@@ -2,23 +2,18 @@
 name: noyalib-validation-and-qa
 description: >-
   What counts as evidence in the noyalib repo. Load this BEFORE opening a PR,
-  BEFORE claiming a fix is done, and BEFORE adding a test. Covers the evidence
-  bar (regression test must fail on pre-fix tree; wrong-but-green is the
-  enemy), the test taxonomy (coverage_*, cst_*, spec/, official_suite,
-  yaml_compliance_report, proptest, competitive_*, competitor_bugs, de*/ser*,
-  issue_* incident regressions, ~480 doctests), the certified inventory
-  (official YAML Test Suite + benches/fixtures/*.yaml), the SPDX-headed
-  file-naming conventions, doctest rules (# Examples + errors-parse-a-repro
-  pattern from Error::KeyCollision), and the acceptance thresholds
-  (coverage 98/98/98 target vs live 96/94/93; official-suite floor is the
-  merge gate; clippy -D warnings; rustfmt clean; ~480 doctests green).
-  Verb-form triggers — use for "how do I add a test", "what test do I write",
-  "does this need a regression test", "how do I write a span regression test",
-  "how do I write a cross-loader parity test", "what evidence must a PR carry",
-  or "which acceptance thresholds must this fix clear".
-  Not this skill: running the tools → noyalib-diagnostics-and-tooling; the
-  live coverage campaign → noyalib-coverage-campaign. Pure-Rust YAML library
-  v0.0.14. Dated 2026-07-08.
+  BEFORE claiming a fix is done, and BEFORE adding a test. Covers the evidence bar
+  (regression test must fail on the pre-fix tree; wrong-but-green is the enemy),
+  the test taxonomy (coverage_*, cst_*, spec/, official_suite, proptest,
+  competitor_bugs, de*/ser*, issue_* regressions, ~480 doctests), the certified
+  inventory (official YAML Test Suite + benches/fixtures/*.yaml), SPDX-headed file
+  naming, doctest rules (# Examples + errors-parse-a-repro from Error::KeyCollision),
+  and the acceptance thresholds (coverage 98/98/98 target vs live 96/94/93;
+  official-suite floor is the merge gate; clippy -D warnings; rustfmt clean). Use
+  for "how do I add a test", "does this need a regression test", "how do I write a
+  cross-loader parity test", "what evidence must a PR carry". Not this skill:
+  running tools → noyalib-diagnostics-and-tooling; the coverage campaign →
+  noyalib-coverage-campaign. v0.0.14, dated 2026-07-08.
 ---
 
 # noyalib Validation & QA
