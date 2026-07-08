@@ -58,6 +58,20 @@ sourced only from the hub, and re-running never dirties the working
 tree. (This is a personal, local ignore; it doesn't touch the committed
 `.gitignore`.)
 
+### Skills only (no system prompt)
+
+For repos that consume AgtMLS *skills* but source their system prompt
+elsewhere (e.g. a global `~/.claude/CLAUDE.md`), pass `--skills-only`:
+
+```bash
+~/dev/agtmls/scripts/setup-workspace.sh rust claude --skills-only
+```
+
+It links the skills without writing a prompt, and cleans up any prompt a
+previous non-`--skills-only` run generated (a hand-authored prompt with
+no generated marker is left untouched). Use this flag on every run for
+those repos so a future setup never re-creates the prompt.
+
 Currently only `rust` has an authored language profile; `python`,
 `cpp`, `go`, and `js` fall back to `_base.md` alone until authored.
 
