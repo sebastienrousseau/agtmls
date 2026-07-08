@@ -12,21 +12,22 @@ Run them all:
 for v in */verify.sh; do echo "== $v =="; "$v"; done
 ```
 
-## Roster
+## Roster (Phase 1 complete — one per major family)
 
 | Example | Direction | Fleet domain | Landmine taught | Status |
 |---|---|---|---|---|
 | [`py-to-rust-iban`](py-to-rust-iban/) | Python → Rust | banking (`pain001`, `camt053`) | integer width: bignum `% 97` → incremental mod (u128 overflow) | ✅ 8/8, tests pass |
 | [`bash-to-python-pathdedupe`](bash-to-python-pathdedupe/) | Bash → Python | dotfiles / shell tooling | word-splitting + glob expansion of unquoted `$var` | ✅ 8/8, glob-safe |
+| [`js-to-ts-configvalidate`](js-to-ts-configvalidate/) | JavaScript → TypeScript | JS/TS tooling (`crypto-service`) | runtime type erasure → validate `unknown` at the boundary | ✅ 8/8 |
+| [`go-to-rust-fraction`](go-to-rust-fraction/) | Go → Rust | Go tooling (`corral`) | `(T, error)` + zero values → `Result` + `?` | ✅ 9/9, tests pass |
+| [`rust-to-swift-op`](rust-to-swift-op/) | Rust → Swift | Rust (`qrc`) → Swift (`AudioWaveLib`) | `enum` associated values → `throws` vs `Result` | ✅ 8/8 |
+| [`py-to-go-duration`](py-to-go-duration/) | Python → Go | Python services → Go | exceptions → `if err != nil`, no sum types | ✅ 9/9 |
 
-## Planned (Phase 1 remaining — see the skill's 10/10 plan)
-
-| Example | Direction | Landmine to teach |
-|---|---|---|
-| `js-to-ts-*` | JavaScript → TypeScript | runtime type erasure → validate at the boundary (`zod`) |
-| `go-to-rust-*` | Go → Rust | `(T, error)` + zero values → `Result` + `Option` |
-| `rust-to-swift-*` | Rust → Swift | `enum` associated values → `throws` vs `Result` convention |
-| `py-to-go-*` | Python → Go | exceptions → `if err != nil`, no sum types |
+Six directions covering **seven** of the nine fleet languages as source
+and/or target: Rust, Python, Go, Swift, TypeScript, JavaScript, Bash. The
+two not yet exercised by a worked example — **C++** and **Ruby** — land in
+a follow-up pass. Each example teaches a distinct landmine from
+`../reference.md`.
 
 ## How each example is validated
 

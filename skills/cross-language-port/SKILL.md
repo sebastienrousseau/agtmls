@@ -144,15 +144,24 @@ propagation across the seam) are in `reference.md` §R4.
 Runnable, verified ports live in `examples/` — each a `reference.<ext>`
 (source) + `port.<ext>` (idiomatic target) + golden `corpus/` + `verify.sh`
 that proves equivalence. Study the one closest to your port before starting;
-copy its shape. Current roster (`examples/README.md` indexes them):
+copy its shape. Roster (`examples/README.md` indexes them), each teaching a
+distinct landmine:
 
-- **`py-to-rust-iban/`** — Python → Rust; teaches the integer-width landmine
-  (Python bignum `% 97` → Rust incremental mod, because the value overflows
-  `u128`).
-- **`bash-to-python-pathdedupe/`** — Bash → Python; teaches word-splitting +
-  glob expansion of unquoted `$var` (a `/tmp/*` segment must stay literal).
+- **`py-to-rust-iban/`** — Python → Rust; integer width (bignum `% 97` →
+  incremental mod, because the value overflows `u128`).
+- **`bash-to-python-pathdedupe/`** — Bash → Python; word-splitting + glob
+  expansion of unquoted `$var` (a `/tmp/*` segment must stay literal).
+- **`js-to-ts-configvalidate/`** — JavaScript → TypeScript; runtime type
+  erasure (validate `unknown` at the boundary; a type cast validates
+  nothing).
+- **`go-to-rust-fraction/`** — Go → Rust; `(T, error)` + zero values →
+  `Result` + `?`, and matching Go's split semantics exactly.
+- **`rust-to-swift-op/`** — Rust → Swift; `enum` associated values map 1:1,
+  but `Result` → `throws` (adopt the target's error channel).
+- **`py-to-go-duration/`** — Python → Go; exceptions → `if err != nil`, no
+  sum types (control flow inverts from throw/catch to return/check).
 
-Run every example's proof at once:
+Run every example's proof at once (source vs port, diffed):
 
 ```sh
 for v in examples/*/verify.sh; do "$v"; done

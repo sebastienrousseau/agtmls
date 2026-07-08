@@ -1,0 +1,8 @@
+ADD 3 4
+NEG 5
+ADD -2 7
+MUL 2 3
+ADD 3
+ADD x 4
+NEG
+ADD 3 4 5

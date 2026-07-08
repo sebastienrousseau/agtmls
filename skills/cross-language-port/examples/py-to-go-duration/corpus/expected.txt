@@ -1,0 +1,9 @@
+5400
+45
+7200
+5400
+5445
+20
+0
+ERROR: invalid duration: abc
+ERROR: invalid duration: 1h30x
