@@ -17,9 +17,9 @@ agtmls/
 │   └── setup-workspace.sh       # Links AgtMLS into your active repos
 ├── system-prompts/              # Global behavioural rules → repo-root CLAUDE.md/AGENTS.md/CONVENTIONS.md
 │   ├── _base.md                 # Universal engineering standards
-│   └── rust.md                  # Rust idioms (authored)
-│                                # python/cpp/go/js: not yet authored — setup
-│                                # falls back to _base.md only for those.
+│   └── <lang>.md                # Per-language idiom profiles: rust, python,
+│                                # go, cpp, swift, typescript, javascript,
+│                                # ruby, bash (all authored)
 ├── skills/                      # Autonomous, multi-step workflows (SKILL.md)
 │   ├── cross-language-port/     # Porting logic between polyglot repos
 │   └── noyalib/                 # Project-specific skills for noyalib
@@ -72,8 +72,9 @@ previous non-`--skills-only` run generated (a hand-authored prompt with
 no generated marker is left untouched). Use this flag on every run for
 those repos so a future setup never re-creates the prompt.
 
-Currently only `rust` has an authored language profile; `python`,
-`cpp`, `go`, and `js` fall back to `_base.md` alone until authored.
+All nine fleet languages have an authored profile — `rust`, `python`,
+`go`, `cpp`, `swift`, `typescript`, `javascript`, `ruby`, `bash`. A
+language without a profile falls back to `_base.md` alone.
 
 ## Adding a skill
 
