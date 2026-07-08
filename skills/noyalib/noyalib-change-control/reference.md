@@ -27,9 +27,10 @@ Defined once, used throughout both `SKILL.md` and this file.
 - **Release branch** — the long-lived `feat/v0.0.X` branch PRs target.
   Currently `feat/v0.0.14` (2026-07-08).
 - **Non-negotiable** — a rule that fails CI or fails review, period.
-- **Satellite crate** — workspace member other than `noyalib` core
-  (`noya-cli`, `noyalib-lsp`, `noyalib-mcp`). Since v0.0.13 several
-  ship as their own repos post workspace split (ADR-0005).
+- **Satellite crate** — a `noyalib-*` crate other than `noyalib` core:
+  `noyalib-wasm`, `noyalib-mcp`, `noyalib-lsp`, `noya-cli`. Post
+  workspace split (ADR-0005, v0.0.12–13) they ship from their own
+  repos in strict `=X.Y.Z` lockstep.
 
 ---
 

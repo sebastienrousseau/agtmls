@@ -15,11 +15,11 @@ and writes idiomatic code for the target language.
 agtmls/
 ├── scripts/
 │   └── setup-workspace.sh       # Links AgtMLS into your active repos
-├── system-prompts/              # Global behavioural rules (AGENTS.md / CONVENTIONS.md)
+├── system-prompts/              # Global behavioural rules → repo-root CLAUDE.md/AGENTS.md/CONVENTIONS.md
 │   ├── _base.md                 # Universal engineering standards
-│   ├── python.md                # Python idioms  (TODO: author)
-│   ├── rust.md                  # Rust idioms    (TODO: author)
-│   └── cpp.md                   # C++ idioms     (TODO: author)
+│   └── rust.md                  # Rust idioms (authored)
+│                                # python/cpp/go/js: not yet authored — setup
+│                                # falls back to _base.md only for those.
 ├── skills/                      # Autonomous, multi-step workflows (SKILL.md)
 │   ├── cross-language-port/     # Porting logic between polyglot repos
 │   └── noyalib/                 # Project-specific skills for noyalib
@@ -41,11 +41,18 @@ provided script to symlink them so hub updates propagate instantly.
     ~/dev/agtmls/scripts/setup-workspace.sh rust aider
     ```
 
-The script picks the right CLI folder (`.claude/`, `.aider/`,
-`.codex/`, or `.agent/`), assembles the system prompt from
-`_base.md` + the language profile, and symlinks every skill and
-command into place. Re-run it any time you add a language profile
-or a skill.
+The script assembles the system prompt from `_base.md` + the language
+profile and writes it to the **repo-root file the tool auto-loads**
+(`CLAUDE.md` for Claude Code, `AGENTS.md` for Codex, `CONVENTIONS.md`
+for Aider — the latter also registered in `.aider.conf.yml`). It then
+symlinks every skill and command into the tool's dot-dir
+(`.claude/`, `.aider/`, `.codex/`, or `.agent/`), flattening skill
+bundles so each skill lands one level deep (`<cli>/skills/<skill>/`)
+where the tool can discover it. Re-run it any time you add a language
+profile or a skill.
+
+Currently only `rust` has an authored language profile; `python`,
+`cpp`, `go`, and `js` fall back to `_base.md` alone until authored.
 
 ## Adding a skill
 

@@ -16,8 +16,9 @@ date: 2026-07-07
 
 # noyalib debugging playbook
 
-Repo: `/Users/seb/Code/Public/rust/noyalib` — pure-Rust YAML 1.2
-library, workspace `crates/noyalib`, current release `v0.0.14`.
+Repo: `github.com/sebastienrousseau/noyalib` — pure-Rust YAML 1.2
+library, workspace `crates/noyalib`, current release `v0.0.14`. Run
+every command below from the repo root.
 
 > **Reference material** (full 6-row loader-routing table, full 14-row
 > symptom table, full 12-knob/6-variant budget inventory, and traps

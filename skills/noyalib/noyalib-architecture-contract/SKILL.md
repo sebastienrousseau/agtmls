@@ -174,18 +174,20 @@ Every claim in this skill (and in `reference.md`) maps to a file:line.
 This provenance section covers **both files** in this directory.
 Re-verify on drift with:
 
+Run from the noyalib repo root.
+
 ```bash
 # Router / streaming-eligibility / typed_keys parity
-grep -n "stream_eligible" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/de.rs
-grep -n "typed_keys" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/parser/loader.rs | head -5
-grep -n "issue #46" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/streaming.rs
-grep -n "MAX_ALIAS_BYTES" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/parser/loader.rs
+grep -n "stream_eligible" crates/noyalib/src/de.rs
+grep -n "typed_keys" crates/noyalib/src/parser/loader.rs | head -5
+grep -n "issue #46" crates/noyalib/src/streaming.rs
+grep -n "MAX_ALIAS_BYTES" crates/noyalib/src/parser/loader.rs
 
 # Panic policy / SemVer surface / weak-points / CST span_at
-grep -rn "invariant_violated" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/
-grep -n "non_exhaustive\|'static\b\|SemVer" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/lib.rs | head
-grep -n "sequence length limit exceeded\|mapping key limit exceeded" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/parser/loader.rs
-grep -n "trim_value_span\|extend_to_line_start\|is_keep_chomped" /Users/seb/Code/Public/rust/noyalib/crates/noyalib/src/cst/document.rs | head
+grep -rn "invariant_violated" crates/noyalib/src/
+grep -n "non_exhaustive\|'static\b\|SemVer" crates/noyalib/src/lib.rs | head
+grep -n "sequence length limit exceeded\|mapping key limit exceeded" crates/noyalib/src/parser/loader.rs
+grep -n "trim_value_span\|extend_to_line_start\|is_keep_chomped" crates/noyalib/src/cst/document.rs | head
 ```
 
 Ground-truth documents this skill (and `reference.md`) compress:

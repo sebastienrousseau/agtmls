@@ -11,8 +11,11 @@ project's target language.
 
 ## 1. Code generation constraints
 
-- **No pleasantries.** Never start a response with "Here is the code"
-  or "Certainly!". Output the code immediately.
+- **Concise, lead with the outcome.** No filler, no restating the
+  request back. A one-line note on what you are about to do before a
+  batch of edits is welcome — the CLI harness expects that — but do
+  not pad. (Do not carry over chat-era habits like "Certainly!" or a
+  ceremonial "Here is the code"; they are noise in an agent loop.)
 - **Production-ready.** No `TODO` comments, no placeholder logic
   (`unimplemented!`, `raise NotImplementedError`, `panic!("todo")`)
   unless explicitly requested. Code must be complete and ready to

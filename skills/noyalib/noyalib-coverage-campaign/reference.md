@@ -1,5 +1,5 @@
-> Reference material complementing
-> `/Users/seb/Code/Public/rust/noyalib/.claude/skills/noyalib-coverage-campaign/SKILL.md`.
+> Reference material complementing `SKILL.md` in this directory
+> (`noyalib-coverage-campaign`).
 > Split extracted 2026-07-08. Load this file only when the compact
 > guidance in SKILL.md is insufficient — bucket walkthroughs,
 > verbatim house-pattern snippets, "why not" rationale for wrong
