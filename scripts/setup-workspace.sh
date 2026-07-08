@@ -34,7 +34,7 @@ done
 
 if [[ -z "$LANGUAGE" || -z "$AGENT_CLI" ]]; then
   echo "Usage: $0 <language> <agent-cli> [--skills-only]"
-  echo "  language:      rust   (python | cpp | go | js: base-only until authored)"
+  echo "  language:      rust | python | go | cpp | swift | typescript | javascript | ruby | bash"
   echo "  agent-cli:     claude | aider | codex"
   echo "  --skills-only: link skills only; do not write a system prompt"
   echo
