@@ -1,0 +1,13 @@
+{
+  "skill": "yaml-domain-reference",
+  "positive": [
+    "explain YAML merge keys and anchors",
+    "why does no parse as false in YAML",
+    "what does the YAML spec say about block scalar chomping",
+    "does noyalib accept nan or octal 0o7 scalars"
+  ],
+  "negative": [
+    "CI is red on my release PR",
+    "raise the test coverage to 98 percent"
+  ]
+}

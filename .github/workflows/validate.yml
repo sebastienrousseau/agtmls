@@ -21,3 +21,7 @@ jobs:
           python-version: "3.12"
       - name: Validate skill frontmatter
         run: python3 scripts/validate-skills.py
+      - name: Check description collisions
+        run: python3 scripts/check-skill-collisions.py
+      - name: Trigger-routing evals
+        run: python3 scripts/run-trigger-evals.py

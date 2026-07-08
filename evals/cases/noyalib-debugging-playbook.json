@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-debugging-playbook",
+  "positive": [
+    "from_str::<Value> disagrees with from_str::<MyStruct>",
+    "spans point at the wrong bytes after parsing",
+    "a budget error fires unexpectedly, which loader is my bug in",
+    "no_std build broke despite green CI, triage it"
+  ],
+  "negative": [
+    "how do I position noyalib versus serde_yaml in the README",
+    "draft the release notes for v0.0.15"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "noyalib-ci-and-release",
+  "positive": [
+    "CI is red on my noyalib PR, help me read the failure",
+    "how do I cut and tag a noyalib release",
+    "cargo-vet failure is blocking the release",
+    "a cargo-deny advisory landed mid-PR",
+    "the satellite didn't publish after the tag push"
+  ],
+  "negative": [
+    "explain YAML block scalar chomping",
+    "why does from_str::<Value> disagree with my struct"
+  ]
+}
