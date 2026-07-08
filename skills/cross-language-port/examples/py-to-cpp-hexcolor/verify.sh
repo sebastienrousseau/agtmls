@@ -2,6 +2,6 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 bin="$(mktemp -u)"; trap 'rm -f "$bin"' EXIT
-rustc --edition 2021 -O reference.rs -o "$bin"
+c++ -std=c++23 -O2 -Wall -Wextra port.cpp -o "$bin"
 exec ../../harness/golden-diff.sh corpus/input.txt corpus/expected.txt \
-  "$bin" "swift port.swift"
+  "python3 reference.py" "$bin"

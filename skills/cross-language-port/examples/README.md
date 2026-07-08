@@ -12,7 +12,7 @@ Run them all:
 for v in */verify.sh; do echo "== $v =="; "$v"; done
 ```
 
-## Roster (Phase 1 complete — one per major family)
+## Roster — one verified port per family, all nine fleet languages
 
 | Example | Direction | Fleet domain | Landmine taught | Status |
 |---|---|---|---|---|
@@ -22,12 +22,16 @@ for v in */verify.sh; do echo "== $v =="; "$v"; done
 | [`go-to-rust-fraction`](go-to-rust-fraction/) | Go → Rust | Go tooling (`corral`) | `(T, error)` + zero values → `Result` + `?` | ✅ 9/9, tests pass |
 | [`rust-to-swift-op`](rust-to-swift-op/) | Rust → Swift | Rust (`qrc`) → Swift (`AudioWaveLib`) | `enum` associated values → `throws` vs `Result` | ✅ 8/8 |
 | [`py-to-go-duration`](py-to-go-duration/) | Python → Go | Python services → Go | exceptions → `if err != nil`, no sum types | ✅ 9/9 |
+| [`py-to-cpp-hexcolor`](py-to-cpp-hexcolor/) | Python → C++ | `euxis` | exceptions → `std::expected` (C++23) + RAII | ✅ 8/8 |
+| [`ruby-to-python-histogram`](ruby-to-python-histogram/) | Ruby → Python | `homebrew-tap` | Enumerable/`tally`/blocks → `Counter`; codepoint sort order | ✅ 3/3 |
 
-Six directions covering **seven** of the nine fleet languages as source
-and/or target: Rust, Python, Go, Swift, TypeScript, JavaScript, Bash. The
-two not yet exercised by a worked example — **C++** and **Ruby** — land in
-a follow-up pass. Each example teaches a distinct landmine from
-`../reference.md`.
+Eight directions covering **all nine** fleet languages as source and/or
+target: Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, Bash.
+Each teaches a distinct landmine from `../reference.md`.
+
+Every `verify.sh` is a thin wrapper over the shared runner in
+[`../harness/`](../harness/) — build the target if compiled, then one
+`golden-diff.sh` call.
 
 ## How each example is validated
 

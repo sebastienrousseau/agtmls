@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
-bin="$(mktemp -u)"; trap 'rm -f "$bin"' EXIT
-rustc --edition 2021 -O reference.rs -o "$bin"
 exec ../../harness/golden-diff.sh corpus/input.txt corpus/expected.txt \
-  "$bin" "swift port.swift"
+  "ruby reference.rb" "python3 port.py"

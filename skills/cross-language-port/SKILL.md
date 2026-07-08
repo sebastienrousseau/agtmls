@@ -160,8 +160,14 @@ distinct landmine:
   but `Result` → `throws` (adopt the target's error channel).
 - **`py-to-go-duration/`** — Python → Go; exceptions → `if err != nil`, no
   sum types (control flow inverts from throw/catch to return/check).
+- **`py-to-cpp-hexcolor/`** — Python → C++; exceptions → `std::expected`
+  (C++23) and RAII (no `new`/`delete`).
+- **`ruby-to-python-histogram/`** — Ruby → Python; Enumerable/`tally`/blocks
+  → `Counter` + comprehensions (watch the codepoint sort order).
 
-Run every example's proof at once (source vs port, diffed):
+Eight directions covering all nine fleet languages. Every `verify.sh` is a
+thin wrapper over the shared runner in `harness/` (`golden-diff.sh` +
+differential property-test templates). Run every proof at once:
 
 ```sh
 for v in examples/*/verify.sh; do "$v"; done

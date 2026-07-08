@@ -178,13 +178,14 @@ recipes, strongest first.
    intended, documented difference.
 4. Keep the corpus in the port's test suite so it stays true.
 
-```
-# language-agnostic shape
-for case in corpus/*.in; do
-  expected="corpus/$(basename "$case" .in).out"
-  got=$(run_port < "$case")
-  diff <(printf '%s' "$got") "$expected" || echo "DIVERGENCE: $case"
-done
+This is packaged as `harness/golden-diff.sh` — pass it the corpus, the
+golden, and the two runnable commands; it proves the source still reproduces
+the golden **and** the port matches it. Every worked example in `examples/`
+uses it. See `harness/README.md`.
+
+```sh
+harness/golden-diff.sh corpus/input.txt corpus/expected.txt \
+    "python3 reference.py" "$compiled_port_binary"
 ```
 
 ### R3.2 Differential property test (for pure functions)
@@ -192,6 +193,10 @@ done
 When source and port can both be invoked from one harness (e.g. porting a
 Python function to Rust, call the Python reference via subprocess), generate
 random inputs and assert `port(x) == reference(x)`:
+
+Starter templates live in `harness/templates/` (`proptest_diff.rs`,
+`hypothesis_diff.py`, `fast-check_diff.mjs`) — wire in your input domain and
+the two commands, then run.
 
 - Rust: `proptest!` generating inputs, shelling to the reference.
 - Python: `hypothesis` `@given` comparing to the ported binary.
