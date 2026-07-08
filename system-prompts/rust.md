@@ -107,12 +107,15 @@ apply; this section refines them for Rust idioms.
 
 ## Toolchain
 
-- `cargo fmt` clean before every push. `rustfmt.toml` is checked in
-  and edition-locked.
-- `cargo clippy --all-targets --all-features -- -D warnings` clean.
-  A clippy lint you disagree with gets an `#[allow(...)]` with a
+CI already enforces `cargo fmt` and `cargo clippy --all-targets
+--all-features -- -D warnings`; run them before pushing and pass the
+gate rather than re-describing it. The conventions the linter can't
+express for you:
+
+- A clippy lint you disagree with gets an `#[allow(...)]` with a
   comment explaining why, or a workspace-wide `[lints.clippy]`
-  override with the same justification.
+  override with the same justification — never a blanket crate-level
+  `-A`.
 - `edition = "..."` matches the MSRV floor and is set explicitly.
 - `#[deny(missing_docs)]` at the crate root for public libraries.
 
