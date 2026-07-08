@@ -60,3 +60,18 @@ For a template, see `skills/cross-language-port/SKILL.md`.
 Project-specific skills (like the noyalib bundle) live under a
 project-named subdirectory to keep them from cluttering the
 top-level namespace.
+
+### The skill contract (CI-enforced)
+
+`scripts/validate-skills.py` runs on every push/PR
+(`.github/workflows/validate.yml`) and fails the build unless every
+`SKILL.md` satisfies:
+
+- a parseable YAML frontmatter block;
+- `name` present, kebab-case, and equal to the skill's directory name;
+- `description` present, **≤ 1024 characters** (Claude Code truncates
+  beyond this), and containing a trigger cue (a "when…" / "use for" /
+  "load before" phrase telling the router when to load the skill);
+- a top-level `# ` heading in the body.
+
+Run it locally before pushing: `python3 scripts/validate-skills.py`.

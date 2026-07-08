@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-coverage-campaign",
+  "positive": [
+    "raise noyalib coverage from 96 to 98 percent",
+    "close the llvm-cov coverage gaps",
+    "make coverage-gap says a file is under threshold, what next",
+    "ratchet the fail-under coverage numbers"
+  ],
+  "negative": [
+    "explain YAML anchors and aliases",
+    "how do I tag a release"
+  ]
+}

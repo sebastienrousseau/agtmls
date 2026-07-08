@@ -1,24 +1,19 @@
 ---
 name: noyalib-ci-and-release
 description: |
-  Load this when operating noyalib's CI or shipping a release. Covers the
-  workflow graph (ci.yml orchestrator, shared-* reusables, security.yml,
-  scorecard.yml, release.yml), THE cache-poisoning doctrine (isolated
-  CARGO_TARGET_DIR per compile surface — the v0.0.9-v0.0.11 lesson), how
-  to read CI failures fast with gh, the supply-chain gate constellation
-  (cargo-vet, cargo-deny, cargo-machete, cargo-semver-checks, REUSE,
-  osv-scanner mirror rule), the tag-driven release flow (version bump →
-  CHANGELOG → RELEASE-NOTES-vX.Y.Z.md → version-refs audit → squash-merge
-  → tag push → release.yml → satellite lockstep publish), and the
-  shared-workflow caller-permissions trap (union callee scopes or the run
-  startup-fails with 0 jobs and no annotation). Triggers include: "CI is
-  red", "release prep", "how do I tag", "cargo-vet failure", "cargo-deny
-  advisory", "clippy on nightly", "workflow permissions", "cache
-  poisoning", "MSRV job broke", "satellite didn't publish", "editing a
-  reusable workflow". Sibling skills: noyalib-change-control (rulebook /
-  what gates apply in principle) and any local-env skill (compilers,
-  toolchains). Volatile facts date-stamped 2026-07-08; release branch
-  feat/v0.0.14; noyalib v0.0.14.
+  Load this when operating noyalib's CI or shipping a release. Covers the workflow
+  graph (ci.yml orchestrator, shared-* reusables, security.yml, scorecard.yml,
+  release.yml), THE cache-poisoning doctrine (isolated CARGO_TARGET_DIR per compile
+  surface — the v0.0.9-v0.0.11 lesson), reading CI failures fast with gh, the
+  supply-chain gate constellation (cargo-vet, cargo-deny, cargo-machete,
+  cargo-semver-checks, REUSE, osv-scanner mirror rule), the tag-driven release flow
+  (version bump → CHANGELOG → RELEASE-NOTES → version-refs audit → squash-merge →
+  tag push → release.yml → satellite lockstep), and the shared-workflow
+  caller-permissions trap (union callee scopes or the run startup-fails with 0 jobs,
+  no annotation). Triggers: "CI is red", "release prep", "how do I tag", "cargo-vet
+  failure", "cargo-deny advisory", "workflow permissions", "cache poisoning", "MSRV
+  job broke", "satellite didn't publish". Sibling: noyalib-change-control (which
+  gates apply). Date-stamped 2026-07-08; branch feat/v0.0.14.
 ---
 
 # noyalib — CI and release runbook

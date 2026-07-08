@@ -1,20 +1,17 @@
 ---
 name: noyalib-change-control
 description: |
-  Load this when working on the noyalib repo (github.com/sebastienrousseau/noyalib)
-  and you need to classify a change, decide which gates it must pass, prepare a PR,
-  answer "am I allowed to do X?", decide whether you may bump the MSRV (a breaking
-  event needing an ADR — mechanics of where rust-version lives are in
-  noyalib-build-and-env), or judge release readiness. Covers change
-  taxonomy (bug fix / feature / security / restructure / release), the written
-  non-negotiables (forbid(unsafe_code), signed Conventional Commits, ADR triggers,
-  panic policy, MSRV, CI-always-green), the unwritten project laws confirmed with
-  the maintainer, the historical v0.0.9 to v0.0.11 CI cache-poisoning incident
-  behind the isolated CARGO_TARGET_DIR rule, and the PR review flow against the
-  current release branch. Sibling skills exist for HOW to run gates locally
-  (noyalib-ci-and-release) and WHAT evidence a change needs
-  (noyalib-validation-and-qa) — this skill is the rulebook, not the runbook.
-  Volatile facts date-stamped 2026-07-08; release branch feat/v0.0.14.
+  Load this when working on the noyalib repo and you need to classify a change,
+  decide which gates it must pass, prepare a PR, answer "am I allowed to do X?",
+  decide whether you may bump the MSRV (a breaking event needing an ADR), or judge
+  release readiness. Covers change taxonomy (bug fix / feature / security /
+  restructure / release), the written non-negotiables (forbid(unsafe_code), signed
+  Conventional Commits, ADR triggers, panic policy, MSRV, CI-always-green), the
+  unwritten project laws confirmed with the maintainer, the v0.0.9→v0.0.11 CI
+  cache-poisoning incident behind the isolated CARGO_TARGET_DIR rule, and the PR
+  review flow. Siblings: noyalib-ci-and-release (HOW to run gates locally) and
+  noyalib-validation-and-qa (WHAT evidence a change needs) — this is the rulebook,
+  not the runbook. Date-stamped 2026-07-08; release branch feat/v0.0.14.
 ---
 
 # noyalib — Change control rulebook
