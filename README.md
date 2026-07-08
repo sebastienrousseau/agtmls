@@ -72,6 +72,25 @@ previous non-`--skills-only` run generated (a hand-authored prompt with
 no generated marker is left untouched). Use this flag on every run for
 those repos so a future setup never re-creates the prompt.
 
+### General skills vs project bundles
+
+Two kinds of skill live under `skills/`:
+
+- **General skills** — a top-level dir with its own `SKILL.md`
+  (`cross-language-port`, `using-agtmls`). These apply anywhere and are
+  **always linked**.
+- **Project bundles** — a top-level dir that holds *other* skill dirs
+  (e.g. `skills/noyalib/`). A bundle is **only** linked when named with
+  `--bundle`, so a project's skills never land in an unrelated repo:
+
+```bash
+# a generic Python repo — general skills only, no project bundle
+setup-workspace.sh python claude --skills-only
+
+# a noyalib-family repo — general skills + the noyalib bundle
+setup-workspace.sh rust claude --skills-only --bundle noyalib
+```
+
 All nine fleet languages have an authored profile — `rust`, `python`,
 `go`, `cpp`, `swift`, `typescript`, `javascript`, `ruby`, `bash`. A
 language without a profile falls back to `_base.md` alone.
