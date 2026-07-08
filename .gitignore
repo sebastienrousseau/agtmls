@@ -2,3 +2,5 @@
 *.swp
 *.swo
 *~
+.ruff_cache/
+__pycache__/

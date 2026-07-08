@@ -1,0 +1,8 @@
+{"host":"localhost","port":8080}
+{"host":"db.example.com","port":5432}
+{"host":"","port":80}
+{"host":"x","port":70000}
+{"host":"x","port":80.5}
+{"host":"x"}
+[1,2,3]
+not json

@@ -1,0 +1,8 @@
+7
+-5
+5
+ERROR: unknown or malformed op: MUL
+ERROR: unknown or malformed op: ADD
+ERROR: not an integer: x
+ERROR: unknown or malformed op: NEG
+ERROR: unknown or malformed op: ADD

@@ -1,0 +1,8 @@
+localhost:8080
+db.example.com:5432
+ERROR: host must be a non-empty string
+ERROR: port out of range
+ERROR: port must be an integer
+ERROR: port must be an integer
+ERROR: not an object
+ERROR: invalid json
