@@ -113,9 +113,10 @@ Six phases. Do not skip §4 — it is what separates a port from a guess.
    pair) is in `reference.md` §R3. "It compiles and looks right" is **not**
    equivalence.
 
-6. **Land it green.** Format, lint, and test with the *target's* toolchain
-   (table above; commands in `reference.md` §R1) until all three pass.
-   Deliver the ported file(s) + the equivalence tests + the golden corpus.
+6. **Land it green.** Run `harness/port-check.sh <target-lang> <files>` —
+   it formats-checks, lints/typechecks, and compiles/syntax-gates with the
+   *target's* toolchain, and must print GREEN before you're done. Deliver
+   the ported file(s) + the equivalence tests + the golden corpus.
 
 ## Data-boundary & interop rules
 

@@ -158,6 +158,30 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   handling. Porting *to* Bash is rarely idiomatic for anything non-trivial;
   push back if the logic wants real data structures.
 
+### Fleet anchors (where each idiom shows up in your repos)
+
+The notes above are grounded in the languages as they appear at
+`github.com/sebastienrousseau`. Representative repo per language, so a port
+into/out of it can be sanity-checked against real fleet code:
+
+| Language | Fleet anchor(s) | Coverage confidence |
+|---|---|---|
+| Rust | `noyalib`, `cmn`, `dtt`, `hsh`, `kyberlib`, `qrc`, `vrd`, `rlg`, `libmake` (~34 repos) | High — deep; also see `system-prompts/rust.md` for the house profile |
+| Python | `pain001`, `camt053`, `pacs008`, `bankstatementparser`, `akande` (~26 repos) | High — deep |
+| Bash/Shell | `dotfiles`, `pipelines`, `devkit`, `iceunit`, `maccfg` | High — 5 repos |
+| JavaScript | `password-generator`, `stratos`, `sine-wave-generator`, `cloudcdn.pro` | Medium |
+| Go | `corral`, `corral-sync` | Low — 2 repos |
+| Swift | `AudioWaveLib`, `WiserOneApp` | Low — 2 repos |
+| TypeScript | `crypto-service` | Low — single repo |
+| C++ | `euxis` | Low — single repo, lower-confidence idiom notes |
+| Ruby | `homebrew-tap` | Low — single repo, lower-confidence idiom notes |
+
+Re-derive the fleet + weights with:
+`gh api 'users/sebastienrousseau/repos?per_page=100&type=owner' --jq '.[]|select(.fork==false)|.language' | sort | uniq -c | sort -rn`.
+For the thin languages (Go, Swift, TS, C++, Ruby) treat the R2 notes as
+"idiomatic best practice, lightly fleet-checked" rather than "battle-tested
+across many repos"; deepen them if the fleet grows in that language.
+
 ---
 
 ## R3. Equivalence-verification recipes
@@ -245,6 +269,12 @@ contract, not vibes.
 - **Ordering & idempotence.** If the source guaranteed side-effect ordering
   (writes, log lines, callbacks), the port and the seam must preserve it —
   add it to the golden corpus as an observable.
+
+**Runnable trap demos** live in `examples/boundary-traps/` — each proves a
+seam trap bites *and* the contract catches it. The integer-width one
+(`integer-width/verify.sh`) demonstrates the `2^53` JSON-number precision
+loss and the string-encoding fix; run it before shipping any port that sends
+large integers across a JSON seam.
 
 ---
 

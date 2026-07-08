@@ -30,6 +30,22 @@ golden-diff.sh <input> <golden> <source-cmd> <port-cmd>
    `<run source> < corpus/input.txt > corpus/expected.txt`.
 4. `verify.sh` — build (if compiled), then call `golden-diff.sh`.
 
+## `port-check.sh` — the land-green gate
+
+`golden-diff.sh` proves *equivalence*; `port-check.sh` proves the port is
+*clean* — it runs the target language's formatter (check mode), linter /
+typecheck, and a compile-or-syntax gate. A port is not done until this is
+GREEN (execution-loop Phase 6).
+
+```sh
+port-check.sh <lang> <path...>   # lang: rust|python|go|cpp|swift|ts|js|ruby|bash
+```
+
+Tools that are installed run; missing ones (e.g. `prettier`, `tsc`,
+`rubocop`, `clang-format`, `swift-format` on a bare box) report **SKIP**, not
+FAIL, so the gate is usable anywhere. It exits non-zero only if a *present*
+tool reports a problem. Every worked example's `port.<ext>` passes it.
+
 ## `templates/` — differential property tests
 
 For pure functions a property test beats a fixed corpus: generate random
