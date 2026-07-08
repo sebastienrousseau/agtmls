@@ -1,0 +1,358 @@
+---
+name: noyalib-validation-and-qa
+description: >-
+  What counts as evidence in the noyalib repo. Load this BEFORE opening a PR,
+  BEFORE claiming a fix is done, and BEFORE adding a test. Covers the evidence
+  bar (regression test must fail on pre-fix tree; wrong-but-green is the
+  enemy), the test taxonomy (coverage_*, cst_*, spec/, official_suite,
+  yaml_compliance_report, proptest, competitive_*, competitor_bugs, de*/ser*,
+  issue_* incident regressions, ~480 doctests), the certified inventory
+  (official YAML Test Suite + benches/fixtures/*.yaml), the SPDX-headed
+  file-naming conventions, doctest rules (# Examples + errors-parse-a-repro
+  pattern from Error::KeyCollision), and the acceptance thresholds
+  (coverage 98/98/98 target vs live 96/94/93; official-suite floor is the
+  merge gate; clippy -D warnings; rustfmt clean; ~480 doctests green).
+  Verb-form triggers — use for "how do I add a test", "what test do I write",
+  "does this need a regression test", "how do I write a span regression test",
+  "how do I write a cross-loader parity test", "what evidence must a PR carry",
+  or "which acceptance thresholds must this fix clear".
+  Not this skill: running the tools → noyalib-diagnostics-and-tooling; the
+  live coverage campaign → noyalib-coverage-campaign. Pure-Rust YAML library
+  v0.0.14. Dated 2026-07-08.
+---
+
+# noyalib Validation & QA
+
+The evidence bar. A PR that "looks right" is not merged; a PR that
+proves a behaviour with a test that would have failed on the previous
+tree is. This skill fences that discipline into checklists.
+
+- Audience: mid-level engineer or Sonnet-class model.
+- Scope: pure-Rust YAML library `noyalib` v0.0.14, test harness and
+  conformance suites.
+- Not this skill:
+  - Running / interpreting the tools → `noyalib-diagnostics-and-tooling`.
+  - The 95 → 98 coverage push specifically → `noyalib-coverage-campaign`.
+  - Chronicle of settled fights → `noyalib-failure-archaeology`.
+- Date-stamped: 2026-07-07.
+
+---
+
+## 1. The evidence bar (non-negotiable)
+
+**A fix is proven by a test that FAILS on the pre-fix tree.** The
+discipline is: write the regression test first, watch it fail
+(`cargo test <name>` red), then fix, then watch green. `CONTRIBUTING.md`
+lines 47–48 codify the rule: *"Add or update tests in the same commit /
+PR as the behaviour change. Never as a follow-up."*
+
+There is one caveat driven by the [CI-always-green invariant] captured
+in `MEMORY.md`: **red tests never get PUSHED alone.** The red→green
+transition happens locally. What lands on `main` is the fix plus its
+regression test, both green, in one commit. A reviewer reconstructs the
+red state mentally by reading the test and the fix together — the test
+name typically encodes the pre-fix bug (e.g.
+`from_str_value_refuses_distinct_typed_key_collision`).
+
+**"Wrong-but-green" is the enemy.** The silent key-collision collapse
+survived 4000+ green tests because no test compared the two loader
+paths against the same input. See
+`tests/no_span_loader_parity.rs:1–43` — it now pins that any semantics
+shared by two code paths must have a cross-path test. The rule
+generalises:
+
+> If a behaviour is implemented by more than one code path
+> (span-full loader vs `NoSpanLoader`, streaming vs blocking,
+> borrowed vs owned, SIMD vs scalar), the invariant needs a test
+> that exercises **both paths against the same input** and asserts
+> they agree.
+
+Exemplars to copy:
+
+- `tests/no_span_loader_parity.rs` — loader parity.
+- `tests/simd_equivalence.rs` — SIMD/scalar path parity.
+- `tests/error_kind.rs` — pins the `Error → ErrorKind` classifier
+  (downstream consumers routing on kind).
+
+---
+
+## 2. Test taxonomy
+
+`crates/noyalib/tests/` holds **130 top-level integration test files**
+(list with `ls crates/noyalib/tests/*.rs | wc -l`). Every file has an
+SPDX header (verified 130 / 130). Naming conventions — match one of
+these families when adding a new file:
+
+| Prefix / family              | What it locks                                           | Files |
+|------------------------------|---------------------------------------------------------|------:|
+| `coverage_*`                 | llvm-cov gap closure (23 files)                         |    23 |
+| `cst_*`                      | Green-tree, round-trip, span, mutation (17 files)       |    17 |
+| `spec/*` + `spec.rs`         | YAML-spec-area organisation (anchors_aliases, block_scalars, comments, edge_cases, errors, flow_collections, mappings, multi_document, nested, null_bool, numbers, scalars, sequences, special_keys, tags) | 15 modules |
+| `official_suite.rs`          | The conformance gate — pass-rate assertion (see §5)     |     1 |
+| `yaml_compliance_report.rs`  | Honest markdown gap report; **no assertions** — a report, not a net; run via `make compliance` |     1 |
+| `proptest.rs`, `properties_interpolation.rs`, `property_interpolation.rs` | Property-based generation (parse∘emit round-trips, totality) |     3 |
+| `competitive_features*.rs`, `competitor_bugs.rs` | Cross-crate interop + other crates' bugs kept as regression fixtures against silent divergence |     3 |
+| `de*.rs`, `ser*.rs`, `serde*.rs` | Serde surface: `Deserializer`, `Serializer`, ecosystem |     ~8 |
+| `issue_*.rs`                 | Incident regressions (e.g. `issue_46.rs` — pnpm-lock parsing) — one file per public incident |     ≥1 |
+| `panic_free.rs`, `scanner_panic_regressions.rs`, `edge_audit.rs` | Fuzz-discovered panic corpora, locked in by hand |     3 |
+
+Doctests: **~480 runnable `# Examples` blocks** across the crate (the
+`doc/TESTING.md` figure at line 11 says ~384; the live count is higher
+after v0.0.14 doc-comment additions — recount with `cargo test --doc
+-p noyalib --all-features 2>&1 | grep "^test result"`). Every public
+item in the crate carries a runnable example; the `README.md` is also
+wired in via `#[cfg(doctest)] #[doc = include_str!("../README.md")]`.
+
+---
+
+## 3. Certified / golden inventory
+
+### 3.1 Official YAML Test Suite
+
+- **Location:** `crates/noyalib/tests/yaml-test-suite/` — 351 `.yaml`
+  case files, upstream from `github.com/yaml/yaml-test-suite`.
+- **Runner:** `tests/official_suite.rs` — the conformance gate.
+- **Skip list:** `SKIP_LIST` inside `official_suite.rs` (currently
+  empty). Every skip is `(id, reason)`, audited, and mirrored in
+  `yaml_compliance_report.rs::SKIP_LIST` — the two lists **must stay
+  in sync** (comment in `yaml_compliance_report.rs:29–32`).
+- **Marker decoder:** `decode_test_suite_markers` in
+  `official_suite.rs:16` handles the visual whitespace alphabet
+  (`␣` → space, `⇥` / `»` / `———»` → tab, `↵` → LF, `↓` → CR,
+  `⇔` → BOM, `∎` → strip-to-EOL). Do not re-implement — reuse.
+- **Assertion arithmetic (verbatim from `official_suite.rs:295–314`):**
+
+  ```rust
+  let total = pass + fail + skip;
+  let compliance = if total > skip {
+      (pass as f64 / (total - skip) as f64) * 100.0
+  } else { 100.0 };
+  // ...
+  assert!(
+      compliance >= 94.0,
+      "Compliance dropped below 94% threshold: {compliance:.1}%"
+  );
+  ```
+
+  The `94.0` floor is what actually gates CI. **Ground truth
+  lives in the test files:** `SKIP_LIST = &[]` (both
+  `official_suite.rs:164` and `yaml_compliance_report.rs:32`), 351
+  wrapper `.yaml` files under `tests/yaml-test-suite/`, and the
+  `compliance >= 94.0` assertion above. `README.md` claims
+  "387/387 attempted, 19 deliberately skipped out of 406" and
+  `doc/BENCHMARKS.md` claims "406/406, 0 skipped" — those two
+  numbers are documentation drift; the compiled tests say
+  otherwise. Any drop in loaded-case pass count against the tests
+  as they stand is a release blocker; the 94% floor exists as a
+  hard backstop, not as the target.
+- **Companion report:** `tests/yaml_compliance_report.rs` writes
+  `target/yaml-compliance-report.md` with the per-case verdict and
+  the reason for each failure/skip. Run with:
+
+  ```sh
+  make compliance
+  # or: cargo test --test yaml_compliance_report -- --nocapture
+  ```
+
+### 3.2 Bench fixtures
+
+`crates/noyalib/benches/fixtures/*.yaml` — the standard workloads:
+
+| Fixture                | Represents                              |
+|------------------------|-----------------------------------------|
+| `github_actions.yaml`  | Realistic CI-config surface             |
+| `k8s_deployment.yaml`  | Container manifest — anchors, multi-doc |
+| `large_list.yaml`      | Big flat sequence — throughput scaling  |
+
+These are golden inputs. Do not delete or mutate without a paired
+Criterion baseline update. Benchmarks that use them run on CodSpeed
+per PR; regressions block merge (see `doc/TESTING.md:138–140`).
+
+---
+
+## 4. How to add a test — checklists per kind
+
+### 4.1 Integration test (new `.rs` file under `tests/`)
+
+1. Pick the family (`coverage_*`, `cst_*`, `de_*`, `issue_<n>`, spec/,
+   competitive_*, etc.) and match its naming. New file **needs the
+   exact SPDX header** every existing test carries:
+
+   ```rust
+   // SPDX-License-Identifier: MIT OR Apache-2.0
+   // Copyright (c) 2026 Noyalib. All rights reserved.
+
+   //! One-line summary — what invariant this file locks.
+   //!
+   //! Longer context: what was wrong, or what path this covers.
+   ```
+
+   (Verify shape against any existing file, e.g. `tests/issue_46.rs` or
+   `tests/no_span_loader_parity.rs`.)
+
+2. If it's a bug regression, name the test after the bug and start the
+   file's module doc with `//! Regression test for …`.
+
+3. If it's spec-area coverage, put it under `tests/spec/<area>.rs` and
+   register the module in `tests/spec/mod.rs`.
+
+4. Feature-gated tests need either `required-features` in
+   `Cargo.toml`'s `[[test]]` entry, or `#[cfg(feature = "…")]` inside
+   the file. Prefer the `cfg` gate — no manifest churn.
+
+5. Anything touching two code paths (blocking vs streaming, spanned
+   vs no-span, SIMD vs scalar) needs a cross-path parity test — see
+   `tests/no_span_loader_parity.rs` and `tests/simd_equivalence.rs`.
+
+### 4.2 Spec case
+
+- One `#[test] fn <snake_case_name>()` per assertion.
+- File already exists (`tests/spec/scalars.rs` etc.) → add the test
+  there. If the area has no file yet, create it under `tests/spec/`
+  **and** wire it into `tests/spec/mod.rs`.
+- Use `noyalib::from_str` (or the specific loader under test) directly;
+  keep the assertion small — one input, one expected value.
+
+### 4.3 Doctest
+
+- Every public item ships a `# Examples` block. `CONTRIBUTING.md:116`
+  makes this explicit.
+- For fallible APIs also add `# Errors`.
+- **Errors-parse-a-repro pattern:** a doctest that demonstrates an
+  error variant must parse an actual reproducer YAML, not just
+  construct the variant. Exemplar (`src/error.rs:504–508`):
+
+  ```rust
+  /// ```
+  /// use noyalib::{Error, Value, from_str};
+  /// let err = from_str::<Value>("1: a\n\"1\": b\n").unwrap_err();
+  /// assert!(matches!(err, Error::KeyCollision(_)));
+  /// ```
+  ```
+
+  Constructing `Error::KeyCollision("1".into())` on its own is
+  allowed only as a supplementary shape-example; the *behaviour*
+  demonstration must parse.
+
+### 4.4 Property test
+
+- Add to `tests/proptest.rs` (or a new `properties_<area>.rs`).
+- The universal property must be readable in one sentence
+  (`parse(emit(v)) == v`, `parse(format(s))` is total, etc.).
+- Shrink to minimal counterexamples; commit those as a fixed regression
+  test in the nearest topical `tests/*.rs` file.
+
+### 4.5 Fuzz-discovered regression
+
+- Add the minimised crashing input to
+  `tests/scanner_panic_regressions.rs` (or the appropriate
+  `*_panic_regressions.rs`) — one `#[test]` per input.
+- Keep the raw corpus entry under `fuzz/corpus/<target>/` so the
+  fuzzer will not re-discover it.
+
+---
+
+## 5. Acceptance thresholds
+
+Before you claim "ready to merge":
+
+| Gate                           | Threshold                                    | Where enforced                                 |
+|--------------------------------|----------------------------------------------|-----------------------------------------------|
+| Official YAML Test Suite       | `compliance >= 94.0` assertion; `SKIP_LIST = &[]` so total-loaded pass count must not drop | `tests/official_suite.rs:295–314` + review |
+| Coverage — functions           | Target 98% / current gate **96%**            | `--fail-under-functions 96` (`ci.yml:160` + `shared-coverage.yml` default) |
+| Coverage — lines               | Target 98% / current gate **94%**            | `--fail-under-lines 94` (`ci.yml:161` + `shared-coverage.yml` default) |
+| Coverage — regions             | Target 98% / current gate **93%**            | `--fail-under-regions 93` (`ci.yml:162` + `shared-coverage.yml` default) |
+| Clippy                         | `-D warnings` — zero warnings                | Workspace CI                                   |
+| Rustfmt                        | Clean (`make fmt`)                           | Workspace CI                                   |
+| Doctests                       | All ~480 pass (`cargo test --doc`)           | Workspace CI                                   |
+| REUSE / SPDX                   | Every source file carries a header           | REUSE workflow                                 |
+| Miri                           | Focused pass green per PR                    | Miri workflow                                  |
+| Fuzz smoke                     | Differential fuzz 10s per target             | `Differential fuzz` workflow                   |
+
+The 98/98/98 target is the live campaign — see
+`noyalib-coverage-campaign` for the plan to lift the live gate
+(96/94/93 functions/lines/regions) up to 98/98/98. `doc/TESTING.md`
+still cites `95 / 93 / 92`; that is documentation drift — trust
+the workflow files. A conformance regression (any yaml-test-suite
+case dropping from pass to fail/skip) is a **release blocker**,
+not a "next PR" item.
+
+---
+
+## 6. What does NOT count as evidence
+
+Explicitly rejected. If any of the below is your entire justification,
+the PR is not ready:
+
+1. **"It looks right."** — reading the diff is not testing.
+2. **A passing test with no failing-before counterpart.** — the test
+   must be shown (locally or via reviewer's mental replay of the diff)
+   to fail on the pre-fix tree.
+3. **Coverage-only tests that execute but do not assert.** — every
+   `#[test]` asserts something an engineer can read. A test that
+   only calls `from_str` and drops the result is not a test; wrap
+   it with `assert!(matches!(...))` or `assert_eq!` on a value.
+   The `coverage_*` family is not exempt from this rule.
+4. **Bench deltas within noise.** — Criterion prints a p-value; if
+   the CI comparison harness (CodSpeed) does not flag the delta as
+   significant, it is not a regression *and* it is not an
+   improvement. Do not claim either.
+5. **"Green on my machine."** — full CI must be green. See the
+   CI-always-green invariant.
+6. **A doctest that only constructs a type.** — for behavioural
+   claims, parse a reproducer (see §4.3).
+
+---
+
+## 7. When NOT to use this skill
+
+- You need to *run* the tests or interpret llvm-cov output →
+  `noyalib-diagnostics-and-tooling`.
+- You are working the 95 → 98 coverage push specifically →
+  `noyalib-coverage-campaign`.
+- You are researching whether a bug was fixed before →
+  `noyalib-failure-archaeology`.
+- You are deciding *what* to build → `noyalib-architecture-contract`.
+
+---
+
+## Provenance (read-only one-liners, run to re-verify)
+
+```sh
+# Integration test file count (expected: 130 top-level .rs files)
+ls crates/noyalib/tests/*.rs | wc -l
+
+# SPDX header coverage in tests (expected: 130 / 130)
+grep -l "^// SPDX-License-Identifier" crates/noyalib/tests/*.rs | wc -l
+
+# Official YAML Test Suite case count (expected: 351 .yaml files)
+ls crates/noyalib/tests/yaml-test-suite/*.yaml | wc -l
+
+# The conformance floor as literally coded
+grep -n "compliance >=" crates/noyalib/tests/official_suite.rs
+
+# Live pass arithmetic — read the eprintln! block
+grep -n "═══ YAML Test Suite Compliance ═══" crates/noyalib/tests/official_suite.rs
+
+# Doctest count (read the "test result" line)
+cargo test --doc -p noyalib --all-features 2>&1 | grep "^test result"
+
+# Full-suite result (integration)
+cargo test -p noyalib --all-features 2>&1 | grep "^test result"
+
+# Coverage gate thresholds as currently wired
+grep -rn "fail-under" .github/workflows/ Makefile 2>/dev/null
+
+# Bench fixture inventory
+ls crates/noyalib/benches/fixtures/
+```
+
+All commands above are read-only. The `cargo test` calls will build if
+the target directory is cold — use `--no-run` if you want purely the
+listing without exercising the suite.
+
+---
+
+**Date-stamp:** 2026-07-07 · **Crate version:** v0.0.14 · **Ground
+truth:** `crates/noyalib/tests/`, `doc/TESTING.md`, `CONTRIBUTING.md`,
+`Makefile`.
