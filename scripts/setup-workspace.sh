@@ -23,23 +23,40 @@ TARGET_DIR=$(pwd)
 LANGUAGE=${1:-}
 AGENT_CLI=${2:-}
 
-# Optional: --skills-only links skills/commands WITHOUT writing a system
-# prompt — for repos that consume AgtMLS skills but source their system
-# prompt elsewhere (e.g. a global ~/.claude/CLAUDE.md). It also cleans up a
-# prompt left by an earlier non-skills-only run.
+# Flags:
+#   --skills-only    link skills/commands WITHOUT writing a system prompt
+#                    (source the prompt elsewhere, e.g. global ~/.claude/CLAUDE.md);
+#                    also cleans up a prompt left by an earlier normal run.
+#   --bundle <name>  additionally link a PROJECT skill bundle (a subdir of
+#                    skills/ that holds its own skills, e.g. `noyalib`).
+#                    Repeatable. By default only GENERAL skills (top-level
+#                    leaves like cross-language-port, using-agtmls) are
+#                    linked — a project bundle never lands in an unrelated repo.
 SKILLS_ONLY=false
-for arg in "$@"; do
-  [[ "$arg" == "--skills-only" ]] && SKILLS_ONLY=true
+BUNDLES=()
+_args=("$@")
+_i=0
+while [[ $_i -lt ${#_args[@]} ]]; do
+  case "${_args[$_i]}" in
+    --skills-only) SKILLS_ONLY=true ;;
+    --bundle)
+      _i=$((_i + 1))
+      [[ $_i -lt ${#_args[@]} ]] && BUNDLES+=("${_args[$_i]}")
+      ;;
+  esac
+  _i=$((_i + 1))
 done
 
 if [[ -z "$LANGUAGE" || -z "$AGENT_CLI" ]]; then
-  echo "Usage: $0 <language> <agent-cli> [--skills-only]"
+  echo "Usage: $0 <language> <agent-cli> [--skills-only] [--bundle <name>]..."
   echo "  language:      rust | python | go | cpp | swift | typescript | javascript | ruby | bash"
   echo "  agent-cli:     claude | aider | codex"
   echo "  --skills-only: link skills only; do not write a system prompt"
+  echo "  --bundle NAME: also link the NAME project skill bundle (e.g. noyalib); repeatable"
   echo
   echo "Example: $0 rust claude"
-  echo "Example: $0 rust claude --skills-only"
+  echo "Example: $0 python claude --skills-only"
+  echo "Example: $0 rust claude --skills-only --bundle noyalib"
   exit 1
 fi
 
@@ -125,21 +142,30 @@ if [[ -n "$GIT_DIR_PATH" ]]; then
 fi
 
 # 3. Symlink skills and commands so hub updates propagate instantly.
-#    A skill is any directory that CONTAINS a SKILL.md. Bundles (a dir of
-#    skill dirs, no top-level SKILL.md) are flattened one level.
+#    A GENERAL skill is a top-level dir under skills/ that CONTAINS a SKILL.md
+#    (cross-language-port, using-agtmls) — always linked, applies anywhere.
+#    A PROJECT BUNDLE is a top-level dir with NO SKILL.md that holds its own
+#    skill dirs (e.g. skills/noyalib/) — linked only when named via --bundle,
+#    so a project's skills never land in an unrelated repo.
 echo "🔗 Linking skills and commands"
 linked=0
 for entry in "$AGTMLS_DIR/skills/"*; do
   [[ -d "$entry" ]] || continue
+  name=$(basename "$entry")
   if [[ -f "$entry/SKILL.md" ]]; then
-    ln -sfn "$entry" "$TARGET_DIR/$CLI_DIR/skills/$(basename "$entry")"
+    ln -sfn "$entry" "$TARGET_DIR/$CLI_DIR/skills/$name"
     linked=$((linked + 1))
   else
-    for leaf in "$entry"/*; do
-      [[ -f "$leaf/SKILL.md" ]] || continue
-      ln -sfn "$leaf" "$TARGET_DIR/$CLI_DIR/skills/$(basename "$leaf")"
-      linked=$((linked + 1))
-    done
+    want=false
+    for b in "${BUNDLES[@]:-}"; do [[ "$b" == "$name" ]] && want=true; done
+    if $want; then
+      for leaf in "$entry"/*; do
+        [[ -f "$leaf/SKILL.md" ]] || continue
+        ln -sfn "$leaf" "$TARGET_DIR/$CLI_DIR/skills/$(basename "$leaf")"
+        linked=$((linked + 1))
+      done
+      echo "   + bundle: $name"
+    fi
   fi
 done
 echo "   linked $linked skill(s)"
