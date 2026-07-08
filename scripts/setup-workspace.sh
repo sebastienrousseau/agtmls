@@ -72,6 +72,23 @@ if [[ "$AGENT_CLI" == "aider" ]]; then
   fi
 fi
 
+# 2b. Keep the generated prompt + CLI dir LOCAL and private. The assembled
+#     prompt is a per-machine artifact of the hub, not repo content — commit
+#     it and it drifts from the hub and leaks your personal config. Add it to
+#     the target's .git/info/exclude (a personal, UN-committed ignore) so it
+#     stays local and re-running never dirties the working tree. This does not
+#     touch the committed .gitignore; skips gracefully outside a git repo.
+GIT_DIR_PATH="$(git -C "$TARGET_DIR" rev-parse --absolute-git-dir 2>/dev/null || true)"
+if [[ -n "$GIT_DIR_PATH" ]]; then
+  EXCLUDE="$GIT_DIR_PATH/info/exclude"
+  mkdir -p "$(dirname "$EXCLUDE")"
+  ignore_local() { grep -qxF "$1" "$EXCLUDE" 2>/dev/null || printf '%s\n' "$1" >> "$EXCLUDE"; }
+  ignore_local "$SYS_PATH"
+  ignore_local "$CLI_DIR/"
+  [[ "$AGENT_CLI" == "aider" ]] && ignore_local ".aider.conf.yml"
+  echo "🙈 Kept $SYS_PATH + $CLI_DIR/ local (.git/info/exclude) — private, not committed"
+fi
+
 # 3. Symlink skills and commands so hub updates propagate instantly.
 #    A skill is any directory that CONTAINS a SKILL.md. Bundles (a dir of
 #    skill dirs, no top-level SKILL.md) are flattened one level.

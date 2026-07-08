@@ -51,6 +51,13 @@ bundles so each skill lands one level deep (`<cli>/skills/<skill>/`)
 where the tool can discover it. Re-run it any time you add a language
 profile or a skill.
 
+The assembled prompt is a per-machine artifact of the hub, not repo
+content — so the script adds it (and the tool's dot-dir) to the target
+repo's local `.git/info/exclude`. It stays **private and un-committed**,
+sourced only from the hub, and re-running never dirties the working
+tree. (This is a personal, local ignore; it doesn't touch the committed
+`.gitignore`.)
+
 Currently only `rust` has an authored language profile; `python`,
 `cpp`, `go`, and `js` fall back to `_base.md` alone until authored.
 
