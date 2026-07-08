@@ -1,0 +1,8 @@
+/usr/bin:/bin:/usr/bin:/usr/local/bin
+/a::/b
+:/lead:/x
+/trail:/y:
+/only
+/dup:/dup
+/tmp/*:/bin:/tmp/*
+/usr/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin

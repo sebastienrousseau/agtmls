@@ -139,6 +139,25 @@ propagation across the seam) are in `reference.md` §R4.
   force a shortcut. If the idiomatic path needs one, that's a design
   question to surface, not a silent choice.
 
+## Worked examples
+
+Runnable, verified ports live in `examples/` — each a `reference.<ext>`
+(source) + `port.<ext>` (idiomatic target) + golden `corpus/` + `verify.sh`
+that proves equivalence. Study the one closest to your port before starting;
+copy its shape. Current roster (`examples/README.md` indexes them):
+
+- **`py-to-rust-iban/`** — Python → Rust; teaches the integer-width landmine
+  (Python bignum `% 97` → Rust incremental mod, because the value overflows
+  `u128`).
+- **`bash-to-python-pathdedupe/`** — Bash → Python; teaches word-splitting +
+  glob expansion of unquoted `$var` (a `/tmp/*` segment must stay literal).
+
+Run every example's proof at once:
+
+```sh
+for v in examples/*/verify.sh; do "$v"; done
+```
+
 ## When NOT to use this skill
 
 - **Micro-porting** (a single function of a few lines) — do it inline in the
