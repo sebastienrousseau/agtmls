@@ -28,6 +28,7 @@
     "validate-release.py",
     "release-check.py",
     "smoke-install.py",
+    "smoke-install-profiles.py",
     "smoke-cli.py",
     "smoke-export.py",
     "smoke-import.py",

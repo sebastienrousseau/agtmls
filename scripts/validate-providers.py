@@ -42,6 +42,12 @@ def main() -> int:
         for name, item in exports.items():
             if not isinstance(item, dict) or not isinstance(item.get("description"), str) or not item["description"].strip():
                 errors.append(f"export target {name} must have description")
+                continue
+            adapters = item.get("adapter_files")
+            if not isinstance(adapters, list) or not adapters or not all(isinstance(path, str) and path for path in adapters):
+                errors.append(f"export target {name} must have adapter_files")
+            elif any(path.startswith("/") or ".." in Path(path).parts for path in adapters):
+                errors.append(f"export target {name} adapter_files must be safe relative paths")
     else:
         errors.append("export_targets must be an object")
     if errors:

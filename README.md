@@ -166,6 +166,7 @@ python3 scripts/validate-lifecycle.py
 python3 scripts/validate-release.py
 python3 scripts/release-check.py
 python3 scripts/smoke-install.py
+python3 scripts/smoke-install-profiles.py
 python3 scripts/smoke-cli.py
 python3 scripts/smoke-export.py
 python3 scripts/smoke-import.py
@@ -222,8 +223,12 @@ language-neutral skills, prompts, commands, and evals.
 ### Providers and profiles
 
 AgtMLS has native symlink installers for Claude Code, Codex, and Aider. Other
-AI providers are supported through provider-neutral Markdown exports generated
-from the same registry source of truth. `providers.json` records the native
+AI providers are supported through provider-adapted Markdown exports generated
+from the same registry source of truth. Each export includes `ADAPTERS.md` plus
+a provider-specific file such as `adapters/openai/AGENTS.md`,
+`adapters/anthropic/CLAUDE.md`,
+`adapters/github-copilot/.github/copilot-instructions.md`, or
+`adapters/cursor/.cursor/rules/agtmls.mdc`. `providers.json` records the native
 agent layouts and export targets; `profiles.json` records named subsets such as
 `minimal`, `polyglot`, `noyalib`, `security`, and `research`.
 

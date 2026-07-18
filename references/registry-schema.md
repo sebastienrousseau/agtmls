@@ -90,3 +90,8 @@ file or bundle metadata file:
 targets. `profiles.json` defines named subsets consumed by `agtmls.py install`
 and `agtmls.py export`. These files are validated independently so adding a new
 provider or profile is an intentional registry change.
+
+Provider export target entries include `adapter_files`, a list of safe relative
+paths that `scripts/export-registry.py` writes into exported archives. The
+archive manifest repeats the selected adapter files so downstream packaging can
+verify the expected provider entry points are present.

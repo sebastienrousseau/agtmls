@@ -1,64 +1,103 @@
 {
-  "schema_version": 1,
-  "native_agents": {
-    "claude": {
-      "prompt_file": "CLAUDE.md",
-      "skills_dir": ".claude/skills",
-      "commands_dir": ".claude/commands",
-      "install_mode": "symlink"
-    },
-    "codex": {
-      "prompt_file": "AGENTS.md",
-      "skills_dir": ".codex/skills",
-      "commands_dir": ".codex/commands",
-      "install_mode": "symlink"
-    },
-    "aider": {
-      "prompt_file": "CONVENTIONS.md",
-      "skills_dir": ".aider/skills",
-      "commands_dir": ".aider/commands",
-      "install_mode": "symlink"
-    }
-  },
   "export_targets": {
-    "generic": {
-      "description": "Provider-neutral bundle containing SKILL.md files, references, commands, prompts, index, profiles, and provider metadata."
-    },
-    "openai": {
-      "description": "Provider-neutral bundle for OpenAI/Codex-style agents that can consume repository instructions and Markdown skills."
-    },
     "anthropic": {
+      "adapter_files": [
+        "adapters/anthropic/CLAUDE.md"
+      ],
       "description": "Provider-neutral bundle for Claude-style agents that can consume CLAUDE.md, slash commands, and Markdown skills."
     },
+    "continue": {
+      "adapter_files": [
+        "adapters/continue/.continue/rules/agtmls.md"
+      ],
+      "description": "Provider-neutral Markdown bundle for Continue-style assistant contexts."
+    },
+    "cursor": {
+      "adapter_files": [
+        "adapters/cursor/.cursor/rules/agtmls.mdc"
+      ],
+      "description": "Provider-neutral Markdown bundle for Cursor project-rule adaptation."
+    },
+    "deepseek": {
+      "adapter_files": [
+        "adapters/deepseek/AGENTS.md"
+      ],
+      "description": "Provider-neutral Markdown bundle for DeepSeek-based coding agents."
+    },
+    "generic": {
+      "adapter_files": [
+        "ADAPTERS.md"
+      ],
+      "description": "Provider-neutral bundle containing SKILL.md files, references, commands, prompts, index, profiles, and provider metadata."
+    },
+    "github-copilot": {
+      "adapter_files": [
+        "adapters/github-copilot/.github/copilot-instructions.md"
+      ],
+      "description": "Provider-neutral Markdown bundle suitable for Copilot-adjacent repository instruction workflows."
+    },
     "google-gemini": {
+      "adapter_files": [
+        "adapters/google-gemini/GEMINI.md"
+      ],
       "description": "Provider-neutral Markdown bundle for Gemini-style agents or custom Gemini CLI integrations."
     },
     "mistral": {
+      "adapter_files": [
+        "adapters/mistral/AGENTS.md"
+      ],
       "description": "Provider-neutral Markdown bundle for Mistral-based agent runtimes."
     },
-    "deepseek": {
-      "description": "Provider-neutral Markdown bundle for DeepSeek-based coding agents."
-    },
-    "qwen": {
-      "description": "Provider-neutral Markdown bundle for Qwen-based coding agents."
-    },
     "ollama": {
+      "adapter_files": [
+        "adapters/ollama/Modelfile.instructions.md"
+      ],
       "description": "Provider-neutral local-model bundle for Ollama-backed agent runtimes."
     },
-    "github-copilot": {
-      "description": "Provider-neutral Markdown bundle suitable for Copilot-adjacent repository instruction workflows."
+    "openai": {
+      "adapter_files": [
+        "adapters/openai/AGENTS.md"
+      ],
+      "description": "Provider-neutral bundle for OpenAI/Codex-style agents that can consume repository instructions and Markdown skills."
     },
-    "cursor": {
-      "description": "Provider-neutral Markdown bundle for Cursor project-rule adaptation."
+    "qwen": {
+      "adapter_files": [
+        "adapters/qwen/AGENTS.md"
+      ],
+      "description": "Provider-neutral Markdown bundle for Qwen-based coding agents."
     },
     "windsurf": {
+      "adapter_files": [
+        "adapters/windsurf/.windsurfrules"
+      ],
       "description": "Provider-neutral Markdown bundle for Windsurf/Cascade rule adaptation."
     },
     "zed": {
+      "adapter_files": [
+        "adapters/zed/.rules/agtmls.md"
+      ],
       "description": "Provider-neutral Markdown bundle for Zed agent rule adaptation."
-    },
-    "continue": {
-      "description": "Provider-neutral Markdown bundle for Continue-style assistant contexts."
     }
-  }
+  },
+  "native_agents": {
+    "aider": {
+      "commands_dir": ".aider/commands",
+      "install_mode": "symlink",
+      "prompt_file": "CONVENTIONS.md",
+      "skills_dir": ".aider/skills"
+    },
+    "claude": {
+      "commands_dir": ".claude/commands",
+      "install_mode": "symlink",
+      "prompt_file": "CLAUDE.md",
+      "skills_dir": ".claude/skills"
+    },
+    "codex": {
+      "commands_dir": ".codex/commands",
+      "install_mode": "symlink",
+      "prompt_file": "AGENTS.md",
+      "skills_dir": ".codex/skills"
+    }
+  },
+  "schema_version": 1
 }
