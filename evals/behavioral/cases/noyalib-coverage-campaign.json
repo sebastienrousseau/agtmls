@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-coverage-campaign",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "96 fn / 94 lines / 93 regions",
+      "98 %",
+      "baseline",
+      "wrong turns"
+    ],
+    "reference_contains": [
+      "coverage-gap-report",
+      "Known wrong paths"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "weakening thresholds is allowed",
+      "assert-free coverage tests are enough"
+    ]
+  }
+}

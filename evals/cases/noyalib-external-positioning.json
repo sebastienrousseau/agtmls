@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-external-positioning",
+  "positive": [
+    "how does noyalib compare to serde_yaml_ng",
+    "can we claim noyalib is faster than yaml-rust2",
+    "write public launch copy for noyalib",
+    "build a COMPARISON matrix against Rust YAML crates"
+  ],
+  "negative": [
+    "fix cargo-vet in CI",
+    "write a cross-loader parity regression test"
+  ]
+}

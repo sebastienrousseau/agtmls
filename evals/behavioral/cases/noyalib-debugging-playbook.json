@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-debugging-playbook",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Symptom-driven triage",
+      "from_str::<Value>",
+      "NoSpanLoader",
+      "budget"
+    ],
+    "reference_contains": [
+      "routing-full",
+      "symptom"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "guess first",
+      "ignore loader parity"
+    ]
+  }
+}

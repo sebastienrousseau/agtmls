@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-validation-and-qa",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "evidence",
+      "FAILS on the pre-fix tree",
+      "test taxonomy",
+      "cross-loader parity"
+    ],
+    "reference_contains": [
+      "regression",
+      "doctest"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "assert-free coverage tests are enough",
+      "looks right is enough"
+    ]
+  }
+}

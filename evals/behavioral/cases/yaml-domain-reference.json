@@ -1,0 +1,24 @@
+{
+  "skill": "yaml-domain-reference",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "YAML 1.2.2",
+      "merge keys",
+      "block-scalar chomping",
+      "Norway problem"
+    ],
+    "reference_contains": [
+      "resolve_plain_ext",
+      "official-suite"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "YAML 1.1 only",
+      "ignore spec"
+    ]
+  }
+}

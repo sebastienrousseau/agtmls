@@ -1,0 +1,57 @@
+{
+  "name": "agtmls-skill-lifecycle",
+  "schema_version": 1,
+  "stages": [
+    {
+      "name": "proposal",
+      "required_artifacts": [
+        ".agtmls/proposals/<skill>.md"
+      ],
+      "exit_criteria": [
+        "human-reviewed trigger",
+        "human-reviewed safety boundaries",
+        "candidate eval prompts identified"
+      ]
+    },
+    {
+      "name": "draft",
+      "required_artifacts": [
+        "skills/<skill>/SKILL.md",
+        "evals/cases/<skill>.json"
+      ],
+      "exit_criteria": [
+        "validate-skills passes",
+        "routing eval passes",
+        "description collision check passes"
+      ]
+    },
+    {
+      "name": "hardened",
+      "required_artifacts": [
+        "evals/behavioral/cases/<skill>.json"
+      ],
+      "exit_criteria": [
+        "behavioral eval passes",
+        "index is regenerated",
+        "index metadata validates"
+      ]
+    },
+    {
+      "name": "published",
+      "required_artifacts": [
+        "index.json"
+      ],
+      "exit_criteria": [
+        "doctor passes with zero warnings",
+        "CI passes",
+        "docs updated for user-visible surfaces"
+      ]
+    }
+  ],
+  "non_negotiables": [
+    "no background transcript capture",
+    "redact likely secrets before staging proposals",
+    "do not auto-install generated skills",
+    "do not edit index.json by hand"
+  ]
+}

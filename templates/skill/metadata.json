@@ -1,0 +1,19 @@
+{
+  "maturity": "draft",
+  "owner": "Sebastien Rousseau",
+  "required_tools": [],
+  "safety_policy": {
+    "executes_commands": false,
+    "handles_secrets": false,
+    "network_access": "none",
+    "requires_human_review": false,
+    "risk_level": "low",
+    "writes_files": false
+  },
+  "supported_agents": [
+    "claude",
+    "codex",
+    "aider"
+  ],
+  "version": "0.1.0"
+}

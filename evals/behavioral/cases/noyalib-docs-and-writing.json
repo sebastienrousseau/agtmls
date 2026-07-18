@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-docs-and-writing",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "README",
+      "CHANGELOG",
+      "SPDX",
+      "ADR"
+    ],
+    "reference_contains": [
+      "release-notes",
+      "SPDX"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "docs can follow later",
+      "omit SPDX"
+    ]
+  }
+}

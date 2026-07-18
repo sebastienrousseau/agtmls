@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-research-frontier",
+  "positive": [
+    "is there a paper angle for noyalib spec conformance",
+    "what upstream YAML test suite contribution should we pursue",
+    "define a falsifiable milestone for YAML edge case authority",
+    "what research direction is open after v0.0.14"
+  ],
+  "negative": [
+    "what is the cargo release tag flow",
+    "debug wrong byte spans"
+  ]
+}

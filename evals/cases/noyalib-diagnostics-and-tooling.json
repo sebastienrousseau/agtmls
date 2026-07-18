@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-diagnostics-and-tooling",
+  "positive": [
+    "run and interpret noyalib Miri output",
+    "read this criterion benchmark table and prove the optimization",
+    "interpret cargo fuzz artifacts from noyalib",
+    "what does llvm-cov regions percentage mean"
+  ],
+  "negative": [
+    "what public claim can we make versus serde_yaml",
+    "how do I add a Cargo feature"
+  ]
+}

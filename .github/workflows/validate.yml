@@ -21,7 +21,73 @@ jobs:
           python-version: "3.12"
       - name: Validate skill frontmatter
         run: python3 scripts/validate-skills.py
+      - name: Validate commands
+        run: python3 scripts/validate-commands.py
+      - name: Validate plugin manifest
+        run: python3 scripts/validate-plugin-manifest.py
+      - name: Validate providers
+        run: python3 scripts/validate-providers.py
+      - name: Validate profiles
+        run: python3 scripts/validate-profiles.py
+      - name: Validate templates
+        run: python3 scripts/validate-templates.py
+      - name: Validate local doc links
+        run: python3 scripts/validate-doc-links.py
+      - name: Validate JSON files
+        run: python3 scripts/validate-json-files.py
+      - name: Validate Python scripts
+        run: python3 scripts/validate-python-scripts.py
+      - name: Validate shell syntax
+        run: python3 scripts/validate-shell-syntax.py
+      - name: Scan for likely secrets
+        run: python3 scripts/validate-secrets.py
+      - name: Validate gitignore policy
+        run: python3 scripts/validate-gitignore.py
+      - name: Validate CLI surface
+        run: python3 scripts/validate-cli-surface.py
+      - name: Validate system prompts
+        run: python3 scripts/validate-system-prompts.py
       - name: Check description collisions
         run: python3 scripts/check-skill-collisions.py
+      - name: Validate eval case schemas
+        run: python3 scripts/validate-eval-cases.py
       - name: Trigger-routing evals
         run: python3 scripts/run-trigger-evals.py
+      - name: Behavioral evals
+        run: python3 scripts/run-behavioral-evals.py
+      - name: Validate skill metadata
+        run: python3 scripts/validate-skill-metadata.py
+      - name: Check generated skill index
+        run: python3 scripts/generate-skill-index.py --check
+      - name: Check generated catalog
+        run: python3 scripts/generate-catalog.py --check
+      - name: Validate generated artifacts
+        run: python3 scripts/validate-generated-artifacts.py
+      - name: Validate skill index metadata
+        run: python3 scripts/validate-skill-index.py
+      - name: Validate lifecycle metadata
+        run: python3 scripts/validate-lifecycle.py
+      - name: Validate release metadata
+        run: python3 scripts/validate-release.py
+      - name: Release check
+        run: python3 scripts/release-check.py
+      - name: Smoke test workspace setup
+        run: python3 scripts/smoke-install.py
+      - name: Smoke test CLI
+        run: python3 scripts/smoke-cli.py
+      - name: Smoke test export
+        run: python3 scripts/smoke-export.py
+      - name: Smoke test import
+        run: python3 scripts/smoke-import.py
+      - name: Smoke test proposal generation
+        run: python3 scripts/smoke-proposal.py
+      - name: Smoke test scaffold
+        run: python3 scripts/smoke-scaffold.py
+      - name: Unit tests
+        run: python3 scripts/run-unit-tests.py
+      - name: Validate check manifest
+        run: python3 scripts/validate-check-manifest.py
+      - name: Doctor
+        run: python3 scripts/agtmls-doctor.py
+      - name: Compile maintenance CLIs
+        run: python3 -m py_compile scripts/agtmls.py scripts/agtmls-doctor.py scripts/export-registry.py scripts/generate-catalog.py scripts/generate-skill-index.py scripts/import-skill.py scripts/propose-skill-from-session.py scripts/registry-diff.py scripts/release-check.py scripts/run-behavioral-evals.py scripts/run-all-checks.py scripts/run-unit-tests.py scripts/scaffold-skill.py scripts/smoke-cli.py scripts/smoke-export.py scripts/smoke-import.py scripts/smoke-install.py scripts/smoke-proposal.py scripts/smoke-scaffold.py scripts/validate-check-manifest.py scripts/validate-cli-surface.py scripts/validate-commands.py scripts/validate-doc-links.py scripts/validate-eval-cases.py scripts/validate-generated-artifacts.py scripts/validate-gitignore.py scripts/validate-json-files.py scripts/validate-lifecycle.py scripts/validate-plugin-manifest.py scripts/validate-profiles.py scripts/validate-providers.py scripts/validate-python-scripts.py scripts/validate-release.py scripts/validate-secrets.py scripts/validate-shell-syntax.py scripts/validate-skill-index.py scripts/validate-skill-metadata.py scripts/validate-system-prompts.py scripts/validate-templates.py

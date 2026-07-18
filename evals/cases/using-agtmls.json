@@ -1,0 +1,13 @@
+{
+  "skill": "using-agtmls",
+  "positive": [
+    "which AgtMLS skill should I use for this task",
+    "how do AgtMLS skills fit together",
+    "is there a skill for porting code or noyalib work",
+    "help me choose between the noyalib skills"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "CI is red on noyalib"
+  ]
+}

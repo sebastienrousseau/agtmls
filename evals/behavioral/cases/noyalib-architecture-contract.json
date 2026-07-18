@@ -1,0 +1,23 @@
+{
+  "skill": "noyalib-architecture-contract",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "forbid(unsafe_code)",
+      "loader parity",
+      "value_target_bypass"
+    ],
+    "reference_contains": [
+      "stream_eligible",
+      "NoSpanLoader"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "allow unsafe",
+      "loader parity is optional"
+    ]
+  }
+}

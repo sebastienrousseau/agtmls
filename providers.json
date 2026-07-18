@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "native_agents": {
+    "claude": {
+      "prompt_file": "CLAUDE.md",
+      "skills_dir": ".claude/skills",
+      "commands_dir": ".claude/commands",
+      "install_mode": "symlink"
+    },
+    "codex": {
+      "prompt_file": "AGENTS.md",
+      "skills_dir": ".codex/skills",
+      "commands_dir": ".codex/commands",
+      "install_mode": "symlink"
+    },
+    "aider": {
+      "prompt_file": "CONVENTIONS.md",
+      "skills_dir": ".aider/skills",
+      "commands_dir": ".aider/commands",
+      "install_mode": "symlink"
+    }
+  },
+  "export_targets": {
+    "generic": {
+      "description": "Provider-neutral bundle containing SKILL.md files, references, commands, prompts, index, profiles, and provider metadata."
+    },
+    "openai": {
+      "description": "Provider-neutral bundle for OpenAI/Codex-style agents that can consume repository instructions and Markdown skills."
+    },
+    "anthropic": {
+      "description": "Provider-neutral bundle for Claude-style agents that can consume CLAUDE.md, slash commands, and Markdown skills."
+    },
+    "google-gemini": {
+      "description": "Provider-neutral Markdown bundle for Gemini-style agents or custom Gemini CLI integrations."
+    },
+    "mistral": {
+      "description": "Provider-neutral Markdown bundle for Mistral-based agent runtimes."
+    },
+    "deepseek": {
+      "description": "Provider-neutral Markdown bundle for DeepSeek-based coding agents."
+    },
+    "qwen": {
+      "description": "Provider-neutral Markdown bundle for Qwen-based coding agents."
+    },
+    "ollama": {
+      "description": "Provider-neutral local-model bundle for Ollama-backed agent runtimes."
+    },
+    "github-copilot": {
+      "description": "Provider-neutral Markdown bundle suitable for Copilot-adjacent repository instruction workflows."
+    },
+    "cursor": {
+      "description": "Provider-neutral Markdown bundle for Cursor project-rule adaptation."
+    },
+    "windsurf": {
+      "description": "Provider-neutral Markdown bundle for Windsurf/Cascade rule adaptation."
+    },
+    "zed": {
+      "description": "Provider-neutral Markdown bundle for Zed agent rule adaptation."
+    },
+    "continue": {
+      "description": "Provider-neutral Markdown bundle for Continue-style assistant contexts."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "skill": "cross-language-port",
+  "positive": [
+    "port this Python module to Rust and prove the outputs match",
+    "translate this Go CLI to TypeScript without changing behavior",
+    "rewrite this Bash script in Python with a golden input output harness",
+    "convert this Ruby function to JavaScript and preserve error semantics"
+  ],
+  "negative": [
+    "explain YAML block scalar chomping",
+    "which noyalib CI gate failed"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-failure-archaeology",
+  "positive": [
+    "has this noyalib loader bug been investigated before",
+    "why was FlowStyle ignored and what should not be retried",
+    "look up the cache poisoning incident behind no_std",
+    "was the BOM column desync ever fixed"
+  ],
+  "negative": [
+    "how do I install cargo llvm cov",
+    "explain YAML tags"
+  ]
+}

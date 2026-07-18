@@ -1,0 +1,23 @@
+{
+  "maturity": "project",
+  "owner": "Sebastien Rousseau",
+  "project": "noyalib",
+  "required_tools": [
+    "cargo",
+    "git"
+  ],
+  "safety_policy": {
+    "executes_commands": true,
+    "handles_secrets": false,
+    "network_access": "optional",
+    "requires_human_review": true,
+    "risk_level": "medium",
+    "writes_files": true
+  },
+  "supported_agents": [
+    "claude",
+    "codex",
+    "aider"
+  ],
+  "version": "0.1.0"
+}

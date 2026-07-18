@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-config-and-flags",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "ParserConfig",
+      "SerializerConfig",
+      "Cargo feature",
+      "strict()"
+    ],
+    "reference_contains": [
+      "ParserConfig",
+      "Cargo feature matrix"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "string replace Cargo.toml",
+      "skip parity"
+    ]
+  }
+}

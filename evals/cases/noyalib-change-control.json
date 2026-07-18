@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-change-control",
+  "positive": [
+    "am I allowed to bump noyalib MSRV",
+    "classify this noyalib change and decide which gates apply",
+    "prepare a noyalib PR with the required evidence",
+    "is this release ready under the change control rulebook"
+  ],
+  "negative": [
+    "run criterion and interpret the benchmark output",
+    "what does max_depth default to"
+  ]
+}

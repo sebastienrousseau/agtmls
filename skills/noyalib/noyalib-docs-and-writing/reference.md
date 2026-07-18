@@ -92,7 +92,7 @@ Skeleton (verified against `TEMPLATE.md`):
 ```markdown
 # NNNN. Title (imperative, one line)
 
-- **Status:** proposed | accepted | superseded by [NNNN](./NNNN-...) | deprecated
+- **Status:** proposed | accepted | superseded by `NNNN` | deprecated
 - **Date:** YYYY-MM-DD
 - **Authors:** Name
 

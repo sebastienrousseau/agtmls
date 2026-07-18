@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-change-control",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "classify",
+      "forbid(unsafe_code)",
+      "Never",
+      "release readiness"
+    ],
+    "reference_contains": [
+      "complete 9-row taxonomy",
+      "Same-session green"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "--no-verify` is allowed",
+      "[skip ci] is allowed"
+    ]
+  }
+}
