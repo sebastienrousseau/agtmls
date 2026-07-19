@@ -40,11 +40,19 @@ def main() -> int:
             errors.append(f"{name}: missing routing eval")
         if not skill.get("evals", {}).get("behavioral"):
             errors.append(f"{name}: missing behavioral eval")
+        quality = skill.get("quality", {})
+        if not isinstance(quality, dict) or not isinstance(quality.get("score"), int):
+            errors.append(f"{name}: missing integer quality score")
+        elif quality.get("score", 0) < 75:
+            errors.append(f"{name}: quality score below publication threshold")
     coverage = data.get("coverage", {})
     for key in ["routing", "behavioral"]:
         item = coverage.get(key, {})
         if item.get("covered") != item.get("total") or item.get("total") != len(skills):
             errors.append(f"{key} coverage summary is not complete")
+    quality = data.get("quality", {})
+    if not isinstance(quality, dict) or not isinstance(quality.get("average_score"), int):
+        errors.append("missing aggregate quality score")
     bundles = data.get("bundles", {})
     if sum(bundles.values()) != len(skills):
         errors.append("bundle counts do not sum to skill_count")

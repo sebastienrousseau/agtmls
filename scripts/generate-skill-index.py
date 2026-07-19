@@ -110,6 +110,26 @@ def infer_tags(name: str, description: str, bundle: str | None) -> list[str]:
     return sorted(tags)
 
 
+
+def quality_score(skill: dict[str, object]) -> dict[str, object]:
+    checks = {
+        "description": bool(str(skill.get("description", "")).strip()),
+        "metadata": bool(skill.get("metadata_path")),
+        "references": bool(skill.get("references")),
+        "routing_eval": bool(skill.get("evals", {}).get("routing")),
+        "behavioral_eval": bool(skill.get("evals", {}).get("behavioral")),
+        "safety_policy": bool(skill.get("safety_policy")),
+        "supported_agents": bool(skill.get("supported_agents")),
+        "maturity": skill.get("maturity") in {"hardened", "project"},
+    }
+    passed = sum(1 for ok in checks.values() if ok)
+    return {
+        "score": round((passed / len(checks)) * 100),
+        "passed": passed,
+        "total": len(checks),
+        "checks": checks,
+    }
+
 def collect() -> dict[str, object]:
     plugin = json.loads(PLUGIN.read_text(encoding="utf-8")) if PLUGIN.exists() else {}
     commands = collect_commands()
@@ -142,43 +162,44 @@ def collect() -> dict[str, object]:
             / f"{fields.get('name', skill_md.parent.name)}.json"
         )
         metadata_path, metadata = load_skill_metadata(skill_md.parent)
-        skills.append(
-            {
-                "name": fields.get("name", skill_md.parent.name),
-                "description": re.sub(r"\s+", " ", fields.get("description", "")).strip(),
-                "path": rel_dir,
-                "kind": kind,
-                "bundle": bundle,
-                "license": fields.get("license", "MIT"),
-                "date": fields.get("date"),
-                "metadata_path": metadata_path,
-                "version": metadata.get("version", fields.get("version", "0.1.0")),
-                "owner": metadata.get("owner"),
-                "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
-                "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),
-                "required_tools": metadata.get("required_tools", []),
-                "safety_policy": metadata.get("safety_policy", {}),
-                "compatibility": fields.get(
-                    "compatibility",
-                    "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
-                ),
-                "tags": infer_tags(
-                    fields.get("name", skill_md.parent.name),
-                    fields.get("description", ""),
-                    bundle,
-                ),
-                "references": references,
-                "scripts": scripts,
-                "assets": assets,
-                "evals": {
-                    "routing": eval_case.exists(),
-                    "behavioral": behavioral_case.exists(),
-                },
-            }
-        )
+        skill = {
+            "name": fields.get("name", skill_md.parent.name),
+            "description": re.sub(r"\s+", " ", fields.get("description", "")).strip(),
+            "path": rel_dir,
+            "kind": kind,
+            "bundle": bundle,
+            "license": fields.get("license", "MIT"),
+            "date": fields.get("date"),
+            "metadata_path": metadata_path,
+            "version": metadata.get("version", fields.get("version", "0.1.0")),
+            "owner": metadata.get("owner"),
+            "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
+            "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),
+            "required_tools": metadata.get("required_tools", []),
+            "safety_policy": metadata.get("safety_policy", {}),
+            "compatibility": fields.get(
+                "compatibility",
+                "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
+            ),
+            "tags": infer_tags(
+                fields.get("name", skill_md.parent.name),
+                fields.get("description", ""),
+                bundle,
+            ),
+            "references": references,
+            "scripts": scripts,
+            "assets": assets,
+            "evals": {
+                "routing": eval_case.exists(),
+                "behavioral": behavioral_case.exists(),
+            },
+        }
+        skill["quality"] = quality_score(skill)
+        skills.append(skill)
     bundles = Counter(skill["bundle"] or "_general" for skill in skills)
     routing = sum(1 for skill in skills if skill["evals"]["routing"])
     behavioral = sum(1 for skill in skills if skill["evals"]["behavioral"])
+    average_quality = round(sum(skill["quality"]["score"] for skill in skills) / len(skills)) if skills else 0
     return {
         "name": "agtmls",
         "description": "Agent Multiple Listing Service skill registry",
@@ -191,6 +212,7 @@ def collect() -> dict[str, object]:
             "routing": {"covered": routing, "total": len(skills)},
             "behavioral": {"covered": behavioral, "total": len(skills)},
         },
+        "quality": {"average_score": average_quality, "total": len(skills)},
         "bundles": dict(sorted(bundles.items())),
         "commands": commands,
         "skills": skills,

@@ -160,11 +160,14 @@ python3 scripts/run-behavioral-evals.py
 python3 scripts/validate-skill-metadata.py
 python3 scripts/generate-skill-index.py --check
 python3 scripts/generate-catalog.py --check
+python3 scripts/generate-docs-site.py --check
 python3 scripts/validate-generated-artifacts.py
+python3 scripts/validate-docs-site.py
 python3 scripts/validate-skill-index.py
 python3 scripts/validate-lifecycle.py
 python3 scripts/validate-release.py
 python3 scripts/release-check.py
+python3 scripts/smoke-release-pack.py
 python3 scripts/smoke-install.py
 python3 scripts/smoke-install-profiles.py
 python3 scripts/smoke-cli.py
@@ -189,6 +192,8 @@ python3 scripts/agtmls.py stats
 python3 scripts/agtmls.py profiles
 python3 scripts/agtmls.py providers
 python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir dist
+python3 scripts/agtmls.py docs-site --write
+python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 python3 scripts/agtmls.py diff --from index.json --to index.json
 python3 scripts/agtmls.py release-check
 python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
@@ -261,3 +266,19 @@ python3 scripts/agtmls.py release-check
 draft metadata, creates a reference stub when needed, and review-gates the
 result. Publish it only after adding routing and behavioral eval cases, filling
 out references, and passing `python3 scripts/agtmls.py check`.
+
+### Static docs site
+
+`site/index.html` is generated from the registry metadata and gives a browser-readable catalog with skill quality, risk, agent support, profiles, and export targets. Rebuild it after changing `index.json`, `profiles.json`, or `providers.json`:
+
+```bash
+python3 scripts/agtmls.py docs-site --write
+```
+
+### Release packs
+
+`release-pack` creates provider export archives plus `SHA256SUMS` and `release-manifest.json`:
+
+```bash
+python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+```

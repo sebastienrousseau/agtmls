@@ -145,6 +145,7 @@ def stats(json_output: bool) -> int:
         "commands": index.get("command_count", 0),
         "bundles": index.get("bundles", {}),
         "coverage": index.get("coverage", {}),
+        "quality": index.get("quality", {}),
     }
     if json_output:
         print(json.dumps(payload, indent=2, sort_keys=True))
@@ -155,6 +156,9 @@ def stats(json_output: bool) -> int:
     for name, count in sorted(payload["bundles"].items()):
         label = "general" if name == "_general" else name
         print(f"bundle/{label}: {count}")
+    quality = payload.get("quality", {})
+    if quality:
+        print(f"quality: {quality.get('average_score', 0)}")
     coverage = payload["coverage"]
     for name in sorted(coverage):
         item = coverage[name]
@@ -231,6 +235,15 @@ def main() -> int:
     export_cmd.add_argument("--bundle", action="append", default=[])
     export_cmd.add_argument("--out-dir", type=Path)
 
+    docs_site = sub.add_parser("docs-site")
+    docs_site.add_argument("--write", action="store_true")
+    docs_site.add_argument("--check", action="store_true")
+
+    release_pack = sub.add_parser("release-pack")
+    release_pack.add_argument("--out-dir", type=Path)
+    release_pack.add_argument("--profile")
+    release_pack.add_argument("--provider", action="append", default=[])
+
     diff_cmd = sub.add_parser("diff")
     diff_cmd.add_argument("--from", dest="old", required=True)
     diff_cmd.add_argument("--to", dest="new", default="index.json")
@@ -304,6 +317,18 @@ def main() -> int:
             cmd.extend(["--bundle", bundle])
         if args.out_dir:
             cmd.extend(["--out-dir", str(args.out_dir)])
+        return run(cmd)
+    if args.command == "docs-site":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-docs-site.py"), *flags])
+    if args.command == "release-pack":
+        cmd = [sys.executable, str(ROOT / "scripts" / "release-pack.py")]
+        if args.out_dir:
+            cmd.extend(["--out-dir", str(args.out_dir)])
+        if args.profile:
+            cmd.extend(["--profile", args.profile])
+        for provider in args.provider:
+            cmd.extend(["--provider", provider])
         return run(cmd)
     if args.command == "diff":
         cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", args.old, "--to", args.new]

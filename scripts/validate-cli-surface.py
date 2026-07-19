@@ -40,6 +40,8 @@ def main() -> int:
         "profiles",
         "providers",
         "export",
+        "docs-site",
+        "release-pack",
         "diff",
         "release-check",
         "import-skill",

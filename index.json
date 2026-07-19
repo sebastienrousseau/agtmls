@@ -24,6 +24,10 @@
   "description": "Agent Multiple Listing Service skill registry",
   "generated_by": "scripts/generate-skill-index.py",
   "name": "agtmls",
+  "quality": {
+    "average_score": 99,
+    "total": 16
+  },
   "registry_version": "0.1.0",
   "schema_version": 1,
   "skill_count": 16,
@@ -45,6 +49,21 @@
       "name": "cross-language-port",
       "owner": "Sebastien Rousseau",
       "path": "skills/cross-language-port",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -88,6 +107,21 @@
       "name": "noyalib-architecture-contract",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-architecture-contract",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -135,6 +169,21 @@
       "name": "noyalib-build-and-env",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-build-and-env",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -181,6 +230,21 @@
       "name": "noyalib-change-control",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-change-control",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -230,6 +294,21 @@
       "name": "noyalib-ci-and-release",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-ci-and-release",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -276,6 +355,21 @@
       "name": "noyalib-config-and-flags",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-config-and-flags",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -320,6 +414,21 @@
       "name": "noyalib-coverage-campaign",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-coverage-campaign",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -368,6 +477,21 @@
       "name": "noyalib-debugging-playbook",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-debugging-playbook",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -416,6 +540,21 @@
       "name": "noyalib-diagnostics-and-tooling",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-diagnostics-and-tooling",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -463,6 +602,21 @@
       "name": "noyalib-docs-and-writing",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-docs-and-writing",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -511,6 +665,21 @@
       "name": "noyalib-external-positioning",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-external-positioning",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -559,6 +728,21 @@
       "name": "noyalib-failure-archaeology",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-failure-archaeology",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -604,6 +788,21 @@
       "name": "noyalib-research-frontier",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-research-frontier",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -652,6 +851,21 @@
       "name": "noyalib-validation-and-qa",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/noyalib-validation-and-qa",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -701,6 +915,21 @@
       "name": "yaml-domain-reference",
       "owner": "Sebastien Rousseau",
       "path": "skills/noyalib/yaml-domain-reference",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
       "references": [
         "reference.md"
       ],
@@ -747,6 +976,21 @@
       "name": "using-agtmls",
       "owner": "Sebastien Rousseau",
       "path": "skills/using-agtmls",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": false,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 7,
+        "score": 88,
+        "total": 8
+      },
       "references": [],
       "required_tools": [],
       "safety_policy": {
