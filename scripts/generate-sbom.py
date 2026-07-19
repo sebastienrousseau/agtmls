@@ -4,13 +4,17 @@ from __future__ import annotations
 import argparse,hashlib,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent; OUT=ROOT/'SBOM.spdx.json'
+SKIP_NAMES={'.DS_Store'}
+SKIP_PARTS={'__pycache__'}
 def sha(p):
     h=hashlib.sha256(); h.update(p.read_bytes()); return h.hexdigest()
+def include_file(p):
+    return p.is_file() and p.name not in SKIP_NAMES and not (SKIP_PARTS & set(p.parts))
 def render():
     files=[]
     for base in ['skills','scripts','commands','system-prompts']:
         for p in sorted((ROOT/base).glob('**/*')):
-            if p.is_file() and '__pycache__' not in p.parts:
+            if include_file(p):
                 files.append({'fileName':p.relative_to(ROOT).as_posix(),'checksums':[{'algorithm':'SHA256','checksumValue':sha(p)}]})
     return {'spdxVersion':'SPDX-2.3','dataLicense':'CC0-1.0','SPDXID':'SPDXRef-DOCUMENT','name':'agtmls','documentNamespace':'https://example.invalid/agtmls/sbom','files':files}
 def main():

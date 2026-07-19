@@ -7,15 +7,6 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "bb2feee392e9dd55e695e83d517ba3fc74f008d0244508a0325b79146db225e1"
-        }
-      ],
-      "fileName": "skills/.DS_Store"
-    },
-    {
-      "checksums": [
-        {
-          "algorithm": "SHA256",
           "checksumValue": "3b1312ecd66470bf45ec5c1d3e31e589faa1972c8bd82535e8c2e15d0fe0280a"
         }
       ],
@@ -988,15 +979,6 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "9d1b93ecfb2d848de0d0a5653cf133541dc17784af6e2a30cabd70951d5342bd"
-        }
-      ],
-      "fileName": "scripts/.DS_Store"
-    },
-    {
-      "checksums": [
-        {
-          "algorithm": "SHA256",
           "checksumValue": "27691f11954240d0c13c84d02b20d5cbfa17cb69900d681403366f73292084e9"
         }
       ],
@@ -1096,7 +1078,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4053b554d0de7db27705afd1c2cf36f823463070ced7da04bf26e162a15351fe"
+          "checksumValue": "e5c141c69c3276e2d2f8c26a660292e82120153f49c7a1083abd79c0f961a694"
         }
       ],
       "fileName": "scripts/generate-sbom.py"
