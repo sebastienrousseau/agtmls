@@ -111,7 +111,7 @@
     {
       "description": "Meta-router for the AgtMLS skill catalog \u2014 read this first when you are unsure which AgtMLS skill (if any) to load for a task, when several skills look like they might apply, or when onboarding to how this hub's skills and shared references fit together. Points at the cross-language-port skill for porting/translating code between languages, at project bundles (e.g. the noyalib/ family) for project-specific work, and at references/ for the shared Definition of Done. Use when the question is \"which skill do I use for X\" or \"how do AgtMLS skills work\".",
       "name": "using-agtmls",
-      "quality": 88,
+      "quality": 100,
       "risk": "low"
     },
     {

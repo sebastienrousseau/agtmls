@@ -29,7 +29,7 @@
   "generated_by": "scripts/generate-skill-index.py",
   "name": "agtmls",
   "quality": {
-    "average_score": 99,
+    "average_score": 100,
     "total": 20
   },
   "registry_version": "0.1.0",
@@ -1157,16 +1157,18 @@
           "description": true,
           "maturity": true,
           "metadata": true,
-          "references": false,
+          "references": true,
           "routing_eval": true,
           "safety_policy": true,
           "supported_agents": true
         },
-        "passed": 7,
-        "score": 88,
+        "passed": 8,
+        "score": 100,
         "total": 8
       },
-      "references": [],
+      "references": [
+        "reference.md"
+      ],
       "required_tools": [],
       "safety_policy": {
         "executes_commands": false,
