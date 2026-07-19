@@ -1,7 +1,11 @@
 {
   "bundles": {
     "_general": 2,
-    "noyalib": 14
+    "engineering": 1,
+    "loops": 1,
+    "noyalib": 14,
+    "security": 1,
+    "web-reach": 1
   },
   "command_count": 1,
   "commands": [
@@ -13,12 +17,12 @@
   ],
   "coverage": {
     "behavioral": {
-      "covered": 16,
-      "total": 16
+      "covered": 20,
+      "total": 20
     },
     "routing": {
-      "covered": 16,
-      "total": 16
+      "covered": 20,
+      "total": 20
     }
   },
   "description": "Agent Multiple Listing Service skill registry",
@@ -26,11 +30,11 @@
   "name": "agtmls",
   "quality": {
     "average_score": 99,
-    "total": 16
+    "total": 20
   },
   "registry_version": "0.1.0",
   "schema_version": 1,
-  "skill_count": 16,
+  "skill_count": 20,
   "skills": [
     {
       "assets": [],
@@ -87,6 +91,120 @@
       ],
       "tags": [
         "porting"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "assets": [],
+      "bundle": "engineering",
+      "compatibility": "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
+      "date": null,
+      "description": "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "project",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/engineering/metadata.json",
+      "name": "pr-review-and-release",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/engineering/pr-review-and-release",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "medium",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "ci",
+        "docs",
+        "engineering",
+        "release"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "assets": [],
+      "bundle": "loops",
+      "compatibility": "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
+      "date": null,
+      "description": "Use when turning repeated agent work into a loop with trigger conditions, evidence, stopping criteria, uninstall state, validation checks, and reviewable artifacts.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "project",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/loops/metadata.json",
+      "name": "agent-loop-design",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/loops/agent-loop-design",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": false,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "loops",
+        "validation"
       ],
       "version": "0.1.0"
     },
@@ -961,6 +1079,63 @@
     },
     {
       "assets": [],
+      "bundle": "security",
+      "compatibility": "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
+      "date": null,
+      "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "project",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/security/metadata.json",
+      "name": "ai-supply-chain-security",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/security/ai-supply-chain-security",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": true,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "medium",
+        "writes_files": false
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "release",
+        "security",
+        "validation"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "assets": [],
       "bundle": null,
       "compatibility": "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
       "date": null,
@@ -1012,6 +1187,66 @@
         "noyalib",
         "porting",
         "routing"
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "assets": [],
+      "bundle": "web-reach",
+      "compatibility": "agentskills.io-style SKILL.md; tested with Claude Code, Codex, and Aider symlink layouts",
+      "date": null,
+      "description": "Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "project",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/web-reach/metadata.json",
+      "name": "web-research-and-source-triage",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/web-reach/web-research-and-source-triage",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": false,
+        "handles_secrets": false,
+        "network_access": "optional",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": false
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "ci",
+        "debugging",
+        "docs",
+        "research",
+        "validation",
+        "web-reach"
       ],
       "version": "0.1.0"
     }

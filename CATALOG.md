@@ -5,7 +5,7 @@
 # AgtMLS Catalog
 
 Registry version: `0.1.0`
-Skills: `16`
+Skills: `20`
 Commands: `1`
 
 ## Skills
@@ -13,6 +13,8 @@ Commands: `1`
 | Name | Bundle | Tags | Path |
 |---|---|---|---|
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
+| `pr-review-and-release` | `engineering` | ci, docs, engineering, release | `skills/engineering/pr-review-and-release` |
+| `agent-loop-design` | `loops` | loops, validation | `skills/loops/agent-loop-design` |
 | `noyalib-architecture-contract` | `noyalib` | architecture, ci, config, noyalib, release | `skills/noyalib/noyalib-architecture-contract` |
 | `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `skills/noyalib/noyalib-build-and-env` |
 | `noyalib-change-control` | `noyalib` | ci, config, noyalib, qa, release, security, validation | `skills/noyalib/noyalib-change-control` |
@@ -27,7 +29,9 @@ Commands: `1`
 | `noyalib-research-frontier` | `noyalib` | ci, noyalib, qa, research, validation, yaml | `skills/noyalib/noyalib-research-frontier` |
 | `noyalib-validation-and-qa` | `noyalib` | ci, coverage, diagnostics, noyalib, qa, validation, yaml | `skills/noyalib/noyalib-validation-and-qa` |
 | `yaml-domain-reference` | `noyalib` | ci, config, noyalib, yaml | `skills/noyalib/yaml-domain-reference` |
+| `ai-supply-chain-security` | `security` | release, security, validation | `skills/security/ai-supply-chain-security` |
 | `using-agtmls` | `general` | ci, noyalib, porting, routing | `skills/using-agtmls` |
+| `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-reach/web-research-and-source-triage` |
 
 ## Commands
 

@@ -21,8 +21,9 @@ class CliJsonTests(unittest.TestCase):
     def test_stats_json_has_full_coverage(self) -> None:
         import json
         payload = json.loads(self.run_cli("stats", "--json"))
-        self.assertEqual(payload["coverage"]["routing"], {"covered": 16, "total": 16})
-        self.assertEqual(payload["coverage"]["behavioral"], {"covered": 16, "total": 16})
+        skill_count = payload["skills"]
+        self.assertEqual(payload["coverage"]["routing"], {"covered": skill_count, "total": skill_count})
+        self.assertEqual(payload["coverage"]["behavioral"], {"covered": skill_count, "total": skill_count})
 
     def test_profiles_json_includes_required_profiles(self) -> None:
         import json

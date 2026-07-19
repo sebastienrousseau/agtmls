@@ -25,6 +25,8 @@ def run(args: list[str]) -> subprocess.CompletedProcess[str]:
 
 def main() -> int:
     errors: list[str] = []
+    index = json.loads((ROOT / "index.json").read_text(encoding="utf-8"))
+    skill_count = index["skill_count"]
 
     list_skills = run(["list"])
     if list_skills.returncode != 0 or "general/cross-language-port" not in list_skills.stdout:
@@ -52,7 +54,7 @@ def main() -> int:
             errors.append(f"show command JSON wrong payload: {payload}")
 
     stats = run(["stats"])
-    if stats.returncode != 0 or "skills: 16" not in stats.stdout or "routing coverage: 16/16" not in stats.stdout:
+    if stats.returncode != 0 or f"skills: {skill_count}" not in stats.stdout or f"routing coverage: {skill_count}/{skill_count}" not in stats.stdout:
         errors.append(f"stats failed:\n{stats.stdout}")
 
     stats_json = run(["stats", "--json"])
@@ -61,7 +63,7 @@ def main() -> int:
     except json.JSONDecodeError as exc:
         errors.append(f"stats JSON invalid: {exc}\n{stats_json.stdout}")
     else:
-        if payload.get("skills") != 16 or payload.get("coverage", {}).get("behavioral", {}).get("covered") != 16:
+        if payload.get("skills") != skill_count or payload.get("coverage", {}).get("behavioral", {}).get("covered") != skill_count:
             errors.append(f"stats JSON wrong payload: {payload}")
 
 

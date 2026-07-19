@@ -1,0 +1,11 @@
+{
+  "negative": [
+    "write a short poem",
+    "format this JSON only"
+  ],
+  "positive": [
+    "Use when auditing AI-agent supply chain risk",
+    "use ai supply chain security for this task"
+  ],
+  "skill": "ai-supply-chain-security"
+}

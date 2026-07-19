@@ -194,6 +194,14 @@ python3 scripts/agtmls.py providers
 python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir dist
 python3 scripts/agtmls.py docs-site --write
 python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
+python3 scripts/agtmls.py evidence --skill cross-language-port --command pytest --file src/example.py
+python3 scripts/agtmls.py agent-card --write
+python3 scripts/agtmls.py mcp-resources --write
+python3 scripts/agtmls.py sbom --write
+python3 scripts/agtmls.py provenance --write
+python3 scripts/agtmls.py provider-install --provider cursor --target /path/to/repo --profile polyglot
+python3 scripts/agtmls.py bench
 python3 scripts/agtmls.py diff --from index.json --to index.json
 python3 scripts/agtmls.py release-check
 python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
@@ -282,3 +290,11 @@ python3 scripts/agtmls.py docs-site --write
 ```bash
 python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 ```
+
+### Evolution and evidence
+
+`evolve` creates a redacted local proposal from a transcript and requires human review before publication. `evidence` records per-skill invocation evidence with commands, touched files, outcome, and the skill safety policy. These files default to `.agtmls/` and are intentionally ignored.
+
+### Interoperability artifacts
+
+`agent-card.json` and `mcp-resources.json` are generated from the registry for A2A-style discovery and MCP-style resource publication. `SBOM.spdx.json` and `provenance.json` provide release supply-chain evidence.

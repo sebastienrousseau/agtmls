@@ -1,0 +1,11 @@
+{
+  "negative": [
+    "write a short poem",
+    "format this JSON only"
+  ],
+  "positive": [
+    "pr-review-and-release skill for release readiness and review discipline",
+    "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship."
+  ],
+  "skill": "pr-review-and-release"
+}

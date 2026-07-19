@@ -1,0 +1,73 @@
+{
+  "builder": {
+    "id": "scripts/agtmls.py check"
+  },
+  "materials": [
+    {
+      "digest": {
+        "sha1": "560b3f9b6e33720c1ac795794d9d5bea02e1cbf4"
+      },
+      "uri": "git+local"
+    }
+  ],
+  "metadata": {
+    "checks": [
+      "validate-skills.py",
+      "validate-commands.py",
+      "validate-plugin-manifest.py",
+      "validate-providers.py",
+      "validate-profiles.py",
+      "validate-templates.py",
+      "validate-doc-links.py",
+      "validate-json-files.py",
+      "validate-python-scripts.py",
+      "validate-shell-syntax.py",
+      "validate-secrets.py",
+      "validate-gitignore.py",
+      "validate-cli-surface.py",
+      "validate-system-prompts.py",
+      "check-skill-collisions.py",
+      "validate-eval-cases.py",
+      "run-trigger-evals.py",
+      "run-behavioral-evals.py",
+      "validate-skill-metadata.py",
+      "generate-skill-index.py --check",
+      "generate-catalog.py --check",
+      "generate-docs-site.py --check",
+      "generate-agent-card.py --check",
+      "generate-mcp-resources.py --check",
+      "generate-sbom.py --check",
+      "generate-provenance.py --check",
+      "validate-generated-artifacts.py",
+      "validate-docs-site.py",
+      "validate-governance.py",
+      "validate-skill-index.py",
+      "validate-lifecycle.py",
+      "validate-release.py",
+      "release-check.py",
+      "smoke-release-pack.py",
+      "smoke-evolve-evidence.py",
+      "smoke-provider-install.py",
+      "smoke-install.py",
+      "smoke-install-profiles.py",
+      "smoke-cli.py",
+      "smoke-export.py",
+      "smoke-import.py",
+      "smoke-proposal.py",
+      "smoke-scaffold.py",
+      "run-unit-tests.py",
+      "bench.py",
+      "validate-check-manifest.py",
+      "agtmls-doctor.py"
+    ],
+    "generated_at": "1970-01-01T00:00:00Z"
+  },
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "schema_version": 1,
+  "subject": [
+    {
+      "name": "agtmls",
+      "version": "0.1.0"
+    }
+  ]
+}

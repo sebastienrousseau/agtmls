@@ -1,0 +1,1629 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://example.invalid/agtmls/sbom",
+  "files": [
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bb2feee392e9dd55e695e83d517ba3fc74f008d0244508a0325b79146db225e1"
+        }
+      ],
+      "fileName": "skills/.DS_Store"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3b1312ecd66470bf45ec5c1d3e31e589faa1972c8bd82535e8c2e15d0fe0280a"
+        }
+      ],
+      "fileName": "skills/cross-language-port/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "99fc7e7d3c16822c806fbd176a4ac3904958d9c87a503fb1ffb8179a569f991c"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f03d9adde65de62025eed13c4cd07333302e5d81a47cb0fecfb2c49765ec5dcd"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9548dd1096c4bf25640cba8957cb7bed87cf0603d39fe9832f706e1c2e3268d8"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d3fc37209615db1216cc8dd3047cff6f6654f322a94595bdaf42d62bf1f45001"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bd2ec119f36aba1f45266015a47083ab71be73e9e31c1d39979074984632431d"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/port.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2ae9eaf6eaf28cba66f01bdf0fec8b9cea53f7b6dc7fc9aee5559197da745f07"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/reference.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ce918ca306ba98b37b14c02ec84672f7c319afe9d506f9064645c8570196b3bb"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/bash-to-python-pathdedupe/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c0a5dc26c33bf9b5d16b8163adc2e650c3ae7461984e1badbf8f3165451604c4"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/boundary-traps/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4579f0634a7fd538a3360571d58a8ce2da3b76f5652e3443cb5646fba98b6fed"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/boundary-traps/integer-width/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "84587c4e79dddf3c3028274eb328fe09171158c459b0b96b4df9cda3cb665788"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "45a6e93d0b6b9432a0872bc630f6ebda52fd041916e4258b810f96c81793a6a6"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eff9d5aba99557d96678e6aa8034a0c5268cc879043cc5db22ecf78fde7ba5b0"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bc5505e57f6186cbbcd2a79a52123768eacb7057168cd998dfee57b9a71d21d8"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/port.rs"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8072b6058c0532c15dc63108a42e9b7c1409b8b2afe613553147fd7a70c0b612"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/reference.go"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29de69bcf05910ba1aa4298ddf2e2c043100490752072c5aa0437d6c436aea70"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/go-to-rust-fraction/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f42dea0bf520e8051f64dff915215a1254c5402a75fbeef457bf55c0497af5b3"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "569b5a9bf1e3998590cdac5422d3901a199eb56fff99ca380b8658895cea0822"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d94f419f066beb709902f3e79e7148ad7347de4c3ed0f6f7b797f964b61bdcb0"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f69ed17eea98f49ee075f676bae79df9cb779e54d5887b94d94313d34511170c"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/package.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e00538fc6434f5c7de0cd00a8c3410e997107f575c7083ea90aecedae7c182e0"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/port.ts"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "afaae92023b2dbbd807b8385a2c58c9c2a950bfa8b1fc132f14cb4e3c7627dbe"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/reference.js"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a527223585f6c9b9ca09a5f8197f67f10f81edf5e3296b11417fd375be7b21e7"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/js-to-ts-configvalidate/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3649aaa3d238edecaddded15fa4fe502f1370a9cf98f10c954b3b076574add26"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "51102ce3636393db1e736cd5eb1bc8e3b26f6a959e366ac47c68d98c07f00fdb"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/compile_flags.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4a68bf9647262a8b8f6a2241317d12179a543e85b993fb3f45f1c63669dd420e"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d5cf87ce760145a1b71e5cb2148ec47226583c38894b0804c4a9efa7b81768e6"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b0b92f96fc90e1cacc87bc91c616e30b4866039ef5fb66151284b48aeef4d2f8"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/port.cpp"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "79438e78ca28d3f805521b2a6d2e6f68954b6c0e9d8c530dec8dec845eb36844"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/reference.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5c632c143bee361687c2748e9fee314b137b4d499e2a6a12f4049928fc3cb283"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-cpp-hexcolor/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "85b6b68f15e8dc039fbd6cf48b42f52ec3f470da8674aec0747e8cb7ad9d74a3"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4ee5e036e87d32c9cf06ae6e7b8cc8dcf77c39e2f53f5b2bd05cb40f5354381d"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "94cb0a7e3bb1d01aad035d1531d89137797af3fbee41d516fd8c2b1207f139b7"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "75faf8b873858ee98cc055509e7bb00d6b1749b4b91a58faf0510633d2e4ef9b"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/port.go"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f534c9fa004d223ae8de5c8f793a376e7c640d067bea29eef47b7cb6a702723f"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/reference.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0449996e2e067f495b4828c1cc26658373b1a3216100484366a3b8529864db61"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-go-duration/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f1c921cc57c7d5845a50e6ccd3c487426a7f05e38a181503e2c70837fb560f13"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a16c39dd38c3ba28f5f5366fa1c7dc61ae56616c89ff85c737a0fa84d368205a"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7faeeb23d32c752ea094e4641ee52fd16e2883c9ae7f5aa477faa6c52ec5fddb"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e9c0b9dab64f0058c1ffab8338dcb2ea720a10c7119ae5dad366f916bbc0fd66"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/port.rs"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2f80b46e83542424b1b900745c405fa64baf2cc929471b1d66886ed641162098"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/reference.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cafef32d1e31f7eec221305f68ef89027596d4414b288b81e32248ea3fb03a85"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/py-to-rust-iban/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5e248bb0ad72c1268eaf6155914d69b1101c6412a840a8fbb0c69977742c4883"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f98dc876b89484c401078960dc0765bf64fc140a49b0333db7cf060ed75455b4"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "99a9c4bd101217763e76f8cdd795fb58077356e30d5021289a0b5f199dc8aefa"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b66c9a8559ce9a8a6698bfd84c4b173bf0bb360e4d4c0b7d73b4650bf5dc5b45"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/port.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "04b12c949c92d94fcdd36f8d5ee0d8c6c0507541850b4f718416b3200082f789"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/reference.rb"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "146ba1fde7556ffd057f816623429ccb8a57801bf69c8720ce935787f4575efa"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/ruby-to-python-histogram/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b59b5497e53a5ffd68d2a61e3d0ebe5bf7f016b40028dc2639dddf0699c8e5ca"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "91af0f37dd75e0967bb84f51d72eff7c99caacc68ab5cf23136bc9baac958016"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/corpus/expected.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f5d330a7f420f74428eaffccc73c807f0fda627d460d0a51002635afc45debe1"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/corpus/input.txt"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bc0aa26e5b77439fe5d473639ebd3db9afeabf7b4df9065eb5a9c82e6982168b"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/port.swift"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7c60b152bca67a5019fadddbc6aeb951a6d2523543320bc7e038eaa14b8cc5bb"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/reference.rs"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "da1591d9c5ba252acbf47672a3445d739db3a7caf5aced7de30c5aec61ad4385"
+        }
+      ],
+      "fileName": "skills/cross-language-port/examples/rust-to-swift-op/verify.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "df3c14beabed0b347c11656fc3934147fb47504230b08e595aceef6bcb52213d"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "043ba5a66886418cc9a7f77382f3a0a9ae6f0f76721ff36ab5bdf847bd19249b"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/golden-diff.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9e41f4879c6184397312499b287ba0b54b88eabb31cba7ccb4e5107dfaed9198"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/port-check.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9221ba5df0b16db55321bc08a8461cb0dae832df4e8e8fbefef113fb72e3b131"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/templates/fast-check_diff.mjs"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b251f4e1a471886ab40a5e1ebd9bebf2892c8dce912846eb6baec10081ad5ca6"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/templates/hypothesis_diff.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d7a3934f3a3e8a479b77aa3e6ddcce17cb4dfad6e7c8c3c2feb75a673db8937c"
+        }
+      ],
+      "fileName": "skills/cross-language-port/harness/templates/proptest_diff.rs"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c6fba54b3fe98051199487549cef42ef728ad34d19ad4ec4e03441ef8ffb0f09"
+        }
+      ],
+      "fileName": "skills/cross-language-port/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed4bc2e1492538435b10f472a9ba8a0349805b353bb2c5a8235e6c1fa2f9eed2"
+        }
+      ],
+      "fileName": "skills/cross-language-port/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a7f559306b15a6023735ef024b0a1ee01e9aae010d2184658146802e44480073"
+        }
+      ],
+      "fileName": "skills/cross-language-port/triggers.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2211a310ec5e92cc7200b56e5074b2107e62febca862db7b4c37fd3e6e2c5ded"
+        }
+      ],
+      "fileName": "skills/engineering/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a3413283a530f76ac98d24e4bd20d8ec5518e0c0cde8b3d1e25371d520875e14"
+        }
+      ],
+      "fileName": "skills/engineering/pr-review-and-release/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8d0319209958fbb2a26be373ebe057bf953ded50d02f9c6200c4a018d79e52bf"
+        }
+      ],
+      "fileName": "skills/engineering/pr-review-and-release/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29088d40cdf9b6b25835a3d71cf7e3e82c7748b7a8da97a7e77951a859ef6866"
+        }
+      ],
+      "fileName": "skills/loops/agent-loop-design/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a9dc9b4b95d5db6ab33d5d6de38846dec204a4965c4e906b0f3852f69759d09a"
+        }
+      ],
+      "fileName": "skills/loops/agent-loop-design/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "034e760485d9bc2a3e1fdfa4fc95f09e5361d03da65cf804d9ce662c2966a994"
+        }
+      ],
+      "fileName": "skills/loops/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a1720452350e7fe3c95baeb49cb8570d006ab4ab184b7589c7424c6eada886d1"
+        }
+      ],
+      "fileName": "skills/noyalib/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8e37b9617a28cc30c5299be865ceb339e94d4f4e870091b085fd67c89446b46b"
+        }
+      ],
+      "fileName": "skills/noyalib/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2a7cd935f2ec4e236fa622df3d5264b3ad4271436dbd08a68a439fbd5987e2b7"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-architecture-contract/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2707d24ad10a88aba0db81029d7cf781bd0495131146745190715b0db41873cd"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-architecture-contract/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "234e9aae9e0301cfc47af184054725d552402cc0e5494876047c2fbc2f104b28"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-build-and-env/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8e30a3f25aeb4968b6dcd6dec0942e4e5d8ba932554347405bc7e6eb1a5abbec"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-build-and-env/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "42831dddba1081633a66b1d66ec84143e7f02d871ce8cf105a77d1630892f243"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-change-control/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1f26317d49788c26e58161e3db25b4c6600aa7892737ff214bdbedb39a882249"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-change-control/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3b62c1ab86ad5cc846122b5bc03ad37fb6968268132232bb270a5d08d190c6ee"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-ci-and-release/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3ad0401cddf11510b11559c46878215e331d831318d9a20fd421e09d5258d2c0"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-ci-and-release/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "45ca430d945a1806db5571d530233d177f224db2b4134e46863066b5767ce9ae"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-config-and-flags/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2361021c0766788ea0ac903dc41770ac507e378329c31f29dd7ecb1444054b3d"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-config-and-flags/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6ff40cea136bce3ba73d7723bca1054f36c977ef3ba94eab99c7b6fc6a3b992c"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-coverage-campaign/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e43c738e6c90afa7af87a3dde9c71275ab433074a4cb05c02769bbc014821722"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-coverage-campaign/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "75e1eb7dd81d97d4d11cbb6f93ca09c93f9b0e1f22991d843bb9b698aea3663a"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-debugging-playbook/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6456cc6521c502bbe3ba9c1cd11a4a14c1867a720b8eabd6c8cf8bbfff519010"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-debugging-playbook/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "13faf8d8772029047d6ea74ab79d0dfafa0cbd7781a03167dd87f96be2770e67"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-diagnostics-and-tooling/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "12dc3d58746b68cde75ce1fd39290d337bde2fc53bedb96a141e359b6c66729b"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-diagnostics-and-tooling/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "929dd9651f63622ec310971fdcb9f03b98ce573e4b0196b566ccdca5e36d086c"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-docs-and-writing/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-docs-and-writing/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "41ba3157f26c122d2eafb033b7aa450f4bda7a88a4a96aee6457b136fba9c5a8"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-external-positioning/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f4c0608a04a6b1fd2d4769093c88059ee8ff000588a4a6f10686e1731e5dacb9"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-external-positioning/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f524e0a851b8eaf6b44f03970b11353abfdbccb49a98e64a793c9f0b720e270a"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-failure-archaeology/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6d7956eff2525e93f114bc5c003c3788d8facfc155271deabb6e1590128fedca"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-failure-archaeology/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e4f9255028e5304d41a3ac59f36e384f5073fd7fc6bd88c85f9fc65dd22bc4d2"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-research-frontier/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9791209a672f58fcd417b95da505d7d80176d193470a8e80a923194b42acdb53"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-research-frontier/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d452cd5542238ade1e5837b45d089b9858e5408e68405c8a85feeef0b56c192f"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-validation-and-qa/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9615efd4831898ade0b6267ee09fb580fb1f14d7038a6a78fd1b811eeba39adf"
+        }
+      ],
+      "fileName": "skills/noyalib/noyalib-validation-and-qa/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7e43173ae2c40bb42ae09be103e8cb7e93f3ef537dcd00afe9a7d633b3461398"
+        }
+      ],
+      "fileName": "skills/noyalib/yaml-domain-reference/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "03b770ffbd9d4bd83231f62bb9b2451cffeb30aef7f3b91133308a0d3527e164"
+        }
+      ],
+      "fileName": "skills/noyalib/yaml-domain-reference/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "58516a633c5d9504f8bc4a4552b01e0c99630aca1166d40fbd760643b00f353e"
+        }
+      ],
+      "fileName": "skills/security/ai-supply-chain-security/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cd5a932bfdc2a066b0b7172a054976c8585e30ec7c6f3f819a9da4b81dffad04"
+        }
+      ],
+      "fileName": "skills/security/ai-supply-chain-security/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cd08361b15219a18ee0964f59697d3f7a3e246ed01246cd8a7303e7bfb759404"
+        }
+      ],
+      "fileName": "skills/security/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "57c6a13a25e87fe7bd3ba9b108afebc36c4e82e4e174a369be6700a90e6a2507"
+        }
+      ],
+      "fileName": "skills/using-agtmls/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4a48705cc330165944890027ff81456f14697871bc991f171201a25cf48ac1bd"
+        }
+      ],
+      "fileName": "skills/using-agtmls/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "320262fccf17d05668e5c7f85af9c3e9e649d66dc68ac5aaa6c398b8a272a636"
+        }
+      ],
+      "fileName": "skills/web-reach/metadata.json"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7b6b3edd10305c5d098d1f2ab812726d5abdc36f465d60dfeba01e8d950bde61"
+        }
+      ],
+      "fileName": "skills/web-reach/web-research-and-source-triage/SKILL.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "397f471d183a172d0123911e4b19d5b04bc69a0a1ee42ce803e62b76728955a3"
+        }
+      ],
+      "fileName": "skills/web-reach/web-research-and-source-triage/reference.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9d1b93ecfb2d848de0d0a5653cf133541dc17784af6e2a30cabd70951d5342bd"
+        }
+      ],
+      "fileName": "scripts/.DS_Store"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "27691f11954240d0c13c84d02b20d5cbfa17cb69900d681403366f73292084e9"
+        }
+      ],
+      "fileName": "scripts/agtmls-doctor.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4dca2c4fe405f65478064f388d47d8e4b5648e46a587d374c093ec057951c5f4"
+        }
+      ],
+      "fileName": "scripts/agtmls.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7cf6b33a062f9c93a1f6672be9f5c1cf599aff02023fe383b59ac433bb0f6b7e"
+        }
+      ],
+      "fileName": "scripts/bench.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d396f9ac4165e06dde0099b313866586ae3ccfe03a0105ce1265256e9135bbba"
+        }
+      ],
+      "fileName": "scripts/check-skill-collisions.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "11e0607f0020d4daae890d6ca74aef55c24d2112119ac63c3419378d5d43afbc"
+        }
+      ],
+      "fileName": "scripts/evolve-session.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f1cfb67574c453e50e95a471daa233e4d98bfbd210f1ad66c59bc858f6d722a7"
+        }
+      ],
+      "fileName": "scripts/export-registry.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b923554cc22721a1da73d4a0ff2b08ba6dd522c2673c81aef52a238fe7128573"
+        }
+      ],
+      "fileName": "scripts/generate-agent-card.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e6212ade1ded76b476ed56d96d9568036f3a1949fee3c9e7c139647764eb67ec"
+        }
+      ],
+      "fileName": "scripts/generate-catalog.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c23f4f1de7c949233e24d6eb15cf7bd68945a1bffc09fb28bb75dcdab9eebb4a"
+        }
+      ],
+      "fileName": "scripts/generate-docs-site.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bd7b72a805448dcc77c16cd22d46c8f9ae78524862b15314c380c15131e76769"
+        }
+      ],
+      "fileName": "scripts/generate-mcp-resources.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "35268d3144576df3d7f12f7223928efa46e538da212f96130efc7cacb90be5e3"
+        }
+      ],
+      "fileName": "scripts/generate-provenance.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4053b554d0de7db27705afd1c2cf36f823463070ced7da04bf26e162a15351fe"
+        }
+      ],
+      "fileName": "scripts/generate-sbom.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d163395ccd51150012969754f2a398d396ba03600ca7d0b46685f4c2ac6d24ff"
+        }
+      ],
+      "fileName": "scripts/generate-skill-index.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9402ca2495d8b97258823df600312b215bd7835ceb426f3e32c4cd8d3343d7a5"
+        }
+      ],
+      "fileName": "scripts/import-skill.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c53fa65aaf26145109ff4dc03ccca811182f460390735dc08ab2d0b536746a93"
+        }
+      ],
+      "fileName": "scripts/propose-skill-from-session.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3572d36ba9fd4a2ec15d04a2b74e6b3f3a12c2d8166af74d3b5e49234eb078ae"
+        }
+      ],
+      "fileName": "scripts/provider-install.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "47908bfbbd2457f2fc3f81c1f11e058f53eea079318abc6b67e49db485cd0c3f"
+        }
+      ],
+      "fileName": "scripts/record-evidence.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3f40d247442a517a671df47930c8d907da8c085f061d721babd482a2df17c40"
+        }
+      ],
+      "fileName": "scripts/registry-diff.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "36fe5e70c11ed5ec7abd662bb4e260593b5ae004240a0145a32afe9e71929e86"
+        }
+      ],
+      "fileName": "scripts/release-check.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7c5c6745dab274ebef8fd92bbfbc7a6a4e12dc913ef2451fc7021b2fe0e7ff1e"
+        }
+      ],
+      "fileName": "scripts/release-pack.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "602ef490c46404ce9825b3405d361e6c03ed96b354198d75dce2fc89b25aed76"
+        }
+      ],
+      "fileName": "scripts/run-all-checks.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5e5e0ddb77268e1eaf7123917dd9e1222e0099c6760a4ac425eba0fd4a1c546f"
+        }
+      ],
+      "fileName": "scripts/run-behavioral-evals.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "80072d5a5f2f722e2206a1a653b5b177cf662ff252b82de1d9ee15250045176a"
+        }
+      ],
+      "fileName": "scripts/run-trigger-evals.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d9baab2024cf3595a43f3907b46584ccb9e9084483fb7d5db8444ec5cb2449e0"
+        }
+      ],
+      "fileName": "scripts/run-unit-tests.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "07eed3394d74c5069c15094a04f1ebe1833d3cf316f796a06afef4f1869efa90"
+        }
+      ],
+      "fileName": "scripts/scaffold-skill.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fda6955bceb1c118dd1d12929de7d3db3fed8d647407551e0909774e97398ca5"
+        }
+      ],
+      "fileName": "scripts/setup-workspace.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e0f84a1b288bf6d79ddd7b3b8e3bea7dfbe1e1d601ec0a853b81f6c840f1a71a"
+        }
+      ],
+      "fileName": "scripts/smoke-cli.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eee49b99f19b5448833f49c941a60f2114af16202318723344b306994825f1e9"
+        }
+      ],
+      "fileName": "scripts/smoke-evolve-evidence.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d0806e2f59dfa54af842d4cc30119b935782c7ba8c0c7ba31856268326faca60"
+        }
+      ],
+      "fileName": "scripts/smoke-export.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b6fa261cbcfb4c19ff79751e190fe85bd43f9be61b67ae9a011fe6c1ffb7a7be"
+        }
+      ],
+      "fileName": "scripts/smoke-import.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0d3f90d6e64a610614be4423c6a4792c378777bbc6003bc632288f56e80f85bf"
+        }
+      ],
+      "fileName": "scripts/smoke-install-profiles.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "84f1801049bb7d90f75f842b587c2635888eb2852572263c009b6a468fed9b63"
+        }
+      ],
+      "fileName": "scripts/smoke-install.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c01d97edc0eb14fa8ce4c385fd62db07eb443534d48a89874ca7f5a53b882b4a"
+        }
+      ],
+      "fileName": "scripts/smoke-proposal.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c0517e4db13d0ab8c9b27fbd01c26e31660521f39e94356afc700a82a45d70e0"
+        }
+      ],
+      "fileName": "scripts/smoke-provider-install.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3ca508cf85258b4692c5627f289d0350d6095174905911802a20af49b5f8b19"
+        }
+      ],
+      "fileName": "scripts/smoke-release-pack.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "66e254b53c17cf469adce7b662a147804808962407054d6d02843563aa769799"
+        }
+      ],
+      "fileName": "scripts/smoke-scaffold.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "57fbaa8f6a5a08910d58c02eb74785a222cea1b42f52586b2553e8d20c948386"
+        }
+      ],
+      "fileName": "scripts/validate-check-manifest.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "13ba15e042f0fc077b8a0d839d5f974c56137139d03f861d025645c83cca0189"
+        }
+      ],
+      "fileName": "scripts/validate-cli-surface.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3ef23fd918f1e2302ead7971515352e5912dc06a8cbd8463c55ce4f2bf33d9e7"
+        }
+      ],
+      "fileName": "scripts/validate-commands.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "48a3afe7e0728eb46d31e6902178fa75b5e3a96293bcabbe39fc7c0ea70bb8b4"
+        }
+      ],
+      "fileName": "scripts/validate-doc-links.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "41357a14bab8ad10258151bc1b8da6f6fe78e164d30954f61c1a5620a2142e78"
+        }
+      ],
+      "fileName": "scripts/validate-docs-site.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5603d435c546b08880b90341b20d8e0f14986e187e85af18496bce22bcb8a60a"
+        }
+      ],
+      "fileName": "scripts/validate-eval-cases.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c50e59043f18da7b86bc46b1dc905a5a760f5b09a4936a0a566b2fc26b80a1b"
+        }
+      ],
+      "fileName": "scripts/validate-generated-artifacts.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2b436fbadef2a1abd24f8e937fc2ea9c278e4a9f2581ee8179d6a042f52ab34d"
+        }
+      ],
+      "fileName": "scripts/validate-gitignore.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ee95b3a75b8693bf62ea0290a3091eee1ba1bfea960bed6fa1f3c0595699202f"
+        }
+      ],
+      "fileName": "scripts/validate-governance.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4dcf34c39f834671cc67c203ded2649e36d20457005f670af1107942201de1f2"
+        }
+      ],
+      "fileName": "scripts/validate-json-files.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "97817017ffb5a64645608dc58dadf5b8d48b56f89d98d46c586d801c506f9338"
+        }
+      ],
+      "fileName": "scripts/validate-lifecycle.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c4f7f32dcaeb17cc4c407d77a5cd2b17b8acae08d73649d3a69ee4df6e6f9848"
+        }
+      ],
+      "fileName": "scripts/validate-plugin-manifest.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ab4a48b15de6cfc2e46f55b15132a55f627f8ce1c05f43dca42f6cc37af3ea5d"
+        }
+      ],
+      "fileName": "scripts/validate-profiles.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e62536824c6718fae5fef4153018a6a11e3da8b811bbe07b5d07ffcf2ed7f06e"
+        }
+      ],
+      "fileName": "scripts/validate-providers.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "31428a4ac8e4ab336cdf7b3549ade66b268f9ea53c7ff26fe83c1b777f21d44a"
+        }
+      ],
+      "fileName": "scripts/validate-python-scripts.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eba96877dd0385fb66eb6306aee05b2d7702b6f23bcc43b34a92b0d834254918"
+        }
+      ],
+      "fileName": "scripts/validate-release.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b48ce8aeac1dcc2ca8e9292cf67edb5b11c3cd79f91c65376e07c6b8adb0435"
+        }
+      ],
+      "fileName": "scripts/validate-secrets.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29bc9e96539455dce296eecae88a090e0aee2c4dbdac58aa4922c5cc47156954"
+        }
+      ],
+      "fileName": "scripts/validate-shell-syntax.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "aa278a3eb222c2e61f64db91e12916002199debc700d543e02ec7767404996bd"
+        }
+      ],
+      "fileName": "scripts/validate-skill-index.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bcd0024933df1ea07df95f7834d92efd1c2072a161b89b96659b6b9870a7ff05"
+        }
+      ],
+      "fileName": "scripts/validate-skill-metadata.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5f8badf264a64defaa91e072ae37e7d78ccf440480f480a639095b3adaf9d2b0"
+        }
+      ],
+      "fileName": "scripts/validate-skills.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "860cf80b3f2ba960a2494e8c4e186c28b9b499c96426ebafcff7e07a119e6163"
+        }
+      ],
+      "fileName": "scripts/validate-system-prompts.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c032958c443ad6b5f8f0c84b394f17c06044c42b6a4d1e594e2e4817eece6383"
+        }
+      ],
+      "fileName": "scripts/validate-templates.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bea07b284b39008dd7c99ca0be631d82d178035cd6702bb79c4492ec37fbf579"
+        }
+      ],
+      "fileName": "commands/README.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "beb2b2266192454bc0f3949d7a4b29fce29986334ccf949dd96a34a39320e13c"
+        }
+      ],
+      "fileName": "commands/agtmls.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "92fcb52be2469a264cc0f192df2769a5421955ad57c0a32a816935cdc2916810"
+        }
+      ],
+      "fileName": "system-prompts/_base.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b8ab8ea8001dd7cf7845e73af1272ba2d07ce33f4c45cd5be52d57b286421506"
+        }
+      ],
+      "fileName": "system-prompts/bash.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ea7f5c6ed949972bf9157b555e81a0e6b9420ba3521617321406b4e50829bf98"
+        }
+      ],
+      "fileName": "system-prompts/cpp.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9a3a4820d950792a23ca439e8564ceb55ed8f0b63fdae6f96f128db0f2600a44"
+        }
+      ],
+      "fileName": "system-prompts/go.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0b69b12c34f31b4aa185e174b7b4f1e5b4db1b96ba1ec5fee5233d12f2ab796a"
+        }
+      ],
+      "fileName": "system-prompts/javascript.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "833eca7dca1a38caed0c60cc3dfe9fcb3c446a88f20b69282da61be85bdd2955"
+        }
+      ],
+      "fileName": "system-prompts/python.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "62de6ddebf7a81666acf86346b398902957ccf1d04244fa4d429ad9e67ef338c"
+        }
+      ],
+      "fileName": "system-prompts/ruby.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bd2f0e69bbbcb67e3232d74e4064d9a17be335299a7a769917f63801d55b503a"
+        }
+      ],
+      "fileName": "system-prompts/rust.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32641d7e645248f7714a4c89086bdef8da2057c578be58a8212d390d0ff52479"
+        }
+      ],
+      "fileName": "system-prompts/swift.md"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d579314dc2d4da457348674abdd7c6e78f3ff6a9672d2f19507ad8223e6c3e0c"
+        }
+      ],
+      "fileName": "system-prompts/typescript.md"
+    }
+  ],
+  "name": "agtmls",
+  "spdxVersion": "SPDX-2.3"
+}

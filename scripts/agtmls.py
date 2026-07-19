@@ -244,6 +244,40 @@ def main() -> int:
     release_pack.add_argument("--profile")
     release_pack.add_argument("--provider", action="append", default=[])
 
+    evolve = sub.add_parser("evolve")
+    evolve.add_argument("transcript", type=Path)
+    evolve.add_argument("--skill-name", required=True)
+
+    evidence = sub.add_parser("evidence")
+    evidence.add_argument("--skill", required=True)
+    evidence.add_argument("--command", action="append", default=[])
+    evidence.add_argument("--file", action="append", default=[])
+    evidence.add_argument("--outcome", default="recorded")
+
+    agent_card = sub.add_parser("agent-card")
+    agent_card.add_argument("--write", action="store_true")
+    agent_card.add_argument("--check", action="store_true")
+
+    mcp_resources = sub.add_parser("mcp-resources")
+    mcp_resources.add_argument("--write", action="store_true")
+    mcp_resources.add_argument("--check", action="store_true")
+
+    sbom = sub.add_parser("sbom")
+    sbom.add_argument("--write", action="store_true")
+    sbom.add_argument("--check", action="store_true")
+
+    provenance = sub.add_parser("provenance")
+    provenance.add_argument("--write", action="store_true")
+    provenance.add_argument("--check", action="store_true")
+
+    provider_install = sub.add_parser("provider-install")
+    provider_install.add_argument("--provider", required=True)
+    provider_install.add_argument("--target", type=Path, required=True)
+    provider_install.add_argument("--profile")
+    provider_install.add_argument("--check", action="store_true")
+
+    sub.add_parser("bench")
+
     diff_cmd = sub.add_parser("diff")
     diff_cmd.add_argument("--from", dest="old", required=True)
     diff_cmd.add_argument("--to", dest="new", default="index.json")
@@ -330,6 +364,36 @@ def main() -> int:
         for provider in args.provider:
             cmd.extend(["--provider", provider])
         return run(cmd)
+    if args.command == "evolve":
+        return run([sys.executable, str(ROOT / "scripts" / "evolve-session.py"), str(args.transcript), "--skill-name", args.skill_name])
+    if args.command == "evidence":
+        cmd = [sys.executable, str(ROOT / "scripts" / "record-evidence.py"), "--skill", args.skill, "--outcome", args.outcome]
+        for item in args.command:
+            cmd.extend(["--command", item])
+        for item in args.file:
+            cmd.extend(["--file", item])
+        return run(cmd)
+    if args.command == "agent-card":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-agent-card.py"), *flags])
+    if args.command == "mcp-resources":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-mcp-resources.py"), *flags])
+    if args.command == "sbom":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-sbom.py"), *flags])
+    if args.command == "provenance":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-provenance.py"), *flags])
+    if args.command == "provider-install":
+        cmd = [sys.executable, str(ROOT / "scripts" / "provider-install.py"), "--provider", args.provider, "--target", str(args.target)]
+        if args.profile:
+            cmd.extend(["--profile", args.profile])
+        if args.check:
+            cmd.append("--check")
+        return run(cmd)
+    if args.command == "bench":
+        return run([sys.executable, str(ROOT / "scripts" / "bench.py")])
     if args.command == "diff":
         cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", args.old, "--to", args.new]
         if args.json:

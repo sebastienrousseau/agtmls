@@ -1,0 +1,11 @@
+{
+  "negative": [
+    "write a short poem",
+    "format this JSON only"
+  ],
+  "positive": [
+    "Use when gathering current web evidence",
+    "use web research and source triage for this task"
+  ],
+  "skill": "web-research-and-source-triage"
+}
