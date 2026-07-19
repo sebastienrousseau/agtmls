@@ -5,9 +5,9 @@
   "materials": [
     {
       "digest": {
-        "sha1": "4492b29ba184a7885b2ba4a777c4ade0c2a94fdf"
+        "sha256": "7655ef2fea87daf6cf059e2a826301a207a6244fe8b1f2bdaa6f8b14a739ccf1"
       },
-      "uri": "git+local"
+      "uri": "agtmls:registry-state"
     }
   ],
   "metadata": {

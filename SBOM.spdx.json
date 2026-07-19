@@ -1069,7 +1069,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "35268d3144576df3d7f12f7223928efa46e538da212f96130efc7cacb90be5e3"
+          "checksumValue": "dc0af0f006b4c5c6b50d5614560be3bb0332288c95f0dcb31c631cae2d5e0cf8"
         }
       ],
       "fileName": "scripts/generate-provenance.py"
