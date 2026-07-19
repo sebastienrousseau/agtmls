@@ -5,7 +5,7 @@
   "materials": [
     {
       "digest": {
-        "sha256": "11db0b228d263fb8789f4176ae4c51214b65b246b16718ef4ad90c9bb6567d31"
+        "sha256": "98ffb9b1d5dfb2365990c7858c1c84a024460bc801a5e3de55f745e97a3e1d5b"
       },
       "uri": "agtmls:registry-state"
     }
@@ -43,6 +43,7 @@
       "validate-governance.py",
       "validate-skill-index.py",
       "validate-lifecycle.py",
+      "validate-version-policy.py",
       "validate-release.py",
       "release-check.py",
       "smoke-release-pack.py",

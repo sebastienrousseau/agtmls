@@ -166,6 +166,7 @@ python3 scripts/validate-docs-site.py
 python3 scripts/validate-skill-index.py
 python3 scripts/validate-lifecycle.py
 python3 scripts/validate-release.py
+python3 scripts/validate-version-policy.py
 python3 scripts/release-check.py
 python3 scripts/smoke-release-pack.py
 python3 scripts/smoke-install.py
@@ -298,3 +299,7 @@ python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 ### Interoperability artifacts
 
 `agent-card.json` and `mcp-resources.json` are generated from the registry for A2A-style discovery and MCP-style resource publication. `SBOM.spdx.json` and `provenance.json` provide release supply-chain evidence.
+
+## Versioning
+
+AgtMLS follows the pre-1.0 patch-line policy in `VERSIONING.md`: public releases stay on `0.0.x` and increment by exactly `0.0.1`.

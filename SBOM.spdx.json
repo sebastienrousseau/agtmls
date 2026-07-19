@@ -1141,7 +1141,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "36fe5e70c11ed5ec7abd662bb4e260593b5ae004240a0145a32afe9e71929e86"
+          "checksumValue": "4c68ea56d41eb3ec52d014882f47be061318a47863095351afa6289b909d25ce"
         }
       ],
       "fileName": "scripts/release-check.py"
@@ -1159,7 +1159,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "602ef490c46404ce9825b3405d361e6c03ed96b354198d75dce2fc89b25aed76"
+          "checksumValue": "2a7b82192fc5ad2e4ab980d2f89893dd63c0ab587df143de489a1a11735edfea"
         }
       ],
       "fileName": "scripts/run-all-checks.py"
@@ -1505,6 +1505,15 @@
         }
       ],
       "fileName": "scripts/validate-templates.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3d7b5f6738656058d3c936cdd9028507439fff1b0a57661b85adce2814db776d"
+        }
+      ],
+      "fileName": "scripts/validate-version-policy.py"
     },
     {
       "checksums": [

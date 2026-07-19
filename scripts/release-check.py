@@ -12,6 +12,7 @@ CHECKS = [
     ["validate-plugin-manifest.py"],
     ["validate-providers.py"],
     ["validate-profiles.py"],
+    ["validate-version-policy.py"],
     ["validate-release.py"],
     ["generate-skill-index.py", "--check"],
     ["generate-catalog.py", "--check"],

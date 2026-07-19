@@ -40,6 +40,7 @@ CHECKS = [
     ["validate-governance.py"],
     ["validate-skill-index.py"],
     ["validate-lifecycle.py"],
+    ["validate-version-policy.py"],
     ["validate-release.py"],
     ["release-check.py"],
     ["smoke-release-pack.py"],
@@ -116,6 +117,7 @@ COMPILE = [
     "validate-skills.py",
     "validate-system-prompts.py",
     "validate-templates.py",
+    "validate-version-policy.py",
 ]
 
 

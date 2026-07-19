@@ -27,4 +27,5 @@ surface, plugin metadata, and validation gates agree.
    python3 scripts/agtmls.py status --target /path/to/repo --agent codex --skills-only
    ```
 
-7. Tag only after CI is green.
+7. Confirm `VERSIONING.md`: versions increment by exactly `0.0.1`; the next release after `v0.0.1` is `v0.0.2`, and `v0.1.0` is forbidden until `v0.0.999` exists.
+8. Tag only after CI is green.
