@@ -66,7 +66,7 @@ def main() -> int:
     if not (target / "reference.md").exists():
         (target / "reference.md").write_text(f"# {name} Reference\n\nImported draft. Review and expand before publication.\n", encoding="utf-8")
     meta = {
-        "version": "0.1.0",
+        "version": "0.0.1",
         "owner": "unassigned",
         "maturity": "draft",
         "supported_agents": ["claude", "codex", "aider"],
