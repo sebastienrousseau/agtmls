@@ -1,0 +1,19 @@
+{
+  "forbids": {
+    "skill_contains": [
+      "ignore safety_policy"
+    ]
+  },
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "reference_contains": [
+      "Required Outputs"
+    ],
+    "skill_contains": [
+      "## Workflow"
+    ]
+  },
+  "skill": "ai-supply-chain-security"
+}

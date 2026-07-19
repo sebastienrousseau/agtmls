@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-architecture-contract",
+  "positive": [
+    "can I change noyalib's three loader architecture",
+    "what invariants must I preserve when editing loader.rs",
+    "explain value_target_bypass and stream_eligible",
+    "review this PR that touches cst document routing"
+  ],
+  "negative": [
+    "how do I tag a release",
+    "raise line coverage to 98 percent"
+  ]
+}

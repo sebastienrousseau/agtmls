@@ -1,0 +1,20 @@
+{
+  "maturity": "hardened",
+  "owner": "Sebastien Rousseau",
+  "project": "web-reach",
+  "required_tools": [],
+  "safety_policy": {
+    "executes_commands": false,
+    "handles_secrets": false,
+    "network_access": "optional",
+    "requires_human_review": true,
+    "risk_level": "low",
+    "writes_files": false
+  },
+  "supported_agents": [
+    "claude",
+    "codex",
+    "aider"
+  ],
+  "version": "0.1.0"
+}

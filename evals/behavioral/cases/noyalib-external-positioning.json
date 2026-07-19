@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-external-positioning",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "public",
+      "competitor",
+      "claiming rules",
+      "re-verified"
+    ],
+    "reference_contains": [
+      "Ecosystem",
+      "claim"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "unverified uniqueness",
+      "benchmark headline without"
+    ]
+  }
+}

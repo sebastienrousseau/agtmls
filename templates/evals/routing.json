@@ -1,0 +1,11 @@
+{
+  "skill": "example-skill",
+  "positive": [
+    "use the example workflow for this task",
+    "run the reusable example playbook"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "CI is red on noyalib"
+  ]
+}

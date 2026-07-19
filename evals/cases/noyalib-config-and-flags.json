@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-config-and-flags",
+  "positive": [
+    "what does the minimal Cargo feature profile drop",
+    "how do I add a ParserConfig axis",
+    "what is the default for max_document_length",
+    "does strict reject duplicate YAML keys"
+  ],
+  "negative": [
+    "CI is red after tag push",
+    "draft a release note"
+  ]
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgtMLS Registry Catalog</title>
+<style>
+body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 0; color: #172026; background: #f7f8fa; }
+header, main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+header { border-bottom: 1px solid #d9dee5; background: #ffffff; max-width: none; }
+header > div { max-width: 1180px; margin: 0 auto; }
+h1 { margin: 0 0 8px; font-size: 32px; }
+.summary { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.summary span { background: #e8eef5; border: 1px solid #ccd6e2; padding: 6px 10px; border-radius: 6px; }
+section { margin: 28px 0; }
+table { width: 100%; border-collapse: collapse; background: #ffffff; border: 1px solid #d9dee5; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e5e9ef; vertical-align: top; }
+th { background: #eef2f6; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }
+li { margin: 8px 0; }
+</style>
+</head>
+<body>
+<header><div>
+<h1>AgtMLS Registry Catalog</h1>
+<p>Generated from <code>index.json</code>, <code>profiles.json</code>, and <code>providers.json</code>.</p>
+<div class="summary">
+<span>Version: <code>0.1.0</code></span>
+<span>Skills: <code>20</code></span>
+<span>Commands: <code>1</code></span>
+<span>Quality: <code>100</code></span>
+<span>Routing: <code>20/20</code></span>
+<span>Behavioral: <code>20/20</code></span>
+</div>
+</div></header>
+<main>
+<section>
+<h2>Skills</h2>
+<table>
+<thead><tr><th>Name</th><th>Bundle</th><th>Quality</th><th>Risk</th><th>Agents</th><th>Tags</th><th>Path</th></tr></thead>
+<tbody>
+<tr><td><code>cross-language-port</code></td><td>general</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>porting</td><td><code>skills/cross-language-port</code></td></tr><tr><td><code>pr-review-and-release</code></td><td>engineering</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, docs, engineering, release</td><td><code>skills/engineering/pr-review-and-release</code></td></tr><tr><td><code>agent-loop-design</code></td><td>loops</td><td>100</td><td>low</td><td>claude, codex, aider</td><td>loops, validation</td><td><code>skills/loops/agent-loop-design</code></td></tr><tr><td><code>noyalib-architecture-contract</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>architecture, ci, config, noyalib, release</td><td><code>skills/noyalib/noyalib-architecture-contract</code></td></tr><tr><td><code>noyalib-build-and-env</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>coverage, diagnostics, noyalib, qa</td><td><code>skills/noyalib/noyalib-build-and-env</code></td></tr><tr><td><code>noyalib-change-control</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, config, noyalib, qa, release, security, validation</td><td><code>skills/noyalib/noyalib-change-control</code></td></tr><tr><td><code>noyalib-ci-and-release</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, noyalib, release, security</td><td><code>skills/noyalib/noyalib-ci-and-release</code></td></tr><tr><td><code>noyalib-config-and-flags</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>config, noyalib</td><td><code>skills/noyalib/noyalib-config-and-flags</code></td></tr><tr><td><code>noyalib-coverage-campaign</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>architecture, ci, coverage, debugging, noyalib, qa</td><td><code>skills/noyalib/noyalib-coverage-campaign</code></td></tr><tr><td><code>noyalib-debugging-playbook</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, debugging, noyalib, qa, release, yaml</td><td><code>skills/noyalib/noyalib-debugging-playbook</code></td></tr><tr><td><code>noyalib-diagnostics-and-tooling</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>coverage, diagnostics, noyalib, qa, validation</td><td><code>skills/noyalib/noyalib-diagnostics-and-tooling</code></td></tr><tr><td><code>noyalib-docs-and-writing</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>architecture, ci, docs, noyalib, qa, release</td><td><code>skills/noyalib/noyalib-docs-and-writing</code></td></tr><tr><td><code>noyalib-external-positioning</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, docs, noyalib, release, research, yaml</td><td><code>skills/noyalib/noyalib-external-positioning</code></td></tr><tr><td><code>noyalib-failure-archaeology</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, noyalib, validation</td><td><code>skills/noyalib/noyalib-failure-archaeology</code></td></tr><tr><td><code>noyalib-research-frontier</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, noyalib, qa, research, validation, yaml</td><td><code>skills/noyalib/noyalib-research-frontier</code></td></tr><tr><td><code>noyalib-validation-and-qa</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, coverage, diagnostics, noyalib, qa, validation, yaml</td><td><code>skills/noyalib/noyalib-validation-and-qa</code></td></tr><tr><td><code>yaml-domain-reference</code></td><td>noyalib</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>ci, config, noyalib, yaml</td><td><code>skills/noyalib/yaml-domain-reference</code></td></tr><tr><td><code>ai-supply-chain-security</code></td><td>security</td><td>100</td><td>medium</td><td>claude, codex, aider</td><td>release, security, validation</td><td><code>skills/security/ai-supply-chain-security</code></td></tr><tr><td><code>using-agtmls</code></td><td>general</td><td>100</td><td>low</td><td>claude, codex, aider</td><td>ci, noyalib, porting, routing</td><td><code>skills/using-agtmls</code></td></tr><tr><td><code>web-research-and-source-triage</code></td><td>web-reach</td><td>100</td><td>low</td><td>claude, codex, aider</td><td>ci, debugging, docs, research, validation, web-reach</td><td><code>skills/web-reach/web-research-and-source-triage</code></td></tr>
+</tbody>
+</table>
+</section>
+<section><h2>Profiles</h2><ul><li><code>minimal</code>: General AgtMLS usage and registry navigation only.</li><li><code>noyalib</code>: Full noyalib project operating set plus general skills.</li><li><code>polyglot</code>: General registry usage plus cross-language porting.</li><li><code>research</code>: Research, external positioning, YAML domain work, and quality-analysis workflows.</li><li><code>security</code>: Skills with security, safety, validation, diagnostics, or secret-handling relevance.</li></ul></section>
+<section><h2>Export Targets</h2><ul><li><code>anthropic</code>: Provider-neutral bundle for Claude-style agents that can consume CLAUDE.md, slash commands, and Markdown skills.</li><li><code>continue</code>: Provider-neutral Markdown bundle for Continue-style assistant contexts.</li><li><code>cursor</code>: Provider-neutral Markdown bundle for Cursor project-rule adaptation.</li><li><code>deepseek</code>: Provider-neutral Markdown bundle for DeepSeek-based coding agents.</li><li><code>generic</code>: Provider-neutral bundle containing SKILL.md files, references, commands, prompts, index, profiles, and provider metadata.</li><li><code>github-copilot</code>: Provider-neutral Markdown bundle suitable for Copilot-adjacent repository instruction workflows.</li><li><code>google-gemini</code>: Provider-neutral Markdown bundle for Gemini-style agents or custom Gemini CLI integrations.</li><li><code>mistral</code>: Provider-neutral Markdown bundle for Mistral-based agent runtimes.</li><li><code>ollama</code>: Provider-neutral local-model bundle for Ollama-backed agent runtimes.</li><li><code>openai</code>: Provider-neutral bundle for OpenAI/Codex-style agents that can consume repository instructions and Markdown skills.</li><li><code>qwen</code>: Provider-neutral Markdown bundle for Qwen-based coding agents.</li><li><code>windsurf</code>: Provider-neutral Markdown bundle for Windsurf/Cascade rule adaptation.</li><li><code>zed</code>: Provider-neutral Markdown bundle for Zed agent rule adaptation.</li></ul></section>
+</main>
+</body>
+</html>

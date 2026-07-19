@@ -19,9 +19,99 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate skill frontmatter
+      - name: Validate Skills
         run: python3 scripts/validate-skills.py
-      - name: Check description collisions
+      - name: Validate Commands
+        run: python3 scripts/validate-commands.py
+      - name: Validate Plugin Manifest
+        run: python3 scripts/validate-plugin-manifest.py
+      - name: Validate Providers
+        run: python3 scripts/validate-providers.py
+      - name: Validate Profiles
+        run: python3 scripts/validate-profiles.py
+      - name: Validate Templates
+        run: python3 scripts/validate-templates.py
+      - name: Validate Doc Links
+        run: python3 scripts/validate-doc-links.py
+      - name: Validate Json Files
+        run: python3 scripts/validate-json-files.py
+      - name: Validate Python Scripts
+        run: python3 scripts/validate-python-scripts.py
+      - name: Validate Shell Syntax
+        run: python3 scripts/validate-shell-syntax.py
+      - name: Validate Secrets
+        run: python3 scripts/validate-secrets.py
+      - name: Validate Gitignore
+        run: python3 scripts/validate-gitignore.py
+      - name: Validate Cli Surface
+        run: python3 scripts/validate-cli-surface.py
+      - name: Validate System Prompts
+        run: python3 scripts/validate-system-prompts.py
+      - name: Check Skill Collisions
         run: python3 scripts/check-skill-collisions.py
-      - name: Trigger-routing evals
+      - name: Validate Eval Cases
+        run: python3 scripts/validate-eval-cases.py
+      - name: Run Trigger Evals
         run: python3 scripts/run-trigger-evals.py
+      - name: Run Behavioral Evals
+        run: python3 scripts/run-behavioral-evals.py
+      - name: Validate Skill Metadata
+        run: python3 scripts/validate-skill-metadata.py
+      - name: Generate Skill Index Check
+        run: python3 scripts/generate-skill-index.py --check
+      - name: Generate Catalog Check
+        run: python3 scripts/generate-catalog.py --check
+      - name: Generate Docs Site Check
+        run: python3 scripts/generate-docs-site.py --check
+      - name: Generate Agent Card Check
+        run: python3 scripts/generate-agent-card.py --check
+      - name: Generate Mcp Resources Check
+        run: python3 scripts/generate-mcp-resources.py --check
+      - name: Generate Sbom Check
+        run: python3 scripts/generate-sbom.py --check
+      - name: Generate Provenance Check
+        run: python3 scripts/generate-provenance.py --check
+      - name: Validate Generated Artifacts
+        run: python3 scripts/validate-generated-artifacts.py
+      - name: Validate Docs Site
+        run: python3 scripts/validate-docs-site.py
+      - name: Validate Governance
+        run: python3 scripts/validate-governance.py
+      - name: Validate Skill Index
+        run: python3 scripts/validate-skill-index.py
+      - name: Validate Lifecycle
+        run: python3 scripts/validate-lifecycle.py
+      - name: Validate Release
+        run: python3 scripts/validate-release.py
+      - name: Release Check
+        run: python3 scripts/release-check.py
+      - name: Smoke Release Pack
+        run: python3 scripts/smoke-release-pack.py
+      - name: Smoke Evolve Evidence
+        run: python3 scripts/smoke-evolve-evidence.py
+      - name: Smoke Provider Install
+        run: python3 scripts/smoke-provider-install.py
+      - name: Smoke Install
+        run: python3 scripts/smoke-install.py
+      - name: Smoke Install Profiles
+        run: python3 scripts/smoke-install-profiles.py
+      - name: Smoke Cli
+        run: python3 scripts/smoke-cli.py
+      - name: Smoke Export
+        run: python3 scripts/smoke-export.py
+      - name: Smoke Import
+        run: python3 scripts/smoke-import.py
+      - name: Smoke Proposal
+        run: python3 scripts/smoke-proposal.py
+      - name: Smoke Scaffold
+        run: python3 scripts/smoke-scaffold.py
+      - name: Run Unit Tests
+        run: python3 scripts/run-unit-tests.py
+      - name: Bench
+        run: python3 scripts/bench.py
+      - name: Validate Check Manifest
+        run: python3 scripts/validate-check-manifest.py
+      - name: Agtmls Doctor
+        run: python3 scripts/agtmls-doctor.py
+      - name: Compile maintenance CLIs
+        run: python3 -m py_compile scripts/agtmls-doctor.py scripts/agtmls.py scripts/bench.py scripts/check-skill-collisions.py scripts/evolve-session.py scripts/export-registry.py scripts/generate-agent-card.py scripts/generate-catalog.py scripts/generate-docs-site.py scripts/generate-mcp-resources.py scripts/generate-provenance.py scripts/generate-sbom.py scripts/generate-skill-index.py scripts/import-skill.py scripts/propose-skill-from-session.py scripts/provider-install.py scripts/record-evidence.py scripts/registry-diff.py scripts/release-check.py scripts/release-pack.py scripts/run-all-checks.py scripts/run-behavioral-evals.py scripts/run-trigger-evals.py scripts/run-unit-tests.py scripts/scaffold-skill.py scripts/smoke-cli.py scripts/smoke-evolve-evidence.py scripts/smoke-export.py scripts/smoke-import.py scripts/smoke-install-profiles.py scripts/smoke-install.py scripts/smoke-proposal.py scripts/smoke-provider-install.py scripts/smoke-release-pack.py scripts/smoke-scaffold.py scripts/validate-check-manifest.py scripts/validate-cli-surface.py scripts/validate-commands.py scripts/validate-doc-links.py scripts/validate-docs-site.py scripts/validate-eval-cases.py scripts/validate-generated-artifacts.py scripts/validate-gitignore.py scripts/validate-governance.py scripts/validate-json-files.py scripts/validate-lifecycle.py scripts/validate-plugin-manifest.py scripts/validate-profiles.py scripts/validate-providers.py scripts/validate-python-scripts.py scripts/validate-release.py scripts/validate-secrets.py scripts/validate-shell-syntax.py scripts/validate-skill-index.py scripts/validate-skill-metadata.py scripts/validate-skills.py scripts/validate-system-prompts.py scripts/validate-templates.py

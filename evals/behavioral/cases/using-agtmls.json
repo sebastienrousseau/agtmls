@@ -1,0 +1,18 @@
+{
+  "skill": "using-agtmls",
+  "requires": {
+    "files_exist": [
+      "SKILL.md"
+    ],
+    "skill_contains": [
+      "cross-language-port",
+      "noyalib/",
+      "Definition of Done"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "always load this skill"
+    ]
+  }
+}

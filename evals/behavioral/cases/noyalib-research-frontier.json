@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-research-frontier",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "candidate",
+      "YAML-spec leadership",
+      "falsifiable",
+      "OPEN"
+    ],
+    "reference_contains": [
+      "hypothesis",
+      "Result-when"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "guaranteed roadmap",
+      "is a guaranteed roadmap"
+    ]
+  }
+}

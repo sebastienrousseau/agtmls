@@ -1,0 +1,11 @@
+{
+  "negative": [
+    "write a short poem",
+    "format this JSON only"
+  ],
+  "positive": [
+    "Use when turning repeated agent work into a loop with trigger conditions",
+    "use agent loop design for this task"
+  ],
+  "skill": "agent-loop-design"
+}

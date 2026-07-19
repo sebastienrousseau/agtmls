@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-build-and-env",
+  "positive": [
+    "fresh clone of noyalib and cargo build fails before code changes",
+    "Miri is not installed on my noyalib machine",
+    "cargo fuzz command not found on Apple Silicon",
+    "bootstrap a noyalib dev environment from scratch"
+  ],
+  "negative": [
+    "is noyalib faster than serde_yaml",
+    "explain merge keys"
+  ]
+}

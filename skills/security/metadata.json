@@ -1,0 +1,20 @@
+{
+  "maturity": "hardened",
+  "owner": "Sebastien Rousseau",
+  "project": "security",
+  "required_tools": [],
+  "safety_policy": {
+    "executes_commands": true,
+    "handles_secrets": true,
+    "network_access": "none",
+    "requires_human_review": true,
+    "risk_level": "medium",
+    "writes_files": false
+  },
+  "supported_agents": [
+    "claude",
+    "codex",
+    "aider"
+  ],
+  "version": "0.1.0"
+}

@@ -14,7 +14,9 @@ and writes idiomatic code for the target language.
 ```
 agtmls/
 ├── scripts/
-│   └── setup-workspace.sh       # Links AgtMLS into your active repos
+│   ├── setup-workspace.sh       # Links AgtMLS into your active repos
+│   ├── agtmls-doctor.py         # Local health checks for the registry
+│   └── generate-skill-index.py  # Builds index.json for discovery
 ├── system-prompts/              # Global behavioural rules → repo-root CLAUDE.md/AGENTS.md/CONVENTIONS.md
 │   ├── _base.md                 # Universal engineering standards
 │   └── <lang>.md                # Per-language idiom profiles: rust, python,
@@ -25,7 +27,15 @@ agtmls/
 │   └── noyalib/                 # Project-specific skills for noyalib
 │       ├── README.md            # Routing index for the 14 noyalib skills
 │       └── noyalib-*/           # Per-skill directory with SKILL.md + reference.md
-└── commands/                    # Interactive slash commands (author here)
+├── commands/                    # Interactive slash commands (author here)
+├── evals/                       # Routing + behavioral skill checks
+├── lifecycle.json               # Skill proposal -> publication lifecycle
+├── profiles.json                # Named install/export profiles
+├── providers.json               # Native agent + export target compatibility matrix
+├── CHANGELOG.md                 # Human-readable changes
+├── RELEASE.md                   # Release checklist
+├── CATALOG.md                   # Generated human-readable registry catalog
+└── index.json                   # Generated skill registry metadata
 ```
 
 ## Hub-and-spoke setup
@@ -123,3 +133,168 @@ top-level namespace.
 - a top-level `# ` heading in the body.
 
 Run it locally before pushing: `python3 scripts/validate-skills.py`.
+
+### Full local health check
+
+Run the same high-signal checks CI runs:
+
+```bash
+python3 scripts/validate-skills.py
+python3 scripts/validate-commands.py
+python3 scripts/validate-plugin-manifest.py
+python3 scripts/validate-providers.py
+python3 scripts/validate-profiles.py
+python3 scripts/validate-templates.py
+python3 scripts/validate-doc-links.py
+python3 scripts/validate-json-files.py
+python3 scripts/validate-python-scripts.py
+python3 scripts/validate-shell-syntax.py
+python3 scripts/validate-secrets.py
+python3 scripts/validate-gitignore.py
+python3 scripts/validate-cli-surface.py
+python3 scripts/validate-system-prompts.py
+python3 scripts/check-skill-collisions.py
+python3 scripts/validate-eval-cases.py
+python3 scripts/run-trigger-evals.py
+python3 scripts/run-behavioral-evals.py
+python3 scripts/validate-skill-metadata.py
+python3 scripts/generate-skill-index.py --check
+python3 scripts/generate-catalog.py --check
+python3 scripts/generate-docs-site.py --check
+python3 scripts/validate-generated-artifacts.py
+python3 scripts/validate-docs-site.py
+python3 scripts/validate-skill-index.py
+python3 scripts/validate-lifecycle.py
+python3 scripts/validate-release.py
+python3 scripts/release-check.py
+python3 scripts/smoke-release-pack.py
+python3 scripts/smoke-install.py
+python3 scripts/smoke-install-profiles.py
+python3 scripts/smoke-cli.py
+python3 scripts/smoke-export.py
+python3 scripts/smoke-import.py
+python3 scripts/smoke-proposal.py
+python3 scripts/smoke-scaffold.py
+python3 scripts/run-unit-tests.py
+python3 scripts/validate-check-manifest.py
+python3 scripts/agtmls-doctor.py
+```
+
+The convenience dispatcher wraps the same operations:
+
+```bash
+python3 scripts/agtmls.py check
+python3 scripts/agtmls.py list
+python3 scripts/agtmls.py list commands
+python3 scripts/agtmls.py search yaml
+python3 scripts/agtmls.py show cross-language-port
+python3 scripts/agtmls.py stats
+python3 scripts/agtmls.py profiles
+python3 scripts/agtmls.py providers
+python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir dist
+python3 scripts/agtmls.py docs-site --write
+python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
+python3 scripts/agtmls.py evidence --skill cross-language-port --command pytest --file src/example.py
+python3 scripts/agtmls.py agent-card --write
+python3 scripts/agtmls.py mcp-resources --write
+python3 scripts/agtmls.py sbom --write
+python3 scripts/agtmls.py provenance --write
+python3 scripts/agtmls.py provider-install --provider cursor --target /path/to/repo --profile polyglot
+python3 scripts/agtmls.py bench
+python3 scripts/agtmls.py diff --from index.json --to index.json
+python3 scripts/agtmls.py release-check
+python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
+python3 scripts/agtmls.py index --check
+python3 scripts/agtmls.py status
+python3 scripts/agtmls.py status --target /path/to/repo --agent codex --skills-only
+python3 scripts/agtmls.py install rust claude --target /path/to/repo --skills-only --bundle noyalib
+python3 scripts/agtmls.py install rust codex --target /path/to/repo --skills-only --profile noyalib
+python3 scripts/agtmls.py uninstall claude --target /path/to/repo --remove-prompt
+python3 scripts/agtmls.py propose-skill transcript.txt --skill-name candidate-skill
+python3 scripts/agtmls.py scaffold-skill candidate-skill
+```
+
+`index.json` is generated from the skill tree and committed so tools can
+discover skills without reading every body. Rebuild it after changing skills:
+
+```bash
+python3 scripts/generate-skill-index.py --write
+python3 scripts/generate-catalog.py --write
+```
+
+The generated schema is documented in
+`references/registry-schema.md`; do not edit `index.json` by hand.
+
+### Repository location
+
+AgtMLS is intentionally a polyglot hub. It should not live under a
+Python-only folder unless your local machine has a personal convention for all
+automation repos. The repo contains Python tooling, but its product surface is
+language-neutral skills, prompts, commands, and evals.
+
+### Providers and profiles
+
+AgtMLS has native symlink installers for Claude Code, Codex, and Aider. Other
+AI providers are supported through provider-adapted Markdown exports generated
+from the same registry source of truth. Each export includes `ADAPTERS.md` plus
+a provider-specific file such as `adapters/openai/AGENTS.md`,
+`adapters/anthropic/CLAUDE.md`,
+`adapters/github-copilot/.github/copilot-instructions.md`, or
+`adapters/cursor/.cursor/rules/agtmls.mdc`. `providers.json` records the native
+agent layouts and export targets; `profiles.json` records named subsets such as
+`minimal`, `polyglot`, `noyalib`, `security`, and `research`.
+
+Use exports when a provider does not have a first-class local skills directory:
+
+```bash
+python3 scripts/agtmls.py export --provider generic --profile polyglot --out-dir dist
+python3 scripts/agtmls.py export --provider anthropic --profile noyalib --out-dir dist
+```
+
+### Safety metadata
+
+Every metadata source must include `safety_policy` with explicit flags for
+network access, file writes, command execution, secret handling, human-review
+requirements, and risk level. The policy is validated by
+`validate-skill-metadata.py` and published into `index.json` so agents can
+route or gate skills before use.
+
+### Import and release workflow
+
+External skills should enter as drafts, not directly as hardened skills:
+
+```bash
+python3 scripts/agtmls.py import-skill /path/to/external/skill --name external-skill
+python3 scripts/agtmls.py scaffold-skill follow-up-skill
+python3 scripts/agtmls.py release-check
+```
+
+`import-skill` normalizes a Markdown skill into `skills/imported/<name>/`, adds
+draft metadata, creates a reference stub when needed, and review-gates the
+result. Publish it only after adding routing and behavioral eval cases, filling
+out references, and passing `python3 scripts/agtmls.py check`.
+
+### Static docs site
+
+`site/index.html` is generated from the registry metadata and gives a browser-readable catalog with skill quality, risk, agent support, profiles, and export targets. Rebuild it after changing `index.json`, `profiles.json`, or `providers.json`:
+
+```bash
+python3 scripts/agtmls.py docs-site --write
+```
+
+### Release packs
+
+`release-pack` creates provider export archives plus `SHA256SUMS` and `release-manifest.json`:
+
+```bash
+python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+```
+
+### Evolution and evidence
+
+`evolve` creates a redacted local proposal from a transcript and requires human review before publication. `evidence` records per-skill invocation evidence with commands, touched files, outcome, and the skill safety policy. These files default to `.agtmls/` and are intentionally ignored.
+
+### Interoperability artifacts
+
+`agent-card.json` and `mcp-resources.json` are generated from the registry for A2A-style discovery and MCP-style resource publication. `SBOM.spdx.json` and `provenance.json` provide release supply-chain evidence.

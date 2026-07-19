@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-docs-and-writing",
+  "positive": [
+    "draft RELEASE-NOTES-v0.0.15 for noyalib",
+    "what SPDX header should this Rust file use",
+    "when does noyalib need an ADR",
+    "edit the noyalib README and rustdoc examples"
+  ],
+  "negative": [
+    "position noyalib against serde_yml publicly",
+    "which loader enforces max_depth"
+  ]
+}

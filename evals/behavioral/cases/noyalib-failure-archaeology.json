@@ -1,0 +1,24 @@
+{
+  "skill": "noyalib-failure-archaeology",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "settled battles",
+      "BEFORE",
+      "symptom",
+      "what NOT to retry"
+    ],
+    "reference_contains": [
+      "Root cause",
+      "Status"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "retry every old fix",
+      "history is irrelevant"
+    ]
+  }
+}

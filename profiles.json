@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "minimal": {
+      "description": "General AgtMLS usage and registry navigation only.",
+      "bundles": [],
+      "skills": ["using-agtmls"]
+    },
+    "polyglot": {
+      "description": "General registry usage plus cross-language porting.",
+      "bundles": [],
+      "skills": ["using-agtmls", "cross-language-port"]
+    },
+    "noyalib": {
+      "description": "Full noyalib project operating set plus general skills.",
+      "bundles": ["noyalib"],
+      "skills": ["using-agtmls", "cross-language-port"]
+    },
+    "security": {
+      "description": "Skills with security, safety, validation, diagnostics, or secret-handling relevance.",
+      "bundles": ["noyalib"],
+      "skills": ["using-agtmls", "cross-language-port"]
+    },
+    "research": {
+      "description": "Research, external positioning, YAML domain work, and quality-analysis workflows.",
+      "bundles": ["noyalib"],
+      "skills": ["using-agtmls", "cross-language-port"]
+    }
+  }
+}

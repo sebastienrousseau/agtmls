@@ -1,0 +1,21 @@
+{
+  "skill": "example-skill",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Objective",
+      "Workflow",
+      "Verification"
+    ],
+    "reference_contains": [
+      "reference"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "skip verification"
+    ]
+  }
+}

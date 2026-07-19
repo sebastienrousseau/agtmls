@@ -1,0 +1,13 @@
+{
+  "skill": "noyalib-validation-and-qa",
+  "positive": [
+    "what evidence must a noyalib PR carry",
+    "how do I add a regression test that fails before the fix",
+    "write a cross loader parity test",
+    "does this noyalib change need a doctest"
+  ],
+  "negative": [
+    "interpret criterion throughput",
+    "compare noyalib to saphyr"
+  ]
+}

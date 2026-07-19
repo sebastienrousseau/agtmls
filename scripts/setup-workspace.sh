@@ -173,6 +173,9 @@ echo "   linked $linked skill(s)"
 if compgen -G "$AGTMLS_DIR/commands/*" > /dev/null; then
   for entry in "$AGTMLS_DIR/commands/"*; do
     [[ -e "$entry" ]] || continue
+    case "$(basename "$entry")" in
+      README.md|.*) continue ;;
+    esac
     ln -sfn "$entry" "$TARGET_DIR/$CLI_DIR/commands/$(basename "$entry")"
   done
 else

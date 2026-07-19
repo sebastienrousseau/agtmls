@@ -1,0 +1,25 @@
+{
+  "skill": "noyalib-diagnostics-and-tooling",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Measure instead of eyeball",
+      "coverage",
+      "Miri",
+      "criterion",
+      "cargo-fuzz"
+    ],
+    "reference_contains": [
+      "bench",
+      "libfuzzer"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "claim without evidence is fine",
+      "measurement is optional"
+    ]
+  }
+}

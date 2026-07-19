@@ -1,0 +1,27 @@
+{
+  "skill": "cross-language-port",
+  "requires": {
+    "files_exist": [
+      "reference.md",
+      "harness/port-check.sh",
+      "harness/golden-diff.sh"
+    ],
+    "skill_contains": [
+      "Behaviour is preserved exactly",
+      "golden-I/O corpus",
+      "harness/port-check.sh <target-lang> <files>",
+      "ad-hoc string-parse across a language boundary"
+    ],
+    "reference_contains": [
+      "Idiom-mapping matrix",
+      "Per-language porting notes",
+      "Data-boundary"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "looks right is enough",
+      "skip equivalence"
+    ]
+  }
+}
