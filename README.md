@@ -169,6 +169,8 @@ python3 scripts/validate-release.py
 python3 scripts/validate-version-policy.py
 python3 scripts/release-check.py
 python3 scripts/smoke-release-pack.py
+python3 scripts/smoke-next-version.py
+python3 scripts/smoke-release-dry-run.py
 python3 scripts/smoke-install.py
 python3 scripts/smoke-install-profiles.py
 python3 scripts/smoke-cli.py
@@ -195,6 +197,9 @@ python3 scripts/agtmls.py providers
 python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir dist
 python3 scripts/agtmls.py docs-site --write
 python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+python3 scripts/agtmls.py next-version
+python3 scripts/agtmls.py release-dry-run --version 0.0.1 --skip-check
+python3 scripts/agtmls.py verify-release-assets --tag v0.0.1
 python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
 python3 scripts/agtmls.py evidence --skill cross-language-port --command pytest --file src/example.py
 python3 scripts/agtmls.py agent-card --write
@@ -303,3 +308,5 @@ python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 ## Versioning
 
 AgtMLS follows the pre-1.0 patch-line policy in `VERSIONING.md`: public releases stay on `0.0.x` and increment by exactly `0.0.1`.
+
+Published release assets can be verified after release with `python3 scripts/agtmls.py verify-release-assets --tag v0.0.1`.

@@ -5,7 +5,7 @@
   "materials": [
     {
       "digest": {
-        "sha256": "98ffb9b1d5dfb2365990c7858c1c84a024460bc801a5e3de55f745e97a3e1d5b"
+        "sha256": "1a3e719aabd8a14e0ffdb6f0f33df52779c193a2a4ad65071733cfba88f18f89"
       },
       "uri": "agtmls:registry-state"
     }
@@ -47,6 +47,8 @@
       "validate-release.py",
       "release-check.py",
       "smoke-release-pack.py",
+      "smoke-next-version.py",
+      "smoke-release-dry-run.py",
       "smoke-evolve-evidence.py",
       "smoke-provider-install.py",
       "smoke-install.py",

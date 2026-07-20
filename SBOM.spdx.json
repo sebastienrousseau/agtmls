@@ -988,7 +988,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4dca2c4fe405f65478064f388d47d8e4b5648e46a587d374c093ec057951c5f4"
+          "checksumValue": "d61f8fe1381a898de28d53e1bd83d154f92197a5ccea132ea06df9c805e2b246"
         }
       ],
       "fileName": "scripts/agtmls.py"
@@ -1105,6 +1105,15 @@
       "checksums": [
         {
           "algorithm": "SHA256",
+          "checksumValue": "40b94b266153e96aec8b2b95f0ace5535d3126922f285edf7717ad09c0f8b32c"
+        }
+      ],
+      "fileName": "scripts/next-version.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
           "checksumValue": "c53fa65aaf26145109ff4dc03ccca811182f460390735dc08ab2d0b536746a93"
         }
       ],
@@ -1150,6 +1159,15 @@
       "checksums": [
         {
           "algorithm": "SHA256",
+          "checksumValue": "0dbefc8dddb68ce9953b0685795fad5a2aec3fe89732df3eb5e8054e1a7a70bd"
+        }
+      ],
+      "fileName": "scripts/release-dry-run.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
           "checksumValue": "7c5c6745dab274ebef8fd92bbfbc7a6a4e12dc913ef2451fc7021b2fe0e7ff1e"
         }
       ],
@@ -1159,7 +1177,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "2a7b82192fc5ad2e4ab980d2f89893dd63c0ab587df143de489a1a11735edfea"
+          "checksumValue": "ca9819c601b3eccb6a4f2f8d76ba83ced92728e3f850ce323aa2e0887f037f92"
         }
       ],
       "fileName": "scripts/run-all-checks.py"
@@ -1267,6 +1285,15 @@
       "checksums": [
         {
           "algorithm": "SHA256",
+          "checksumValue": "270dcefa54a3b82bb0d706082d3f47c6d9391feed7c3399286e171141f7e46b6"
+        }
+      ],
+      "fileName": "scripts/smoke-next-version.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
           "checksumValue": "c01d97edc0eb14fa8ce4c385fd62db07eb443534d48a89874ca7f5a53b882b4a"
         }
       ],
@@ -1280,6 +1307,15 @@
         }
       ],
       "fileName": "scripts/smoke-provider-install.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ab610e4f2369fff999f8a75f29604c52c0197b27ab949d62dc88c8183b977d24"
+        }
+      ],
+      "fileName": "scripts/smoke-release-dry-run.py"
     },
     {
       "checksums": [
@@ -1312,7 +1348,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "13ba15e042f0fc077b8a0d839d5f974c56137139d03f861d025645c83cca0189"
+          "checksumValue": "04c7f06b3e224b2c701348d22a621faa5f17884db9f7185771509c842e4de47a"
         }
       ],
       "fileName": "scripts/validate-cli-surface.py"
@@ -1514,6 +1550,15 @@
         }
       ],
       "fileName": "scripts/validate-version-policy.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a80a87088a82cca2a77e3bb308b35a1d2d5e9094de215c31f31ecaed5f900881"
+        }
+      ],
+      "fileName": "scripts/verify-release-assets.py"
     },
     {
       "checksums": [

@@ -244,6 +244,21 @@ def main() -> int:
     release_pack.add_argument("--profile")
     release_pack.add_argument("--provider", action="append", default=[])
 
+    next_version = sub.add_parser("next-version")
+    next_version.add_argument("--tag", action="store_true")
+    next_version.add_argument("--json", action="store_true")
+
+    release_dry_run = sub.add_parser("release-dry-run")
+    release_dry_run.add_argument("--version")
+    release_dry_run.add_argument("--skip-check", action="store_true")
+    release_dry_run.add_argument("--profile")
+    release_dry_run.add_argument("--provider", action="append", default=[])
+
+    verify_release_assets = sub.add_parser("verify-release-assets")
+    verify_release_assets.add_argument("--tag", default="v0.0.1")
+    verify_release_assets.add_argument("--repo")
+    verify_release_assets.add_argument("--out-dir", type=Path)
+
     evolve = sub.add_parser("evolve")
     evolve.add_argument("transcript", type=Path)
     evolve.add_argument("--skill-name", required=True)
@@ -363,6 +378,31 @@ def main() -> int:
             cmd.extend(["--profile", args.profile])
         for provider in args.provider:
             cmd.extend(["--provider", provider])
+        return run(cmd)
+    if args.command == "next-version":
+        cmd = [sys.executable, str(ROOT / "scripts" / "next-version.py")]
+        if args.tag:
+            cmd.append("--tag")
+        if args.json:
+            cmd.append("--json")
+        return run(cmd)
+    if args.command == "release-dry-run":
+        cmd = [sys.executable, str(ROOT / "scripts" / "release-dry-run.py")]
+        if args.version:
+            cmd.extend(["--version", args.version])
+        if args.skip_check:
+            cmd.append("--skip-check")
+        if args.profile:
+            cmd.extend(["--profile", args.profile])
+        for provider in args.provider:
+            cmd.extend(["--provider", provider])
+        return run(cmd)
+    if args.command == "verify-release-assets":
+        cmd = [sys.executable, str(ROOT / "scripts" / "verify-release-assets.py"), "--tag", args.tag]
+        if args.repo:
+            cmd.extend(["--repo", args.repo])
+        if args.out_dir:
+            cmd.extend(["--out-dir", str(args.out_dir)])
         return run(cmd)
     if args.command == "evolve":
         return run([sys.executable, str(ROOT / "scripts" / "evolve-session.py"), str(args.transcript), "--skill-name", args.skill_name])
