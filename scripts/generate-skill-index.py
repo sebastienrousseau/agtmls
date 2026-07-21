@@ -171,7 +171,7 @@ def collect() -> dict[str, object]:
             "license": fields.get("license", "MIT"),
             "date": fields.get("date"),
             "metadata_path": metadata_path,
-            "version": metadata.get("version", fields.get("version", "0.0.2")),
+            "version": metadata.get("version", fields.get("version", "0.0.3")),
             "owner": metadata.get("owner"),
             "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
             "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),
