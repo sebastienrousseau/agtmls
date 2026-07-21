@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Smoke-test provider-adapted export bundles."""
+"""Smoke-test provider-adapted export bundles for every configured provider."""
 
 from __future__ import annotations
 
@@ -12,16 +12,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "scripts" / "agtmls.py"
-CASES = [
-    ("openai", "polyglot", "agtmls/adapters/openai/AGENTS.md"),
-    ("github-copilot", "minimal", "agtmls/adapters/github-copilot/.github/copilot-instructions.md"),
-    ("cursor", "polyglot", "agtmls/adapters/cursor/.cursor/rules/agtmls.mdc"),
-    ("continue", "minimal", "agtmls/adapters/continue/.continue/rules/agtmls.md"),
-]
 
 
-def check_archive(provider: str, profile: str, adapter: str, out_dir: Path, errors: list[str]) -> None:
-    proc = subprocess.run([sys.executable, str(CLI), "export", "--provider", provider, "--profile", profile, "--out-dir", str(out_dir)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+def cases() -> list[tuple[str, str, list[str]]]:
+    data = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))
+    items = []
+    for provider, spec in sorted(data.get("export_targets", {}).items()):
+        profile = "minimal" if provider in {"continue", "github-copilot", "generic"} else "polyglot"
+        adapters = [f"agtmls/{path}" for path in spec.get("adapter_files", [])]
+        items.append((provider, profile, adapters))
+    return items
+
+
+def check_archive(provider: str, profile: str, adapters: list[str], out_dir: Path, errors: list[str]) -> None:
+    proc = subprocess.run(
+        [sys.executable, str(CLI), "export", "--provider", provider, "--profile", profile, "--out-dir", str(out_dir)],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
     if proc.returncode != 0:
         errors.append(f"export {provider}/{profile} failed:\n{proc.stdout}")
         return
@@ -31,7 +42,7 @@ def check_archive(provider: str, profile: str, adapter: str, out_dir: Path, erro
         return
     with tarfile.open(archive, "r:gz") as tf:
         names = set(tf.getnames())
-        for required in ["agtmls/export-manifest.json", "agtmls/ADAPTERS.md", adapter]:
+        for required in ["agtmls/export-manifest.json", "agtmls/ADAPTERS.md", *adapters]:
             if required not in names:
                 errors.append(f"{provider}/{profile} archive missing {required}")
         if "agtmls/skills/using-agtmls/SKILL.md" not in names:
@@ -43,23 +54,26 @@ def check_archive(provider: str, profile: str, adapter: str, out_dir: Path, erro
         payload = json.loads(member.read().decode("utf-8"))
         if payload.get("provider") != provider or payload.get("profile") != profile:
             errors.append(f"wrong export manifest: {payload}")
-        if adapter.replace("agtmls/", "") not in payload.get("adapter_files", []):
-            errors.append(f"manifest missing adapter file {adapter}: {payload}")
+        expected = [adapter.replace("agtmls/", "") for adapter in adapters]
+        for adapter in expected:
+            if adapter not in payload.get("adapter_files", []):
+                errors.append(f"manifest missing adapter file {adapter}: {payload}")
 
 
 def main() -> int:
     errors: list[str] = []
+    all_cases = cases()
     with tempfile.TemporaryDirectory(prefix="agtmls-export-smoke-") as td:
         out_dir = Path(td)
-        for provider, profile, adapter in CASES:
-            check_archive(provider, profile, adapter, out_dir, errors)
+        for provider, profile, adapters in all_cases:
+            check_archive(provider, profile, adapters, out_dir, errors)
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
         print()
         print(f"FAIL: {len(errors)} export smoke issue(s)")
         return 1
-    print("OK: export smoke test passed")
+    print(f"OK: export smoke test passed for {len(all_cases)} provider(s)")
     return 0
 
 

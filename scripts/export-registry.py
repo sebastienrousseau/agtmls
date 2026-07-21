@@ -60,29 +60,18 @@ def adapter_text(provider: str, profile: str | None, skill_count: int) -> str:
     )
 
 
-def write_adapter_files(staging: Path, provider: str, profile: str | None, skill_count: int) -> list[str]:
+def write_adapter_files(staging: Path, provider: str, profile: str | None, skill_count: int, targets: dict[str, object]) -> list[str]:
     body = adapter_text(provider, profile, skill_count)
-    adapter_files = {
-        "generic": ["ADAPTERS.md"],
-        "openai": ["adapters/openai/AGENTS.md"],
-        "anthropic": ["adapters/anthropic/CLAUDE.md"],
-        "google-gemini": ["adapters/google-gemini/GEMINI.md"],
-        "mistral": ["adapters/mistral/AGENTS.md"],
-        "deepseek": ["adapters/deepseek/AGENTS.md"],
-        "qwen": ["adapters/qwen/AGENTS.md"],
-        "ollama": ["adapters/ollama/Modelfile.instructions.md"],
-        "github-copilot": ["adapters/github-copilot/.github/copilot-instructions.md"],
-        "cursor": ["adapters/cursor/.cursor/rules/agtmls.mdc"],
-        "windsurf": ["adapters/windsurf/.windsurfrules"],
-        "zed": ["adapters/zed/.rules/agtmls.md"],
-        "continue": ["adapters/continue/.continue/rules/agtmls.md"],
-    }
+    spec = targets.get(provider, {})
+    adapters = spec.get("adapter_files", []) if isinstance(spec, dict) else []
+    if not isinstance(adapters, list) or not adapters:
+        adapters = ["ADAPTERS.md"]
     written: list[str] = []
-    for rel in adapter_files.get(provider, ["ADAPTERS.md"]):
-        path = staging / rel
+    for rel in adapters:
+        path = staging / str(rel)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(body, encoding="utf-8")
-        written.append(rel)
+        written.append(str(rel))
     if "ADAPTERS.md" not in written:
         overview = staging / "ADAPTERS.md"
         overview.write_text(body + "\nProvider-specific adapter files are under `adapters/`.\n", encoding="utf-8")
@@ -109,7 +98,7 @@ def build(out_dir: Path, provider: str, profile: str | None, bundle: list[str]) 
             if (ROOT / rel).exists():
                 shutil.copy2(ROOT / rel, staging / rel)
         skill_count = len(list((staging / "skills").iterdir()))
-        adapter_files = write_adapter_files(staging, provider, profile, skill_count)
+        adapter_files = write_adapter_files(staging, provider, profile, skill_count, targets)
         manifest = {
             "schema_version": 1,
             "provider": provider,

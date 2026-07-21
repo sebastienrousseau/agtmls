@@ -1033,7 +1033,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "f1cfb67574c453e50e95a471daa233e4d98bfbd210f1ad66c59bc858f6d722a7"
+          "checksumValue": "d5852399ba08857debc15eaf5e07601357b4f9625785a2f31439ed02e203253e"
         }
       ],
       "fileName": "scripts/export-registry.py"
@@ -1132,7 +1132,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3572d36ba9fd4a2ec15d04a2b74e6b3f3a12c2d8166af74d3b5e49234eb078ae"
+          "checksumValue": "254647f57b49aee01349ba7d6dddb20cdbbb340e051ed240fa689b813874e86c"
         }
       ],
       "fileName": "scripts/provider-install.py"
@@ -1267,7 +1267,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d0806e2f59dfa54af842d4cc30119b935782c7ba8c0c7ba31856268326faca60"
+          "checksumValue": "eafb1fd9a3b9216403b1663a942a8a44d6c1e8576117c32facd8571e848fd608"
         }
       ],
       "fileName": "scripts/smoke-export.py"
@@ -1321,7 +1321,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "c0517e4db13d0ab8c9b27fbd01c26e31660521f39e94356afc700a82a45d70e0"
+          "checksumValue": "58323daa3a7ee507fd20c2fb8f92e884e1fafcf5cf853a38c10644517773e48b"
         }
       ],
       "fileName": "scripts/smoke-provider-install.py"
