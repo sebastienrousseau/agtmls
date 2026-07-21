@@ -9,7 +9,7 @@ on:
     inputs:
       tag:
         description: "Release tag to verify"
-        default: "v0.0.1"
+        default: "latest"
         required: true
 
 permissions:
@@ -26,4 +26,4 @@ jobs:
       - name: Verify release assets
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/verify-release-assets.py --tag "${{ inputs.tag || 'v0.0.1' }}"
+        run: python3 scripts/verify-release-assets.py --tag "${{ inputs.tag || 'latest' }}"
