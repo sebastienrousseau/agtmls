@@ -1240,7 +1240,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3641f701c6b8407bed2075700748f1e9f087efcd7ee6425d78c37a18454d86f8"
+          "checksumValue": "0b13eef4a2bf6b157fd01b748b028d3679b1b759e4cb52ae54768adf24205614"
         }
       ],
       "fileName": "scripts/smoke-bump-version-check.py"
@@ -1303,7 +1303,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "270dcefa54a3b82bb0d706082d3f47c6d9391feed7c3399286e171141f7e46b6"
+          "checksumValue": "fe62ebc0b698ee9901746e83a1ddb8be717b5ee7955fc84774ff73b002cdfec9"
         }
       ],
       "fileName": "scripts/smoke-next-version.py"

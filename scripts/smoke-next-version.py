@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -16,12 +17,21 @@ def main() -> int:
         print(proc.stdout, end="")
         return proc.returncode
     version = proc.stdout.strip()
-    if version != "0.0.2":
-        print(f"FAIL: expected next version 0.0.2 after v0.0.1, got {version}")
+    parts = version.split(".")
+    if len(parts) != 3 or parts[:2] != ["0", "0"] or not parts[2].isdigit():
+        print(f"FAIL: next version does not follow 0.0.x policy: {version}")
         return 1
     tag_proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "next-version.py"), "--tag"], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
-    if tag_proc.returncode != 0 or tag_proc.stdout.strip() != "v0.0.2":
-        print(f"FAIL: expected next tag v0.0.2, got {tag_proc.stdout.strip()}")
+    if tag_proc.returncode != 0 or tag_proc.stdout.strip() != f"v{version}":
+        print(f"FAIL: expected next tag v{version}, got {tag_proc.stdout.strip()}")
+        return 1
+    json_proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "next-version.py"), "--json"], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+    if json_proc.returncode != 0:
+        print(json_proc.stdout, end="")
+        return json_proc.returncode
+    payload = json.loads(json_proc.stdout)
+    if payload.get("version") != version or payload.get("tag") != f"v{version}":
+        print(f"FAIL: inconsistent JSON payload: {json_proc.stdout.strip()}")
         return 1
     print("OK: next-version smoke test passed")
     return 0
