@@ -1186,7 +1186,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "8875825aa597882e594dfea968e866b9ee025c275446f10b86cf745ba7d19adb"
+          "checksumValue": "fd682a2491e0bae7e9f97936229dad7ed2a0be056bf44792bcc0d7f79e45f7a9"
         }
       ],
       "fileName": "scripts/run-all-checks.py"
@@ -1298,6 +1298,15 @@
         }
       ],
       "fileName": "scripts/smoke-install.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c2a2c64405da4098b2dcbe43acf91adcdc7c295cb271aabf9a4511df0ff7e695"
+        }
+      ],
+      "fileName": "scripts/smoke-live-providers.py"
     },
     {
       "checksums": [
@@ -1573,7 +1582,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "a80a87088a82cca2a77e3bb308b35a1d2d5e9094de215c31f31ecaed5f900881"
+          "checksumValue": "75f474513b9ad4b23c38a302fc5e7ea70e9e357e46f90e97cd11d8e8ec9dcd1b"
         }
       ],
       "fileName": "scripts/verify-release-assets.py"

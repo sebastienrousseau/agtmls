@@ -259,6 +259,18 @@ python3 scripts/agtmls.py export --provider generic --profile polyglot --out-dir
 python3 scripts/agtmls.py export --provider anthropic --profile noyalib --out-dir dist
 ```
 
+Optional live API smoke tests are available for configured model backends. They
+skip cleanly when credentials are absent and probe only metadata/list endpoints
+when present:
+
+```bash
+python3 scripts/smoke-live-providers.py
+```
+
+Supported credential variables are `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`,
+`GEMINI_API_KEY`, `MISTRAL_API_KEY`, `DEEPSEEK_API_KEY`, `QWEN_API_KEY`, and
+`OLLAMA_BASE_URL` for a reachable local Ollama server.
+
 ### Safety metadata
 
 Every metadata source must include `safety_policy` with explicit flags for

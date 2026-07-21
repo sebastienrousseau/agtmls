@@ -41,6 +41,7 @@
     "smoke-release-dry-run.py",
     "smoke-evolve-evidence.py",
     "smoke-provider-install.py",
+    "smoke-live-providers.py",
     "smoke-install.py",
     "smoke-install-profiles.py",
     "smoke-cli.py",
