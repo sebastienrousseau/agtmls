@@ -32,7 +32,7 @@
     "average_score": 100,
     "total": 20
   },
-  "registry_version": "0.0.1",
+  "registry_version": "0.0.2",
   "schema_version": 1,
   "skill_count": 20,
   "skills": [
@@ -92,7 +92,7 @@
       "tags": [
         "porting"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -150,7 +150,7 @@
         "engineering",
         "release"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -206,7 +206,7 @@
         "loops",
         "validation"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -268,7 +268,7 @@
         "noyalib",
         "release"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -329,7 +329,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -393,7 +393,7 @@
         "security",
         "validation"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -454,7 +454,7 @@
         "release",
         "security"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -513,7 +513,7 @@
         "config",
         "noyalib"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -576,7 +576,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -639,7 +639,7 @@
         "release",
         "yaml"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -701,7 +701,7 @@
         "qa",
         "validation"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -764,7 +764,7 @@
         "qa",
         "release"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -827,7 +827,7 @@
         "research",
         "yaml"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -887,7 +887,7 @@
         "noyalib",
         "validation"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -950,7 +950,7 @@
         "validation",
         "yaml"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -1014,7 +1014,7 @@
         "validation",
         "yaml"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -1075,7 +1075,7 @@
         "noyalib",
         "yaml"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -1132,7 +1132,7 @@
         "security",
         "validation"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -1190,7 +1190,7 @@
         "porting",
         "routing"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     },
     {
       "assets": [],
@@ -1250,7 +1250,7 @@
         "validation",
         "web-reach"
       ],
-      "version": "0.0.1"
+      "version": "0.0.2"
     }
   ]
 }

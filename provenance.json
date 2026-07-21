@@ -5,7 +5,7 @@
   "materials": [
     {
       "digest": {
-        "sha256": "a489e4fb9fa19a117d47fdb253e4f527e2e57688871fc1dd2bc0e34806e5ddfd"
+        "sha256": "62f11feb481ee825d0601ef06de56ee3fad065a54d499a625b886f4ce33d1a16"
       },
       "uri": "agtmls:registry-state"
     }
@@ -71,7 +71,7 @@
   "subject": [
     {
       "name": "agtmls",
-      "version": "0.0.1"
+      "version": "0.0.2"
     }
   ]
 }

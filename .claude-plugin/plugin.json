@@ -1,12 +1,12 @@
 {
-  "name": "agtmls",
-  "version": "0.0.1",
-  "description": "The universal agent skills registry — polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
   "author": {
     "name": "Sebastien Rousseau"
   },
-  "license": "MIT",
+  "commands": "./commands",
+  "description": "The universal agent skills registry \u2014 polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
   "homepage": "https://github.com/sebastienrousseau/agtmls",
+  "license": "MIT",
+  "name": "agtmls",
   "skills": "./skills",
-  "commands": "./commands"
+  "version": "0.0.2"
 }
