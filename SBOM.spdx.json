@@ -1177,7 +1177,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "7c5c6745dab274ebef8fd92bbfbc7a6a4e12dc913ef2451fc7021b2fe0e7ff1e"
+          "checksumValue": "55b94b9e7c6a398ae80344a74dfd85089f11bfe86d7aaac470bf1e7ab5272e02"
         }
       ],
       "fileName": "scripts/release-pack.py"
@@ -1339,7 +1339,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "f3ca508cf85258b4692c5627f289d0350d6095174905911802a20af49b5f8b19"
+          "checksumValue": "04e544b4e70db231fdf39cf5cd654813c8f5dd7b6a0e8d9dce323b5c198fcd3b"
         }
       ],
       "fileName": "scripts/smoke-release-pack.py"

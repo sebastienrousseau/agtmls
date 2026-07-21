@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EXPORT = ROOT / "scripts" / "export-registry.py"
+PROVIDERS = ROOT / "providers.json"
 
 
 def sha256(path: Path) -> str:
@@ -22,13 +23,21 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def default_providers() -> list[str]:
+    data = json.loads(PROVIDERS.read_text(encoding="utf-8"))
+    targets = data.get("export_targets", {})
+    if not isinstance(targets, dict) or not targets:
+        raise SystemExit("providers.json must define export_targets")
+    return sorted(targets)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, default=ROOT / "dist" / "release")
     parser.add_argument("--profile", default="polyglot")
     parser.add_argument("--provider", action="append", default=None)
     args = parser.parse_args()
-    providers = args.provider or ["generic", "openai", "anthropic", "cursor", "github-copilot", "continue"]
+    providers = args.provider or default_providers()
     args.out_dir.mkdir(parents=True, exist_ok=True)
     artifacts: list[Path] = []
     for provider in providers:
