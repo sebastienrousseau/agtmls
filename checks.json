@@ -37,6 +37,7 @@
     "release-check.py",
     "smoke-release-pack.py",
     "smoke-next-version.py",
+    "smoke-bump-version-check.py",
     "smoke-release-dry-run.py",
     "smoke-evolve-evidence.py",
     "smoke-provider-install.py",

@@ -198,6 +198,7 @@ python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir 
 python3 scripts/agtmls.py docs-site --write
 python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 python3 scripts/agtmls.py next-version
+python3 scripts/agtmls.py bump-version --check --version 0.0.2
 python3 scripts/agtmls.py release-dry-run --version 0.0.1 --skip-check
 python3 scripts/agtmls.py verify-release-assets --tag v0.0.1
 python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
@@ -310,3 +311,5 @@ python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
 AgtMLS follows the pre-1.0 patch-line policy in `VERSIONING.md`: public releases stay on `0.0.x` and increment by exactly `0.0.1`.
 
 Published release assets can be verified after release with `python3 scripts/agtmls.py verify-release-assets --tag v0.0.1`.
+
+Release tag protection is documented in `docs/tag-protection.md`.

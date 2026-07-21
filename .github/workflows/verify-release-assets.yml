@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: verify-release-assets
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to verify"
+        default: "v0.0.1"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/verify-release-assets.py --tag "${{ inputs.tag || 'v0.0.1' }}"

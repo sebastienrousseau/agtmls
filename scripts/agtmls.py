@@ -248,6 +248,11 @@ def main() -> int:
     next_version.add_argument("--tag", action="store_true")
     next_version.add_argument("--json", action="store_true")
 
+    bump_version = sub.add_parser("bump-version")
+    bump_version.add_argument("--version")
+    bump_version.add_argument("--date")
+    bump_version.add_argument("--check", action="store_true")
+
     release_dry_run = sub.add_parser("release-dry-run")
     release_dry_run.add_argument("--version")
     release_dry_run.add_argument("--skip-check", action="store_true")
@@ -385,6 +390,15 @@ def main() -> int:
             cmd.append("--tag")
         if args.json:
             cmd.append("--json")
+        return run(cmd)
+    if args.command == "bump-version":
+        cmd = [sys.executable, str(ROOT / "scripts" / "bump-version.py")]
+        if args.version:
+            cmd.extend(["--version", args.version])
+        if args.date:
+            cmd.extend(["--date", args.date])
+        if args.check:
+            cmd.append("--check")
         return run(cmd)
     if args.command == "release-dry-run":
         cmd = [sys.executable, str(ROOT / "scripts" / "release-dry-run.py")]

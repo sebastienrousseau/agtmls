@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: release
+
+on:
+  push:
+    tags:
+      - "v0.0.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release, for example v0.0.2"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Resolve tag
+        id: version
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+      - name: Validate release tag
+        run: |
+          test "$(python3 - <<'PY'
+import json
+print(json.load(open('.claude-plugin/plugin.json'))['version'])
+PY
+)" = "${{ steps.version.outputs.version }}"
+          python3 scripts/validate-version-policy.py
+          python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
+      - name: Full release gate
+        run: python3 scripts/agtmls.py check
+      - name: Build release assets
+        run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" dist/release/* \
+            --title "AgtMLS ${{ steps.version.outputs.tag }}" \
+            --notes "Automated AgtMLS ${{ steps.version.outputs.tag }} release. Versions increment by exactly 0.0.1 on the 0.0.x line."

@@ -45,6 +45,7 @@ def main() -> int:
         "verify-release-assets",
         "release-dry-run",
         "next-version",
+        "bump-version",
         "evolve",
         "evidence",
         "agent-card",

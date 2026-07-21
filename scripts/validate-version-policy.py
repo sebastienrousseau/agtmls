@@ -52,19 +52,37 @@ def release_tags() -> list[tuple[int, int, int]]:
     return sorted(tags)
 
 
+def sequencing_errors(current: str, tags: list[tuple[int, int, int]]) -> list[str]:
+    errors: list[str] = []
+    parsed = parse_version(current)
+    if parsed is None:
+        return ["plugin version must be semver X.Y.Z"]
+    major, minor, patch = parsed
+    if major != 0 or minor != 0:
+        errors.append("public releases must stay on the 0.0.x line")
+    if patch < 1 or patch > 999:
+        errors.append("0.0.x patch must be between 1 and 999")
+    if tags:
+        if any((tag_major, tag_minor) != (0, 0) for tag_major, tag_minor, _ in tags) and (0, 0, 999) not in tags:
+            errors.append("minor/major release tags are forbidden until v0.0.999 exists")
+        patch_tags = [tag_patch for tag_major, tag_minor, tag_patch in tags if (tag_major, tag_minor) == (0, 0)]
+        if patch_tags:
+            latest_patch = max(patch_tags)
+            if patch < latest_patch:
+                errors.append(f"current version {current} is behind latest tag v0.0.{latest_patch}")
+            if patch > latest_patch + 1:
+                errors.append(
+                    f"current version {current} skips patch releases; next allowed after v0.0.{latest_patch} is 0.0.{latest_patch + 1}"
+                )
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     plugin = read_json(ROOT / ".claude-plugin" / "plugin.json")
     current = str(plugin.get("version", ""))
     parsed = parse_version(current)
-    if parsed is None:
-        errors.append("plugin version must be semver X.Y.Z")
-    else:
-        major, minor, patch = parsed
-        if major != 0 or minor != 0:
-            errors.append("public releases must stay on the 0.0.x line")
-        if patch < 1 or patch > 999:
-            errors.append("0.0.x patch must be between 1 and 999")
+    errors.extend(sequencing_errors(current, []))
 
     for path in METADATA_FILES:
         version = str(read_json(path).get("version", ""))
@@ -91,19 +109,7 @@ def main() -> int:
             errors.append(f"VERSIONING.md must document: {required}")
 
     tags = release_tags()
-    if tags and parsed is not None:
-        if any((major, minor) != (0, 0) for major, minor, _ in tags) and (0, 0, 999) not in tags:
-            errors.append("minor/major release tags are forbidden until v0.0.999 exists")
-        patch_tags = [patch for major, minor, patch in tags if (major, minor) == (0, 0)]
-        if patch_tags:
-            latest_patch = max(patch_tags)
-            current_patch = parsed[2]
-            if current_patch < latest_patch:
-                errors.append(f"current version {current} is behind latest tag v0.0.{latest_patch}")
-            if current_patch > latest_patch + 1:
-                errors.append(
-                    f"current version {current} skips patch releases; next allowed after v0.0.{latest_patch} is 0.0.{latest_patch + 1}"
-                )
+    errors.extend(error for error in sequencing_errors(current, tags) if error not in errors)
 
     if errors:
         for error in errors:

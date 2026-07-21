@@ -988,7 +988,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d61f8fe1381a898de28d53e1bd83d154f92197a5ccea132ea06df9c805e2b246"
+          "checksumValue": "aecc0d6d62ee2b934a0f97fbf0a21f22434fba3dd1f15a49de8cd82f24d4ed9d"
         }
       ],
       "fileName": "scripts/agtmls.py"
@@ -1001,6 +1001,15 @@
         }
       ],
       "fileName": "scripts/bench.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "64e4e9d85b9ed71fc508514eb33b13b663c590b04ae26ff74f2e6c730eb7bdae"
+        }
+      ],
+      "fileName": "scripts/bump-version.py"
     },
     {
       "checksums": [
@@ -1177,7 +1186,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "ca9819c601b3eccb6a4f2f8d76ba83ced92728e3f850ce323aa2e0887f037f92"
+          "checksumValue": "8875825aa597882e594dfea968e866b9ee025c275446f10b86cf745ba7d19adb"
         }
       ],
       "fileName": "scripts/run-all-checks.py"
@@ -1204,7 +1213,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d9baab2024cf3595a43f3907b46584ccb9e9084483fb7d5db8444ec5cb2449e0"
+          "checksumValue": "dd22c66869c709e85eadba95f88ddf515814ac80e2e86a95b229511e323dadda"
         }
       ],
       "fileName": "scripts/run-unit-tests.py"
@@ -1226,6 +1235,15 @@
         }
       ],
       "fileName": "scripts/setup-workspace.sh"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3641f701c6b8407bed2075700748f1e9f087efcd7ee6425d78c37a18454d86f8"
+        }
+      ],
+      "fileName": "scripts/smoke-bump-version-check.py"
     },
     {
       "checksums": [
@@ -1348,7 +1366,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "04c7f06b3e224b2c701348d22a621faa5f17884db9f7185771509c842e4de47a"
+          "checksumValue": "ee8351b74855dc77bea7377fa3029b7823bdbac383536e1f6aee09ae2031393f"
         }
       ],
       "fileName": "scripts/validate-cli-surface.py"
@@ -1546,7 +1564,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3d7b5f6738656058d3c936cdd9028507439fff1b0a57661b85adce2814db776d"
+          "checksumValue": "9a8479a6f56fecd433025cf933e55e3b01d2fa016e74b05d77115cf9892059e9"
         }
       ],
       "fileName": "scripts/validate-version-policy.py"
