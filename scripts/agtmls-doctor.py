@@ -89,11 +89,14 @@ def main() -> int:
             else:
                 r.fail(f"plugin manifest missing {key}")
         for key in ["skills", "commands"]:
-            rel = manifest.get(key)
-            if rel and (ROOT / rel).exists():
-                r.ok(f"plugin {key} path exists: {rel}")
-            elif rel:
-                r.fail(f"plugin {key} path missing: {rel}")
+            value = manifest.get(key)
+            # `skills` and `commands` accept a string or an array of paths;
+            # bundles need the array form to be discovered at all.
+            for rel in value if isinstance(value, list) else [value]:
+                if rel and (ROOT / rel).exists():
+                    r.ok(f"plugin {key} path exists: {rel}")
+                elif rel:
+                    r.fail(f"plugin {key} path missing: {rel}")
     else:
         r.fail(".claude-plugin/plugin.json is missing")
 

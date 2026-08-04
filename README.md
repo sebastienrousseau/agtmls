@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # AgtMLS — Agent Multiple Listing Service
 
 **The universal agent skills registry.**
@@ -22,21 +25,109 @@ agtmls/
 │   └── <lang>.md                # Per-language idiom profiles: rust, python,
 │                                # go, cpp, swift, typescript, javascript,
 │                                # ruby, bash (all authored)
-├── skills/                      # Autonomous, multi-step workflows (SKILL.md)
+├── skills/                      # FLAT: every skill is skills/<name>/SKILL.md
+│   ├── writing-plans/           # Discipline skills: plan → test → debug →
+│   ├── test-driven-development/ #   verify → review → hand off. Apply in
+│   ├── systematic-debugging/    #   any repo, any language
+│   ├── verification-before-completion/
+│   ├── receiving-code-review/
+│   ├── handoff/
 │   ├── cross-language-port/     # Porting logic between polyglot repos
-│   └── noyalib/                 # Project-specific skills for noyalib
-│       ├── README.md            # Routing index for the 14 noyalib skills
-│       └── noyalib-*/           # Per-skill directory with SKILL.md + reference.md
+│   └── noyalib-*/               # Project skills; bundle is a metadata field
+├── references/
+│   └── noyalib-bundle.md        # Routing index for the 14 noyalib skills
 ├── commands/                    # Interactive slash commands (author here)
 ├── evals/                       # Routing + behavioral skill checks
 ├── lifecycle.json               # Skill proposal -> publication lifecycle
 ├── profiles.json                # Named install/export profiles
-├── providers.json               # Native agent + export target compatibility matrix
+├── providers.json               # Native agent + plugin + export target matrix
 ├── CHANGELOG.md                 # Human-readable changes
 ├── RELEASE.md                   # Release checklist
 ├── CATALOG.md                   # Generated human-readable registry catalog
 └── index.json                   # Generated skill registry metadata
 ```
+
+## Install
+
+No clone required:
+
+```bash
+uvx agtmls install rust claude --skills-only --bundle noyalib   # one-shot
+pipx install agtmls && agtmls install rust claude               # persistent
+```
+
+The package bundles the whole registry and is **dependency-free** — every
+script is stdlib-only, so `uvx` is a single fast download with nothing to
+resolve. Browsing works the same way:
+
+```bash
+uvx agtmls list
+uvx agtmls search yaml
+uvx agtmls show cross-language-port
+uvx agtmls stats
+```
+
+Installing from a package defaults to `--copy` rather than symlinks: the
+wheel lives in an ephemeral uvx/pipx cache, and linking into a cache that is
+about to be collected would leave the target repo full of dangling links.
+Pass `--copy` explicitly to get the same behaviour from a checkout.
+
+Repository-maintenance commands (`check`, `release-*`, `bump-version`,
+`diff`, `next-version`, `verify-release-assets`) need a real checkout and
+refuse to run from a package. Point `AGTMLS_HOME` at a checkout to run the
+installed CLI against your own working tree:
+
+```bash
+AGTMLS_HOME=~/dev/agtmls agtmls check
+```
+
+## Install as a plugin
+
+AgtMLS reaches agents three ways, and `providers.json` records all three:
+
+| Section | Mechanism | Runtimes |
+|---|---|---|
+| `native_agents` | symlink install via `setup-workspace.sh` | Claude Code, Codex, Aider |
+| `plugin_targets` | the runtime's own plugin manifest | Antigravity, Codex, Cursor, Gemini CLI, Kimi, OpenCode |
+| `export_targets` | provider-adapted Markdown bundle | 13 targets, see below |
+
+Plugin installs need no clone:
+
+```
+# Claude Code
+/plugin marketplace add sebastienrousseau/agtmls
+/plugin install agtmls@agtmls
+
+# Antigravity
+agy plugin install https://github.com/sebastienrousseau/agtmls
+
+# Gemini CLI
+gemini extensions install https://github.com/sebastienrousseau/agtmls
+
+# Codex CLI      /plugins  -> search agtmls -> Install Plugin
+# Cursor         /add-plugin agtmls
+# Kimi Code      /plugins install https://github.com/sebastienrousseau/agtmls
+# OpenCode       see .opencode/INSTALL.md
+```
+
+Every plugin manifest is **generated** from `.claude-plugin/plugin.json` and
+the skill tree, so a version bump or a new bundle cannot leave one runtime
+behind:
+
+```bash
+python3 scripts/agtmls.py plugin-manifests --write   # regenerate
+python3 scripts/agtmls.py plugin-manifests --check   # CI: fail on drift
+```
+
+The manifests are `plugin.json` (Antigravity, at the repo root — it does not
+read `.claude-plugin/`), `.codex-plugin/plugin.json` plus
+`.agents/plugins/marketplace.json` (Codex), `.cursor-plugin/plugin.json`,
+`.kimi-plugin/plugin.json`, `gemini-extension.json` with `GEMINI.md`, and
+`.opencode/INSTALL.md`. OpenCode has no skill-bundle manifest, so it is
+wired through the `instructions` array in the user's `opencode.json`.
+
+Use the hub-and-spoke setup below instead when you want editable symlinks,
+per-language system prompts, or a native Aider install.
 
 ## Hub-and-spoke setup
 
@@ -55,11 +146,10 @@ The script assembles the system prompt from `_base.md` + the language
 profile and writes it to the **repo-root file the tool auto-loads**
 (`CLAUDE.md` for Claude Code, `AGENTS.md` for Codex, `CONVENTIONS.md`
 for Aider — the latter also registered in `.aider.conf.yml`). It then
-symlinks every skill and command into the tool's dot-dir
-(`.claude/`, `.aider/`, `.codex/`, or `.agent/`), flattening skill
-bundles so each skill lands one level deep (`<cli>/skills/<skill>/`)
-where the tool can discover it. Re-run it any time you add a language
-profile or a skill.
+symlinks every in-scope skill and command into the tool's dot-dir
+(`.claude/`, `.aider/`, `.codex/`, or `.agent/`), one level deep
+(`<cli>/skills/<skill>/`) where the tool can discover it. Re-run it any
+time you add a language profile or a skill.
 
 The assembled prompt is a per-machine artifact of the hub, not repo
 content — so the script adds it (and the tool's dot-dir) to the target
@@ -82,16 +172,47 @@ previous non-`--skills-only` run generated (a hand-authored prompt with
 no generated marker is left untouched). Use this flag on every run for
 those repos so a future setup never re-creates the prompt.
 
+### The discipline skills
+
+Six skills cover ordinary engineering work in any repo and any language.
+They are general (`"bundle": null`), so they install everywhere, and they
+compose in phase order:
+
+| Phase | Skill | The rule it enforces |
+| --- | --- | --- |
+| Decompose | `writing-plans` | A step is done when something observable changes |
+| Build | `test-driven-development` | A test you have not seen fail proves nothing |
+| Diagnose | `systematic-debugging` | No edit before an explanation |
+| Finish | `verification-before-completion` | A claim you have not observed is a guess |
+| Review | `receiving-code-review` | Every comment gets a decision and a reply |
+| Pause | `handoff` | Can the reader act without asking you a question? |
+
+Each hands off to the next — debugging produces the explanation a red test is
+written from; that red-then-green is exactly the evidence the completion gate
+demands. A project bundle's own rules override them on specifics.
+
+Install just these with the `discipline` profile:
+
+```bash
+uvx agtmls install python claude --profile discipline
+```
+
 ### General skills vs project bundles
 
-Two kinds of skill live under `skills/`:
+The skill tree is **flat** — every skill is `skills/<name>/SKILL.md`, with no
+nesting. That is not cosmetic: each agent runtime scans its skills path
+*non-recursively*, so a nested skill is invisible to Codex, Cursor, Gemini
+CLI, Antigravity, and anything else that does not support an array-valued
+`skills` field.
 
-- **General skills** — a top-level dir with its own `SKILL.md`
-  (`cross-language-port`, `using-agtmls`). These apply anywhere and are
-  **always linked**.
-- **Project bundles** — a top-level dir that holds *other* skill dirs
-  (e.g. `skills/noyalib/`). A bundle is **only** linked when named with
-  `--bundle`, so a project's skills never land in an unrelated repo:
+Bundle membership is therefore the `bundle` field in each skill's
+`metadata.json`, not a parent directory:
+
+- **General skills** (`"bundle": null`) — `cross-language-port`,
+  `using-agtmls`. These apply anywhere and are **always linked**.
+- **Project skills** (`"bundle": "noyalib"`) — linked **only** when the
+  bundle is named with `--bundle`, so a project's skills never land in an
+  unrelated repo:
 
 ```bash
 # a generic Python repo — general skills only, no project bundle
@@ -113,11 +234,15 @@ minimum a `SKILL.md` file. The frontmatter's `name` and
 verb-form triggers so a model can decide whether to load the skill
 from the description alone.
 
-For a template, see `skills/cross-language-port/SKILL.md`.
+For a template, see `skills/cross-language-port/SKILL.md`, or scaffold one:
 
-Project-specific skills (like the noyalib bundle) live under a
-project-named subdirectory to keep them from cluttering the
-top-level namespace.
+```bash
+python3 scripts/agtmls.py scaffold-skill my-skill
+```
+
+Project-specific skills live beside every other skill and declare their
+grouping with `"bundle": "<name>"` in `metadata.json`. Pass `--bundle` to
+`scaffold-skill` to set it.
 
 ### The skill contract (CI-enforced)
 
@@ -126,101 +251,58 @@ top-level namespace.
 `SKILL.md` satisfies:
 
 - a parseable YAML frontmatter block;
-- `name` present, kebab-case, and equal to the skill's directory name;
+- **only the six keys the [Agent Skills spec][spec] allows** — `name`,
+  `description`, `license`, `compatibility`, `metadata`, `allowed-tools`.
+  Any other key fails validation here and in `skills-ref validate`;
+- `name` present, ≤ 64 characters, kebab-case with no consecutive hyphens,
+  and equal to the skill's directory name;
 - `description` present, **≤ 1024 characters** (Claude Code truncates
   beyond this), and containing a trigger cue (a "when…" / "use for" /
   "load before" phrase telling the router when to load the skill);
-- a top-level `# ` heading in the body.
+- `compatibility` ≤ 500 characters, and `metadata` a flat map of string
+  keys to string values, when either is present;
+- a top-level `# ` heading in the body;
+- **≤ 500 lines total**, so activation stays inside the
+  progressive-disclosure budget. Detail belongs in `reference.md`.
 
 Run it locally before pushing: `python3 scripts/validate-skills.py`.
 
-### Full local health check
+[spec]: https://agentskills.io/specification.md
 
-Run the same high-signal checks CI runs:
+### Generated frontmatter
+
+`compatibility`, `metadata`, and `allowed-tools` are **generated** from each
+skill's `metadata.json` — do not hand-edit them:
 
 ```bash
-python3 scripts/validate-skills.py
-python3 scripts/validate-commands.py
-python3 scripts/validate-plugin-manifest.py
-python3 scripts/validate-providers.py
-python3 scripts/validate-profiles.py
-python3 scripts/validate-templates.py
-python3 scripts/validate-doc-links.py
-python3 scripts/validate-json-files.py
-python3 scripts/validate-python-scripts.py
-python3 scripts/validate-shell-syntax.py
-python3 scripts/validate-secrets.py
-python3 scripts/validate-gitignore.py
-python3 scripts/validate-cli-surface.py
-python3 scripts/validate-system-prompts.py
-python3 scripts/check-skill-collisions.py
-python3 scripts/validate-eval-cases.py
-python3 scripts/run-trigger-evals.py
-python3 scripts/run-behavioral-evals.py
-python3 scripts/validate-skill-metadata.py
-python3 scripts/generate-skill-index.py --check
-python3 scripts/generate-catalog.py --check
-python3 scripts/generate-docs-site.py --check
-python3 scripts/validate-generated-artifacts.py
-python3 scripts/validate-docs-site.py
-python3 scripts/validate-skill-index.py
-python3 scripts/validate-lifecycle.py
-python3 scripts/validate-release.py
-python3 scripts/validate-version-policy.py
-python3 scripts/release-check.py
-python3 scripts/smoke-release-pack.py
-python3 scripts/smoke-next-version.py
-python3 scripts/smoke-release-dry-run.py
-python3 scripts/smoke-install.py
-python3 scripts/smoke-install-profiles.py
-python3 scripts/smoke-cli.py
-python3 scripts/smoke-export.py
-python3 scripts/smoke-import.py
-python3 scripts/smoke-proposal.py
-python3 scripts/smoke-scaffold.py
-python3 scripts/run-unit-tests.py
-python3 scripts/validate-check-manifest.py
-python3 scripts/agtmls-doctor.py
+python3 scripts/sync-skill-frontmatter.py --write   # regenerate
+python3 scripts/sync-skill-frontmatter.py --check   # CI: fail on drift
 ```
 
-The convenience dispatcher wraps the same operations:
+`metadata.json` stays the source of truth, but it is an AgtMLS-private
+sidecar that no other runtime reads. Mirroring it into the spec's fields is
+what gives a Cursor, Gemini CLI, or marketplace consumer the same risk
+signal a native install gets. `required_tools` becomes `compatibility`;
+`safety_policy` becomes the namespaced `agtmls-*` keys under `metadata` and
+the derived `allowed-tools` surface.
+
+Note that `allowed-tools` is experimental and runtimes disagree on its
+meaning — some read it as a pre-approval, others as a restriction. AgtMLS
+declares the **full capability surface** the safety policy implies, which is
+correct under the restriction reading and pre-approves under the other.
+Switch `ALLOWED_TOOLS_MODE` in `sync-skill-frontmatter.py` to `"readonly"`
+to declare only non-mutating tools instead.
+
+### Full local health check
+
+The full list lives in [docs/checks.md](docs/checks.md). Run them all with:
 
 ```bash
 python3 scripts/agtmls.py check
-python3 scripts/agtmls.py list
-python3 scripts/agtmls.py list commands
-python3 scripts/agtmls.py search yaml
-python3 scripts/agtmls.py show cross-language-port
-python3 scripts/agtmls.py stats
-python3 scripts/agtmls.py profiles
-python3 scripts/agtmls.py providers
-python3 scripts/agtmls.py export --provider openai --profile polyglot --out-dir dist
-python3 scripts/agtmls.py docs-site --write
-python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
-python3 scripts/agtmls.py next-version
-python3 scripts/agtmls.py bump-version --check --version 0.0.2
-python3 scripts/agtmls.py release-dry-run --version 0.0.1 --skip-check
-python3 scripts/agtmls.py verify-release-assets --tag v0.0.1
-python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
-python3 scripts/agtmls.py evidence --skill cross-language-port --command pytest --file src/example.py
-python3 scripts/agtmls.py agent-card --write
-python3 scripts/agtmls.py mcp-resources --write
-python3 scripts/agtmls.py sbom --write
-python3 scripts/agtmls.py provenance --write
-python3 scripts/agtmls.py provider-install --provider cursor --target /path/to/repo --profile polyglot
-python3 scripts/agtmls.py bench
-python3 scripts/agtmls.py diff --from index.json --to index.json
-python3 scripts/agtmls.py release-check
-python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
-python3 scripts/agtmls.py index --check
-python3 scripts/agtmls.py status
-python3 scripts/agtmls.py status --target /path/to/repo --agent codex --skills-only
-python3 scripts/agtmls.py install rust claude --target /path/to/repo --skills-only --bundle noyalib
-python3 scripts/agtmls.py install rust codex --target /path/to/repo --skills-only --profile noyalib
-python3 scripts/agtmls.py uninstall claude --target /path/to/repo --remove-prompt
-python3 scripts/agtmls.py propose-skill transcript.txt --skill-name candidate-skill
-python3 scripts/agtmls.py scaffold-skill candidate-skill
 ```
+
+The dispatcher wraps every registry operation; the full command reference is
+in [docs/cli.md](docs/cli.md).
 
 `index.json` is generated from the skill tree and committed so tools can
 discover skills without reading every body. Rebuild it after changing skills:
