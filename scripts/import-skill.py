@@ -68,7 +68,7 @@ def main() -> int:
         (target / "reference.md").write_text(f"# {name} Reference\n\nImported draft. Review and expand before publication.\n", encoding="utf-8")
     meta = {
         "bundle": args.bundle,
-        "version": "0.0.3",
+        "version": "0.0.4",
         "owner": "unassigned",
         "maturity": "draft",
         "supported_agents": ["claude", "codex", "aider"],

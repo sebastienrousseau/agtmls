@@ -32,7 +32,7 @@
     "average_score": 100,
     "total": 26
   },
-  "registry_version": "0.0.3",
+  "registry_version": "0.0.4",
   "schema_version": 1,
   "skill_count": 26,
   "skills": [
@@ -96,7 +96,7 @@
         "loops",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -158,7 +158,7 @@
         "security",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -225,7 +225,7 @@
       "tags": [
         "porting"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -286,7 +286,7 @@
       "tags": [
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -355,7 +355,7 @@
         "ci",
         "noyalib"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -425,7 +425,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -495,7 +495,7 @@
         "release",
         "security"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -564,7 +564,7 @@
         "noyalib",
         "release"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -632,7 +632,7 @@
         "config",
         "noyalib"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -701,7 +701,7 @@
         "debugging",
         "noyalib"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -770,7 +770,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -840,7 +840,7 @@
         "noyalib",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -912,7 +912,7 @@
         "qa",
         "release"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -982,7 +982,7 @@
         "release",
         "yaml"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1051,7 +1051,7 @@
         "noyalib",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1120,7 +1120,7 @@
         "research",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1190,7 +1190,7 @@
         "qa",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1255,7 +1255,7 @@
         "engineering",
         "release"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1317,7 +1317,7 @@
       "tags": [
         "ci"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1382,7 +1382,7 @@
         "debugging",
         "qa"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1446,7 +1446,7 @@
       "tags": [
         "qa"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1507,7 +1507,7 @@
         "porting",
         "routing"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1569,7 +1569,7 @@
         "qa",
         "validation"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1635,7 +1635,7 @@
         "validation",
         "web-reach"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1696,7 +1696,7 @@
       "tags": [
         "docs"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     },
     {
       "allowed_tools": [
@@ -1765,7 +1765,7 @@
         "noyalib",
         "yaml"
       ],
-      "version": "0.0.3"
+      "version": "0.0.4"
     }
   ]
 }

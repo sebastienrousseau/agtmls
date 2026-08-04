@@ -25,6 +25,9 @@ TEXT_DEFAULT_FILES = [
     # PyPI release ships a wheel whose metadata contradicts its contents.
     ROOT / "pyproject.toml",
     ROOT / "src" / "agtmls" / "__init__.py",
+    # marketplace.json pins the version twice (catalog + plugin entry) and
+    # validate-plugin-manifest.py fails if either drifts from plugin.json.
+    ROOT / ".claude-plugin" / "marketplace.json",
 ]
 GENERATORS = [
     ["sync-skill-frontmatter.py", "--write"],
