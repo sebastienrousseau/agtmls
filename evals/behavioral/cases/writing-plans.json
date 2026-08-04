@@ -1,0 +1,24 @@
+{
+  "skill": "writing-plans",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "done-condition",
+      "Not in scope",
+      "Riskiest unknown first",
+      "revise it"
+    ],
+    "reference_contains": [
+      "Template",
+      "Revising mid-execution"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "skip the done-condition",
+      "scope drift is fine"
+    ]
+  }
+}

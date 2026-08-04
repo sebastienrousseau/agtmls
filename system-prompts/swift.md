@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Language profile: Swift
 
 You are working in a Swift project (5.9+, targeting Swift 6 language

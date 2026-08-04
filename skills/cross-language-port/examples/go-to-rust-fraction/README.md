@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Go → Rust: reduce a fraction
 
 Fleet domain: Go tooling (`corral`, `corral-sync`) → Rust.

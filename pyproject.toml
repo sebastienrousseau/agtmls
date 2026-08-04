@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agtmls"
+version = "0.0.3"
+description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Sebastien Rousseau" }]
+keywords = ["agent", "skills", "registry", "claude", "codex", "llm", "prompts"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Code Generators",
+]
+# Deliberately dependency-free: every script in the registry is stdlib-only,
+# which is what makes `uvx agtmls` a single fast download with nothing to
+# resolve.
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/sebastienrousseau/agtmls"
+Repository = "https://github.com/sebastienrousseau/agtmls"
+Changelog = "https://github.com/sebastienrousseau/agtmls/blob/main/CHANGELOG.md"
+
+[project.scripts]
+agtmls = "agtmls.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agtmls"]
+
+# The registry is shipped verbatim under agtmls/_registry/. That layout is
+# load-bearing: every script resolves its root as `Path(__file__).parent.parent`,
+# so placing scripts/ at agtmls/_registry/scripts/ makes the registry root
+# resolve correctly inside the wheel with no code change. Keep this list in
+# sync with scripts/validate-packaging.py, which fails the build gate if the
+# wheel would omit something the CLI needs.
+[tool.hatch.build.targets.wheel.force-include]
+"scripts" = "agtmls/_registry/scripts"
+"skills" = "agtmls/_registry/skills"
+"commands" = "agtmls/_registry/commands"
+"system-prompts" = "agtmls/_registry/system-prompts"
+"references" = "agtmls/_registry/references"
+"templates" = "agtmls/_registry/templates"
+"evals" = "agtmls/_registry/evals"
+"index.json" = "agtmls/_registry/index.json"
+"profiles.json" = "agtmls/_registry/profiles.json"
+"providers.json" = "agtmls/_registry/providers.json"
+"lifecycle.json" = "agtmls/_registry/lifecycle.json"
+"checks.json" = "agtmls/_registry/checks.json"
+"CATALOG.md" = "agtmls/_registry/CATALOG.md"
+"LICENSE" = "agtmls/_registry/LICENSE"
+".claude-plugin/plugin.json" = "agtmls/_registry/.claude-plugin/plugin.json"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/agtmls",
+  "scripts",
+  "skills",
+  "commands",
+  "system-prompts",
+  "references",
+  "templates",
+  "evals",
+  "*.json",
+  "*.md",
+  "LICENSE",
+]

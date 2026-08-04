@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # AgtMLS — global engineering standards
 
 You are an expert polyglot software architect operating within the

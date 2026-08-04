@@ -5,7 +5,7 @@
   "materials": [
     {
       "digest": {
-        "sha256": "ab83bf3d0a93fb9f20e32087afeaafd8bff25c96f03ad7164a6d9a013d9f0ea8"
+        "sha256": "27f32b00475ed042ada340fe1cf4feadd77e7c85b266defaa8433efa8f820199"
       },
       "uri": "agtmls:registry-state"
     }
@@ -13,8 +13,11 @@
   "metadata": {
     "checks": [
       "validate-skills.py",
+      "validate-spec-conformance.py",
+      "validate-licence-headers.py",
       "validate-commands.py",
       "validate-plugin-manifest.py",
+      "validate-packaging.py",
       "validate-providers.py",
       "validate-profiles.py",
       "validate-templates.py",
@@ -31,6 +34,8 @@
       "run-trigger-evals.py",
       "run-behavioral-evals.py",
       "validate-skill-metadata.py",
+      "sync-skill-frontmatter.py --check",
+      "generate-plugin-manifests.py --check",
       "generate-skill-index.py --check",
       "generate-catalog.py --check",
       "generate-docs-site.py --check",

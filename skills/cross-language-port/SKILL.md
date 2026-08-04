@@ -1,18 +1,19 @@
 ---
 name: cross-language-port
-description: >-
-  Autonomously port a module, script, CLI, or function from one language to
-  another across the polyglot fleet — Rust, Python, Go, C++, Swift,
-  TypeScript, JavaScript, Ruby, and Bash/Shell — preserving business logic
-  exactly while adopting the target language's idioms, error model,
-  concurrency shape, and toolchain, AND proving behavioural equivalence with
-  a differential golden-I/O harness rather than eyeballing. Load when the
-  user says "port this to <lang>", "translate to <lang>", "rewrite in
-  <lang>", "convert this to <lang>", "reimplement <X> in <lang>", "give me
-  the <lang> equivalent", or asks for a Rust↔Python↔Go↔Swift↔TS/JS↔Ruby↔C++
-  ↔Bash equivalent of existing code. Not for micro-snippets (do those
-  inline) or behaviour-changing redesigns (that's a rewrite, clarify intent
-  first).
+description: "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns."
+license: MIT
+compatibility: "Requires target-language toolchain, diff. Tested with Claude Code, Codex, and Aider skill layouts"
+allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
+metadata:
+  agtmls-version: "0.0.3"
+  agtmls-owner: "Sebastien Rousseau"
+  agtmls-maturity: "hardened"
+  agtmls-risk-level: "medium"
+  agtmls-network-access: "optional"
+  agtmls-writes-files: "true"
+  agtmls-executes-commands: "true"
+  agtmls-handles-secrets: "false"
+  agtmls-requires-human-review: "true"
 ---
 
 # Skill: cross-language porting

@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Language profile: Go
 
 You are working in a Go project. The universal rules above still

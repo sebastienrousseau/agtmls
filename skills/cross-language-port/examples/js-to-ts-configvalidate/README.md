@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — JavaScript → TypeScript: config validation
 
 Fleet domain: JS/TS tooling (`password-generator`, `stratos`, `crypto-service`).

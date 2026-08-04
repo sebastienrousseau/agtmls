@@ -1,0 +1,8 @@
+# Every path has an owner. Review is required for the load-bearing surfaces:
+# the gate, the packaging layout, and the skill contract.
+*                           @sebastienrousseau
+/scripts/                   @sebastienrousseau
+/.github/workflows/         @sebastienrousseau
+/pyproject.toml             @sebastienrousseau
+/checks.json                @sebastienrousseau
+/doc/adr/                   @sebastienrousseau

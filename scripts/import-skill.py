@@ -41,14 +41,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("--name")
-    parser.add_argument("--bundle", default="imported")
+    parser.add_argument("--bundle", default="imported",
+                        help="bundle label recorded in metadata.json (the skill tree is flat)")
     parser.add_argument("--out-root", type=Path, default=ROOT)
     args = parser.parse_args()
     skill_md = source_skill_md(args.source)
     text = skill_md.read_text(encoding="utf-8", errors="replace")
     name = slugify(args.name or title_from(text, skill_md.stem))
     out_root = args.out_root.resolve()
-    target = out_root / "skills" / args.bundle / name
+    target = out_root / "skills" / name
     if target.exists():
         raise SystemExit(f"target skill already exists: {target}")
     target.mkdir(parents=True)
@@ -66,6 +67,7 @@ def main() -> int:
     if not (target / "reference.md").exists():
         (target / "reference.md").write_text(f"# {name} Reference\n\nImported draft. Review and expand before publication.\n", encoding="utf-8")
     meta = {
+        "bundle": args.bundle,
         "version": "0.0.3",
         "owner": "unassigned",
         "maturity": "draft",

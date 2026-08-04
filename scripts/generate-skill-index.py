@@ -23,15 +23,23 @@ PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 
 
 def load_skill_metadata(skill_dir: Path) -> tuple[str | None, dict[str, object]]:
+    """Every skill carries its own metadata.json. The skill tree is flat, so
+    bundle membership is a metadata field rather than a parent directory —
+    runtimes scan `skills/` non-recursively for `<name>/SKILL.md`."""
     direct = skill_dir / "metadata.json"
     if direct.exists():
         return direct.relative_to(ROOT).as_posix(), json.loads(direct.read_text(encoding="utf-8"))
-    parts = skill_dir.relative_to(SKILLS_DIR).parts
-    if len(parts) > 1:
-        bundle_meta = SKILLS_DIR / parts[0] / "metadata.json"
-        if bundle_meta.exists():
-            return bundle_meta.relative_to(ROOT).as_posix(), json.loads(bundle_meta.read_text(encoding="utf-8"))
     return None, {}
+
+
+def unquote(value: str) -> str:
+    """Strip a YAML quoted-scalar wrapper. Descriptions and generated fields
+    are emitted quoted, so the raw value would otherwise carry the quotes
+    into index.json and out to every export."""
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        inner = value[1:-1]
+        return inner.replace('\\"', '"') if value[0] == '"' else inner.replace("''", "'")
+    return value
 
 
 def parse_frontmatter(text: str) -> dict[str, str]:
@@ -45,14 +53,16 @@ def parse_frontmatter(text: str) -> dict[str, str]:
         top = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
         if top and not line.startswith((" ", "\t")):
             if key is not None:
-                fields[key] = " ".join(part.strip() for part in buf).strip()
+                fields[key] = unquote(" ".join(part.strip() for part in buf).strip())
             key = top.group(1)
             value = top.group(2).strip()
             buf = [] if value in {"|", ">", "|-", ">-", "|+", ">+", ""} else [value]
         elif key is not None:
             buf.append(line.strip())
     if key is not None:
-        fields[key] = " ".join(part.strip() for part in buf).strip()
+        # The final flush needs the same unquoting as the mid-loop one: for a
+        # command file, `description` IS the last key.
+        fields[key] = unquote(" ".join(part.strip() for part in buf).strip())
     return fields
 
 
@@ -73,12 +83,11 @@ def collect_commands() -> list[dict[str, object]]:
     return commands
 
 
-def skill_kind(path: Path) -> tuple[str, str | None]:
-    rel = path.parent.relative_to(SKILLS_DIR)
-    parts = rel.parts
-    if len(parts) == 1:
+def skill_kind(metadata: dict[str, object]) -> tuple[str, str | None]:
+    bundle = metadata.get("bundle")
+    if not bundle:
         return "general", None
-    return "project", parts[0]
+    return "project", str(bundle)
 
 
 def infer_tags(name: str, description: str, bundle: str | None) -> list[str]:
@@ -134,10 +143,11 @@ def collect() -> dict[str, object]:
     plugin = json.loads(PLUGIN.read_text(encoding="utf-8")) if PLUGIN.exists() else {}
     commands = collect_commands()
     skills = []
-    for skill_md in sorted(SKILLS_DIR.glob("**/SKILL.md")):
+    for skill_md in sorted(SKILLS_DIR.glob("*/SKILL.md")):
         text = skill_md.read_text(encoding="utf-8")
         fields = parse_frontmatter(text)
-        kind, bundle = skill_kind(skill_md)
+        metadata_path, metadata = load_skill_metadata(skill_md.parent)
+        kind, bundle = skill_kind(metadata)
         rel_dir = skill_md.parent.relative_to(ROOT).as_posix()
         references = sorted(
             p.relative_to(skill_md.parent).as_posix()
@@ -161,7 +171,6 @@ def collect() -> dict[str, object]:
             / "cases"
             / f"{fields.get('name', skill_md.parent.name)}.json"
         )
-        metadata_path, metadata = load_skill_metadata(skill_md.parent)
         skill = {
             "name": fields.get("name", skill_md.parent.name),
             "description": re.sub(r"\s+", " ", fields.get("description", "")).strip(),
@@ -169,7 +178,7 @@ def collect() -> dict[str, object]:
             "kind": kind,
             "bundle": bundle,
             "license": fields.get("license", "MIT"),
-            "date": fields.get("date"),
+            "allowed_tools": fields.get("allowed-tools", "").split(),
             "metadata_path": metadata_path,
             "version": metadata.get("version", fields.get("version", "0.0.3")),
             "owner": metadata.get("owner"),

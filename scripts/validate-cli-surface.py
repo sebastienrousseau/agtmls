@@ -11,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "scripts" / "agtmls.py"
 README = ROOT / "README.md"
+# The command reference moved out of the README to keep it readable; the
+# surface must still be documented somewhere a user will find it.
+CLI_DOC = ROOT / "docs" / "cli.md"
 COMMAND = ROOT / "commands" / "agtmls.md"
 
 
@@ -50,6 +53,7 @@ def main() -> int:
         "evidence",
         "agent-card",
         "mcp-resources",
+        "plugin-manifests",
         "sbom",
         "provenance",
         "provider-install",
@@ -67,10 +71,14 @@ def main() -> int:
     if found != expected:
         errors.append(f"CLI subcommands mismatch: expected {sorted(expected)}, found {sorted(found)}")
     readme = README.read_text(encoding="utf-8")
+    if CLI_DOC.exists():
+        readme += CLI_DOC.read_text(encoding="utf-8")
+    else:
+        errors.append("docs/cli.md is missing; the CLI surface must stay documented")
     command = COMMAND.read_text(encoding="utf-8")
     for name in expected:
         if f"agtmls.py {name}" not in readme and name not in {"doctor"}:
-            errors.append(f"README missing agtmls.py {name} example or mention")
+            errors.append(f"README/docs/cli.md missing agtmls.py {name} example or mention")
     if "agtmls.py status" not in command:
         errors.append("commands/agtmls.md must invoke agtmls.py status")
     if re.search(r"agtmls.py\s+list\s+commands", readme) is None:

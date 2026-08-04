@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Python → Go: duration parser
 
 Fleet domain: Python services (`pain001`, `akande`, the `*-mcp` servers) → Go.

@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
+KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 AGENTS = {"claude", "codex", "aider"}
 MATURITY = {"draft", "hardened", "project", "deprecated"}
 NETWORK_ACCESS = {"none", "optional", "required"}
@@ -19,20 +20,17 @@ SAFETY_BOOLEANS = ["writes_files", "executes_commands", "handles_secrets", "requ
 
 
 def metadata_for(skill_dir: Path) -> tuple[Path | None, dict[str, object]]:
+    """The skill's own metadata.json. The tree is flat, so there is no bundle
+    directory to inherit from — every skill owns its file."""
     direct = skill_dir / "metadata.json"
     if direct.exists():
         return direct, json.loads(direct.read_text(encoding="utf-8"))
-    parts = skill_dir.relative_to(SKILLS_DIR).parts
-    if len(parts) > 1:
-        bundle_meta = SKILLS_DIR / parts[0] / "metadata.json"
-        if bundle_meta.exists():
-            return bundle_meta, json.loads(bundle_meta.read_text(encoding="utf-8"))
     return None, {}
 
 
 def main() -> int:
     errors: list[str] = []
-    metadata_files = sorted(SKILLS_DIR.glob("**/metadata.json"))
+    metadata_files = sorted(SKILLS_DIR.glob("*/metadata.json"))
     for mf in metadata_files:
         try:
             data = json.loads(mf.read_text(encoding="utf-8"))
@@ -43,6 +41,14 @@ def main() -> int:
             errors.append(f"{mf.relative_to(ROOT)}: version must be semver X.Y.Z")
         if not data.get("owner"):
             errors.append(f"{mf.relative_to(ROOT)}: missing owner")
+        # Bundle membership is a field, not a parent directory: the skill
+        # tree is flat so every runtime's non-recursive scan finds all of it.
+        if "bundle" not in data:
+            errors.append(f"{mf.relative_to(ROOT)}: missing bundle (use null for general skills)")
+        elif data["bundle"] is not None and not (
+            isinstance(data["bundle"], str) and KEBAB.match(data["bundle"])
+        ):
+            errors.append(f"{mf.relative_to(ROOT)}: bundle must be null or kebab-case")
         if data.get("maturity") not in MATURITY:
             errors.append(f"{mf.relative_to(ROOT)}: maturity must be one of {sorted(MATURITY)}")
         agents = data.get("supported_agents", [])
@@ -65,10 +71,10 @@ def main() -> int:
             if policy.get("risk_level") == "high" and not policy.get("requires_human_review"):
                 errors.append(f"{mf.relative_to(ROOT)}: high-risk skills must require human review")
 
-    for skill_md in sorted(SKILLS_DIR.glob("**/SKILL.md")):
+    for skill_md in sorted(SKILLS_DIR.glob("*/SKILL.md")):
         meta_path, data = metadata_for(skill_md.parent)
         if not data:
-            errors.append(f"{skill_md.parent.relative_to(ROOT)}: no metadata.json or bundle metadata")
+            errors.append(f"{skill_md.parent.relative_to(ROOT)}: no metadata.json")
         elif meta_path is not None and not meta_path.exists():
             errors.append(f"{skill_md.parent.relative_to(ROOT)}: metadata path disappeared")
 

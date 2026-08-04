@@ -79,6 +79,52 @@
       "description": "Provider-neutral Markdown bundle for Zed agent rule adaptation."
     }
   },
+  "plugin_targets": {
+    "antigravity": {
+      "description": "Google Antigravity CLI. Stages the directory it is given and reads plugin.json from that directory's root; it does not read .claude-plugin/.",
+      "install": "agy plugin install https://github.com/sebastienrousseau/agtmls",
+      "manifest_files": [
+        "plugin.json"
+      ]
+    },
+    "codex": {
+      "description": "OpenAI Codex plugin system. Reads .codex-plugin/plugin.json, with marketplace metadata under .agents/plugins/.",
+      "install": "/plugins -> search agtmls -> Install Plugin",
+      "manifest_files": [
+        ".agents/plugins/marketplace.json",
+        ".codex-plugin/plugin.json"
+      ]
+    },
+    "cursor": {
+      "description": "Cursor plugin system. Reads .cursor-plugin/plugin.json; distinct from the .cursor/rules export target.",
+      "install": "/add-plugin agtmls",
+      "manifest_files": [
+        ".cursor-plugin/plugin.json"
+      ]
+    },
+    "gemini-cli": {
+      "description": "Gemini CLI extensions. Reads gemini-extension.json and loads the named context file, which @-includes the router skill.",
+      "install": "gemini extensions install https://github.com/sebastienrousseau/agtmls",
+      "manifest_files": [
+        "GEMINI.md",
+        "gemini-extension.json"
+      ]
+    },
+    "kimi": {
+      "description": "Kimi Code plugin system. Reads .kimi-plugin/plugin.json and supports a session-start skill.",
+      "install": "/plugins install https://github.com/sebastienrousseau/agtmls",
+      "manifest_files": [
+        ".kimi-plugin/plugin.json"
+      ]
+    },
+    "opencode": {
+      "description": "OpenCode. No skill-bundle manifest; consumes an instructions array in opencode.json, documented in .opencode/INSTALL.md.",
+      "install": "see .opencode/INSTALL.md",
+      "manifest_files": [
+        ".opencode/INSTALL.md"
+      ]
+    }
+  },
   "native_agents": {
     "aider": {
       "commands_dir": ".aider/commands",

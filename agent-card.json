@@ -1,67 +1,73 @@
 {
   "capabilities": [
     {
-      "description": "Autonomously port a module, script, CLI, or function from one language to another across the polyglot fleet \u2014 Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash/Shell \u2014 preserving business logic exactly while adopting the target language's idioms, error model, concurrency shape, and toolchain, AND proving behavioural equivalence with a differential golden-I/O harness rather than eyeballing. Load when the user says \"port this to <lang>\", \"translate to <lang>\", \"rewrite in <lang>\", \"convert this to <lang>\", \"reimplement <X> in <lang>\", \"give me the <lang> equivalent\", or asks for a Rust\u2194Python\u2194Go\u2194Swift\u2194TS/JS\u2194Ruby\u2194C++ \u2194Bash equivalent of existing code. Not for micro-snippets (do those inline) or behaviour-changing redesigns (that's a rewrite, clarify intent first).",
-      "name": "cross-language-port",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
-      "name": "pr-review-and-release",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
       "description": "Use when turning repeated agent work into a loop with trigger conditions, evidence, stopping criteria, uninstall state, validation checks, and reviewable artifacts.",
       "name": "agent-loop-design",
       "quality": 100,
       "risk": "low"
     },
     {
-      "description": "Load-bearing design decisions, invariants, and residual weak points for noyalib's parser/loader/CST. Use before modifying scanner/loader/streaming/CST code, adding a config axis or budget, wiring a new deserialise entry point, answering \"can I change X here\", \"why are there three loaders\", \"which path enforces this limit\", \"explain the three-loader architecture\", \"what is a NoSpanLoader\", \"what invariants must I preserve when editing loader.rs\", \"what does loader-parity require\", or reviewing a PR that touches de.rs / parser/loader.rs / cst/document.rs. Not a runbook for CI/release \u2014 see noyalib-ci-and-release. Not incident detail \u2014 see noyalib-failure-archaeology.",
+      "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
+      "name": "ai-supply-chain-security",
+      "quality": 100,
+      "risk": "medium"
+    },
+    {
+      "description": "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns.",
+      "name": "cross-language-port",
+      "quality": 100,
+      "risk": "medium"
+    },
+    {
+      "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
+      "name": "handoff",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
+      "description": "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology).",
       "name": "noyalib-architecture-contract",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Recreate a working noyalib development environment from scratch on a fresh machine, resolve toolchain / MSRV / \"command not found\" errors, and avoid the known Apple-Silicon, no_std, and workspace-boundary traps. Load when a new engineer or AI session is bootstrapping, when `cargo build`, `cargo test`, `make`, cargo-fuzz, Miri, or coverage runs fail before the code is even in scope, or when the answer is \"install X\" / \"run from repo root\" / \"use `--target aarch64-apple-darwin`\".",
+      "description": "Recreate a working noyalib dev environment and fix toolchain, MSRV, and Apple-Silicon traps. Use when cargo build, cargo test, make, fuzz, Miri, or coverage fails before the code is in scope.",
       "name": "noyalib-build-and-env",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Load this when working on the noyalib repo and you need to classify a change, decide which gates it must pass, prepare a PR, answer \"am I allowed to do X?\", decide whether you may bump the MSRV (a breaking event needing an ADR), or judge release readiness. Covers change taxonomy (bug fix / feature / security / restructure / release), the written non-negotiables (forbid(unsafe_code), signed Conventional Commits, ADR triggers, panic policy, MSRV, CI-always-green), the unwritten project laws confirmed with the maintainer, the v0.0.9\u2192v0.0.11 CI cache-poisoning incident behind the isolated CARGO_TARGET_DIR rule, and the PR review flow. Siblings: noyalib-ci-and-release (HOW to run gates locally) and noyalib-validation-and-qa (WHAT evidence a change needs) \u2014 this is the rulebook, not the runbook. Date-stamped 2026-07-08; release branch feat/v0.0.14.",
+      "description": "The noyalib rulebook: classify a change, pick the gates it must pass, non-negotiables (unsafe, signed commits, ADR triggers, MSRV, panic policy), PR flow. Use for 'am I allowed to do X' or judging release readiness. Not the runbook (noyalib-ci-and-release).",
       "name": "noyalib-change-control",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Load this when operating noyalib's CI or shipping a release. Covers the workflow graph (ci.yml orchestrator, shared-* reusables, security.yml, scorecard.yml, release.yml), THE cache-poisoning doctrine (isolated CARGO_TARGET_DIR per compile surface \u2014 the v0.0.9-v0.0.11 lesson), reading CI failures fast with gh, the supply-chain gate constellation (cargo-vet, cargo-deny, cargo-machete, cargo-semver-checks, REUSE, osv-scanner mirror rule), the tag-driven release flow (version bump \u2192 CHANGELOG \u2192 RELEASE-NOTES \u2192 version-refs audit \u2192 squash-merge \u2192 tag push \u2192 release.yml \u2192 satellite lockstep), and the shared-workflow caller-permissions trap (union callee scopes or the run startup-fails with 0 jobs, no annotation). Triggers: \"CI is red\", \"release prep\", \"how do I tag\", \"cargo-vet failure\", \"cargo-deny advisory\", \"workflow permissions\", \"cache poisoning\", \"MSRV job broke\", \"satellite didn't publish\". Sibling: noyalib-change-control (which gates apply). Date-stamped 2026-07-08; branch feat/v0.0.14.",
+      "description": "Operate noyalib CI and ship releases: workflow graph, cache-poisoning doctrine, supply-chain gates, tag-driven release flow. Use for red CI, release prep, tagging, cargo-vet or cargo-deny failures. Not which-gates-apply (noyalib-change-control).",
       "name": "noyalib-ci-and-release",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Catalog of every configuration axis in noyalib \u2014 Cargo features (defaults, deps, production vs experimental, MSRV interactions), `ParserConfig` DoS budgets and behavioural toggles, `SerializerConfig` emission style, and the two preset constructors (`ParserConfig::new`, `ParserConfig::strict`). Use when asked \"what does feature `X` do\", \"how do I limit `Y`\", \"what's the default for `max_depth` / `max_document_length` / alias expansions\", \"how do I add a Cargo feature\", \"how do I add a `ParserConfig` axis\", \"which toggle disables the streaming fast path\", \"does the minimal profile drop `serde_ignored`\", \"does `strict()` reject duplicate keys\". Also the checklist for adding a new axis without repeating the FlowStyle-ignored (#84) or the Loader/NoSpanLoader budget-drift class of bug.",
+      "description": "Every noyalib configuration axis: Cargo features, ParserConfig DoS budgets and toggles, SerializerConfig, preset constructors. Use for 'what does feature X do', 'how do I limit Y', 'what is the default for max_document_length', 'does strict reject duplicate keys', or adding a new axis safely.",
       "name": "noyalib-config-and-flags",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Executable, decision-gated playbook for the noyalib coverage-hardening campaign \u2014 driving line/branch/function coverage from the live workspace gate (96 fn / 94 lines / 93 regions per .github/workflows/ci.yml and shared-coverage.yml defaults; doc/TESTING.md still says 95/93/92 and is stale drift) toward the 98 % target declared in PLAN.md. Load this when the ask is \"raise coverage\", \"close the llvm-cov gaps\", \"what should I work on next\", \"make coverage-gap says X is under threshold\", \"ratchet the fail-under numbers\", \"we're at 96, get us to 98\", or any variant of coverage triage on this repo. Coordinates the scripts/coverage-gap-report.sh punchlist, the tests/coverage_*.rs house-pattern, and the shared-coverage.yml gate. Owns the end-to-end workflow: baseline \u2192 target selection \u2192 gap analysis \u2192 test authoring \u2192 verification \u2192 promotion. Explicitly fences off wrong turns (chasing 100 %, weakening thresholds, assert-free coverage tests, testing invariant_violated defensive paths).",
+      "description": "Raise noyalib line, branch, and function coverage toward the 98% target. Use for 'raise coverage', llvm-cov gaps, coverage-gap triage, ratcheting fail-under thresholds, or picking the next coverage target. Fences off the known wrong turns (chasing 100%, weakening thresholds).",
       "name": "noyalib-coverage-campaign",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Symptom-driven triage for noyalib (pure-Rust YAML 1.2). Load when a test fails, a parse result surprises you, spans point at the wrong bytes, budget errors fire unexpectedly, `from_str::<Value>` and `from_str::<MyStruct>` disagree, `no_std` breaks despite green CI (symptom triage here; the cache-poisoning CI doctrine that PREVENTS it lives in noyalib-ci-and-release), column desync / spurious indent errors show up, or you need to answer \"why does the parse differ?\" quickly. Runbook voice with the rationale embedded \u2014 for a mid-level engineer or Sonnet-class model with zero project context.",
+      "description": "Symptom-driven triage for noyalib: failing tests, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
       "name": "noyalib-debugging-playbook",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Measure instead of eyeball. Use when running or interpreting coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib; when proving a fix works (differential testing, budget-breach assertions, bench-gated optimisations, clean-fingerprint verification); when reading tool output (regions/lines/functions percentages, Miri UB reports, criterion time/thrpt/change tables, libfuzzer runs/corpus/artifacts); when a claim needs evidence rather than an assertion.",
+      "description": "Measure instead of eyeball. Use when running or reading coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib, when interpreting what an llvm-cov regions percentage means, or when a claim needs evidence rather than assertion.",
       "name": "noyalib-diagnostics-and-tooling",
       "quality": 100,
       "risk": "medium"
@@ -73,44 +79,62 @@
       "risk": "medium"
     },
     {
-      "description": "Guides how noyalib is described to the outside world \u2014 the ecosystem map, provable differentiators, claiming rules, reproducibility standards, and the serde_yaml refugee migration playbook. Load this when writing or reviewing README claims, release notes / RELEASE-NOTES-*.md, marketing / launch copy, blog posts, conference abstracts, papers, competitor / peer comparisons, migration guides (MIGRATION-FROM-*.md), the COMPARISON.md matrix, benchmark headlines, \"why noyalib vs X\", \"is noyalib faster than X\", \"what makes noyalib different\", \"how does noyalib compare to serde_yaml / serde_yaml_ng / serde_yml / serde-norway / serde-yaml-bw / saphyr / serde-saphyr / yaml-spanned / yaml-rust2 / libyaml-safer\", or any question about what we can and cannot claim in public. Ecosystem cells drift fast: everything is date-stamped 2026-07-08 and must be re-verified before publication.",
+      "description": "How noyalib is described publicly: ecosystem map, provable differentiators, claiming rules, migration guides, and the COMPARISON matrix against other Rust YAML crates. Use when writing or reviewing README claims, release notes, launch copy, 'why noyalib vs X', or 'can we claim noyalib is faster than yaml-rust2 or saphyr'. Dated claims must be re-verified before publishing.",
       "name": "noyalib-external-positioning",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "The chronicle of noyalib's settled battles. Load BEFORE proposing a fix, refactor, or \"I noticed X is shaped oddly\" change. Answers \"has this been tried?\", \"why is X shaped that way?\", \"is there a known regression history for this area?\", \"was this ever reverted?\", \"check history before I propose X\", \"look up the incident behind Y\", or \"explain the story of Z\". Covers the cache-poisoning no_std mask, the distinct-typed key- collision campaign (loader parity + nan-key follow-on), BOM column desync, lone-CR line breaks, alias span misdirection, FlowStyle ignored, #46 depth-counter imbalances, RUSTSEC/cargo-vet trust-chain gaps, and workspace-split shared-workflow caller permissions. Each entry: symptom \u2192 root cause \u2192 evidence (commit SHA + file) \u2192 status \u2192 what NOT to retry. Dated 2026-07-08.",
+      "description": "The chronicle of noyalib's settled battles: symptom, root cause, evidence, and what NOT to retry. Load BEFORE proposing a fix or refactor - 'has this been tried', 'why is X shaped that way', 'is there regression history here', 'look up the cache poisoning incident behind no_std', 'was the BOM column desync ever fixed'.",
       "name": "noyalib-failure-archaeology",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "What's next for noyalib \u2014 the open, candidate research directions where this library could advance the state of the art, PLUS the discipline that turns a hunch into an accepted result here. Frontier thesis chosen 2026-07-07: YAML-spec leadership \u2014 conformance beyond the official test suite, edge-case authority, upstream spec/suite contributions, becoming the reference implementation for YAML 1.2.2 ambiguities. Load when asking \"is there a research angle here?\", \"what would be worth a paper / RFC / upstream PR?\", \"how do we know an idea earned its way in?\", \"what's a falsifiable milestone for a spec-conformance push?\". Ambitions are OPEN and CANDIDATE; nothing on this page is a v0.1.0 commitment. Covers the frontier thesis, four open problem statements with first-three-steps grounded in this repo, and the research methodology (evidence bar, hypothesis-predicts-numbers, idea lifecycle) that has produced the results noyalib already ships. Dated 2026-07-07.",
+      "description": "Open research directions for noyalib and the evidence bar an idea must clear. Use for 'is there a research angle', 'what's worth a paper, RFC, or upstream PR', or setting a falsifiable spec-conformance milestone. Ambitions stay OPEN and CANDIDATE, never roadmap commitments.",
       "name": "noyalib-research-frontier",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "What counts as evidence in the noyalib repo. Load this BEFORE opening a PR, BEFORE claiming a fix is done, and BEFORE adding a test. Covers the evidence bar (regression test must fail on the pre-fix tree; wrong-but-green is the enemy), the test taxonomy (coverage_*, cst_*, spec/, official_suite, proptest, competitor_bugs, de*/ser*, issue_* regressions, ~480 doctests), the certified inventory (official YAML Test Suite + benches/fixtures/*.yaml), SPDX-headed file naming, doctest rules (# Examples + errors-parse-a-repro from Error::KeyCollision), and the acceptance thresholds (coverage 98/98/98 target vs live 96/94/93; official-suite floor is the merge gate; clippy -D warnings; rustfmt clean). Use for \"how do I add a test\", \"does this need a regression test\", \"how do I write a cross-loader parity test\", \"what evidence must a PR carry\". Not this skill: running tools \u2192 noyalib-diagnostics-and-tooling; the coverage campaign \u2192 noyalib-coverage-campaign. v0.0.14, dated 2026-07-08.",
+      "description": "What counts as evidence in noyalib. Use before opening a PR, claiming a fix is done, or adding a test: the evidence bar, test taxonomy, doctest rules, cross-loader parity regression tests, acceptance thresholds. Not running tools (noyalib-diagnostics-and-tooling).",
       "name": "noyalib-validation-and-qa",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "YAML 1.2.2 spec knowledge as noyalib implements it \u2014 scalar resolution (resolve_plain_ext table), documents/streams/directives (\u00a76.8, \u00a79.1.2), block vs flow, block-scalar chomping (|/>/-/+), line breaks (\u00a75.4 LF/CR/CRLF), anchors/aliases/merge keys with DoS budgets (max_alias_expansions, alias_anchor_ratio, max_merge_keys), tags (!!str/!!int/!!bool/!!null/!!binary \u2192 RFC 4648), YAML 1.1 vs 1.2 flags (legacy_booleans/octal/sexagesimal), the Norway problem, MergeKeyPolicy Auto/AsOrdinary/Error, and official-suite conformance arithmetic. Load when reasoning about YAML semantics, plain-scalar coercion, or spec-conformance work. Use for \"explain merge keys / anchors / chomping / tags\", \"how do I resolve a plain scalar\", \"why does `no` parse as false\", \"does noyalib accept `nan` / `.inf` / octal `0o7`\", \"how many cases does the official YAML suite cover\".",
-      "name": "yaml-domain-reference",
+      "description": "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+      "name": "pr-review-and-release",
       "quality": 100,
       "risk": "medium"
     },
     {
-      "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
-      "name": "ai-supply-chain-security",
+      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when a reviewer leaves comments, requests changes, or disagrees with an approach, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes. Not preparing or shipping the change itself.",
+      "name": "receiving-code-review",
       "quality": 100,
-      "risk": "medium"
+      "risk": "low"
     },
     {
-      "description": "Meta-router for the AgtMLS skill catalog \u2014 read this first when you are unsure which AgtMLS skill (if any) to load for a task, when several skills look like they might apply, or when onboarding to how this hub's skills and shared references fit together. Points at the cross-language-port skill for porting/translating code between languages, at project bundles (e.g. the noyalib/ family) for project-specific work, and at references/ for the shared Definition of Done. Use when the question is \"which skill do I use for X\" or \"how do AgtMLS skills work\".",
+      "description": "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing.",
+      "name": "systematic-debugging",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
+      "description": "Write the failing test first, then the code that makes it pass. Load when adding behaviour, changing behaviour, or pinning a bug, and whenever a test was authored after the code it covers. Enforces red-green-refactor with an observed red phase, so a test that never failed is never mistaken for proof.",
+      "name": "test-driven-development",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
+      "description": "Meta-router for the AgtMLS skill catalog. Read first when unsure which AgtMLS skill applies, when several look relevant, when asking 'is there a skill for porting or noyalib work', or when onboarding to how the hub's skills and shared references fit together.",
       "name": "using-agtmls",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
+      "description": "The gate between doing work and claiming it is done. Load before saying finished, fixed, working, or ready, before marking a task complete, and before reporting an outcome to a human. Converts each claim into the observation that would justify it, and names the rationalizations that let unverified work ship. Not the project's own evidence bar or test taxonomy.",
+      "name": "verification-before-completion",
       "quality": 100,
       "risk": "low"
     },
@@ -119,6 +143,18 @@
       "name": "web-research-and-source-triage",
       "quality": 100,
       "risk": "low"
+    },
+    {
+      "description": "Turn a vague or multi-step request into an ordered list of small steps, each with its own done-condition and verification. Load before starting work that touches several files, has unclear scope, or spans more than one session, and when a request needs decomposing before any code is written. Produces a plan a reviewer can check against, not a to-do list.",
+      "name": "writing-plans",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
+      "description": "YAML 1.2.2 semantics as noyalib implements them: scalar resolution, block vs flow, chomping, anchors, aliases, merge keys with DoS budgets, tags, 1.1-vs-1.2 flags, the Norway problem, and whether nan or octal 0o7 scalars resolve. Use for spec-conformance and plain-scalar questions.",
+      "name": "yaml-domain-reference",
+      "quality": 100,
+      "risk": "medium"
     }
   ],
   "description": "Agent Multiple Listing Service skill registry",

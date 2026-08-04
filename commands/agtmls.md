@@ -1,5 +1,6 @@
 ---
 description: Run the local AgtMLS registry health check.
+license: MIT
 ---
 
 Run from the AgtMLS checkout:

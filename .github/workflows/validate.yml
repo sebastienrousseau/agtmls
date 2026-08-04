@@ -12,8 +12,13 @@ permissions:
   contents: read
 
 jobs:
-  validate-skills:
-    runs-on: ubuntu-latest
+  checks:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,13 +26,24 @@ jobs:
           fetch-tags: true
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
+      - name: Install reference validator
+        # skills-ref requires Python >=3.11. It is optional: without it
+        # validate-spec-conformance.py reports SKIP, and 3.11+ legs still
+        # enforce the spec. Never fail the run over a dev-only tool.
+        run: python3 -m pip install --disable-pip-version-check skills-ref || true
       - name: Validate Skills
         run: python3 scripts/validate-skills.py
+      - name: Validate Spec Conformance
+        run: python3 scripts/validate-spec-conformance.py
+      - name: Validate Licence Headers
+        run: python3 scripts/validate-licence-headers.py
       - name: Validate Commands
         run: python3 scripts/validate-commands.py
       - name: Validate Plugin Manifest
         run: python3 scripts/validate-plugin-manifest.py
+      - name: Validate Packaging
+        run: python3 scripts/validate-packaging.py
       - name: Validate Providers
         run: python3 scripts/validate-providers.py
       - name: Validate Profiles
@@ -60,6 +76,10 @@ jobs:
         run: python3 scripts/run-behavioral-evals.py
       - name: Validate Skill Metadata
         run: python3 scripts/validate-skill-metadata.py
+      - name: Sync Skill Frontmatter Check
+        run: python3 scripts/sync-skill-frontmatter.py --check
+      - name: Generate Plugin Manifests Check
+        run: python3 scripts/generate-plugin-manifests.py --check
       - name: Generate Skill Index Check
         run: python3 scripts/generate-skill-index.py --check
       - name: Generate Catalog Check
@@ -136,3 +156,17 @@ jobs:
         run: python3 scripts/agtmls-doctor.py
       - name: Compile maintenance CLIs
         run: python3 -m py_compile scripts/agtmls-doctor.py scripts/agtmls.py scripts/bench.py scripts/check-skill-collisions.py scripts/evolve-session.py scripts/export-registry.py scripts/generate-agent-card.py scripts/generate-catalog.py scripts/generate-docs-site.py scripts/generate-mcp-resources.py scripts/generate-provenance.py scripts/generate-sbom.py scripts/generate-skill-index.py scripts/import-skill.py scripts/propose-skill-from-session.py scripts/provider-install.py scripts/record-evidence.py scripts/registry-diff.py scripts/release-check.py scripts/release-pack.py scripts/run-all-checks.py scripts/run-behavioral-evals.py scripts/run-trigger-evals.py scripts/run-unit-tests.py scripts/scaffold-skill.py scripts/smoke-cli.py scripts/smoke-evolve-evidence.py scripts/smoke-export.py scripts/smoke-import.py scripts/smoke-install-profiles.py scripts/smoke-install.py scripts/smoke-proposal.py scripts/smoke-provider-install.py scripts/smoke-live-providers.py scripts/smoke-release-pack.py scripts/smoke-scaffold.py scripts/validate-check-manifest.py scripts/validate-cli-surface.py scripts/validate-commands.py scripts/validate-doc-links.py scripts/validate-docs-site.py scripts/validate-eval-cases.py scripts/validate-generated-artifacts.py scripts/validate-gitignore.py scripts/validate-governance.py scripts/validate-json-files.py scripts/validate-lifecycle.py scripts/validate-plugin-manifest.py scripts/validate-profiles.py scripts/validate-providers.py scripts/validate-python-scripts.py scripts/validate-release.py scripts/validate-secrets.py scripts/validate-shell-syntax.py scripts/validate-skill-index.py scripts/validate-skill-metadata.py scripts/validate-skills.py scripts/validate-system-prompts.py scripts/validate-templates.py scripts/validate-version-policy.py scripts/next-version.py scripts/release-dry-run.py scripts/smoke-next-version.py scripts/smoke-release-dry-run.py scripts/verify-release-assets.py scripts/bump-version.py scripts/smoke-bump-version-check.py
+
+  # Branch protection requires a status check literally named
+  # "validate-skills". Matrix legs report as "checks (os, version)", which
+  # would never satisfy it, so this job carries the name and passes only when
+  # every leg passed.
+  validate-skills:
+    if: always()
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm every matrix leg passed
+        run: |
+          echo "checks result: ${{ needs.checks.result }}"
+          test "${{ needs.checks.result }}" = "success"

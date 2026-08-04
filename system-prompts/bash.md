@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Language profile: Bash/Shell
 
 You are working in a Bash/Shell project. The universal rules above

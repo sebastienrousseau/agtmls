@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Using AgtMLS Reference
 
 Use this reference when the `using-agtmls` spine is not enough to decide how

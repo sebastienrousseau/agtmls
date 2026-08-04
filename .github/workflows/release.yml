@@ -16,6 +16,10 @@ on:
 
 permissions:
   contents: write
+  # Build provenance is signed via Sigstore against the workflow identity;
+  # id-token is what proves the artifacts came from this repo and ref.
+  attestations: write
+  id-token: write
 
 jobs:
   release:
@@ -48,14 +52,30 @@ jobs:
           test "$VERSION" = "${{ steps.version.outputs.version }}"
           python3 scripts/validate-version-policy.py
           python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
+      - name: Install reference validator
+        run: python3 -m pip install --disable-pip-version-check skills-ref
       - name: Full release gate
         run: python3 scripts/agtmls.py check
       - name: Build release assets
         run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
+      - name: Build Python distributions
+        run: |
+          python3 -m pip install --disable-pip-version-check build
+          python3 -m build --outdir dist/python
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/release/*, dist/python/*"
+      - name: Verify the wheel installs and runs
+        run: |
+          python3 -m venv /tmp/verify
+          /tmp/verify/bin/pip install --disable-pip-version-check dist/python/*.whl
+          test "$(/tmp/verify/bin/agtmls stats --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["registry_version"])')" \
+            = "${{ steps.version.outputs.version }}"
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ steps.version.outputs.tag }}" dist/release/* \
+          gh release create "${{ steps.version.outputs.tag }}" dist/release/* dist/python/* \
             --title "AgtMLS ${{ steps.version.outputs.tag }}" \
             --notes "Automated AgtMLS ${{ steps.version.outputs.tag }} release. Versions increment by exactly 0.0.1 on the 0.0.x line."

@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Ruby → Python: word histogram
 
 Fleet domain: Ruby (`homebrew-tap`) → Python.

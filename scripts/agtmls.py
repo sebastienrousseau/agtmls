@@ -282,6 +282,10 @@ def main() -> int:
     mcp_resources.add_argument("--write", action="store_true")
     mcp_resources.add_argument("--check", action="store_true")
 
+    plugin_manifests = sub.add_parser("plugin-manifests")
+    plugin_manifests.add_argument("--write", action="store_true")
+    plugin_manifests.add_argument("--check", action="store_true")
+
     sbom = sub.add_parser("sbom")
     sbom.add_argument("--write", action="store_true")
     sbom.add_argument("--check", action="store_true")
@@ -319,6 +323,11 @@ def main() -> int:
     install.add_argument("agent", choices=["claude", "aider", "codex"])
     install.add_argument("--target", type=Path, default=Path.cwd())
     install.add_argument("--skills-only", action="store_true")
+    install.add_argument(
+        "--copy",
+        action="store_true",
+        help="copy skills instead of symlinking (required when the hub is a packaged wheel)",
+    )
     install.add_argument("--bundle", action="append", default=[])
     install.add_argument("--profile")
 
@@ -346,6 +355,8 @@ def main() -> int:
             cmd.extend(["--agent", args.agent])
         if args.skills_only:
             cmd.append("--skills-only")
+        if args.copy:
+            cmd.append("--copy")
         for bundle in args.bundle:
             cmd.extend(["--bundle", bundle])
         return run(cmd)
@@ -433,6 +444,9 @@ def main() -> int:
     if args.command == "mcp-resources":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-mcp-resources.py"), *flags])
+    if args.command == "plugin-manifests":
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run([sys.executable, str(ROOT / "scripts" / "generate-plugin-manifests.py"), *flags])
     if args.command == "sbom":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-sbom.py"), *flags])
@@ -469,6 +483,8 @@ def main() -> int:
         cmd = [str(ROOT / "scripts" / "setup-workspace.sh"), args.language, args.agent]
         if args.skills_only:
             cmd.append("--skills-only")
+        if args.copy:
+            cmd.append("--copy")
         bundles = list(args.bundle)
         if args.profile:
             data = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"]

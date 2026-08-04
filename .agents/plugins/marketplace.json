@@ -1,0 +1,16 @@
+{
+  "interface": {
+    "displayName": "AgtMLS"
+  },
+  "name": "agtmls",
+  "plugins": [
+    {
+      "category": "Developer Tools",
+      "name": "agtmls",
+      "source": {
+        "source": "url",
+        "url": "./"
+      }
+    }
+  ]
+}

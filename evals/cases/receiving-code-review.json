@@ -1,0 +1,13 @@
+{
+  "skill": "receiving-code-review",
+  "positive": [
+    "the reviewer left comments how should I respond",
+    "I disagree with this review comment what do I do",
+    "how do I handle a change request on my PR",
+    "reviewer asked for something out of scope"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "explain YAML merge keys"
+  ]
+}

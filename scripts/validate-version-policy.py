@@ -14,13 +14,9 @@ SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 TAG = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 METADATA_FILES = [
     ROOT / ".claude-plugin" / "plugin.json",
-    ROOT / "skills" / "cross-language-port" / "metadata.json",
-    ROOT / "skills" / "engineering" / "metadata.json",
-    ROOT / "skills" / "loops" / "metadata.json",
-    ROOT / "skills" / "noyalib" / "metadata.json",
-    ROOT / "skills" / "security" / "metadata.json",
-    ROOT / "skills" / "using-agtmls" / "metadata.json",
-    ROOT / "skills" / "web-reach" / "metadata.json",
+    # Derived, not hardcoded: the skill tree is flat, so every skill owns a
+    # metadata.json and a new skill must not silently escape the version gate.
+    *sorted((ROOT / "skills").glob("*/metadata.json")),
 ]
 
 

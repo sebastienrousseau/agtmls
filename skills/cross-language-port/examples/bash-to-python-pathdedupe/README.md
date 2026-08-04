@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Bash → Python: PATH dedupe
 
 Fleet domain: dotfiles / shell tooling (`dotfiles`, `pipelines`, `devkit`).

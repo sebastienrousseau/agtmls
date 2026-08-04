@@ -1,0 +1,13 @@
+{
+  "skill": "verification-before-completion",
+  "positive": [
+    "is this actually done or am I guessing",
+    "before I say the fix works what evidence do I need",
+    "I'm about to report this task complete",
+    "what would justify claiming the tests pass"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "explain YAML merge keys"
+  ]
+}

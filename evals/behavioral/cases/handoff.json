@@ -1,0 +1,24 @@
+{
+  "skill": "handoff",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "without asking you a question",
+      "State of the tree",
+      "Dead ends",
+      "next action"
+    ],
+    "reference_contains": [
+      "Template",
+      "Multi-agent and cross-tool handoff"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "should be straightforward",
+      "omit the dead ends"
+    ]
+  }
+}

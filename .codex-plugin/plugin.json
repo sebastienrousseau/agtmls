@@ -1,0 +1,34 @@
+{
+  "author": {
+    "name": "Sebastien Rousseau"
+  },
+  "commands": "./commands",
+  "description": "The universal agent skills registry — polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
+  "homepage": "https://github.com/sebastienrousseau/agtmls",
+  "interface": {
+    "capabilities": [
+      "Read",
+      "Write",
+      "Interactive"
+    ],
+    "developerName": "Sebastien Rousseau",
+    "displayName": "AgtMLS",
+    "shortDescription": "The universal agent skills registry",
+    "websiteURL": "https://github.com/sebastienrousseau/agtmls"
+  },
+  "keywords": [
+    "skills",
+    "registry",
+    "polyglot",
+    "porting",
+    "security",
+    "release"
+  ],
+  "license": "MIT",
+  "name": "agtmls",
+  "repository": "https://github.com/sebastienrousseau/agtmls",
+  "skills": [
+    "./skills"
+  ],
+  "version": "0.0.3"
+}

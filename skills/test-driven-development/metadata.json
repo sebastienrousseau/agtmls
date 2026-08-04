@@ -1,0 +1,22 @@
+{
+  "bundle": null,
+  "maturity": "hardened",
+  "owner": "Sebastien Rousseau",
+  "required_tools": [
+    "a test runner"
+  ],
+  "safety_policy": {
+    "executes_commands": true,
+    "handles_secrets": false,
+    "network_access": "none",
+    "requires_human_review": true,
+    "risk_level": "low",
+    "writes_files": true
+  },
+  "supported_agents": [
+    "claude",
+    "codex",
+    "aider"
+  ],
+  "version": "0.0.3"
+}

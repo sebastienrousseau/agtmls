@@ -1,14 +1,19 @@
 ---
 name: using-agtmls
-description: >-
-  Meta-router for the AgtMLS skill catalog — read this first when you are
-  unsure which AgtMLS skill (if any) to load for a task, when several skills
-  look like they might apply, or when onboarding to how this hub's skills and
-  shared references fit together. Points at the cross-language-port skill for
-  porting/translating code between languages, at project bundles (e.g. the
-  noyalib/ family) for project-specific work, and at references/ for the
-  shared Definition of Done. Use when the question is "which skill do I use
-  for X" or "how do AgtMLS skills work".
+description: "Meta-router for the AgtMLS skill catalog. Read first when unsure which AgtMLS skill applies, when several look relevant, when asking 'is there a skill for porting or noyalib work', or when onboarding to how the hub's skills and shared references fit together."
+license: MIT
+compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
+allowed-tools: "Read Glob Grep"
+metadata:
+  agtmls-version: "0.0.3"
+  agtmls-owner: "Sebastien Rousseau"
+  agtmls-maturity: "hardened"
+  agtmls-risk-level: "low"
+  agtmls-network-access: "none"
+  agtmls-writes-files: "false"
+  agtmls-executes-commands: "false"
+  agtmls-handles-secrets: "false"
+  agtmls-requires-human-review: "false"
 ---
 
 # Using AgtMLS — the meta-router
@@ -25,13 +30,29 @@ helps you pick the right skill (or decide none applies) before loading one.
    migrations (Py2→3, ES5→ESNext, C++17→23) and behaviour-changing
    redesigns: not this skill.
 
-2. **Working inside a specific project that has its own bundle?**
+2. **Doing ordinary engineering work — building, fixing, or finishing?**
+   → load the discipline skill for the phase you are in. These apply in any
+   repo, any language, and are always installed:
+
+   | Phase | Skill | Load when |
+   | --- | --- | --- |
+   | Decompose | **`writing-plans`** | Work spans several files or sessions and needs steps with done-conditions |
+   | Build | **`test-driven-development`** | Adding or changing behaviour — red test first |
+   | Diagnose | **`systematic-debugging`** | Something is broken and the cause is unknown |
+   | Finish | **`verification-before-completion`** | About to claim done, fixed, or working |
+   | Review | **`receiving-code-review`** | A reviewer left comments or requested changes |
+   | Pause | **`handoff`** | Work is unfinished and continuity is about to break |
+
+   They compose in that order and hand off to each other. A project bundle's
+   own rules (evidence bar, gates, test taxonomy) override them on specifics.
+
+3. **Working inside a specific project that has its own bundle?**
    → load that project's skills. The **`noyalib/`** family (14 skills) is the
-   worked example; its `noyalib/README.md` is a router for change control,
+   worked example; the `references/noyalib-bundle.md` index is a router for change control,
    CI/release, debugging, architecture, YAML domain, config, coverage, docs,
    positioning, validation, and research. Start there for any noyalib task.
 
-3. **None of the above?** Don't force a skill. Do the task directly using the
+4. **None of the above?** Don't force a skill. Do the task directly using the
    universal engineering standards in the assembled system prompt
    (`system-prompts/_base.md` + the language profile).
 
