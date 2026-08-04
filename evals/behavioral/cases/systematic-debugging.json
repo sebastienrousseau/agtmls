@@ -1,0 +1,25 @@
+{
+  "skill": "systematic-debugging",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "No edit before an explanation",
+      "Reproduce",
+      "Localize",
+      "Explain",
+      "bisect"
+    ],
+    "reference_contains": [
+      "Intermittent failures",
+      "Localization by symptom class"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "guess and check is fine",
+      "shotgun editing is fine"
+    ]
+  }
+}

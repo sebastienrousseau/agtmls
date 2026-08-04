@@ -1,0 +1,13 @@
+{
+  "skill": "handoff",
+  "positive": [
+    "write up where things stand before I run out of context",
+    "hand this unfinished work over to someone else",
+    "I'm pausing this branch what should I record",
+    "where are we with this and what is the next step"
+  ],
+  "negative": [
+    "raise line coverage to 98 percent",
+    "how do I tag a release"
+  ]
+}

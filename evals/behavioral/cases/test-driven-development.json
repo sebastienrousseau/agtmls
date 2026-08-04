@@ -1,0 +1,25 @@
+{
+  "skill": "test-driven-development",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "test you have not seen fail",
+      "RED",
+      "GREEN",
+      "REFACTOR",
+      "legitimate red"
+    ],
+    "reference_contains": [
+      "Observing red, per runner",
+      "untested code"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "assertion-free tests are enough",
+      "skip the red phase"
+    ]
+  }
+}

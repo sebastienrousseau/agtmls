@@ -1,0 +1,13 @@
+{
+  "skill": "writing-plans",
+  "positive": [
+    "break this multi-file change into steps before we start",
+    "decompose this vague request into a plan",
+    "what are the steps and how do we check each one",
+    "plan this migration before writing code"
+  ],
+  "negative": [
+    "why does this crash",
+    "compare noyalib to saphyr"
+  ]
+}

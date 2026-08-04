@@ -1,0 +1,13 @@
+{
+  "skill": "test-driven-development",
+  "positive": [
+    "write the failing test first for this feature",
+    "should I write the test before the code",
+    "red green refactor this change",
+    "I wrote the code already do I still need a red test"
+  ],
+  "negative": [
+    "draft a release note",
+    "how do I add a Cargo feature"
+  ]
+}

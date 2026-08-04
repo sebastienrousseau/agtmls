@@ -1,0 +1,13 @@
+{
+  "skill": "systematic-debugging",
+  "positive": [
+    "why does this crash and how do I find the cause",
+    "this test fails intermittently in CI only",
+    "something broke after the upgrade find the root cause",
+    "help me bisect this regression"
+  ],
+  "negative": [
+    "write public launch copy",
+    "raise line coverage to 98 percent"
+  ]
+}
