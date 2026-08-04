@@ -7,6 +7,19 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.4 - 2026-08-04
+
+### Fixed
+
+- `bump-version.py` did not update `.claude-plugin/marketplace.json`, which
+  pins the version twice. The catalog would have shipped advertising the
+  previous release. Caught by the manifest parity check.
+
+### Changed
+
+- Bumped release metadata through the guarded patch-line release flow.
+
+
 ### Added
 
 - **A real unit-test suite for the tooling** — 65 tests across 12 cases

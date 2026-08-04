@@ -180,7 +180,7 @@ def collect() -> dict[str, object]:
             "license": fields.get("license", "MIT"),
             "allowed_tools": fields.get("allowed-tools", "").split(),
             "metadata_path": metadata_path,
-            "version": metadata.get("version", fields.get("version", "0.0.3")),
+            "version": metadata.get("version", fields.get("version", "0.0.4")),
             "owner": metadata.get("owner"),
             "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
             "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),

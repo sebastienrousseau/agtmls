@@ -5,7 +5,7 @@ license: MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:
-  agtmls-version: "0.0.3"
+  agtmls-version: "0.0.4"
   agtmls-owner: "Sebastien Rousseau"
   agtmls-maturity: "hardened"
   agtmls-bundle: "engineering"
