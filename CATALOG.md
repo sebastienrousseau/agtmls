@@ -5,33 +5,39 @@
 # AgtMLS Catalog
 
 Registry version: `0.0.3`
-Skills: `20`
+Skills: `26`
 Commands: `1`
 
 ## Skills
 
 | Name | Bundle | Tags | Path |
 |---|---|---|---|
+| `agent-loop-design` | `loops` | loops, validation | `skills/agent-loop-design` |
+| `ai-supply-chain-security` | `security` | release, security, validation | `skills/ai-supply-chain-security` |
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
-| `pr-review-and-release` | `engineering` | ci, docs, engineering, release | `skills/engineering/pr-review-and-release` |
-| `agent-loop-design` | `loops` | loops, validation | `skills/loops/agent-loop-design` |
-| `noyalib-architecture-contract` | `noyalib` | architecture, ci, config, noyalib, release | `skills/noyalib/noyalib-architecture-contract` |
-| `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `skills/noyalib/noyalib-build-and-env` |
-| `noyalib-change-control` | `noyalib` | ci, config, noyalib, qa, release, security, validation | `skills/noyalib/noyalib-change-control` |
-| `noyalib-ci-and-release` | `noyalib` | ci, noyalib, release, security | `skills/noyalib/noyalib-ci-and-release` |
-| `noyalib-config-and-flags` | `noyalib` | config, noyalib | `skills/noyalib/noyalib-config-and-flags` |
-| `noyalib-coverage-campaign` | `noyalib` | architecture, ci, coverage, debugging, noyalib, qa | `skills/noyalib/noyalib-coverage-campaign` |
-| `noyalib-debugging-playbook` | `noyalib` | ci, debugging, noyalib, qa, release, yaml | `skills/noyalib/noyalib-debugging-playbook` |
-| `noyalib-diagnostics-and-tooling` | `noyalib` | coverage, diagnostics, noyalib, qa, validation | `skills/noyalib/noyalib-diagnostics-and-tooling` |
-| `noyalib-docs-and-writing` | `noyalib` | architecture, ci, docs, noyalib, qa, release | `skills/noyalib/noyalib-docs-and-writing` |
-| `noyalib-external-positioning` | `noyalib` | ci, docs, noyalib, release, research, yaml | `skills/noyalib/noyalib-external-positioning` |
-| `noyalib-failure-archaeology` | `noyalib` | ci, noyalib, validation | `skills/noyalib/noyalib-failure-archaeology` |
-| `noyalib-research-frontier` | `noyalib` | ci, noyalib, qa, research, validation, yaml | `skills/noyalib/noyalib-research-frontier` |
-| `noyalib-validation-and-qa` | `noyalib` | ci, coverage, diagnostics, noyalib, qa, validation, yaml | `skills/noyalib/noyalib-validation-and-qa` |
-| `yaml-domain-reference` | `noyalib` | ci, config, noyalib, yaml | `skills/noyalib/yaml-domain-reference` |
-| `ai-supply-chain-security` | `security` | release, security, validation | `skills/security/ai-supply-chain-security` |
-| `using-agtmls` | `general` | ci, noyalib, porting, routing | `skills/using-agtmls` |
-| `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-reach/web-research-and-source-triage` |
+| `handoff` | `general` | validation | `skills/handoff` |
+| `noyalib-architecture-contract` | `noyalib` | architecture, ci, noyalib | `skills/noyalib-architecture-contract` |
+| `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `skills/noyalib-build-and-env` |
+| `noyalib-change-control` | `noyalib` | ci, noyalib, release, security | `skills/noyalib-change-control` |
+| `noyalib-ci-and-release` | `noyalib` | ci, noyalib, release | `skills/noyalib-ci-and-release` |
+| `noyalib-config-and-flags` | `noyalib` | config, noyalib | `skills/noyalib-config-and-flags` |
+| `noyalib-coverage-campaign` | `noyalib` | coverage, debugging, noyalib | `skills/noyalib-coverage-campaign` |
+| `noyalib-debugging-playbook` | `noyalib` | debugging, noyalib, qa | `skills/noyalib-debugging-playbook` |
+| `noyalib-diagnostics-and-tooling` | `noyalib` | coverage, diagnostics, noyalib, validation | `skills/noyalib-diagnostics-and-tooling` |
+| `noyalib-docs-and-writing` | `noyalib` | architecture, ci, docs, noyalib, qa, release | `skills/noyalib-docs-and-writing` |
+| `noyalib-external-positioning` | `noyalib` | docs, noyalib, release, yaml | `skills/noyalib-external-positioning` |
+| `noyalib-failure-archaeology` | `noyalib` | ci, noyalib, validation | `skills/noyalib-failure-archaeology` |
+| `noyalib-research-frontier` | `noyalib` | noyalib, research, validation | `skills/noyalib-research-frontier` |
+| `noyalib-validation-and-qa` | `noyalib` | diagnostics, noyalib, qa, validation | `skills/noyalib-validation-and-qa` |
+| `pr-review-and-release` | `engineering` | ci, docs, engineering, release | `skills/pr-review-and-release` |
+| `receiving-code-review` | `general` | ci | `skills/receiving-code-review` |
+| `systematic-debugging` | `general` | debugging, qa | `skills/systematic-debugging` |
+| `test-driven-development` | `general` | qa | `skills/test-driven-development` |
+| `using-agtmls` | `general` | noyalib, porting, routing | `skills/using-agtmls` |
+| `verification-before-completion` | `general` | porting, qa, validation | `skills/verification-before-completion` |
+| `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-research-and-source-triage` |
+| `writing-plans` | `general` | docs | `skills/writing-plans` |
+| `yaml-domain-reference` | `noyalib` | config, noyalib, yaml | `skills/yaml-domain-reference` |
 
 ## Commands
 
