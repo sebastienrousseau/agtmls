@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -33,7 +34,7 @@ def render(template: Path, name: str, title: str) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("name", help="kebab-case skill name")
-    parser.add_argument("--bundle", help="optional project bundle under skills/")
+    parser.add_argument("--bundle", help="optional bundle label recorded in metadata.json")
     parser.add_argument("--title", help="human title for the skill heading")
     parser.add_argument("--out-root", type=Path, default=ROOT, help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -49,7 +50,7 @@ def main() -> int:
     skills_root = out_root / "skills"
     evals_root = out_root / "evals"
     title = args.title or args.name.replace("-", " ").title()
-    skill_dir = skills_root / args.bundle / args.name if args.bundle else skills_root / args.name
+    skill_dir = skills_root / args.name
     if skill_dir.exists():
         print(f"FAIL: skill directory already exists: {skill_dir}", file=sys.stderr)
         return 1
@@ -57,8 +58,14 @@ def main() -> int:
     try:
         write_new(skill_dir / "SKILL.md", render(TEMPLATES / "skill" / "SKILL.md", args.name, title))
         write_new(skill_dir / "reference.md", render(TEMPLATES / "skill" / "reference.md", args.name, title))
-        if not args.bundle:
-            write_new(skill_dir / "metadata.json", render(TEMPLATES / "skill" / "metadata.json", args.name, title))
+        metadata = json.loads(
+            render(TEMPLATES / "skill" / "metadata.json", args.name, title)
+        )
+        metadata["bundle"] = args.bundle
+        write_new(
+            skill_dir / "metadata.json",
+            json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        )
         write_new(
             evals_root / "cases" / f"{args.name}.json",
             render(TEMPLATES / "evals" / "routing.json", args.name, title),

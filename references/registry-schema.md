@@ -27,15 +27,18 @@ the catalog without loading every skill body.
 - `name` — skill name from frontmatter.
 - `description` — flattened router description.
 - `path` — repo-relative skill directory.
-- `kind` — `general` or `project`.
-- `bundle` — project bundle name, or `null` for general skills.
+- `kind` — `general` or `project`, derived from `bundle`.
+- `bundle` — bundle name from the skill's `metadata.json`, or `null` for
+  general skills. The skill tree is flat, so this is a metadata field and
+  not a parent directory.
 - `license` — explicit frontmatter license or repo default.
-- `date` — optional frontmatter date.
-- `metadata_path` — `metadata.json` source, either skill-local or inherited
-  from a bundle.
+- `allowed_tools` — tool surface from the `allowed-tools` frontmatter field,
+  derived from `safety_policy` by `sync-skill-frontmatter.py`.
+- `metadata_path` — the skill's own `metadata.json`.
 - `version`, `owner`, `maturity`, `supported_agents`, `required_tools` —
   optional metadata loaded from `metadata.json`.
-- `compatibility` — portable skill compatibility statement.
+- `compatibility` — portable skill compatibility statement, generated from
+  `required_tools` into the spec's `compatibility` frontmatter field.
 - `tags` — generated taxonomy tags.
 - `references`, `scripts`, `assets` — repo-local adjunct files.
 - `evals.routing` — whether `evals/cases/<skill>.json` exists.

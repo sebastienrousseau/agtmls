@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # cross-language-port — reference material
 
 Complements `SKILL.md` in this directory. Load when the doctrine + loop in

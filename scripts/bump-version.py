@@ -13,20 +13,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 VERSION_FILES = [
     ROOT / ".claude-plugin" / "plugin.json",
-    ROOT / "skills" / "cross-language-port" / "metadata.json",
-    ROOT / "skills" / "engineering" / "metadata.json",
-    ROOT / "skills" / "loops" / "metadata.json",
-    ROOT / "skills" / "noyalib" / "metadata.json",
-    ROOT / "skills" / "security" / "metadata.json",
-    ROOT / "skills" / "using-agtmls" / "metadata.json",
-    ROOT / "skills" / "web-reach" / "metadata.json",
+    # Derived, not hardcoded: the skill tree is flat, so every skill owns a
+    # metadata.json and a new skill must not silently escape the version bump.
+    *sorted((ROOT / "skills").glob("*/metadata.json")),
     ROOT / "templates" / "skill" / "metadata.json",
 ]
 TEXT_DEFAULT_FILES = [
     ROOT / "scripts" / "import-skill.py",
     ROOT / "scripts" / "generate-skill-index.py",
+    # The published package version must move with the registry version, or a
+    # PyPI release ships a wheel whose metadata contradicts its contents.
+    ROOT / "pyproject.toml",
+    ROOT / "src" / "agtmls" / "__init__.py",
 ]
 GENERATORS = [
+    ["sync-skill-frontmatter.py", "--write"],
+    ["generate-plugin-manifests.py", "--write"],
     ["generate-skill-index.py", "--write"],
     ["generate-catalog.py", "--write"],
     ["generate-docs-site.py", "--write"],

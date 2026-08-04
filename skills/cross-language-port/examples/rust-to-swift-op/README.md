@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Rust → Swift: op evaluator over an enum
 
 Fleet domain: Rust (`qrc`, `vrd`) → Swift (`AudioWaveLib`, `WiserOneApp`).

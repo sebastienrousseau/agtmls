@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Worked port — Python → Rust: IBAN mod-97 validation
 
 Fleet domain: payments/banking (`pain001`, `camt053`, `bankstatementparser`).

@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # harness/ — reusable equivalence tooling
 
 Turns the differential golden-I/O method (`../reference.md` §R3) into shared,

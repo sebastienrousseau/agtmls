@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # cross-language-port — worked examples
 
 Each example is a **runnable, verified** port: a `reference.<ext>` (source),

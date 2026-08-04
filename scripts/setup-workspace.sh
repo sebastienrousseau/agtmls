@@ -13,9 +13,9 @@
 #     NOT live inside the tool's dot-dir — no tool auto-reads
 #     `.claude/AGENTS.md` or `.codex/AGENTS.md`.
 #   - Skills are linked as LEAF directories (each containing a SKILL.md)
-#     directly under `<cli>/skills/<skill>`. A project bundle such as
-#     `skills/noyalib/*` is flattened so each skill lands one level deep,
-#     not two — `<cli>/skills/noyalib/<skill>` is too deep to discover.
+#     directly under `<cli>/skills/<skill>`. Runtimes scan that path
+#     non-recursively, so anything two levels deep is undiscoverable — which
+#     is why the hub's own skills/ tree is flat too.
 set -euo pipefail
 
 AGTMLS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
@@ -27,18 +27,23 @@ AGENT_CLI=${2:-}
 #   --skills-only    link skills/commands WITHOUT writing a system prompt
 #                    (source the prompt elsewhere, e.g. global ~/.claude/CLAUDE.md);
 #                    also cleans up a prompt left by an earlier normal run.
-#   --bundle <name>  additionally link a PROJECT skill bundle (a subdir of
-#                    skills/ that holds its own skills, e.g. `noyalib`).
-#                    Repeatable. By default only GENERAL skills (top-level
-#                    leaves like cross-language-port, using-agtmls) are
-#                    linked — a project bundle never lands in an unrelated repo.
+#   --copy           copy skills instead of symlinking, for hubs that do not
+#                    persist (an installed wheel under uvx/pipx).
+#   --bundle <name>  additionally link skills whose metadata.json declares
+#                    `"bundle": "<name>"` (e.g. `noyalib`). Repeatable. By
+#                    default only GENERAL skills (bundle: null) are linked —
+#                    a project's skills never land in an unrelated repo.
 SKILLS_ONLY=false
 BUNDLES=()
+# Symlinks assume the hub stays put. An installed wheel (uvx/pipx) lives in an
+# ephemeral cache, so --copy materialises real files instead of dangling links.
+COPY=false
 _args=("$@")
 _i=0
 while [[ $_i -lt ${#_args[@]} ]]; do
   case "${_args[$_i]}" in
     --skills-only) SKILLS_ONLY=true ;;
+    --copy) COPY=true ;;
     --bundle)
       _i=$((_i + 1))
       [[ $_i -lt ${#_args[@]} ]] && BUNDLES+=("${_args[$_i]}")
@@ -48,11 +53,12 @@ while [[ $_i -lt ${#_args[@]} ]]; do
 done
 
 if [[ -z "$LANGUAGE" || -z "$AGENT_CLI" ]]; then
-  echo "Usage: $0 <language> <agent-cli> [--skills-only] [--bundle <name>]..."
+  echo "Usage: $0 <language> <agent-cli> [--skills-only] [--copy] [--bundle <name>]..."
   echo "  language:      rust | python | go | cpp | swift | typescript | javascript | ruby | bash"
   echo "  agent-cli:     claude | aider | codex"
   echo "  --skills-only: link skills only; do not write a system prompt"
   echo "  --bundle NAME: also link the NAME project skill bundle (e.g. noyalib); repeatable"
+  echo "  --copy:        copy skills instead of symlinking (for non-persistent hubs)"
   echo
   echo "Example: $0 rust claude"
   echo "Example: $0 python claude --skills-only"
@@ -142,33 +148,55 @@ if [[ -n "$GIT_DIR_PATH" ]]; then
 fi
 
 # 3. Symlink skills and commands so hub updates propagate instantly.
-#    A GENERAL skill is a top-level dir under skills/ that CONTAINS a SKILL.md
-#    (cross-language-port, using-agtmls) — always linked, applies anywhere.
-#    A PROJECT BUNDLE is a top-level dir with NO SKILL.md that holds its own
-#    skill dirs (e.g. skills/noyalib/) — linked only when named via --bundle,
-#    so a project's skills never land in an unrelated repo.
-echo "🔗 Linking skills and commands"
+#    The skill tree is FLAT — every skill is skills/<name>/SKILL.md — because
+#    each agent runtime scans its skills path non-recursively. Bundle
+#    membership is the `bundle` field in each skill's metadata.json, not a
+#    parent directory.
+#    A GENERAL skill (bundle: null) is always linked; it applies anywhere.
+#    A PROJECT skill is linked only when its bundle is named via --bundle, so
+#    a project's skills never land in an unrelated repo.
+link_or_copy() {
+  local src=$1 dst=$2
+  if $COPY; then
+    rm -rf "$dst"
+    cp -R "$src" "$dst"
+  else
+    ln -sfn "$src" "$dst"
+  fi
+}
+
+if $COPY; then
+  echo "📦 Copying skills and commands"
+else
+  echo "🔗 Linking skills and commands"
+fi
 linked=0
-for entry in "$AGTMLS_DIR/skills/"*; do
-  [[ -d "$entry" ]] || continue
-  name=$(basename "$entry")
-  if [[ -f "$entry/SKILL.md" ]]; then
-    ln -sfn "$entry" "$TARGET_DIR/$CLI_DIR/skills/$name"
-    linked=$((linked + 1))
+# python3 is already required by the rest of the toolchain (doctor, index,
+# every check); reading one JSON field is not a new dependency.
+while IFS=$'\t' read -r name bundle; do
+  [[ -n "$name" ]] || continue
+  entry="$AGTMLS_DIR/skills/$name"
+  if [[ -z "$bundle" ]]; then
+    want=true
   else
     want=false
-    for b in "${BUNDLES[@]:-}"; do [[ "$b" == "$name" ]] && want=true; done
-    if $want; then
-      for leaf in "$entry"/*; do
-        [[ -f "$leaf/SKILL.md" ]] || continue
-        ln -sfn "$leaf" "$TARGET_DIR/$CLI_DIR/skills/$(basename "$leaf")"
-        linked=$((linked + 1))
-      done
-      echo "   + bundle: $name"
-    fi
+    for b in "${BUNDLES[@]:-}"; do [[ "$b" == "$bundle" ]] && want=true; done
   fi
-done
-echo "   linked $linked skill(s)"
+  if $want; then
+    link_or_copy "$entry" "$TARGET_DIR/$CLI_DIR/skills/$name"
+    linked=$((linked + 1))
+  fi
+done < <(python3 - "$AGTMLS_DIR" <<'PY'
+import json, pathlib, sys
+skills = pathlib.Path(sys.argv[1]) / "skills"
+for skill_md in sorted(skills.glob("*/SKILL.md")):
+    meta_path = skill_md.parent / "metadata.json"
+    meta = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
+    print(f"{skill_md.parent.name}\t{meta.get('bundle') or ''}")
+PY
+)
+for b in "${BUNDLES[@]:-}"; do [[ -n "$b" ]] && echo "   + bundle: $b"; done
+if $COPY; then echo "   copied $linked skill(s)"; else echo "   linked $linked skill(s)"; fi
 
 if compgen -G "$AGTMLS_DIR/commands/*" > /dev/null; then
   for entry in "$AGTMLS_DIR/commands/"*; do
@@ -176,7 +204,7 @@ if compgen -G "$AGTMLS_DIR/commands/*" > /dev/null; then
     case "$(basename "$entry")" in
       README.md|.*) continue ;;
     esac
-    ln -sfn "$entry" "$TARGET_DIR/$CLI_DIR/commands/$(basename "$entry")"
+    link_or_copy "$entry" "$TARGET_DIR/$CLI_DIR/commands/$(basename "$entry")"
   done
 else
   echo "   (no commands to link yet)"

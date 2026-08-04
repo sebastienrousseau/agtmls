@@ -4,12 +4,23 @@
 Zero-dependency (stdlib only). Exits non-zero if any skill fails, so it can
 gate CI. The router bets everything on frontmatter quality; this enforces it.
 
-Per skill, checks:
+Per skill, checks the agentskills.io Agent Skills spec plus the stricter
+AgtMLS router contract:
+
+  spec (https://agentskills.io/specification.md)
   - a YAML frontmatter block (--- ... ---) that parses;
-  - `name` present, kebab-case, and equal to the skill's directory name;
-  - `description` present, <= MAX_DESC chars (Claude Code truncates beyond
-    this), and containing a trigger cue (a "when"/"use for"/"trigger" phrase
-    that tells the router when to load the skill);
+  - only the six specified keys — anything else fails validation;
+  - `name` present, 1-MAX_NAME chars, kebab-case, no consecutive hyphens,
+    and equal to the skill's directory name;
+  - `description` present and <= MAX_DESC chars;
+  - `compatibility`, when present, <= MAX_COMPAT chars;
+  - `metadata`, when present, a mapping of string keys to string values;
+  - body <= MAX_BODY_LINES lines, so activation stays inside the
+    progressive-disclosure budget.
+
+  AgtMLS additions
+  - `description` contains a trigger cue (a "when"/"use for"/"trigger"
+    phrase that tells the router when to load the skill);
   - a top-level `# ` heading in the body.
 
 The idea (a validator guarding the skill catalog) is adopted from
@@ -23,9 +34,17 @@ import sys
 from pathlib import Path
 
 MAX_DESC = 1024  # Claude Code silently truncates descriptions beyond this.
+MAX_NAME = 64  # Spec cap on `name`.
+MAX_COMPAT = 500  # Spec cap on `compatibility`.
+MAX_BODY_LINES = 500  # Spec guidance: keep SKILL.md under 500 lines.
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
+
+# The spec's closed key set. A key outside this set fails validation in
+# `skills-ref validate`, so it must fail here too or the catalog ships
+# skills that other runtimes reject.
+SPEC_KEYS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 
 KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 # A trigger cue: something that tells the router WHEN to load the skill
@@ -74,6 +93,13 @@ def check(skill_md: Path) -> list[str]:
         return [err]
     assert fields is not None
 
+    unknown = sorted(set(fields) - SPEC_KEYS)
+    if unknown:
+        errors.append(
+            "frontmatter key(s) outside the Agent Skills spec: "
+            + ", ".join(f"`{key}`" for key in unknown)
+        )
+
     name = fields.get("name", "")
     if not name:
         errors.append("missing `name`")
@@ -82,6 +108,24 @@ def check(skill_md: Path) -> list[str]:
             errors.append(f"`name` ({name!r}) != directory name ({dirname!r})")
         if not KEBAB.match(name):
             errors.append(f"`name` is not kebab-case: {name!r}")
+        if len(name) > MAX_NAME:
+            errors.append(f"`name` too long: {len(name)} > {MAX_NAME} chars")
+
+    compat = fields.get("compatibility")
+    if compat is not None:
+        flat_compat = re.sub(r"\s+", " ", compat).strip()
+        if not flat_compat:
+            errors.append("`compatibility` present but empty")
+        elif len(flat_compat) > MAX_COMPAT:
+            errors.append(f"`compatibility` too long: {len(flat_compat)} > {MAX_COMPAT} chars")
+
+    metadata = fields.get("metadata")
+    if metadata is not None:
+        if not metadata.strip():
+            errors.append("`metadata` present but empty")
+        for line in metadata.split("\n"):
+            if line.strip() and not re.match(r"^[A-Za-z0-9_.-]+:[ \t]*\S", line.strip()):
+                errors.append(f"`metadata` must be flat string key/value pairs: {line.strip()!r}")
 
     desc = fields.get("description", "")
     if not desc:
@@ -97,6 +141,13 @@ def check(skill_md: Path) -> list[str]:
     body = parts[1] if len(parts) > 1 else ""
     if not re.search(r"^#[ \t]+\S", body, re.MULTILINE):
         errors.append("body has no top-level `# ` heading")
+
+    lines = len(text.splitlines())
+    if lines > MAX_BODY_LINES:
+        errors.append(
+            f"SKILL.md too long: {lines} > {MAX_BODY_LINES} lines "
+            "(move detail into reference.md)"
+        )
 
     return errors
 

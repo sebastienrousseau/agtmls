@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # cross-language-port — trigger & routing corpus
 
 A fixture that pins *when this skill should load*. Each prompt has an

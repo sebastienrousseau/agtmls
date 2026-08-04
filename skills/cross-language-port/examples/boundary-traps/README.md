@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # Boundary traps — runnable seam tests
 
 When a port leaves a **live seam** between two languages (a service shelling

@@ -24,7 +24,8 @@ def main() -> int:
         proc = subprocess.run([sys.executable, str(SCRIPT), str(source), "--name", "External Skill", "--out-root", str(out_root)], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
         if proc.returncode != 0:
             errors.append(f"import failed:\n{proc.stdout}")
-        target = out_root / "skills" / "imported" / "external-skill"
+        # Flat tree: --bundle is recorded in metadata.json, not a subdirectory.
+        target = out_root / "skills" / "external-skill"
         if not (target / "SKILL.md").exists():
             errors.append("import missing SKILL.md")
         if not (target / "reference.md").exists():
