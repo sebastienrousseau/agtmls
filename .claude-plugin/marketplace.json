@@ -1,0 +1,35 @@
+{
+  "description": "The universal agent skills registry — polyglot engineering skills, system prompts, and commands for Claude Code and compatible agents.",
+  "name": "agtmls",
+  "owner": {
+    "name": "Sebastien Rousseau",
+    "url": "https://github.com/sebastienrousseau"
+  },
+  "plugins": [
+    {
+      "author": {
+        "name": "Sebastien Rousseau"
+      },
+      "category": "engineering",
+      "commands": "./commands",
+      "description": "The universal agent skills registry — polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
+      "displayName": "AgtMLS",
+      "homepage": "https://github.com/sebastienrousseau/agtmls",
+      "keywords": [
+        "skills",
+        "registry",
+        "polyglot",
+        "porting",
+        "security",
+        "release"
+      ],
+      "license": "MIT",
+      "name": "agtmls",
+      "repository": "https://github.com/sebastienrousseau/agtmls",
+      "skills": "./skills",
+      "source": "./",
+      "version": "0.0.3"
+    }
+  ],
+  "version": "0.0.3"
+}
