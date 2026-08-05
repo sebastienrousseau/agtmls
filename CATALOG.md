@@ -4,7 +4,7 @@
 
 # AgtMLS Catalog
 
-Registry version: `0.0.4`
+Registry version: `0.0.5`
 Skills: `30`
 Commands: `4`
 

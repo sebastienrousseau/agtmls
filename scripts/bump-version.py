@@ -78,14 +78,23 @@ def update_changelog(version: str, today: str) -> None:
     marker = "## Unreleased\n"
     if marker not in text:
         raise SystemExit("CHANGELOG.md missing ## Unreleased")
-    entry = (
-        f"## Unreleased\n\n"
-        f"## {version} - {today}\n\n"
-        "### Changed\n\n"
-        "- Bumped release metadata through the guarded patch-line release flow.\n\n"
-    )
-    text = text.replace(marker, entry, 1)
-    path.write_text(text, encoding="utf-8")
+    # Move whatever accumulated under Unreleased into the new version, rather
+    # than inserting boilerplate above it. Otherwise a release that adds four
+    # skills is headlined "bumped release metadata", and the real entries read
+    # as if they belong to an older version.
+    head, _, rest = text.partition(marker)
+    body, sep, tail = rest.partition("\n## ")
+    accumulated = body.strip()
+    if accumulated:
+        entry = f"## Unreleased\n\n## {version} - {today}\n\n{accumulated}\n\n"
+    else:
+        entry = (
+            f"## Unreleased\n\n"
+            f"## {version} - {today}\n\n"
+            "### Changed\n\n"
+            "- Bumped release metadata through the guarded patch-line release flow.\n\n"
+        )
+    path.write_text(head + entry + (sep + tail if sep else ""), encoding="utf-8")
 
 
 def main() -> int:
