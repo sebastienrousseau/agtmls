@@ -47,7 +47,7 @@
     "average_score": 100,
     "total": 30
   },
-  "registry_version": "0.0.4",
+  "registry_version": "0.0.5",
   "schema_version": 1,
   "skill_count": 30,
   "skills": [
@@ -112,7 +112,7 @@
         "review",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -174,7 +174,7 @@
         "security",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -237,7 +237,7 @@
         "config",
         "planning"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -304,7 +304,7 @@
       "tags": [
         "porting"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -366,7 +366,7 @@
         "ci",
         "review"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -428,7 +428,7 @@
         "continuity",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -492,7 +492,7 @@
         "debugging",
         "incident"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -562,7 +562,7 @@
         "incident",
         "noyalib"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -632,7 +632,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -702,7 +702,7 @@
         "release",
         "security"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -771,7 +771,7 @@
         "noyalib",
         "release"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -839,7 +839,7 @@
         "config",
         "noyalib"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -908,7 +908,7 @@
         "debugging",
         "noyalib"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -978,7 +978,7 @@
         "noyalib",
         "qa"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1048,7 +1048,7 @@
         "noyalib",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1120,7 +1120,7 @@
         "qa",
         "release"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1191,7 +1191,7 @@
         "review",
         "yaml"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1262,7 +1262,7 @@
         "refactoring",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1331,7 +1331,7 @@
         "research",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1401,7 +1401,7 @@
         "qa",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1467,7 +1467,7 @@
         "release",
         "review"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1530,7 +1530,7 @@
         "ci",
         "review"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1592,7 +1592,7 @@
       "tags": [
         "refactoring"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1657,7 +1657,7 @@
         "debugging",
         "qa"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1722,7 +1722,7 @@
         "qa",
         "refactoring"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1783,7 +1783,7 @@
         "porting",
         "routing"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1845,7 +1845,7 @@
         "qa",
         "validation"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1911,7 +1911,7 @@
         "validation",
         "web-reach"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -1975,7 +1975,7 @@
         "planning",
         "review"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     },
     {
       "allowed_tools": [
@@ -2044,7 +2044,7 @@
         "noyalib",
         "yaml"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     }
   ]
 }

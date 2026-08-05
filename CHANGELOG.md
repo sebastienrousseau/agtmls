@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.5 - 2026-08-04
+
 ### Added
 
 - Four general skills: `brainstorming` (pin down a vague ask before planning),
@@ -31,6 +33,16 @@ All notable changes to AgtMLS are recorded here.
 - `validate-licence-headers.py` did not know `agents/*.md` is frontmatter-first
   like `SKILL.md`, so it demanded a leading comment that would have broken
   agent parsing.
+- `bump-version.py` inserted its boilerplate *above* the accumulated
+  `Unreleased` entries, so a release adding four skills was headlined "bumped
+  release metadata". It now moves the accumulated entries into the new
+  version.
+
+### Changed
+
+- CI actions moved off the deprecated Node 20 runtime: `actions/checkout` v4
+  to v7, `actions/setup-python` v5 to v7, `actions/attest-build-provenance`
+  v2 to v4.
 
 ## 0.0.4 - 2026-08-04
 

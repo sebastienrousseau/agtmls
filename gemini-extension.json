@@ -2,5 +2,5 @@
   "contextFileName": "GEMINI.md",
   "description": "The universal agent skills registry — polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
   "name": "agtmls",
-  "version": "0.0.4"
+  "version": "0.0.5"
 }

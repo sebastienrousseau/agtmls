@@ -7,7 +7,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "e446037e00fab3e3503fc0ff39866ce3fcfb134e5f3dd70eb252a7661330e412"
+          "checksumValue": "18ba792c7fcd205bf87ca14f2d577b39150f74134d733f16a8eb0b592a1d4665"
         }
       ],
       "fileName": "skills/agent-loop-design/SKILL.md"
@@ -16,7 +16,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "62da3959debf9af3ff12eb0b85f9d34c9b067bf216c3559a34f9f957527956d1"
+          "checksumValue": "5facd39876945a1bf5acdfd1276d9d24675bbc2b9022b486ca57673c6f44631b"
         }
       ],
       "fileName": "skills/agent-loop-design/metadata.json"
@@ -34,7 +34,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "b5b81c5d4a41cd70989c990d31ea660f8f0f5b8c9b6130ec2e02d2e33d1ef25c"
+          "checksumValue": "efaeb6ba3eb08e1ff941861aebb47deb8f7644441e202293cdb2bcbdf376badd"
         }
       ],
       "fileName": "skills/ai-supply-chain-security/SKILL.md"
@@ -43,7 +43,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "0bcf240b26c30c8ecac136da5615a28036420c6ea9ec804fc3d6ea4b466008d1"
+          "checksumValue": "3048190d93498d07fbe33f7301bd1a0f9497fd52d5add852be8082d62ce32dbb"
         }
       ],
       "fileName": "skills/ai-supply-chain-security/metadata.json"
@@ -61,7 +61,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3d41d8a040180ad131e86960545f359821b304f564575abf51739f8016323a3a"
+          "checksumValue": "8d38019adf23a4d1c95f9732d665661172b8be71aa8c91115342b311b879e96d"
         }
       ],
       "fileName": "skills/brainstorming/SKILL.md"
@@ -70,7 +70,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "81c18616e9b0dff9ecaebd3b773cd29d6e9e5c1326c2cd2fc734d190f3d95dc3"
+          "checksumValue": "de313301b6421dff7c13ee9e39025a436409acb0a7daad7d9f4b5f7dddb9b48f"
         }
       ],
       "fileName": "skills/brainstorming/metadata.json"
@@ -88,7 +88,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "18b5b9f7620768eb0da4c4cf125ba2427934429e574c5aaca445aac9d850af3e"
+          "checksumValue": "ec427ff40f36a1742399434a1052c274fb765a1b69905f51e50717199bf75760"
         }
       ],
       "fileName": "skills/cross-language-port/SKILL.md"
@@ -628,7 +628,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "2f54b555c4a5c9d947cdc672fe34c3e001b10f02e9b385d1935d12845715bf92"
+          "checksumValue": "43a2dac0aa88363d135fce090625cb773511a267220e024df5a354132e098f78"
         }
       ],
       "fileName": "skills/cross-language-port/metadata.json"
@@ -655,7 +655,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "b8e8b6b88ae3b14647c9881dc274aea48becd5b50e3376a043ca8bed2fdfba8d"
+          "checksumValue": "723ef4a8e4a1788ff6a0471e1e007d8f9ffc44a5890ce68d26c032ce96cce97b"
         }
       ],
       "fileName": "skills/giving-code-review/SKILL.md"
@@ -664,7 +664,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "81c18616e9b0dff9ecaebd3b773cd29d6e9e5c1326c2cd2fc734d190f3d95dc3"
+          "checksumValue": "de313301b6421dff7c13ee9e39025a436409acb0a7daad7d9f4b5f7dddb9b48f"
         }
       ],
       "fileName": "skills/giving-code-review/metadata.json"
@@ -682,7 +682,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "5d880db47491b8890e964ba3b5d34e7c7df6fa056526ea803d58de48f6247ec8"
+          "checksumValue": "e6120405bdd44c60326e4895d09eaec66c1586fdff8aeeb355135cf14dad7a60"
         }
       ],
       "fileName": "skills/handoff/SKILL.md"
@@ -691,7 +691,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "81c18616e9b0dff9ecaebd3b773cd29d6e9e5c1326c2cd2fc734d190f3d95dc3"
+          "checksumValue": "de313301b6421dff7c13ee9e39025a436409acb0a7daad7d9f4b5f7dddb9b48f"
         }
       ],
       "fileName": "skills/handoff/metadata.json"
@@ -709,7 +709,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "6209df09936d37cee3724c458cf1421d4297224b71e462c5866c851dc68d110e"
+          "checksumValue": "e5229c2683918afd5f34632df3161da558b59f8136a4aaa4b408c22dbffc832e"
         }
       ],
       "fileName": "skills/incident-response/SKILL.md"
@@ -718,7 +718,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4a7847adc759264127ae6a48982463326f17a3b0717418987963920ad616f019"
+          "checksumValue": "d2cc163487f93d2a804982e2bbdcc77c7652f165ea44a6540ed60ec6df211769"
         }
       ],
       "fileName": "skills/incident-response/metadata.json"
@@ -736,7 +736,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "cde54abeada12065f9197be828a28e69505acb24f944f5734b390959c8b6a034"
+          "checksumValue": "cb84e097d64406ba255599891b22de8bfe0fbd4f777668e0d66400bd817ecbd9"
         }
       ],
       "fileName": "skills/noyalib-architecture-contract/SKILL.md"
@@ -745,7 +745,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-architecture-contract/metadata.json"
@@ -763,7 +763,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "91befc5617e42c1e74520754e7cab9475d734e11595d7a215171323a7aa3f5cc"
+          "checksumValue": "408f25db778d0c8fdd34501b2122d29b24376880483b462c7d296e9bc3177ba0"
         }
       ],
       "fileName": "skills/noyalib-build-and-env/SKILL.md"
@@ -772,7 +772,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-build-and-env/metadata.json"
@@ -790,7 +790,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "99582c994d8826c5c7ba9f74a8fb80b9867be34918bdaae1eb6ad077b9125b18"
+          "checksumValue": "e4f382a414263a3e4fa928060bf8447a63c07a0a5d31fccb3f2db50d1c76de3b"
         }
       ],
       "fileName": "skills/noyalib-change-control/SKILL.md"
@@ -799,7 +799,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-change-control/metadata.json"
@@ -817,7 +817,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "b27e3408dd64654fe2f0033a0041d82cddcd313eed3c2fb5e692d9e0fc9f4cd2"
+          "checksumValue": "af38c1ac09c0d420b75f0fe0788acacfbecf0a80eb6d306cb5c218edb4dbb39b"
         }
       ],
       "fileName": "skills/noyalib-ci-and-release/SKILL.md"
@@ -826,7 +826,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-ci-and-release/metadata.json"
@@ -844,7 +844,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "36725961f9de15a0d0f630de0c3df04962f5a02459269713c83f370c256362f0"
+          "checksumValue": "eada3b3b2c52106f2575f3d685d33c31a24ee462bd55e029ca8ee4a4079f2205"
         }
       ],
       "fileName": "skills/noyalib-config-and-flags/SKILL.md"
@@ -853,7 +853,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-config-and-flags/metadata.json"
@@ -871,7 +871,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "7ddc6c2d2b2124a6c3d41a8efbc8c211a74a127d3c80a6383724c151e93ce2f3"
+          "checksumValue": "a3ee51a206464d261a463373532b34aa0b60708717b17ec2f9bc86b0ede1cf39"
         }
       ],
       "fileName": "skills/noyalib-coverage-campaign/SKILL.md"
@@ -880,7 +880,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-coverage-campaign/metadata.json"
@@ -898,7 +898,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3938c52326346c8195618c7591db844d3c7fb1313835b9e8e4a2ff49503e99a9"
+          "checksumValue": "4b7439b58dfe580a31ebc52d4e0d7a9a4e18820c071aa7d405bb2d9706512aab"
         }
       ],
       "fileName": "skills/noyalib-debugging-playbook/SKILL.md"
@@ -907,7 +907,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-debugging-playbook/metadata.json"
@@ -925,7 +925,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "3f24b72b292c29a29e3af24402e99e2950a816655f5919bd62405404c8c3fcdd"
+          "checksumValue": "434a7529277445bb6151de96daa83e977af1edb1e169e76c02f71f487a08dbc9"
         }
       ],
       "fileName": "skills/noyalib-diagnostics-and-tooling/SKILL.md"
@@ -934,7 +934,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-diagnostics-and-tooling/metadata.json"
@@ -952,7 +952,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "fb48a722a5d83d70e4134be65e61c660ec2ef87d916f9152c9a4dcd415dde5f6"
+          "checksumValue": "2271d528d9653e32815d55ce15339236aa39cbf338e62883438383f8f868197d"
         }
       ],
       "fileName": "skills/noyalib-docs-and-writing/SKILL.md"
@@ -961,7 +961,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-docs-and-writing/metadata.json"
@@ -979,7 +979,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "e1eab4425ee77397c316b3e7d0e0b3e1f5461d5b82dd86d47c277a9d03f32ddc"
+          "checksumValue": "f029ee22546430f9cdd82448606748bfd352e39d38984ccdd49ca1279b721b8e"
         }
       ],
       "fileName": "skills/noyalib-external-positioning/SKILL.md"
@@ -988,7 +988,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-external-positioning/metadata.json"
@@ -1006,7 +1006,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "1da1a51ad9e1c79536c9716dbbc33e56dd39edb9ce23d437209330a92b336547"
+          "checksumValue": "5d172e6b719446e810bffb7c8fa8f2697b2af393bbbdd82b4fadc728d8962186"
         }
       ],
       "fileName": "skills/noyalib-failure-archaeology/SKILL.md"
@@ -1015,7 +1015,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-failure-archaeology/metadata.json"
@@ -1033,7 +1033,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "8e6bdcca14c0fca15594a7654412fef65994a14f137e607f1415ba69cb025e92"
+          "checksumValue": "cafd6f406920a30e344d69e54b8eb5c40fee369f9463f66f72a78b0a45f5f36c"
         }
       ],
       "fileName": "skills/noyalib-research-frontier/SKILL.md"
@@ -1042,7 +1042,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-research-frontier/metadata.json"
@@ -1060,7 +1060,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "2833954ac31563825531f918f5e40c65dbad07cc96f178649f4758420771e179"
+          "checksumValue": "097f9c71391452598d550b7a6536861d86fe810dd1dd398ebe7abec2b3bd4d2d"
         }
       ],
       "fileName": "skills/noyalib-validation-and-qa/SKILL.md"
@@ -1069,7 +1069,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/noyalib-validation-and-qa/metadata.json"
@@ -1087,7 +1087,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "386e8ae2bcf6a7b894d8c740e1c975734b334243de0f772b3f6d52672423368b"
+          "checksumValue": "d214a51adf2ed4ce66cc91b611844b641f609ad90c36b81a00bc2bdbcf224870"
         }
       ],
       "fileName": "skills/pr-review-and-release/SKILL.md"
@@ -1096,7 +1096,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "a8a8c328b890bdba4c1c737968ec615798cbb5e97b524ceff1294c77c9dcc799"
+          "checksumValue": "6446f3f445a1caa9cf007c2e90514477df46700ca85bd4a3e1a6e4c210e9bba8"
         }
       ],
       "fileName": "skills/pr-review-and-release/metadata.json"
@@ -1114,7 +1114,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "13b7fc961a740ce0a02b58dc4046f77b86ce5c69b3a1099e5e3cb986d46456b9"
+          "checksumValue": "fb53492eed273917e4ed8cfbf75f8695dc393830b289e60db31f7cf9fc816b09"
         }
       ],
       "fileName": "skills/receiving-code-review/SKILL.md"
@@ -1123,7 +1123,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4a7847adc759264127ae6a48982463326f17a3b0717418987963920ad616f019"
+          "checksumValue": "d2cc163487f93d2a804982e2bbdcc77c7652f165ea44a6540ed60ec6df211769"
         }
       ],
       "fileName": "skills/receiving-code-review/metadata.json"
@@ -1141,7 +1141,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "6d52959a9cfc248774e70c9f677a09432c0adccc441bdb1e2d2d9f751b0faede"
+          "checksumValue": "2e8108199381700d88b947f94453bd5c6bf3673b8472939fa34d73e9648883d8"
         }
       ],
       "fileName": "skills/refactoring-safely/SKILL.md"
@@ -1150,7 +1150,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4a7847adc759264127ae6a48982463326f17a3b0717418987963920ad616f019"
+          "checksumValue": "d2cc163487f93d2a804982e2bbdcc77c7652f165ea44a6540ed60ec6df211769"
         }
       ],
       "fileName": "skills/refactoring-safely/metadata.json"
@@ -1168,7 +1168,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "bb24c04b31721506e39c2262b4c390c7ce0559a5823731948517ae2252f238f7"
+          "checksumValue": "9f3ba308848bb6d426528ca0c8d31303016a51c2c04e4eeaa2ef55b48c88a513"
         }
       ],
       "fileName": "skills/systematic-debugging/SKILL.md"
@@ -1177,7 +1177,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "2bdbb233eb746a837b52fc3454d65a2ccf9581b1de07d5f6ea8db2d9cfe783b5"
+          "checksumValue": "a17f89326a281db35ab66d9e781b8f9a543b1a00d292326758ff7911c4eea9e0"
         }
       ],
       "fileName": "skills/systematic-debugging/metadata.json"
@@ -1195,7 +1195,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "5b7c485ed99f6ed7fc17e504517901b00291da9cb2322da84e18ef2e70e4cddc"
+          "checksumValue": "8311a2cb79fc8245daa376ff84121b5b58bc6b4a202b3ab1d9361e25afa0b38a"
         }
       ],
       "fileName": "skills/test-driven-development/SKILL.md"
@@ -1204,7 +1204,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "c4364738555124b81b6d419a086ac0c489700cfdcf685c79954dfc383e4d1b02"
+          "checksumValue": "9910dc3c3952941d6a0c60cf47c96d74ff494430b6d9eac0a3fc543e34a05de9"
         }
       ],
       "fileName": "skills/test-driven-development/metadata.json"
@@ -1222,7 +1222,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "81020a2f0e6096da03d49bae4510b8a1d1b9d77389de3827f92e41f80d75c554"
+          "checksumValue": "1f308cefaf86e26f53ec8e990abe328927745fbb3a6ab18e189bfac9323b40dd"
         }
       ],
       "fileName": "skills/using-agtmls/SKILL.md"
@@ -1231,7 +1231,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "38f8a6492a8a086926607450990ac18748c28cba066e8dddbe20afa0b3f864ff"
+          "checksumValue": "18b75b815f31b2e5ccfbed3a7fa9d589d66346a3ed23d2c7de98b6df090af46d"
         }
       ],
       "fileName": "skills/using-agtmls/metadata.json"
@@ -1249,7 +1249,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "99db6811f2455cac1fd530fb05ac9525d8ca93f730ff6617e256b825b22d3a9a"
+          "checksumValue": "458f8d8e006d9aeb5b5f2ca3213550d6b4cf254b48f0b230b214d0a73f533f49"
         }
       ],
       "fileName": "skills/verification-before-completion/SKILL.md"
@@ -1258,7 +1258,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "b831bdb94009cd548d64bd70bc66e299fafc8e22e549c504724822ef4d237904"
+          "checksumValue": "e54d338ebc6fdec08289458d050666ce6e33f0b95078a09f8801bdb3ca1f913a"
         }
       ],
       "fileName": "skills/verification-before-completion/metadata.json"
@@ -1276,7 +1276,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "c0c9e9155004d14f241319e17915a9caa72fa1a4cb23234072939023b77df96a"
+          "checksumValue": "373da9a602257dcc19e3e357bb93c19db54cd4aaeb624e9036bc7830be4f5b3b"
         }
       ],
       "fileName": "skills/web-research-and-source-triage/SKILL.md"
@@ -1285,7 +1285,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "6fc4f151fc346ab89232f0f9ac15edc80fda7c6a740a8a7cbebada06e0e2488f"
+          "checksumValue": "08b8aed8d761ab2bb5f9d7c772d8fa0ff064037779a53d417ab3a45e154f4500"
         }
       ],
       "fileName": "skills/web-research-and-source-triage/metadata.json"
@@ -1303,7 +1303,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "6be5433ce9871d9e947862e400df1203023e8f2526d0301abe533d55cae61399"
+          "checksumValue": "0bb4121828079a1f3c7f512ed082c20da5ad9ea73d78e8ba8ecf7c68e0c73636"
         }
       ],
       "fileName": "skills/writing-plans/SKILL.md"
@@ -1312,7 +1312,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "81c18616e9b0dff9ecaebd3b773cd29d6e9e5c1326c2cd2fc734d190f3d95dc3"
+          "checksumValue": "de313301b6421dff7c13ee9e39025a436409acb0a7daad7d9f4b5f7dddb9b48f"
         }
       ],
       "fileName": "skills/writing-plans/metadata.json"
@@ -1330,7 +1330,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "b6d7dac7067d9d5086c1a262025960d2db59560c4331171ed714e414ba460a9d"
+          "checksumValue": "150af40b85485fd1bdbc2c5353c3e9e6b25dd90e8dfb972e884562cb34fee0c9"
         }
       ],
       "fileName": "skills/yaml-domain-reference/SKILL.md"
@@ -1339,7 +1339,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "d5954d0ae0d86bbc9f2f02988d268bd767c3b9295cacb97594568ff5410c365d"
+          "checksumValue": "521f00b1b8e42991fcd306bac462b396b01b628618ed908448c1053bddf10acf"
         }
       ],
       "fileName": "skills/yaml-domain-reference/metadata.json"
@@ -1384,7 +1384,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "c3dd8ad63fd35ee3962c816e07323ae8429eb76582f25f6c49ef8674606d7e62"
+          "checksumValue": "43926dc79ee424a4d3c6db27ecb8bf0f925942a6881fbfb5a0a84ce790249596"
         }
       ],
       "fileName": "scripts/bump-version.py"
@@ -1483,7 +1483,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "4c755601bdfdd815b898a7e4c72bd12d346ce17722f78eabba693f0d306cb253"
+          "checksumValue": "d9829971d8d6124691e35da7cc7a6a7088de08ebbcd4d5d6a6d5c9d9d9398705"
         }
       ],
       "fileName": "scripts/generate-skill-index.py"
@@ -1492,7 +1492,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "c31a7a43332c3569c431655a9afa54dc49b45e0a8914e0a5aef09fc89ea070d0"
+          "checksumValue": "ce30af2b4aa29d64191effb69a6e318b84d5afd6166d54367df835be4c3c2221"
         }
       ],
       "fileName": "scripts/import-skill.py"
