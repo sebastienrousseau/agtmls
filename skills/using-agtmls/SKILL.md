@@ -36,11 +36,14 @@ helps you pick the right skill (or decide none applies) before loading one.
 
    | Phase | Skill | Load when |
    | --- | --- | --- |
+   | Specify | **`brainstorming`** | The ask is vague and needs pinning down before anything is planned |
    | Decompose | **`writing-plans`** | Work spans several files or sessions and needs steps with done-conditions |
    | Build | **`test-driven-development`** | Adding or changing behaviour — red test first |
    | Diagnose | **`systematic-debugging`** | Something is broken and the cause is unknown |
    | Finish | **`verification-before-completion`** | About to claim done, fixed, or working |
-   | Review | **`receiving-code-review`** | A reviewer left comments or requested changes |
+   | Restructure | **`refactoring-safely`** | Changing shape without changing behaviour |
+   | Firefight | **`incident-response`** | Something is broken in production right now |
+   | Review | **`giving-code-review`** / **`receiving-code-review`** | Reading someone's change, or answering feedback on yours |
    | Pause | **`handoff`** | Work is unfinished and continuity is about to break |
 
    They compose in that order and hand off to each other. A project bundle's

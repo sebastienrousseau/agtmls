@@ -5,42 +5,49 @@
 # AgtMLS Catalog
 
 Registry version: `0.0.4`
-Skills: `26`
-Commands: `1`
+Skills: `30`
+Commands: `4`
 
 ## Skills
 
 | Name | Bundle | Tags | Path |
 |---|---|---|---|
-| `agent-loop-design` | `loops` | loops, validation | `skills/agent-loop-design` |
+| `agent-loop-design` | `loops` | loops, review, validation | `skills/agent-loop-design` |
 | `ai-supply-chain-security` | `security` | release, security, validation | `skills/ai-supply-chain-security` |
+| `brainstorming` | `general` | ci, config, planning | `skills/brainstorming` |
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
-| `handoff` | `general` | validation | `skills/handoff` |
-| `noyalib-architecture-contract` | `noyalib` | architecture, ci, noyalib | `skills/noyalib-architecture-contract` |
+| `giving-code-review` | `general` | ci, review | `skills/giving-code-review` |
+| `handoff` | `general` | continuity, validation | `skills/handoff` |
+| `incident-response` | `general` | ci, debugging, incident | `skills/incident-response` |
+| `noyalib-architecture-contract` | `noyalib` | architecture, ci, incident, noyalib | `skills/noyalib-architecture-contract` |
 | `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `skills/noyalib-build-and-env` |
 | `noyalib-change-control` | `noyalib` | ci, noyalib, release, security | `skills/noyalib-change-control` |
 | `noyalib-ci-and-release` | `noyalib` | ci, noyalib, release | `skills/noyalib-ci-and-release` |
 | `noyalib-config-and-flags` | `noyalib` | config, noyalib | `skills/noyalib-config-and-flags` |
 | `noyalib-coverage-campaign` | `noyalib` | coverage, debugging, noyalib | `skills/noyalib-coverage-campaign` |
-| `noyalib-debugging-playbook` | `noyalib` | debugging, noyalib, qa | `skills/noyalib-debugging-playbook` |
+| `noyalib-debugging-playbook` | `noyalib` | ci, debugging, noyalib, qa | `skills/noyalib-debugging-playbook` |
 | `noyalib-diagnostics-and-tooling` | `noyalib` | coverage, diagnostics, noyalib, validation | `skills/noyalib-diagnostics-and-tooling` |
 | `noyalib-docs-and-writing` | `noyalib` | architecture, ci, docs, noyalib, qa, release | `skills/noyalib-docs-and-writing` |
-| `noyalib-external-positioning` | `noyalib` | docs, noyalib, release, yaml | `skills/noyalib-external-positioning` |
-| `noyalib-failure-archaeology` | `noyalib` | ci, noyalib, validation | `skills/noyalib-failure-archaeology` |
+| `noyalib-external-positioning` | `noyalib` | docs, noyalib, release, review, yaml | `skills/noyalib-external-positioning` |
+| `noyalib-failure-archaeology` | `noyalib` | ci, incident, noyalib, refactoring, validation | `skills/noyalib-failure-archaeology` |
 | `noyalib-research-frontier` | `noyalib` | noyalib, research, validation | `skills/noyalib-research-frontier` |
 | `noyalib-validation-and-qa` | `noyalib` | diagnostics, noyalib, qa, validation | `skills/noyalib-validation-and-qa` |
-| `pr-review-and-release` | `engineering` | ci, docs, engineering, release | `skills/pr-review-and-release` |
-| `receiving-code-review` | `general` | ci | `skills/receiving-code-review` |
+| `pr-review-and-release` | `engineering` | ci, docs, engineering, release, review | `skills/pr-review-and-release` |
+| `receiving-code-review` | `general` | ci, review | `skills/receiving-code-review` |
+| `refactoring-safely` | `general` | refactoring | `skills/refactoring-safely` |
 | `systematic-debugging` | `general` | debugging, qa | `skills/systematic-debugging` |
-| `test-driven-development` | `general` | qa | `skills/test-driven-development` |
+| `test-driven-development` | `general` | qa, refactoring | `skills/test-driven-development` |
 | `using-agtmls` | `general` | noyalib, porting, routing | `skills/using-agtmls` |
 | `verification-before-completion` | `general` | porting, qa, validation | `skills/verification-before-completion` |
 | `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-research-and-source-triage` |
-| `writing-plans` | `general` | docs | `skills/writing-plans` |
+| `writing-plans` | `general` | continuity, docs, planning, review | `skills/writing-plans` |
 | `yaml-domain-reference` | `noyalib` | config, noyalib, yaml | `skills/yaml-domain-reference` |
 
 ## Commands
 
 | Name | Description | Path |
 |---|---|---|
+| `agtmls-audit` | Audit the registry for routing decay, spec drift, and stale artifacts. | `commands/agtmls-audit.md` |
+| `agtmls-new-skill` | Scaffold a new AgtMLS skill with its metadata and both eval cases. | `commands/agtmls-new-skill.md` |
+| `agtmls-release` | Walk the guarded AgtMLS release flow from version bump to published artifacts. | `commands/agtmls-release.md` |
 | `agtmls` | Run the local AgtMLS registry health check. | `commands/agtmls.md` |

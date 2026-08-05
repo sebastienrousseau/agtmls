@@ -1,0 +1,24 @@
+{
+  "skill": "refactoring-safely",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "not a refactor",
+      "characterisation",
+      "One transformation at a time",
+      "Never mix in behaviour"
+    ],
+    "reference_contains": [
+      "Building a characterisation net",
+      "Safe sequences"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "mix behaviour into a refactor",
+      "change tests to match"
+    ]
+  }
+}

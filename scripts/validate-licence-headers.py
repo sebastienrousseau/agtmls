@@ -20,7 +20,7 @@ SPDX = "SPDX-License-Identifier"
 # Directories that are not ours to header.
 SKIP_DIRS = {".git", "dist", "__pycache__", ".ruff_cache", ".agtmls", "node_modules"}
 FRONTMATTER_FIRST = {"SKILL.md"}
-FRONTMATTER_DIRS = {"commands"}
+FRONTMATTER_DIRS = {"commands", "agents"}
 
 
 def frontmatter_licence(text: str) -> bool:

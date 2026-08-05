@@ -1,4 +1,8 @@
 {
+  "agents": [
+    "./agents/registry-auditor.md",
+    "./agents/skill-author.md"
+  ],
   "author": {
     "name": "Sebastien Rousseau"
   },

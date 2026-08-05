@@ -15,6 +15,13 @@
       "uri": "agtmls://skills/ai-supply-chain-security"
     },
     {
+      "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
+      "mimeType": "text/markdown",
+      "name": "brainstorming",
+      "path": "skills/brainstorming/SKILL.md",
+      "uri": "agtmls://skills/brainstorming"
+    },
+    {
       "description": "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns.",
       "mimeType": "text/markdown",
       "name": "cross-language-port",
@@ -22,11 +29,25 @@
       "uri": "agtmls://skills/cross-language-port"
     },
     {
+      "description": "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently.",
+      "mimeType": "text/markdown",
+      "name": "giving-code-review",
+      "path": "skills/giving-code-review/SKILL.md",
+      "uri": "agtmls://skills/giving-code-review"
+    },
+    {
       "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
       "mimeType": "text/markdown",
       "name": "handoff",
       "path": "skills/handoff/SKILL.md",
       "uri": "agtmls://skills/handoff"
+    },
+    {
+      "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
+      "mimeType": "text/markdown",
+      "name": "incident-response",
+      "path": "skills/incident-response/SKILL.md",
+      "uri": "agtmls://skills/incident-response"
     },
     {
       "description": "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology).",
@@ -71,7 +92,7 @@
       "uri": "agtmls://skills/noyalib-coverage-campaign"
     },
     {
-      "description": "Symptom-driven triage for noyalib: failing tests, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
+      "description": "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
       "mimeType": "text/markdown",
       "name": "noyalib-debugging-playbook",
       "path": "skills/noyalib-debugging-playbook/SKILL.md",
@@ -120,18 +141,25 @@
       "uri": "agtmls://skills/noyalib-validation-and-qa"
     },
     {
-      "description": "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+      "description": "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
       "mimeType": "text/markdown",
       "name": "pr-review-and-release",
       "path": "skills/pr-review-and-release/SKILL.md",
       "uri": "agtmls://skills/pr-review-and-release"
     },
     {
-      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when a reviewer leaves comments, requests changes, or disagrees with an approach, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes. Not preparing or shipping the change itself.",
+      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes.",
       "mimeType": "text/markdown",
       "name": "receiving-code-review",
       "path": "skills/receiving-code-review/SKILL.md",
       "uri": "agtmls://skills/receiving-code-review"
+    },
+    {
+      "description": "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits.",
+      "mimeType": "text/markdown",
+      "name": "refactoring-safely",
+      "path": "skills/refactoring-safely/SKILL.md",
+      "uri": "agtmls://skills/refactoring-safely"
     },
     {
       "description": "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing.",

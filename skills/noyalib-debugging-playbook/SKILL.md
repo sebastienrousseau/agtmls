@@ -1,6 +1,6 @@
 ---
 name: noyalib-debugging-playbook
-description: "Symptom-driven triage for noyalib: failing tests, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast."
+description: "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast."
 license: MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"

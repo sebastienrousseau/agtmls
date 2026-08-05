@@ -1,0 +1,13 @@
+{
+  "skill": "brainstorming",
+  "positive": [
+    "this request is vague help me pin down what they want",
+    "build me a dashboard - what should I ask first",
+    "turn this fuzzy ask into acceptance criteria",
+    "what questions should I ask before starting"
+  ],
+  "negative": [
+    "why does this crash",
+    "how do I tag a release"
+  ]
+}

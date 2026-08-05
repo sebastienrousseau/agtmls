@@ -1,0 +1,24 @@
+{
+  "skill": "incident-response",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Stop the bleeding",
+      "Roll back",
+      "timeline",
+      "Mitigate"
+    ],
+    "reference_contains": [
+      "Severity",
+      "mitigation menu"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "debug while the site is down",
+      "skip the write-up"
+    ]
+  }
+}

@@ -81,6 +81,7 @@ esac
 
 mkdir -p "$TARGET_DIR/$CLI_DIR/skills"
 mkdir -p "$TARGET_DIR/$CLI_DIR/commands"
+mkdir -p "$TARGET_DIR/$CLI_DIR/agents"
 
 # 2. Assemble the system prompt (base + language profile) at repo root —
 #    unless --skills-only, in which case only clean up a prompt a previous
@@ -197,6 +198,15 @@ PY
 )
 for b in "${BUNDLES[@]:-}"; do [[ -n "$b" ]] && echo "   + bundle: $b"; done
 if $COPY; then echo "   copied $linked skill(s)"; else echo "   linked $linked skill(s)"; fi
+
+# Agents are subagent definitions; every native layout takes them beside
+# skills and commands. They are general-purpose, so all of them link.
+if compgen -G "$AGTMLS_DIR/agents/*.md" > /dev/null; then
+  for entry in "$AGTMLS_DIR/agents/"*.md; do
+    link_or_copy "$entry" "$TARGET_DIR/$CLI_DIR/agents/$(basename "$entry")"
+  done
+  echo "   + $(ls "$AGTMLS_DIR"/agents/*.md | wc -l | tr -d ' ') agent(s)"
+fi
 
 if compgen -G "$AGTMLS_DIR/commands/*" > /dev/null; then
   for entry in "$AGTMLS_DIR/commands/"*; do

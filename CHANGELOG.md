@@ -7,6 +7,31 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Four general skills: `brainstorming` (pin down a vague ask before planning),
+  `giving-code-review` (the complement to `receiving-code-review`),
+  `refactoring-safely` (shape changes under a characterisation net), and
+  `incident-response` (mitigate first, diagnose after). General skills go from
+  8/26 to 12/30; the noyalib share drops from 53% to 46%.
+- **Subagents**: an `agents/` directory with `skill-author` and
+  `registry-auditor`, wired through `plugin.json`, the marketplace catalog,
+  every generated plugin manifest, `providers.json` (`agents_dir` per native
+  agent), the installer, and the wheel.
+- Three commands — `agtmls-new-skill`, `agtmls-audit`, `agtmls-release` —
+  taking the catalog from 1 to 4.
+- Five index tags the taxonomy lacked: `refactoring`, `review`, `planning`,
+  `incident`, `continuity`.
+
+### Fixed
+
+- `bump-version.py` did not update `.claude-plugin/marketplace.json`, which
+  pins the version twice; the catalog would have advertised the previous
+  release.
+- `validate-licence-headers.py` did not know `agents/*.md` is frontmatter-first
+  like `SKILL.md`, so it demanded a leading comment that would have broken
+  agent parsing.
+
 ## 0.0.4 - 2026-08-04
 
 ### Fixed
