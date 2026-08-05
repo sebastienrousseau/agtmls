@@ -41,6 +41,7 @@ REQUIRED = [
     "scripts",
     "skills",
     "commands",
+    "agents",
     "system-prompts",
     "references",
     "templates",

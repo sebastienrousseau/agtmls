@@ -48,6 +48,7 @@ packages = ["src/agtmls"]
 "scripts" = "agtmls/_registry/scripts"
 "skills" = "agtmls/_registry/skills"
 "commands" = "agtmls/_registry/commands"
+"agents" = "agtmls/_registry/agents"
 "system-prompts" = "agtmls/_registry/system-prompts"
 "references" = "agtmls/_registry/references"
 "templates" = "agtmls/_registry/templates"
@@ -67,6 +68,7 @@ include = [
   "scripts",
   "skills",
   "commands",
+  "agents",
   "system-prompts",
   "references",
   "templates",

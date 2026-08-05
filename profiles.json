@@ -12,9 +12,13 @@
       "description": "General registry usage, cross-language porting, and the engineering-discipline skills.",
       "bundles": [],
       "skills": [
+        "brainstorming",
         "cross-language-port",
+        "giving-code-review",
         "handoff",
+        "incident-response",
         "receiving-code-review",
+        "refactoring-safely",
         "systematic-debugging",
         "test-driven-development",
         "using-agtmls",
@@ -28,9 +32,13 @@
         "noyalib"
       ],
       "skills": [
+        "brainstorming",
         "cross-language-port",
+        "giving-code-review",
         "handoff",
+        "incident-response",
         "receiving-code-review",
+        "refactoring-safely",
         "systematic-debugging",
         "test-driven-development",
         "using-agtmls",
@@ -44,9 +52,13 @@
         "noyalib"
       ],
       "skills": [
+        "brainstorming",
         "cross-language-port",
+        "giving-code-review",
         "handoff",
+        "incident-response",
         "receiving-code-review",
+        "refactoring-safely",
         "systematic-debugging",
         "test-driven-development",
         "using-agtmls",
@@ -60,9 +72,13 @@
         "noyalib"
       ],
       "skills": [
+        "brainstorming",
         "cross-language-port",
+        "giving-code-review",
         "handoff",
+        "incident-response",
         "receiving-code-review",
+        "refactoring-safely",
         "systematic-debugging",
         "test-driven-development",
         "using-agtmls",
@@ -74,8 +90,12 @@
       "description": "The engineering-discipline skills that apply to any repo in any language: plan, test-first, debug to root cause, verify before claiming done, handle review feedback, and hand work over cleanly.",
       "bundles": [],
       "skills": [
+        "brainstorming",
+        "giving-code-review",
         "handoff",
+        "incident-response",
         "receiving-code-review",
+        "refactoring-safely",
         "systematic-debugging",
         "test-driven-development",
         "using-agtmls",

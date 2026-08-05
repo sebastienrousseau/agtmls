@@ -1,14 +1,29 @@
 {
   "bundles": {
-    "_general": 8,
+    "_general": 12,
     "engineering": 1,
     "loops": 1,
     "noyalib": 14,
     "security": 1,
     "web-reach": 1
   },
-  "command_count": 1,
+  "command_count": 4,
   "commands": [
+    {
+      "description": "Audit the registry for routing decay, spec drift, and stale artifacts.",
+      "name": "agtmls-audit",
+      "path": "commands/agtmls-audit.md"
+    },
+    {
+      "description": "Scaffold a new AgtMLS skill with its metadata and both eval cases.",
+      "name": "agtmls-new-skill",
+      "path": "commands/agtmls-new-skill.md"
+    },
+    {
+      "description": "Walk the guarded AgtMLS release flow from version bump to published artifacts.",
+      "name": "agtmls-release",
+      "path": "commands/agtmls-release.md"
+    },
     {
       "description": "Run the local AgtMLS registry health check.",
       "name": "agtmls",
@@ -17,12 +32,12 @@
   ],
   "coverage": {
     "behavioral": {
-      "covered": 26,
-      "total": 26
+      "covered": 30,
+      "total": 30
     },
     "routing": {
-      "covered": 26,
-      "total": 26
+      "covered": 30,
+      "total": 30
     }
   },
   "description": "Agent Multiple Listing Service skill registry",
@@ -30,11 +45,11 @@
   "name": "agtmls",
   "quality": {
     "average_score": 100,
-    "total": 26
+    "total": 30
   },
   "registry_version": "0.0.4",
   "schema_version": 1,
-  "skill_count": 26,
+  "skill_count": 30,
   "skills": [
     {
       "allowed_tools": [
@@ -94,6 +109,7 @@
       ],
       "tags": [
         "loops",
+        "review",
         "validation"
       ],
       "version": "0.0.4"
@@ -157,6 +173,69 @@
         "release",
         "security",
         "validation"
+      ],
+      "version": "0.0.4"
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "general",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/brainstorming/metadata.json",
+      "name": "brainstorming",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/brainstorming",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": false,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "ci",
+        "config",
+        "planning"
       ],
       "version": "0.0.4"
     },
@@ -238,6 +317,68 @@
       "assets": [],
       "bundle": null,
       "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "general",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/giving-code-review/metadata.json",
+      "name": "giving-code-review",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/giving-code-review",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": false,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "ci",
+        "review"
+      ],
+      "version": "0.0.4"
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
       "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
       "evals": {
         "behavioral": true,
@@ -284,7 +425,72 @@
         "aider"
       ],
       "tags": [
+        "continuity",
         "validation"
+      ],
+      "version": "0.0.4"
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "general",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/incident-response/metadata.json",
+      "name": "incident-response",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/incident-response",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "ci",
+        "debugging",
+        "incident"
       ],
       "version": "0.0.4"
     },
@@ -353,6 +559,7 @@
       "tags": [
         "architecture",
         "ci",
+        "incident",
         "noyalib"
       ],
       "version": "0.0.4"
@@ -717,7 +924,7 @@
       "assets": [],
       "bundle": "noyalib",
       "compatibility": "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts",
-      "description": "Symptom-driven triage for noyalib: failing tests, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
+      "description": "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
       "evals": {
         "behavioral": true,
         "routing": true
@@ -766,6 +973,7 @@
         "aider"
       ],
       "tags": [
+        "ci",
         "debugging",
         "noyalib",
         "qa"
@@ -980,6 +1188,7 @@
         "docs",
         "noyalib",
         "release",
+        "review",
         "yaml"
       ],
       "version": "0.0.4"
@@ -1048,7 +1257,9 @@
       ],
       "tags": [
         "ci",
+        "incident",
         "noyalib",
+        "refactoring",
         "validation"
       ],
       "version": "0.0.4"
@@ -1204,7 +1415,7 @@
       "assets": [],
       "bundle": "engineering",
       "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
-      "description": "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+      "description": "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
       "evals": {
         "behavioral": true,
         "routing": true
@@ -1253,7 +1464,8 @@
         "ci",
         "docs",
         "engineering",
-        "release"
+        "release",
+        "review"
       ],
       "version": "0.0.4"
     },
@@ -1269,7 +1481,7 @@
       "assets": [],
       "bundle": null,
       "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
-      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when a reviewer leaves comments, requests changes, or disagrees with an approach, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes. Not preparing or shipping the change itself.",
+      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes.",
       "evals": {
         "behavioral": true,
         "routing": true
@@ -1315,7 +1527,70 @@
         "aider"
       ],
       "tags": [
-        "ci"
+        "ci",
+        "review"
+      ],
+      "version": "0.0.4"
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "general",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/refactoring-safely/metadata.json",
+      "name": "refactoring-safely",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/refactoring-safely",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "refactoring"
       ],
       "version": "0.0.4"
     },
@@ -1444,7 +1719,8 @@
         "aider"
       ],
       "tags": [
-        "qa"
+        "qa",
+        "refactoring"
       ],
       "version": "0.0.4"
     },
@@ -1694,7 +1970,10 @@
         "aider"
       ],
       "tags": [
-        "docs"
+        "continuity",
+        "docs",
+        "planning",
+        "review"
       ],
       "version": "0.0.4"
     },

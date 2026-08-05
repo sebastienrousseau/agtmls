@@ -67,6 +67,17 @@ def required_skill_paths() -> set[str]:
     return {"./skills", *nested}
 
 
+def check_agent_paths(label: str, value: object, errors: list[str]) -> None:
+    """`agents` is an array of file paths. A directory string is rejected by
+    `claude plugin validate`, and a stale list silently drops an agent."""
+    on_disk = sorted("./" + p.relative_to(ROOT).as_posix() for p in (ROOT / "agents").glob("*.md"))
+    if not isinstance(value, list):
+        errors.append(f"{label} must be an array of agent file paths, not {type(value).__name__}")
+        return
+    if sorted(value) != on_disk:
+        errors.append(f"{label} does not match agents/ on disk: {sorted(set(on_disk) ^ set(value))}")
+
+
 def check_skill_paths(label: str, value: object, errors: list[str]) -> None:
     entries = value if isinstance(value, list) else [value]
     resolved: set[str] = set()
@@ -106,6 +117,7 @@ def check_plugin(errors: list[str]) -> dict[str, object]:
         errors.append("plugin manifest homepage must be a GitHub HTTPS URL")
 
     check_skill_paths("plugin manifest skills", manifest.get("skills"), errors)
+    check_agent_paths("plugin manifest agents", manifest.get("agents"), errors)
 
     commands = rel_path(manifest.get("commands"))
     if commands is None:
@@ -162,6 +174,8 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
             errors.append(f"{label} source is required")
         if "skills" in entry:
             check_skill_paths(f"{label} skills", entry["skills"], errors)
+        if "agents" in entry:
+            check_agent_paths(f"{label} agents", entry["agents"], errors)
         # Version pinning drives updates for installed users; an entry that
         # drifts from plugin.json ships stale metadata to the catalog.
         if entry.get("name") == plugin.get("name"):

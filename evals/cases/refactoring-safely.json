@@ -1,0 +1,13 @@
+{
+  "skill": "refactoring-safely",
+  "positive": [
+    "extract this function without changing behaviour",
+    "rename this across every call site safely",
+    "restructure this module but keep it working",
+    "is it safe to deduplicate these three blocks"
+  ],
+  "negative": [
+    "write public launch copy",
+    "explain YAML merge keys"
+  ]
+}

@@ -79,6 +79,29 @@
       "description": "Provider-neutral Markdown bundle for Zed agent rule adaptation."
     }
   },
+  "native_agents": {
+    "aider": {
+      "agents_dir": ".aider/agents",
+      "commands_dir": ".aider/commands",
+      "install_mode": "symlink",
+      "prompt_file": "CONVENTIONS.md",
+      "skills_dir": ".aider/skills"
+    },
+    "claude": {
+      "agents_dir": ".claude/agents",
+      "commands_dir": ".claude/commands",
+      "install_mode": "symlink",
+      "prompt_file": "CLAUDE.md",
+      "skills_dir": ".claude/skills"
+    },
+    "codex": {
+      "agents_dir": ".codex/agents",
+      "commands_dir": ".codex/commands",
+      "install_mode": "symlink",
+      "prompt_file": "AGENTS.md",
+      "skills_dir": ".codex/skills"
+    }
+  },
   "plugin_targets": {
     "antigravity": {
       "description": "Google Antigravity CLI. Stages the directory it is given and reads plugin.json from that directory's root; it does not read .claude-plugin/.",
@@ -123,26 +146,6 @@
       "manifest_files": [
         ".opencode/INSTALL.md"
       ]
-    }
-  },
-  "native_agents": {
-    "aider": {
-      "commands_dir": ".aider/commands",
-      "install_mode": "symlink",
-      "prompt_file": "CONVENTIONS.md",
-      "skills_dir": ".aider/skills"
-    },
-    "claude": {
-      "commands_dir": ".claude/commands",
-      "install_mode": "symlink",
-      "prompt_file": "CLAUDE.md",
-      "skills_dir": ".claude/skills"
-    },
-    "codex": {
-      "commands_dir": ".codex/commands",
-      "install_mode": "symlink",
-      "prompt_file": "AGENTS.md",
-      "skills_dir": ".codex/skills"
     }
   },
   "schema_version": 1

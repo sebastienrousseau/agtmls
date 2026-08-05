@@ -1,0 +1,24 @@
+{
+  "skill": "brainstorming",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Ask about what changes the work",
+      "unbound variables",
+      "Write the spec back",
+      "Silent assumption"
+    ],
+    "reference_contains": [
+      "Question banks by request shape",
+      "cannot articulate"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "ask twenty questions first",
+      "assume silently"
+    ]
+  }
+}

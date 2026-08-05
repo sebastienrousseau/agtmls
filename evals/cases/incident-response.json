@@ -1,0 +1,13 @@
+{
+  "skill": "incident-response",
+  "positive": [
+    "production is down what do I do first",
+    "errors spiking after the deploy right now",
+    "users are affected should I roll back",
+    "we have an outage and I need to mitigate"
+  ],
+  "negative": [
+    "explain YAML tags",
+    "how do I add a Cargo feature"
+  ]
+}

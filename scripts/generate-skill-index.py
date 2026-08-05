@@ -112,6 +112,13 @@ def infer_tags(name: str, description: str, bundle: str | None) -> list[str]:
         "config": ["config", "feature", "flags"],
         "validation": ["validation", "evidence"],
         "qa": ["qa", "test"],
+        # The taxonomy grew with the catalog: general engineering-discipline
+        # skills cover domains the original code-centric tags did not.
+        "refactoring": ["refactor", "restructure", "deduplicate", "rename"],
+        "review": ["review", "reviewer", "pull request", "feedback"],
+        "planning": ["plan", "decompose", "specification", "acceptance criteria"],
+        "incident": ["incident", "outage", "production", "mitigat", "roll back"],
+        "continuity": ["handoff", "hand over", "resume", "session"],
     }
     for token, needles in candidates.items():
         if any(needle in text for needle in needles):

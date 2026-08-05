@@ -1,0 +1,13 @@
+{
+  "skill": "giving-code-review",
+  "positive": [
+    "review this pull request I did not write",
+    "how should I comment on someone else's diff",
+    "is this concern blocking or just preference",
+    "what should I look for reviewing this change"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "raise line coverage to 98 percent"
+  ]
+}

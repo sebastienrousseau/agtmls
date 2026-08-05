@@ -1,0 +1,24 @@
+{
+  "skill": "giving-code-review",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Every comment states its severity",
+      "blocking",
+      "nit",
+      "Do not redesign in review"
+    ],
+    "reference_contains": [
+      "correctness pass",
+      "Severity, calibrated"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "preference is a merge condition",
+      "review the person"
+    ]
+  }
+}

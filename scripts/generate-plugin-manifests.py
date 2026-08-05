@@ -47,6 +47,17 @@ def skill_paths() -> list[str]:
     return ["./skills"]
 
 
+def agent_paths() -> list[str]:
+    """Agent files, enumerated. `agents` takes an array of FILE paths, not a
+    directory — verified against `claude plugin validate`, which rejects a
+    directory string. Deriving it here means adding an agent cannot leave the
+    manifests stale."""
+    return sorted(
+        "./" + p.relative_to(ROOT).as_posix()
+        for p in (ROOT / "agents").glob("*.md")
+    )
+
+
 def dumps(data: object) -> str:
     return json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
 
@@ -70,9 +81,11 @@ def render(plugin: dict[str, object]) -> dict[str, str]:
 
     codex = {
         **common,
+        "agents": agent_paths(),
         "commands": "./commands",
         "keywords": keywords,
         "repository": repo,
+        "agents": agent_paths(),
         "skills": skill_paths(),
         "interface": {
             "displayName": "AgtMLS",
@@ -87,12 +100,14 @@ def render(plugin: dict[str, object]) -> dict[str, str]:
         "displayName": "AgtMLS",
         "keywords": keywords,
         "repository": repo,
+        "agents": agent_paths(),
         "skills": skill_paths(),
     }
     kimi = {
         **common,
         "keywords": keywords,
         "sessionStart": {"skill": "using-agtmls"},
+        "agents": agent_paths(),
         "skills": skill_paths(),
     }
     # Codex reads marketplace metadata from .agents/plugins/, not
