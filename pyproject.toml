@@ -10,7 +10,7 @@ name = "agtmls"
 version = "0.0.5"
 description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0 OR MIT"
 requires-python = ">=3.10"
 authors = [{ name = "Sebastien Rousseau" }]
 keywords = ["agent", "skills", "registry", "claude", "codex", "llm", "prompts"]
