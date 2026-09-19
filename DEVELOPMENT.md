@@ -66,3 +66,25 @@ python3 scripts/bump-version.py --version $(python3 scripts/next-version.py)
 python3 scripts/release-dry-run.py --version $(python3 scripts/next-version.py)
 python3 scripts/run-all-checks.py
 ```
+
+## Regenerating the SBOM after a commit
+
+`SBOM.spdx.json` and `provenance.json` take their timestamp from the commit
+that last changed a path they describe. That is deliberate: the previous
+generator hardcoded `1970-01-01T00:00:00Z` to satisfy the determinism gate,
+which made the field deterministic by making it false.
+
+The consequence is an ordering requirement. A commit that touches `scripts/`,
+`skills/`, `index.json` or any other covered path moves the timestamp, so the
+gate will report the SBOM stale immediately afterwards:
+
+```bash
+git commit -m 'fix(scripts): ...'        # gate now reports a stale SBOM
+python3 scripts/generate-sbom.py --write
+python3 scripts/generate-provenance.py --write
+git commit -m 'chore: regenerate supply-chain artifacts'
+```
+
+This converges in exactly one step: neither `SBOM.*.json` nor
+`provenance.json` is itself a covered path, so committing them cannot move the
+timestamp again. `validate-sbom-conformance.py` lists what is covered.
