@@ -28,6 +28,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from _lib.covered import SOURCE_DIRS, SOURCE_FILES  # noqa: E402
 OUT = ROOT / "provenance.json"
 MATERIALS = [
     "index.json",
@@ -55,14 +58,22 @@ def material_digest() -> str:
 
 
 def built_at() -> str:
-    """Commit date of the last commit touching a material."""
+    """Commit date of the last commit touching AUTHORED content.
+
+    Not the materials: those include SBOM.spdx.json, which is regenerated
+    alongside this file. Deriving the date from a generated artifact meant
+    committing the regenerated SBOM moved this timestamp, so the pair never
+    settled. Authored paths are not written by any generator, so one
+    regeneration converges.
+    """
     epoch = os.environ.get("SOURCE_DATE_EPOCH")
     if epoch:
         from datetime import datetime, timezone
 
         return datetime.fromtimestamp(int(epoch), tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     proc = subprocess.run(
-        ["git", "log", "-1", "--format=%cd", "--date=format:%Y-%m-%dT%H:%M:%SZ", "--", *MATERIALS],
+        ["git", "log", "-1", "--format=%cd", "--date=format:%Y-%m-%dT%H:%M:%SZ",
+         "--", *SOURCE_DIRS, *SOURCE_FILES],
         cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False,
     )
     return proc.stdout.strip() or "1970-01-01T00:00:00Z"

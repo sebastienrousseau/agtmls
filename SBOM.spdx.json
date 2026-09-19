@@ -1405,6 +1405,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-covered.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "012b4809cef232b18a428385957e8043f6a11477"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "919ac6bc4c3e9a39e05e17dd4f382f8d6f27a32d6579fdca7f4b4acc17e8ac6f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/covered.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-digest.py",
       "checksums": [
         {
@@ -1681,11 +1697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "158b2e77af77838c87350127f1aa2b03f3dd9a9e"
+          "checksumValue": "7aa2bf249226fb2ef74ee12f5efac54a36177bce"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cfabb941960a2d16577b2df402ffce4ec45f5eb59622ef952def59c7b5f0fceb"
+          "checksumValue": "42756b4e8cc6d7fcd69c4a72369eff37795f3ec725a68c3930de49d644df238f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1697,11 +1713,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "616578d79e1d3ec032d7f24d5f8a11652c85d62b"
+          "checksumValue": "d2018b25d736c65ecd2ba1aeb3bb885515168c20"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ebc01a218ed72433a143a54b722d0b25936ba4c5d0c80268d9e8e917e3838134"
+          "checksumValue": "14faf93418578bd875010788e00613d09b4808b9f723f66431c05b4d5bd092d8"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5587,6 +5603,7 @@
         "SPDXRef-File-references-noyalib-bundle.md",
         "SPDXRef-File-references-registry-schema.md",
         "SPDXRef-File-scripts--lib---init--.py",
+        "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",

@@ -86,7 +86,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "28e73656eb4f1c7c2773ebf5cffbd596f528b97d"
+            "gitCommit": "091577a885505578457eaef476836534f704b8d6"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -107,7 +107,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "3ba2bd4feb1e6b7f9dbb78940993cf9c806dc212aebf9f96067ec7ca9edcd3ef"
+        "sha256": "35fc0a571672b377e3dc3e8b129aba679ab6b4bd4ed950ec2a510c86afdff3fc"
       },
       "name": "agtmls-0.0.6"
     }

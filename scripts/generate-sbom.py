@@ -29,21 +29,12 @@ import uuid
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from _lib.covered import SOURCE_DIRS as COVERED_DIRS, SOURCE_FILES as COVERED_FILES  # noqa: E402
 OUT_SPDX = ROOT / "SBOM.spdx.json"
 OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
 
-# Every path force-included into the wheel by pyproject.toml. Keep in step
-# with validate-packaging.py: a directory that ships but is not described
-# here is a hole in the bill of materials.
-COVERED_DIRS = [
-    "agents", "commands", "evals", "references", "scripts",
-    "skills", "src", "system-prompts", "templates",
-]
-COVERED_FILES = [
-    "index.json", "profiles.json", "providers.json",
-    "lifecycle.json", "checks.json", "CATALOG.md",
-    "LICENSE-APACHE", "LICENSE-MIT",
-]
 SKIP_NAMES = {".DS_Store"}
 SKIP_PARTS = {"__pycache__"}
 NAMESPACE_BASE = "https://github.com/sebastienrousseau/agtmls/spdx"

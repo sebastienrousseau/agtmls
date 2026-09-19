@@ -85,6 +85,13 @@ python3 scripts/generate-provenance.py --write
 git commit -m 'chore: regenerate supply-chain artifacts'
 ```
 
-This converges in exactly one step: neither `SBOM.*.json` nor
-`provenance.json` is itself a covered path, so committing them cannot move the
-timestamp again. `validate-sbom-conformance.py` lists what is covered.
+This converges in exactly one step, and `scripts/_lib/covered.py` is why: both
+generators take their date from **authored** paths only, never from a generated
+artifact. Committing the regenerated files cannot move a timestamp derived from
+files they are not.
+
+Getting that wrong is easy and was got wrong here first: provenance originally
+timestamped itself from its own materials, which include `SBOM.spdx.json`, so
+committing a regenerated SBOM invalidated provenance and the pair never
+settled. If a new path joins `SOURCE_DIRS` or `SOURCE_FILES`, check it is
+authored rather than generated.

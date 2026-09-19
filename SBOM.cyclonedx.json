@@ -789,6 +789,15 @@
       "hashes": [
         {
           "alg": "SHA-256",
+          "content": "919ac6bc4c3e9a39e05e17dd4f382f8d6f27a32d6579fdca7f4b4acc17e8ac6f"
+        }
+      ],
+      "name": "scripts/_lib/covered.py"
+    },
+    {
+      "hashes": [
+        {
+          "alg": "SHA-256",
           "content": "8ed514b3c34e362bd4da9301db0a8e2f9753ad26b405dd836593f9b59393e537"
         }
       ],
@@ -942,7 +951,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cfabb941960a2d16577b2df402ffce4ec45f5eb59622ef952def59c7b5f0fceb"
+          "content": "42756b4e8cc6d7fcd69c4a72369eff37795f3ec725a68c3930de49d644df238f"
         }
       ],
       "name": "scripts/generate-provenance.py"
@@ -951,7 +960,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ebc01a218ed72433a143a54b722d0b25936ba4c5d0c80268d9e8e917e3838134"
+          "content": "14faf93418578bd875010788e00613d09b4808b9f723f66431c05b4d5bd092d8"
         }
       ],
       "name": "scripts/generate-sbom.py"
