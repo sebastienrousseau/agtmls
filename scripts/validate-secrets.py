@@ -32,7 +32,8 @@ def iter_text_files() -> list[Path]:
 
 def main() -> int:
     errors: list[str] = []
-    for path in iter_text_files():
+    files = iter_text_files()
+    for path in files:
         if path.name == "validate-secrets.py":
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
@@ -46,7 +47,7 @@ def main() -> int:
         print()
         print(f"FAIL: {len(errors)} likely secret(s)")
         return 1
-    print(f"OK: no likely secrets in {len(iter_text_files())} text file(s)")
+    print(f"OK: no likely secrets in {len(files)} text file(s)")
     return 0
 
 

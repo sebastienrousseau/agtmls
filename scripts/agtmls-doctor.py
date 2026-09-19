@@ -68,6 +68,11 @@ def main() -> int:
     parser.add_argument("--agent", choices=["claude", "codex", "aider"], help="consumer agent layout")
     parser.add_argument("--bundle", action="append", default=[], help="expected project bundle in target")
     parser.add_argument("--skills-only", action="store_true", help="target should not have an AgtMLS prompt")
+    parser.add_argument(
+        "--skip-gate",
+        action="store_true",
+        help="skip re-running checks.json; use inside the gate, which has already run them",
+    )
     args = parser.parse_args()
 
     r = Reporter()
@@ -118,7 +123,12 @@ def main() -> int:
     else:
         r.warn(f"behavioral eval coverage incomplete: {len(behavioral_cases)}/{len(skill_files)}")
 
-    checks = json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
+    # For a human, `agtmls doctor` running the whole gate is the point. Inside
+    # run-all-checks.py it meant every check ran twice -- the duplication was
+    # roughly half the gate's wall time.
+    checks = [] if args.skip_gate else json.loads(
+        (ROOT / "checks.json").read_text(encoding="utf-8")
+    )["checks"]
     for check in checks:
         parts = shlex.split(check)
         if not parts or parts[0] == "agtmls-doctor.py":
