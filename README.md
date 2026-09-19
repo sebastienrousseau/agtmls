@@ -57,6 +57,16 @@
 
 ---
 
+## Why this exists
+
+Agent skills are instructions a model will follow. Copying them between
+repositories by hand means no two checkouts agree, nobody can say whether an
+installed skill is the one that was published, and a hidden instruction in one
+of them is invisible until a model acts on it.
+
+AgtMLS is the registry: skills are content-addressed, installs are verified
+against a lockfile, and every file is analysed before it ships.
+
 ## Install
 
 ### As a CLI tool (zero clone required)
