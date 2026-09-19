@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from _lib.covered import SOURCE_DIRS, SOURCE_FILES  # noqa: E402
+from _lib.covered import SOURCE_DIRS, SOURCE_FILES  # noqa: E402  (ROOT must be on the path first)
 OUT = ROOT / "provenance.json"
 MATERIALS = [
     "index.json",
