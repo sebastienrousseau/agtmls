@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 <p align="center">
-  <img src="assets/logo.svg" alt="AgtMLS logo" width="128" height="128" />
+  <img src="https://cloudcdn.pro/agtmls/v1/logos/agtmls.svg" alt="AgtMLS logo" width="128" />
 </p>
 
 <h1 align="center">agtmls</h1>
