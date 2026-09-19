@@ -8,6 +8,14 @@ MANDIR ?= $(PREFIX)/share/man/man1
 BASHCOMPDIR ?= $(PREFIX)/share/bash-completion/completions
 ZSHCOMPDIR ?= $(PREFIX)/share/zsh/site-functions
 FISHCOMPDIR ?= $(PREFIX)/share/fish/vendor_completions.d
+# agtmls.py resolves its registry as Path(__file__).parent.parent, so the
+# registry must be installed as a tree and the binary must be a wrapper
+# pointing at it. Installing the dispatcher alone put agtmls in $(BINDIR)
+# and made it look for $(PREFIX)/index.json, which never existed.
+DATADIR ?= $(PREFIX)/share/agtmls
+REGISTRY_DIRS := scripts skills commands agents system-prompts references templates evals
+REGISTRY_FILES := index.json profiles.json providers.json lifecycle.json checks.json \
+                  CATALOG.md LICENSE-APACHE LICENSE-MIT
 DESTDIR ?=
 PYTHON ?= python3
 
@@ -16,7 +24,7 @@ PYTHON ?= python3
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
 
-check: ## Run the full 57-check validation suite
+check: ## Run the full 62-check validation suite
 	$(PYTHON) scripts/run-all-checks.py
 
 test: ## Run the unit test suite
@@ -45,8 +53,14 @@ clean: ## Clean build and bytecode caches
 	find . -type d -name __pycache__ -exec rm -rf {} +
 
 install: completions man ## Install agtmls to PREFIX (default: /usr/local)
+	install -d $(DESTDIR)$(DATADIR)
+	for d in $(REGISTRY_DIRS); do cp -R "$$d" $(DESTDIR)$(DATADIR)/; done
+	for f in $(REGISTRY_FILES); do cp "$$f" $(DESTDIR)$(DATADIR)/; done
+	find $(DESTDIR)$(DATADIR) -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
 	install -d $(DESTDIR)$(BINDIR)
-	install -m 755 scripts/agtmls.py $(DESTDIR)$(BINDIR)/agtmls
+	printf '#!/bin/sh\nexec "$${PYTHON:-python3}" %s/scripts/agtmls.py "$$@"\n' '$(DATADIR)' \
+	  > $(DESTDIR)$(BINDIR)/agtmls
+	chmod 755 $(DESTDIR)$(BINDIR)/agtmls
 	install -d $(DESTDIR)$(MANDIR)
 	install -m 644 share/man/man1/agtmls.1 $(DESTDIR)$(MANDIR)/agtmls.1
 	install -d $(DESTDIR)$(BASHCOMPDIR)
@@ -58,6 +72,7 @@ install: completions man ## Install agtmls to PREFIX (default: /usr/local)
 
 uninstall: ## Remove installed agtmls from PREFIX
 	rm -f $(DESTDIR)$(BINDIR)/agtmls
+	rm -rf $(DESTDIR)$(DATADIR)
 	rm -f $(DESTDIR)$(MANDIR)/agtmls.1
 	rm -f $(DESTDIR)$(BASHCOMPDIR)/agtmls
 	rm -f $(DESTDIR)$(ZSHCOMPDIR)/_agtmls
