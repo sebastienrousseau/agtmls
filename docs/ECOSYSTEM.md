@@ -79,15 +79,25 @@ Publishing job.
 
 ## 0.1 Ecosystem status
 
+All seven repositories exist and are public.
+
 | Repository | Location | State |
 |---|---|---|
-| `agtmls` | `Public/Python/agtmls` | Phase 0 and 2 complete; 62-check gate green. Emits per-skill `integrity`; install verifies and writes a lockfile |
-| `agtmls-spec` | `Public/Other/agtmls-spec` | **Created.** 8 spec documents (5 normative), 19 rule files, 3 schemas, 44 corpus cases, a 4-level conformance runner |
-| `agtmls-core` | `Public/Rust/agtmls-core` | **Created, L4 verified.** Digest + rules + analyzers + lockfile verification + CLI. 0 clippy warnings under pedantic, rustdoc strict clean |
-| `agtmls-mcp` | — | Not started (phase 5) |
-| `agtmls-lsp` | — | Not started (phase 6) |
-| `agtmls-wasm` | — | Not started (phase 4) |
-| `agtmls-action` | — | Not started (phase 4) |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 62-check gate, ~40s. Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
+| [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
+| [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
+| [`agtmls-action`](https://github.com/sebastienrousseau/agtmls-action) | `Public/JavaScript/agtmls-action` | SARIF to code scanning. Vendors the WASM module; no Rust toolchain at run time |
+| [`agtmls-mcp`](https://github.com/sebastienrousseau/agtmls-mcp) | `Public/Rust/agtmls-mcp` | JSON-RPC over stdio, MCP `2025-06-18`. 5 tools, 2 resource families, 2 prompts |
+| [`agtmls-lsp`](https://github.com/sebastienrousseau/agtmls-lsp) | `Public/Rust/agtmls-lsp` | Live diagnostics, frontmatter completion, capability-narrowing code actions |
+
+### Publishing
+
+Release workflows exist for crates.io (`agtmls-core`), npm (`agtmls-wasm`) and
+PyPI (`agtmls`), all via Trusted Publishing, so no long-lived token exists to
+leak. **Nothing is published yet**: each needs a one-time trusted publisher
+registered on the registry and a matching GitHub environment, which cannot be
+done from a checkout.
 
 ### What the second implementation proved
 
@@ -609,9 +619,9 @@ Dependencies are real; this order is not negotiable without breaking something.
 | **1** | `agtmls-spec` + digest + corpus migration | 2–3 | **Done** — corpus replays green against Python |
 | **2** | §8.1 + §8.2 in the hub | 2 | **Done** — install refuses a tampered registry (exit 3) and records a lockfile; `verify` detects modification, deletion and drift |
 | **3** | `agtmls-core` + differential CI | 4–6 | **Done** — L4 verified: digests, rule sets and lockfile verification all identical across both implementations |
-| **4** | `agtmls-wasm` + `agtmls-action` | 2 | SARIF in code scanning; < 500 KB |
-| **5** | `agtmls-mcp` | 3–4 | MCP Inspector green; offline test passes |
-| **6** | `agtmls-lsp` + VS Code client | 4–6 | < 100ms cold start; code actions land |
+| **4** | `agtmls-wasm` + `agtmls-action` | 2 | **Done** — 410 KB gzipped; SARIF wired to code scanning |
+| **5** | `agtmls-mcp` | 3–4 | **Done** — 5 tools over stdio; path traversal refused; tool failures are content, not protocol errors |
+| **6** | `agtmls-lsp` + VS Code client | 4–6 | **Server done**; the VS Code extension is not written |
 | **7** | Scorecard tool; all repos ≥ 9.5 | 2 | `--fail-under` wired into every repo |
 
 **~6 months part-time.** Phases 4–6 can overlap once phase 3 lands.
