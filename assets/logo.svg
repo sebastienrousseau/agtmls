@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
+<svg width="3600" height="3600" viewBox="0 0 3600 3600" fill="none" version="1.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AgtMLS Logo">
+  <defs>
+    <!-- Drop Shadow Filter for tactile elevation -->
+    <filter id="hex-shadow" x="-10%" y="-10%" width="130%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#090d16" flood-opacity="0.32" />
+    </filter>
+
+    <!-- Hexagon 1 (Top Left): Cobalt to Royal Blue -->
+    <linearGradient id="grad-top-left" x1="959" y1="656" x2="2041" y2="1905" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+
+    <!-- Hexagon 2 (Top Right): Radiant Cyan to Ocean Azure -->
+    <linearGradient id="grad-top-right" x1="2158" y1="656" x2="3240" y2="1905" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="50%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <!-- Hexagon 3 (Bottom Left): Deep Indigo to Electric Purple -->
+    <linearGradient id="grad-bottom-left" x1="360" y1="1694" x2="1442" y2="2943" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#818CF8" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#4338CA" />
+    </linearGradient>
+
+    <!-- Hexagon 4 (Bottom Right): Vibrant Violet to Magenta Amethyst -->
+    <linearGradient id="grad-bottom-right" x1="1558" y1="1694" x2="2641" y2="2943" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A78BFA" />
+      <stop offset="50%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#6D28D9" />
+    </linearGradient>
+
+    <!-- Specular highlight stroke gradient -->
+    <linearGradient id="specular-highlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05" />
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagon Cluster Group with Shadow -->
+  <g filter="url(#hex-shadow)">
+    <!-- Hexagon 3: Bottom Left -->
+    <path
+      d="m360 2631.2 541.12 312.47 540.72-312.47v-624.67l-540.72-312.05-541.12 312.05z"
+      fill="url(#grad-bottom-left)"
+      stroke="url(#specular-highlight)"
+      stroke-width="12"
+      stroke-linejoin="round"
+    />
+
+    <!-- Hexagon 1: Top Left / Center Top -->
+    <path
+      d="m2041.2 968.76-540.72-312.47-541.12 312.47v624.67l541.12 312.05 540.72-312.05z"
+      fill="url(#grad-top-left)"
+      stroke="url(#specular-highlight)"
+      stroke-width="12"
+      stroke-linejoin="round"
+    />
+
+    <!-- Hexagon 4: Bottom Center / Right -->
+    <path
+      d="m2640.7 2006.6-541.12-312.05-540.72 312.05v624.67l540.72 312.47 541.12-312.47z"
+      fill="url(#grad-bottom-right)"
+      stroke="url(#specular-highlight)"
+      stroke-width="12"
+      stroke-linejoin="round"
+    />
+
+    <!-- Hexagon 2: Top Right -->
+    <path
+      d="m3240 968.76-541.12-312.47-540.72 312.47v624.67l540.72 312.05 541.12-312.05z"
+      fill="url(#grad-top-right)"
+      stroke="url(#specular-highlight)"
+      stroke-width="12"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>
