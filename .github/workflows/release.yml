@@ -13,6 +13,10 @@ on:
       tag:
         description: "Existing tag to release, for example v0.0.2"
         required: true
+      dry_run:
+        description: "Build and validate without publishing to PyPI"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -102,6 +106,15 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check build
           python3 -m build --outdir dist/
+      # A rehearsal that stops before the registry. Without one, the first
+      # time this path runs for real is also the first time it runs at all.
+      - name: Publish (dry run)
+        if: inputs.dry_run
+        run: |
+          python3 -m pip install --disable-pip-version-check twine
+          python3 -m twine check dist/*
+          echo "dry run: built and validated $(ls dist | wc -l) file(s); nothing uploaded"
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        if: ${{ !inputs.dry_run }}
         with:
           attestations: true
