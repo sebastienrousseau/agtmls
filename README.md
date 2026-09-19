@@ -1,446 +1,537 @@
 <!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
 <!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
-# AgtMLS — Agent Multiple Listing Service
+<p align="center">
+  <img src="https://cloudcdn.pro/agtmls/v1/logos/agtmls.svg" alt="AgtMLS logo" width="128" />
+</p>
 
-**The universal agent skills registry.**
+<h1 align="center">agtmls</h1>
 
-`agtmls` is the central nervous system for LLM prompts, skills, and
-system instructions across a polyglot ecosystem (Python, Rust, C++,
-Go, JS). By acting as a single source of truth, it ensures that
-whether you use Claude Code, Aider, GitHub Copilot CLI, or Codex,
-the AI behaves consistently, adheres to strict security standards,
-and writes idiomatic code for the target language.
+<p align="center">
+  The universal agent skills registry — polyglot engineering skills, system prompts, commands, and subagents for Claude Code, OpenAI Codex, Aider, Google Antigravity, and compatible runtimes.
+</p>
 
-## Directory structure
+<p align="center">
+  <a href="https://github.com/sebastienrousseau/agtmls/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/sebastienrousseau/agtmls/validate.yml?branch=main&style=for-the-badge&logo=github&label=Checks" alt="Build" /></a>
+  <a href="https://pypi.org/project/agtmls/"><img src="https://img.shields.io/pypi/v/agtmls.svg?style=for-the-badge&color=fc8d62&logo=pypi" alt="PyPI" /></a>
+  <a href="https://github.com/sebastienrousseau/agtmls/releases"><img src="https://img.shields.io/github/v/release/sebastienrousseau/agtmls?style=for-the-badge&color=blue&logo=github" alt="GitHub Release" /></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/sebastienrousseau/agtmls"><img src="https://img.shields.io/ossf-scorecard/github.com/sebastienrousseau/agtmls?style=for-the-badge&label=OpenSSF%20Scorecard&logo=openssf" alt="OpenSSF Scorecard" /></a>
+  <a href="LICENSE-APACHE"><img src="https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg?style=for-the-badge" alt="License: Apache-2.0 OR MIT" /></a>
+  <a href="https://github.com/sebastienrousseau/agtmls/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/python-%3E%3D3.10-93450a.svg?style=for-the-badge&logo=python" alt="Python >= 3.10" /></a>
+</p>
 
-```
-agtmls/
-├── scripts/
-│   ├── setup-workspace.sh       # Links AgtMLS into your active repos
-│   ├── agtmls-doctor.py         # Local health checks for the registry
-│   └── generate-skill-index.py  # Builds index.json for discovery
-├── system-prompts/              # Global behavioural rules → repo-root CLAUDE.md/AGENTS.md/CONVENTIONS.md
-│   ├── _base.md                 # Universal engineering standards
-│   └── <lang>.md                # Per-language idiom profiles: rust, python,
-│                                # go, cpp, swift, typescript, javascript,
-│                                # ruby, bash (all authored)
-├── skills/                      # FLAT: every skill is skills/<name>/SKILL.md
-│   ├── writing-plans/           # Discipline skills: plan → test → debug →
-│   ├── test-driven-development/ #   verify → review → hand off. Apply in
-│   ├── systematic-debugging/    #   any repo, any language
-│   ├── verification-before-completion/
-│   ├── receiving-code-review/
-│   ├── handoff/
-│   ├── cross-language-port/     # Porting logic between polyglot repos
-│   └── noyalib-*/               # Project skills; bundle is a metadata field
-├── references/
-│   └── noyalib-bundle.md        # Routing index for the 14 noyalib skills
-├── commands/                    # Interactive slash commands (author here)
-├── evals/                       # Routing + behavioral skill checks
-├── lifecycle.json               # Skill proposal -> publication lifecycle
-├── profiles.json                # Named install/export profiles
-├── providers.json               # Native agent + plugin + export target matrix
-├── CHANGELOG.md                 # Human-readable changes
-├── RELEASE.md                   # Release checklist
-├── CATALOG.md                   # Generated human-readable registry catalog
-└── index.json                   # Generated skill registry metadata
-```
+---
+
+## Contents
+
+**Getting started**
+
+- [Install](#install) — CLI tool (uvx / pipx), Python library, agent plugins, source
+- [Requirements](#requirements) — Python toolchain floor, platform support, zero dependencies
+- [Quick Start](#quick-start) — inspect, install, and audit in seconds
+
+**Registry & Capabilities**
+
+- [Capabilities at a glance](#capabilities-at-a-glance) — 31 skills, 4 commands, 4 subagents, 13 provider targets
+- [The Discipline Skills Pipeline](#the-discipline-skills-pipeline) — ordered engineering lifecycle from plan to handoff
+- [Anti-Slop & Editorial Doctrine](#anti-slop--editorial-doctrine) — human-voice preservation and AI filler removal
+- [ToxicSkills & Supply Chain Security](#toxicskills--supply-chain-security) — static security analyzer, steganography defense, SBOM
+- [Skill Anatomy & Router Contract](#skill-anatomy--router-contract) — frontmatter specification, trigger cues, progressive disclosure
+- [General Skills vs Project Bundles](#general-skills-vs-project-bundles) — flat directory structure and scoped metadata
+- [Providers & Profiles](#providers--profiles) — native symlinks, runtime plugins, and adapted exports
+
+**CLI & Tooling Reference**
+
+- [CLI Reference](#cli-reference) — dispatcher usage, registry discovery, and diagnostic commands
+- [Shell Completions & Manpages](#shell-completions--manpages) — native completions for Bash, Zsh, Fish, and man1 manual
+- [Directory Structure](#directory-structure) — full repository layout
+
+**Operational**
+
+- [When not to use AgtMLS](#when-not-to-use-agtmls) — design scope and intentional boundaries
+- [Development](#development) — make targets, 57-gate validation suite, benchmarks
+- [Security & Hardening](#security--hardening) — zero-dependency architecture, signing keys, private disclosure
+- [Documentation](#documentation) — canonical specifications, ADRs, and developer guides
+- [Stability guarantees](#stability-guarantees) — strict pre-1.0 SemVer (`v0.0.1` → `v0.0.999`), output determinism
+- [License](#license) — Apache-2.0 OR MIT dual licensing
+
+---
 
 ## Install
 
-No clone required:
+### As a CLI tool (zero clone required)
+
+`agtmls` is distributed as a zero-dependency Python wheel. It can be run immediately without installation via `uvx` or installed persistently via `pipx`:
 
 ```bash
-uvx agtmls install rust claude --skills-only --bundle noyalib   # one-shot
-pipx install agtmls && agtmls install rust claude               # persistent
+# One-shot execution (ephemeral cache)
+uvx agtmls install rust claude --skills-only --bundle noyalib
+
+# Persistent installation
+pipx install agtmls
+agtmls install rust claude
 ```
 
-The package bundles the whole registry and is **dependency-free** — every
-script is stdlib-only, so `uvx` is a single fast download with nothing to
-resolve. Browsing works the same way:
+Because the package is **100% dependency-free** (standard library only), `uvx` resolves and launches instantaneously with no transitive package risks.
+
+### As a Python package (PyPI)
 
 ```bash
-uvx agtmls list
-uvx agtmls search yaml
-uvx agtmls show cross-language-port
-uvx agtmls stats
+pip install agtmls
 ```
 
-Installing from a package defaults to `--copy` rather than symlinks: the
-wheel lives in an ephemeral uvx/pipx cache, and linking into a cache that is
-about to be collected would leave the target repo full of dangling links.
-Pass `--copy` explicitly to get the same behaviour from a checkout.
+### As an Agent Plugin
 
-Repository-maintenance commands (`check`, `release-*`, `bump-version`,
-`diff`, `next-version`, `verify-release-assets`) need a real checkout and
-refuse to run from a package. Point `AGTMLS_HOME` at a checkout to run the
-installed CLI against your own working tree:
+AgtMLS integrates directly with modern coding agent plugin managers without requiring a local git checkout:
+
+| Runtime | Installation Command / Action | Manifest Location |
+| :--- | :--- | :--- |
+| **Claude Code** | `/plugin marketplace add sebastienrousseau/agtmls`<br/>`/plugin install agtmls@agtmls` | `.claude-plugin/plugin.json` |
+| **Google Antigravity** | `agy plugin install https://github.com/sebastienrousseau/agtmls` | `plugin.json` |
+| **OpenAI Codex** | `/plugins` → Search `agtmls` → **Install Plugin** | `.agents/plugins/marketplace.json`<br/>`.codex-plugin/plugin.json` |
+| **Gemini CLI** | `gemini extensions install https://github.com/sebastienrousseau/agtmls` | `gemini-extension.json`<br/>`GEMINI.md` |
+| **Cursor** | `/add-plugin agtmls` | `.cursor-plugin/plugin.json` |
+| **Kimi Code** | `/plugins install https://github.com/sebastienrousseau/agtmls` | `.kimi-plugin/plugin.json` |
+| **OpenCode** | Follow instructions in `.opencode/INSTALL.md` | `.opencode/INSTALL.md` |
+
+All plugin manifests are derived automatically from `.claude-plugin/plugin.json` and the skill tree via `python3 scripts/generate-plugin-manifests.py`.
+
+### As a native workspace symlink (hub-and-spoke)
+
+For local development across your active repositories, use the hub-and-spoke setup. In this mode, skills and prompts are symlinked directly from your local clone so changes take effect immediately:
 
 ```bash
-AGTMLS_HOME=~/dev/agtmls agtmls check
+# 1. Clone AgtMLS locally
+git clone https://github.com/sebastienrousseau/agtmls.git ~/dev/agtmls
+
+# 2. Navigate to your target application repository
+cd ~/dev/my-service
+
+# 3. Link skills and conventions
+~/dev/agtmls/scripts/setup-workspace.sh rust claude
 ```
 
-## Install as a plugin
+`setup-workspace.sh` configures the native prompt conventions (`CLAUDE.md`, `AGENTS.md`, or `CONVENTIONS.md`) and symlinks active skills into `.claude/skills/`, `.codex/skills/`, `.aider/skills/`, or `.agents/skills/`. All links and generated files are automatically added to `.git/info/exclude` to ensure your repository working tree remains clean.
 
-AgtMLS reaches agents three ways, and `providers.json` records all three:
+### Build and install from source (Unix Makefile)
 
-| Section | Mechanism | Runtimes |
-|---|---|---|
-| `native_agents` | symlink install via `setup-workspace.sh` | Claude Code, Codex, Aider |
-| `plugin_targets` | the runtime's own plugin manifest | Antigravity, Codex, Cursor, Gemini CLI, Kimi, OpenCode |
-| `export_targets` | provider-adapted Markdown bundle | 13 targets, see below |
-
-Plugin installs need no clone:
-
-```
-# Claude Code
-/plugin marketplace add sebastienrousseau/agtmls
-/plugin install agtmls@agtmls
-
-# Antigravity
-agy plugin install https://github.com/sebastienrousseau/agtmls
-
-# Gemini CLI
-gemini extensions install https://github.com/sebastienrousseau/agtmls
-
-# Codex CLI      /plugins  -> search agtmls -> Install Plugin
-# Cursor         /add-plugin agtmls
-# Kimi Code      /plugins install https://github.com/sebastienrousseau/agtmls
-# OpenCode       see .opencode/INSTALL.md
-```
-
-Every plugin manifest is **generated** from `.claude-plugin/plugin.json` and
-the skill tree, so a version bump or a new bundle cannot leave one runtime
-behind:
+AgtMLS implements the standard Unix packaging contract honoring `PREFIX` (default `/usr/local`) and `DESTDIR`:
 
 ```bash
-python3 scripts/agtmls.py plugin-manifests --write   # regenerate
-python3 scripts/agtmls.py plugin-manifests --check   # CI: fail on drift
+git clone https://github.com/sebastienrousseau/agtmls.git
+cd agtmls
+
+# Run test suites and diagnostics
+make test
+make doctor
+
+# Install CLI binary, manpage, and shell completions
+sudo make install
+
+# Or install to an isolated staging directory (FHS compliant)
+make DESTDIR=/tmp/stage install
 ```
 
-The manifests are `plugin.json` (Antigravity, at the repo root — it does not
-read `.claude-plugin/`), `.codex-plugin/plugin.json` plus
-`.agents/plugins/marketplace.json` (Codex), `.cursor-plugin/plugin.json`,
-`.kimi-plugin/plugin.json`, `gemini-extension.json` with `GEMINI.md`, and
-`.opencode/INSTALL.md`. OpenCode has no skill-bundle manifest, so it is
-wired through the `instructions` array in the user's `opencode.json`.
+---
 
-Use the hub-and-spoke setup below instead when you want editable symlinks,
-per-language system prompts, or a native Aider install.
+## Requirements
 
-## Hub-and-spoke setup
+- **Python 3.10 or newer.** Tested and validated across Python 3.10, 3.11, 3.12, 3.13, and 3.14 on macOS and Ubuntu runners in GitHub Actions CI.
+- **Zero runtime dependencies.** Every script, validator, generator, and CLI command in AgtMLS is written exclusively using Python's standard library. No `pip install` required.
+- **Cross-platform.** Verified on Linux, macOS (Apple Silicon and Intel), and POSIX environments.
+- **Standard Git.** Commits and tags require cryptographic signing (OpenSSH `ed25519` allowed signers in [`KEYS.asc`](KEYS.asc)).
 
-Do NOT copy these files into your application repositories. Use the
-provided script to symlink them so hub updates propagate instantly.
+---
 
-1. Clone this hub: `~/dev/agtmls` (or wherever you keep it).
-2. Navigate to an application repo: `cd ~/dev/my-rust-microservice`.
-3. Link the rules:
+## Quick Start
 
-    ```bash
-    ~/dev/agtmls/scripts/setup-workspace.sh rust aider
-    ```
-
-The script assembles the system prompt from `_base.md` + the language
-profile and writes it to the **repo-root file the tool auto-loads**
-(`CLAUDE.md` for Claude Code, `AGENTS.md` for Codex, `CONVENTIONS.md`
-for Aider — the latter also registered in `.aider.conf.yml`). It then
-symlinks every in-scope skill and command into the tool's dot-dir
-(`.claude/`, `.aider/`, `.codex/`, or `.agent/`), one level deep
-(`<cli>/skills/<skill>/`) where the tool can discover it. Re-run it any
-time you add a language profile or a skill.
-
-The assembled prompt is a per-machine artifact of the hub, not repo
-content — so the script adds it (and the tool's dot-dir) to the target
-repo's local `.git/info/exclude`. It stays **private and un-committed**,
-sourced only from the hub, and re-running never dirties the working
-tree. (This is a personal, local ignore; it doesn't touch the committed
-`.gitignore`.)
-
-### Skills only (no system prompt)
-
-For repos that consume AgtMLS *skills* but source their system prompt
-elsewhere (e.g. a global `~/.claude/CLAUDE.md`), pass `--skills-only`:
+### 1. Explore available skills and commands
 
 ```bash
-~/dev/agtmls/scripts/setup-workspace.sh rust claude --skills-only
+# List all 31 registered skills
+agtmls list
+
+# List all interactive slash commands
+agtmls list commands
+
+# Search for skills by topic or tag
+agtmls search debugging
+
+# Inspect metadata, risk level, and prompt instructions for a skill
+agtmls show anti-slop-pr-and-writing
 ```
 
-It links the skills without writing a prompt, and cleans up any prompt a
-previous non-`--skills-only` run generated (a hand-authored prompt with
-no generated marker is left untouched). Use this flag on every run for
-those repos so a future setup never re-creates the prompt.
+### 2. Audit skills for prompt injection and security risks
 
-### The discipline skills
-
-Six skills cover ordinary engineering work in any repo and any language.
-They are general (`"bundle": null`), so they install everywhere, and they
-compose in phase order:
-
-| Phase | Skill | The rule it enforces |
-| --- | --- | --- |
-| Decompose | `writing-plans` | A step is done when something observable changes |
-| Build | `test-driven-development` | A test you have not seen fail proves nothing |
-| Diagnose | `systematic-debugging` | No edit before an explanation |
-| Finish | `verification-before-completion` | A claim you have not observed is a guess |
-| Review | `receiving-code-review` | Every comment gets a decision and a reply |
-| Pause | `handoff` | Can the reader act without asking you a question? |
-
-Each hands off to the next — debugging produces the explanation a red test is
-written from; that red-then-green is exactly the evidence the completion gate
-demands. A project bundle's own rules override them on specifics.
-
-Install just these with the `discipline` profile:
+Statically scan any local skill, prompt file, or the entire registry for toxic patterns:
 
 ```bash
-uvx agtmls install python claude --profile discipline
+# Scan all skills with strict validation
+agtmls audit --all --strict
 ```
 
-### General skills vs project bundles
-
-The skill tree is **flat** — every skill is `skills/<name>/SKILL.md`, with no
-nesting. That is not cosmetic: each agent runtime scans its skills path
-*non-recursively*, so a nested skill is invisible to Codex, Cursor, Gemini
-CLI, Antigravity, and anything else that does not support an array-valued
-`skills` field.
-
-Bundle membership is therefore the `bundle` field in each skill's
-`metadata.json`, not a parent directory:
-
-- **General skills** (`"bundle": null`) — `cross-language-port`,
-  `using-agtmls`. These apply anywhere and are **always linked**.
-- **Project skills** (`"bundle": "noyalib"`) — linked **only** when the
-  bundle is named with `--bundle`, so a project's skills never land in an
-  unrelated repo:
+### 3. Verify repository and agent health
 
 ```bash
-# a generic Python repo — general skills only, no project bundle
-setup-workspace.sh python claude --skills-only
+# Run local diagnostic health checks
+agtmls doctor
 
-# a noyalib-family repo — general skills + the noyalib bundle
-setup-workspace.sh rust claude --skills-only --bundle noyalib
+# Execute the full 57-gate validation suite
+agtmls check
 ```
 
-All nine fleet languages have an authored profile — `rust`, `python`,
-`go`, `cpp`, `swift`, `typescript`, `javascript`, `ruby`, `bash`. A
-language without a profile falls back to `_base.md` alone.
+---
 
-## Adding a skill
+## Capabilities at a glance
 
-Every skill lives in its own directory under `skills/` with at
-minimum a `SKILL.md` file. The frontmatter's `name` and
-`description` fields drive the router — write a description rich in
-verb-form triggers so a model can decide whether to load the skill
-from the description alone.
+| Component | Count | Description | Primary Location |
+| :--- | :--- | :--- | :--- |
+| **Engineering Skills** | 31 | Modular, trigger-based technical instructions conforming to the [Agent Skills specification](https://agentskills.io) | [`skills/`](skills/) |
+| **System Prompts** | 10 | Universal engineering standards (`_base.md`) + 9 language profiles (Rust, Python, Go, C++, Swift, TS, JS, Ruby, Bash) | [`system-prompts/`](system-prompts/) |
+| **Slash Commands** | 4 | Interactive agent actions (`agtmls`, `agtmls-audit`, `agtmls-new-skill`, `agtmls-release`) | [`commands/`](commands/) |
+| **Subagents** | 4 | Context-isolated autonomous roles (`anti-slop-editor`, `security-sentinel`, `skill-author`, `registry-auditor`) | [`agents/`](agents/) |
+| **Security Auditor** | 1 | Zero-dependency static scanner detecting prompt injection, unicode steganography, and unsafe commands | [`scripts/audit-skill.py`](scripts/audit-skill.py) |
+| **Provider Targets** | 13 | Cross-runtime support via native symlinks, plugin manifests, and adapted markdown bundles | [`providers.json`](providers.json) |
+| **Named Profiles** | 5 | Curated subsets for specific workflows (`minimal`, `polyglot`, `discipline`, `noyalib`, `security`) | [`profiles.json`](profiles.json) |
 
-For a template, see `skills/cross-language-port/SKILL.md`, or scaffold one:
+---
 
-```bash
-python3 scripts/agtmls.py scaffold-skill my-skill
+## The Discipline Skills Pipeline
+
+Six general skills (`bundle: null`) govern day-to-day software engineering in any programming language. They compose sequentially across the software delivery lifecycle:
+
+```mermaid
+flowchart LR
+    A["writing-plans"] --> B["test-driven-development"]
+    B --> C["systematic-debugging"]
+    C --> D["verification-before-completion"]
+    D --> E["anti-slop-pr-and-writing"]
+    E --> F["receiving-code-review"]
+    F --> G["handoff"]
 ```
 
-Project-specific skills live beside every other skill and declare their
-grouping with `"bundle": "<name>"` in `metadata.json`. Pass `--bundle` to
-`scaffold-skill` to set it.
+| Phase | Skill | Core Invariant Enforced |
+| :--- | :--- | :--- |
+| **Decompose** | [`writing-plans`](skills/writing-plans/) | A step is done only when something observable changes. Decompose multi-step tasks before modifying code. |
+| **Build** | [`test-driven-development`](skills/test-driven-development/) | A test you have not seen fail proves nothing. Write minimal failing tests before implementation. |
+| **Diagnose** | [`systematic-debugging`](skills/systematic-debugging/) | No edit before an explanation. Formulate hypotheses and identify root causes with minimal reproductions. |
+| **Verify** | [`verification-before-completion`](skills/verification-before-completion/) | A claim you have not observed is a guess. Fresh test logs and commands are required before marking complete. |
+| **Polish** | [`anti-slop-pr-and-writing`](skills/anti-slop-pr-and-writing/) | Engineers read diffs to understand intent and mechanics. Eliminate conversational filler and robotic clichés. |
+| **Review** | [`receiving-code-review`](skills/receiving-code-review/) | Every review comment gets an explicit technical decision, code adjustment, or empirical reply. |
+| **Handoff** | [`handoff`](skills/handoff/) | Document exact branch state, test commands, and open questions so readers act without asking questions. |
 
-### The skill contract (CI-enforced)
+---
 
-`scripts/validate-skills.py` runs on every push/PR
-(`.github/workflows/validate.yml`) and fails the build unless every
-`SKILL.md` satisfies:
+## Anti-Slop & Editorial Doctrine
 
-- a parseable YAML frontmatter block;
-- **only the six keys the [Agent Skills spec][spec] allows** — `name`,
-  `description`, `license`, `compatibility`, `metadata`, `allowed-tools`.
-  Any other key fails validation here and in `skills-ref validate`;
-- `name` present, ≤ 64 characters, kebab-case with no consecutive hyphens,
-  and equal to the skill's directory name;
-- `description` present, **≤ 1024 characters** (Claude Code truncates
-  beyond this), and containing a trigger cue (a "when…" / "use for" /
-  "load before" phrase telling the router when to load the skill);
-- `compatibility` ≤ 500 characters, and `metadata` a flat map of string
-  keys to string values, when either is present;
-- a top-level `# ` heading in the body;
-- **≤ 500 lines total**, so activation stays inside the
-  progressive-disclosure budget. Detail belongs in `reference.md`.
+The [`anti-slop-pr-and-writing`](skills/anti-slop-pr-and-writing/) skill and [`anti-slop-editor`](agents/anti-slop-editor.md) subagent enforce clean, dense, human-sounding technical communication across Pull Request summaries, git commits, code comments, and documentation.
 
-Run it locally before pushing: `python3 scripts/validate-skills.py`.
+### The Five Patterns Stripped on Sight
 
-[spec]: https://agentskills.io/specification.md
+1. **Conversational Sycophancy & Robotic Apologies**:
+   - *Strip*: `"Certainly!"`, `"I'd be happy to help!"`, `"As an AI language model..."`, `"Sorry for the oversight."`
+   - *Enforce*: Direct technical statements of action, findings, or code changes.
+2. **Throat-Clearing Openers**:
+   - *Strip*: Temporal clichés about fast-paced eras, `"Here's the thing..."`, `"Let's dive in..."`
+   - *Enforce*: The problem, failure mode, or architectural decision stated in sentence one.
+3. **Binary Contrasts & Fake Profundity**:
+   - *Strip*: `"It's not X. It's Y."`, `"The future isn't coming; it's already here."`
+   - *Enforce*: Concrete engineering trade-offs, benchmarks, and empirical measurements.
+4. **Fluffy PR Summaries & Emoji Theater**:
+   - *Strip*: Rocket emojis (`🚀`), party poppers (`🎉`), and bullet points that merely re-state git diff filenames.
+   - *Enforce*: The underlying *Why* (the root cause) and the architectural *What*, followed by benchmark or test proof.
+5. **Defensive Syntax Paraphrasing in Code**:
+   - *Strip*: Comments that state the obvious syntax (`// increment counter`, `// return result`).
+   - *Enforce*: Comments explaining non-obvious *invariants*, race condition prevention, or hardware constraints.
 
-### Generated frontmatter
+For the full catalog of before-and-after transformations, see [`skills/anti-slop-pr-and-writing/reference.md`](skills/anti-slop-pr-and-writing/reference.md).
 
-`compatibility`, `metadata`, and `allowed-tools` are **generated** from each
-skill's `metadata.json` — do not hand-edit them:
+---
+
+## ToxicSkills & Supply Chain Security
+
+AgtMLS includes proactive defense against malicious third-party prompt injection, unauthorized outbound network access, and capability escalation.
+
+### Static Security Auditor (`agtmls audit`)
+
+The built-in static analyzer ([`scripts/audit-skill.py`](scripts/audit-skill.py)) inspects skills and markdown prompts without executing untrusted code:
 
 ```bash
-python3 scripts/sync-skill-frontmatter.py --write   # regenerate
-python3 scripts/sync-skill-frontmatter.py --check   # CI: fail on drift
+# Scan a single skill directory or markdown file
+agtmls audit skills/my-skill
+
+# Scan the entire registry and fail on any warning
+agtmls audit --all --strict --json
 ```
 
-`metadata.json` stays the source of truth, but it is an AgtMLS-private
-sidecar that no other runtime reads. Mirroring it into the spec's fields is
-what gives a Cursor, Gemini CLI, or marketplace consumer the same risk
-signal a native install gets. `required_tools` becomes `compatibility`;
-`safety_policy` becomes the namespaced `agtmls-*` keys under `metadata` and
-the derived `allowed-tools` surface.
+### Attack Vectors Defended
 
-Note that `allowed-tools` is experimental and runtimes disagree on its
-meaning — some read it as a pre-approval, others as a restriction. AgtMLS
-declares the **full capability surface** the safety policy implies, which is
-correct under the restriction reading and pre-approves under the other.
-Switch `ALLOWED_TOOLS_MODE` in `sync-skill-frontmatter.py` to `"readonly"`
-to declare only non-mutating tools instead.
+- **Invisible Unicode Steganography**: Zero-width spaces (`\u200B`–`\u200D`, `\uFEFF`), bidirectional override markers (`\u202A`–`\u202E`, `\u2066`–`\u2069`), and Unicode tag characters (`\U000E0000`–`\U000E007F`) used to conceal prompt injection from human reviewers.
+- **Prompt Injection & Persona Jailbreaks**: Detection of instruction overrides (`"ignore previous instructions"`), developer-mode exploits, and security guardrail bypasses.
+- **Dangerous Shell Invocations**: Unauthorized pipe-to-shell commands (`curl | bash`), root wipes (`rm -rf /`), credential access (`~/.ssh`, `~/.aws`), and reverse shells.
+- **Data Exfiltration Pingbacks**: Detection of covert markdown image pingbacks intended to leak session context or environment variables.
+- **Policy Honesty Checks**: Ensures that skills declaring `executes_commands: false` or `network_access: none` do not instruct models to run destructive commands or make network requests.
 
-### Full local health check
+### Cryptographic Artifacts
 
-The full list lives in [docs/checks.md](docs/checks.md). Run them all with:
+Every release ships with cryptographic evidence:
+- **SPDX 2.3 SBOM**: [`SBOM.spdx.json`](SBOM.spdx.json) tracks SHA-256 digests of all distributed skills, scripts, and commands.
+- **SLSA Provenance Subject**: [`provenance.json`](provenance.json) binds release assets to git commit hashes.
+- **Signed Commits & Tags**: Maintainer keys are published in [`KEYS.asc`](KEYS.asc).
+
+---
+
+## Skill Anatomy & Router Contract
+
+Every skill in AgtMLS strictly adheres to the [Agent Skills Specification](https://agentskills.io/specification.md) and passes CI validation via [`scripts/validate-skills.py`](scripts/validate-skills.py).
+
+### Frontmatter Contract
+
+```yaml
+---
+name: anti-slop-pr-and-writing
+description: "Eliminate AI slop, clichés, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts."
+license: Apache-2.0 OR MIT
+compatibility: "Tested with Claude Code, Codex, Antigravity, and Aider skill layouts"
+allowed-tools: "Read Glob Grep Write Edit"
+metadata:
+  agtmls-version: "0.0.6"
+  agtmls-owner: "Sebastien Rousseau"
+  agtmls-maturity: "hardened"
+  agtmls-risk-level: "low"
+  agtmls-network-access: "none"
+  agtmls-writes-files: "true"
+  agtmls-executes-commands: "false"
+  agtmls-handles-secrets: "false"
+  agtmls-requires-human-review: "true"
+---
+```
+
+1. **Closed Key Set**: Only `name`, `description`, `license`, `compatibility`, `allowed-tools`, and `metadata` are permitted.
+2. **Name Constraint**: Kebab-case, $\le 64$ characters, matching the directory name exactly.
+3. **Trigger Cue**: Descriptions must be $\le 1024$ characters and contain explicit trigger cues (`"load when"`, `"use for"`, `"trigger"`) so routers activate them accurately.
+4. **Progressive Disclosure Budget**: The main `SKILL.md` body is capped at **500 lines**. Extended catalogs, before/after tables, and API references must live in `reference.md` and be loaded on demand.
+5. **Evaluations**: Every skill requires positive and negative trigger cases in [`evals/cases/`](evals/cases/) and behavioral assertions in [`evals/behavioral/cases/`](evals/behavioral/cases/).
+
+---
+
+## General Skills vs Project Bundles
+
+The skill tree is deliberately **flat**: every skill resides at `skills/<name>/SKILL.md`.
+
+Because agent runtimes scan their skills directories non-recursively, nesting skills inside subdirectories causes them to be silently ignored by Codex, Antigravity, Cursor, and Gemini CLI.
+
+AgtMLS resolves this using metadata bundling in `metadata.json`:
+- **General Skills** (`"bundle": null`): Universal engineering practices (e.g. `writing-plans`, `anti-slop-pr-and-writing`, `systematic-debugging`). Linked into all consumer repositories.
+- **Project Bundles** (`"bundle": "noyalib"`): Specialized domain knowledge (e.g. `noyalib-validation-and-qa`). Linked **only** when explicitly requested via `--bundle <name>`.
 
 ```bash
+# Standard repository: general discipline skills only
+agtmls install python claude --skills-only
+
+# Domain repository: general skills + noyalib project bundle
+agtmls install rust claude --skills-only --bundle noyalib
+```
+
+---
+
+## Providers & Profiles
+
+AgtMLS reaches 13 agent runtimes and environments defined in [`providers.json`](providers.json):
+
+| Mode | Target Runtimes | Mechanism |
+| :--- | :--- | :--- |
+| **Native Agents** | Claude Code, OpenAI Codex, Aider | Direct symlink installation via `setup-workspace.sh` |
+| **Plugin Targets** | Google Antigravity, Cursor, Gemini CLI, Kimi Code, OpenCode | Native runtime plugin manifests (`plugin.json`, `.cursor-plugin/`, etc.) |
+| **Export Targets** | GitHub Copilot, Continue, DeepSeek, Mistral, Ollama, Qwen, Windsurf, Zed | Provider-adapted Markdown bundles (`ADAPTERS.md`, rules, instructions) |
+
+Generate standalone bundles using named profiles from [`profiles.json`](profiles.json):
+
+```bash
+# Export polyglot bundle for OpenAI-compatible agents
+agtmls export --provider openai --profile polyglot --out-dir dist
+
+# Export Claude-adapted bundle with noyalib domain rules
+agtmls export --provider anthropic --profile noyalib --out-dir dist
+```
+
+---
+
+## CLI Reference
+
+`scripts/agtmls.py` is the dispatcher for all registry operations. When installed via `pip` or `pipx`, the command is available directly as `agtmls`.
+
+```bash
+# Local health and status
+python3 scripts/agtmls.py doctor
+python3 scripts/agtmls.py status
+
+# Full gate validation (57 checks)
 python3 scripts/agtmls.py check
-```
 
-The dispatcher wraps every registry operation; the full command reference is
-in [docs/cli.md](docs/cli.md).
+# Static security audit
+python3 scripts/agtmls.py audit --all --strict
 
-`index.json` is generated from the skill tree and committed so tools can
-discover skills without reading every body. Rebuild it after changing skills:
+# Registry discovery
+python3 scripts/agtmls.py list
+python3 scripts/agtmls.py list commands
+python3 scripts/agtmls.py search yaml
+python3 scripts/agtmls.py show anti-slop-pr-and-writing
+python3 scripts/agtmls.py stats
 
-```bash
-python3 scripts/generate-skill-index.py --write
-python3 scripts/generate-catalog.py --write
-```
+# Evaluations and benchmarks
+python3 scripts/agtmls.py bench
 
-The generated schema is documented in
-`references/registry-schema.md`; do not edit `index.json` by hand.
+# Skill authoring and imports
+python3 scripts/agtmls.py scaffold-skill candidate-skill
+python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
 
-### Repository location
-
-AgtMLS is intentionally a polyglot hub. It should not live under a
-Python-only folder unless your local machine has a personal convention for all
-automation repos. The repo contains Python tooling, but its product surface is
-language-neutral skills, prompts, commands, and evals.
-
-### Providers and profiles
-
-AgtMLS has native symlink installers for Claude Code, Codex, and Aider. Other
-AI providers are supported through provider-adapted Markdown exports generated
-from the same registry source of truth. Each export includes `ADAPTERS.md` plus
-a provider-specific file such as `adapters/openai/AGENTS.md`,
-`adapters/anthropic/CLAUDE.md`,
-`adapters/github-copilot/.github/copilot-instructions.md`, or
-`adapters/cursor/.cursor/rules/agtmls.mdc`. `providers.json` records the native
-agent layouts and export targets; `profiles.json` records named subsets such as
-`minimal`, `polyglot`, `noyalib`, `security`, and `research`.
-
-Use exports when a provider does not have a first-class local skills directory:
-
-```bash
-python3 scripts/agtmls.py export --provider generic --profile polyglot --out-dir dist
-python3 scripts/agtmls.py export --provider anthropic --profile noyalib --out-dir dist
-```
-
-Optional live API smoke tests are available for configured model backends. They
-skip cleanly when credentials are absent and probe only metadata/list endpoints
-when present:
-
-```bash
-python3 scripts/smoke-live-providers.py
-```
-
-Supported credential variables are `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`,
-`GEMINI_API_KEY`, `MISTRAL_API_KEY`, `DEEPSEEK_API_KEY`, `QWEN_API_KEY`, and
-`OLLAMA_BASE_URL` for a reachable local Ollama server.
-
-### Safety metadata
-
-Every metadata source must include `safety_policy` with explicit flags for
-network access, file writes, command execution, secret handling, human-review
-requirements, and risk level. The policy is validated by
-`validate-skill-metadata.py` and published into `index.json` so agents can
-route or gate skills before use.
-
-### Import and release workflow
-
-External skills should enter as drafts, not directly as hardened skills:
-
-```bash
-python3 scripts/agtmls.py import-skill /path/to/external/skill --name external-skill
-python3 scripts/agtmls.py scaffold-skill follow-up-skill
-python3 scripts/agtmls.py release-check
-```
-
-`import-skill` normalizes a Markdown skill into `skills/imported/<name>/`, adds
-draft metadata, creates a reference stub when needed, and review-gates the
-result. Publish it only after adding routing and behavioral eval cases, filling
-out references, and passing `python3 scripts/agtmls.py check`.
-
-### Static docs site
-
-`site/index.html` is generated from the registry metadata and gives a browser-readable catalog with skill quality, risk, agent support, profiles, and export targets. Rebuild it after changing `index.json`, `profiles.json`, or `providers.json`:
-
-```bash
+# Manifest and artifact generation
+python3 scripts/agtmls.py index --write
+python3 scripts/agtmls.py plugin-manifests --write
+python3 scripts/agtmls.py agent-card --write
+python3 scripts/agtmls.py mcp-resources --write
+python3 scripts/agtmls.py sbom --write
+python3 scripts/agtmls.py provenance --write
 python3 scripts/agtmls.py docs-site --write
 ```
 
-### Release packs
+For the complete command-line interface documentation, see [`docs/cli.md`](docs/cli.md).
 
-`release-pack` creates provider export archives plus `SHA256SUMS` and `release-manifest.json`:
+---
+
+## Shell Completions & Manpages
+
+AgtMLS ships with native shell completions and Unix manuals generated directly from the CLI specification:
 
 ```bash
-python3 scripts/agtmls.py release-pack --profile polyglot --out-dir dist/release
+# Generate shell completions for Bash, Zsh, and Fish
+make completions
+
+# Generate Unix manual page (share/man/man1/agtmls.1)
+make man
+
+# Inspect manual page
+man share/man/man1/agtmls.1
 ```
 
-### Evolution and evidence
+Shell completion files are installed to standard system locations (`/usr/local/share/bash-completion/completions/agtmls`, `/usr/local/share/zsh/site-functions/_agtmls`, and `/usr/local/share/fish/vendor_completions.d/agtmls.fish`) during `make install`.
 
-`evolve` creates a redacted local proposal from a transcript and requires human review before publication. `evidence` records per-skill invocation evidence with commands, touched files, outcome, and the skill safety policy. These files default to `.agtmls/` and are intentionally ignored.
+---
 
-### Interoperability artifacts
+## Directory Structure
 
-`agent-card.json` and `mcp-resources.json` are generated from the registry for A2A-style discovery and MCP-style resource publication. `SBOM.spdx.json` and `provenance.json` provide release supply-chain evidence.
+```
+agtmls/
+├── .claude-plugin/              # Claude Code plugin and marketplace manifests
+├── .github/                     # GitHub workflows, dependabot, issue/PR templates
+│   ├── ISSUE_TEMPLATE/          # Structured YAML issue templates
+│   ├── PULL_REQUEST_TEMPLATE.md # PR quality checklist and signing requirements
+│   ├── dependabot.yml           # Automated dependency updates
+│   └── workflows/               # CI validation and release automation
+├── agents/                      # Context-isolated subagents (anti-slop, sentinel, auditor)
+├── commands/                    # Interactive slash commands (agtmls, audit, release)
+├── completions/                 # Generated shell completions (Bash, Zsh, Fish)
+├── docs/                        # Architecture, CLI, checks, and reference documentation
+├── evals/                       # Trigger routing and behavioral test suites
+├── references/                  # Registry schema and bundle specifications
+├── scripts/                     # Zero-dependency CLI, generators, and validators
+├── share/man/man1/              # Generated Unix manpages (agtmls.1)
+├── skills/                      # 31 flat skill directories (SKILL.md, metadata.json)
+├── system-prompts/              # Base rules (_base.md) and 9 language profiles
+├── agent-card.json              # A2A agent discovery manifest
+├── CATALOG.md                   # Human-readable registry catalog
+├── checks.json                  # Canonical 57-check validation registry
+├── index.json                   # Machine-readable skill registry index
+├── KEYS.asc                     # OpenSSH allowed signers for commit/tag verification
+├── Makefile                     # Unix build and installation task runner
+├── mcp-resources.json           # Model Context Protocol resource catalog
+├── profiles.json                # Named installation and export profiles
+├── provenance.json              # SLSA-aligned cryptographic release provenance
+├── providers.json               # Native agents and 13 provider adapter targets
+├── pyproject.toml               # Zero-dependency Python packaging specification
+├── SBOM.spdx.json               # SPDX 2.3 software bill of materials
+└── site/index.html              # Static documentation catalog
+```
 
-## Versioning
-
-AgtMLS follows the pre-1.0 patch-line policy in `VERSIONING.md`: public releases stay on `0.0.x` and increment by exactly `0.0.1`.
-
-Published release assets can be verified after release with `python3 scripts/agtmls.py verify-release-assets --tag v0.0.1`.
-
-Release tag protection is documented in `docs/tag-protection.md`.
-
-## Documentation
-
-- [User Catalog](CATALOG.md) — The complete index of 30 engineering skills and subagents.
-- [Architecture](docs/ARCHITECTURE.md) — System architecture, generation pipeline, and provider adapters.
-- [Developer Guide](DEVELOPMENT.md) — Local setup, reproducing CI validation gates, and release dry-runs.
-- [Invariants for Agents](AGENTS.md) — Rules for AI-assisted contributors.
+---
 
 ## When not to use AgtMLS
 
-AgtMLS is designed as a structured, versioned engineering skills registry for developer agents. Do not use AgtMLS if:
-- You need a dynamic runtime plugin sandbox (AgtMLS provides declarative skills, system prompts, and static adapters).
-- You are looking for arbitrary unverified community prompt dumps (all AgtMLS skills must pass behavioral evals, frontmatter schema validation, and collision tests).
-- Your workflow cannot adhere to versioned, reproducible releases.
+AgtMLS is designed as a deterministic, versioned engineering skills registry. Do not use AgtMLS if:
+- **You need dynamic code execution sandboxing at runtime**: AgtMLS provides declarative skills, system prompts, and static tool configurations. It is not an arbitrary sandbox hypervisor.
+- **You want uncurated prompt dumps**: Every AgtMLS skill must pass semantic collision checks ($< 0.75$), behavioral eval assertions, and frontmatter validation.
+- **Your workflow cannot support reproducible release versioning**: All skills adhere to strict patch-line versioning.
+
+---
+
+## Development
+
+Local development requires only standard Python 3.10+ and `make`.
+
+```bash
+# Run the complete 57-gate validation suite
+make check
+
+# Run unit tests
+make test
+
+# Run routing and behavioral evaluation benchmarks
+make bench
+
+# Run registry diagnostic checks
+make doctor
+
+# Clean build caches and bytecode
+make clean
+```
+
+For complete instructions on reproducing CI gates locally, see [`DEVELOPMENT.md`](DEVELOPMENT.md).
+
+---
+
+## Security & Hardening
+
+- **Private Reporting**: Report security vulnerabilities privately following [`SECURITY.md`](SECURITY.md).
+- **Zero-Dependency Architecture**: Eliminates third-party PyPI supply-chain vulnerabilities.
+- **Cryptographic Provenance**: Every release is accompanied by [`SBOM.spdx.json`](SBOM.spdx.json) and [`provenance.json`](provenance.json).
+- **SSH Commit Signing**: All maintainer commits and tags are signed with OpenSSH keys published in [`KEYS.asc`](KEYS.asc).
+
+---
+
+## Documentation
+
+The canonical documentation entry points:
+
+| Document | Purpose |
+| :--- | :--- |
+| [`CATALOG.md`](CATALOG.md) | The complete index of 31 engineering skills, subagents, and commands. |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architectural layout, generator pipelines, and adapter compilation. |
+| [`docs/cli.md`](docs/cli.md) | Comprehensive CLI command-line reference and examples. |
+| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 57 CI validation gates. |
+| [`DEVELOPMENT.md`](DEVELOPMENT.md) | Developer workflow, local test reproduction, and release verification. |
+| [`AGENTS.md`](AGENTS.md) | Authoritative invariants and rules for AI-assisted contributors. |
+| [`SECURITY.md`](SECURITY.md) | Vulnerability disclosure policy and security posture. |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Pull request guidelines, conventional commits, and signing. |
+| [`CHANGELOG.md`](CHANGELOG.md) | Complete per-release record of additions, fixes, and changes. |
+
+---
 
 ## Stability guarantees
 
-- **SemVer breaking axis**: Public releases strictly follow semantic patch-line increments (`v0.0.1` -> `v0.0.999` -> `v0.1.0`). Breaking changes to skill contracts, frontmatter schemas, or provider export layouts are strictly governed and documented in release notes.
-- **Output stability**: Script generators produce deterministic JSON/Markdown artifacts verified in CI via `--check` flags.
+- **Strict Pre-1.0 SemVer**: Public releases adhere to the incremental patch-line policy in [`VERSIONING.md`](VERSIONING.md) (`v0.0.1` → `v0.0.999` → `v0.1.0`).
+- **Output Determinism**: All generator scripts produce identical, reproducible artifacts verified in CI via `--check` flags.
+- **Toolchain Floor**: Python 3.10 is the verified floor. The floor will only be raised when Python 3.10 reaches upstream end-of-life.
 
-## Security & hardening
-
-- **Private Reporting**: Report security vulnerabilities privately following [SECURITY.md](SECURITY.md).
-- **Dependency-Free Architecture**: AgtMLS scripts use zero external PyPI runtime dependencies, eliminating supply-chain exposure from third-party packages.
-- **Provenance & SBOM**: Every release includes a cryptographically verifiable SPDX 2.3 SBOM (`SBOM.spdx.json`) and SLSA-aligned provenance subject (`provenance.json`).
-- **Secret Scanning & Eval Guardrails**: `scripts/validate-secrets.py` and behavioral eval suites run on every commit.
-
-## Minimum-toolchain policy
-
-- **Python**: 3.10 is the stated floor, tested and validated across Python 3.10, 3.11, 3.12, 3.13, and 3.14 on macOS and Ubuntu. The floor will only be raised when Python 3.10 reaches end-of-life and documented in `CHANGELOG.md`.
+---
 
 ## License
 
-AgtMLS is dual-licensed under the terms of both the **Apache License (Version 2.0)** and the **MIT License**. You may choose either license at your option:
+Dual-licensed under the terms of both the **Apache License (Version 2.0)** and the **MIT License**, at your option:
 
 - [Apache License, Version 2.0](LICENSE-APACHE)
 - [MIT License](LICENSE-MIT)
+
+See [CHANGELOG.md](CHANGELOG.md) for full release history.
+
+<p align="right"><a href="#contents">Back to Top</a></p>
