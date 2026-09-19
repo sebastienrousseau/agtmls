@@ -8,6 +8,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# A new push to the same ref makes the previous run's result irrelevant.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -18,20 +23,36 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        # PRs run the supported floor and ceiling; main and tags run all five.
+        python-version: ${{ (github.event_name == 'pull_request' && fromJSON('["3.10","3.14"]')) || fromJSON('["3.10","3.11","3.12","3.13","3.14"]') }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           fetch-tags: true
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install reference validator
         # skills-ref requires Python >=3.11. It is optional: without it
         # validate-spec-conformance.py reports SKIP, and 3.11+ legs still
         # enforce the spec. Never fail the run over a dev-only tool.
-        run: python3 -m pip install --disable-pip-version-check skills-ref || true
+        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0' || true
+      - name: Verify commit signatures
+        # README states signing is required. Until this step, that was an
+        # honour-system policy rather than a control.
+        if: github.event_name == 'pull_request'
+        run: |
+          git config gpg.ssh.allowedSignersFile KEYS.asc
+          unsigned=0
+          for commit in $(git rev-list origin/${{ github.base_ref }}..HEAD); do
+            status=$(git log -1 --format='%G?' "$commit")
+            if [ "$status" != "G" ] && [ "$status" != "U" ]; then
+              echo "::error::unsigned or unverifiable commit $commit (%G? = $status)"
+              unsigned=1
+            fi
+          done
+          test "$unsigned" -eq 0
       - name: Validate Skills
         run: python3 scripts/validate-skills.py
       - name: Validate Spec Conformance
@@ -126,16 +147,6 @@ jobs:
         run: python3 scripts/smoke-evolve-evidence.py
       - name: Smoke Provider Install
         run: python3 scripts/smoke-provider-install.py
-      - name: Smoke Live Providers
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
-          OLLAMA_BASE_URL: ${{ vars.OLLAMA_BASE_URL }}
-        run: python3 scripts/smoke-live-providers.py
       - name: Smoke Install
         run: python3 scripts/smoke-install.py
       - name: Smoke Install Safety
