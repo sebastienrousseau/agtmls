@@ -55,13 +55,14 @@ done
 if [[ -z "$LANGUAGE" || -z "$AGENT_CLI" ]]; then
   echo "Usage: $0 <language> <agent-cli> [--skills-only] [--copy] [--bundle <name>]..."
   echo "  language:      rust | python | go | cpp | swift | typescript | javascript | ruby | bash"
-  echo "  agent-cli:     claude | aider | codex"
+  echo "  agent-cli:     claude | aider | codex | antigravity (agy)"
   echo "  --skills-only: link skills only; do not write a system prompt"
   echo "  --bundle NAME: also link the NAME project skill bundle (e.g. noyalib); repeatable"
   echo "  --copy:        copy skills instead of symlinking (for non-persistent hubs)"
   echo
   echo "Example: $0 rust claude"
   echo "Example: $0 python claude --skills-only"
+  echo "Example: $0 python agy --skills-only"
   echo "Example: $0 rust claude --skills-only --bundle noyalib"
   exit 1
 fi
@@ -73,10 +74,11 @@ echo "🚀 Configuring AgtMLS workspace in $TARGET_DIR for $LANGUAGE using $AGEN
 # 1. Map CLI tool to its dot-dir (skills/commands) and its AUTO-LOADED
 #    system-prompt path (repo root — see design note above).
 case "$AGENT_CLI" in
-  claude) CLI_DIR=".claude"; SYS_PATH="CLAUDE.md" ;;
-  aider)  CLI_DIR=".aider";  SYS_PATH="CONVENTIONS.md" ;;
-  codex)  CLI_DIR=".codex";  SYS_PATH="AGENTS.md" ;;
-  *)      CLI_DIR=".agent";  SYS_PATH="AGENTS.md" ;;
+  claude)          CLI_DIR=".claude"; SYS_PATH="CLAUDE.md" ;;
+  aider)           CLI_DIR=".aider";  SYS_PATH="CONVENTIONS.md" ;;
+  codex)           CLI_DIR=".codex";  SYS_PATH="AGENTS.md" ;;
+  antigravity|agy) CLI_DIR=".agents"; SYS_PATH="AGENTS.md" ;;
+  *)               CLI_DIR=".agent";  SYS_PATH="AGENTS.md" ;;
 esac
 
 mkdir -p "$TARGET_DIR/$CLI_DIR/skills"

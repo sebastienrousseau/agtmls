@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+cff-version: 1.2.0
+title: agtmls
+message: >-
+  If you use this software in research or development, please cite it using
+  these metadata.
+type: software
+authors:
+  - given-names: Sebastien
+    family-names: Rousseau
+    email: sebastian.rousseau@gmail.com
+repository-code: https://github.com/sebastienrousseau/agtmls
+url: https://github.com/sebastienrousseau/agtmls
+abstract: >-
+  The universal agent skills registry — polyglot engineering skills and
+  system prompts for Claude Code, Codex, Antigravity, and compatible agents.
+keywords:
+  - agent-skills
+  - claude-code
+  - codex
+  - antigravity
+  - llm-agents
+  - prompt-engineering
+license: Apache-2.0 OR MIT
+version: 0.0.6

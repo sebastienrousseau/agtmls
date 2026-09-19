@@ -1618,7 +1618,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "1d8a175c5c1f8c2667675343f89b5876b15060658f7036ce464692dba587d442"
+          "checksumValue": "f81519d5328a2a1b19f085eae54d2aa731f1588d5968b4107bd75b02b07cc7ed"
         }
       ],
       "fileName": "scripts/setup-workspace.sh"
@@ -1681,7 +1681,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "84f1801049bb7d90f75f842b587c2635888eb2852572263c009b6a468fed9b63"
+          "checksumValue": "de635f16210031cd40df402004156e8728fd85e64f0b8ea0c861add20e6b12d4"
         }
       ],
       "fileName": "scripts/smoke-install.py"

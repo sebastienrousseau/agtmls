@@ -407,3 +407,40 @@ AgtMLS follows the pre-1.0 patch-line policy in `VERSIONING.md`: public releases
 Published release assets can be verified after release with `python3 scripts/agtmls.py verify-release-assets --tag v0.0.1`.
 
 Release tag protection is documented in `docs/tag-protection.md`.
+
+## Documentation
+
+- [User Catalog](CATALOG.md) — The complete index of 30 engineering skills and subagents.
+- [Architecture](docs/ARCHITECTURE.md) — System architecture, generation pipeline, and provider adapters.
+- [Developer Guide](DEVELOPMENT.md) — Local setup, reproducing CI validation gates, and release dry-runs.
+- [Invariants for Agents](AGENTS.md) — Rules for AI-assisted contributors.
+
+## When not to use AgtMLS
+
+AgtMLS is designed as a structured, versioned engineering skills registry for developer agents. Do not use AgtMLS if:
+- You need a dynamic runtime plugin sandbox (AgtMLS provides declarative skills, system prompts, and static adapters).
+- You are looking for arbitrary unverified community prompt dumps (all AgtMLS skills must pass behavioral evals, frontmatter schema validation, and collision tests).
+- Your workflow cannot adhere to versioned, reproducible releases.
+
+## Stability guarantees
+
+- **SemVer breaking axis**: Public releases strictly follow semantic patch-line increments (`v0.0.1` -> `v0.0.999` -> `v0.1.0`). Breaking changes to skill contracts, frontmatter schemas, or provider export layouts are strictly governed and documented in release notes.
+- **Output stability**: Script generators produce deterministic JSON/Markdown artifacts verified in CI via `--check` flags.
+
+## Security & hardening
+
+- **Private Reporting**: Report security vulnerabilities privately following [SECURITY.md](SECURITY.md).
+- **Dependency-Free Architecture**: AgtMLS scripts use zero external PyPI runtime dependencies, eliminating supply-chain exposure from third-party packages.
+- **Provenance & SBOM**: Every release includes a cryptographically verifiable SPDX 2.3 SBOM (`SBOM.spdx.json`) and SLSA-aligned provenance subject (`provenance.json`).
+- **Secret Scanning & Eval Guardrails**: `scripts/validate-secrets.py` and behavioral eval suites run on every commit.
+
+## Minimum-toolchain policy
+
+- **Python**: 3.10 is the stated floor, tested and validated across Python 3.10, 3.11, 3.12, 3.13, and 3.14 on macOS and Ubuntu. The floor will only be raised when Python 3.10 reaches end-of-life and documented in `CHANGELOG.md`.
+
+## License
+
+AgtMLS is dual-licensed under the terms of both the **Apache License (Version 2.0)** and the **MIT License**. You may choose either license at your option:
+
+- [Apache License, Version 2.0](LICENSE-APACHE)
+- [MIT License](LICENSE-MIT)

@@ -53,12 +53,23 @@ def smoke_prompt(tmp: Path, errors: list[str]) -> None:
     expect((target / ".claude" / "skills" / "using-agtmls").is_symlink(), "missing using-agtmls skill link", errors)
 
 
+def smoke_antigravity(tmp: Path, errors: list[str]) -> None:
+    target = tmp / "antigravity"
+    target.mkdir()
+    proc = run([str(SETUP), "python", "agy"], target)
+    expect(proc.returncode == 0, f"antigravity setup failed:\n{proc.stdout}", errors)
+    prompt = target / "AGENTS.md"
+    expect(prompt.exists(), "antigravity setup did not write AGENTS.md", errors)
+    expect((target / ".agents" / "skills" / "using-agtmls").is_symlink(), "missing .agents skill link", errors)
+
+
 def main() -> int:
     errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="agtmls-smoke-") as td:
         tmp = Path(td)
         smoke_skills_only(tmp, errors)
         smoke_prompt(tmp, errors)
+        smoke_antigravity(tmp, errors)
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
