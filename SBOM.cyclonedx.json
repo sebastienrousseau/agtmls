@@ -960,7 +960,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d7f08b980a2c5c63036276a38e22a80c216e13d791530f44e82afa10537294d5"
+          "content": "6d6ec33a651e9f34c3fab380032939d72c48c35af997cadb16040a2ab69be752"
         }
       ],
       "name": "scripts/generate-provenance.py"
@@ -969,7 +969,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "14faf93418578bd875010788e00613d09b4808b9f723f66431c05b4d5bd092d8"
+          "content": "fc2d529c9dc581870dcc06b662b86ddfc8f4e5dcd644cede7a1fb8d5be2fe945"
         }
       ],
       "name": "scripts/generate-sbom.py"
@@ -1401,7 +1401,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "95d586a4942dc49fe6c87c67b1fe574c9e3e4c347b114813fcd1b877eca1d5af"
+          "content": "0f5aa725dc31e1bbe585923ac4491b30fb09042f172fba3abe7ad494e395bb10"
         }
       ],
       "name": "scripts/validate-packaging.py"
@@ -3117,7 +3117,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-19T16:39:50Z",
+    "timestamp": "2026-09-19T17:45:11Z",
     "tools": {
       "components": [
         {
