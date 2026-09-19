@@ -254,7 +254,7 @@ AgtMLS includes proactive defense against malicious third-party prompt injection
 
 ### Static Security Auditor (`agtmls audit`)
 
-The built-in static analyzer ([`scripts/audit-skill.py`](scripts/audit-skill.py)) inspects skills and markdown prompts without executing untrusted code:
+The built-in static analyzer ([`scripts/audit-skill.py`](scripts/audit-skill.py)) inspects every file in a skill — markdown, shell, Python, JSON and anything carrying the executable bit — without executing untrusted code. Every finding carries a stable rule identifier (`AGT-STEG-001`, `AGT-EXEC-003`, …) so it can be suppressed, exported or tracked individually:
 
 ```bash
 # Scan a single skill directory or markdown file
@@ -266,11 +266,63 @@ agtmls audit --all --strict --json
 
 ### Attack Vectors Defended
 
-- **Invisible Unicode Steganography**: Zero-width spaces (`\u200B`–`\u200D`, `\uFEFF`), bidirectional override markers (`\u202A`–`\u202E`, `\u2066`–`\u2069`), and Unicode tag characters (`\U000E0000`–`\U000E007F`) used to conceal prompt injection from human reviewers.
-- **Prompt Injection & Persona Jailbreaks**: Detection of instruction overrides (`"ignore previous instructions"`), developer-mode exploits, and security guardrail bypasses.
-- **Dangerous Shell Invocations**: Unauthorized pipe-to-shell commands (`curl | bash`), root wipes (`rm -rf /`), credential access (`~/.ssh`, `~/.aws`), and reverse shells.
-- **Data Exfiltration Pingbacks**: Detection of covert markdown image pingbacks intended to leak session context or environment variables.
-- **Policy Honesty Checks**: Ensures that skills declaring `executes_commands: false` or `network_access: none` do not instruct models to run destructive commands or make network requests.
+- **Invisible Unicode Steganography** (`AGT-STEG-*`): Zero-width spaces (`\u200B`–`\u200D`, `\uFEFF`), bidirectional override markers (`\u202A`–`\u202E`, `\u2066`–`\u2069`), variation selectors (`\uFE00`–`\uFE0F`), soft hyphens, invisible mathematical operators (`\u2061`–`\u2064`), Hangul fillers, and Unicode tag characters (`\U000E0000`–`\U000E007F`) used to conceal prompt injection from human reviewers.
+- **Prompt Injection & Persona Jailbreaks** (`AGT-INJ-*`): Detection of instruction overrides (`"ignore previous instructions"`), developer-mode exploits, and security guardrail bypasses.
+- **Dangerous Shell Invocations** (`AGT-EXEC-*`): Unauthorized pipe-to-shell commands (`curl | bash`), root wipes (`rm -rf /`), credential access (`~/.ssh`, `~/.aws`), and reverse shells.
+- **Data Exfiltration Pingbacks** (`AGT-EXFIL-*`): Detection of covert markdown image pingbacks intended to leak session context or environment variables.
+- **Capability Escalation** (`AGT-CAP-*`): Frontmatter that grants `Bash`, `Write` or `WebFetch` while `metadata.json` declares those capabilities denied. The runtime honours the frontmatter, so the two disagreeing is the escalation.
+- **Policy Honesty Checks** (`AGT-POLICY-*`): Skills declaring `executes_commands: false` or `network_access: none` that instruct models to run commands or fetch URLs. A missing or unparseable `metadata.json` is itself a finding — an unattested skill is not a safe skill.
+
+### Content-addressed skills and install verification
+
+Every skill in [`index.json`](index.json) carries an `integrity` digest — a
+SHA-256 over a manifest of its files, defined normatively in
+[`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) and stable
+across a git clone, a `--copy` install, an extracted wheel and a release
+tarball.
+
+```bash
+agtmls install rust claude          # verifies the registry, then records a lockfile
+agtmls verify claude                # re-checks the installed tree
+```
+
+`install` verifies the **source** registry against `index.json` before copying
+anything and refuses with exit `3` if they disagree — checking after a
+tampered skill has been copied into your repository would not be a control. It
+then writes `.agtmls/manifest.json` recording what was installed and what each
+skill hashed to.
+
+`verify` recomputes those digests:
+
+| Status | Meaning | Exit |
+| :--- | :--- | ---: |
+| *(clean)* | Every recorded skill is byte-identical to what was installed | `0` |
+| `MODIFIED` | Content changed since install — a local edit, or tampering | `3` |
+| `MISSING` | Recorded in the lockfile but no longer present | `3` |
+| `UNMANAGED` | Present but not installed by AgtMLS. Reported, never deleted | `0` |
+
+Verification **reports rather than repairs**: silently rewriting a skill whose
+digest moved would destroy a local edit and would hide tampering behind the
+same behaviour.
+
+### Evasion resistance
+
+Detectors are only meaningful if they survive a determined author, so the
+analyzer is gated against an adversarial corpus
+([`evals/security/corpus.json`](evals/security/corpus.json), run by
+[`scripts/run-security-evals.py`](scripts/run-security-evals.py)) rather than
+against one canonical string per rule. It covers payloads split across
+newlines, alternate invisible-character channels, malicious code in
+non-markdown files, and skills that simply omit the metadata declaring their
+policy. Benign fixtures in the same corpus gate false positives.
+
+### Untrusted import
+
+`agtmls import-skill` audits before it copies and refuses on any CRITICAL or
+HIGH finding. Imported skills are recorded as unattested — `maturity: draft`,
+`risk_level: high`, `requires_human_review: true` — with the source's own
+`metadata.json` preserved as `metadata.source.json` and the audit findings
+retained under `provenance.audit_findings`.
 
 ### Cryptographic Artifacts
 
@@ -366,7 +418,7 @@ agtmls export --provider anthropic --profile noyalib --out-dir dist
 python3 scripts/agtmls.py doctor
 python3 scripts/agtmls.py status
 
-# Full gate validation (57 checks)
+# Full gate validation (62 checks)
 python3 scripts/agtmls.py check
 
 # Static security audit
@@ -441,7 +493,7 @@ agtmls/
 ├── system-prompts/              # Base rules (_base.md) and 9 language profiles
 ├── agent-card.json              # A2A agent discovery manifest
 ├── CATALOG.md                   # Human-readable registry catalog
-├── checks.json                  # Canonical 57-check validation registry
+├── checks.json                  # Canonical 62-check validation registry
 ├── index.json                   # Machine-readable skill registry index
 ├── KEYS.asc                     # OpenSSH allowed signers for commit/tag verification
 ├── Makefile                     # Unix build and installation task runner
