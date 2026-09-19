@@ -80,8 +80,17 @@ def built_at() -> str:
 
 
 def source_ref() -> str:
+    """The commit that last changed authored content.
+
+    Not HEAD. A file that records the current commit hash can never be
+    committed and remain current: committing it changes HEAD, so the next
+    --check regenerates a different value, forever. Naming the commit that
+    last changed the described content is both stable and more accurate --
+    this document describes registry state, not the commit that happened to
+    write it.
+    """
     proc = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
+        ["git", "log", "-1", "--format=%H", "--", *SOURCE_DIRS, *SOURCE_FILES],
         cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False,
     )
     return proc.stdout.strip() or "unknown"

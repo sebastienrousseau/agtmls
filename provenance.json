@@ -86,7 +86,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "c33c35daed7fe0686832766bc76c95a0903bf56e"
+            "gitCommit": "8aa5a7781a72ab01c1c00f8453bcac1194306f79"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }

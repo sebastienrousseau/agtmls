@@ -951,7 +951,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "42756b4e8cc6d7fcd69c4a72369eff37795f3ec725a68c3930de49d644df238f"
+          "content": "d7f08b980a2c5c63036276a38e22a80c216e13d791530f44e82afa10537294d5"
         }
       ],
       "name": "scripts/generate-provenance.py"
