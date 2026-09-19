@@ -127,12 +127,13 @@ def check_plugin(errors: list[str]) -> dict[str, object]:
             f"plugin manifest commands path must be a directory: {manifest.get('commands')}"
         )
 
+    license_file = ROOT / "LICENSE" if (ROOT / "LICENSE").exists() else ROOT / "LICENSE-MIT"
     license_text = (
-        (ROOT / "LICENSE").read_text(encoding="utf-8", errors="replace")
-        if (ROOT / "LICENSE").exists()
+        license_file.read_text(encoding="utf-8", errors="replace")
+        if license_file.exists()
         else ""
     )
-    if manifest.get("license") == "MIT" and "MIT License" not in license_text:
+    if manifest.get("license") in ("MIT", "Apache-2.0 OR MIT") and "MIT License" not in license_text:
         errors.append("LICENSE file must contain MIT License text")
     return manifest
 

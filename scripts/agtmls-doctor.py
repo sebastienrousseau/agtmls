@@ -72,12 +72,18 @@ def main() -> int:
 
     r = Reporter()
 
-    for path in ["README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md", "commands"]:
-        p = ROOT / path
-        if p.exists():
+    for path in ["README.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md", "commands"]:
+        item = ROOT / path
+        if item.exists():
             r.ok(f"{path} exists")
         else:
             r.fail(f"{path} is missing")
+    if (ROOT / "LICENSE").exists():
+        r.ok("LICENSE exists")
+    elif (ROOT / "LICENSE-MIT").exists():
+        r.ok("LICENSE-MIT exists")
+    else:
+        r.fail("LICENSE is missing")
 
     manifest_path = ROOT / ".claude-plugin" / "plugin.json"
     if manifest_path.exists():

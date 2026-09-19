@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agtmls"
-version = "0.0.5"
+version = "0.0.6"
 description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
@@ -59,7 +59,8 @@ packages = ["src/agtmls"]
 "lifecycle.json" = "agtmls/_registry/lifecycle.json"
 "checks.json" = "agtmls/_registry/checks.json"
 "CATALOG.md" = "agtmls/_registry/CATALOG.md"
-"LICENSE" = "agtmls/_registry/LICENSE"
+"LICENSE-APACHE" = "agtmls/_registry/LICENSE-APACHE"
+"LICENSE-MIT" = "agtmls/_registry/LICENSE-MIT"
 ".claude-plugin/plugin.json" = "agtmls/_registry/.claude-plugin/plugin.json"
 
 [tool.hatch.build.targets.sdist]
@@ -75,5 +76,6 @@ include = [
   "evals",
   "*.json",
   "*.md",
-  "LICENSE",
+  "LICENSE-APACHE",
+  "LICENSE-MIT",
 ]

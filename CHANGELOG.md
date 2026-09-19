@@ -7,6 +7,18 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.6 - 2026-09-19
+
+### Added
+
+- Dual licensing under Apache-2.0 and MIT: added `LICENSE-APACHE` and `LICENSE-MIT` (merging #17).
+
+### Changed
+
+- Updated packaging and manifest validation tooling (`pyproject.toml`, `validate-packaging.py`, `validate-plugin-manifest.py`, `agtmls-doctor.py`, `export-registry.py`) to support dual license declarations.
+- Bumped release metadata through the guarded patch-line release flow to `v0.0.6`.
+
+
 ## 0.0.5 - 2026-08-04
 
 ### Added
