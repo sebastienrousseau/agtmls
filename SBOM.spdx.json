@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-19T15:08:14Z",
+    "created": "2026-09-19T16:39:50Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1530,6 +1530,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/bump-version.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-check-publishing-readiness.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8ee7be1937cb1524ca5bafb9d470aa3a9bcd40ef"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "06da54d2f27a63c81bf6836e6f2bb0400636e4c3ea0818eb8b9cc77b8f7deca9"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/check-publishing-readiness.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5611,6 +5627,7 @@
         "SPDXRef-File-scripts-audit-skill.py",
         "SPDXRef-File-scripts-bench.py",
         "SPDXRef-File-scripts-bump-version.py",
+        "SPDXRef-File-scripts-check-publishing-readiness.py",
         "SPDXRef-File-scripts-check-skill-collisions.py",
         "SPDXRef-File-scripts-evolve-session.py",
         "SPDXRef-File-scripts-export-registry.py",
