@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+
+name: Bug report
+description: Report incorrect skill routing, validation failure, CLI error, or installer issue.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. A minimal reproduction with reproduction steps is the single most useful thing you can include.
+  - type: input
+    id: version
+    attributes:
+      label: AgtMLS version
+      description: Output of `agtmls --version` or package version.
+      placeholder: "0.0.6"
+    validations:
+      required: true
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Target agent / runtime
+      options:
+        - Claude Code
+        - OpenAI Codex
+        - Aider
+        - Google Antigravity (agy)
+        - Gemini CLI
+        - Cursor
+        - Windsurf
+        - Standalone CLI / scripts
+        - Other / Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: How you invoked it
+      description: The exact command or prompt given to the agent.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened, including exact error output or unintended skill activation.
+    validations:
+      required: true

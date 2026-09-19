@@ -10,6 +10,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from _lib import lockfile  # noqa: E402  (needs ROOT on the path first)
 
 
 def run(argv: list[str], cwd: Path = ROOT) -> int:
@@ -40,7 +43,9 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
                     resolved = entry.resolve(strict=True)
                 except FileNotFoundError:
                     resolved = Path("")
-                if str(resolved).startswith(str(ROOT)):
+                # A string prefix would also match a sibling checkout whose
+                # path merely starts with ours, e.g. ../agtmls-experiments.
+                if resolved != Path("") and resolved.is_relative_to(ROOT):
                     entry.unlink()
                     removed += 1
     prompt_path = target / prompt
@@ -189,9 +194,71 @@ def providers(json_output: bool) -> int:
     return 0
 
 
+def verify_registry() -> list[tuple[str, str, str]]:
+    """Skills whose on-disk content no longer matches index.json.
+
+    Checked before an install rather than after: copying a tampered skill into
+    a consumer repository and then reporting it is not a control.
+    """
+    from _lib.digest import skill_digest
+
+    drift: list[tuple[str, str, str]] = []
+    for skill in load_index().get("skills", []):
+        expected = skill.get("integrity")
+        if not expected:
+            continue
+        source = ROOT / skill["path"]
+        if not source.is_dir():
+            drift.append((skill["name"], expected, "<missing>"))
+            continue
+        actual = skill_digest(source)
+        if actual != expected:
+            drift.append((skill["name"], expected, actual))
+    return drift
+
+
+def installed_skill_names(target: Path, agent: str) -> list[str]:
+    dot, _ = agent_paths(agent)
+    directory = target / dot / "skills"
+    if not directory.is_dir():
+        return []
+    return sorted(entry.name for entry in directory.iterdir() if entry.is_dir() or entry.is_symlink())
+
+
+def verify_install(target: Path, agent: str, json_output: bool) -> int:
+    """Check an installed tree against its lockfile."""
+    target = target.resolve()
+    dot, _ = agent_paths(agent)
+    problems = lockfile.verify(target, target / dot / "skills")
+
+    if json_output:
+        print(json.dumps(
+            {"target": str(target), "ok": not problems,
+             "problems": [{"skill": n, "status": s, "detail": d} for n, s, d in problems]},
+            indent=2, sort_keys=True,
+        ))
+    elif not problems:
+        lock = lockfile.read(target) or {}
+        print(f"OK: {len(lock.get('skills', []))} skill(s) match the lockfile in {target}")
+    else:
+        for name, status, detail in problems:
+            print(f"{status.upper():<12} {name or '-'}  {detail}", file=sys.stderr)
+        print(f"\nFAIL: {len(problems)} integrity problem(s)", file=sys.stderr)
+
+    if not problems:
+        return lockfile.EXIT_OK
+    # "unmanaged" is informational; only a real mismatch is an integrity failure.
+    if all(status == "unmanaged" for _, status, _ in problems):
+        return lockfile.EXIT_OK
+    return lockfile.EXIT_INTEGRITY_FAILURE
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(prog="agtmls")
-    sub = parser.add_subparsers(dest="command", required=True)
+    # dest must not collide with any subparser option dest: `evidence --command`
+    # used to overwrite the subcommand name with its own (list) value, which made
+    # every dispatch comparison below fail. See CliDispatchTests.
+    sub = parser.add_subparsers(dest="subcommand", required=True)
 
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--target", type=Path)
@@ -270,7 +337,7 @@ def main() -> int:
 
     evidence = sub.add_parser("evidence")
     evidence.add_argument("--skill", required=True)
-    evidence.add_argument("--command", action="append", default=[])
+    evidence.add_argument("--command", dest="evidence_commands", action="append", default=[])
     evidence.add_argument("--file", action="append", default=[])
     evidence.add_argument("--outcome", default="recorded")
 
@@ -309,6 +376,12 @@ def main() -> int:
 
     sub.add_parser("release-check")
 
+    audit_cmd = sub.add_parser("audit", help="statically audit skills for prompt injection, steganography, and security risks")
+    audit_cmd.add_argument("path", nargs="?", type=Path, help="path to skill directory or markdown file")
+    audit_cmd.add_argument("--all", action="store_true", help="audit all skills in registry")
+    audit_cmd.add_argument("--strict", action="store_true", help="fail on warnings")
+    audit_cmd.add_argument("--json", action="store_true", help="output JSON")
+
     import_cmd = sub.add_parser("import-skill")
     import_cmd.add_argument("source", type=Path)
     import_cmd.add_argument("--name")
@@ -330,6 +403,28 @@ def main() -> int:
     )
     install.add_argument("--bundle", action="append", default=[])
     install.add_argument("--profile")
+    install.add_argument(
+        "--force",
+        action="store_true",
+        help="back up and overwrite a prompt file AgtMLS did not generate",
+    )
+    install.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print every planned change and exit without touching disk",
+    )
+    install.add_argument(
+        "--no-verify",
+        action="store_true",
+        help="skip the integrity check against index.json (not recommended)",
+    )
+
+    verify = sub.add_parser(
+        "verify", help="check an installed tree against its .agtmls/manifest.json lockfile"
+    )
+    verify.add_argument("agent", choices=["claude", "aider", "codex"])
+    verify.add_argument("--target", type=Path, default=Path.cwd())
+    verify.add_argument("--json", action="store_true")
 
     remove = sub.add_parser("uninstall")
     remove.add_argument("agent", choices=["claude", "aider", "codex"])
@@ -347,7 +442,7 @@ def main() -> int:
 
     args = parser.parse_args()
 
-    if args.command in {"doctor", "status"}:
+    if args.subcommand in {"doctor", "status"}:
         cmd = [sys.executable, str(ROOT / "scripts" / "agtmls-doctor.py")]
         if args.target:
             cmd.extend(["--target", str(args.target)])
@@ -355,26 +450,24 @@ def main() -> int:
             cmd.extend(["--agent", args.agent])
         if args.skills_only:
             cmd.append("--skills-only")
-        if args.copy:
-            cmd.append("--copy")
         for bundle in args.bundle:
             cmd.extend(["--bundle", bundle])
         return run(cmd)
-    if args.command == "check":
+    if args.subcommand == "check":
         return run([sys.executable, str(ROOT / "scripts" / "run-all-checks.py")])
-    if args.command == "list":
+    if args.subcommand == "list":
         return list_entries(args.kind, args.bundle, args.json)
-    if args.command == "search":
+    if args.subcommand == "search":
         return search_entries(args.query, args.json)
-    if args.command == "show":
+    if args.subcommand == "show":
         return show_entry(args.name, args.json)
-    if args.command == "stats":
+    if args.subcommand == "stats":
         return stats(args.json)
-    if args.command == "profiles":
+    if args.subcommand == "profiles":
         return profiles(args.json)
-    if args.command == "providers":
+    if args.subcommand == "providers":
         return providers(args.json)
-    if args.command == "export":
+    if args.subcommand == "export":
         cmd = [sys.executable, str(ROOT / "scripts" / "export-registry.py"), "--provider", args.provider]
         if args.profile:
             cmd.extend(["--profile", args.profile])
@@ -383,10 +476,10 @@ def main() -> int:
         if args.out_dir:
             cmd.extend(["--out-dir", str(args.out_dir)])
         return run(cmd)
-    if args.command == "docs-site":
+    if args.subcommand == "docs-site":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-docs-site.py"), *flags])
-    if args.command == "release-pack":
+    if args.subcommand == "release-pack":
         cmd = [sys.executable, str(ROOT / "scripts" / "release-pack.py")]
         if args.out_dir:
             cmd.extend(["--out-dir", str(args.out_dir)])
@@ -395,14 +488,14 @@ def main() -> int:
         for provider in args.provider:
             cmd.extend(["--provider", provider])
         return run(cmd)
-    if args.command == "next-version":
+    if args.subcommand == "next-version":
         cmd = [sys.executable, str(ROOT / "scripts" / "next-version.py")]
         if args.tag:
             cmd.append("--tag")
         if args.json:
             cmd.append("--json")
         return run(cmd)
-    if args.command == "bump-version":
+    if args.subcommand == "bump-version":
         cmd = [sys.executable, str(ROOT / "scripts" / "bump-version.py")]
         if args.version:
             cmd.extend(["--version", args.version])
@@ -411,7 +504,7 @@ def main() -> int:
         if args.check:
             cmd.append("--check")
         return run(cmd)
-    if args.command == "release-dry-run":
+    if args.subcommand == "release-dry-run":
         cmd = [sys.executable, str(ROOT / "scripts" / "release-dry-run.py")]
         if args.version:
             cmd.extend(["--version", args.version])
@@ -422,69 +515,84 @@ def main() -> int:
         for provider in args.provider:
             cmd.extend(["--provider", provider])
         return run(cmd)
-    if args.command == "verify-release-assets":
+    if args.subcommand == "verify-release-assets":
         cmd = [sys.executable, str(ROOT / "scripts" / "verify-release-assets.py"), "--tag", args.tag]
         if args.repo:
             cmd.extend(["--repo", args.repo])
         if args.out_dir:
             cmd.extend(["--out-dir", str(args.out_dir)])
         return run(cmd)
-    if args.command == "evolve":
+    if args.subcommand == "evolve":
         return run([sys.executable, str(ROOT / "scripts" / "evolve-session.py"), str(args.transcript), "--skill-name", args.skill_name])
-    if args.command == "evidence":
+    if args.subcommand == "evidence":
         cmd = [sys.executable, str(ROOT / "scripts" / "record-evidence.py"), "--skill", args.skill, "--outcome", args.outcome]
-        for item in args.command:
+        for item in args.evidence_commands:
             cmd.extend(["--command", item])
         for item in args.file:
             cmd.extend(["--file", item])
         return run(cmd)
-    if args.command == "agent-card":
+    if args.subcommand == "agent-card":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-agent-card.py"), *flags])
-    if args.command == "mcp-resources":
+    if args.subcommand == "mcp-resources":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-mcp-resources.py"), *flags])
-    if args.command == "plugin-manifests":
+    if args.subcommand == "plugin-manifests":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-plugin-manifests.py"), *flags])
-    if args.command == "sbom":
+    if args.subcommand == "sbom":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-sbom.py"), *flags])
-    if args.command == "provenance":
+    if args.subcommand == "provenance":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-provenance.py"), *flags])
-    if args.command == "provider-install":
+    if args.subcommand == "provider-install":
         cmd = [sys.executable, str(ROOT / "scripts" / "provider-install.py"), "--provider", args.provider, "--target", str(args.target)]
         if args.profile:
             cmd.extend(["--profile", args.profile])
         if args.check:
             cmd.append("--check")
         return run(cmd)
-    if args.command == "bench":
+    if args.subcommand == "bench":
         return run([sys.executable, str(ROOT / "scripts" / "bench.py")])
-    if args.command == "diff":
+    if args.subcommand == "diff":
         cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", args.old, "--to", args.new]
         if args.json:
             cmd.append("--json")
         return run(cmd)
-    if args.command == "release-check":
+    if args.subcommand == "release-check":
         return run([sys.executable, str(ROOT / "scripts" / "release-check.py")])
-    if args.command == "import-skill":
+    if args.subcommand == "audit":
+        cmd = [sys.executable, str(ROOT / "scripts" / "audit-skill.py")]
+        if args.path:
+            cmd.append(str(args.path))
+        if args.all:
+            cmd.append("--all")
+        if args.strict:
+            cmd.append("--strict")
+        if args.json:
+            cmd.extend(["--format", "json"])
+        return run(cmd)
+    if args.subcommand == "import-skill":
         cmd = [sys.executable, str(ROOT / "scripts" / "import-skill.py"), str(args.source)]
         if args.name:
             cmd.extend(["--name", args.name])
         if args.bundle:
             cmd.extend(["--bundle", args.bundle])
         return run(cmd)
-    if args.command == "index":
+    if args.subcommand == "index":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-skill-index.py"), *flags])
-    if args.command == "install":
+    if args.subcommand == "install":
         cmd = [str(ROOT / "scripts" / "setup-workspace.sh"), args.language, args.agent]
         if args.skills_only:
             cmd.append("--skills-only")
         if args.copy:
             cmd.append("--copy")
+        if args.force:
+            cmd.append("--force")
+        if args.dry_run:
+            cmd.append("--dry-run")
         bundles = list(args.bundle)
         if args.profile:
             data = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"]
@@ -495,10 +603,44 @@ def main() -> int:
             bundles.extend(profile.get("bundles", []))
         for bundle in sorted(set(bundles)):
             cmd.extend(["--bundle", bundle])
-        return run(cmd, cwd=args.target.resolve())
-    if args.command == "uninstall":
+
+        target = args.target.resolve()
+        if not args.no_verify and not args.dry_run:
+            drift = verify_registry()
+            if drift:
+                print(
+                    f"refusing to install: {len(drift)} skill(s) do not match index.json",
+                    file=sys.stderr,
+                )
+                for name, expected, actual in drift:
+                    print(f"  {name}\n    index    {expected}\n    on disk  {actual}", file=sys.stderr)
+                print(
+                    "\nThe registry has been modified since index.json was generated. Run "
+                    "`agtmls index --write` if the change is yours, or re-clone if it is not.",
+                    file=sys.stderr,
+                )
+                return lockfile.EXIT_INTEGRITY_FAILURE
+
+        rc = run(cmd, cwd=target)
+        if rc != 0 or args.dry_run:
+            return rc
+
+        # Record what landed, so `agtmls verify` has something to check against.
+        index = load_index()
+        installed = installed_skill_names(target, args.agent)
+        payload = lockfile.build(
+            target, ROOT, installed,
+            "copy" if args.copy else "symlink",
+            str(index.get("registry_version", "")),
+        )
+        path = lockfile.write(target, payload)
+        print(f"recorded {len(payload['skills'])} skill(s) in {path.relative_to(target)}")
+        return 0
+    if args.subcommand == "verify":
+        return verify_install(args.target, args.agent, args.json)
+    if args.subcommand == "uninstall":
         return uninstall(args.target, args.agent, args.remove_prompt)
-    if args.command == "propose-skill":
+    if args.subcommand == "propose-skill":
         return run(
             [
                 sys.executable,
@@ -508,7 +650,7 @@ def main() -> int:
                 args.skill_name,
             ]
         )
-    if args.command == "scaffold-skill":
+    if args.subcommand == "scaffold-skill":
         cmd = [sys.executable, str(ROOT / "scripts" / "scaffold-skill.py"), args.name]
         if args.bundle:
             cmd.extend(["--bundle", args.bundle])

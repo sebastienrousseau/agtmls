@@ -1,0 +1,52 @@
+#compdef agtmls
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+
+_agtmls() {
+    local -a commands
+    commands=(
+        'agent-card:agent-card command'
+        'audit:audit command'
+        'bench:bench command'
+        'bump-version:bump-version command'
+        'check:check command'
+        'diff:diff command'
+        'docs-site:docs-site command'
+        'doctor:doctor command'
+        'evidence:evidence command'
+        'evolve:evolve command'
+        'export:export command'
+        'import-skill:import-skill command'
+        'index:index command'
+        'install:install command'
+        'list:list command'
+        'mcp-resources:mcp-resources command'
+        'next-version:next-version command'
+        'plugin-manifests:plugin-manifests command'
+        'profiles:profiles command'
+        'propose-skill:propose-skill command'
+        'provenance:provenance command'
+        'provider-install:provider-install command'
+        'providers:providers command'
+        'release-check:release-check command'
+        'release-dry-run:release-dry-run command'
+        'release-pack:release-pack command'
+        'sbom:sbom command'
+        'scaffold-skill:scaffold-skill command'
+        'search:search command'
+        'show:show command'
+        'stats:stats command'
+        'status:status command'
+        'uninstall:uninstall command'
+        'verify-release-assets:verify-release-assets command'
+    )
+    _arguments -C \
+        '1: :->command' \
+        '*: :->args'
+    case $state in
+        command)
+            _describe -t commands 'agtmls command' commands
+            ;;
+    esac
+}
+compdef _agtmls agtmls

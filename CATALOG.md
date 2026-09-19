@@ -4,8 +4,8 @@
 
 # AgtMLS Catalog
 
-Registry version: `0.0.5`
-Skills: `30`
+Registry version: `0.0.6`
+Skills: `31`
 Commands: `4`
 
 ## Skills
@@ -14,6 +14,7 @@ Commands: `4`
 |---|---|---|---|
 | `agent-loop-design` | `loops` | loops, review, validation | `skills/agent-loop-design` |
 | `ai-supply-chain-security` | `security` | release, security, validation | `skills/ai-supply-chain-security` |
+| `anti-slop-pr-and-writing` | `general` | docs, release, review | `skills/anti-slop-pr-and-writing` |
 | `brainstorming` | `general` | ci, config, planning | `skills/brainstorming` |
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
 | `giving-code-review` | `general` | ci, review | `skills/giving-code-review` |

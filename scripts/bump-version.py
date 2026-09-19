@@ -19,7 +19,8 @@ VERSION_FILES = [
     ROOT / "templates" / "skill" / "metadata.json",
 ]
 TEXT_DEFAULT_FILES = [
-    ROOT / "scripts" / "import-skill.py",
+    # import-skill.py deliberately absent: it reads the version from
+    # plugin.json instead of carrying a literal for this script to patch.
     ROOT / "scripts" / "generate-skill-index.py",
     # The published package version must move with the registry version, or a
     # PyPI release ships a wheel whose metadata contradicts its contents.

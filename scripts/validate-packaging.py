@@ -26,7 +26,7 @@ from pathlib import Path
 try:  # 3.11+
     import tomllib
 except ModuleNotFoundError:  # pragma: no cover - exercised on 3.10 only
-    tomllib = None  # type: ignore[assignment]
+    tomllib = None  # type: ignore[assignment]  # 3.10 has no tomllib; guarded at every use
 
 ROOT = Path(__file__).resolve().parent.parent
 PYPROJECT = ROOT / "pyproject.toml"

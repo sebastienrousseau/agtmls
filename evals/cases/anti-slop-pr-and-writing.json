@@ -1,0 +1,13 @@
+{
+  "skill": "anti-slop-pr-and-writing",
+  "positive": [
+    "remove AI slop from this PR description",
+    "clean up robotic clich\u00e9s in my commit message",
+    "make this documentation sound human and concise",
+    "strip conversational filler and binary contrasts from this draft"
+  ],
+  "negative": [
+    "fuzz test the YAML parser",
+    "benchmark release pack throughput"
+  ]
+}

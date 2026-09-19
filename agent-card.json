@@ -13,6 +13,12 @@
       "risk": "medium"
     },
     {
+      "description": "Eliminate AI slop, clich\u00e9s, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts.",
+      "name": "anti-slop-pr-and-writing",
+      "quality": 100,
+      "risk": "low"
+    },
+    {
       "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
       "name": "brainstorming",
       "quality": 100,
@@ -204,5 +210,5 @@
     "zed"
   ],
   "schema_version": 1,
-  "version": "0.0.5"
+  "version": "0.0.6"
 }

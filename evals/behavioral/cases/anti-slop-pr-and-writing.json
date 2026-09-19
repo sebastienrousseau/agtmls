@@ -1,0 +1,24 @@
+{
+  "skill": "anti-slop-pr-and-writing",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "Binary contrasts",
+      "Throat-clearing",
+      "Conversational sycophancy",
+      "Preserve technical density"
+    ],
+    "reference_contains": [
+      "Before and after",
+      "PR description"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "Certainly! I would be delighted",
+      "In today's fast-paced world"
+    ]
+  }
+}

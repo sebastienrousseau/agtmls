@@ -20,6 +20,7 @@
     "validate-system-prompts.py",
     "check-skill-collisions.py",
     "validate-eval-cases.py",
+    "run-security-evals.py",
     "run-trigger-evals.py",
     "run-behavioral-evals.py",
     "validate-skill-metadata.py",
@@ -31,6 +32,7 @@
     "generate-agent-card.py --check",
     "generate-mcp-resources.py --check",
     "generate-sbom.py --check",
+    "validate-sbom-conformance.py",
     "generate-provenance.py --check",
     "validate-generated-artifacts.py",
     "validate-docs-site.py",
@@ -48,8 +50,11 @@
     "smoke-provider-install.py",
     "smoke-live-providers.py",
     "smoke-install.py",
+    "smoke-install-safety.py",
+    "smoke-install-verify.py",
     "smoke-install-profiles.py",
     "smoke-cli.py",
+    "smoke-make-install.py",
     "smoke-export.py",
     "smoke-import.py",
     "smoke-proposal.py",
@@ -57,6 +62,6 @@
     "run-unit-tests.py",
     "bench.py",
     "validate-check-manifest.py",
-    "agtmls-doctor.py"
+    "agtmls-doctor.py --skip-gate"
   ]
 }

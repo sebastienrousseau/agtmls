@@ -16,6 +16,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from _lib.digest import skill_digest  # noqa: E402  (needs ROOT on the path first)
 SKILLS_DIR = ROOT / "skills"
 COMMANDS_DIR = ROOT / "commands"
 INDEX = ROOT / "index.json"
@@ -182,12 +185,17 @@ def collect() -> dict[str, object]:
             "name": fields.get("name", skill_md.parent.name),
             "description": re.sub(r"\s+", " ", fields.get("description", "")).strip(),
             "path": rel_dir,
+            # Content address, per agtmls-spec/spec/03-integrity.md. This is
+            # what makes an installed skill verifiable: `version` alone cannot
+            # answer "is what I have what you published?", because every skill
+            # carries the registry's version whether or not it changed.
+            "integrity": skill_digest(skill_md.parent),
             "kind": kind,
             "bundle": bundle,
             "license": fields.get("license", "MIT"),
             "allowed_tools": fields.get("allowed-tools", "").split(),
             "metadata_path": metadata_path,
-            "version": metadata.get("version", fields.get("version", "0.0.5")),
+            "version": metadata.get("version", fields.get("version", "0.0.6")),
             "owner": metadata.get("owner"),
             "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
             "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),

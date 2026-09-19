@@ -13,6 +13,10 @@ on:
       tag:
         description: "Existing tag to release, for example v0.0.2"
         required: true
+      dry_run:
+        description: "Build and validate without publishing to PyPI"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -26,20 +30,23 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v0.0.') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
       - name: Resolve tag
         id: version
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            TAG="${{ inputs.tag }}"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            TAG="$INPUT_TAG"
           else
             TAG="${GITHUB_REF_NAME}"
           fi
@@ -53,7 +60,7 @@ jobs:
           python3 scripts/validate-version-policy.py
           python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
       - name: Install reference validator
-        run: python3 -m pip install --disable-pip-version-check skills-ref
+        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
       - name: Full release gate
         run: python3 scripts/agtmls.py check
       - name: Build release assets
@@ -63,7 +70,7 @@ jobs:
           python3 -m pip install --disable-pip-version-check build
           python3 -m build --outdir dist/python
       - name: Attest release assets
-        uses: actions/attest-build-provenance@v4
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: "dist/release/*, dist/python/*"
       - name: Verify the wheel installs and runs
@@ -79,3 +86,35 @@ jobs:
           gh release create "${{ steps.version.outputs.tag }}" dist/release/* dist/python/* \
             --title "AgtMLS ${{ steps.version.outputs.tag }}" \
             --notes "Automated AgtMLS ${{ steps.version.outputs.tag }} release. Versions increment by exactly 0.0.1 on the 0.0.x line."
+
+  # Trusted Publishing: no long-lived PyPI token exists to leak, and PyPI
+  # records PEP 740 attestations for the uploaded files.
+  publish-pypi:
+    needs: release
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Build distributions
+        run: |
+          python3 -m pip install --disable-pip-version-check build
+          python3 -m build --outdir dist/
+      # A rehearsal that stops before the registry. Without one, the first
+      # time this path runs for real is also the first time it runs at all.
+      - name: Publish (dry run)
+        if: inputs.dry_run
+        run: |
+          python3 -m pip install --disable-pip-version-check twine
+          python3 -m twine check dist/*
+          echo "dry run: built and validated $(ls dist | wc -l) file(s); nothing uploaded"
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        if: ${{ !inputs.dry_run }}
+        with:
+          attestations: true

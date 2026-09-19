@@ -8,6 +8,7 @@ Run the full gate, then look for what it cannot see.
 ```sh
 python3 scripts/agtmls.py check
 python3 scripts/check-skill-collisions.py
+python3 scripts/agtmls.py audit --all --strict
 python3 scripts/agtmls.py stats
 ```
 

@@ -1,0 +1,47 @@
+.\" SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+.\" SPDX-License-Identifier: Apache-2.0 OR MIT
+.TH AGTMLS 1 "March 2026" "agtmls 0.0.6" "User Commands"
+.SH NAME
+agtmls \- The universal agent skills registry
+.SH SYNOPSIS
+.B agtmls
+[\fIcommand\fR] [\fIoptions...\fR]
+.SH DESCRIPTION
+\fBagtmls\fR is the zero-dependency CLI and registry for managing and deploying polyglot
+engineering skills, system prompts, commands, and subagents across AI coding runtimes including
+Claude Code, OpenAI Codex, Aider, Google Antigravity, Gemini CLI, Cursor, and Windsurf.
+.SH SUBCOMMANDS
+.TP
+\fBdoctor\fR
+Run the AgtMLS full diagnostic suite verifying configuration, skills, and tools.
+.TP
+\fBstatus\fR
+Inspect local workspace installation status and symlinked skills.
+.TP
+\fBcheck\fR
+Run the 57-gate validation suite guarding registry integrity.
+.TP
+\fBaudit\fR [\fIpath\fR] [\fB\-\-\-all\fR] [\fB\-\-\-strict\fR]
+Statically scan skills for prompt injection, hidden unicode steganography, and dangerous execution.
+.TP
+\fBlist\fR [\fIcommands\fR]
+List available skills or commands in the registry.
+.TP
+\fBsearch\fR \fIquery\fR
+Search skills and commands by keyword or tag.
+.TP
+\fBshow\fR \fIname\fR
+Display detailed metadata and prompt instructions for a skill.
+.TP
+\fBinstall\fR \fIlanguage\fR \fIagent\fR [\fB\-\-\-target\fR \fIdir\fR]
+Install skills and conventions for the chosen agent and language.
+.TP
+\fBuninstall\fR \fIagent\fR [\fB\-\-\-target\fR \fIdir\fR]
+Remove AgtMLS-managed symlinks and prompt conventions from the workspace.
+.TP
+\fBbench\fR
+Run routing and behavioral benchmark evaluation test suites.
+.SH AUTHORS
+Sebastien Rousseau
+.SH COPYRIGHT
+Apache-2.0 OR MIT

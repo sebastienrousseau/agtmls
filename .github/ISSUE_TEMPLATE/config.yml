@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & ideas
+    url: https://github.com/sebastienrousseau/agtmls/discussions
+    about: Ask how to use or adapt agtmls skills, or discuss an idea before proposing a skill.
+  - name: Security vulnerability
+    url: https://github.com/sebastienrousseau/agtmls/security/advisories/new
+    about: Report a vulnerability privately — please do NOT open a public issue (see SECURITY.md).

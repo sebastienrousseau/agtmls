@@ -94,7 +94,7 @@ def build(out_dir: Path, provider: str, profile: str | None, bundle: list[str]) 
         for rel in ["commands", "system-prompts"]:
             if (ROOT / rel).exists():
                 copytree(ROOT / rel, staging / rel)
-        for rel in ["index.json", "profiles.json", "providers.json", "CATALOG.md", "README.md", "LICENSE"]:
+        for rel in ["index.json", "profiles.json", "providers.json", "CATALOG.md", "README.md", "LICENSE", "LICENSE-APACHE", "LICENSE-MIT"]:
             if (ROOT / rel).exists():
                 shutil.copy2(ROOT / rel, staging / rel)
         skill_count = len(list((staging / "skills").iterdir()))

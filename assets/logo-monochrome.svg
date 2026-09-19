@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
+<svg width="3600" height="3600" viewBox="0 0 3600 3600" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AgtMLS Logo (Monochrome)">
+  <path d="m360 2631.2 541.12 312.47 540.72-312.47v-624.67l-540.72-312.05-541.12 312.05z" />
+  <path d="m2041.2 968.76-540.72-312.47-541.12 312.47v624.67l541.12 312.05 540.72-312.05z" />
+  <path d="m2640.7 2006.6-541.12-312.05-540.72 312.05v624.67l540.72 312.47 541.12-312.47z" />
+  <path d="m3240 968.76-541.12-312.47-540.72 312.47v624.67l540.72 312.05 541.12-312.05z" />
+</svg>

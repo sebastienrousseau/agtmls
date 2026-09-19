@@ -36,6 +36,7 @@ def main() -> int:
         "doctor",
         "status",
         "check",
+        "audit",
         "list",
         "search",
         "show",
@@ -64,6 +65,7 @@ def main() -> int:
         "index",
         "install",
         "uninstall",
+        "verify",
         "propose-skill",
         "scaffold-skill",
     }
