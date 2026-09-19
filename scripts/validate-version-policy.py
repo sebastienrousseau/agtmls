@@ -91,10 +91,27 @@ def main() -> int:
     agent_card = read_json(ROOT / "agent-card.json")
     if agent_card.get("version") != current:
         errors.append("agent-card.json version must match plugin version")
+    # provenance.json is an in-toto Statement. A subject carries `name` and
+    # `digest` and has no `version` field, so the registry version is read
+    # from the predicate's externalParameters, and the subject name must still
+    # embed it -- both are checked, because either drifting is a real defect.
     provenance = read_json(ROOT / "provenance.json")
     subject = provenance.get("subject", [{}])
-    if not isinstance(subject, list) or not subject or subject[0].get("version") != current:
-        errors.append("provenance.json subject version must match plugin version")
+    if not isinstance(subject, list) or not subject:
+        errors.append("provenance.json must carry an in-toto subject list")
+    elif subject[0].get("name") != f"agtmls-{current}":
+        errors.append(
+            f"provenance.json subject name must be 'agtmls-{current}', "
+            f"got {subject[0].get('name')!r}"
+        )
+    declared = (
+        provenance.get("predicate", {})
+        .get("buildDefinition", {})
+        .get("externalParameters", {})
+        .get("registryVersion")
+    )
+    if declared != current:
+        errors.append("provenance.json registryVersion must match plugin version")
 
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     if f"## {current} - " not in changelog:

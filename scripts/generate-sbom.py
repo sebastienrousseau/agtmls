@@ -1,28 +1,248 @@
 #!/usr/bin/env python3
-"""Generate a lightweight SPDX SBOM for registry files."""
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+"""Generate an SPDX 2.3 SBOM, and a CycloneDX 1.6 equivalent, for the registry.
+
+The previous document called itself SPDX 2.3 while omitting `creationInfo`,
+which is mandatory, along with `packages`, `relationships` and per-file
+`SPDXID`; its `documentNamespace` was `https://example.invalid/...`. It failed
+every SPDX validator. It also covered four directories while the wheel ships
+nine, so `agents/`, `evals/`, `references/`, `templates/` and `src/` had no
+coverage at all -- an SBOM that did not describe the artifact it accompanied.
+
+Determinism: `created` is the commit date of the most recent commit touching
+a covered path. That is stable between releases (so the `--check` gate does
+not fail on every unrelated commit) and moves exactly when the described
+content moves -- unlike the hardcoded epoch it replaces, which was
+deterministic by being false.
+"""
+
 from __future__ import annotations
-import argparse,hashlib,json,sys
+
+import argparse
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import uuid
 from pathlib import Path
-ROOT=Path(__file__).resolve().parent.parent; OUT=ROOT/'SBOM.spdx.json'
-SKIP_NAMES={'.DS_Store'}
-SKIP_PARTS={'__pycache__'}
-def sha(p):
-    h=hashlib.sha256(); h.update(p.read_bytes()); return h.hexdigest()
-def include_file(p):
-    return p.is_file() and p.name not in SKIP_NAMES and not (SKIP_PARTS & set(p.parts))
-def render():
-    files=[]
-    for base in ['skills','scripts','commands','system-prompts']:
-        for p in sorted((ROOT/base).glob('**/*')):
-            if include_file(p):
-                files.append({'fileName':p.relative_to(ROOT).as_posix(),'checksums':[{'algorithm':'SHA256','checksumValue':sha(p)}]})
-    return {'spdxVersion':'SPDX-2.3','dataLicense':'CC0-1.0','SPDXID':'SPDXRef-DOCUMENT','name':'agtmls','documentNamespace':'https://example.invalid/agtmls/sbom','files':files}
-def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--write',action='store_true'); ap.add_argument('--check',action='store_true'); a=ap.parse_args(); text=json.dumps(render(),indent=2,sort_keys=True)+'\n'
-    if a.write: OUT.write_text(text,encoding='utf-8'); print(f'wrote {OUT.relative_to(ROOT)}'); return 0
-    if a.check:
-        cur=OUT.read_text(encoding='utf-8') if OUT.exists() else ''
-        if cur!=text: print('FAIL: SBOM.spdx.json is stale; run generate-sbom.py --write'); return 1
-        print('OK: SBOM is current'); return 0
-    print(text,end=''); return 0
-if __name__=='__main__': sys.exit(main())
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT_SPDX = ROOT / "SBOM.spdx.json"
+OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
+
+# Every path force-included into the wheel by pyproject.toml. Keep in step
+# with validate-packaging.py: a directory that ships but is not described
+# here is a hole in the bill of materials.
+COVERED_DIRS = [
+    "agents", "commands", "evals", "references", "scripts",
+    "skills", "src", "system-prompts", "templates",
+]
+COVERED_FILES = [
+    "index.json", "profiles.json", "providers.json",
+    "lifecycle.json", "checks.json", "CATALOG.md",
+    "LICENSE-APACHE", "LICENSE-MIT",
+]
+SKIP_NAMES = {".DS_Store"}
+SKIP_PARTS = {"__pycache__"}
+NAMESPACE_BASE = "https://github.com/sebastienrousseau/agtmls/spdx"
+# Stable per-document UUID seed: the namespace must be unique per document but
+# must not change unless the document does.
+NAMESPACE_UUID = uuid.UUID("6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88")
+
+
+def checksums(path: Path) -> dict[str, str]:
+    """SHA-256 for integrity, SHA-1 because SPDX 2.3 requires it.
+
+    A FileChecksum must include SHA1 or the document fails validation. SHA-1
+    is present for schema conformance only; nothing in AgtMLS trusts it.
+    """
+    sha256 = hashlib.sha256()
+    sha1 = hashlib.sha1()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            sha256.update(chunk)
+            sha1.update(chunk)
+    return {"SHA256": sha256.hexdigest(), "SHA1": sha1.hexdigest()}
+
+
+def included(path: Path) -> bool:
+    return (
+        path.is_file()
+        and not path.is_symlink()
+        and path.name not in SKIP_NAMES
+        and not (SKIP_PARTS & set(path.parts))
+    )
+
+
+def covered_paths() -> list[Path]:
+    paths: list[Path] = []
+    for name in COVERED_DIRS:
+        base = ROOT / name
+        if base.exists():
+            paths.extend(p for p in base.rglob("*") if included(p))
+    for name in COVERED_FILES:
+        candidate = ROOT / name
+        if candidate.exists():
+            paths.append(candidate)
+    return sorted(paths, key=lambda p: p.relative_to(ROOT).as_posix())
+
+
+def created_at(paths: list[Path]) -> str:
+    """Commit date of the newest commit touching a covered path."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        from datetime import datetime, timezone
+
+        return datetime.fromtimestamp(int(epoch), tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        relative = sorted({p.relative_to(ROOT).parts[0] for p in paths})
+        proc = subprocess.run(
+            ["git", "log", "-1", "--format=%cd", "--date=format:%Y-%m-%dT%H:%M:%SZ", "--", *relative],
+            cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False,
+        )
+        stamp = proc.stdout.strip()
+        if stamp:
+            return stamp
+    except OSError:
+        pass
+    # An sdist unpacked outside git has neither; say so rather than invent one.
+    return "1970-01-01T00:00:00Z"
+
+
+def version() -> str:
+    plugin = ROOT / ".claude-plugin" / "plugin.json"
+    return json.loads(plugin.read_text(encoding="utf-8"))["version"]
+
+
+def spdx_id(relative: str) -> str:
+    # SPDXID allows only letters, digits, '.' and '-'.
+    safe = "".join(ch if ch.isalnum() or ch in ".-" else "-" for ch in relative)
+    return f"SPDXRef-File-{safe}"
+
+
+def render_spdx(paths: list[Path]) -> dict:
+    release = version()
+    files = []
+    for path in paths:
+        relative = path.relative_to(ROOT).as_posix()
+        files.append({
+            "SPDXID": spdx_id(relative),
+            "fileName": f"./{relative}",
+            "checksums": [
+                {"algorithm": algorithm, "checksumValue": value}
+                for algorithm, value in sorted(checksums(path).items())
+            ],
+            "licenseConcluded": "Apache-2.0 OR MIT",
+            "copyrightText": "Copyright 2026 Sebastien Rousseau",
+        })
+    package_id = "SPDXRef-Package-agtmls"
+    return {
+        "spdxVersion": "SPDX-2.3",
+        "dataLicense": "CC0-1.0",
+        "SPDXID": "SPDXRef-DOCUMENT",
+        "name": f"agtmls-{release}",
+        "documentNamespace": f"{NAMESPACE_BASE}/{release}/{NAMESPACE_UUID}",
+        "creationInfo": {
+            "created": created_at(paths),
+            "creators": [
+                "Tool: agtmls-generate-sbom",
+                "Person: Sebastien Rousseau",
+                "Organization: AgtMLS",
+            ],
+            "licenseListVersion": "3.24",
+        },
+        "packages": [{
+            "SPDXID": package_id,
+            "name": "agtmls",
+            "versionInfo": release,
+            "downloadLocation": "https://pypi.org/project/agtmls/",
+            "filesAnalyzed": True,
+            "licenseConcluded": "Apache-2.0 OR MIT",
+            "licenseDeclared": "Apache-2.0 OR MIT",
+            "copyrightText": "Copyright 2026 Sebastien Rousseau",
+            "supplier": "Person: Sebastien Rousseau",
+            "externalRefs": [{
+                "referenceCategory": "PACKAGE-MANAGER",
+                "referenceType": "purl",
+                "referenceLocator": f"pkg:pypi/agtmls@{release}",
+            }],
+            "hasFiles": [f["SPDXID"] for f in files],
+        }],
+        "files": files,
+        "relationships": [
+            {"spdxElementId": "SPDXRef-DOCUMENT", "relationshipType": "DESCRIBES",
+             "relatedSpdxElement": package_id},
+        ],
+    }
+
+
+def render_cyclonedx(paths: list[Path]) -> dict:
+    """CycloneDX 1.6 is what most enterprise scanners ingest."""
+    release = version()
+    return {
+        "bomFormat": "CycloneDX",
+        "specVersion": "1.6",
+        "serialNumber": f"urn:uuid:{NAMESPACE_UUID}",
+        "version": 1,
+        "metadata": {
+            "timestamp": created_at(paths),
+            "tools": {"components": [
+                {"type": "application", "name": "agtmls-generate-sbom", "version": release}
+            ]},
+            "authors": [{"name": "Sebastien Rousseau"}],
+            "component": {
+                "type": "application",
+                "bom-ref": f"pkg:pypi/agtmls@{release}",
+                "name": "agtmls",
+                "version": release,
+                "purl": f"pkg:pypi/agtmls@{release}",
+                "licenses": [{"expression": "Apache-2.0 OR MIT"}],
+            },
+        },
+        # Deliberately empty: the package has no runtime dependencies, and an
+        # empty list states that in a form a scanner can read.
+        "components": [],
+        "files": [
+            {"name": p.relative_to(ROOT).as_posix(),
+             "hashes": [{"alg": "SHA-256", "content": checksums(p)["SHA256"]}]}
+            for p in paths
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n", maxsplit=1)[0])
+    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--check", action="store_true")
+    parser.add_argument("--format", choices=["spdx", "cyclonedx"], default="spdx")
+    args = parser.parse_args()
+
+    paths = covered_paths()
+    targets = [
+        (OUT_SPDX, json.dumps(render_spdx(paths), indent=2, sort_keys=True) + "\n"),
+        (OUT_CYCLONEDX, json.dumps(render_cyclonedx(paths), indent=2, sort_keys=True) + "\n"),
+    ]
+
+    if args.write:
+        for out, text in targets:
+            out.write_text(text, encoding="utf-8")
+            print(f"wrote {out.relative_to(ROOT)} ({len(paths)} files)")
+        return 0
+    if args.check:
+        stale = [
+            out.name for out, text in targets
+            if (out.read_text(encoding="utf-8") if out.exists() else "") != text
+        ]
+        if stale:
+            print(f"FAIL: {', '.join(stale)} stale; run generate-sbom.py --write")
+            return 1
+        print(f"OK: SBOM is current ({len(paths)} files, SPDX 2.3 + CycloneDX 1.6)")
+        return 0
+    print(targets[0][1] if args.format == "spdx" else targets[1][1], end="")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

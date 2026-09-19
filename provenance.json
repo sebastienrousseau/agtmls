@@ -1,16 +1,6 @@
 {
-  "builder": {
-    "id": "scripts/agtmls.py check"
-  },
-  "materials": [
-    {
-      "digest": {
-        "sha256": "b68daa53564db1a4241d2b360bba45d73473f2d2b027812b3a4b0a74719e49a8"
-      },
-      "uri": "agtmls:registry-state"
-    }
-  ],
-  "metadata": {
+  "_type": "https://in-toto.io/Statement/v1",
+  "agtmls": {
     "checks": [
       "validate-skills.py",
       "validate-spec-conformance.py",
@@ -31,6 +21,7 @@
       "validate-system-prompts.py",
       "check-skill-collisions.py",
       "validate-eval-cases.py",
+      "run-security-evals.py",
       "run-trigger-evals.py",
       "run-behavioral-evals.py",
       "validate-skill-metadata.py",
@@ -42,6 +33,7 @@
       "generate-agent-card.py --check",
       "generate-mcp-resources.py --check",
       "generate-sbom.py --check",
+      "validate-sbom-conformance.py",
       "generate-provenance.py --check",
       "validate-generated-artifacts.py",
       "validate-docs-site.py",
@@ -59,8 +51,11 @@
       "smoke-provider-install.py",
       "smoke-live-providers.py",
       "smoke-install.py",
+      "smoke-install-safety.py",
+      "smoke-install-verify.py",
       "smoke-install-profiles.py",
       "smoke-cli.py",
+      "smoke-make-install.py",
       "smoke-export.py",
       "smoke-import.py",
       "smoke-proposal.py",
@@ -68,16 +63,53 @@
       "run-unit-tests.py",
       "bench.py",
       "validate-check-manifest.py",
-      "agtmls-doctor.py"
+      "agtmls-doctor.py --skip-gate"
     ],
-    "generated_at": "1970-01-01T00:00:00Z"
+    "materials": [
+      "index.json",
+      "checks.json",
+      "agent-card.json",
+      "mcp-resources.json",
+      "SBOM.spdx.json",
+      "SBOM.cyclonedx.json"
+    ],
+    "schema_version": 2,
+    "signed": false
+  },
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://github.com/sebastienrousseau/agtmls/registry-state/v1",
+      "externalParameters": {
+        "registryVersion": "0.0.6",
+        "repository": "https://github.com/sebastienrousseau/agtmls"
+      },
+      "resolvedDependencies": [
+        {
+          "digest": {
+            "gitCommit": "f92ba1c8dd558ba94e57daaf6416f00510caa31d"
+          },
+          "uri": "git+https://github.com/sebastienrousseau/agtmls"
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
+      },
+      "metadata": {
+        "finishedOn": "2026-09-19T10:37:10Z",
+        "invocationId": "local",
+        "startedOn": "2026-09-19T10:37:10Z"
+      }
+    }
   },
   "predicateType": "https://slsa.dev/provenance/v1",
-  "schema_version": 1,
   "subject": [
     {
-      "name": "agtmls",
-      "version": "0.0.6"
+      "digest": {
+        "sha256": "4596666ec36d63ca8d6646e6126e3832adf6f7ddc14bedc651c1a974c4a19e44"
+      },
+      "name": "agtmls-0.0.6"
     }
   ]
 }
