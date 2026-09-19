@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
 .DEFAULT_GOAL := help
-PYTHON ?= python3
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+DESTDIR ?=
 
-.PHONY: help check test bench doctor clean build bump
+.PHONY: help check test bench doctor clean build bump install uninstall
 
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -30,3 +32,11 @@ build: ## Build wheel and sdist packages
 clean: ## Clean build and bytecode caches
 	rm -rf build/ dist/ *.egg-info .pytest_cache/
 	find . -type d -name __pycache__ -exec rm -rf {} +
+
+install: ## Install agtmls to PREFIX (default: /usr/local)
+	install -d $(DESTDIR)$(BINDIR)
+	install -m 755 scripts/agtmls.py $(DESTDIR)$(BINDIR)/agtmls
+
+uninstall: ## Remove installed agtmls from PREFIX
+	rm -f $(DESTDIR)$(BINDIR)/agtmls
+

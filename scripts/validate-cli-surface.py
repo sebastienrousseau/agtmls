@@ -36,6 +36,7 @@ def main() -> int:
         "doctor",
         "status",
         "check",
+        "audit",
         "list",
         "search",
         "show",

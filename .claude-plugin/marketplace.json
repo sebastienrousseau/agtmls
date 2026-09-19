@@ -8,7 +8,9 @@
   "plugins": [
     {
       "agents": [
+        "./agents/anti-slop-editor.md",
         "./agents/registry-auditor.md",
+        "./agents/security-sentinel.md",
         "./agents/skill-author.md"
       ],
       "author": {

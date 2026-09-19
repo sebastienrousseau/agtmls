@@ -9,6 +9,7 @@ install section of the README for which commands need a checkout.
 
 ```bash
 python3 scripts/agtmls.py check
+python3 scripts/agtmls.py audit --all --strict
 python3 scripts/agtmls.py list
 python3 scripts/agtmls.py list commands
 python3 scripts/agtmls.py search yaml

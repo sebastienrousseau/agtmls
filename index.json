@@ -1,6 +1,6 @@
 {
   "bundles": {
-    "_general": 12,
+    "_general": 13,
     "engineering": 1,
     "loops": 1,
     "noyalib": 14,
@@ -32,12 +32,12 @@
   ],
   "coverage": {
     "behavioral": {
-      "covered": 30,
-      "total": 30
+      "covered": 31,
+      "total": 31
     },
     "routing": {
-      "covered": 30,
-      "total": 30
+      "covered": 31,
+      "total": 31
     }
   },
   "description": "Agent Multiple Listing Service skill registry",
@@ -45,11 +45,11 @@
   "name": "agtmls",
   "quality": {
     "average_score": 100,
-    "total": 30
+    "total": 31
   },
   "registry_version": "0.0.6",
   "schema_version": 1,
-  "skill_count": 30,
+  "skill_count": 31,
   "skills": [
     {
       "allowed_tools": [
@@ -173,6 +173,69 @@
         "release",
         "security",
         "validation"
+      ],
+      "version": "0.0.6"
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Eliminate AI slop, clich\u00e9s, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "kind": "general",
+      "license": "MIT",
+      "maturity": "hardened",
+      "metadata_path": "skills/anti-slop-pr-and-writing/metadata.json",
+      "name": "anti-slop-pr-and-writing",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/anti-slop-pr-and-writing",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": true,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 8,
+        "score": 100,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": false,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "docs",
+        "release",
+        "review"
       ],
       "version": "0.0.6"
     },

@@ -309,6 +309,12 @@ def main() -> int:
 
     sub.add_parser("release-check")
 
+    audit_cmd = sub.add_parser("audit", help="statically audit skills for prompt injection, steganography, and security risks")
+    audit_cmd.add_argument("path", nargs="?", type=Path, help="path to skill directory or markdown file")
+    audit_cmd.add_argument("--all", action="store_true", help="audit all skills in registry")
+    audit_cmd.add_argument("--strict", action="store_true", help="fail on warnings")
+    audit_cmd.add_argument("--json", action="store_true", help="output JSON")
+
     import_cmd = sub.add_parser("import-skill")
     import_cmd.add_argument("source", type=Path)
     import_cmd.add_argument("--name")
@@ -469,6 +475,17 @@ def main() -> int:
         return run(cmd)
     if args.command == "release-check":
         return run([sys.executable, str(ROOT / "scripts" / "release-check.py")])
+    if args.command == "audit":
+        cmd = [sys.executable, str(ROOT / "scripts" / "audit-skill.py")]
+        if args.path:
+            cmd.append(str(args.path))
+        if args.all:
+            cmd.append("--all")
+        if args.strict:
+            cmd.append("--strict")
+        if args.json:
+            cmd.extend(["--format", "json"])
+        return run(cmd)
     if args.command == "import-skill":
         cmd = [sys.executable, str(ROOT / "scripts" / "import-skill.py"), str(args.source)]
         if args.name:
