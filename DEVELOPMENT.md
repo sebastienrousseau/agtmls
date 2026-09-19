@@ -82,8 +82,12 @@ gate will report the SBOM stale immediately afterwards:
 git commit -m 'fix(scripts): ...'        # gate now reports a stale SBOM
 python3 scripts/generate-sbom.py --write
 python3 scripts/generate-provenance.py --write
-git commit -m 'chore: regenerate supply-chain artifacts'
+git commit SBOM.spdx.json SBOM.cyclonedx.json provenance.json \
+  -m 'chore: regenerate supply-chain artifacts'
 ```
+
+The regeneration commit must contain **only** generated files. Mixing an
+authored change into it moves the timestamp again and you go round once more.
 
 This converges in exactly one step, and `scripts/_lib/covered.py` is why: both
 generators take their date from **authored** paths only, never from a generated
