@@ -45,7 +45,10 @@ jobs:
         run: |
           git config gpg.ssh.allowedSignersFile KEYS.asc
           unsigned=0
-          for commit in $(git rev-list origin/${{ github.base_ref }}..HEAD); do
+          # --no-merges: on a pull_request event HEAD is the synthetic merge
+          # commit GitHub creates, which no contributor signs. Authored commits
+          # on both sides of it are still checked.
+          for commit in $(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD); do
             status=$(git log -1 --format='%G?' "$commit")
             if [ "$status" != "G" ] && [ "$status" != "U" ]; then
               echo "::error::unsigned or unverifiable commit $commit (%G? = $status)"
