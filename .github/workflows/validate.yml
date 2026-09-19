@@ -49,6 +49,15 @@ jobs:
           # commit GitHub creates, which no contributor signs. Authored commits
           # on both sides of it are still checked.
           for commit in $(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD); do
+            author=$(git log -1 --format='%an' "$commit")
+            # A bot's commits are signed by GitHub's key, not by a maintainer
+            # key in KEYS.asc, so they verify as E here. That is a different
+            # trust path -- authenticated by the forge, not by us -- and this
+            # gate governs contributor commits. Excluding them is deliberate;
+            # a human commit pushed to a bot's branch is still checked.
+            case "$author" in
+              *"[bot]") echo "skipping bot commit $commit ($author)"; continue ;;
+            esac
             status=$(git log -1 --format='%G?' "$commit")
             if [ "$status" != "G" ] && [ "$status" != "U" ]; then
               echo "::error::unsigned or unverifiable commit $commit (%G? = $status)"
