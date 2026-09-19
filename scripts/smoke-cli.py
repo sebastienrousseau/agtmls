@@ -75,6 +75,10 @@ def main() -> int:
     if providers.returncode != 0 or "native/codex" not in providers.stdout or "export/openai" not in providers.stdout:
         errors.append(f"providers failed:\n{providers.stdout}")
 
+    audit = run(["audit", "--all", "--strict"])
+    if audit.returncode != 0 or "Zero security or steganography findings detected" not in audit.stdout:
+        errors.append(f"audit failed:\n{audit.stdout}")
+
     diff = run(["diff", "--from", "index.json", "--to", "index.json", "--json"])
     try:
         payload = json.loads(diff.stdout)

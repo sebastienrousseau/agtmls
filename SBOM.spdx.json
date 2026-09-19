@@ -1474,10 +1474,28 @@
       "checksums": [
         {
           "algorithm": "SHA256",
+          "checksumValue": "8e52ce5642f91ee79724b6736f400083233ebba54716c7708a1e05838ef8471c"
+        }
+      ],
+      "fileName": "scripts/generate-completions.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
           "checksumValue": "c23f4f1de7c949233e24d6eb15cf7bd68945a1bffc09fb28bb75dcdab9eebb4a"
         }
       ],
       "fileName": "scripts/generate-docs-site.py"
+    },
+    {
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "97334e6ab5498bd80ff351345a932122a9201814ec1771371aaaa80280e30189"
+        }
+      ],
+      "fileName": "scripts/generate-manpage.py"
     },
     {
       "checksums": [
@@ -1672,7 +1690,7 @@
       "checksums": [
         {
           "algorithm": "SHA256",
-          "checksumValue": "e0f84a1b288bf6d79ddd7b3b8e3bea7dfbe1e1d601ec0a853b81f6c840f1a71a"
+          "checksumValue": "31ec485b365f08febad7527630ffc53bcea07066a96f217050dd911a77e1dd47"
         }
       ],
       "fileName": "scripts/smoke-cli.py"

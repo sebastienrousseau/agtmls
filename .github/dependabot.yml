@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# Dependabot configuration for `agtmls`.
+#
+# Reference: https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  # ── GitHub Actions ───────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "ci(deps)"
+      include: scope
+    labels:
+      - dependencies
+      - github-actions
+
+  # ── Python packages (pip) ────────────────────────────────────────
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps(python)"
+      include: scope
+    labels:
+      - dependencies
+      - python

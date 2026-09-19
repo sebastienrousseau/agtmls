@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+
+name: Feature request or skill proposal
+description: Propose a new skill, supported agent runtime, or tooling enhancement.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing an enhancement to AgtMLS.
+        If you are proposing a new skill, please specify clear triggers (when to load) and non-triggers (when NOT to load).
+  - type: dropdown
+    id: category
+    attributes:
+      label: Proposal category
+      options:
+        - New skill
+        - Skill enhancement / refinement
+        - New agent provider / runtime support
+        - CLI / Tooling enhancement
+        - Security / Validation policy
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What challenge or repetitive workflow does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Detailed description of the proposed skill, trigger condition, or feature.
+    validations:
+      required: true
