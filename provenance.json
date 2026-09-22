@@ -31,7 +31,6 @@
       "generate-skill-index.py --check",
       "generate-catalog.py --check",
       "generate-docs-site.py --check",
-      "generate-agent-card.py --check",
       "generate-mcp-resources.py --check",
       "generate-sbom.py --check",
       "validate-sbom-conformance.py",
@@ -70,7 +69,6 @@
     "materials": [
       "index.json",
       "checks.json",
-      "agent-card.json",
       "mcp-resources.json",
       "SBOM.spdx.json",
       "SBOM.cyclonedx.json"
@@ -88,7 +86,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "f010f3753e4531d381a509715e16fdd6bc3ba7d1"
+            "gitCommit": "b6fa42ab6d79c621bb2ff3e902fe2d698e8a4011"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -99,9 +97,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-22T21:57:20Z",
+        "finishedOn": "2026-09-22T22:01:06Z",
         "invocationId": "local",
-        "startedOn": "2026-09-22T21:57:20Z"
+        "startedOn": "2026-09-22T22:01:06Z"
       }
     }
   },
@@ -109,7 +107,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a3b020d4385e32576752d7889b37c8b551845ec88476d8e94dc888bb014d8db2"
+        "sha256": "dcf0632512be0d900dbf4910c34f7eded2790f0f452ecdd24f610cea7bcf319d"
       },
       "name": "agtmls-0.0.6"
     }

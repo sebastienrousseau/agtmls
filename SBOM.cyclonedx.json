@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fadc56830f280b5c649f85d0843adefdd38d0eaa0a66d7840b416df873b6d704"
+          "content": "f5aec0e6b5b62f3f94871ea078f559e66d9e21073a46cce600d704ba09a97b0f"
         }
       ],
       "name": "checks.json",
@@ -963,7 +963,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "68fcd50dbd2a617dc49c8ee966257c128b59889229d088dc4c551995deedb85d"
+          "content": "7720990f31439b2b95120a21c831f841cb034e205a8a593f8519ad11d58ac3b9"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -974,7 +974,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "919ac6bc4c3e9a39e05e17dd4f382f8d6f27a32d6579fdca7f4b4acc17e8ac6f"
+          "content": "3cfb2f16efcbb4b40ad8bc6fcc3941b9b66d1efb56faa0ef09cf8b6f11a8f101"
         }
       ],
       "name": "scripts/_lib/covered.py",
@@ -1051,7 +1051,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "34b39ab18dfe75924845f38e9929e8a0aef951d55386c4d9420f024074a0682b"
+          "content": "f5c72e79748be75169ec25568190f7e026eb0a2e6426ffd39b2bf1883ae3c120"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -1084,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8dbec1c58877050699345c0cc3674055518c1493191bcd1459a4432029d080d7"
+          "content": "fc2b2d75f8df704be536a55e1775390021e3d4e317893957e7a2ef955509d3cf"
         }
       ],
       "name": "scripts/bump-version.py",
@@ -1132,17 +1132,6 @@
         }
       ],
       "name": "scripts/export-registry.py",
-      "type": "file"
-    },
-    {
-      "bom-ref": "scripts/generate-agent-card.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "03ba730dca9bd6fe0bb96d752cc80867f1208edd5eff8876af8c7e7b3cbc3164"
-        }
-      ],
-      "name": "scripts/generate-agent-card.py",
       "type": "file"
     },
     {
@@ -1216,7 +1205,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6d6ec33a651e9f34c3fab380032939d72c48c35af997cadb16040a2ab69be752"
+          "content": "8c7fb34fa7b65dba6e83d53adf667e643f0b6e51b393a797a8f1f9384ba7c917"
         }
       ],
       "name": "scripts/generate-provenance.py",
@@ -1315,7 +1304,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7e147b5831acc5484bc6a1f5d67acba698d051f01cf95de0fc922275e99f6a1d"
+          "content": "9343a81f6c83e595ea43e119b6ec0aef16dffd1fc2bf28f5b2115e4ab26b8c3c"
         }
       ],
       "name": "scripts/release-check.py",
@@ -1403,7 +1392,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ba22c7f0111487001b74c9ab3e9bac323e9205b014df2dccea7d65dcd8ae3e8a"
+          "content": "c409c913f2883d55dcd1d912b14a35aef987d33da79b139f55c9a364bc090010"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1656,7 +1645,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b32788dbff66d921a332cb8fc1cf51ca9218684bf43632da7df43dca8044e02e"
+          "content": "3b46ce668139d1390b96385b9a1bd60723f99b0b8b64d2060006934b8dfe862d"
         }
       ],
       "name": "scripts/validate-cli-surface.py",
@@ -1942,7 +1931,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "55eb84b890d324dbe7c529ce48494af0b147f1c2ba4c1961f2aba4ac73c46079"
+          "content": "5f890db75562c44a997f98ed122da932c0f6d82af3601501727d73707675f70b"
         }
       ],
       "name": "scripts/validate-version-policy.py",
@@ -3870,7 +3859,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T21:57:20Z",
+    "timestamp": "2026-09-22T22:01:06Z",
     "tools": {
       "components": [
         {
