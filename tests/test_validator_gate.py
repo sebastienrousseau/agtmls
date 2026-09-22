@@ -433,3 +433,39 @@ class EveryValidatorTests(ValidatorFailureBase):
             self.assertEqual(code, 0, f"{parts[0]} failed on a pristine fixture:\n{output}")
             checked.append(parts[0])
         self.assertGreaterEqual(len(checked), 8, f"only drove {checked}")
+
+
+class SpecConformanceTests(unittest.TestCase):
+    """validate-spec-conformance.py printed SKIP and passed whenever skills-ref
+    was missing, and CI installed it with `|| true` -- so a failed install
+    silently turned the spec check off on every leg.
+    """
+
+    def drive(self, env: dict[str, str], version: tuple[int, int]) -> tuple[int, str]:
+        import os
+        from unittest import mock
+
+        module = load_script("validate-spec-conformance.py")
+        with mock.patch.object(module, "runner", return_value=None), \
+                mock.patch.dict(os.environ, env, clear=False), \
+                mock.patch.object(module, "PYTHON", version):
+            if "CI" not in env:
+                os.environ.pop("CI", None)
+            return run_main(module)
+
+    def test_a_missing_reference_validator_fails_in_ci(self) -> None:
+        code, output = self.drive({"CI": "true"}, (3, 12))
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL", output)
+
+    def test_ci_on_a_python_the_reference_does_not_support_skips(self) -> None:
+        """skills-ref needs 3.11+; the 3.10 leg cannot run it at all."""
+        code, output = self.drive({"CI": "true"}, (3, 10))
+        self.assertEqual(code, 0, output)
+        self.assertIn("SKIP", output)
+
+    def test_a_local_run_without_it_still_skips(self) -> None:
+        """The offline gate stays runnable on a machine with no network."""
+        code, output = self.drive({}, (3, 12))
+        self.assertEqual(code, 0, output)
+        self.assertIn("SKIP", output)

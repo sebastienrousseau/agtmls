@@ -34,10 +34,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install reference validator
-        # skills-ref requires Python >=3.11. It is optional: without it
-        # validate-spec-conformance.py reports SKIP, and 3.11+ legs still
-        # enforce the spec. Never fail the run over a dev-only tool.
-        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0' || true
+        # skills-ref requires Python >=3.11, so the 3.10 leg skips it. On 3.11+
+        # a failed install must fail the run: validate-spec-conformance.py
+        # treats a missing validator in CI as FAIL, not SKIP.
+        if: matrix.python-version != '3.10'
+        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
       - name: Verify commit signatures
         # README states signing is required. Until this step, that was an
         # honour-system policy rather than a control.
