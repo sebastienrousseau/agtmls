@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "97de9b6f0a6bb9e5c4020b3b2304b642b74877f831d8c05fe8081971f999d7c0"
+          "content": "16b25057ab6cc727aea22159f7f819edfc9c265e01fe9a41ea897b7325786d53"
         }
       ],
       "name": "checks.json",
@@ -1095,7 +1095,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "51f79f32595ca38021c6b47a3846992deac9aabb5303c9cc3e2df5362789646c"
+          "content": "02b2209874eebc3cb72e8024189c6586506d59e4a33e3bf0b499f733213d8b9c"
         }
       ],
       "name": "scripts/bench.py",
@@ -1392,7 +1392,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "67317655d86ce68bc770649ce2c3a4791a69eefe75e7b24b947c300a03da26b0"
+          "content": "f269d68edfeca9d08ef6761becc60c99173a0d0cf90ef5c77c5f321878d8b021"
         }
       ],
       "name": "scripts/run-coverage.py",
@@ -1425,7 +1425,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c4f16dbad9a72532cc7ffcf88cb0023b6c1ee1a541c7c1133c1b72caaa56b4e4"
+          "content": "2c00257dbda0f48a74164fa618d1371a21a2ec5a9aa3cad5910e371e5da8395e"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1891,6 +1891,17 @@
         }
       ],
       "name": "scripts/validate-secrets.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/validate-security-claims.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4562f0d55d3315254f7221a4c817125b781395c8aa9e115e912ff850931920c8"
+        }
+      ],
+      "name": "scripts/validate-security-claims.py",
       "type": "file"
     },
     {
@@ -3903,7 +3914,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:45:00Z",
+    "timestamp": "2026-09-22T22:47:35Z",
     "tools": {
       "components": [
         {
