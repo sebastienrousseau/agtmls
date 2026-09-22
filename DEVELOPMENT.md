@@ -31,7 +31,7 @@ AgtMLS is deliberately dependency-free: every utility script runs using Python s
 make test       # Run the 65 unit tests
 make bench      # Run the benchmark (routing + behavioral eval checks)
 make doctor     # Run agtmls-doctor health check
-make check      # Run the full 62-check validation suite
+make check      # Run the full 63-check validation suite
 ```
 
 ## Reproducing every CI gate

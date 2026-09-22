@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""Validate checks.json against run-all-checks.py AND the CI workflow.
+"""Validate checks.json against the CI workflow, and keep it the only copy.
 
-Three places must agree on the gate: the manifest, the local runner, and
+Two places must agree on the gate: the manifest and
 `.github/workflows/validate.yml`. The workflow enumerates each check as its
-own step, so a check added to the manifest and the runner can still silently
-miss CI — which is exactly what happened to validate-packaging.py,
-sync-skill-frontmatter.py, and generate-plugin-manifests.py. A green local
-gate then means nothing about a pull request.
+own step, so a check added to the manifest can still silently miss CI — which
+is exactly what happened to validate-packaging.py, sync-skill-frontmatter.py
+and generate-plugin-manifests.py. A green local gate then means nothing about
+a pull request.
+
+The local runner used to be a third place, holding a hand-copied list, and
+this check compared the two. It no longer holds one: `run-all-checks.py`
+reads `checks.json`. What is enforced here instead is that it stays that way,
+because a re-declared list is how the drift starts.
 """
 
 from __future__ import annotations
@@ -22,28 +27,33 @@ RUNNER = ROOT / "scripts" / "run-all-checks.py"
 WORKFLOW = ROOT / ".github" / "workflows" / "validate.yml"
 
 
-def runner_checks() -> list[str]:
-    tree = ast.parse(RUNNER.read_text(encoding="utf-8"))
-    for node in tree.body:
-        if isinstance(node, ast.Assign):
-            for target in node.targets:
-                if isinstance(target, ast.Name) and target.id == "CHECKS":
-                    checks: list[str] = []
-                    for item in ast.literal_eval(node.value):
-                        checks.append(" ".join(item))
-                    return checks
-    return []
+def redeclared_lists(runner: Path) -> list[str]:
+    """Module-level names in the runner that would shadow the manifest."""
+    tree = ast.parse(runner.read_text(encoding="utf-8"))
+    return sorted(
+        target.id
+        for node in tree.body
+        if isinstance(node, ast.Assign)
+        for target in node.targets
+        if isinstance(target, ast.Name) and target.id in {"CHECKS", "COMPILE"}
+    )
 
 
 def main() -> int:
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     manifest = data.get("checks", [])
-    runner = runner_checks()
     errors: list[str] = []
+
     if data.get("schema_version") != 1:
         errors.append("checks.json schema_version must be 1")
-    if manifest != runner:
-        errors.append("checks.json does not match run-all-checks.py CHECKS order")
+
+    for name in redeclared_lists(RUNNER):
+        errors.append(
+            f"run-all-checks.py re-declares the gate as {name}; it must read checks.json"
+        )
+    if "checks.json" not in RUNNER.read_text(encoding="utf-8"):
+        errors.append("run-all-checks.py never reads checks.json")
+
     workflow = WORKFLOW.read_text(encoding="utf-8") if WORKFLOW.exists() else ""
     if not workflow:
         errors.append(f"CI workflow missing: {WORKFLOW.relative_to(ROOT)}")
@@ -55,6 +65,7 @@ def main() -> int:
         # a step in the workflow, or CI is weaker than `agtmls check`.
         if workflow and f"scripts/{script}" not in workflow:
             errors.append(f"check not run by validate.yml: {check}")
+
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

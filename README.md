@@ -428,7 +428,7 @@ agtmls export --provider anthropic --profile noyalib --out-dir dist
 python3 scripts/agtmls.py doctor
 python3 scripts/agtmls.py status
 
-# Full gate validation (62 checks)
+# Full gate validation (63 checks)
 python3 scripts/agtmls.py check
 
 # Static security audit
@@ -503,7 +503,7 @@ agtmls/
 ├── system-prompts/              # Base rules (_base.md) and 9 language profiles
 ├── agent-card.json              # A2A agent discovery manifest
 ├── CATALOG.md                   # Human-readable registry catalog
-├── checks.json                  # Canonical 62-check validation registry
+├── checks.json                  # Canonical 63-check validation registry
 ├── index.json                   # Machine-readable skill registry index
 ├── KEYS.asc                     # OpenSSH allowed signers for commit/tag verification
 ├── Makefile                     # Unix build and installation task runner

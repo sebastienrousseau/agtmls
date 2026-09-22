@@ -22,6 +22,7 @@
       "check-skill-collisions.py",
       "validate-eval-cases.py",
       "run-security-evals.py",
+      "audit-skill.py --all --strict",
       "run-trigger-evals.py",
       "run-behavioral-evals.py",
       "validate-skill-metadata.py",
@@ -107,7 +108,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a351d718ccf7168481d4ccc0c39b641ba3c1a70d5f9c8cec25ba3e0937bc3a54"
+        "sha256": "94c6870389b6316d1badf2b253c7a2d781cbd756b009cedfb9bd686f01ac8625"
       },
       "name": "agtmls-0.0.6"
     }

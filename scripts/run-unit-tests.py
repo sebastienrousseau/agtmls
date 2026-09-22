@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Unit tests for the registry tooling itself.
 
-The 62-check gate validates repository *data*. These tests validate the
+The 63-check gate validates repository *data*. These tests validate the
 *validators* — the failure mode the gate cannot see is a checker that always
 returns 0. Every test here is written to fail if the logic it covers is
 weakened, not merely if it raises.
@@ -28,12 +28,22 @@ CLI = ROOT / "scripts" / "agtmls.py"
 
 def load_script(name: str):
     path = ROOT / "scripts" / name
-    spec = importlib.util.spec_from_file_location(
-        name.replace("-", "_").replace(".py", ""), path
-    )
+    # Prefixed: scripts/agtmls.py would otherwise register as "agtmls" and
+    # shadow the real package in src/, which PackagedCliTests imports.
+    module_name = "_agtmls_script_" + name.replace("-", "_").replace(".py", "")
+    spec = importlib.util.spec_from_file_location(module_name, path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Registered before execution: dataclasses resolves a field's type through
+    # sys.modules[cls.__module__], which is None for a module that was built
+    # from a spec and never registered. Without this, load_script raises on
+    # any script that declares a @dataclass.
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        del sys.modules[module_name]
+        raise
     return module
 
 
@@ -423,15 +433,161 @@ class MetadataContractTests(unittest.TestCase):
 
 
 class CheckManifestTests(unittest.TestCase):
-    """The gate must be identical in the manifest, the runner, and CI."""
+    """checks.json is the gate. CI must run all of it, and the local runner
+    must read it rather than keep a copy."""
 
-    def test_manifest_runner_and_ci_agree(self) -> None:
-        module = load_script("validate-check-manifest.py")
-        manifest = json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
-        self.assertEqual(manifest, module.runner_checks())
+    def manifest(self) -> list[str]:
+        return json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
+
+    def test_manifest_is_covered_by_ci(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
-        for check in manifest:
+        for check in self.manifest():
             self.assertIn(f"scripts/{check.split()[0]}", workflow, f"{check} is not run by CI")
+
+    def test_runner_keeps_no_second_copy_of_the_gate(self) -> None:
+        """A hardcoded list in the runner is how the gate drifts.
+
+        The compile list that used to live here had already lost four
+        scripts, one of them the security analyzer, while reading as
+        exhaustive.
+        """
+        tree = ast.parse((ROOT / "scripts" / "run-all-checks.py").read_text(encoding="utf-8"))
+        duplicated = sorted(
+            target.id
+            for node in tree.body
+            if isinstance(node, ast.Assign)
+            for target in node.targets
+            if isinstance(target, ast.Name) and target.id in {"CHECKS", "COMPILE"}
+        )
+        self.assertEqual(
+            duplicated, [], f"run-all-checks.py re-declares the gate as {duplicated}"
+        )
+
+    def test_runner_reads_the_manifest(self) -> None:
+        module = load_script("run-all-checks.py")
+        self.assertEqual(module.manifest_checks(), self.manifest())
+
+    def test_runner_reports_every_failure(self) -> None:
+        """Returning on the first failure costs one CI round trip per fix."""
+        module = load_script("run-all-checks.py")
+        with tempfile.TemporaryDirectory() as raw:
+            scripts = Path(raw)
+            (scripts / "passes.py").write_text("raise SystemExit(0)\n", encoding="utf-8")
+            (scripts / "fails-a.py").write_text(
+                "print('first defect'); raise SystemExit(1)\n", encoding="utf-8"
+            )
+            (scripts / "fails-b.py").write_text(
+                "print('second defect'); raise SystemExit(1)\n", encoding="utf-8"
+            )
+            results = module.run_checks(
+                ["passes.py", "fails-a.py", "fails-b.py"], jobs=3, scripts_dir=scripts
+            )
+        self.assertEqual(len(results), 3)
+        failed = sorted(r.check for r in results if r.returncode != 0)
+        self.assertEqual(failed, ["fails-a.py", "fails-b.py"])
+        joined = "".join(r.output for r in results)
+        self.assertIn("first defect", joined)
+        self.assertIn("second defect", joined)
+
+    def test_an_exclusive_check_never_overlaps_another(self) -> None:
+        """Tree-mutating checks must not share the pool.
+
+        smoke-make-install.py runs `make install`, whose prerequisites
+        regenerate completions/ and share/man/ inside the working tree. A
+        concurrent reader of those files is a flaky gate, so the guarantee is
+        asserted here rather than assumed.
+        """
+        module = load_script("run-all-checks.py")
+        with tempfile.TemporaryDirectory() as raw:
+            scripts = Path(raw)
+            log = scripts / "windows.txt"
+            # Raw: the \n below belongs to the generated script, not to this
+            # file. time.time(), not perf_counter(), because these windows are
+            # compared across processes.
+            probe = textwrap.dedent(
+                r"""
+                import sys, time
+                name, path = sys.argv[1], sys.argv[2]
+                start = time.time()
+                time.sleep(0.05)
+                with open(path, "a") as handle:
+                    handle.write("%s %r %r\n" % (name, start, time.time()))
+                """
+            )
+            names = ["alone.py", "one.py", "two.py", "three.py"]
+            for name in names:
+                (scripts / name).write_text(
+                    f"import sys\nsys.argv = [sys.argv[0], {name!r}, {str(log)!r}]\n"
+                    + probe,
+                    encoding="utf-8",
+                )
+            original = module.EXCLUSIVE
+            module.EXCLUSIVE = frozenset({"alone.py"})
+            try:
+                results = module.run_checks(names, jobs=4, scripts_dir=scripts)
+            finally:
+                module.EXCLUSIVE = original
+            # Without this the probes could fail silently and the overlap
+            # assertions below would pass over an empty log.
+            for result in results:
+                self.assertEqual(result.returncode, 0, f"{result.check}: {result.output}")
+
+            windows = {}
+            for line in log.read_text(encoding="utf-8").splitlines():
+                name, start, end = line.split()
+                windows[name] = (float(start), float(end))
+
+        self.assertEqual(sorted(windows), sorted(names))
+        alone_start, alone_end = windows["alone.py"]
+        for name in ["one.py", "two.py", "three.py"]:
+            start, end = windows[name]
+            self.assertFalse(
+                start < alone_end and alone_start < end,
+                f"{name} ran while the exclusive check did",
+            )
+
+    def test_every_exclusive_check_is_in_the_manifest(self) -> None:
+        """The isolation list annotates manifest entries; it cannot outlive one."""
+        module = load_script("run-all-checks.py")
+        scripts = {check.split()[0] for check in self.manifest()}
+        for name in module.EXCLUSIVE:
+            self.assertIn(name, scripts, f"{name} is isolated but is not a gate check")
+
+
+class RegistryAuditGateTests(unittest.TestCase):
+    """The analyzer must be pointed at the skills this repository ships.
+
+    run-security-evals.py proves the analyzer *can* detect things by replaying
+    a corpus. It says nothing about skills/, which is what users install.
+    """
+
+    def test_registry_audit_runs_in_the_gate(self) -> None:
+        checks = json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
+        self.assertIn("audit-skill.py --all --strict", checks)
+
+    def test_registry_audit_rejects_a_tampered_skill(self) -> None:
+        """A gate check that cannot fail is not a check.
+
+        The payload comes from the security corpus rather than a literal here:
+        one copy of every attack string, and scripts/ stays clean.
+        """
+        corpus = json.loads(
+            (ROOT / "evals" / "security" / "corpus.json").read_text(encoding="utf-8")
+        )
+        case = next(c for c in corpus["cases"] if c["name"] == "split-line-injection")
+        with tempfile.TemporaryDirectory() as raw:
+            skill = Path(raw) / "tampered"
+            skill.mkdir()
+            for name, body in case["files"].items():
+                (skill / name).write_text(body, encoding="utf-8")
+            proc = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "audit-skill.py"), str(skill), "--strict"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        self.assertNotEqual(proc.returncode, 0, "the analyzer passed a known injection")
+        self.assertIn("AGT-INJ", proc.stdout)
 
 
 class CliJsonTests(unittest.TestCase):

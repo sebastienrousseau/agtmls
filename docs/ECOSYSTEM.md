@@ -56,16 +56,18 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **62 checks**, all green, **~40s** (32s and 40s on two idle runs).
+Gate: **63 checks**, all green, **6.9s** wall on six jobs (6.88s, 6.94s, 7.24s
+and 7.53s on four idle runs; 20.8s with `--jobs 1`).
 
-That is up from **21.3s** for the original 57 checks. The five added checks each
-copy the registry or shell out to `make`, which is where the extra time goes;
-removing the doctor's duplicate run of the entire gate paid most of it back.
-The scorecard's 60s budget (criterion 3.3) is met, with little headroom —
-§8.5 is still worth doing before more checks land.
+The checks are independent processes, so §8.5's process pool landed: 24.2s
+serial and fail-fast became ~7s concurrent, reporting every failure. The cost
+is still concentrated in the checks that copy the registry — `smoke-export.py`
+at 3.0-3.4s is the critical path, and no amount of concurrency goes below it.
+The scorecard's 60s budget (criterion 3.3) now has real headroom.
 
 An earlier figure of 137s in this document was wrong: it was measured while
-Rust builds were running concurrently. Remaining hub work is in §8.
+Rust builds were running concurrently. A later figure of ~40s was measured
+before the pool. Remaining hub work is in §8.
 
 **Not applied — needs your review.** The CI changes remove or restructure
 existing steps, which the assistant sandbox refused (correctly). They are
@@ -83,7 +85,7 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 62-check gate, ~40s. Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 63-check gate, ~7s. Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |

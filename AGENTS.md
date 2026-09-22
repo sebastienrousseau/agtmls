@@ -16,7 +16,7 @@ Everything here also applies to humans. It is addressed to agents because agents
 
 ## Before you claim to be done
 
-The repository has 57 validation gates and tests. Before concluding any task, run:
+The repository has 63 validation gates and tests. Before concluding any task, run:
 
 ```console
 python3 scripts/run-all-checks.py
