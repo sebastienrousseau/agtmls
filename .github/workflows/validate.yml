@@ -128,6 +128,8 @@ jobs:
         run: python3 scripts/generate-docs-site.py --check
       - name: Generate Mcp Resources Check
         run: python3 scripts/generate-mcp-resources.py --check
+      - name: Generate Benchmarks Doc Check
+        run: python3 scripts/generate-benchmarks-doc.py --check
       - name: Generate Sbom Check
         run: python3 scripts/generate-sbom.py --check
       - name: Validate Sbom Conformance

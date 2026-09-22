@@ -328,7 +328,7 @@ def redeclare() -> int:
 def smoke() -> int:
     """One iteration of every workload. Proves the harness runs; times nothing.
 
-    This is what belongs in the 64-check gate: a timing assertion inside a
+    This is what belongs in the 65-check gate: a timing assertion inside a
     ten-leg matrix on shared runners is a flake generator, and `--check`
     exists for a dedicated job.
     """

@@ -49,7 +49,7 @@
 **Operational**
 
 - [When not to use AgtMLS](#when-not-to-use-agtmls) — design scope and intentional boundaries
-- [Development](#development) — make targets, 64-gate validation suite, benchmarks
+- [Development](#development) — make targets, 65-gate validation suite, benchmarks
 - [Security & Hardening](#security--hardening) — zero-dependency architecture, signing keys, private disclosure
 - [Documentation](#documentation) — canonical specifications, ADRs, and developer guides
 - [Stability guarantees](#stability-guarantees) — strict pre-1.0 SemVer (`v0.0.1` → `v0.0.999`), output determinism
@@ -186,7 +186,7 @@ agtmls audit --all --strict
 # Run local diagnostic health checks
 agtmls doctor
 
-# Execute the full 64-gate validation suite
+# Execute the full 65-gate validation suite
 agtmls check
 ```
 
@@ -427,7 +427,7 @@ agtmls export --provider anthropic --profile noyalib --out-dir dist
 python3 scripts/agtmls.py doctor
 python3 scripts/agtmls.py status
 
-# Full gate validation (64 checks)
+# Full gate validation (65 checks)
 python3 scripts/agtmls.py check
 
 # Static security audit
@@ -500,7 +500,7 @@ agtmls/
 ├── skills/                      # 31 flat skill directories (SKILL.md, metadata.json)
 ├── system-prompts/              # Base rules (_base.md) and 9 language profiles
 ├── CATALOG.md                   # Human-readable registry catalog
-├── checks.json                  # Canonical 64-check validation registry
+├── checks.json                  # Canonical 65-check validation registry
 ├── index.json                   # Machine-readable skill registry index
 ├── KEYS.asc                     # OpenSSH allowed signers for commit/tag verification
 ├── Makefile                     # Unix build and installation task runner
@@ -529,7 +529,7 @@ AgtMLS is designed as a deterministic, versioned engineering skills registry. Do
 Local development requires only standard Python 3.10+ and `make`.
 
 ```bash
-# Run the complete 64-gate validation suite
+# Run the complete 65-gate validation suite
 make check
 
 # Run unit tests
@@ -567,7 +567,7 @@ The canonical documentation entry points:
 | [`CATALOG.md`](CATALOG.md) | The complete index of 31 engineering skills, subagents, and commands. |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architectural layout, generator pipelines, and adapter compilation. |
 | [`docs/cli.md`](docs/cli.md) | Comprehensive CLI command-line reference and examples. |
-| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 64 CI validation gates. |
+| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 65 CI validation gates. |
 | [`DEVELOPMENT.md`](DEVELOPMENT.md) | Developer workflow, local test reproduction, and release verification. |
 | [`AGENTS.md`](AGENTS.md) | Authoritative invariants and rules for AI-assisted contributors. |
 | [`SECURITY.md`](SECURITY.md) | Vulnerability disclosure policy and security posture. |

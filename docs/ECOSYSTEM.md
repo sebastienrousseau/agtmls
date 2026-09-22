@@ -56,7 +56,7 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **64 checks**, all green, **10.1-13.4s** wall on six jobs over ten
+Gate: **65 checks**, all green, **10.1-13.4s** wall on six jobs over ten
 consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same machine
 state.
 
@@ -97,7 +97,7 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 64-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 65-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |

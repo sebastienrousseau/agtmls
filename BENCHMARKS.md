@@ -31,9 +31,9 @@ python3 scripts/bench.py --scaling        # growth at 10x registry size
 
 ## Results
 
-Recorded on the machine named in `bench-baseline.json`: macOS 26.7,
-arm64, Python 3.12.14. One machine, five suite runs. No claim is made about
-any other machine.
+<!-- generated:latency sources="benchmarks/results/latency.json:242aed18de0eedae2c2cdf5ba07788a02a17a820ca6fdb09e1b812ad84be1050,bench-baseline.json:85c6d792e846854288665de208f9ca1029f7c769b01dcbae06ce2545fc4dcc35" -->
+Recorded on the machine named in `bench-baseline.json`: macOS 26.7, arm64, Python 3.12.14.
+One machine, 5 suite runs. No claim is made about any other machine.
 
 | Workload | min ms | P50 ms | P95 ms | × calibration |
 |---|---:|---:|---:|---:|
@@ -42,15 +42,13 @@ any other machine.
 | `cli-search` | 36.05 | 37.41 | 43.04 | 3.07 |
 | `cli-show` | 37.99 | 47.28 | 64.55 | 3.23 |
 | `cli-stats` | 34.51 | 48.40 | 65.65 | 2.94 |
-| `digest-registry` (31 skills) | 44.15 | 47.73 | 59.47 | 3.76 |
-| `route-rank` (TF-IDF over 31 descriptions) | 33.41 | 37.98 | 41.68 | 2.84 |
+| `digest-registry` (every skill) | 44.15 | 47.73 | 59.47 | 3.76 |
+| `route-rank` (TF-IDF over every description) | 33.41 | 37.98 | 41.68 | 2.84 |
 | `audit-all` (`--all --strict`) | 206.70 | 263.98 | 392.56 | 17.59 |
 | `index-check` | 64.08 | 82.78 | 120.88 | 5.45 |
 
-The four `cli-*` commands are the interactive surface, and all sit around
-**37ms P50** against the 100ms budget of scorecard criterion 3.10. Roughly
-12ms of that is the interpreter itself — the calibration row — so AgtMLS's own
-share of a cold `agtmls list` is about 25ms.
+The 4 `cli-*` commands are the interactive surface: P50 between **37ms** and **48ms**, against the 100ms budget of scorecard criterion 3.10. About 13ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 25ms.
+<!-- /generated:latency -->
 
 ## Regression detection, and its limits
 
@@ -61,9 +59,11 @@ samples, because noise only ever adds time.
 
 The threshold is **not** a round number picked in advance.
 `--write-baseline` runs the whole suite five times, records each workload's
-spread across those runs, and `--check` allows `max(20%, 3 × spread)`. On the
-recorded machine the spreads are 1.2% to 7.5%, so eight of nine workloads are
-gated at the full 20% of criterion 3.2 and `cli-search` at 23%.
+spread across those runs, and `--check` allows `max(20%, 3 × spread)`.
+
+<!-- generated:thresholds sources="bench-baseline.json:85c6d792e846854288665de208f9ca1029f7c769b01dcbae06ce2545fc4dcc35" -->
+On the recorded machine the spreads are 1.2% to 7.5%, so 8 of 9 workloads are gated at the full 20% of criterion 3.2 and `cli-search` at 23%.
+<!-- /generated:thresholds -->
 
 `--check` measures **the same way the baseline was recorded**: three full
 suite runs, minimum ratio per workload. Comparing a single run against a
@@ -88,7 +88,7 @@ fails with exactly one finding (`+37%`) and no false positives.
 workload 47–106% slower, with nothing changed. Under sustained throttling the
 CPU-bound workloads degrade further than the spawn-bound calibration, so the
 ratio is not invariant. `--check` therefore belongs on an idle machine or a
-dedicated CI job, and **not** inside the 64-check gate — which runs `--smoke`
+dedicated CI job, and **not** inside the 65-check gate — which runs `--smoke`
 instead: one iteration per workload, asserting only that each still runs.
 
 ## Scaling
@@ -98,24 +98,26 @@ Criterion 3.5 asks that no hot path be worse than linear in registry size.
 and measures against the real one. Raw numbers in
 [`benchmarks/results/scaling.json`](benchmarks/results/scaling.json).
 
+<!-- generated:scaling sources="benchmarks/results/scaling.json:d94f51561b37cb0fb5d397202ebb95c05b968ddd3610e1b34623d52e3040e8ad" -->
 | Skills | `skill_digest` over all | Pairwise description scoring |
 |---:|---:|---:|
-| 31 | 42.3 ms | 2.7 ms |
-| 310 | 403.1 ms | 201.2 ms |
-| **growth for ×10** | **×9.5** | **×73.4** |
+| 31 | 29.69 ms | 1.89 ms |
+| 310 | 208.49 ms | 209.07 ms |
+| **growth for ×10** | **×7.02** | **×110.62** |
 
-`skill_digest` is O(bytes) and measures ×9.5 for ×10 the corpus — linear. The
+`skill_digest` measured ×7.02 for ×10 the corpus. Pairwise scoring measured ×110.62; at 31 skills it costs 1.89ms, and extrapolating quadratically from 310 skills it reaches roughly 2.2s at 1,000 skills and 19.6s at 3,000.
+<!-- /generated:scaling -->
+
+`skill_digest` is O(bytes), so it should grow no faster than the corpus; the
 check fails if it ever grows more than 1.5× faster than the registry.
 
 Pairwise description scoring — what `check-skill-collisions.py` does — is
-**O(n²) by construction**: it compares every description with every other one.
-×73 for ×10 is that curve. It is measured and reported rather than asserted
-against a linear bound, because the comparison *is* the check. It is not on a
-hot path — it runs once per gate, never per request — and at 31 skills it
-costs 2.7ms. Extrapolating the measured curve, it reaches roughly 2s at 1,000
-skills and 20s at 3,000. That is the point at which it needs blocking or
-approximate nearest-neighbours, and this table is how that will be noticed
-rather than discovered.
+**O(n²) by construction**: it compares every description with every other one,
+and the growth row above is that curve. It is measured and reported rather than
+asserted against a linear bound, because the comparison *is* the check. It is
+not on a hot path — it runs once per gate, never per request. The extrapolation
+above is the point at which it needs blocking or approximate nearest-neighbours,
+and this table is how that will be noticed rather than discovered.
 
 ## What these numbers are not
 
