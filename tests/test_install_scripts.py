@@ -203,6 +203,28 @@ class DoctorTargetTests(ScriptCase):
         self.assertIn("WARN target .codex/commands is missing", output)
         self.assertIn("WARN target generated AGENTS.md is missing", output)
 
+    def test_every_native_agent_can_be_inspected(self) -> None:
+        """`agtmls install ... antigravity` works, so `doctor --agent
+        antigravity` has to. The doctor kept its own agent list, and it
+        rejected the agent the installer had just installed for."""
+        (self.target / ".agents" / "skills").mkdir(parents=True)
+        code, output = self.drive("--skip-gate", "--target", str(self.target), "--agent", "antigravity")
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   target .agents/skills exists", output)
+        self.assertIn("WARN target generated AGENTS.md is missing", output)
+
+    def test_a_link_into_a_sibling_checkout_is_not_ours(self) -> None:
+        """`<root>-experiments/skills/x` shares the registry's path prefix. A
+        string prefix match counted it as an AgtMLS link; uninstall had the
+        same bug and was fixed with is_relative_to."""
+        sibling = Path(str(self.fixture) + "-experiments")
+        (sibling / "skills" / SKILLS[0]).mkdir(parents=True)
+        self.addCleanup(lambda: shutil.rmtree(sibling, ignore_errors=True))
+        skills = self.install(names=SKILLS[1:])
+        (skills / SKILLS[0]).symlink_to(sibling / "skills" / SKILLS[0])
+        code, output = self.doctor()
+        self.assertIn(f"WARN target missing expected AgtMLS skill links: {SKILLS[0]}\n", output)
+
     def test_commands_without_skills_warns_and_checks_no_links(self) -> None:
         (self.target / ".claude" / "commands").mkdir(parents=True)
         (self.target / "CLAUDE.md").write_text(GENERATED, encoding="utf-8")

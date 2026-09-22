@@ -14,6 +14,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
+PROVIDERS = ROOT / "providers.json"
+
+
+def native_agents() -> dict[str, tuple[str, str]]:
+    """Agent name -> (dot-directory, prompt file), from providers.json.
+
+    A hand-kept copy here rejected `antigravity`, which `agtmls install`
+    accepts, so the doctor could not inspect what the installer had made.
+    """
+    data = json.loads(PROVIDERS.read_text(encoding="utf-8"))
+    return {
+        name: (str(Path(item["skills_dir"]).parent), item["prompt_file"])
+        for name, item in data["native_agents"].items()
+    }
 
 
 def expected_skill_names(bundles: list[str]) -> list[str]:
@@ -67,7 +81,8 @@ def run_check(script: str, args: list[str], reporter: Reporter) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", type=Path, help="optional consumer repo to inspect")
-    parser.add_argument("--agent", choices=["claude", "codex", "aider"], help="consumer agent layout")
+    agents = native_agents()
+    parser.add_argument("--agent", choices=sorted(agents), help="consumer agent layout")
     parser.add_argument("--bundle", action="append", default=[], help="expected project bundle in target")
     parser.add_argument("--skills-only", action="store_true", help="target should not have an AgtMLS prompt")
     parser.add_argument(
@@ -144,11 +159,7 @@ def main() -> int:
         else:
             r.ok(f"target repo exists: {target}")
             if args.agent:
-                dot, prompt = {
-                    "claude": (".claude", "CLAUDE.md"),
-                    "codex": (".codex", "AGENTS.md"),
-                    "aider": (".aider", "CONVENTIONS.md"),
-                }[args.agent]
+                dot, prompt = agents[args.agent]
                 skills_dir = target / dot / "skills"
                 commands_dir = target / dot / "commands"
                 if skills_dir.exists():
@@ -163,7 +174,9 @@ def main() -> int:
                     missing = []
                     for name in expected_skill_names(args.bundle):
                         link = skills_dir / name
-                        if not link.is_symlink() or not str(link.resolve()).startswith(str(ROOT)):
+                        # is_relative_to, not a string prefix: a sibling
+                        # checkout `<root>-experiments` shares the prefix.
+                        if not link.is_symlink() or not link.resolve().is_relative_to(ROOT):
                             missing.append(name)
                     if missing:
                         r.warn(f"target missing expected AgtMLS skill links: {', '.join(missing)}")
