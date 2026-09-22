@@ -843,7 +843,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "36b6c7f4d3fcc065a30df7fe8488615cd89c1e598a158b7ec7433d5c16643330"
+          "content": "197d6eb0565becf95f95aef2f146551da3fb7d982727c3f0fabe7e66e4c1eb67"
         }
       ],
       "name": "scripts/bench.py"
@@ -1068,7 +1068,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eb8d81aaf2b76fb23e8a8644177311c0fc5c56286365dcbd8fd78541d2bf530f"
+          "content": "388a378a17b2bf3bc6556c85fa1d196af25a0f3e6b6de1d308ef21a11bf06927"
         }
       ],
       "name": "scripts/run-all-checks.py"
@@ -1104,7 +1104,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1c154f2fb39eca510581c1e9b1a8962fa0c6e5eb3be14061a6bccd290e4a7f44"
+          "content": "51285576bbcfdae5fba744cdf4a7e83cae543a8726e1b61b09b782d097d726b0"
         }
       ],
       "name": "scripts/run-unit-tests.py"

@@ -678,6 +678,43 @@ class BenchmarkTests(unittest.TestCase):
         self.assertGreater(entry["spread_cv"], 0.0)
         self.assertEqual(baseline["suite_runs"], 3)
 
+    def test_redeclare_refuses_when_the_workloads_changed(self) -> None:
+        """Declarations can be refreshed in place; measurements cannot.
+
+        Re-running the suite to pick up a changed declaration would replace a
+        baseline recorded on an idle machine with one recorded on whatever
+        machine was free, and the absolute figures only mean anything from an
+        unsaturated one. But if the workload set itself moved, the numbers no
+        longer describe the suite and must be re-measured.
+        """
+        module = load_script("bench.py")
+        with tempfile.TemporaryDirectory() as raw:
+            baseline = Path(raw) / "bench-baseline.json"
+            baseline.write_text(json.dumps({
+                "workloads": {"calibration": {"spread_cv": 0.0, "p50_ms": 1.0}},
+            }), encoding="utf-8")
+            original = module.BASELINE
+            module.BASELINE = baseline
+            try:
+                self.assertEqual(module.redeclare(), 1, "a changed workload set must refuse")
+                full = {name: {"spread_cv": 0.0, "p50_ms": 1.0} for name in module.workloads()}
+                baseline.write_text(json.dumps({"workloads": full}), encoding="utf-8")
+                self.assertEqual(module.redeclare(), 0)
+                refreshed = json.loads(baseline.read_text(encoding="utf-8"))
+            finally:
+                module.BASELINE = original
+        for name, entry in refreshed["workloads"].items():
+            self.assertEqual(entry["interactive"], name in module.INTERACTIVE)
+            self.assertEqual(entry["p50_ms"], 1.0, "a measurement must not be touched")
+
+    def test_the_baseline_declares_which_workloads_are_interactive(self) -> None:
+        """Criterion 3.10's budget has nothing to bind to otherwise."""
+        module = load_script("bench.py")
+        recorded = json.loads((ROOT / "bench-baseline.json").read_text(encoding="utf-8"))
+        for name, entry in recorded["workloads"].items():
+            self.assertIn("interactive", entry, f"{name} does not say whether it is interactive")
+            self.assertEqual(entry["interactive"], name in module.INTERACTIVE)
+
     def test_the_gate_runs_smoke_not_the_timing_check(self) -> None:
         """--check compares ratios and needs an idle machine.
 

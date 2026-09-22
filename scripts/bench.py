@@ -311,6 +311,9 @@ def as_baseline(reports: list[dict[str, object]]) -> dict[str, object]:
             "min_ms": last["workloads"][name]["min_ms"],
             "p50_ms": last["workloads"][name]["p50_ms"],
             "p95_ms": last["workloads"][name]["p95_ms"],
+            # Declared, not inferred: COLD_START_BUDGET_MS governs the surfaces
+            # a person waits on, and a budget with nothing bound to it is prose.
+            "interactive": name in INTERACTIVE,
         }
     for name, record in workloads_out.items():
         record["allowed_regression"] = round(threshold_for(record) - 1.0, 4)
@@ -325,6 +328,46 @@ def as_baseline(reports: list[dict[str, object]]) -> dict[str, object]:
         "cold_start_budget_ms": COLD_START_BUDGET_MS,
         "workloads": workloads_out,
     }
+
+
+def redeclare() -> int:
+    """Refresh what the baseline *declares*, leaving what it *measured* alone.
+
+    Which workloads are interactive, and how much regression each is allowed,
+    are derived from this file's constants rather than from a stopwatch. When
+    they change, re-running the whole suite to pick them up would replace a
+    baseline recorded on an idle machine with one recorded on whatever machine
+    happened to be free -- and the absolute figures in a baseline are only
+    meaningful from an unsaturated one.
+
+    So this rewrites the derived fields and refuses to touch the numbers.
+    """
+    if not BASELINE.exists():
+        print(f"FAIL: no {BASELINE.name}; run bench.py --write-baseline")
+        return 1
+    data = json.loads(BASELINE.read_text(encoding="utf-8"))
+    known = set(workloads())
+    recorded = set(data.get("workloads", {}))
+    if recorded != known:
+        print(f"FAIL: the baseline records {sorted(recorded)} but the suite defines "
+              f"{sorted(known)}; the workloads changed, so the numbers must be "
+              "re-measured with --write-baseline")
+        return 1
+
+    changed = []
+    for name, entry in data["workloads"].items():
+        for key, value in (("interactive", name in INTERACTIVE),
+                           ("allowed_regression", round(threshold_for(entry) - 1.0, 4))):
+            if entry.get(key) != value:
+                changed.append(f"{name}.{key}")
+                entry[key] = value
+    data["noise_sigmas"] = NOISE_SIGMAS
+    data["regression_threshold_floor"] = REGRESSION_THRESHOLD
+    data["cold_start_budget_ms"] = COLD_START_BUDGET_MS
+    BASELINE.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"OK: refreshed {len(changed)} declaration(s) in {BASELINE.name}; "
+          "no measurement was altered")
+    return 0
 
 
 def smoke() -> int:
@@ -423,6 +466,12 @@ def scaling() -> int:
             "digest": round(digest_growth, 2),
             "pairwise": round(pairwise_growth, 2),
         },
+        # Pairwise description scoring compares every skill with every other,
+        # so it is quadratic by definition. It runs once per gate and never
+        # per request, which is what makes that acceptable -- and saying so
+        # here rather than only in BENCHMARKS.md is what lets a checker tell
+        # a deliberate curve from an accidental one.
+        "cold_paths": ["pairwise"],
     }
     RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "scaling.json").write_text(
@@ -447,6 +496,11 @@ def main() -> int:
     mode.add_argument("--check", action="store_true", help="fail on a regression against bench-baseline.json")
     mode.add_argument("--write-baseline", action="store_true", help="re-record bench-baseline.json")
     mode.add_argument("--scaling", action="store_true", help="measure growth at 10x registry size")
+    mode.add_argument(
+        "--redeclare",
+        action="store_true",
+        help="refresh the baseline's derived declarations without re-measuring",
+    )
     parser.add_argument("--iterations", type=int, default=20, help="timed iterations (default: 20)")
     parser.add_argument("--warmup", type=int, default=3, help="untimed iterations first (default: 3)")
     parser.add_argument(
@@ -468,6 +522,8 @@ def main() -> int:
         return smoke()
     if args.scaling:
         return scaling()
+    if args.redeclare:
+        return redeclare()
 
     if args.write_baseline:
         # One run cannot observe its own run-to-run spread, and the spread is

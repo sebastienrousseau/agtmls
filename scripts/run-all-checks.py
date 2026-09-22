@@ -47,6 +47,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 MANIFEST = ROOT / "checks.json"
 RUNS_DIR = ROOT / ".agtmls" / "runs"
+#: A deliberately recorded gate cost, committed. The per-run records under
+#: .agtmls/ are local and ignored, which makes "the gate takes N seconds" a
+#: claim nobody outside this checkout can check. Written only by --record, so
+#: it is a measurement someone took, not a file that churns on every run.
+RECORD = ROOT / "benchmarks" / "results" / "gate.json"
 
 # Checks that write inside the working tree and therefore cannot share the
 # pool with readers of the same files. This annotates manifest entries; it is
@@ -190,6 +195,11 @@ def main() -> int:
         help="concurrent checks (default: min(8, cpu count); 1 to serialise)",
     )
     parser.add_argument(
+        "--record",
+        action="store_true",
+        help=f"also write the measured wall time to {RECORD.name}, for committing",
+    )
+    parser.add_argument(
         "--format",
         choices=["text", "json"],
         default="text",
@@ -203,6 +213,34 @@ def main() -> int:
     wall = time.perf_counter() - started
 
     path = record(results, wall, args.jobs)
+    if args.record:
+        RECORD.parent.mkdir(parents=True, exist_ok=True)
+        RECORD.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "generated_by": "scripts/run-all-checks.py --record",
+                    "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "environment": {"python": sys.version.split()[0]},
+                    "jobs": args.jobs,
+                    "checks": len(results),
+                    "wall_s": round(wall, 3),
+                    "serial_s": round(sum(r.duration_s for r in results), 3),
+                    # A duration from a run that failed is still a duration,
+                    # but it is not "the gate passes in N seconds". Record
+                    # which it was rather than letting the reader assume.
+                    "passed": all(r.returncode == 0 for r in results),
+                    "failed": [r.check for r in results if r.returncode != 0],
+                    "slowest": {
+                        r.check: round(r.duration_s, 3)
+                        for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
+                    },
+                },
+                indent=2, sort_keys=True,
+            ) + "\n",
+            encoding="utf-8",
+        )
+        print(f"recorded {RECORD.relative_to(ROOT)}")
     if args.format == "json":
         print(json.dumps(
             {"run": str(path.relative_to(ROOT)),

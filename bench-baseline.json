@@ -15,6 +15,7 @@
   "workloads": {
     "audit-all": {
       "allowed_regression": 0.2,
+      "interactive": false,
       "min_ms": 206.702,
       "p50_ms": 263.982,
       "p95_ms": 392.561,
@@ -23,6 +24,7 @@
     },
     "calibration": {
       "allowed_regression": 0.2,
+      "interactive": false,
       "min_ms": 11.749,
       "p50_ms": 12.549,
       "p95_ms": 14.666,
@@ -31,6 +33,7 @@
     },
     "cli-list": {
       "allowed_regression": 0.2,
+      "interactive": true,
       "min_ms": 36.052,
       "p50_ms": 37.515,
       "p95_ms": 45.418,
@@ -39,6 +42,7 @@
     },
     "cli-search": {
       "allowed_regression": 0.2265,
+      "interactive": true,
       "min_ms": 36.047,
       "p50_ms": 37.415,
       "p95_ms": 43.044,
@@ -47,6 +51,7 @@
     },
     "cli-show": {
       "allowed_regression": 0.2,
+      "interactive": true,
       "min_ms": 37.987,
       "p50_ms": 47.279,
       "p95_ms": 64.551,
@@ -55,6 +60,7 @@
     },
     "cli-stats": {
       "allowed_regression": 0.2,
+      "interactive": true,
       "min_ms": 34.507,
       "p50_ms": 48.402,
       "p95_ms": 65.652,
@@ -63,6 +69,7 @@
     },
     "digest-registry": {
       "allowed_regression": 0.2,
+      "interactive": false,
       "min_ms": 44.15,
       "p50_ms": 47.725,
       "p95_ms": 59.469,
@@ -71,6 +78,7 @@
     },
     "index-check": {
       "allowed_regression": 0.2,
+      "interactive": false,
       "min_ms": 64.085,
       "p50_ms": 82.779,
       "p95_ms": 120.878,
@@ -79,6 +87,7 @@
     },
     "route-rank": {
       "allowed_regression": 0.2,
+      "interactive": false,
       "min_ms": 33.413,
       "p50_ms": 37.975,
       "p95_ms": 41.676,

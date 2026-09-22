@@ -1,0 +1,21 @@
+{
+  "checks": 63,
+  "environment": {
+    "python": "3.12.14"
+  },
+  "failed": [],
+  "generated_at": "2026-09-22T13:10:23Z",
+  "generated_by": "scripts/run-all-checks.py --record",
+  "jobs": 6,
+  "passed": true,
+  "schema_version": 1,
+  "serial_s": 65.988,
+  "slowest": {
+    "smoke-export.py": 8.672,
+    "smoke-install-profiles.py": 4.623,
+    "smoke-install-safety.py": 5.649,
+    "smoke-release-dry-run.py": 4.396,
+    "smoke-release-pack.py": 4.479
+  },
+  "wall_s": 20.909
+}
