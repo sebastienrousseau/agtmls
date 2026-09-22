@@ -167,7 +167,6 @@ class CliDispatchTests(unittest.TestCase):
     # A subcommand added without an entry here fails
     # test_every_declared_subcommand_is_covered, so coverage closes itself.
     INVOCATIONS: dict[str, list[str]] = {
-        "agent-card": ["--check"],
         "audit": ["--all"],
         "bench": [],
         "bump-version": ["--check"],

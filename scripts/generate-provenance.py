@@ -35,7 +35,6 @@ OUT = ROOT / "provenance.json"
 MATERIALS = [
     "index.json",
     "checks.json",
-    "agent-card.json",
     "mcp-resources.json",
     "SBOM.spdx.json",
     "SBOM.cyclonedx.json",

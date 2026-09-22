@@ -5,7 +5,6 @@
 _agtmls() {
     local -a commands
     commands=(
-        'agent-card:agent-card command'
         'audit:audit command'
         'bench:bench command'
         'bump-version:bump-version command'

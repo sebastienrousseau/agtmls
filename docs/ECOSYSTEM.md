@@ -56,7 +56,7 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **64 checks**, all green, **10.1-13.4s** wall on six jobs over ten
+Gate: **63 checks**, all green, **10.1-13.4s** wall on six jobs over ten
 consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same machine
 state.
 
@@ -97,7 +97,7 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 64-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 63-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
@@ -608,7 +608,7 @@ Promote `agtmls-doctor.py`'s `Reporter` into `scripts/_lib/report.py`;
 ### 8.7 Smaller items
 
 - Rewrite the remaining semicolon-compressed scripts. `generate-sbom.py` and
-  `generate-provenance.py` are done; `generate-agent-card.py`, `bench.py`,
+  `generate-provenance.py` are done; `bench.py`,
   `record-evidence.py`, `evolve-session.py`, `validate-governance.py`,
   `generate-docs-site.py`, `generate-completions.py`,
   `generate-plugin-manifests.py`, `validate-packaging.py` and
@@ -617,9 +617,9 @@ Promote `agtmls-doctor.py`'s `Reporter` into `scripts/_lib/report.py`;
 - `validate-secrets.py`: widen beyond 8 suffixes; scan history; add entropy
   and vendor-token patterns.
 - `bench.py` must measure time or be renamed.
-- `agent-card.json` is not an A2A card — `capabilities` is an array where the
-  spec defines an object, and `protocolVersion`, `url`, `preferredTransport`,
-  `defaultInputModes`/`defaultOutputModes` and `provider` are absent.
+- ~~`agent-card.json` is not an A2A card~~ — removed in 0.0.7. It had no
+  consumer and could not conform without a service endpoint; a conforming
+  A2A export can be added when one exists.
 
 ---
 

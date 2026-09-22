@@ -19,7 +19,6 @@ CHECKS = [
     ["generate-skill-index.py", "--check"],
     ["generate-catalog.py", "--check"],
     ["generate-docs-site.py", "--check"],
-    ["generate-agent-card.py", "--check"],
     ["generate-mcp-resources.py", "--check"],
     ["generate-sbom.py", "--check"],
     ["generate-provenance.py", "--check"],

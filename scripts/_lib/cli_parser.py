@@ -118,9 +118,6 @@ def build_parser() -> argparse.ArgumentParser:
     evidence.add_argument("--file", action="append", default=[])
     evidence.add_argument("--outcome", default="recorded")
 
-    agent_card = sub.add_parser("agent-card")
-    agent_card.add_argument("--write", action="store_true")
-    agent_card.add_argument("--check", action="store_true")
 
     mcp_resources = sub.add_parser("mcp-resources")
     mcp_resources.add_argument("--write", action="store_true")

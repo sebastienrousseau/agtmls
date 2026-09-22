@@ -348,9 +348,6 @@ def main() -> int:
         for item in args.file:
             cmd.extend(["--file", item])
         return run(cmd)
-    if args.subcommand == "agent-card":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-agent-card.py"), *flags])
     if args.subcommand == "mcp-resources":
         flags = ["--write"] if args.write else ["--check"] if args.check else []
         return run([sys.executable, str(ROOT / "scripts" / "generate-mcp-resources.py"), *flags])

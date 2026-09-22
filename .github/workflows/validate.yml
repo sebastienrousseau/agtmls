@@ -123,8 +123,6 @@ jobs:
         run: python3 scripts/generate-catalog.py --check
       - name: Generate Docs Site Check
         run: python3 scripts/generate-docs-site.py --check
-      - name: Generate Agent Card Check
-        run: python3 scripts/generate-agent-card.py --check
       - name: Generate Mcp Resources Check
         run: python3 scripts/generate-mcp-resources.py --check
       - name: Generate Sbom Check

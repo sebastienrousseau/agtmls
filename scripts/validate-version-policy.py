@@ -106,9 +106,6 @@ def main() -> int:
     index = read_json(ROOT / "index.json")
     if index.get("registry_version") != current:
         errors.append("index.json registry_version must match plugin version")
-    agent_card = read_json(ROOT / "agent-card.json")
-    if agent_card.get("version") != current:
-        errors.append("agent-card.json version must match plugin version")
     # provenance.json is an in-toto Statement. A subject carries `name` and
     # `digest` and has no `version` field, so the registry version is read
     # from the predicate's externalParameters, and the subject name must still

@@ -56,7 +56,6 @@ def main() -> int:
         "bump-version",
         "evolve",
         "evidence",
-        "agent-card",
         "mcp-resources",
         "plugin-manifests",
         "sbom",

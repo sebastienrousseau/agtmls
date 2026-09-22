@@ -13,7 +13,7 @@ exists to catch that.
 python3 scripts/agtmls.py check
 ```
 
-64 checks. It is the same gate CI runs — `validate-check-manifest.py` fails
+63 checks. It is the same gate CI runs — `validate-check-manifest.py` fails
 if `checks.json`, `scripts/run-all-checks.py`, and
 `.github/workflows/validate.yml` ever disagree, so a green local run means a
 green CI run.
@@ -113,7 +113,7 @@ Tests run on Python 3.10–3.13 across Linux and macOS in CI.
 
 These are generated and drift-checked:
 
-`index.json` · `CATALOG.md` · `site/index.html` · `agent-card.json` ·
+`index.json` · `CATALOG.md` · `site/index.html` ·
 `mcp-resources.json` · `SBOM.spdx.json` · `provenance.json` ·
 `plugin.json` · `gemini-extension.json` · `GEMINI.md` ·
 `.codex-plugin/` · `.cursor-plugin/` · `.kimi-plugin/` · `.agents/` ·

@@ -343,13 +343,6 @@ class GeneratedArtifactTests(ValidatorFailureBase):
         self.overwrite("CATALOG.md", "# Catalog\n\nnothing here\n")
         self.assert_catches("generate-catalog.py", "--check")
 
-    def test_the_agent_card_is_current(self) -> None:
-        self.assert_clean("generate-agent-card.py", "--check")
-
-    def test_a_stale_agent_card_is_caught(self) -> None:
-        self.edit_json("agent-card.json", lambda data: data.__setitem__("name", "something-else"))
-        self.assert_catches("generate-agent-card.py", "--check")
-
     def test_mcp_resources_are_current(self) -> None:
         self.assert_clean("generate-mcp-resources.py", "--check")
 

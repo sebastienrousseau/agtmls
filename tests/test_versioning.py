@@ -116,7 +116,7 @@ class DigestStabilityTests(unittest.TestCase):
             (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
         )["version"]
         generated = (
-            "sbom", "provenance", "index.json", "agent-card", "mcp-resources",
+            "sbom", "provenance", "index.json", "mcp-resources",
             "catalog", "lock", "changelog", "site", "bench-baseline",
         )
         # The per-provider manifests restate the version by construction. The

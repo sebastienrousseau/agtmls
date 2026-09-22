@@ -39,7 +39,6 @@ GENERATORS = [
     ["generate-skill-index.py", "--write"],
     ["generate-catalog.py", "--write"],
     ["generate-docs-site.py", "--write"],
-    ["generate-agent-card.py", "--write"],
     ["generate-mcp-resources.py", "--write"],
     ["generate-sbom.py", "--write"],
     ["generate-provenance.py", "--write"],

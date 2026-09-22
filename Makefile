@@ -24,7 +24,7 @@ PYTHON ?= python3
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
 
-check: ## Run the full 64-check validation suite
+check: ## Run the full 63-check validation suite
 	$(PYTHON) scripts/run-all-checks.py
 
 test: ## Run the unit test suite

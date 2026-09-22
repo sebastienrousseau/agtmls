@@ -35,5 +35,5 @@ SOURCE_FILES = [
 # exclusion is explicit rather than implied by absence.
 GENERATED = [
     "SBOM.spdx.json", "SBOM.cyclonedx.json", "provenance.json",
-    "agent-card.json", "mcp-resources.json", "CATALOG.md",
+    "mcp-resources.json", "CATALOG.md",
 ]
