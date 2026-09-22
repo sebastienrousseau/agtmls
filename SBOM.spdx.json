@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "321b8c8c04bc890a139d5e7d52abae943ffe804f"
+          "checksumValue": "45596fa6d39a73cc17f60b328920796e255ed43d"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c61899b4eb69f982f99b648569966734acc6a96c6c996194faba884f754cf2bf"
+          "checksumValue": "fadc56830f280b5c649f85d0843adefdd38d0eaa0a66d7840b416df873b6d704"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1969,11 +1969,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "492e9f6d33718ff8196702edc5309f5dd0fa8ad4"
+          "checksumValue": "7f58ebf1d46f9758efd51694ea8bcb39edf30d62"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "27b6aa7596cb2684f2082d735d805468ef2fa176983adb54ac3b3e21dc159c88"
+          "checksumValue": "7ee22e59bfa3c772bd611339fc9a126bc8cc6f7d9c913671459239e2bb711681"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2202,6 +2202,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/smoke-next-version.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-smoke-offline.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "839b514ff449b92962626673fc2caa81c5a4fae0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "82d3fcb8a6f49a50775ed0b270d65afedea0779cf554b7ec07beb65b239d0aaf"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/smoke-offline.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5669,6 +5685,7 @@
         "SPDXRef-File-scripts-smoke-live-providers.py",
         "SPDXRef-File-scripts-smoke-make-install.py",
         "SPDXRef-File-scripts-smoke-next-version.py",
+        "SPDXRef-File-scripts-smoke-offline.py",
         "SPDXRef-File-scripts-smoke-proposal.py",
         "SPDXRef-File-scripts-smoke-provider-install.py",
         "SPDXRef-File-scripts-smoke-release-dry-run.py",

@@ -55,6 +55,7 @@
     "smoke-install-verify.py",
     "smoke-install-profiles.py",
     "smoke-cli.py",
+    "smoke-offline.py",
     "smoke-make-install.py",
     "smoke-export.py",
     "smoke-import.py",

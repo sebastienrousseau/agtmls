@@ -176,6 +176,9 @@ jobs:
         run: python3 scripts/smoke-install-profiles.py
       - name: Smoke Cli
         run: python3 scripts/smoke-cli.py
+      - name: Smoke Offline
+        # "No telemetry" is a positioning claim; this is the control behind it.
+        run: python3 scripts/smoke-offline.py
       - name: Smoke Make Install
         run: python3 scripts/smoke-make-install.py
       - name: Smoke Export

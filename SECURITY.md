@@ -9,9 +9,31 @@ incorrect public claims.
 
 ## Reporting
 
-Report security issues privately to the maintainer before publishing details.
-Include the affected file, expected impact, and a minimal reproduction where
-possible.
+Report privately through
+[GitHub Security Advisories](https://github.com/sebastienrousseau/agtmls/security/advisories/new),
+which opens a channel only you and the maintainer can read. Do not open a
+public issue for a vulnerability, and do not publish details before a fix is
+available.
+
+Include the affected file, the expected impact, and a minimal reproduction
+where possible. A skill that steers an agent into unsafe commands is in scope
+even when it runs no code itself.
+
+### Response window
+
+AgtMLS is maintained by one person, so these are the commitments that can be
+kept rather than the ones that sound best:
+
+| Stage | Target |
+| :--- | :--- |
+| Acknowledgement | within 5 business days |
+| Initial assessment, with a severity and a direction | within 10 business days |
+| Fix or documented mitigation for HIGH and CRITICAL | within 30 days of assessment |
+| Public advisory | with the release that carries the fix |
+
+If an acknowledgement has not arrived within 5 business days, the report has
+been missed rather than declined; escalate by opening a public issue that says
+a private report is outstanding, without the details.
 
 ## Security rules for skills
 

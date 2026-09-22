@@ -56,6 +56,7 @@
       "smoke-install-verify.py",
       "smoke-install-profiles.py",
       "smoke-cli.py",
+      "smoke-offline.py",
       "smoke-make-install.py",
       "smoke-export.py",
       "smoke-import.py",
@@ -108,7 +109,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6a3f8871e9c5a11eb286b7d20a325fc939eda6e4b631754507aa5c0b44326bd1"
+        "sha256": "73b285ca1643bdbee11aba8979e231d368d616ca6d2f33ae876e2c084be42e41"
       },
       "name": "agtmls-0.0.6"
     }

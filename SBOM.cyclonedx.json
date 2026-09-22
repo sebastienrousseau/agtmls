@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c61899b4eb69f982f99b648569966734acc6a96c6c996194faba884f754cf2bf"
+          "content": "fadc56830f280b5c649f85d0843adefdd38d0eaa0a66d7840b416df873b6d704"
         }
       ],
       "name": "checks.json",
@@ -1348,7 +1348,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "27b6aa7596cb2684f2082d735d805468ef2fa176983adb54ac3b3e21dc159c88"
+          "content": "7ee22e59bfa3c772bd611339fc9a126bc8cc6f7d9c913671459239e2bb711681"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1506,6 +1506,17 @@
         }
       ],
       "name": "scripts/smoke-next-version.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/smoke-offline.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "82d3fcb8a6f49a50775ed0b270d65afedea0779cf554b7ec07beb65b239d0aaf"
+        }
+      ],
+      "name": "scripts/smoke-offline.py",
       "type": "file"
     },
     {

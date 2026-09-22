@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Unit tests for the registry tooling itself.
 
-The 63-check gate validates repository *data*. These tests validate the
+The 64-check gate validates repository *data*. These tests validate the
 *validators* — the failure mode the gate cannot see is a checker that always
 returns 0. Every test here is written to fail if the logic it covers is
 weakened, not merely if it raises.
@@ -674,15 +674,17 @@ class CheckManifestTests(unittest.TestCase):
     def test_the_count_pattern_actually_matches_prose(self) -> None:
         """A regex that matches nothing would make the check above vacuous."""
         module = load_script("validate-check-manifest.py")
-        for text in [
-            "Run the full 63-check validation suite",
-            "The repository has 63 validation gates and tests.",
-            "Detailed reference of all 63 CI validation gates.",
-            "Gate: **63 checks**, all green",
-            "make targets, 63-gate validation suite",
+        total = len(self.manifest())
+        for shape in [
+            "Run the full {n}-check validation suite",
+            "The repository has {n} validation gates and tests.",
+            "Detailed reference of all {n} CI validation gates.",
+            "Gate: **{n} checks**, all green",
+            "make targets, {n}-gate validation suite",
         ]:
+            text = shape.format(n=total)
             self.assertEqual(
-                [claimed for claimed, _ in module.count_claims(text)], [63],
+                [claimed for claimed, _ in module.count_claims(text)], [total],
                 f"pattern missed: {text!r}",
             )
         # And the exemption has to actually exempt, or historical prose
@@ -838,6 +840,56 @@ class BenchmarkTests(unittest.TestCase):
             sorted(recorded["workloads"]), sorted(self.mod.workloads()),
             "a workload was added or renamed without re-recording the baseline",
         )
+
+
+class OfflineGuaranteeTests(unittest.TestCase):
+    """"No telemetry" has to be a control, not a code review.
+
+    Absence of a telemetry client today says nothing about the next
+    dependency or the next well-meant crash reporter. For a local-first tool
+    whose whole positioning is that your skills never reach us, the claim
+    needs something that fails when it stops being true.
+    """
+
+    def test_the_offline_proof_runs_in_the_gate(self) -> None:
+        checks = json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
+        self.assertIn("smoke-offline.py", checks)
+
+    def test_the_block_records_and_refuses(self) -> None:
+        """The injected sitecustomize must do both.
+
+        Refusing without recording would report a clean run for a call that
+        was attempted, which is the failure mode that matters: a telemetry
+        ping whose exception is swallowed still exits 0.
+        """
+        module = load_script("smoke-offline.py")
+        with tempfile.TemporaryDirectory() as raw:
+            workspace = Path(raw)
+            injected = workspace / "inject"
+            injected.mkdir()
+            (injected / "sitecustomize.py").write_text(module.SITECUSTOMIZE, encoding="utf-8")
+            log = workspace / "attempts.log"
+            env = module.blocked_environment(injected, log)
+            proc = subprocess.run(
+                [sys.executable, "-c",
+                 "import urllib.request\n"
+                 "try:\n"
+                 "    urllib.request.urlopen('http://example.invalid', timeout=1)\n"
+                 "except Exception:\n"
+                 "    pass\n"],
+                env=env, capture_output=True, text=True, check=False,
+            )
+            recorded = module.attempts(log)
+        self.assertEqual(proc.returncode, 0, "the swallowed call must still exit 0")
+        self.assertTrue(recorded, "a swallowed network call was not recorded")
+        self.assertIn("example.invalid", "".join(recorded))
+
+    def test_the_local_surface_covers_what_a_consumer_runs(self) -> None:
+        """A proof that only covered `--help` would prove nothing."""
+        module = load_script("smoke-offline.py")
+        covered = {argv[0] for argv in module.COMMANDS}
+        for command in ("list", "search", "show", "stats", "audit", "index"):
+            self.assertIn(command, covered, f"{command} is not exercised offline")
 
 
 class RegistryAuditGateTests(unittest.TestCase):

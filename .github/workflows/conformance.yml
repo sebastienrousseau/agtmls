@@ -85,3 +85,40 @@ jobs:
               sys.exit("FAIL: the SPDX validator accepted a corrupted document")
           print("OK: both validators reject a corrupted document")
           PY
+
+  wheel-size:
+    name: the wheel stays under its committed ceiling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check build
+      - name: Build and measure
+        # The registry ships inside the wheel, so the wheel grows with every
+        # skill. Measured at 614,750 bytes for 31 skills; the ceiling is a
+        # little over 1.7x that, which absorbs ordinary growth and still
+        # catches something large arriving by accident -- a vendored binary,
+        # a committed model, a directory nobody meant to force-include.
+        env:
+          MAX_WHEEL_BYTES: "1048576"
+        run: |
+          python3 -m build --wheel --outdir dist .
+          python3 - <<'PY'
+          import os, pathlib, sys
+
+          ceiling = int(os.environ["MAX_WHEEL_BYTES"])
+          wheels = sorted(pathlib.Path("dist").glob("*.whl"))
+          if not wheels:
+              sys.exit("FAIL: no wheel was built")
+          size = wheels[0].stat().st_size
+          share = size / ceiling * 100
+          print(f"{wheels[0].name}: {size} bytes, {share:.0f}% of the {ceiling}-byte ceiling")
+          if size > ceiling:
+              sys.exit(
+                  f"FAIL: the wheel is {size - ceiling} bytes over its ceiling. "
+                  "Raise MAX_WHEEL_BYTES deliberately, or find what grew."
+              )
+          PY
