@@ -124,16 +124,11 @@ class SkillMetadataBranchTests(BrokenTreeCase):
     def fails_with(self, message: str) -> None:
         self.assert_fails(self.SCRIPT, f"FAIL: {self.relative}: {message}")
 
-    @unittest.expectedFailure
     def test_malformed_metadata_is_reported_rather_than_raised(self) -> None:
-        """Known defect: the first pass reports it, the second pass crashes.
-
-        main() catches the JSONDecodeError and records "invalid JSON", then
-        its coverage loop calls metadata_for(), which parses the same file
-        again without a handler and raises. Marked as an expected failure so
-        the suite stays green while the defect stands, and turns red -- as an
-        unexpected success -- the day it is fixed and this marker must go.
-        """
+        """The first pass reported it; the second pass parsed the same file
+        again with no handler and crashed, so the validator died with a
+        traceback instead of naming the file. The second pass only needs to
+        know the file exists."""
         self.overwrite(self.relative, "{ not json")
         self.fails_with("invalid JSON")
 
