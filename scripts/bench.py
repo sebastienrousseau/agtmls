@@ -160,13 +160,14 @@ def measure(name: str, argv: list[str], iterations: int, warmup: int) -> dict[st
         _, rc, output = run_once(argv)
         if rc != 0:
             raise SystemExit(
-                f"FAIL: workload {name!r} exited {rc} during warmup\n{output.rstrip()}"
+                f"FAIL: workload {name!r} exited {rc} during warmup; run it alone to see "
+                f"why, then fix it or drop it from workloads()\n{output.rstrip()}"
             )
     samples: list[float] = []
     for _ in range(iterations):
         elapsed, rc, output = run_once(argv)
         if rc != 0:
-            raise SystemExit(f"FAIL: workload {name!r} exited {rc}\n{output.rstrip()}")
+            raise SystemExit(f"FAIL: workload {name!r} exited {rc}; run it alone to see why\n{output.rstrip()}")
         samples.append(elapsed * 1000.0)
     return {
         "name": name,
@@ -380,7 +381,7 @@ def smoke() -> int:
     for name, argv in workloads().items():
         elapsed, rc, output = run_once(argv)
         if rc != 0:
-            print(f"FAIL: workload {name!r} exited {rc}")
+            print(f"FAIL: workload {name!r} exited {rc}; run that command alone to see why")
             print(output.rstrip())
             return 1
         print(f"OK   {name:<18}{elapsed * 1000:>8.1f}ms")

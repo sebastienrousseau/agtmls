@@ -40,10 +40,10 @@ def main() -> int:
     args = parser.parse_args()
 
     if not KEBAB.match(args.name):
-        print("FAIL: skill name must be kebab-case", file=sys.stderr)
+        print("FAIL: skill name must be kebab-case; use lowercase words joined by single hyphens", file=sys.stderr)
         return 1
     if args.bundle and not KEBAB.match(args.bundle):
-        print("FAIL: bundle must be kebab-case", file=sys.stderr)
+        print("FAIL: bundle must be kebab-case; use lowercase words joined by single hyphens", file=sys.stderr)
         return 1
 
     out_root = args.out_root.resolve()
@@ -52,7 +52,8 @@ def main() -> int:
     title = args.title or args.name.replace("-", " ").title()
     skill_dir = skills_root / args.name
     if skill_dir.exists():
-        print(f"FAIL: skill directory already exists: {skill_dir}", file=sys.stderr)
+        print(f"FAIL: skill directory already exists: {skill_dir}; pick another name or "
+              "remove it first", file=sys.stderr)
         return 1
 
     try:
@@ -75,7 +76,8 @@ def main() -> int:
             render(TEMPLATES / "evals" / "behavioral.json", args.name, title),
         )
     except FileExistsError as exc:
-        print(f"FAIL: refusing to overwrite existing file: {Path(exc.filename)}", file=sys.stderr)
+        print(f"FAIL: refusing to overwrite existing file: {Path(exc.filename)}; remove it "
+              "first if replacing it is what you meant", file=sys.stderr)
         return 1
 
     print(f"created {skill_dir}")

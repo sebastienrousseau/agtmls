@@ -212,7 +212,8 @@ def main() -> int:
         return 1
 
     if not (ROOT / ROUTER_SKILL).exists():
-        print(f"FAIL: router skill missing: {ROUTER_SKILL}")
+        print(f"FAIL: router skill missing: {ROUTER_SKILL}; add it under skills/ or "
+              "point ROUTER_SKILL at the skill that routes")
         return 1
 
     stale: list[str] = []
@@ -233,7 +234,7 @@ def main() -> int:
         return 0
     if stale:
         for rel in stale:
-            print(f"FAIL: {rel} is stale")
+            print(f"FAIL: {rel} is stale; run generate-plugin-manifests.py --write")
         print()
         print(f"FAIL: {len(stale)} stale manifest(s); run generate-plugin-manifests.py --write")
         return 1

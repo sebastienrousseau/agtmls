@@ -171,7 +171,8 @@ def main() -> int:
         rel = skill_md.relative_to(ROOT).as_posix()
         wanted = render(skill_md)
         if wanted is None:
-            print(f"FAIL: {rel}: unparseable frontmatter or missing metadata.json")
+            print(f"FAIL: {rel}: unparseable frontmatter or missing metadata.json; see "
+                  "templates/skill/ for the shape both must have")
             return 1
         if wanted == skill_md.read_text(encoding="utf-8"):
             continue
@@ -186,7 +187,8 @@ def main() -> int:
         return 0
     if stale:
         for rel in stale:
-            print(f"FAIL: {rel}: frontmatter out of sync with metadata.json")
+            print(f"FAIL: {rel}: frontmatter out of sync with metadata.json; run "
+                  "sync-skill-frontmatter.py --write")
         print()
         print(f"FAIL: {len(stale)} stale skill(s); run sync-skill-frontmatter.py --write")
         return 1

@@ -122,3 +122,51 @@ jobs:
                   "Raise MAX_WHEEL_BYTES deliberately, or find what grew."
               )
           PY
+
+  api-diff:
+    name: the public API has not broken since the last release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check 'griffe==2.3.0'
+      - name: Compare against the newest release tag
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+
+          tags = subprocess.run(
+              ["git", "tag", "--list", "v0.0.*", "--sort=-v:refname"],
+              capture_output=True, text=True, check=False,
+          ).stdout.split()
+          if not tags:
+              print("no release tag yet; nothing to compare against")
+              sys.exit(0)
+          against = tags[0]
+
+          # griffe exits non-zero for any change, including __version__ moving,
+          # which happens on every single release. A gate that fires every
+          # release is a gate people learn to ignore, so the version attribute
+          # is the one expected difference and everything else is a breakage.
+          benign = re.compile(r"__version__: Attribute value was changed")
+          proc = subprocess.run(
+              ["griffe", "check", "agtmls", "-s", "src", "-a", against, "-f", "oneline"],
+              capture_output=True, text=True, check=False,
+          )
+          lines = [l for l in (proc.stdout + proc.stderr).splitlines() if l.strip()]
+          breakages = [l for l in lines if not benign.search(l)]
+          for line in lines:
+              print(("BREAK " if line in breakages else "ok    ") + line)
+          if breakages:
+              print(f"\nFAIL: {len(breakages)} public API breakage(s) since {against}. "
+                    "Restore the symbol, or make the removal deliberate and say so "
+                    "in CHANGELOG.md.")
+              sys.exit(1)
+          print(f"\nOK: no public API breakage since {against}")
+          PY

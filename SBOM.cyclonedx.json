@@ -1029,7 +1029,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "197d6eb0565becf95f95aef2f146551da3fb7d982727c3f0fabe7e66e4c1eb67"
+          "content": "9f6e52470aaae731854f7c28de9c1f9f12a86d706476ee9ead66c65b09978259"
         }
       ],
       "name": "scripts/bench.py",
@@ -1161,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2c5097397fc0198838392c58994c486834f6f164469ee6b3f0e6a816c8863aa8"
+          "content": "ce992b82f9f5ec581626abe599055f4142a5e134b0280fc5ec7358f63f93c7f2"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -1359,7 +1359,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a51ac29803649bdf822afd1881a44f2997ee4ade3194a0cf1de3f1f10d7ebd17"
+          "content": "274c39fb0131f30ce540b950baf2022b2c7b5c7ef956dc1bd82047e142cda720"
         }
       ],
       "name": "scripts/scaffold-skill.py",
@@ -1579,7 +1579,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9ee9d96f23576d98acab97b52be7f34b2dfb6bb90312baf4ccb85dd00575246d"
+          "content": "0d01578f4a7ae234e3d4c5ca2a9f2917f970a10a821b99107d9d11339e10e6cd"
         }
       ],
       "name": "scripts/sync-skill-frontmatter.py",
@@ -1733,7 +1733,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "43e73cc4f20fd3df024db63f36894e983791e938d560f5308d65ae9f7a60576e"
+          "content": "8b0c3342691736ccf7acb264622de087b14035679bcd35a9c4e4672ad4417f71"
         }
       ],
       "name": "scripts/validate-plugin-manifest.py",
