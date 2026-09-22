@@ -608,7 +608,7 @@ Promote `agtmls-doctor.py`'s `Reporter` into `scripts/_lib/report.py`;
 ### 8.7 Smaller items
 
 - Rewrite the remaining semicolon-compressed scripts. `generate-sbom.py` and
-  `generate-provenance.py` are done; `bench.py`,
+  `generate-provenance.py` and `generate-mcp-resources.py` are done; `bench.py`,
   `record-evidence.py`, `evolve-session.py`, `validate-governance.py`,
   `generate-docs-site.py`, `generate-completions.py`,
   `generate-plugin-manifests.py`, `validate-packaging.py` and

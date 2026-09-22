@@ -169,6 +169,22 @@ class ScaffoldTests(GeneratorBase):
         self.assertNotEqual(code, 0, "scaffolding silently overwrote an existing skill")
 
 
+class McpResourceTests(GeneratorBase):
+    def test_resource_uris_use_the_scheme_agtmls_mcp_serves(self) -> None:
+        """The descriptors said `agtmls://skills/`; the server answers `agtmls://skill/`.
+
+        agtmls-mcp (src/tools.rs) and docs/ECOSYSTEM.md both define
+        `agtmls://skill/{name}`, so a client following this file asked the
+        server for URIs it had never heard of.
+        """
+        code, output = self.drive("generate-mcp-resources.py", "--write")
+        self.assertEqual(code, 0, output)
+        data = json.loads((self.fixture / "mcp-resources.json").read_text(encoding="utf-8"))
+        self.assertTrue(data["resources"], "no resources")
+        for resource in data["resources"]:
+            self.assertEqual(resource["uri"], f"agtmls://skill/{resource['name']}")
+
+
 class SupplyChainGeneratorTests(GeneratorBase):
     """The artifacts a consumer checks the registry against."""
 
