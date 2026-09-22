@@ -3,9 +3,10 @@
 
 # AgtMLS Ecosystem — Implementation Plan
 
-**Status:** phases 1 and 3 started. `agtmls-spec` and `agtmls-core` exist
-locally and pass differential conformance; `agtmls-mcp`, `agtmls-lsp`,
-`agtmls-wasm` and `agtmls-action` do not exist yet.
+**Status (0.0.7):** all seven repositories exist (§0.1). Phases 1–5 have
+working code; phase 6 has an LSP server and a 57-line VS Code client
+scaffold; phase 7's scorecard tool exists but no workflow enforces it. The
+commercial tier has no code.
 **Owner:** Sebastien Rousseau
 **Rubric:** every repo is gated against [`SCORECARD.md`](SCORECARD.md).
 
@@ -56,9 +57,10 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **66 checks**, all green, **10.1-13.4s** wall on six jobs over ten
-consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same machine
-state.
+At the time of this phase the gate measured **10.1-13.4s** wall on six jobs
+over ten consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same
+machine state. It has grown since; the current figure is whatever
+`run-all-checks.py --record` last wrote to `benchmarks/results/gate.json`.
 
 The checks are independent processes, so §8.5's process pool landed: 24.2s
 serial and fail-fast became roughly half that concurrently, reporting every
@@ -97,8 +99,8 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 66-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
-| [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phase 2 complete; phase 0 repairs landing in 0.0.7. 66-check gate (timing in `benchmarks/results/gate.json`). Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Python/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
 | [`agtmls-action`](https://github.com/sebastienrousseau/agtmls-action) | `Public/JavaScript/agtmls-action` | SARIF to code scanning. Vendors the WASM module; no Rust toolchain at run time |
@@ -109,9 +111,11 @@ All seven repositories exist and are public.
 
 Release workflows exist for crates.io (`agtmls-core`), npm (`agtmls-wasm`) and
 PyPI (`agtmls`), all via Trusted Publishing, so no long-lived token exists to
-leak. **Nothing is published yet**: each needs a one-time trusted publisher
-registered on the registry and a matching GitHub environment, which cannot be
-done from a checkout.
+leak. **None has run yet**: PyPI carries 0.0.3–0.0.5, uploaded by hand before
+the workflow existed, and neither `agtmls-core` on crates.io nor
+`@agtmls/wasm` on npm is published (checked 2026-09-22). Each needs a
+one-time trusted publisher registered on the registry and a matching GitHub
+environment, which cannot be done from a checkout.
 
 ### What the second implementation proved
 
@@ -635,7 +639,7 @@ Dependencies are real; this order is not negotiable without breaking something.
 | **3** | `agtmls-core` + differential CI | 4–6 | **Done** — L4 verified: digests, rule sets and lockfile verification all identical across both implementations |
 | **4** | `agtmls-wasm` + `agtmls-action` | 2 | **Done** — 410 KB gzipped; SARIF wired to code scanning |
 | **5** | `agtmls-mcp` | 3–4 | **Done** — 5 tools over stdio; path traversal refused; tool failures are content, not protocol errors |
-| **6** | `agtmls-lsp` + VS Code client | 4–6 | **Server done**; the VS Code extension is not written |
+| **6** | `agtmls-lsp` + VS Code client | 4–6 | **Server done**; the VS Code client is a 57-line scaffold with no marketplace build |
 | **7** | Scorecard tool; all repos ≥ 9.5 | 2 | `--fail-under` wired into every repo |
 
 **~6 months part-time.** Phases 4–6 can overlap once phase 3 lands.
