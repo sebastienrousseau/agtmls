@@ -959,6 +959,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/analyzer.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6d62b754aa90c4b6d537d45a84d94d3578b648a541d3afaffc39d465559ecec0"
+        }
+      ],
+      "name": "scripts/_lib/analyzer.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/cli_parser.py",
       "hashes": [
         {
@@ -1073,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "665530ad0cf9167b9dffa2883c4f25786db1cd988f48ae4633725a3147e74d9d"
+          "content": "96d1914a4f43ac74685cd3ca83ad889135fefb3efde8634b705c579e7ec44a2a"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -3881,7 +3892,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:25:55Z",
+    "timestamp": "2026-09-22T22:37:00Z",
     "tools": {
       "components": [
         {

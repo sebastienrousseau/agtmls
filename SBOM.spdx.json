@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-22T22:25:55Z",
+    "created": "2026-09-22T22:37:00Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1405,6 +1405,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-analyzer.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "73c8fdba5fc83e9698519401252a7c8233e6b0e8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6d62b754aa90c4b6d537d45a84d94d3578b648a541d3afaffc39d465559ecec0"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/analyzer.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-cli-parser.py",
       "checksums": [
         {
@@ -1569,11 +1585,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f59034220a7fc30a45cb6b76876e72563c0c7b38"
+          "checksumValue": "22bca2913cb2441dc35d34994fa17de087d6a272"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "665530ad0cf9167b9dffa2883c4f25786db1cd988f48ae4633725a3147e74d9d"
+          "checksumValue": "96d1914a4f43ac74685cd3ca83ad889135fefb3efde8634b705c579e7ec44a2a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5731,6 +5747,7 @@
         "SPDXRef-File-references-noyalib-bundle.md",
         "SPDXRef-File-references-registry-schema.md",
         "SPDXRef-File-scripts--lib---init--.py",
+        "SPDXRef-File-scripts--lib-analyzer.py",
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
