@@ -49,7 +49,7 @@
 **Operational**
 
 - [When not to use AgtMLS](#when-not-to-use-agtmls) — design scope and intentional boundaries
-- [Development](#development) — make targets, 57-gate validation suite, benchmarks
+- [Development](#development) — make targets, 63-gate validation suite, benchmarks
 - [Security & Hardening](#security--hardening) — zero-dependency architecture, signing keys, private disclosure
 - [Documentation](#documentation) — canonical specifications, ADRs, and developer guides
 - [Stability guarantees](#stability-guarantees) — strict pre-1.0 SemVer (`v0.0.1` → `v0.0.999`), output determinism
@@ -186,7 +186,7 @@ agtmls audit --all --strict
 # Run local diagnostic health checks
 agtmls doctor
 
-# Execute the full 57-gate validation suite
+# Execute the full 63-gate validation suite
 agtmls check
 ```
 
@@ -532,7 +532,7 @@ AgtMLS is designed as a deterministic, versioned engineering skills registry. Do
 Local development requires only standard Python 3.10+ and `make`.
 
 ```bash
-# Run the complete 57-gate validation suite
+# Run the complete 63-gate validation suite
 make check
 
 # Run unit tests
@@ -570,11 +570,12 @@ The canonical documentation entry points:
 | [`CATALOG.md`](CATALOG.md) | The complete index of 31 engineering skills, subagents, and commands. |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architectural layout, generator pipelines, and adapter compilation. |
 | [`docs/cli.md`](docs/cli.md) | Comprehensive CLI command-line reference and examples. |
-| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 57 CI validation gates. |
+| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 63 CI validation gates. |
 | [`DEVELOPMENT.md`](DEVELOPMENT.md) | Developer workflow, local test reproduction, and release verification. |
 | [`AGENTS.md`](AGENTS.md) | Authoritative invariants and rules for AI-assisted contributors. |
 | [`SECURITY.md`](SECURITY.md) | Vulnerability disclosure policy and security posture. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Pull request guidelines, conventional commits, and signing. |
+| [`BENCHMARKS.md`](BENCHMARKS.md) | Measured timings, the regression-detection method, and its limits. |
 | [`CHANGELOG.md`](CHANGELOG.md) | Complete per-release record of additions, fixes, and changes. |
 
 ---

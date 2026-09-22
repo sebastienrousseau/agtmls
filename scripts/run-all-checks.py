@@ -18,10 +18,11 @@ round trip. The pool is threads rather than processes on purpose: the work
 happens in child processes, so the parent only waits on them, and threads
 avoid pickling a runner that is loaded by path in the test suite.
 
-One check is scheduled alone. `smoke-make-install.py` runs `make install`,
-whose prerequisites regenerate `completions/` and `share/man/` *inside the
-working tree*. Another check reading one of those files while make rewrites
-it is a flaky gate, so tree-mutating checks do not share the pool.
+Two checks are scheduled alone, because they write inside the working tree
+while they run: `make install` regenerates `completions/` and `share/man/` in
+place, and the install-verification smoke test tampers with a real skill to
+prove a drifted registry is refused. A concurrent reader of either is a flaky
+gate, so tree-mutating checks do not share the pool. See EXCLUSIVE below.
 
     python3 scripts/run-all-checks.py              # all of it, concurrently
     python3 scripts/run-all-checks.py --jobs 1     # serial, for bisecting
@@ -51,7 +52,23 @@ RUNS_DIR = ROOT / ".agtmls" / "runs"
 # pool with readers of the same files. This annotates manifest entries; it is
 # not a second copy of the manifest, and a unit test fails if a name here
 # stops being a check.
-EXCLUSIVE = frozenset({"smoke-make-install.py"})
+#
+#   smoke-make-install.py   runs `make install`, whose prerequisites
+#                           regenerate completions/ and share/man/ in place.
+#   smoke-install-verify.py deliberately tampers with
+#                           skills/writing-plans/SKILL.md to prove `install`
+#                           refuses a drifted registry, restoring it in a
+#                           `finally`. Harmless when the gate was serial; with
+#                           a pool, any concurrent reader of skills/ can
+#                           observe the tampered state. It was found exactly
+#                           once in ten gate runs, as `generate-skill-index.py
+#                           --check` reporting index.json stale, because the
+#                           tamper window is one `install` invocation long.
+#
+# The list was derived by measurement, not by reading: run each check alone
+# while polling mtime and size of every file in the tree, and see which ones
+# move. Re-run that when adding a check that writes anything.
+EXCLUSIVE = frozenset({"smoke-make-install.py", "smoke-install-verify.py"})
 
 # Enough history to see a trend in gate duration, bounded so the directory
 # does not grow for the life of the checkout.

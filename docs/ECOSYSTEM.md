@@ -56,14 +56,26 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **63 checks**, all green, **6.9s** wall on six jobs (6.88s, 6.94s, 7.24s
-and 7.53s on four idle runs; 20.8s with `--jobs 1`).
+Gate: **63 checks**, all green, **10.1-13.4s** wall on six jobs over ten
+consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same machine
+state.
 
 The checks are independent processes, so §8.5's process pool landed: 24.2s
-serial and fail-fast became ~7s concurrent, reporting every failure. The cost
-is still concentrated in the checks that copy the registry — `smoke-export.py`
-at 3.0-3.4s is the critical path, and no amount of concurrency goes below it.
-The scorecard's 60s budget (criterion 3.3) now has real headroom.
+serial and fail-fast became roughly half that concurrently, reporting every
+failure rather than the first.
+
+An earlier measurement in this section read 6.9s. That was real, and it was
+also wrong, because only one check was then scheduled outside the pool.
+`smoke-install-verify.py` tampers with `skills/writing-plans/SKILL.md` to
+prove a drifted registry is refused, and restores it in a `finally` -- which
+was harmless while the gate was serial and is a race against every concurrent
+reader of `skills/`. It surfaced once in ten runs as `generate-skill-index.py
+--check` reporting a stale index. Scheduling it alone costs about 3s of wall
+time and is not optional.
+
+The remaining cost is concentrated in the checks that copy the registry, plus
+the two that must run alone. The scorecard's 60s budget (criterion 3.3) still
+has real headroom.
 
 An earlier figure of 137s in this document was wrong: it was measured while
 Rust builds were running concurrently. A later figure of ~40s was measured
@@ -85,7 +97,7 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 63-check gate, ~7s. Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 63-check gate, ~11s. Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |

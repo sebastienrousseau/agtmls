@@ -61,7 +61,7 @@
     "smoke-proposal.py",
     "smoke-scaffold.py",
     "run-unit-tests.py",
-    "bench.py",
+    "bench.py --smoke",
     "validate-check-manifest.py",
     "agtmls-doctor.py --skip-gate"
   ]

@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9f917a43d4b6417bf2b7366006ad6c2946f62f4c"
+          "checksumValue": "321b8c8c04bc890a139d5e7d52abae943ffe804f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d1b6863bafdaa68e0cb29b18f872c75d2d01fd82bf7a43ef95cdb7333076621a"
+          "checksumValue": "c61899b4eb69f982f99b648569966734acc6a96c6c996194faba884f754cf2bf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1505,11 +1505,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6e620be6e21ea8a480b509aaeb53c132852823c2"
+          "checksumValue": "9eb58dfe207246415975c2530c6cc818ee6f0d76"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7cf6b33a062f9c93a1f6672be9f5c1cf599aff02023fe383b59ac433bb0f6b7e"
+          "checksumValue": "36b6c7f4d3fcc065a30df7fe8488615cd89c1e598a158b7ec7433d5c16643330"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1905,11 +1905,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4e168f008ca0b580933a784d83eb145dacce154d"
+          "checksumValue": "70b7f03471cda0037b1053e560b5c2b4d21b5063"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f72267b2a6ac5fef5b0e25a8d78a9bad8a0affe430b126d6ad83e5368f9c490a"
+          "checksumValue": "eb8d81aaf2b76fb23e8a8644177311c0fc5c56286365dcbd8fd78541d2bf530f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1969,11 +1969,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "09d1a8bf173cdceb9d56254aea1d1637fb78a51b"
+          "checksumValue": "b88210ca5e5c4d0cff5effe72e44b773d080a2e5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cd3355ada133d8f50370d8a70dd811fb23bc7a68f49b98cfea33e93b4a53feea"
+          "checksumValue": "1c154f2fb39eca510581c1e9b1a8962fa0c6e5eb3be14061a6bccd290e4a7f44"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2305,11 +2305,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "93776d65346231d53a6131d06e79ab3cfd3907ff"
+          "checksumValue": "a715cecbf5708e987c9c2b00adb1244070c2346d"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c9eecd1ff70531664cd7ce233f8bca9e92e38c8bf578be79e4ce3a09e09e6c5a"
+          "checksumValue": "9c8b596e8f856248911be57c9b2dbce2dcb12e38e72010e723b2ccdd035fac18"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",

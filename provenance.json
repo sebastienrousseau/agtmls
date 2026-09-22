@@ -62,7 +62,7 @@
       "smoke-proposal.py",
       "smoke-scaffold.py",
       "run-unit-tests.py",
-      "bench.py",
+      "bench.py --smoke",
       "validate-check-manifest.py",
       "agtmls-doctor.py --skip-gate"
     ],
@@ -108,7 +108,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "ef5a669972a72720f03742586be858dcfd725768bfe8b73dc4764b13f810d87b"
+        "sha256": "ef6fd1a304ea8340a64ddaad7291f6077a32708b3044aba468c2b96f15c76689"
       },
       "name": "agtmls-0.0.6"
     }

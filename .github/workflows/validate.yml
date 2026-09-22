@@ -189,7 +189,9 @@ jobs:
       - name: Run Unit Tests
         run: python3 scripts/run-unit-tests.py
       - name: Bench
-        run: python3 scripts/bench.py
+        # --smoke: one iteration per workload, no timing assertions. The
+        # regression check needs an idle machine, and runs in bench.yml.
+        run: python3 scripts/bench.py --smoke
       - name: Validate Check Manifest
         run: python3 scripts/validate-check-manifest.py
       - name: Agtmls Doctor

@@ -1,0 +1,89 @@
+{
+  "cold_start_budget_ms": 100.0,
+  "generated_at": "2026-09-22T12:11:46Z",
+  "generated_by": "scripts/bench.py --write-baseline",
+  "noise_sigmas": 3.0,
+  "recorded_on": {
+    "machine": "arm64",
+    "platform": "macOS-26.7-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.12.14"
+  },
+  "regression_threshold_floor": 1.2,
+  "schema_version": 1,
+  "suite_runs": 5,
+  "workloads": {
+    "audit-all": {
+      "allowed_regression": 0.2,
+      "min_ms": 206.702,
+      "p50_ms": 263.982,
+      "p95_ms": 392.561,
+      "ratio_to_calibration": 17.059,
+      "spread_cv": 0.053
+    },
+    "calibration": {
+      "allowed_regression": 0.2,
+      "min_ms": 11.749,
+      "p50_ms": 12.549,
+      "p95_ms": 14.666,
+      "ratio_to_calibration": 1.0,
+      "spread_cv": 0.0
+    },
+    "cli-list": {
+      "allowed_regression": 0.2,
+      "min_ms": 36.052,
+      "p50_ms": 37.515,
+      "p95_ms": 45.418,
+      "ratio_to_calibration": 3.0179,
+      "spread_cv": 0.0478
+    },
+    "cli-search": {
+      "allowed_regression": 0.2265,
+      "min_ms": 36.047,
+      "p50_ms": 37.415,
+      "p95_ms": 43.044,
+      "ratio_to_calibration": 3.0177,
+      "spread_cv": 0.0755
+    },
+    "cli-show": {
+      "allowed_regression": 0.2,
+      "min_ms": 37.987,
+      "p50_ms": 47.279,
+      "p95_ms": 64.551,
+      "ratio_to_calibration": 3.0218,
+      "spread_cv": 0.0281
+    },
+    "cli-stats": {
+      "allowed_regression": 0.2,
+      "min_ms": 34.507,
+      "p50_ms": 48.402,
+      "p95_ms": 65.652,
+      "ratio_to_calibration": 2.937,
+      "spread_cv": 0.0245
+    },
+    "digest-registry": {
+      "allowed_regression": 0.2,
+      "min_ms": 44.15,
+      "p50_ms": 47.725,
+      "p95_ms": 59.469,
+      "ratio_to_calibration": 3.485,
+      "spread_cv": 0.042
+    },
+    "index-check": {
+      "allowed_regression": 0.2,
+      "min_ms": 64.085,
+      "p50_ms": 82.779,
+      "p95_ms": 120.878,
+      "ratio_to_calibration": 5.4155,
+      "spread_cv": 0.0648
+    },
+    "route-rank": {
+      "allowed_regression": 0.2,
+      "min_ms": 33.413,
+      "p50_ms": 37.975,
+      "p95_ms": 41.676,
+      "ratio_to_calibration": 2.8439,
+      "spread_cv": 0.0117
+    }
+  }
+}

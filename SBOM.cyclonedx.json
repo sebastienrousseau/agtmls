@@ -69,7 +69,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d1b6863bafdaa68e0cb29b18f872c75d2d01fd82bf7a43ef95cdb7333076621a"
+          "content": "c61899b4eb69f982f99b648569966734acc6a96c6c996194faba884f754cf2bf"
         }
       ],
       "name": "checks.json"
@@ -843,7 +843,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7cf6b33a062f9c93a1f6672be9f5c1cf599aff02023fe383b59ac433bb0f6b7e"
+          "content": "36b6c7f4d3fcc065a30df7fe8488615cd89c1e598a158b7ec7433d5c16643330"
         }
       ],
       "name": "scripts/bench.py"
@@ -1068,7 +1068,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f72267b2a6ac5fef5b0e25a8d78a9bad8a0affe430b126d6ad83e5368f9c490a"
+          "content": "eb8d81aaf2b76fb23e8a8644177311c0fc5c56286365dcbd8fd78541d2bf530f"
         }
       ],
       "name": "scripts/run-all-checks.py"
@@ -1104,7 +1104,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cd3355ada133d8f50370d8a70dd811fb23bc7a68f49b98cfea33e93b4a53feea"
+          "content": "1c154f2fb39eca510581c1e9b1a8962fa0c6e5eb3be14061a6bccd290e4a7f44"
         }
       ],
       "name": "scripts/run-unit-tests.py"
@@ -1293,7 +1293,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c9eecd1ff70531664cd7ce233f8bca9e92e38c8bf578be79e4ce3a09e09e6c5a"
+          "content": "9c8b596e8f856248911be57c9b2dbce2dcb12e38e72010e723b2ccdd035fac18"
         }
       ],
       "name": "scripts/validate-check-manifest.py"

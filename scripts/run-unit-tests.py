@@ -546,12 +546,154 @@ class CheckManifestTests(unittest.TestCase):
                 f"{name} ran while the exclusive check did",
             )
 
+    def test_documented_check_count_matches_the_manifest(self) -> None:
+        """Criterion 5.9: a README claim nobody enforces is a README claim that drifts.
+
+        The count read 57 in AGENTS.md and 62 in the Makefile while the
+        manifest held 62, and fixing those left four more "57-gate" claims  check-count:historical
+        in README.md that a search for the other spellings did not find.
+        """
+        module = load_script("validate-check-manifest.py")
+        total = len(self.manifest())
+        self.assertGreater(len(module.COUNTED), 0)
+        for relative in module.COUNTED:
+            path = ROOT / relative
+            self.assertTrue(path.exists(), f"{relative} is counted but missing")
+            # count_claims(), not the raw pattern: a test that reimplements the
+            # scan is a test of the reimplementation.
+            for claimed, line in module.count_claims(path.read_text(encoding="utf-8")):
+                self.assertEqual(claimed, total, f"{relative}:{line} claims {claimed}")
+
+    def test_the_count_pattern_actually_matches_prose(self) -> None:
+        """A regex that matches nothing would make the check above vacuous."""
+        module = load_script("validate-check-manifest.py")
+        for text in [
+            "Run the full 63-check validation suite",
+            "The repository has 63 validation gates and tests.",
+            "Detailed reference of all 63 CI validation gates.",
+            "Gate: **63 checks**, all green",
+            "make targets, 63-gate validation suite",
+        ]:
+            self.assertEqual(
+                [claimed for claimed, _ in module.count_claims(text)], [63],
+                f"pattern missed: {text!r}",
+            )
+        # And the exemption has to actually exempt, or historical prose
+        # becomes unwriteable.
+        fixture = f"it was a 57-check gate {module.HISTORICAL}"  # check-count:historical
+        self.assertEqual(module.count_claims(fixture), [])
+
+    def test_tree_mutating_checks_are_declared_exclusive(self) -> None:
+        """Both known tree-mutating checks must stay out of the pool.
+
+        smoke-install-verify.py writes to skills/writing-plans/SKILL.md and
+        smoke-make-install.py regenerates completions/ and share/man/. A
+        concurrent reader of either is a flaky gate. The full list was derived
+        by running each check alone and watching every file's mtime; re-run
+        that scan when a check starts writing something.
+        """
+        module = load_script("run-all-checks.py")
+        for name in ("smoke-install-verify.py", "smoke-make-install.py"):
+            self.assertIn(name, module.EXCLUSIVE, f"{name} would race the pool")
+
+    def test_the_tamper_test_still_restores_what_it_tampered(self) -> None:
+        """If the restore ever stops happening, the repository is corrupted.
+
+        This is why that check is scheduled alone rather than rewritten: the
+        tampering is the point of the test.
+        """
+        source = (ROOT / "scripts" / "smoke-install-verify.py").read_text(encoding="utf-8")
+        self.assertIn('drifted.write_text(backup + "\\ndrifted\\n", encoding="utf-8")', source)
+        self.assertIn("finally:", source)
+        self.assertIn('drifted.write_text(backup, encoding="utf-8")', source)
+
     def test_every_exclusive_check_is_in_the_manifest(self) -> None:
         """The isolation list annotates manifest entries; it cannot outlive one."""
         module = load_script("run-all-checks.py")
         scripts = {check.split()[0] for check in self.manifest()}
         for name in module.EXCLUSIVE:
             self.assertIn(name, scripts, f"{name} is isolated but is not a gate check")
+
+
+class BenchmarkTests(unittest.TestCase):
+    """bench.py — the file that has to be right for any timing claim to be."""
+
+    def setUp(self) -> None:
+        self.mod = load_script("bench.py")
+
+    def test_percentile_is_nearest_rank(self) -> None:
+        """An interpolated P95 reports a duration nobody observed."""
+        samples = [10.0, 20.0, 30.0, 40.0]
+        self.assertIn(self.mod.percentile(samples, 0.50), samples)
+        self.assertIn(self.mod.percentile(samples, 0.95), samples)
+        self.assertEqual(self.mod.percentile(samples, 0.95), 40.0)
+        self.assertEqual(self.mod.percentile([7.0], 0.50), 7.0)
+
+    def test_threshold_never_drops_below_the_floor(self) -> None:
+        """Criterion 3.2's 20% is a floor, not a default."""
+        self.assertAlmostEqual(
+            self.mod.threshold_for({"spread_cv": 0.0}), self.mod.REGRESSION_THRESHOLD
+        )
+        self.assertAlmostEqual(
+            self.mod.threshold_for({"spread_cv": 0.01}), self.mod.REGRESSION_THRESHOLD
+        )
+
+    def test_threshold_widens_with_measured_spread(self) -> None:
+        """A workload too noisy to gate at 20% gets the headroom it needs."""
+        wide = self.mod.threshold_for({"spread_cv": 0.18})
+        self.assertGreater(wide, self.mod.REGRESSION_THRESHOLD)
+        self.assertAlmostEqual(wide, 1.0 + self.mod.NOISE_SIGMAS * 0.18)
+
+    def test_regression_is_reported_against_the_recorded_allowance(self) -> None:
+        baseline = {"workloads": {"cli-list": {"ratio_to_calibration": 3.0, "spread_cv": 0.0}}}
+        clean = {"workloads": {"cli-list": {"ratio_to_calibration": 3.3}}}
+        slower = {"workloads": {"cli-list": {"ratio_to_calibration": 4.2}}}
+        self.assertEqual(self.mod.regressions(clean, baseline), [])
+        found = self.mod.regressions(slower, baseline)
+        self.assertEqual([name for name, _ in found], ["cli-list"])
+        self.assertIn("allowed 20%", found[0][1])
+
+    def test_missing_baseline_entry_is_a_failure_not_a_pass(self) -> None:
+        """A workload with no baseline must not silently count as fine."""
+        found = self.mod.regressions(
+            {"workloads": {"new-thing": {"ratio_to_calibration": 1.0}}}, {"workloads": {}}
+        )
+        self.assertEqual([name for name, _ in found], ["new-thing"])
+
+    def test_baseline_records_the_spread_it_gates_on(self) -> None:
+        def report(ratio: float) -> dict:
+            return {
+                "generated_at": "2026-01-01T00:00:00Z",
+                "environment": {"python": "3.12.0"},
+                "workloads": {
+                    "cli-list": {
+                        "ratio_to_calibration": ratio,
+                        "min_ms": 30.0, "p50_ms": 31.0, "p95_ms": 33.0,
+                    }
+                },
+            }
+        baseline = self.mod.as_baseline([report(3.0), report(3.3), report(3.6)])
+        entry = baseline["workloads"]["cli-list"]
+        self.assertEqual(entry["ratio_to_calibration"], 3.0)  # the best seen
+        self.assertGreater(entry["spread_cv"], 0.0)
+        self.assertEqual(baseline["suite_runs"], 3)
+
+    def test_the_gate_runs_smoke_not_the_timing_check(self) -> None:
+        """--check compares ratios and needs an idle machine.
+
+        In the ten-leg matrix it would report shared-runner noise as
+        regressions until people learned to ignore the gate.
+        """
+        checks = json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
+        self.assertIn("bench.py --smoke", checks)
+        self.assertNotIn("bench.py --check", checks)
+
+    def test_committed_baseline_covers_every_workload(self) -> None:
+        recorded = json.loads((ROOT / "bench-baseline.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            sorted(recorded["workloads"]), sorted(self.mod.workloads()),
+            "a workload was added or renamed without re-recording the baseline",
+        )
 
 
 class RegistryAuditGateTests(unittest.TestCase):
