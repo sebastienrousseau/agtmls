@@ -897,7 +897,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a9117697d9b2bfde7d34ffd264ccf439bc7b2848a3675afb185eaa928be99032"
+          "content": "1bf837d9b6e83fb01800230d7b2a7a51debda23d05a141e6a41adb3e35cd3739"
         }
       ],
       "name": "providers.json",
@@ -963,7 +963,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "242c60183b96cc482a04ea752db255f63aafe903ef1b9403681f7d41f19194f2"
+          "content": "68fcd50dbd2a617dc49c8ee966257c128b59889229d088dc4c551995deedb85d"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -1051,7 +1051,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "00c695740b12ba07a8bdf2b0ed067b241055c3ff82561dc6993cda37f771dd6a"
+          "content": "34b39ab18dfe75924845f38e9929e8a0aef951d55386c4d9420f024074a0682b"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -1161,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bddc00566d364da4e09f94071f6ad1aa8053c104afdb32f9329fc5185c610214"
+          "content": "02913281792a8c43ba4c7bea8f1431f43e098b4196255f6c1ad91454a616be26"
         }
       ],
       "name": "scripts/generate-completions.py",
@@ -1810,7 +1810,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e5fb94ec1cd97ed8b4a54e5a85211e925882a90971ef7f05239d768d8f8bd852"
+          "content": "7800020218fa58fc154647e9b355bc315615e447cad0885114168d9f7c39ce0d"
         }
       ],
       "name": "scripts/validate-providers.py",
@@ -3870,7 +3870,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T21:52:29Z",
+    "timestamp": "2026-09-22T21:57:20Z",
     "tools": {
       "components": [
         {
