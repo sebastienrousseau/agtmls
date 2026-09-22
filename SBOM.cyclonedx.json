@@ -1898,7 +1898,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b4e8ffbba5f93fd80952aa258d3ef57f117141ee08b4b77e8d25604cef7aacf2"
+          "content": "4b84c0bf04ac16e967b816f20270ba2b7dc7977812212b122aa8fde0b752332b"
         }
       ],
       "name": "scripts/validate-spec-conformance.py",
@@ -3859,7 +3859,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:03:01Z",
+    "timestamp": "2026-09-22T22:04:59Z",
     "tools": {
       "components": [
         {
