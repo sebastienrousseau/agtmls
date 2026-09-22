@@ -69,10 +69,12 @@ def main() -> int:
         checked += 1
         text = path.read_text(encoding="utf-8")
         if wants_frontmatter(path):
-            if not frontmatter_licence(text):
-                errors.append(f"{rel}: must declare `license:` in frontmatter (no leading comment allowed)")
-            elif text.lstrip().startswith("<!--"):
+            # Checked first: a leading comment stops the frontmatter parsing,
+            # so behind frontmatter_licence() this could never be reached.
+            if text.lstrip().startswith("<!--"):
                 errors.append(f"{rel}: frontmatter must start at byte 0; move the licence into `license:`")
+            elif not frontmatter_licence(text):
+                errors.append(f"{rel}: must declare `license:` in frontmatter")
         elif SPDX not in text:
             errors.append(f"{rel}: missing an {SPDX} header")
         else:

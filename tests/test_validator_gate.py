@@ -249,6 +249,19 @@ class RepositoryValidatorTests(ValidatorFailureBase):
         )
         self.assertIn("GPL-3.0-only", self.assert_catches("validate-licence-headers.py"))
 
+    def test_a_comment_before_skill_frontmatter_is_named_for_what_it_is(self) -> None:
+        """A REUSE-style header above SKILL.md frontmatter stops the frontmatter
+        parsing, even when `license:` is declared inside it. The check for that
+        case sat behind a condition that required the frontmatter to parse, so
+        it could never fire, and authors were told to add a field they had."""
+        skill = self.some_skill()
+        text = skill.read_text(encoding="utf-8")
+        self.overwrite(
+            str(skill.relative_to(self.fixture)),
+            "<!-- SPDX-License-Identifier: MIT -->\n" + text,
+        )
+        self.assertIn("frontmatter must start at byte 0", self.assert_catches("validate-licence-headers.py"))
+
     def test_a_skill_that_drops_its_licence_field_is_caught(self) -> None:
         """SKILL.md cannot carry a comment header, so it declares `license:`."""
         skill = self.some_skill()
