@@ -33,6 +33,7 @@
       "generate-catalog.py --check",
       "generate-docs-site.py --check",
       "generate-mcp-resources.py --check",
+      "generate-benchmarks-doc.py --check",
       "generate-sbom.py --check",
       "validate-sbom-conformance.py",
       "generate-provenance.py --check",
@@ -87,7 +88,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "b8562f11fc0b84ada12f0b7f3b249ceb6fdebee3"
+            "gitCommit": "3b5f1824a4c69572e8b01235295d78957480a94c"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -98,9 +99,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-22T22:41:21Z",
+        "finishedOn": "2026-09-22T22:45:00Z",
         "invocationId": "local",
-        "startedOn": "2026-09-22T22:41:21Z"
+        "startedOn": "2026-09-22T22:45:00Z"
       }
     }
   },
@@ -108,7 +109,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "8312888e7b51e0196b0cb179d8d48720aeb30f4d518113d9b0a7ad6be84597a4"
+        "sha256": "35a8d1290d5c9c21d1d0a154b6e2f01a10062a70fa31586fd8275e9fc661e150"
       },
       "name": "agtmls-0.0.6"
     }
