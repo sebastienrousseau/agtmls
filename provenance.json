@@ -21,6 +21,7 @@
       "validate-system-prompts.py",
       "check-skill-collisions.py",
       "validate-eval-cases.py",
+      "sync-spec-rules.py --check",
       "run-security-evals.py",
       "audit-skill.py --all --strict",
       "run-trigger-evals.py",
@@ -86,7 +87,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "c655fb048242f34e861dffe8e644ee043fb3d231"
+            "gitCommit": "bb5afd2d362b7afea043cf0cb8ac89fc1996d33b"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -97,9 +98,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-22T22:04:59Z",
+        "finishedOn": "2026-09-22T22:25:55Z",
         "invocationId": "local",
-        "startedOn": "2026-09-22T22:04:59Z"
+        "startedOn": "2026-09-22T22:25:55Z"
       }
     }
   },
@@ -107,7 +108,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "4b5fa95804321f6aed69afb3c42e766b6a0f8699c5340d60caac6d03e72df817"
+        "sha256": "724b2ebc932566018eda7b7bac67d9dc6ed599b4dc5d58870bbab6db50bc6969"
       },
       "name": "agtmls-0.0.6"
     }

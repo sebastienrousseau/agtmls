@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-22T22:04:59Z",
+    "created": "2026-09-22T22:25:55Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f12b43bef6d400e99a7545e27ad2c5a22fcd2386"
+          "checksumValue": "f4c10839ae325df95f11e96a84bb2b59e9a44d91"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f5aec0e6b5b62f3f94871ea078f559e66d9e21073a46cce600d704ba09a97b0f"
+          "checksumValue": "f928ddf7d3197268d114eead388d771c94fe9ffd15be0d7d2277210173b1a204"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1469,15 +1469,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-rules.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "08f92d859c660d8fbdecc4433911ad4c74f3cc9b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "54271345cd77ed1e1266d2ed90b1e03a90206f3ec8d7685bf3bc9e5df4a71e83"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/rules.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-rules.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "16daebd5e8a55161e4c27a87d86813709c095a68"
+          "checksumValue": "33169ed798c9b077ab2fe2ead30d565a6fa2f044"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "eb1fb016677f169a788ab33048d41b4feb704cb26814338cd332ef16b81c1e0a"
+          "checksumValue": "85fc36b2e408a7d7b2aab302afd69f9200bcc0dfe42fd33d2b8e7db021dd6ac3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1569,11 +1585,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "af74158d11e0d9d8a16644dfcd1df09c1408cd23"
+          "checksumValue": "5bf56f5a2c7b57a2486a7260cb8cc8becc82ad74"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4a82267d20566271c389cd00392f9d4fed0334425cc54df96d1fbee7a6bb360e"
+          "checksumValue": "2cfb4b8e6cff870098221159cd7344cddf021c26fb21620f944bfac932309622"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2033,11 +2049,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "09d3d926388958c55cccf7d5a56d5f979662acba"
+          "checksumValue": "0d3939eaa4629946724b89df8f5c1a84677abe54"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c409c913f2883d55dcd1d912b14a35aef987d33da79b139f55c9a364bc090010"
+          "checksumValue": "ba22c7f0111487001b74c9ab3e9bac323e9205b014df2dccea7d65dcd8ae3e8a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2378,6 +2394,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/sync-skill-frontmatter.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-sync-spec-rules.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f7b7451ec5745561e2e06cdc0890cde7b6529b72"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7c4d199b41b8e918346f4f12e37bc61f74a4ad7b58253addc2e1d29a0be5d6ea"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/sync-spec-rules.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5703,6 +5735,7 @@
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
+        "SPDXRef-File-scripts--lib-rules.json",
         "SPDXRef-File-scripts--lib-rules.py",
         "SPDXRef-File-scripts--lib-scaling.py",
         "SPDXRef-File-scripts--lib-workloads.py",
@@ -5760,6 +5793,7 @@
         "SPDXRef-File-scripts-smoke-release-pack.py",
         "SPDXRef-File-scripts-smoke-scaffold.py",
         "SPDXRef-File-scripts-sync-skill-frontmatter.py",
+        "SPDXRef-File-scripts-sync-spec-rules.py",
         "SPDXRef-File-scripts-validate-check-manifest.py",
         "SPDXRef-File-scripts-validate-cli-surface.py",
         "SPDXRef-File-scripts-validate-commands.py",

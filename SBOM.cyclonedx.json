@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f5aec0e6b5b62f3f94871ea078f559e66d9e21073a46cce600d704ba09a97b0f"
+          "content": "f928ddf7d3197268d114eead388d771c94fe9ffd15be0d7d2277210173b1a204"
         }
       ],
       "name": "checks.json",
@@ -1003,11 +1003,22 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/rules.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "54271345cd77ed1e1266d2ed90b1e03a90206f3ec8d7685bf3bc9e5df4a71e83"
+        }
+      ],
+      "name": "scripts/_lib/rules.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/rules.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eb1fb016677f169a788ab33048d41b4feb704cb26814338cd332ef16b81c1e0a"
+          "content": "85fc36b2e408a7d7b2aab302afd69f9200bcc0dfe42fd33d2b8e7db021dd6ac3"
         }
       ],
       "name": "scripts/_lib/rules.py",
@@ -1073,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4a82267d20566271c389cd00392f9d4fed0334425cc54df96d1fbee7a6bb360e"
+          "content": "2cfb4b8e6cff870098221159cd7344cddf021c26fb21620f944bfac932309622"
         }
       ],
       "name": "scripts/bench.py",
@@ -1392,7 +1403,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c409c913f2883d55dcd1d912b14a35aef987d33da79b139f55c9a364bc090010"
+          "content": "ba22c7f0111487001b74c9ab3e9bac323e9205b014df2dccea7d65dcd8ae3e8a"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1627,6 +1638,17 @@
         }
       ],
       "name": "scripts/sync-skill-frontmatter.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/sync-spec-rules.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7c4d199b41b8e918346f4f12e37bc61f74a4ad7b58253addc2e1d29a0be5d6ea"
+        }
+      ],
+      "name": "scripts/sync-spec-rules.py",
       "type": "file"
     },
     {
@@ -3859,7 +3881,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:04:59Z",
+    "timestamp": "2026-09-22T22:25:55Z",
     "tools": {
       "components": [
         {
