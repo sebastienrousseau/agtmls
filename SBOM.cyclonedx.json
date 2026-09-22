@@ -1183,7 +1183,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2419437a8fce5c0f09f46ab12993c1e80106d9384cc0b9efb76631f89389dfc0"
+          "content": "d7eee50378cd90cc987ec97b8f69b34e1e12f1fc9bfb0d1fd87ee2289850d315"
         }
       ],
       "name": "scripts/generate-mcp-resources.py",
@@ -3859,7 +3859,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:01:06Z",
+    "timestamp": "2026-09-22T22:03:01Z",
     "tools": {
       "components": [
         {
