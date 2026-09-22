@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate every skills/**/SKILL.md against the AgtMLS skill contract.
 
 Zero-dependency (stdlib only). Exits non-zero if any skill fails, so it can

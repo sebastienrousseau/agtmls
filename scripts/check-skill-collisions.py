@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Flag skill descriptions that have drifted into each other.
 
 The router picks skills by description. As a catalog grows, two descriptions

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 # Reusable differential golden-I/O runner for cross-language ports.
 #
 # Proves behavioural equivalence in two steps:

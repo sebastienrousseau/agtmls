@@ -205,6 +205,27 @@ class RepositoryValidatorTests(ValidatorFailureBase):
         self.overwrite("docs/checks.md", "# Checks\n\nNo licence header here.\n")
         self.assertIn("checks.md", self.assert_catches("validate-licence-headers.py"))
 
+    def test_a_script_with_no_licence_is_caught(self) -> None:
+        """Code was counted but never read, so a bare script passed."""
+        self.overwrite("scripts/unlicensed.py", '"""No header."""\n')
+        self.assertIn("unlicensed.py", self.assert_catches("validate-licence-headers.py"))
+
+    def test_a_shell_script_with_no_licence_is_caught(self) -> None:
+        self.overwrite("scripts/unlicensed.sh", "#!/usr/bin/env bash\nset -euo pipefail\n")
+        self.assertIn("unlicensed.sh", self.assert_catches("validate-licence-headers.py"))
+
+    def test_a_licence_buried_below_the_header_is_caught(self) -> None:
+        """A header is the first lines of the file, not a mention anywhere."""
+        body = "\n".join(["#!/usr/bin/env python3"] + ["pass"] * 10)
+        self.overwrite("scripts/buried.py", body + "\n# SPDX-License-Identifier: MIT\n")
+        self.assertIn("buried.py", self.assert_catches("validate-licence-headers.py"))
+
+    def test_a_licence_this_repository_does_not_offer_is_caught(self) -> None:
+        self.overwrite(
+            "scripts/gpl.py", "# SPDX-License-Identifier: GPL-3.0-only\n\"\"\"Wrong.\"\"\"\n"
+        )
+        self.assertIn("GPL-3.0-only", self.assert_catches("validate-licence-headers.py"))
+
     def test_a_skill_that_drops_its_licence_field_is_caught(self) -> None:
         """SKILL.md cannot carry a comment header, so it declares `license:`."""
         skill = self.some_skill()

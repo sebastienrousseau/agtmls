@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate the PyPI packaging surface.
 
 `uvx agtmls` ships the registry inside the wheel under `agtmls/_registry/`.

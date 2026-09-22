@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 # Boundary trap (reference.md §R4): a u64 above 2^53 loses precision when it
 # crosses a seam as a JSON *number* (JS/JSON numbers are f64), but survives
 # as a JSON *string*. Proves the trap BITES and the string contract CATCHES

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 # port-check.sh — the "land green" gate for a ported file.
 #
 # Runs the target language's formatter (check mode), linter / typecheck, and

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Generate index.json for the AgtMLS skill registry.
 
 The index is intentionally derived from files already in the repo. It gives

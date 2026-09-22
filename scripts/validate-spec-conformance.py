@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate every skill with the Agent Skills *reference* implementation.
 
 `validate-skills.py` enforces our reading of the spec plus the stricter AgtMLS

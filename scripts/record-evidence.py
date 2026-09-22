@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Record a local skill invocation evidence event."""
 from __future__ import annotations
 import argparse,json,sys,time,uuid

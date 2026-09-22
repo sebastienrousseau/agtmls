@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Create a redacted skill-evolution proposal from a session transcript."""
 from __future__ import annotations
 import argparse, hashlib, json, re, sys, time

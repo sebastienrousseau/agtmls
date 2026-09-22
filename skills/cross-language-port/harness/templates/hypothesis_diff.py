@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 """Differential property test TEMPLATE (Python `hypothesis`).
 
 Assert the PORT agrees with the SOURCE (used as an oracle) over generated

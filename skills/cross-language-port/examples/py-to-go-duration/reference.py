@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 """Reference (SOURCE): parse a duration like "1h30m45s" into seconds.
 
 Idiomatic Python: validate with a regex and ``raise ValueError`` on bad

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Generate per-runtime plugin manifests from providers.json + plugin.json.
 
 AgtMLS reaches agents three ways, and providers.json names all three:

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Optional live API smoke tests for provider backends.
 
 The script exits successfully when no provider credentials are configured. When a

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Mirror metadata.json into spec-portable SKILL.md frontmatter.
 
 `metadata.json` is an AgtMLS-private sidecar: Claude Code, Cursor, Gemini

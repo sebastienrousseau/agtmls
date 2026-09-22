@@ -325,7 +325,7 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:9725a9c397ee278a5a8f97011ec380180efa2db6ec344f8f93be46d6c8039740",
+      "integrity": "sha256:eaf8cc38336e2c32ad49460f07a04fc35fcff63790c68a8571e6c9275d69bedc",
       "kind": "general",
       "last_changed_version": "0.0.6",
       "license": "MIT",
@@ -797,7 +797,7 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:21c3e6420c4c7f2a7c4c484ebb2cc4a3ba2deee59f177409cfef3dfc3b4cdcd6",
+      "integrity": "sha256:04b2fb128fd56fc4a3707a22c3c588154f777fa1d2adaa2c1228376f30a6615e",
       "kind": "project",
       "last_changed_version": "0.0.6",
       "license": "MIT",
@@ -936,7 +936,7 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:c69d63e279967bba8fcf638e8e6610c384017c12f98864e11a6a3cca5e853c8d",
+      "integrity": "sha256:c577909c0cde086c36fcfc81dc89628606a16c17ab5de76cc40ef6edc22eda31",
       "kind": "project",
       "last_changed_version": "0.0.6",
       "license": "MIT",
@@ -1435,7 +1435,7 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:5704e7b1d0a19d0e6cdac636778fe75bf08d0d1b7eeb8d4d1f1c54a63c0779df",
+      "integrity": "sha256:e050ab2f4d116d848906d818552a63d0a5a7ee6ebf1d93e815d3905326f9d447",
       "kind": "project",
       "last_changed_version": "0.0.6",
       "license": "MIT",

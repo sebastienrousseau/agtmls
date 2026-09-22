@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 """Port (TARGET): word-frequency histogram.
 
 Idiomatic Python: ``str.split()`` (splits on whitespace runs and drops

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate the AgtMLS plugin manifest and marketplace catalog.
 
 Two manifests gate distribution through the Claude Code plugin system:
