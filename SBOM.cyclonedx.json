@@ -708,7 +708,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "893cb0010a01c9ff836ebdc61c2d8c17ce3a08b94fd44e41cc633c415101e6dc"
+          "content": "d489a953c2efa5504502a24c81e34f3d371a7abe8340110c911a75dd88be4e5e"
         }
       ],
       "name": "index.json"
@@ -852,7 +852,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "84966f21d68a07141839552182b845ebbfa79019b75bfe0c6098ab88c93d30d8"
+          "content": "6a1aba85d69cee8af2224224f7808a456175374748a9aaf4ae6481345671253e"
         }
       ],
       "name": "scripts/bump-version.py"
@@ -933,7 +933,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "97334e6ab5498bd80ff351345a932122a9201814ec1771371aaaa80280e30189"
+          "content": "2cc2f7539d1f1df11a5e61bf38c46a6c8c020ec80fe0b1ea2f9cb5cd4a52173a"
         }
       ],
       "name": "scripts/generate-manpage.py"
@@ -978,7 +978,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1ea187628154d72af8c0bf33e55e2d9fba2c6bb9d7be17eedeae3f2a7d9d7afa"
+          "content": "8b82c175d857eb9da5f07e67a24210826aa290d7e9decf6416861e82f33f45e5"
         }
       ],
       "name": "scripts/generate-skill-index.py"
@@ -1104,7 +1104,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "51285576bbcfdae5fba744cdf4a7e83cae543a8726e1b61b09b782d097d726b0"
+          "content": "27b6aa7596cb2684f2082d735d805468ef2fa176983adb54ac3b3e21dc159c88"
         }
       ],
       "name": "scripts/run-unit-tests.py"
@@ -1284,7 +1284,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "39b85af1f4a4e4c060b89542356e57e18570dece673423bb0b05ef31b19b9418"
+          "content": "9ee9d96f23576d98acab97b52be7f34b2dfb6bb90312baf4ccb85dd00575246d"
         }
       ],
       "name": "scripts/sync-skill-frontmatter.py"
@@ -1491,7 +1491,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d8994097c885921b042fe2d6946205a44347ce9c4840dab6ff961fba76c401c6"
+          "content": "a8036cff68e71acf021fec263857f63c25a96ad62431b683193084565c9d3859"
         }
       ],
       "name": "scripts/validate-skill-metadata.py"
@@ -1536,7 +1536,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dfd33d7622d6454592b44e96a1d5f054f0849bb34b7aea79319273f6b80bf72c"
+          "content": "b4b39adb4dc2caece47276ae1a3f1170179605339951e1fe3b71f884adb1a329"
         }
       ],
       "name": "scripts/validate-version-policy.py"
@@ -1554,7 +1554,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "31e47de88781b887b9e0c027f0c2ce189c7f13f71e5907344628da40251be9a6"
+          "content": "c829bc054c4eb6a6c8448f722b293bd3ceb53870f17b3d4b83c05d02e274b2b7"
         }
       ],
       "name": "skills/agent-loop-design/SKILL.md"
@@ -1563,7 +1563,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ddc320a9db9c6a8a14c658b3ee6d4a05fa2ff9dc1b269f9a1bbe41ea5908b2fb"
+          "content": "3c05182318116f5c265894084c95b445b775f20a56d6be64131bf7626a3063b3"
         }
       ],
       "name": "skills/agent-loop-design/metadata.json"
@@ -1581,7 +1581,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7c858d3424e1563063944fb1ea01e5f8c99853e7fa5a2470dfbba82df8cbd33f"
+          "content": "8b26c1c563a7d769d7cc08b5b5a1cebe4ecd44685854ae17a52fced368abb385"
         }
       ],
       "name": "skills/ai-supply-chain-security/SKILL.md"
@@ -1590,7 +1590,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d234114aca8bcccd68a1bd24f6cc660755ecb30862e23d215742c3840f13f1c3"
+          "content": "84937ce02cb35a67efe7c61c5446248f801dfa62eb7a0b1c8943d9b21dbc858c"
         }
       ],
       "name": "skills/ai-supply-chain-security/metadata.json"
@@ -1608,7 +1608,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0391d9ffb8da6ac080e2d9f315a327e0521fd4861efe2810a097bd981692f9be"
+          "content": "bc64a38eb03dae45742f8add235685669395294314922c72e44a2f5d3bcfe7bc"
         }
       ],
       "name": "skills/anti-slop-pr-and-writing/SKILL.md"
@@ -1617,7 +1617,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "name": "skills/anti-slop-pr-and-writing/metadata.json"
@@ -1635,7 +1635,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b8360a55ae5f97b1bdb11caf6f3360a2aca54165e8adec00748b2f766224ade5"
+          "content": "ab75dcbeb8718c162adab26ec5f9e723e3bc489910ba9e53c3826b87088a602c"
         }
       ],
       "name": "skills/brainstorming/SKILL.md"
@@ -1644,7 +1644,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "name": "skills/brainstorming/metadata.json"
@@ -1662,7 +1662,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d6c5ddc58fb640d3e0215ee577ac149ee54517f06df68b4a16f8d244cd12ed23"
+          "content": "c87c73c113c2e9a4c84fbbcee6842a343a6ead3831ad7b3c3e180c553e7bb306"
         }
       ],
       "name": "skills/cross-language-port/SKILL.md"
@@ -2202,7 +2202,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4f5d68772fc072fc13f97d9e3f9528808ce7a70b4242dc2fd77e869b6856fe23"
+          "content": "0d05cc0654535afc2758aff6253d4daaa3dcf9280938317ee344a02883a2601f"
         }
       ],
       "name": "skills/cross-language-port/metadata.json"
@@ -2229,7 +2229,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf3359d12436d73583b44f5888f17762fba4031f6be3e37fe963a713a794cc70"
+          "content": "868bd645b1f8584e3912ace290433752101924e00765004eaa7f2b8b6911faf5"
         }
       ],
       "name": "skills/giving-code-review/SKILL.md"
@@ -2238,7 +2238,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "name": "skills/giving-code-review/metadata.json"
@@ -2256,7 +2256,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2cf2d60c6ff5028b7b59788358664fa8737743abb9e83bd64a1ec0b85a7ee8de"
+          "content": "939620d3bd2851dc9b88cd50d49ee4d3fd60fa9da38df2ad53b6d4e66cf9f990"
         }
       ],
       "name": "skills/handoff/SKILL.md"
@@ -2265,7 +2265,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "name": "skills/handoff/metadata.json"
@@ -2283,7 +2283,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0b07443d40fccee627f77b5cdcfa91beb2aa3d556f4d8a4e7a54f8297bdce190"
+          "content": "2c9fad0795a9f58b1b450d1f46345931da48486439ecaa29a5aaa19fc92c57bc"
         }
       ],
       "name": "skills/incident-response/SKILL.md"
@@ -2292,7 +2292,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "name": "skills/incident-response/metadata.json"
@@ -2310,7 +2310,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e92198bd876d5ac5a79cd11a02cc82bd2d85762e3409aa213e8ff1ae1dec11f2"
+          "content": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
         }
       ],
       "name": "skills/noyalib-architecture-contract/SKILL.md"
@@ -2319,7 +2319,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-architecture-contract/metadata.json"
@@ -2337,7 +2337,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e6daaa099b1e91fa035a92bd202788d9965c7d2c830c3cbf39ccbc8b8a2c77cd"
+          "content": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
         }
       ],
       "name": "skills/noyalib-build-and-env/SKILL.md"
@@ -2346,7 +2346,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-build-and-env/metadata.json"
@@ -2364,7 +2364,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2d8052d0b33c4f53fb9bf460362f98012574331bdab782f2ecadabdc0c06f96b"
+          "content": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
         }
       ],
       "name": "skills/noyalib-change-control/SKILL.md"
@@ -2373,7 +2373,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-change-control/metadata.json"
@@ -2391,7 +2391,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "52a5c5b6f30d29e7cd4c1fe54d6478c24c21c64b8ef219e590f4ece77b50fb50"
+          "content": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
         }
       ],
       "name": "skills/noyalib-ci-and-release/SKILL.md"
@@ -2400,7 +2400,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-ci-and-release/metadata.json"
@@ -2418,7 +2418,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1b701e692029b525e2a02320f4abc8f6498b4cd6feada5a6f8b70c1c93179401"
+          "content": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
         }
       ],
       "name": "skills/noyalib-config-and-flags/SKILL.md"
@@ -2427,7 +2427,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-config-and-flags/metadata.json"
@@ -2445,7 +2445,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5283dd540f639f75cbd8d554c68dc6958a8772d89d9aa09e9e6b25c9048e2bd7"
+          "content": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
         }
       ],
       "name": "skills/noyalib-coverage-campaign/SKILL.md"
@@ -2454,7 +2454,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-coverage-campaign/metadata.json"
@@ -2472,7 +2472,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c0444e7526137f49200e7db558e1b785066af5c839499442f887fa521bbee0ae"
+          "content": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
         }
       ],
       "name": "skills/noyalib-debugging-playbook/SKILL.md"
@@ -2481,7 +2481,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-debugging-playbook/metadata.json"
@@ -2499,7 +2499,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2288fa6491b475432c64e0cd1811e5a181310a45b0ffec8832dfee57c8d69a60"
+          "content": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
         }
       ],
       "name": "skills/noyalib-diagnostics-and-tooling/SKILL.md"
@@ -2508,7 +2508,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-diagnostics-and-tooling/metadata.json"
@@ -2526,7 +2526,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "866f75021dfb7a957754da241f01f935055c1ab7af6c7fa88510e06b75f0abdc"
+          "content": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
         }
       ],
       "name": "skills/noyalib-docs-and-writing/SKILL.md"
@@ -2535,7 +2535,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-docs-and-writing/metadata.json"
@@ -2553,7 +2553,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7a7c2e9a416bc05e69d164bcd9a19d533f537f3a2389cd2d810cafabf6a7c04a"
+          "content": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
         }
       ],
       "name": "skills/noyalib-external-positioning/SKILL.md"
@@ -2562,7 +2562,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-external-positioning/metadata.json"
@@ -2580,7 +2580,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d66bce200a0deb18cd2b25d39bbc3cd2779480e8eb6defbe4729d4c51e5e56b2"
+          "content": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
         }
       ],
       "name": "skills/noyalib-failure-archaeology/SKILL.md"
@@ -2589,7 +2589,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-failure-archaeology/metadata.json"
@@ -2607,7 +2607,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f6f341dae9d20b7715650bd01443bdc7d6f30ba53ccd00343fedd2a8f0fcba68"
+          "content": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
         }
       ],
       "name": "skills/noyalib-research-frontier/SKILL.md"
@@ -2616,7 +2616,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-research-frontier/metadata.json"
@@ -2634,7 +2634,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4798916e23f9d69af06384aa630e910895c232777cfb4e93a4fcafa1472340c1"
+          "content": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
         }
       ],
       "name": "skills/noyalib-validation-and-qa/SKILL.md"
@@ -2643,7 +2643,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/noyalib-validation-and-qa/metadata.json"
@@ -2661,7 +2661,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bb1c2dbc6605bb0f8825ccdb0c35ae7d1a3271239e10e89a5196373f0fbb7bf3"
+          "content": "9d6a96810ab6b3d76392842d92ab2df5fc5aa1a38c6cc614bc0a94365b38b2ec"
         }
       ],
       "name": "skills/pr-review-and-release/SKILL.md"
@@ -2670,7 +2670,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9e4bac3b8401ecd857154c44a0debc468dd4d95f377b84d86380a79f3b48b12e"
+          "content": "0ad444de898031368c5552aae7e2344cab8dd6ce488a6ce78440a81d4e7be1a6"
         }
       ],
       "name": "skills/pr-review-and-release/metadata.json"
@@ -2688,7 +2688,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1eee278e630cad70ae157da85fca0823a91ee0392b617ead744a6b8b95f38bc3"
+          "content": "c1edd156b87ec8d6ba9485714c46297433e51929a6c08eeea979085b93dfaabc"
         }
       ],
       "name": "skills/receiving-code-review/SKILL.md"
@@ -2697,7 +2697,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "name": "skills/receiving-code-review/metadata.json"
@@ -2715,7 +2715,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4808efd0120e3200a15dad4988ce42f7e41a3dda2603f8975dc13a3f6dd16cdd"
+          "content": "916cfb8f5adf2b672cfe00bd710afddb5a8ab8f55c303100e37afa9e3ea66794"
         }
       ],
       "name": "skills/refactoring-safely/SKILL.md"
@@ -2724,7 +2724,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "name": "skills/refactoring-safely/metadata.json"
@@ -2742,7 +2742,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5ffa0d613060fbe0d245f631855f7f019801320e08bc010d5eba2d62a137dea3"
+          "content": "1526e2c7d09734f0f88fd6067fdf7e202e60c80d1f6f351c09f6ee834c0ad971"
         }
       ],
       "name": "skills/systematic-debugging/SKILL.md"
@@ -2751,7 +2751,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "49777a125cbd309a9eaaf8c4b748ba2f3d9b91d0905bbf4dff49d22f3a8becb2"
+          "content": "2b342f8875c554032873363a2f1f09993aa1b9218c65613f1375f73bb5ec8dd9"
         }
       ],
       "name": "skills/systematic-debugging/metadata.json"
@@ -2769,7 +2769,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a3e1dca05cc3d495b89c32f914265054a86d5d3745e8ac943ce8c50983ca4981"
+          "content": "f3efe34e331b12893f3e2ef0fe91e69fc0413e574f3dd1497a7bdd6c5fbb4923"
         }
       ],
       "name": "skills/test-driven-development/SKILL.md"
@@ -2778,7 +2778,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3eb11a55fd77a574380b9d9176126c458afdb4fafebbf2ef238a972146af92c1"
+          "content": "c56733bb8ddcdacc3afaf8b9911ce4fbf442b57690a536f0a47757fb1607a141"
         }
       ],
       "name": "skills/test-driven-development/metadata.json"
@@ -2796,7 +2796,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cadedbfd8084df4005ce138b7a737b34877a732ef037e5898ca001da9c6a12fb"
+          "content": "189be118105e54e33a605e6bc3b3fefcb0a6ad63fe2371a4d4f15e2d61a4d0c5"
         }
       ],
       "name": "skills/using-agtmls/SKILL.md"
@@ -2805,7 +2805,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b933613bad641abe0b2e68e95ea8c54abdc8bc2a6a21f4c3afc9061337ca3246"
+          "content": "a343cb216f192398ebf668a94a2c60ef8d486bbe2ee1016e184891bd2fdda438"
         }
       ],
       "name": "skills/using-agtmls/metadata.json"
@@ -2823,7 +2823,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c86cb09e0f6f09f74cef1226d8a2abbd9ef8f9349cc9c1701f87915d0f6b171e"
+          "content": "163a96ff7a646346c8e8b4050584aa2eccf3fef2789cd40456bd0f9202893c0c"
         }
       ],
       "name": "skills/verification-before-completion/SKILL.md"
@@ -2832,7 +2832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0af354b1b350ae651549e8e8d6fb0835ca1ab9dc7094fad95e6cd9d13f7faaab"
+          "content": "4508f8bd8c81be3aaf3377b1d4ec37ae970fa4a496e7fc99146b0040d5b6f675"
         }
       ],
       "name": "skills/verification-before-completion/metadata.json"
@@ -2850,7 +2850,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3b57709f7d2af72ea07a6b70e42a583a82aed19e5df623935bfd207dc3a6016f"
+          "content": "4b34af64cae0572c78441125dd924b022a591873a0ffead584fca7a9eeea4715"
         }
       ],
       "name": "skills/web-research-and-source-triage/SKILL.md"
@@ -2859,7 +2859,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0157932f8a5d57b902ce35f4ba43386f71d35547af77040653b01167e5dae82c"
+          "content": "5a32f1a9ca6b0e9f97c5d4b41377f55809e8b2c2544e3e620b2b622460e5966e"
         }
       ],
       "name": "skills/web-research-and-source-triage/metadata.json"
@@ -2877,7 +2877,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6177ad3efc67815a245019f0dcb1af57d317fef11fb697e512dc4b496a0b8cf0"
+          "content": "d3f03a53a170b97d4eab30849348eecf55d758b194b587b22e234861c8fb9548"
         }
       ],
       "name": "skills/writing-plans/SKILL.md"
@@ -2886,7 +2886,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "name": "skills/writing-plans/metadata.json"
@@ -2904,7 +2904,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "13a5ac094ee463b698a7e44afaeee89e3e96abdaf0a4f910b2834004c139ac93"
+          "content": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
         }
       ],
       "name": "skills/yaml-domain-reference/SKILL.md"
@@ -2913,7 +2913,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "name": "skills/yaml-domain-reference/metadata.json"
@@ -3084,7 +3084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f718374de8a2c295178377f6aef0159187756bf9465e056cfca121e195fb3a42"
+          "content": "27288e7eb02de75ad1c71a01a203d4d0703ecb52c7cb4c8e7769cb40561452b8"
         }
       ],
       "name": "templates/skill/metadata.json"

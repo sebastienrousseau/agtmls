@@ -37,8 +37,12 @@ def main() -> int:
         except json.JSONDecodeError as exc:
             errors.append(f"{mf.relative_to(ROOT)}: invalid JSON: {exc}")
             continue
-        if not SEMVER.match(str(data.get("version", ""))):
-            errors.append(f"{mf.relative_to(ROOT)}: version must be semver X.Y.Z")
+        if "version" in data:
+            errors.append(
+                f"{mf.relative_to(ROOT)}: must not carry a version; a skill is "
+                "identified by its digest, and index.json records the release "
+                "that last moved it"
+            )
         if not data.get("owner"):
             errors.append(f"{mf.relative_to(ROOT)}: missing owner")
         # Bundle membership is a field, not a parent directory: the skill

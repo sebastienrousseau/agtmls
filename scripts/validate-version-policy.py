@@ -14,9 +14,13 @@ SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 TAG = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 METADATA_FILES = [
     ROOT / ".claude-plugin" / "plugin.json",
-    # Derived, not hardcoded: the skill tree is flat, so every skill owns a
-    # metadata.json and a new skill must not silently escape the version gate.
-    *sorted((ROOT / "skills").glob("*/metadata.json")),
+]
+#: Files that must NOT carry a version. A version here is stamped with the
+#: registry's on every release, and these are inside each skill's content
+#: address -- so restoring one would make every release move every digest
+#: again, and `verify` could not tell a bump from tampering.
+VERSION_FREE = sorted((ROOT / "skills").glob("*/metadata.json")) + [
+    ROOT / "templates" / "skill" / "metadata.json",
 ]
 
 
@@ -84,6 +88,18 @@ def main() -> int:
         version = str(read_json(path).get("version", ""))
         if version != current:
             errors.append(f"{path.relative_to(ROOT)} version {version} must match {current}")
+
+    for path in VERSION_FREE:
+        if not path.exists():
+            continue
+        if "version" in read_json(path):
+            errors.append(
+                f"{path.relative_to(ROOT)} must not carry a version: it would put "
+                "the release back inside the skill's content address"
+            )
+    for skill_md in sorted((ROOT / "skills").glob("*/SKILL.md")):
+        if "agtmls-version" in skill_md.read_text(encoding="utf-8"):
+            errors.append(f"{skill_md.relative_to(ROOT)} must not carry agtmls-version")
 
     index = read_json(ROOT / "index.json")
     if index.get("registry_version") != current:

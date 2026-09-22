@@ -357,7 +357,6 @@ license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, Antigravity, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:
-  agtmls-version: "0.0.6"
   agtmls-owner: "Sebastien Rousseau"
   agtmls-maturity: "hardened"
   agtmls-risk-level: "low"

@@ -11,17 +11,18 @@ from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# The registry version lives here and nowhere else that is authored. Skills
+# used to be in this list -- every metadata.json rewritten on every release --
+# which made a release a 129-file diff and put the version inside each skill's
+# content address. A skill's identity is its digest now, and index.json records
+# which release last moved it.
 VERSION_FILES = [
     ROOT / ".claude-plugin" / "plugin.json",
-    # Derived, not hardcoded: the skill tree is flat, so every skill owns a
-    # metadata.json and a new skill must not silently escape the version bump.
-    *sorted((ROOT / "skills").glob("*/metadata.json")),
-    ROOT / "templates" / "skill" / "metadata.json",
 ]
 TEXT_DEFAULT_FILES = [
-    # import-skill.py deliberately absent: it reads the version from
-    # plugin.json instead of carrying a literal for this script to patch.
-    ROOT / "scripts" / "generate-skill-index.py",
+    # import-skill.py, generate-skill-index.py and generate-manpage.py are
+    # deliberately absent: each reads the version from plugin.json rather than
+    # carrying a literal for this script to patch.
     # The published package version must move with the registry version, or a
     # PyPI release ships a wheel whose metadata contradicts its contents.
     ROOT / "pyproject.toml",

@@ -84,7 +84,11 @@ def derive_metadata(metadata: dict[str, object]) -> list[tuple[str, str]]:
     if not isinstance(policy, dict):
         policy = {}
     pairs = [
-        ("agtmls-version", str(metadata.get("version", ""))),
+        # No version. It used to be stamped here with the registry's version on
+        # every release, which put the release into each skill's content
+        # address -- so all 31 digests moved whether or not a skill changed,
+        # and `verify` could not tell a bump from tampering. A skill's identity
+        # is its digest; index.json records which release last moved it.
         ("agtmls-owner", str(metadata.get("owner", ""))),
         ("agtmls-maturity", str(metadata.get("maturity", ""))),
         ("agtmls-bundle", str(metadata.get("bundle") or "")),
