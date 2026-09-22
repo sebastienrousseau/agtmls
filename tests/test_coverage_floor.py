@@ -137,6 +137,15 @@ class MeasureTests(unittest.TestCase):
         self.assertEqual(fake.calls[0][0][-1], str(self.root / "scripts" / "run-all-checks.py"))
         self.assertEqual(fake.calls[-1][0], ["cov", "report"])
 
+    def test_unit_runs_the_unit_suite_and_reports_everything(self) -> None:
+        """The project rule: unit-test coverage of every script, not only the
+        library, stays at or above 98%. Widening core would change what the
+        100% floor means, so this is its own scope."""
+        fake = FakeSubprocess(report_out=REPORT)
+        self.assertEqual(self.measure("unit", fake), 87.25)
+        self.assertEqual(fake.calls[0][0][-1], str(self.root / "scripts" / "run-unit-tests.py"))
+        self.assertEqual(fake.calls[-1][0], ["cov", "report"])
+
     def test_children_are_traced_without_losing_the_callers_path(self) -> None:
         """Most of the work happens in child processes. Without the hook they
         go unmeasured; overwriting PYTHONPATH would break the ones that need it."""
@@ -265,3 +274,19 @@ class FloorTests(unittest.TestCase):
         self.assertEqual(written["schema_version"], 1)
         self.assertEqual(written["floors"], {"all": 61.0})
         self.assertEqual(self.mod.floors(), {"all": 61.0})
+
+    def test_unit_coverage_below_98_fails_even_with_no_floor_recorded(self) -> None:
+        """98% is a project rule, not a measurement: it holds before any floor
+        is written and after a floor file is edited down."""
+        code, out = self.drive(97.9, "--scope", "unit")
+        self.assertEqual(code, 1, out)
+        self.assertIn("unit: 97.9% against a floor of 98.0%", out)
+
+    def test_a_unit_floor_edited_below_the_rule_does_not_lower_it(self) -> None:
+        self.write_floor({"unit": 50.0})
+        code, out = self.drive(97.0, "--scope", "unit")
+        self.assertEqual(code, 1, out)
+
+    def test_unit_coverage_at_the_rule_passes(self) -> None:
+        code, out = self.drive(98.0, "--scope", "unit")
+        self.assertEqual(code, 0, out)

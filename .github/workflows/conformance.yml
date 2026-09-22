@@ -211,6 +211,8 @@ jobs:
         # Measured from the unit suite alone, in-process, so the number
         # reflects tests rather than incidental execution by the gate.
         run: python3 scripts/run-coverage.py --scope core
+      - name: Every script, from the unit suite (project rule, >= 98%)
+        run: python3 scripts/run-coverage.py --scope unit
       - name: Every script, via the gate
         run: python3 scripts/run-coverage.py --scope all
       - name: The floor must not have been quietly lowered

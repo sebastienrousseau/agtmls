@@ -23,3 +23,12 @@ python3 scripts/run-all-checks.py
 ```
 
 All unit tests, behavioral evals, routing checks, and doctor inspections must pass with 0 failures and 0 warnings. State what you ran and what you observed.
+
+Unit-test coverage of `scripts/` and `src/` (lines and branches, measured from the unit suite alone) MUST stay at or above 98%, and the library core at 100%:
+
+```console
+python3 scripts/run-coverage.py --scope unit
+python3 scripts/run-coverage.py --scope core
+```
+
+Both need `coverage` installed; CI runs them in `conformance.yml`. New code ships with tests that were seen to fail before the change.

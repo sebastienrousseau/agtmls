@@ -8,14 +8,19 @@ so the number was unknown -- and an unknown number is not a high one. The
 first measurement put the unit suite at 21% of everything and 77% of the
 library core.
 
-Two scopes, because they answer different questions
----------------------------------------------------
+Three scopes, because they answer different questions
+-----------------------------------------------------
 
 **core** -- the library the product's trust rests on: `scripts/_lib/` and
 `src/agtmls/`. Digests, lockfiles, the command surface, the packaged entry
 point. This is what decides whether an installed skill is the skill that was
 published, and it is measured from the unit suite alone, in-process, so the
 number reflects tests rather than incidental execution.
+
+**unit** -- every script and the package, measured from the unit suite
+alone. Project rule: this never falls below 98%. It is the number that says
+the tooling is tested, not merely executed: the gate runs every validator on a
+correct tree, which exercises its happy path and none of its refusals.
 
 **all** -- every script, measured while the whole gate runs with subprocess
 tracing on. Most of this repository's work happens in child processes, so a
@@ -36,6 +41,7 @@ gate without giving up the gate being stdlib-only and runnable offline. It
 runs in CI, and locally whenever someone installs the tool.
 
     python3 scripts/run-coverage.py                 # core, against the floor
+    python3 scripts/run-coverage.py --scope unit    # every script, from the unit suite
     python3 scripts/run-coverage.py --scope all     # everything, via the gate
     python3 scripts/run-coverage.py --update        # raise the floor to what holds
 """
@@ -55,6 +61,9 @@ ROOT = Path(__file__).resolve().parent.parent
 FLOOR = ROOT / "coverage-floor.json"
 #: The library the product's trust rests on.
 CORE = ("scripts/_lib/*", "src/agtmls/*")
+#: Minimums that are project rules rather than measurements. A floor recorded
+#: below one of these -- or none recorded at all -- does not lower it.
+RULES = {"unit": 98.0}
 
 
 def coverage_cmd() -> list[str]:
@@ -98,7 +107,7 @@ def measure(scope: str) -> float:
             [str(hook)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
         )
 
-        target = "run-unit-tests.py" if scope == "core" else "run-all-checks.py"
+        target = "run-all-checks.py" if scope == "all" else "run-unit-tests.py"
         run = subprocess.run(
             [*tool, "run", str(ROOT / "scripts" / target)],
             cwd=ROOT, env=env, text=True,
@@ -126,15 +135,16 @@ def measure(scope: str) -> float:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--scope", choices=["core", "all"], default="core",
-                        help="core: the library, from the unit suite. all: every script, via the gate")
+    parser.add_argument("--scope", choices=["core", "unit", "all"], default="core",
+                        help="core: the library, from the unit suite. unit: every script, from "
+                             "the unit suite. all: every script, via the gate")
     parser.add_argument("--update", action="store_true",
                         help="raise the recorded floor to what currently holds")
     args = parser.parse_args()
 
     measured = measure(args.scope)
     recorded = floors()
-    floor = float(recorded.get(args.scope, 0.0))
+    floor = max(float(recorded.get(args.scope, 0.0)), RULES.get(args.scope, 0.0))
     print()
     print(f"{args.scope}: {measured:.1f}% against a floor of {floor:.1f}%")
 
@@ -149,7 +159,9 @@ def main() -> int:
         payload["floors"][args.scope] = round(measured, 1)
         payload["note"] = (
             "Floors may rise and must never fall. core is the library measured "
-            "from the unit suite; all is every script measured while the gate runs."
+            "from the unit suite; unit is every script measured from the unit "
+            "suite, and must stay at or above 98; all is every script measured "
+            "while the gate runs."
         )
         FLOOR.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print(f"recorded {args.scope} floor at {measured:.1f}%")
