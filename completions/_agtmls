@@ -38,6 +38,7 @@ _agtmls() {
         'stats:stats command'
         'status:status command'
         'uninstall:uninstall command'
+        'verify:verify command'
         'verify-release-assets:verify-release-assets command'
     )
     _arguments -C \

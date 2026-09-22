@@ -10,44 +10,35 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
 COMPLETIONS_DIR = ROOT / "completions"
 
-SUBCOMMANDS = [
-    "agent-card",
-    "audit",
-    "bench",
-    "bump-version",
-    "check",
-    "diff",
-    "docs-site",
-    "doctor",
-    "evidence",
-    "evolve",
-    "export",
-    "import-skill",
-    "index",
-    "install",
-    "list",
-    "mcp-resources",
-    "next-version",
-    "plugin-manifests",
-    "profiles",
-    "propose-skill",
-    "provenance",
-    "provider-install",
-    "providers",
-    "release-check",
-    "release-dry-run",
-    "release-pack",
-    "sbom",
-    "scaffold-skill",
-    "search",
-    "show",
-    "stats",
-    "status",
-    "uninstall",
-    "verify-release-assets",
-]
+from _lib.cli_parser import build_parser  # noqa: E402  (needs the scripts path first)
+
+def subcommands() -> list[str]:
+    """Every subcommand, read from the parser that defines them.
+
+    This was a hand-maintained list, and it had gone one command stale:
+    `verify` -- which checks an installed tree against its lockfile -- was
+    absent, so shell completion never offered the integrity check to anyone
+    who had installed the completions. Completions that disagree with the CLI
+    are worse than none, because they teach the wrong surface.
+    """
+    parser = build_parser()
+    # `_subparsers` is None when none were added, so this has to be checked
+    # rather than walked: a traceback here would tell the reader about
+    # argparse internals instead of about their parser.
+    group = parser._subparsers  # noqa: SLF001  (argparse exposes no public accessor)
+    for action in getattr(group, "_group_actions", []):  # noqa: SLF001  (same)
+        if isinstance(action, argparse._SubParsersAction):  # noqa: SLF001  (same)
+            return sorted(action.choices)
+    raise SystemExit(
+        "FAIL: the parser declares no subcommands, so the completions would be "
+        "empty; check build_parser() in scripts/_lib/cli_parser.py"
+    )
+
+
+SUBCOMMANDS = subcommands()
 
 
 def render_bash() -> str:

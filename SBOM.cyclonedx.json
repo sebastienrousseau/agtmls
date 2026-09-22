@@ -1161,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8e52ce5642f91ee79724b6736f400083233ebba54716c7708a1e05838ef8471c"
+          "content": "1127ba6164fa4f316b7350c9b2710beb24593490b435edc0a8eb5c920a8f388a"
         }
       ],
       "name": "scripts/generate-completions.py",
@@ -1363,6 +1363,17 @@
         }
       ],
       "name": "scripts/run-behavioral-evals.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/run-coverage.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ed76822e02c668ae2ef2d831abe1b2a50a2cb7f19ea8499b9cba8b58be258fd"
+        }
+      ],
+      "name": "scripts/run-coverage.py",
       "type": "file"
     },
     {

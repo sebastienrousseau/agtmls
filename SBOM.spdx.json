@@ -1697,11 +1697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bb625f607ad0b2c45e87cdad0f37b9ebeca34345"
+          "checksumValue": "ff4428d5eaef0a1d3c1732dd4594ede196dec645"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8e52ce5642f91ee79724b6736f400083233ebba54716c7708a1e05838ef8471c"
+          "checksumValue": "1127ba6164fa4f316b7350c9b2710beb24593490b435edc0a8eb5c920a8f388a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1994,6 +1994,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/run-behavioral-evals.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-run-coverage.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "40fa85c4e5051fae2571ce438dd121324b959054"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8ed76822e02c668ae2ef2d831abe1b2a50a2cb7f19ea8499b9cba8b58be258fd"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/run-coverage.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5736,6 +5752,7 @@
         "SPDXRef-File-scripts-release-pack.py",
         "SPDXRef-File-scripts-run-all-checks.py",
         "SPDXRef-File-scripts-run-behavioral-evals.py",
+        "SPDXRef-File-scripts-run-coverage.py",
         "SPDXRef-File-scripts-run-security-evals.py",
         "SPDXRef-File-scripts-run-trigger-evals.py",
         "SPDXRef-File-scripts-run-unit-tests.py",

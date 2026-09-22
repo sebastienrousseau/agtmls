@@ -79,3 +79,25 @@ include = [
   "LICENSE-APACHE",
   "LICENSE-MIT",
 ]
+
+# Coverage of the tooling, not of the registry data it validates. Subprocess
+# tracing is on because most of this repository's work happens in child
+# processes: the gate runs 64 of them, and a measurement that saw only what
+# the parent executed would report a number with no relationship to what the
+# tests exercise.
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["scripts", "src"]
+omit = ["*/__pycache__/*", "scripts/_lib/scaling.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_also = [
+  # A module's own entry point is exercised by running it, which the gate does
+  # 64 times; counting the two lines that call main() adds noise, not signal.
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+]

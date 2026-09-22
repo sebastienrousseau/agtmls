@@ -1,0 +1,8 @@
+{
+  "floors": {
+    "all": 71.0,
+    "core": 100.0
+  },
+  "note": "Floors may rise and must never fall. core is the library measured from the unit suite; all is every script measured while the gate runs.",
+  "schema_version": 1
+}

@@ -170,3 +170,51 @@ jobs:
               sys.exit(1)
           print(f"\nOK: no public API breakage since {against}")
           PY
+
+  coverage:
+    name: coverage holds at its committed floor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check 'coverage==7.16.1'
+      - name: The library core
+        # Measured from the unit suite alone, in-process, so the number
+        # reflects tests rather than incidental execution by the gate.
+        run: python3 scripts/run-coverage.py --scope core
+      - name: Every script, via the gate
+        run: python3 scripts/run-coverage.py --scope all
+      - name: The floor must not have been quietly lowered
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+
+          committed = json.loads(open("coverage-floor.json", encoding="utf-8").read())["floors"]
+          base = subprocess.run(
+              ["git", "show", "origin/main:coverage-floor.json"],
+              capture_output=True, text=True, check=False,
+          )
+          if base.returncode != 0:
+              print("no baseline on origin/main; nothing to compare")
+              sys.exit(0)
+          previous = json.loads(base.stdout)["floors"]
+          dropped = {
+              scope: (was, committed.get(scope))
+              for scope, was in previous.items()
+              if committed.get(scope, 0) < was
+          }
+          if dropped:
+              for scope, (was, now) in dropped.items():
+                  print(f"FAIL: the {scope} floor moved down, {was}% -> {now}%")
+              sys.exit(
+                  "A floor that moves down is a target. Raise coverage, or say in "
+                  "the commit message why the floor is being lowered."
+              )
+          print(f"OK: {len(committed)} floor(s) held or raised")
+          PY
