@@ -202,7 +202,7 @@ agtmls check
 | **Subagents** | 4 | Context-isolated autonomous roles (`anti-slop-editor`, `security-sentinel`, `skill-author`, `registry-auditor`) | [`agents/`](agents/) |
 | **Security Auditor** | 1 | Zero-dependency static scanner detecting prompt injection, unicode steganography, and unsafe commands | [`scripts/audit-skill.py`](scripts/audit-skill.py) |
 | **Provider Targets** | 13 | Cross-runtime support via native symlinks, plugin manifests, and adapted markdown bundles | [`providers.json`](providers.json) |
-| **Named Profiles** | 5 | Curated subsets for specific workflows (`minimal`, `polyglot`, `discipline`, `noyalib`, `security`) | [`profiles.json`](profiles.json) |
+| **Named Profiles** | 6 | Curated subsets for specific workflows (`minimal`, `polyglot`, `discipline`, `security`, `research`, `noyalib`) | [`profiles.json`](profiles.json) |
 
 ---
 

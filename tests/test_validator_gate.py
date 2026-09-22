@@ -182,6 +182,29 @@ class ManifestValidatorTests(ValidatorFailureBase):
         self.edit_json("profiles.json", mutate)
         self.assert_catches("validate-profiles.py")
 
+    def test_two_profiles_that_install_the_same_skills_are_caught(self) -> None:
+        """`security` and `research` were copies of `noyalib` under other names."""
+
+        def mutate(data: dict) -> None:
+            data["profiles"]["security"] = dict(data["profiles"]["noyalib"])
+
+        self.edit_json("profiles.json", mutate)
+        self.assertIn("security", self.assert_catches("validate-profiles.py"))
+
+    def test_a_profile_that_omits_its_own_bundle_is_caught(self) -> None:
+        def mutate(data: dict) -> None:
+            data["profiles"]["security"]["bundles"] = []
+
+        self.edit_json("profiles.json", mutate)
+        self.assertIn("security", self.assert_catches("validate-profiles.py"))
+
+    def test_a_general_profile_that_pulls_in_a_project_bundle_is_caught(self) -> None:
+        def mutate(data: dict) -> None:
+            data["profiles"]["polyglot"]["bundles"] = ["noyalib"]
+
+        self.edit_json("profiles.json", mutate)
+        self.assertIn("noyalib", self.assert_catches("validate-profiles.py"))
+
     def test_lifecycle_passes_when_intact(self) -> None:
         self.assert_clean("validate-lifecycle.py")
 

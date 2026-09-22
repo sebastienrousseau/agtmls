@@ -47,13 +47,12 @@
       ]
     },
     "security": {
-      "description": "Skills with security, safety, validation, diagnostics, or secret-handling relevance.",
+      "description": "Agent-skill supply-chain security (auditing skills, hooks and plugins before trusting them) plus the discipline skills.",
       "bundles": [
-        "noyalib"
+        "security"
       ],
       "skills": [
         "brainstorming",
-        "cross-language-port",
         "giving-code-review",
         "handoff",
         "incident-response",
@@ -67,13 +66,12 @@
       ]
     },
     "research": {
-      "description": "Research, external positioning, YAML domain work, and quality-analysis workflows.",
+      "description": "Web research and source triage plus the discipline skills. Project-specific research skills ship in their project profile.",
       "bundles": [
-        "noyalib"
+        "web-reach"
       ],
       "skills": [
         "brainstorming",
-        "cross-language-port",
         "giving-code-review",
         "handoff",
         "incident-response",

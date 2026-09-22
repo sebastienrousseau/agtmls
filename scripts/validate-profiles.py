@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parent.parent
 PROFILES = ROOT / "profiles.json"
 INDEX = ROOT / "index.json"
 REQUIRED = {"minimal", "polyglot", "noyalib", "security", "research"}
+# A project bundle serves one codebase; only the profile named after it may
+# install it, so the general profiles stay general.
+PROJECT_BUNDLES = {"noyalib"}
 
 
 def main() -> int:
@@ -20,6 +23,10 @@ def main() -> int:
     data = json.loads(PROFILES.read_text(encoding="utf-8"))
     index = json.loads(INDEX.read_text(encoding="utf-8"))
     skills = {skill["name"] for skill in index.get("skills", [])}
+    members: dict[str, set[str]] = {}
+    for skill in index.get("skills", []):
+        members.setdefault(skill.get("bundle") or "_general", set()).add(skill["name"])
+    resolved: dict[frozenset[str], str] = {}
     bundles = {name for name in index.get("bundles", {}) if name != "_general"}
     if data.get("schema_version") != 1:
         errors.append("profiles.json schema_version must be 1")
@@ -49,6 +56,15 @@ def main() -> int:
         for bundle in pb:
             if bundle not in bundles:
                 errors.append(f"profile {name} references unknown bundle: {bundle}")
+            elif bundle in PROJECT_BUNDLES and bundle != name:
+                errors.append(f"profile {name} pulls in the {bundle} project bundle; only profile {bundle} may")
+        if name in bundles and name not in pb:
+            errors.append(f"profile {name} omits the {name} bundle it is named after")
+        installs = frozenset(ps).union(*(members.get(bundle, set()) for bundle in pb))
+        if installs in resolved:
+            errors.append(f"profile {name} installs exactly what profile {resolved[installs]} does")
+        else:
+            resolved[installs] = name
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
