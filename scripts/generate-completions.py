@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 COMPLETIONS_DIR = ROOT / "completions"
 
-from _lib.cli_parser import build_parser  # noqa: E402  (needs the scripts path first)
+from _lib.cli_parser import build_parser, native_agents  # noqa: E402  (needs the scripts path first)
 
 def subcommands() -> list[str]:
     """Every subcommand, read from the parser that defines them.
@@ -43,6 +43,7 @@ SUBCOMMANDS = subcommands()
 
 def render_bash() -> str:
     subs = " ".join(SUBCOMMANDS)
+    agents = " ".join(native_agents())
     return f"""# bash completion for agtmls -*- shell-script -*-
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 # SPDX-License-Identifier: Apache-2.0 OR MIT
@@ -63,12 +64,12 @@ _agtmls_completions() {{
             if [[ $cword -eq 2 ]]; then
                 COMPREPLY=( $(compgen -W "python rust typescript go ruby generic" -- "$cur") )
             elif [[ $cword -eq 3 ]]; then
-                COMPREPLY=( $(compgen -W "claude codex aider agy antigravity" -- "$cur") )
+                COMPREPLY=( $(compgen -W "{agents}" -- "$cur") )
             fi
             ;;
         uninstall)
             if [[ $cword -eq 2 ]]; then
-                COMPREPLY=( $(compgen -W "claude codex aider agy antigravity" -- "$cur") )
+                COMPREPLY=( $(compgen -W "{agents}" -- "$cur") )
             fi
             ;;
         audit|show)

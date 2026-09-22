@@ -41,7 +41,7 @@ class CliJsonTests(unittest.TestCase):
 
     def test_providers_json_includes_native_and_exports(self) -> None:
         payload = json.loads(self.run_cli("providers", "--json"))
-        self.assertEqual(set(payload["native_agents"]), {"claude", "codex", "aider"})
+        self.assertEqual(set(payload["native_agents"]), {"aider", "antigravity", "claude", "codex"})
         self.assertIn("generic", payload["export_targets"])
         self.assertIn("openai", payload["export_targets"])
 
@@ -52,6 +52,59 @@ class CliJsonTests(unittest.TestCase):
 
     def test_search_filters_to_matching_skills(self) -> None:
         self.assertIn("systematic-debugging", self.run_cli("search", "debugging"))
+
+
+class NativeAgentParityTests(unittest.TestCase):
+    """providers.json names the native agents; every other surface follows it.
+
+    The installer accepted `antigravity`, the completions offered it, and the
+    CLI rejected it: four hand-kept lists, three of them wrong.
+    """
+
+    def native(self) -> set[str]:
+        data = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))
+        return set(data["native_agents"])
+
+    def test_every_agent_argument_offers_exactly_the_native_agents(self) -> None:
+        import argparse
+
+        parser = load_script("agtmls.py").build_parser()
+        subparsers = next(
+            action for action in parser._subparsers._group_actions  # noqa: SLF001  (argparse exposes no public accessor)
+            if isinstance(action, argparse._SubParsersAction)  # noqa: SLF001  (the class is private too)
+        )
+        offered = {}
+        for name, sub in subparsers.choices.items():
+            for action in sub._actions:  # noqa: SLF001  (a subparser exposes no action list)
+                if action.dest == "agent":
+                    offered[name] = set(action.choices)
+        self.assertTrue(offered, "no subcommand takes an agent")
+        for name, choices in offered.items():
+            self.assertEqual(choices, self.native(), f"`{name}` disagrees with providers.json")
+
+    def test_the_installer_script_accepts_every_native_agent(self) -> None:
+        text = (ROOT / "scripts" / "setup-workspace.sh").read_text(encoding="utf-8")
+        labels = set()
+        for line in text.splitlines():
+            head = line.strip().split(")", 1)[0]
+            if line.strip().endswith(";;") and ")" in line and "*" not in head:
+                labels.update(head.split("|"))
+        self.assertLessEqual(self.native(), labels)
+
+    def test_agent_paths_come_from_providers_json(self) -> None:
+        data = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))
+        module = load_script("agtmls.py")
+        for name, item in data["native_agents"].items():
+            dot, prompt = module.agent_paths(name)
+            self.assertEqual((dot, prompt), (str(Path(item["skills_dir"]).parent), item["prompt_file"]))
+
+    def test_completions_offer_exactly_the_native_agents(self) -> None:
+        text = (ROOT / "completions" / "agtmls.bash").read_text(encoding="utf-8")
+        offered = set()
+        for line in text.splitlines():
+            if "claude" in line and "compgen -W" in line:
+                offered.update(line.split('"')[1].split())
+        self.assertEqual(offered, self.native())
 
 
 class PackagedCliTests(unittest.TestCase):

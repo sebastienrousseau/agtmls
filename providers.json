@@ -87,6 +87,13 @@
       "prompt_file": "CONVENTIONS.md",
       "skills_dir": ".aider/skills"
     },
+    "antigravity": {
+      "agents_dir": ".agents/agents",
+      "commands_dir": ".agents/commands",
+      "install_mode": "symlink",
+      "prompt_file": "AGENTS.md",
+      "skills_dir": ".agents/skills"
+    },
     "claude": {
       "agents_dir": ".claude/agents",
       "commands_dir": ".claude/commands",

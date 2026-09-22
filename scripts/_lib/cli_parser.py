@@ -12,12 +12,26 @@ every declared subcommand has a dispatch case.
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
+
+PROVIDERS = Path(__file__).resolve().parents[2] / "providers.json"
+
+
+def native_agents() -> list[str]:
+    """The agents `install`, `verify` and friends accept, from providers.json.
+
+    Hand-kept copies of this list drifted: the installer script accepted
+    `antigravity` while every `choices=` here rejected it.
+    """
+    data = json.loads(PROVIDERS.read_text(encoding="utf-8"))
+    return sorted(data["native_agents"])
 
 
 def build_parser() -> argparse.ArgumentParser:
     """Every subcommand agtmls accepts."""
     parser = argparse.ArgumentParser(prog="agtmls")
+    agents = native_agents()
     # dest must not collide with any subparser option dest: `evidence --command`
     # used to overwrite the subcommand name with its own (list) value, which made
     # every dispatch comparison below fail. See CliDispatchTests.
@@ -25,13 +39,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--target", type=Path)
-    doctor.add_argument("--agent", choices=["claude", "aider", "codex"])
+    doctor.add_argument("--agent", choices=agents)
     doctor.add_argument("--skills-only", action="store_true")
     doctor.add_argument("--bundle", action="append", default=[])
 
     status = sub.add_parser("status")
     status.add_argument("--target", type=Path)
-    status.add_argument("--agent", choices=["claude", "aider", "codex"])
+    status.add_argument("--agent", choices=agents)
     status.add_argument("--skills-only", action="store_true")
     status.add_argument("--bundle", action="append", default=[])
 
@@ -156,7 +170,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     install = sub.add_parser("install")
     install.add_argument("language")
-    install.add_argument("agent", choices=["claude", "aider", "codex"])
+    install.add_argument("agent", choices=agents)
     install.add_argument("--target", type=Path, default=Path.cwd())
     install.add_argument("--skills-only", action="store_true")
     install.add_argument(
@@ -185,12 +199,12 @@ def build_parser() -> argparse.ArgumentParser:
     verify = sub.add_parser(
         "verify", help="check an installed tree against its .agtmls/manifest.json lockfile"
     )
-    verify.add_argument("agent", choices=["claude", "aider", "codex"])
+    verify.add_argument("agent", choices=agents)
     verify.add_argument("--target", type=Path, default=Path.cwd())
     verify.add_argument("--json", action="store_true")
 
     remove = sub.add_parser("uninstall")
-    remove.add_argument("agent", choices=["claude", "aider", "codex"])
+    remove.add_argument("agent", choices=agents)
     remove.add_argument("--target", type=Path, default=Path.cwd())
     remove.add_argument("--remove-prompt", action="store_true")
 

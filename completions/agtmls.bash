@@ -18,12 +18,12 @@ _agtmls_completions() {
             if [[ $cword -eq 2 ]]; then
                 COMPREPLY=( $(compgen -W "python rust typescript go ruby generic" -- "$cur") )
             elif [[ $cword -eq 3 ]]; then
-                COMPREPLY=( $(compgen -W "claude codex aider agy antigravity" -- "$cur") )
+                COMPREPLY=( $(compgen -W "aider antigravity claude codex" -- "$cur") )
             fi
             ;;
         uninstall)
             if [[ $cword -eq 2 ]]; then
-                COMPREPLY=( $(compgen -W "claude codex aider agy antigravity" -- "$cur") )
+                COMPREPLY=( $(compgen -W "aider antigravity claude codex" -- "$cur") )
             fi
             ;;
         audit|show)

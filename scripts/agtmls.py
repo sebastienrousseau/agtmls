@@ -23,13 +23,12 @@ def run(argv: list[str], cwd: Path = ROOT) -> int:
 
 
 def agent_paths(agent: str) -> tuple[str, str]:
-    if agent == "claude":
-        return ".claude", "CLAUDE.md"
-    if agent == "aider":
-        return ".aider", "CONVENTIONS.md"
-    if agent == "codex":
-        return ".codex", "AGENTS.md"
-    raise ValueError(agent)
+    """The dot-directory and prompt file an agent reads, from providers.json."""
+    data = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))
+    item = data["native_agents"].get(agent)
+    if item is None:
+        raise ValueError(agent)
+    return str(Path(item["skills_dir"]).parent), item["prompt_file"]
 
 
 def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
