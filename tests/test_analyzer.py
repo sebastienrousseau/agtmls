@@ -97,6 +97,27 @@ class FrontmatterToolsTests(Workspace):
     def test_frontmatter_without_allowed_tools_declares_none(self) -> None:
         self.assertEqual(analyzer.frontmatter_tools(self.skill("name: x") / "SKILL.md"), [])
 
+    def test_the_space_separated_form_the_spec_uses_is_split(self) -> None:
+        """Every skill in this registry writes `allowed-tools: "Read Glob Bash"`.
+
+        The parser split on commas only, so that string came back as one tool
+        named "Read Glob Bash", which grants nothing -- and AGT-CAP-001 could
+        not fire on any real skill.
+        """
+        tools = analyzer.frontmatter_tools(self.skill('allowed-tools: "Read Glob Bash"') / "SKILL.md")
+        self.assertEqual(tools, ["Read", "Glob", "Bash"])
+
+    def test_a_real_skill_that_grants_bash_against_its_policy_escalates(self) -> None:
+        skill = self.skill('allowed-tools: "Read Grep Bash"', metadata={"safety_policy": {"executes_commands": False}})
+        self.assertEqual(self.rules(analyzer.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"])
+
+    def test_a_scoped_tool_keeps_its_specifier_and_still_counts_as_the_tool(self) -> None:
+        skill = self.skill('allowed-tools: "Read Bash(git log:*)"')
+        self.assertEqual(analyzer.frontmatter_tools(skill / "SKILL.md"), ["Read", "Bash(git log:*)"])
+        self.assertEqual(
+            self.rules(analyzer.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"]
+        )
+
     def test_a_bracketed_quoted_list_is_unwrapped(self) -> None:
         tools = analyzer.frontmatter_tools(self.skill("allowed-tools: [Bash, 'Read']") / "SKILL.md")
         self.assertEqual(tools, ["Bash", "Read"])

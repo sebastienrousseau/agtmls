@@ -179,8 +179,20 @@ def read_capped(path: Path) -> str | None:
         return None
 
 
+# One tool: a name, optionally with a parenthesised specifier that may itself
+# contain spaces -- `Bash(git log:*)`.
+TOOL_TOKEN = re.compile(r"[^\s,()'\"\[\]]+(?:\([^)]*\))?")
+
+
 def frontmatter_tools(skill_md: Path) -> list[str]:
-    """allowed-tools declared in SKILL.md frontmatter, if any."""
+    """allowed-tools declared in SKILL.md frontmatter, if any.
+
+    The Agent Skills spec writes the field space-separated, and every skill
+    here does: `allowed-tools: "Read Glob Bash"`. This split on commas only,
+    so that string came back as a single tool named "Read Glob Bash" that
+    granted nothing, and AGT-CAP-001 could not fire on a real skill. Commas
+    and YAML list brackets are still accepted.
+    """
     text = read_capped(skill_md) or ""
     match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
     if not match:
@@ -188,8 +200,7 @@ def frontmatter_tools(skill_md: Path) -> list[str]:
     field = re.search(r"^allowed-tools:[ \t]*(.*)$", match.group(1), re.MULTILINE)
     if not field:
         return []
-    raw = field.group(1).strip().strip("[]")
-    return [tool.strip().strip("'\"") for tool in raw.split(",") if tool.strip()]
+    return TOOL_TOKEN.findall(field.group(1))
 
 
 def load_policy(skill_dir: Path) -> tuple[dict, list[Finding]]:
@@ -256,7 +267,8 @@ def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
         return []
     findings: list[Finding] = []
     for tool in frontmatter_tools(skill_md):
-        capability = TOOL_CAPABILITIES.get(tool)
+        # `Bash(git log:*)` narrows Bash; it still grants executes_commands.
+        capability = TOOL_CAPABILITIES.get(tool.split("(", 1)[0])
         if capability is None:
             continue
         if capability == "network_access":
