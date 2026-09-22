@@ -7,6 +7,56 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Breaking
+
+- `agtmls agent-card` and `agent-card.json` are removed. The file declared
+  itself `not_a2a`, nothing consumed it, and it could not conform to A2A v1.0
+  without a service endpoint.
+
+### Added
+
+- `antigravity` is a native agent for `install`, `verify` and `uninstall`,
+  installing into `.agents/`. `setup-workspace.sh` already accepted it; the
+  CLI rejected it.
+- Benchmarks: nine workloads measured in fresh processes with every raw
+  sample committed under `benchmarks/results/`, a regression gate, and a
+  scaling measurement at ten times the registry.
+- `smoke-offline.py` proves the local tier never opens a network socket.
+- Coverage measurement, with the library core held at 100% of lines and
+  branches. The security analyzer now sits inside that floor.
+- SECURITY.md separates boundaries (digests, install verification, the
+  lockfile, signed tags) from heuristics (the analyzer, policy checks, evals).
+
+### Changed
+
+- A skill's digest no longer includes the release version, so a release
+  moves no content address unless the skill itself changed.
+- The analyzer's rules are a snapshot of a pinned `agtmls-spec` commit
+  (`scripts/_lib/rules.json`), checked for self-consistency in the gate and
+  against the spec in CI, instead of a hand-kept copy.
+- Every measured number in BENCHMARKS.md is generated from the raw results
+  and stamped with their hashes. The scaling section had drifted: it now
+  reports x7.02 (digest) and x110.62 (pairwise) for ten times the registry.
+- README and SECURITY.md describe the analyzer as first-stage triage rather
+  than a defence, and the gate rejects absolute security claims.
+- The `security` and `research` profiles install their own bundles; general
+  profiles no longer pull in the `noyalib` project bundle.
+- The gate audits the shipped registry with `--strict` and runs in parallel;
+  it is now 66 checks.
+
+### Fixed
+
+- AGT-CAP-001 could not fire on any real skill: `allowed-tools` is
+  space-separated and was split on commas only.
+- The licence gate counted `.py` and `.sh` files without reading them; 87
+  files lacked an SPDX header.
+- `mcp-resources.json` used `agtmls://skills/` while agtmls-mcp serves
+  `agtmls://skill/`.
+- The spec-conformance check passed silently in CI when `skills-ref` failed
+  to install.
+- SBOM.cyclonedx.json did not validate against CycloneDX 1.6.
+- Error messages name the command that fixes the problem.
+
 ## 0.0.6 - 2026-09-19
 
 ### Added
