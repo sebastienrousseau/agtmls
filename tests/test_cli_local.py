@@ -186,8 +186,10 @@ class InstallLifecycleTests(CliFixture):
         self.assertFalse((self.target / ".agtmls" / "manifest.json").exists(),
                          "a dry run wrote a lockfile")
 
-    def test_an_index_entry_without_a_digest_is_not_checked(self) -> None:
-        """Documents a fail-open: an entry with no `integrity` is skipped, not refused."""
+    def test_an_index_entry_without_a_digest_is_refused(self) -> None:
+        """An entry with no `integrity` used to be skipped, so stripping a
+        skill's digest from index.json let any content through the check.
+        A skill with nothing to verify against is unverified, not clean."""
         index = self.index()
         for skill in index["skills"]:
             if skill["name"] == "using-agtmls":
@@ -195,7 +197,7 @@ class InstallLifecycleTests(CliFixture):
         replace_file(self, self.fixture / "index.json", json.dumps(index))
         skill_md = self.fixture / "skills" / "using-agtmls" / "SKILL.md"
         replace_file(self, skill_md, skill_md.read_text(encoding="utf-8") + "\nedit\n")
-        self.assertEqual(self.cli.verify_registry(), [])
+        self.assertEqual(self.cli.verify_registry()[0][:2], ("using-agtmls", "<no digest>"))
 
     def test_a_failed_installer_writes_no_lockfile(self) -> None:
         self.cli.run = lambda argv, cwd=None: 5

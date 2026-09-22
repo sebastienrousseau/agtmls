@@ -208,6 +208,9 @@ def verify_registry() -> list[tuple[str, str, str]]:
     for skill in load_index().get("skills", []):
         expected = skill.get("integrity")
         if not expected:
+            # Skipping this let anyone who could edit index.json exempt a
+            # skill from the check by deleting its digest. Fail closed.
+            drift.append((skill["name"], "<no digest>", "<unverifiable>"))
             continue
         source = ROOT / skill["path"]
         if not source.is_dir():
