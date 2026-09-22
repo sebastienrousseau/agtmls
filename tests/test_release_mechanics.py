@@ -60,11 +60,21 @@ class ReleaseFixtureBase(unittest.TestCase):
 class BumpVersionTests(ReleaseFixtureBase):
     """A release touches nearly everything; this is what decides what it touches."""
 
-    def bumper(self, target: str):
+    def bumper(self, target: str, regenerate: bool = False):
+        """A bumper aimed at the fixture.
+
+        `next_version()` shells out to git tags; the policy it enforces is
+        tested separately, and here the question is what a bump *writes*.
+
+        Regeneration is opt-in because a full bump spawns nine generator
+        subprocesses, and four of these six tests are about which version
+        strings move. Running the generators for all of them made the unit
+        suite the slowest check in the gate.
+        """
         module = self.script("bump-version.py")
-        # next_version() shells out to git tags; the policy it enforces is
-        # tested separately, and here the question is what a bump *writes*.
         module.next_version = lambda: target
+        if not regenerate:
+            module.GENERATORS = []
         return module
 
     def test_a_bump_moves_the_single_authored_version(self) -> None:
@@ -84,13 +94,15 @@ class BumpVersionTests(ReleaseFixtureBase):
 
         skills = sorted(p for p in (self.fixture / "skills").iterdir() if p.is_dir())
         before = {p.name: skill_digest(p) for p in skills}
-        run_main(self.bumper("9.9.9"), "--version", "9.9.9")
+        # With generators: sync-skill-frontmatter.py rewrites every SKILL.md,
+        # so this only means anything if it actually ran.
+        run_main(self.bumper("9.9.9", regenerate=True), "--version", "9.9.9")
         after = {p.name: skill_digest(p) for p in skills}
         moved = sorted(name for name in before if before[name] != after[name])
         self.assertEqual(moved, [], f"a version bump moved {len(moved)} content address(es)")
 
     def test_a_bump_records_the_release_that_changed_each_skill(self) -> None:
-        run_main(self.bumper("9.9.9"), "--version", "9.9.9")
+        run_main(self.bumper("9.9.9", regenerate=True), "--version", "9.9.9")
         index = json.loads((self.fixture / "index.json").read_text(encoding="utf-8"))
         recorded = {skill["last_changed_version"] for skill in index["skills"]}
         self.assertNotIn(
