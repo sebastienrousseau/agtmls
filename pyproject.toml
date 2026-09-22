@@ -89,7 +89,16 @@ include = [
 branch = true
 parallel = true
 source = ["scripts", "src"]
-omit = ["*/__pycache__/*", "scripts/_lib/scaling.py"]
+omit = [
+  "*/__pycache__/*",
+  "scripts/_lib/scaling.py",
+  # smoke-*.py are tests. They drive installs, exports and `make install`
+  # end to end, and the gate runs each as a subprocess. Measuring how much
+  # of the test code the tests execute is not a coverage number anybody can
+  # act on -- the convention everywhere else is to exclude the suite, and
+  # these are the suite.
+  "scripts/smoke-*.py",
+]
 
 [tool.coverage.report]
 show_missing = true

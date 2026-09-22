@@ -175,6 +175,65 @@ class CliDispatchTests(unittest.TestCase):
         self.calls.clear()
         return self.module.main()
 
+    def optional_flags(self, name: str) -> list:
+        """Every optional flag a subcommand declares, with a usable value.
+
+        Derived from the parser so a new flag is exercised the day it is
+        added. Each is dispatched on its own rather than all at once: some
+        pairs are mutually exclusive, and one flag per dispatch reaches the
+        same branches without having to know which.
+        """
+        import argparse
+
+        parser = load_script("agtmls.py").build_parser()
+        subparsers = next(
+            action for action in parser._subparsers._group_actions  # noqa: SLF001  (argparse exposes no public accessor)
+            if isinstance(action, argparse._SubParsersAction)  # noqa: SLF001  (the class is private too)
+        )
+        out = []
+        for action in subparsers.choices[name]._actions:  # noqa: SLF001  (same)
+            if not action.option_strings or action.dest == "help":
+                continue
+            flag = action.option_strings[-1]
+            if action.nargs == 0:
+                out.append([flag])
+            elif action.choices:
+                out.append([flag, str(sorted(action.choices)[0])])
+            elif "dir" in action.dest or "target" in action.dest:
+                out.append([flag, self.tmp.name])
+            else:
+                out.append([flag, "probe"])
+        return out
+
+    def test_every_optional_flag_reaches_a_dispatch_branch(self) -> None:
+        """The forwarding branches are `if args.x:` -- minimal args skip them all.
+
+        Dispatching each subcommand with only its required arguments left
+        roughly a third of this file unexecuted: every `--out-dir`,
+        `--profile` and `--provider` forward was untested, so a dispatcher
+        that silently dropped a flag would have looked fine.
+        """
+        exercised = 0
+        for name, required in sorted(self.INVOCATIONS.items()):
+            for flag in self.optional_flags(name):
+                with self.subTest(subcommand=name, flag=flag[0]):
+                    try:
+                        code = self.dispatch(name, [*required, *flag])
+                    except SystemExit:
+                        continue  # mutually exclusive with a required argument
+                    self.assertNotEqual(
+                        code, 2, f"{name} {flag[0]} fell through every dispatch branch"
+                    )
+                    exercised += 1
+        self.assertGreater(exercised, 30, f"only {exercised} flag dispatches ran")
+
+    def test_a_forwarded_flag_actually_reaches_the_command_line(self) -> None:
+        """A dispatcher that accepts a flag and drops it is worse than one that refuses it."""
+        self.dispatch("export", ["--provider", "generic", "--out-dir", self.tmp.name])
+        forwarded = " ".join(self.calls[0])
+        self.assertIn("--out-dir", forwarded)
+        self.assertIn(self.tmp.name, forwarded)
+
     def test_every_declared_subcommand_is_covered(self) -> None:
         declared = load_script("validate-cli-surface.py").subcommands()
         self.assertEqual(
