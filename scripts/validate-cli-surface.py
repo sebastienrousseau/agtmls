@@ -9,7 +9,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CLI = ROOT / "scripts" / "agtmls.py"
+# The subcommands moved out of agtmls.py so the surface could be read on
+# its own. This check follows them rather than parsing the dispatch.
+CLI = ROOT / "scripts" / "_lib" / "cli_parser.py"
 README = ROOT / "README.md"
 # The command reference moved out of the README to keep it readable; the
 # surface must still be documented somewhere a user will find it.

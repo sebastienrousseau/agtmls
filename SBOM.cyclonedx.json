@@ -959,6 +959,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/cli_parser.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "242c60183b96cc482a04ea752db255f63aafe903ef1b9403681f7d41f19194f2"
+        }
+      ],
+      "name": "scripts/_lib/cli_parser.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/covered.py",
       "hashes": [
         {
@@ -992,6 +1003,39 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/rules.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eb1fb016677f169a788ab33048d41b4feb704cb26814338cd332ef16b81c1e0a"
+        }
+      ],
+      "name": "scripts/_lib/rules.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/scaling.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "929da8af756519c537908e53a0c3e7770088b283744db8d2b2bb5f78fdabec0e"
+        }
+      ],
+      "name": "scripts/_lib/scaling.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/workloads.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "73fbef6a47310f4f808e3cc30f70241f631bcb44984060e43efe20d22aeb6020"
+        }
+      ],
+      "name": "scripts/_lib/workloads.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/agtmls-doctor.py",
       "hashes": [
         {
@@ -1007,7 +1051,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "89138697e00eca695ce5433d11e804f07eb89ac064ba9a0fbafcd569cd146efd"
+          "content": "c8143851c3c7bd4bd9c05dd9b78cace6c8531d31207daf363248ec96a0b88ff4"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -1018,7 +1062,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8196fe0eacb6a652890185efc31ce4f160f616bc9487a2ad6b82f74d41b6f3ec"
+          "content": "665530ad0cf9167b9dffa2883c4f25786db1cd988f48ae4633725a3147e74d9d"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -1029,7 +1073,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9f6e52470aaae731854f7c28de9c1f9f12a86d706476ee9ead66c65b09978259"
+          "content": "4a82267d20566271c389cd00392f9d4fed0334425cc54df96d1fbee7a6bb360e"
         }
       ],
       "name": "scripts/bench.py",
@@ -1348,7 +1392,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7ee22e59bfa3c772bd611339fc9a126bc8cc6f7d9c913671459239e2bb711681"
+          "content": "ba22c7f0111487001b74c9ab3e9bac323e9205b014df2dccea7d65dcd8ae3e8a"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1601,7 +1645,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "615b3b7f297d2c5a37c982f2a337b25e47cf53004f1c0c0266098e9c38f59169"
+          "content": "ee677286d2f25f78e13fe29186a2060a70ddf4d052b8dcd5bc8c638f2c2a4d83"
         }
       ],
       "name": "scripts/validate-cli-surface.py",

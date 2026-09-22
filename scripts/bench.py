@@ -47,7 +47,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
 SCRIPTS = ROOT / "scripts"
+
+from _lib.scaling import scaling  # noqa: E402  (needs the scripts path first)
+from _lib.workloads import (  # noqa: E402  (needs the scripts path first)
+    COLD_START_BUDGET_MS,
+    INTERACTIVE,
+    workloads,
+)
 RESULTS = ROOT / "benchmarks" / "results"
 BASELINE = ROOT / "bench-baseline.json"
 HISTORY = ROOT / ".agtmls" / "runs"
@@ -72,60 +80,6 @@ CHECK_REPEATS = 3
 # Same policy as run-all-checks.py: enough history to see a trend, bounded so
 # the directory does not grow for the life of the checkout.
 RETAINED_RUNS = 50
-
-# Criterion 3.10, for the surfaces a person waits on.
-COLD_START_BUDGET_MS = 100.0
-INTERACTIVE = ("cli-list", "cli-search", "cli-show", "cli-stats")
-
-# A bare interpreter: process spawn plus interpreter init, and nothing else.
-# Every workload here pays that cost before it does any of its own work, so
-# dividing by it isolates what AgtMLS costs from what the machine costs. A CPU
-# loop was tried instead and made the ratios worse; see the module docstring.
-CALIBRATION_CODE = "pass"
-
-# Content-address every shipped skill: the hot path of `install --verify`
-# and of `agtmls verify`.
-DIGEST_CODE = (
-    "import sys\n"
-    f"sys.path.insert(0, {str(SCRIPTS)!r})\n"
-    "from _lib.digest import skill_digest\n"
-    "from pathlib import Path\n"
-    f"root = Path({str(ROOT)!r}) / 'skills'\n"
-    "for d in sorted(p for p in root.iterdir() if p.is_dir()):\n"
-    "    skill_digest(d)\n"
-)
-
-# The router proxy's maths: build TF-IDF vectors for every skill description
-# and score one prompt against all of them.
-ROUTE_CODE = (
-    "import importlib.util, sys\n"
-    f"spec = importlib.util.spec_from_file_location('c', {str(SCRIPTS / 'check-skill-collisions.py')!r})\n"
-    "m = importlib.util.module_from_spec(spec); sys.modules['c'] = m; spec.loader.exec_module(m)\n"
-    "from pathlib import Path\n"
-    f"root = Path({str(ROOT)!r}) / 'skills'\n"
-    "descs = [m.frontmatter_description(p.read_text(encoding='utf-8'))\n"
-    "         for p in sorted(root.glob('**/SKILL.md'))]\n"
-    "vecs = m.tfidf([m.vector(d) for d in descs])\n"
-    "query = m.tfidf([m.vector('hand this unfinished work over to someone else')])[0]\n"
-    "ranked = sorted((m.cosine(query, v) for v in vecs), reverse=True)\n"
-)
-
-
-def workloads() -> dict[str, list[str]]:
-    """Name -> argv. Every entry is run as its own process."""
-    cli = str(SCRIPTS / "agtmls.py")
-    return {
-        "calibration": [sys.executable, "-c", CALIBRATION_CODE],
-        "cli-list": [sys.executable, cli, "list"],
-        "cli-search": [sys.executable, cli, "search", "review"],
-        "cli-show": [sys.executable, cli, "show", "handoff"],
-        "cli-stats": [sys.executable, cli, "stats"],
-        "digest-registry": [sys.executable, "-c", DIGEST_CODE],
-        "route-rank": [sys.executable, "-c", ROUTE_CODE],
-        "audit-all": [sys.executable, str(SCRIPTS / "audit-skill.py"), "--all", "--strict"],
-        "index-check": [sys.executable, str(SCRIPTS / "generate-skill-index.py"), "--check"],
-    }
-
 
 def percentile(samples: list[float], fraction: float) -> float:
     """Nearest-rank percentile.
@@ -386,107 +340,6 @@ def smoke() -> int:
             return 1
         print(f"OK   {name:<18}{elapsed * 1000:>8.1f}ms")
     print(f"\nOK: {len(workloads())} benchmark workload(s) runnable")
-    return 0
-
-
-def synthetic_registry(target: Path, factor: int) -> int:
-    """`factor` copies of every shipped skill, for a scaling measurement."""
-    source = ROOT / "skills"
-    originals = sorted(p for p in source.iterdir() if p.is_dir())
-    count = 0
-    for index in range(factor):
-        for skill in originals:
-            shutil.copytree(skill, target / f"{skill.name}-{index:03d}")
-            count += 1
-    return count
-
-
-def scaling() -> int:
-    """Criterion 3.5: growth against registry size, measured rather than argued."""
-    sys.path.insert(0, str(SCRIPTS))
-    from _lib.digest import skill_digest
-
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location(
-        "_bench_collisions", SCRIPTS / "check-skill-collisions.py"
-    )
-    collisions = importlib.util.module_from_spec(spec)
-    sys.modules["_bench_collisions"] = collisions
-    spec.loader.exec_module(collisions)
-
-    rows = []
-    with tempfile.TemporaryDirectory(prefix="agtmls-scaling-") as raw:
-        for factor in (1, 10):
-            tree = Path(raw) / f"x{factor}"
-            tree.mkdir()
-            size = synthetic_registry(tree, factor)
-
-            started = time.perf_counter()
-            for skill in sorted(p for p in tree.iterdir() if p.is_dir()):
-                skill_digest(skill)
-            digest_ms = (time.perf_counter() - started) * 1000
-
-            descriptions = [
-                collisions.frontmatter_description((p / "SKILL.md").read_text(encoding="utf-8"))
-                for p in sorted(tree.iterdir())
-                if (p / "SKILL.md").exists()
-            ]
-            started = time.perf_counter()
-            vectors = collisions.tfidf([collisions.vector(d) for d in descriptions])
-            for i in range(len(vectors)):
-                for j in range(i + 1, len(vectors)):
-                    collisions.cosine(vectors[i], vectors[j])
-            pairwise_ms = (time.perf_counter() - started) * 1000
-
-            rows.append({
-                "factor": factor,
-                "skills": size,
-                "digest_ms": round(digest_ms, 2),
-                "pairwise_ms": round(pairwise_ms, 2),
-            })
-
-    size_growth = rows[1]["skills"] / rows[0]["skills"]
-    digest_growth = rows[1]["digest_ms"] / rows[0]["digest_ms"]
-    pairwise_growth = rows[1]["pairwise_ms"] / rows[0]["pairwise_ms"]
-
-    print(f"  {'skills':>8}{'digest ms':>12}{'pairwise ms':>14}")
-    for row in rows:
-        print(f"  {row['skills']:>8}{row['digest_ms']:>12.1f}{row['pairwise_ms']:>14.1f}")
-    print()
-    print(f"  size x{size_growth:.0f}  ->  digest x{digest_growth:.1f}, pairwise x{pairwise_growth:.1f}")
-
-    report = {
-        "schema_version": 1,
-        "generated_by": "scripts/bench.py --scaling",
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "environment": environment(),
-        "rows": rows,
-        "growth": {
-            "size": round(size_growth, 2),
-            "digest": round(digest_growth, 2),
-            "pairwise": round(pairwise_growth, 2),
-        },
-        # Pairwise description scoring compares every skill with every other,
-        # so it is quadratic by definition. It runs once per gate and never
-        # per request, which is what makes that acceptable -- and saying so
-        # here rather than only in BENCHMARKS.md is what lets a checker tell
-        # a deliberate curve from an accidental one.
-        "cold_paths": ["pairwise"],
-    }
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / "scaling.json").write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-
-    # Digest is O(bytes) and must stay linear. Pairwise scoring is O(n^2) by
-    # construction -- it compares every description with every other -- so it
-    # is measured and reported, not asserted against a linear bound.
-    if digest_growth > size_growth * 1.5:
-        print(f"\nFAIL: digest grew x{digest_growth:.1f} for x{size_growth:.0f} the registry")
-        return 1
-    print(f"\nOK: digest is linear in registry size; pairwise is x{pairwise_growth:.1f} "
-          f"for x{size_growth:.0f} (quadratic by design, see BENCHMARKS.md)")
     return 0
 
 
