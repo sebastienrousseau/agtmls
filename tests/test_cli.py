@@ -191,7 +191,7 @@ class CliDispatchTests(unittest.TestCase):
             if isinstance(action, argparse._SubParsersAction)  # noqa: SLF001  (the class is private too)
         )
         out = []
-        for action in subparsers.choices[name]._actions:  # noqa: SLF001  (same)
+        for action in subparsers.choices[name]._actions:  # noqa: SLF001  (a subparser exposes no action list)
             if not action.option_strings or action.dest == "help":
                 continue
             flag = action.option_strings[-1]
