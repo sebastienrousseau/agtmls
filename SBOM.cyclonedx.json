@@ -853,7 +853,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9ae93da9a0dab60887f693c32c8924751daf6efd1c3873d2f4c780bab45dc519"
+          "content": "258d2bf4012a3d2318064aef7da9f94f072327954423cd0dce163359562609bf"
         }
       ],
       "name": "evals/security/corpus.json",
@@ -963,7 +963,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6d62b754aa90c4b6d537d45a84d94d3578b648a541d3afaffc39d465559ecec0"
+          "content": "c802e6f051ddb216eb85e0ab2f4366e3eb78e67e8b01491d59e91f04181bbf2c"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -3892,7 +3892,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T22:37:00Z",
+    "timestamp": "2026-09-22T22:41:21Z",
     "tools": {
       "components": [
         {
