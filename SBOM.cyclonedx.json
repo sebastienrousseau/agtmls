@@ -1161,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1127ba6164fa4f316b7350c9b2710beb24593490b435edc0a8eb5c920a8f388a"
+          "content": "bddc00566d364da4e09f94071f6ad1aa8053c104afdb32f9329fc5185c610214"
         }
       ],
       "name": "scripts/generate-completions.py",

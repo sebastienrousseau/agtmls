@@ -1697,11 +1697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ff4428d5eaef0a1d3c1732dd4594ede196dec645"
+          "checksumValue": "d3e431db96e85689a9e63d2716944aba31e248e7"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1127ba6164fa4f316b7350c9b2710beb24593490b435edc0a8eb5c920a8f388a"
+          "checksumValue": "bddc00566d364da4e09f94071f6ad1aa8053c104afdb32f9329fc5185c610214"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
