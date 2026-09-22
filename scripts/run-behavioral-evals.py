@@ -63,6 +63,9 @@ def main() -> int:
         for needle in forbids.get("skill_contains", []):
             checks += 1
             errors.extend(contains_none("SKILL.md", skill_text, [needle], cf.name))
+        for needle in forbids.get("reference_contains", []):
+            checks += 1
+            errors.extend(contains_none("reference.md", ref_text, [needle], cf.name))
 
     if errors:
         for error in errors:

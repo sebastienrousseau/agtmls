@@ -201,6 +201,13 @@ class BehavioralEvalTests(RegistryBase):
         output = self.break_case(forbids={"skill_contains": ["Resolve every alias"]})
         self.assertIn("SKILL.md contains forbidden 'Resolve every alias'", output)
 
+    def test_a_forbidden_phrase_in_the_reference_is_caught(self) -> None:
+        """validate-eval-cases.py accepts forbids.reference_contains, and the
+        runner never read it: a case could forbid a phrase that was present
+        and still pass."""
+        output = self.break_case(forbids={"reference_contains": ["anchor table"]})
+        self.assertIn("reference.md contains forbidden 'anchor table'", output)
+
 
 class TriggerEvalTests(RegistryBase):
     """run-trigger-evals.py -- does each description still attract its prompts?
