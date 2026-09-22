@@ -486,3 +486,19 @@ class DispatchEdgeTests(CliFixture):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DispatchFallthroughTests(unittest.TestCase):
+    def test_a_subcommand_with_no_handler_exits_2_rather_than_0(self) -> None:
+        """argparse only accepts declared subcommands, so reaching the end of
+        main() means one was declared without a handler. Falling off the end
+        would return None -- exit 0, success -- for a command that did nothing."""
+        import argparse
+        from unittest import mock
+
+        cli = load_script("agtmls.py")
+        parser = mock.Mock()
+        parser.parse_args.return_value = argparse.Namespace(subcommand="declared-but-unhandled")
+        with mock.patch.object(cli, "build_parser", return_value=parser):
+            self.assertEqual(cli.main(), 2)
+

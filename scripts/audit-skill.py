@@ -51,7 +51,7 @@ def main() -> int:
         agents_dir = ROOT / "agents"
         if agents_dir.exists():
             targets.extend(sorted(p for p in agents_dir.glob("*.md")))
-    elif args.path:
+    else:  # a path is present: its absence returned above
         targets.append(args.path.resolve())
 
     all_findings: list[Finding] = []
