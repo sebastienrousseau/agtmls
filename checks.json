@@ -21,6 +21,7 @@
     "check-skill-collisions.py",
     "validate-eval-cases.py",
     "sync-spec-rules.py --check",
+    "validate-security-claims.py",
     "run-security-evals.py",
     "audit-skill.py --all --strict",
     "run-trigger-evals.py",

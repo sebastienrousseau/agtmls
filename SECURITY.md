@@ -35,6 +35,27 @@ If an acknowledgement has not arrived within 5 business days, the report has
 been missed rather than declined; escalate by opening a public issue that says
 a private report is outstanding, without the details.
 
+## Boundaries and heuristics
+
+A boundary holds regardless of what a skill says; a heuristic is best-effort
+and can be evaded. Knowing which is which is the point of this section.
+
+| Protection | Kind | What it establishes |
+| :--- | :--- | :--- |
+| `integrity` digest per skill in `index.json` | Boundary | The installed files are byte-for-byte the files this registry published |
+| `install` verifying the source before copying (exit `3`) | Boundary | A tampered registry is refused before anything reaches your repository |
+| `verify` against `.agtmls/manifest.json` | Boundary | Drift after install — modified, missing or unmanaged files — is reported |
+| Signed commits and tags (`KEYS.asc`) | Boundary | Which maintainer key produced a given revision |
+| `agtmls audit` rules (`AGT-STEG`, `AGT-INJ`, `AGT-EXEC`, `AGT-EXFIL`) | Heuristic | Known patterns are flagged; packed or obfuscated payloads can evade static scanning |
+| Capability and policy honesty (`AGT-CAP`, `AGT-POLICY`) | Heuristic | Frontmatter and `metadata.json` agree with each other and with the skill's prose; it cannot see what a script does at run time |
+| Collision, routing and behavioral evals | Heuristic | Skills stay distinguishable and keep their documented shape; they do not measure whether a skill helps |
+
+Not provided, today: execution sandboxing, runtime detonation of untrusted
+skills, and a signature over `index.json` that proves who published it. The
+digest proves a skill matches the index; it does not yet prove the index came
+from this project. Until it does, obtain the registry from this repository or
+from PyPI directly, not from a mirror.
+
 ## Security rules for skills
 
 - Do not hardcode API keys, tokens, passwords, cookies, or private endpoints.

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Run the unit suite.
 
-The 65-check gate validates repository *data*. These tests validate the
+The 66-check gate validates repository *data*. These tests validate the
 *validators*, and they live in `tests/` as a discovered package rather than in
 this file: it had reached 1,248 lines, which the maintainability ceiling
 exists to catch.

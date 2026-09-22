@@ -3,7 +3,7 @@
 name: conformance
 
 # Separate from validate.yml on purpose. These validators are third-party
-# packages with their own dependency trees, and the 65-check gate is
+# packages with their own dependency trees, and the 66-check gate is
 # stdlib-only and runnable offline -- which is a property worth keeping, so
 # the checks that need a network live here instead of weakening it.
 #

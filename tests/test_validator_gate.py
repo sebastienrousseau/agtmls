@@ -469,3 +469,31 @@ class SpecConformanceTests(unittest.TestCase):
         code, output = self.drive({}, (3, 12))
         self.assertEqual(code, 0, output)
         self.assertIn("SKIP", output)
+
+
+class SecurityClaimTests(ValidatorFailureBase):
+    """A static analyzer is triage, and the docs must say so.
+
+    Packing evades every static skill scanner tested at over 90% (arXiv
+    2607.02357), yet the README promised "proactive defense" and listed
+    "Attack Vectors Defended". A security product that overclaims is
+    discredited by the first bypass.
+    """
+
+    def test_the_shipped_documents_make_no_absolute_claims(self) -> None:
+        self.assert_clean("validate-security-claims.py")
+
+    def test_defense_language_in_the_readme_is_caught(self) -> None:
+        path = self.fixture / "README.md"
+        self.overwrite("README.md", path.read_text(encoding="utf-8") + "\nAgtMLS provides proactive defense against malicious skills.\n")
+        self.assertIn("README.md", self.assert_catches("validate-security-claims.py"))
+
+    def test_a_guarantee_in_the_docs_is_caught(self) -> None:
+        self.overwrite("docs/claims.md", "<!-- SPDX-License-Identifier: MIT -->\n\nThe analyzer guarantees that no malicious skill is installed.\n")
+        self.assertIn("claims.md", self.assert_catches("validate-security-claims.py"))
+
+    def test_security_md_must_separate_boundaries_from_heuristics(self) -> None:
+        path = self.fixture / "SECURITY.md"
+        text = path.read_text(encoding="utf-8")
+        self.overwrite("SECURITY.md", text.replace("## Boundaries and heuristics", "## Something else"))
+        self.assertIn("SECURITY.md", self.assert_catches("validate-security-claims.py"))

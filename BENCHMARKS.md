@@ -88,7 +88,7 @@ fails with exactly one finding (`+37%`) and no false positives.
 workload 47–106% slower, with nothing changed. Under sustained throttling the
 CPU-bound workloads degrade further than the spawn-bound calibration, so the
 ratio is not invariant. `--check` therefore belongs on an idle machine or a
-dedicated CI job, and **not** inside the 65-check gate — which runs `--smoke`
+dedicated CI job, and **not** inside the 66-check gate — which runs `--smoke`
 instead: one iteration per workload, asserting only that each still runs.
 
 ## Scaling
