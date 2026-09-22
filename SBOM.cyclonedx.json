@@ -886,7 +886,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "493f98f2e03ec299287176c1cebcbf848822af24c7446020b4ed6f65e223ebce"
+          "content": "7238c9e4a307b1a39e90fef0efd60055f83ab816e2417809ec2987a144b05e1e"
         }
       ],
       "name": "profiles.json",
@@ -1799,7 +1799,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "379399dd8bd3ddfce6ce1772280ba46af2817a8a74eda1a0739d57a0f1977c22"
+          "content": "1f9a1c7867e697e843ddd5149ec06384b20faaa5cd00e5e5908a19232819a799"
         }
       ],
       "name": "scripts/validate-profiles.py",
@@ -3870,7 +3870,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T21:48:59Z",
+    "timestamp": "2026-09-22T21:52:29Z",
     "tools": {
       "components": [
         {
