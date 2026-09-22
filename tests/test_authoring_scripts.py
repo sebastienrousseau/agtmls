@@ -290,16 +290,13 @@ class ScaffoldTests(ScriptCase):
         self.assertIn("bundle must be kebab-case", output)
         self.assertFalse((self.out / "skills").exists())
 
-    @unittest.expectedFailure
     def test_an_existing_eval_case_is_never_overwritten(self) -> None:
         """The skill directory is new, but its eval case is someone's work.
 
-        Known defect, kept visible rather than papered over: write_new()
-        raises FileExistsError(path), which leaves `exc.filename` None, so the
-        refusal message at scaffold-skill.py:81 dies in Path(None) with a
-        TypeError instead of printing. The file is still not overwritten, but
-        the user gets a traceback. Remove the decorator once that is fixed;
-        an unexpected success fails the suite so it cannot be forgotten.
+        This used to die in Path(None) with a TypeError -- FileExistsError(path)
+        leaves `exc.filename` unset -- after SKILL.md, reference.md and
+        metadata.json had already been written, leaving a half-scaffolded
+        skill behind. Every target is now checked before anything is written.
         """
         case = self.out / "evals" / "cases" / "new-skill.json"
         case.parent.mkdir(parents=True)
@@ -307,6 +304,8 @@ class ScaffoldTests(ScriptCase):
         code, output = self.scaffold("new-skill")
         self.assertEqual(code, 1)
         self.assertIn(f"refusing to overwrite existing file: {case}", output)
+        self.assertEqual(case.read_text(encoding="utf-8"), '{"mine": true}\n')
+        self.assertFalse((self.out / "skills" / "new-skill").exists(), "a half-scaffolded skill was left behind")
         self.assertEqual(case.read_text(encoding="utf-8"), '{"mine": true}\n')
 
 

@@ -18,11 +18,19 @@ EVALS = ROOT / "evals"
 KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
-def write_new(path: Path, text: str) -> None:
-    if path.exists():
-        raise FileExistsError(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text, encoding="utf-8")
+def write_all(files: dict[Path, str]) -> Path | None:
+    """Write every file, or none: the first that already exists, if any.
+
+    Checking each file as it was written left SKILL.md, reference.md and
+    metadata.json behind when a later eval case turned out to exist.
+    """
+    for path in files:
+        if path.exists():
+            return path
+    for path, text in files.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    return None
 
 
 def render(template: Path, name: str, title: str) -> str:
@@ -58,27 +66,19 @@ def main() -> int:
               "remove it first", file=sys.stderr)
         return 1
 
-    try:
-        write_new(skill_dir / "SKILL.md", render(TEMPLATES / "skill" / "SKILL.md", args.name, title))
-        write_new(skill_dir / "reference.md", render(TEMPLATES / "skill" / "reference.md", args.name, title))
-        metadata = json.loads(
-            render(TEMPLATES / "skill" / "metadata.json", args.name, title)
-        )
-        metadata["bundle"] = args.bundle
-        write_new(
-            skill_dir / "metadata.json",
-            json.dumps(metadata, indent=2, sort_keys=True) + "\n",
-        )
-        write_new(
-            evals_root / "cases" / f"{args.name}.json",
-            render(TEMPLATES / "evals" / "routing.json", args.name, title),
-        )
-        write_new(
-            evals_root / "behavioral" / "cases" / f"{args.name}.json",
-            render(TEMPLATES / "evals" / "behavioral.json", args.name, title),
-        )
-    except FileExistsError as exc:
-        print(f"FAIL: refusing to overwrite existing file: {Path(exc.filename)}; remove it "
+    metadata = json.loads(render(TEMPLATES / "skill" / "metadata.json", args.name, title))
+    metadata["bundle"] = args.bundle
+    existing = write_all({
+        skill_dir / "SKILL.md": render(TEMPLATES / "skill" / "SKILL.md", args.name, title),
+        skill_dir / "reference.md": render(TEMPLATES / "skill" / "reference.md", args.name, title),
+        skill_dir / "metadata.json": json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        evals_root / "cases" / f"{args.name}.json": render(TEMPLATES / "evals" / "routing.json", args.name, title),
+        evals_root / "behavioral" / "cases" / f"{args.name}.json": render(
+            TEMPLATES / "evals" / "behavioral.json", args.name, title
+        ),
+    })
+    if existing is not None:
+        print(f"FAIL: refusing to overwrite existing file: {existing}; remove it "
               "first if replacing it is what you meant", file=sys.stderr)
         return 1
 
