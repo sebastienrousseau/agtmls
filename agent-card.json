@@ -1,199 +1,13 @@
 {
-  "capabilities": [
-    {
-      "description": "Use when turning repeated agent work into a loop with trigger conditions, evidence, stopping criteria, uninstall state, validation checks, and reviewable artifacts.",
-      "name": "agent-loop-design",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
-      "name": "ai-supply-chain-security",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Eliminate AI slop, clich\u00e9s, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts.",
-      "name": "anti-slop-pr-and-writing",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
-      "name": "brainstorming",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns.",
-      "name": "cross-language-port",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently.",
-      "name": "giving-code-review",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
-      "name": "handoff",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
-      "name": "incident-response",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology).",
-      "name": "noyalib-architecture-contract",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Recreate a working noyalib dev environment and fix toolchain, MSRV, and Apple-Silicon traps. Use when cargo build, cargo test, make, fuzz, Miri, or coverage fails before the code is in scope.",
-      "name": "noyalib-build-and-env",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "The noyalib rulebook: classify a change, pick the gates it must pass, non-negotiables (unsafe, signed commits, ADR triggers, MSRV, panic policy), PR flow. Use for 'am I allowed to do X' or judging release readiness. Not the runbook (noyalib-ci-and-release).",
-      "name": "noyalib-change-control",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Operate noyalib CI and ship releases: workflow graph, cache-poisoning doctrine, supply-chain gates, tag-driven release flow. Use for red CI, release prep, tagging, cargo-vet or cargo-deny failures. Not which-gates-apply (noyalib-change-control).",
-      "name": "noyalib-ci-and-release",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Every noyalib configuration axis: Cargo features, ParserConfig DoS budgets and toggles, SerializerConfig, preset constructors. Use for 'what does feature X do', 'how do I limit Y', 'what is the default for max_document_length', 'does strict reject duplicate keys', or adding a new axis safely.",
-      "name": "noyalib-config-and-flags",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Raise noyalib line, branch, and function coverage toward the 98% target. Use for 'raise coverage', llvm-cov gaps, coverage-gap triage, ratcheting fail-under thresholds, or picking the next coverage target. Fences off the known wrong turns (chasing 100%, weakening thresholds).",
-      "name": "noyalib-coverage-campaign",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
-      "name": "noyalib-debugging-playbook",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Measure instead of eyeball. Use when running or reading coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib, when interpreting what an llvm-cov regions percentage means, or when a claim needs evidence rather than assertion.",
-      "name": "noyalib-diagnostics-and-tooling",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Maintain noyalib's docs of record and house writing style. Use when authoring or editing README, CHANGELOG, RELEASE-NOTES-vX.Y.Z.md, ADRs under doc/adr/, doc/POLICIES.md, doc/ARCHITECTURE.md, doc/USER-GUIDE.md, GLOSSARY.md, MIGRATION*.md, GETTING_STARTED.md, or crate-level and item-level rustdoc. Covers house rustdoc style (# Examples, # Errors, runnable doctests), commit-message archaeology (Assisted-by trailer, symptom/root-cause bodies), SPDX/REUSE headers per file type, ADR lifecycle (when required, template, post-implementation updates), release-notes template, and the version-refs release audit. Do NOT use for release mechanics (see noyalib-ci-and-release) or competitive positioning (see noyalib-external-positioning).",
-      "name": "noyalib-docs-and-writing",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "How noyalib is described publicly: ecosystem map, provable differentiators, claiming rules, migration guides, and the COMPARISON matrix against other Rust YAML crates. Use when writing or reviewing README claims, release notes, launch copy, 'why noyalib vs X', or 'can we claim noyalib is faster than yaml-rust2 or saphyr'. Dated claims must be re-verified before publishing.",
-      "name": "noyalib-external-positioning",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "The chronicle of noyalib's settled battles: symptom, root cause, evidence, and what NOT to retry. Load BEFORE proposing a fix or refactor - 'has this been tried', 'why is X shaped that way', 'is there regression history here', 'look up the cache poisoning incident behind no_std', 'was the BOM column desync ever fixed'.",
-      "name": "noyalib-failure-archaeology",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Open research directions for noyalib and the evidence bar an idea must clear. Use for 'is there a research angle', 'what's worth a paper, RFC, or upstream PR', or setting a falsifiable spec-conformance milestone. Ambitions stay OPEN and CANDIDATE, never roadmap commitments.",
-      "name": "noyalib-research-frontier",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "What counts as evidence in noyalib. Use before opening a PR, claiming a fix is done, or adding a test: the evidence bar, test taxonomy, doctest rules, cross-loader parity regression tests, acceptance thresholds. Not running tools (noyalib-diagnostics-and-tooling).",
-      "name": "noyalib-validation-and-qa",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
-      "name": "pr-review-and-release",
-      "quality": 100,
-      "risk": "medium"
-    },
-    {
-      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes.",
-      "name": "receiving-code-review",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits.",
-      "name": "refactoring-safely",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing.",
-      "name": "systematic-debugging",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Write the failing test first, then the code that makes it pass. Load when adding behaviour, changing behaviour, or pinning a bug, and whenever a test was authored after the code it covers. Enforces red-green-refactor with an observed red phase, so a test that never failed is never mistaken for proof.",
-      "name": "test-driven-development",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Meta-router for the AgtMLS skill catalog. Read first when unsure which AgtMLS skill applies, when several look relevant, when asking 'is there a skill for porting or noyalib work', or when onboarding to how the hub's skills and shared references fit together.",
-      "name": "using-agtmls",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "The gate between doing work and claiming it is done. Load before saying finished, fixed, working, or ready, before marking a task complete, and before reporting an outcome to a human. Converts each claim into the observation that would justify it, and names the rationalizations that let unverified work ship. Not the project's own evidence bar or test taxonomy.",
-      "name": "verification-before-completion",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.",
-      "name": "web-research-and-source-triage",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "Turn a vague or multi-step request into an ordered list of small steps, each with its own done-condition and verification. Load before starting work that touches several files, has unclear scope, or spans more than one session, and when a request needs decomposing before any code is written. Produces a plan a reviewer can check against, not a to-do list.",
-      "name": "writing-plans",
-      "quality": 100,
-      "risk": "low"
-    },
-    {
-      "description": "YAML 1.2.2 semantics as noyalib implements them: scalar resolution, block vs flow, chomping, anchors, aliases, merge keys with DoS budgets, tags, 1.1-vs-1.2 flags, the Norway problem, and whether nan or octal 0o7 scalars resolve. Use for spec-conformance and plain-scalar questions.",
-      "name": "yaml-domain-reference",
-      "quality": 100,
-      "risk": "medium"
-    }
-  ],
   "description": "Agent Multiple Listing Service skill registry",
   "interfaces": [
     "skills",
     "provider-adapted-markdown",
     "mcp-resources"
   ],
+  "kind": "agtmls-registry-card",
   "name": "agtmls",
+  "not_a2a": "A2A requires `url`, a live service endpoint. AgtMLS is installed rather than called, and its server surface is agtmls-mcp over stdio. Set `a2a_endpoint` in providers.json to publish a real AgentCard instead of this.",
   "providers": [
     "anthropic",
     "continue",
@@ -210,5 +24,388 @@
     "zed"
   ],
   "schema_version": 1,
+  "skills": [
+    {
+      "description": "Use when turning repeated agent work into a loop with trigger conditions, evidence, stopping criteria, uninstall state, validation checks, and reviewable artifacts.",
+      "id": "agent-loop-design",
+      "name": "agent-loop-design",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "loops",
+        "review",
+        "validation"
+      ]
+    },
+    {
+      "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
+      "id": "ai-supply-chain-security",
+      "name": "ai-supply-chain-security",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "release",
+        "security",
+        "validation"
+      ]
+    },
+    {
+      "description": "Eliminate AI slop, clich\u00e9s, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts.",
+      "id": "anti-slop-pr-and-writing",
+      "name": "anti-slop-pr-and-writing",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "docs",
+        "release",
+        "review"
+      ]
+    },
+    {
+      "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
+      "id": "brainstorming",
+      "name": "brainstorming",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "ci",
+        "config",
+        "planning"
+      ]
+    },
+    {
+      "description": "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns.",
+      "id": "cross-language-port",
+      "name": "cross-language-port",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "porting"
+      ]
+    },
+    {
+      "description": "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently.",
+      "id": "giving-code-review",
+      "name": "giving-code-review",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "ci",
+        "review"
+      ]
+    },
+    {
+      "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
+      "id": "handoff",
+      "name": "handoff",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "continuity",
+        "validation"
+      ]
+    },
+    {
+      "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
+      "id": "incident-response",
+      "name": "incident-response",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "ci",
+        "debugging",
+        "incident"
+      ]
+    },
+    {
+      "description": "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology).",
+      "id": "noyalib-architecture-contract",
+      "name": "noyalib-architecture-contract",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "architecture",
+        "ci",
+        "incident",
+        "noyalib"
+      ]
+    },
+    {
+      "description": "Recreate a working noyalib dev environment and fix toolchain, MSRV, and Apple-Silicon traps. Use when cargo build, cargo test, make, fuzz, Miri, or coverage fails before the code is in scope.",
+      "id": "noyalib-build-and-env",
+      "name": "noyalib-build-and-env",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "coverage",
+        "diagnostics",
+        "noyalib",
+        "qa"
+      ]
+    },
+    {
+      "description": "The noyalib rulebook: classify a change, pick the gates it must pass, non-negotiables (unsafe, signed commits, ADR triggers, MSRV, panic policy), PR flow. Use for 'am I allowed to do X' or judging release readiness. Not the runbook (noyalib-ci-and-release).",
+      "id": "noyalib-change-control",
+      "name": "noyalib-change-control",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "ci",
+        "noyalib",
+        "release",
+        "security"
+      ]
+    },
+    {
+      "description": "Operate noyalib CI and ship releases: workflow graph, cache-poisoning doctrine, supply-chain gates, tag-driven release flow. Use for red CI, release prep, tagging, cargo-vet or cargo-deny failures. Not which-gates-apply (noyalib-change-control).",
+      "id": "noyalib-ci-and-release",
+      "name": "noyalib-ci-and-release",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "ci",
+        "noyalib",
+        "release"
+      ]
+    },
+    {
+      "description": "Every noyalib configuration axis: Cargo features, ParserConfig DoS budgets and toggles, SerializerConfig, preset constructors. Use for 'what does feature X do', 'how do I limit Y', 'what is the default for max_document_length', 'does strict reject duplicate keys', or adding a new axis safely.",
+      "id": "noyalib-config-and-flags",
+      "name": "noyalib-config-and-flags",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "config",
+        "noyalib"
+      ]
+    },
+    {
+      "description": "Raise noyalib line, branch, and function coverage toward the 98% target. Use for 'raise coverage', llvm-cov gaps, coverage-gap triage, ratcheting fail-under thresholds, or picking the next coverage target. Fences off the known wrong turns (chasing 100%, weakening thresholds).",
+      "id": "noyalib-coverage-campaign",
+      "name": "noyalib-coverage-campaign",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "coverage",
+        "debugging",
+        "noyalib"
+      ]
+    },
+    {
+      "description": "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
+      "id": "noyalib-debugging-playbook",
+      "name": "noyalib-debugging-playbook",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "ci",
+        "debugging",
+        "noyalib",
+        "qa"
+      ]
+    },
+    {
+      "description": "Measure instead of eyeball. Use when running or reading coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib, when interpreting what an llvm-cov regions percentage means, or when a claim needs evidence rather than assertion.",
+      "id": "noyalib-diagnostics-and-tooling",
+      "name": "noyalib-diagnostics-and-tooling",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "coverage",
+        "diagnostics",
+        "noyalib",
+        "validation"
+      ]
+    },
+    {
+      "description": "Maintain noyalib's docs of record and house writing style. Use when authoring or editing README, CHANGELOG, RELEASE-NOTES-vX.Y.Z.md, ADRs under doc/adr/, doc/POLICIES.md, doc/ARCHITECTURE.md, doc/USER-GUIDE.md, GLOSSARY.md, MIGRATION*.md, GETTING_STARTED.md, or crate-level and item-level rustdoc. Covers house rustdoc style (# Examples, # Errors, runnable doctests), commit-message archaeology (Assisted-by trailer, symptom/root-cause bodies), SPDX/REUSE headers per file type, ADR lifecycle (when required, template, post-implementation updates), release-notes template, and the version-refs release audit. Do NOT use for release mechanics (see noyalib-ci-and-release) or competitive positioning (see noyalib-external-positioning).",
+      "id": "noyalib-docs-and-writing",
+      "name": "noyalib-docs-and-writing",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "architecture",
+        "ci",
+        "docs",
+        "noyalib",
+        "qa",
+        "release"
+      ]
+    },
+    {
+      "description": "How noyalib is described publicly: ecosystem map, provable differentiators, claiming rules, migration guides, and the COMPARISON matrix against other Rust YAML crates. Use when writing or reviewing README claims, release notes, launch copy, 'why noyalib vs X', or 'can we claim noyalib is faster than yaml-rust2 or saphyr'. Dated claims must be re-verified before publishing.",
+      "id": "noyalib-external-positioning",
+      "name": "noyalib-external-positioning",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "docs",
+        "noyalib",
+        "release",
+        "review",
+        "yaml"
+      ]
+    },
+    {
+      "description": "The chronicle of noyalib's settled battles: symptom, root cause, evidence, and what NOT to retry. Load BEFORE proposing a fix or refactor - 'has this been tried', 'why is X shaped that way', 'is there regression history here', 'look up the cache poisoning incident behind no_std', 'was the BOM column desync ever fixed'.",
+      "id": "noyalib-failure-archaeology",
+      "name": "noyalib-failure-archaeology",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "ci",
+        "incident",
+        "noyalib",
+        "refactoring",
+        "validation"
+      ]
+    },
+    {
+      "description": "Open research directions for noyalib and the evidence bar an idea must clear. Use for 'is there a research angle', 'what's worth a paper, RFC, or upstream PR', or setting a falsifiable spec-conformance milestone. Ambitions stay OPEN and CANDIDATE, never roadmap commitments.",
+      "id": "noyalib-research-frontier",
+      "name": "noyalib-research-frontier",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "noyalib",
+        "research",
+        "validation"
+      ]
+    },
+    {
+      "description": "What counts as evidence in noyalib. Use before opening a PR, claiming a fix is done, or adding a test: the evidence bar, test taxonomy, doctest rules, cross-loader parity regression tests, acceptance thresholds. Not running tools (noyalib-diagnostics-and-tooling).",
+      "id": "noyalib-validation-and-qa",
+      "name": "noyalib-validation-and-qa",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "diagnostics",
+        "noyalib",
+        "qa",
+        "validation"
+      ]
+    },
+    {
+      "description": "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+      "id": "pr-review-and-release",
+      "name": "pr-review-and-release",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "ci",
+        "docs",
+        "engineering",
+        "release",
+        "review"
+      ]
+    },
+    {
+      "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes.",
+      "id": "receiving-code-review",
+      "name": "receiving-code-review",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "ci",
+        "review"
+      ]
+    },
+    {
+      "description": "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits.",
+      "id": "refactoring-safely",
+      "name": "refactoring-safely",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "refactoring"
+      ]
+    },
+    {
+      "description": "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing.",
+      "id": "systematic-debugging",
+      "name": "systematic-debugging",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "debugging",
+        "qa"
+      ]
+    },
+    {
+      "description": "Write the failing test first, then the code that makes it pass. Load when adding behaviour, changing behaviour, or pinning a bug, and whenever a test was authored after the code it covers. Enforces red-green-refactor with an observed red phase, so a test that never failed is never mistaken for proof.",
+      "id": "test-driven-development",
+      "name": "test-driven-development",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "qa",
+        "refactoring"
+      ]
+    },
+    {
+      "description": "Meta-router for the AgtMLS skill catalog. Read first when unsure which AgtMLS skill applies, when several look relevant, when asking 'is there a skill for porting or noyalib work', or when onboarding to how the hub's skills and shared references fit together.",
+      "id": "using-agtmls",
+      "name": "using-agtmls",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "noyalib",
+        "porting",
+        "routing"
+      ]
+    },
+    {
+      "description": "The gate between doing work and claiming it is done. Load before saying finished, fixed, working, or ready, before marking a task complete, and before reporting an outcome to a human. Converts each claim into the observation that would justify it, and names the rationalizations that let unverified work ship. Not the project's own evidence bar or test taxonomy.",
+      "id": "verification-before-completion",
+      "name": "verification-before-completion",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "porting",
+        "qa",
+        "validation"
+      ]
+    },
+    {
+      "description": "Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.",
+      "id": "web-research-and-source-triage",
+      "name": "web-research-and-source-triage",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "ci",
+        "debugging",
+        "docs",
+        "research",
+        "validation",
+        "web-reach"
+      ]
+    },
+    {
+      "description": "Turn a vague or multi-step request into an ordered list of small steps, each with its own done-condition and verification. Load before starting work that touches several files, has unclear scope, or spans more than one session, and when a request needs decomposing before any code is written. Produces a plan a reviewer can check against, not a to-do list.",
+      "id": "writing-plans",
+      "name": "writing-plans",
+      "quality": 100,
+      "risk": "low",
+      "tags": [
+        "continuity",
+        "docs",
+        "planning",
+        "review"
+      ]
+    },
+    {
+      "description": "YAML 1.2.2 semantics as noyalib implements them: scalar resolution, block vs flow, chomping, anchors, aliases, merge keys with DoS budgets, tags, 1.1-vs-1.2 flags, the Norway problem, and whether nan or octal 0o7 scalars resolve. Use for spec-conformance and plain-scalar questions.",
+      "id": "yaml-domain-reference",
+      "name": "yaml-domain-reference",
+      "quality": 100,
+      "risk": "medium",
+      "tags": [
+        "config",
+        "noyalib",
+        "yaml"
+      ]
+    }
+  ],
   "version": "0.0.6"
 }

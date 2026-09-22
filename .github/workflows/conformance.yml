@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: conformance
+
+# Separate from validate.yml on purpose. These validators are third-party
+# packages with their own dependency trees, and the 63-check gate is
+# stdlib-only and runnable offline -- which is a property worth keeping, so
+# the checks that need a network live here instead of weakening it.
+#
+# What this answers: an emitted format and a conformant one are different
+# claims. SBOM.cyclonedx.json carried a top-level `files` key, which the 1.6
+# schema forbids, and was rejected by every validator for as long as it had
+# existed, because nothing had ever run one.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sbom:
+    name: SBOMs validate against their own schemas
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install validators
+        # Pinned: an unpinned validator can start passing or failing for
+        # reasons that have nothing to do with this repository.
+        run: |
+          python3 -m pip install --disable-pip-version-check \
+            'spdx-tools==0.8.3' 'cyclonedx-python-lib[json-validation]==8.5.0'
+      - name: SPDX 2.3
+        run: pyspdxtools -i SBOM.spdx.json
+      - name: CycloneDX 1.6
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from cyclonedx.schema import SchemaVersion
+          from cyclonedx.validation.json import JsonStrictValidator
+
+          text = open("SBOM.cyclonedx.json", encoding="utf-8").read()
+          spec = json.loads(text)["specVersion"]
+          error = JsonStrictValidator(SchemaVersion.from_version(spec)).validate_str(text)
+          if error is not None:
+              print(f"FAIL: SBOM.cyclonedx.json is not valid CycloneDX {spec}")
+              print(error)
+              sys.exit(1)
+          print(f"OK: SBOM.cyclonedx.json is valid CycloneDX {spec}")
+          PY
+      - name: The validators must be able to fail
+        # A validator that passes everything is indistinguishable from one
+        # that was never wired up. Corrupt a copy and require a rejection.
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+
+          document = json.load(open("SBOM.cyclonedx.json", encoding="utf-8"))
+          document["components"][0]["type"] = "not-a-valid-type"
+          json.dump(document, open("/tmp/bad.cyclonedx.json", "w", encoding="utf-8"))
+
+          from cyclonedx.schema import SchemaVersion
+          from cyclonedx.validation.json import JsonStrictValidator
+
+          text = open("/tmp/bad.cyclonedx.json", encoding="utf-8").read()
+          spec = json.loads(text)["specVersion"]
+          if JsonStrictValidator(SchemaVersion.from_version(spec)).validate_str(text) is None:
+              sys.exit("FAIL: the CycloneDX validator accepted a corrupted document")
+
+          spdx = json.load(open("SBOM.spdx.json", encoding="utf-8"))
+          spdx["files"][0].pop("checksums", None)
+          json.dump(spdx, open("/tmp/bad.spdx.json", "w", encoding="utf-8"))
+          proc = subprocess.run(["pyspdxtools", "-i", "/tmp/bad.spdx.json"], check=False)
+          if proc.returncode == 0:
+              sys.exit("FAIL: the SPDX validator accepted a corrupted document")
+          print("OK: both validators reject a corrupted document")
+          PY
