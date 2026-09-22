@@ -1062,7 +1062,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6bc690f73d3d82f692215fa9693431382b8a000610ebc26724d2b7fa8ba58337"
+          "content": "4f4e3a26835a3ec61f4e126fd2d70860816bae92f25a06234d059fdbcef0f62c"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1073,7 +1073,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f5c72e79748be75169ec25568190f7e026eb0a2e6426ffd39b2bf1883ae3c120"
+          "content": "eea5f08d1be25c52f72735fbf409d3bdcab26474a32345965d4e5b0ddf3994a4"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -3914,7 +3914,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-22T23:30:21Z",
+    "timestamp": "2026-09-22T23:35:01Z",
     "tools": {
       "components": [
         {
