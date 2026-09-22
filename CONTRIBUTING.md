@@ -13,7 +13,7 @@ exists to catch that.
 python3 scripts/agtmls.py check
 ```
 
-63 checks. It is the same gate CI runs — `validate-check-manifest.py` fails
+64 checks. It is the same gate CI runs — `validate-check-manifest.py` fails
 if `checks.json`, `scripts/run-all-checks.py`, and
 `.github/workflows/validate.yml` ever disagree, so a green local run means a
 green CI run.

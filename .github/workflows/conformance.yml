@@ -3,7 +3,7 @@
 name: conformance
 
 # Separate from validate.yml on purpose. These validators are third-party
-# packages with their own dependency trees, and the 63-check gate is
+# packages with their own dependency trees, and the 64-check gate is
 # stdlib-only and runnable offline -- which is a property worth keeping, so
 # the checks that need a network live here instead of weakening it.
 #
@@ -25,6 +25,29 @@ permissions:
   contents: read
 
 jobs:
+  spec-rules:
+    name: Analyzer rules match the pinned agtmls-spec commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Read the pinned spec commit
+        id: pin
+        run: |
+          echo "commit=$(python3 -c 'import json; print(json.load(open("scripts/_lib/rules.json"))["source"]["commit"])')" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: sebastienrousseau/agtmls-spec
+          ref: ${{ steps.pin.outputs.commit }}
+          path: agtmls-spec
+      - name: Snapshot equals the spec it names
+        # rules.json is the only copy of the rule set in this repository.
+        # This is what proves it is a copy and not a fork.
+        run: python3 scripts/sync-spec-rules.py --check --from agtmls-spec --commit "${{ steps.pin.outputs.commit }}"
+
   sbom:
     name: SBOMs validate against their own schemas
     runs-on: ubuntu-latest
