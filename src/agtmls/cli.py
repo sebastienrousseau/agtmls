@@ -84,6 +84,10 @@ def main(argv: list[str] | None = None) -> int:
     # A wheel's skills disappear with the cache; copy them instead of linking.
     if packaged and command == "install" and "--copy" not in argv:
         argv.append("--copy")
+    # The doctor inspects a checkout unless told otherwise; the wheel has the
+    # registry and none of the repository's documents, evals or gate.
+    if packaged and command in {"doctor", "status"} and "--installed" not in argv:
+        argv.append("--installed")
 
     target = root / "scripts" / "agtmls.py"
     sys.argv = [str(target), *argv]

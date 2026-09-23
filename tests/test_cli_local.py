@@ -271,6 +271,78 @@ class UninstallTests(CliFixture):
     def uninstall(self, remove_prompt: bool = False) -> tuple[int, str]:
         return capture(self.cli.uninstall, self.target, "claude", remove_prompt)
 
+    def record(self, names, mode: str) -> Path:
+        payload = self.cli.lockfile.build(self.target, self.fixture, list(names), mode, "0.0.0")
+        return self.cli.lockfile.write(self.target, payload)
+
+    def test_copied_skills_recorded_in_the_lockfile_are_removed(self) -> None:
+        """`uvx agtmls install` copies (the wheel's cache is ephemeral), and
+        v0.0.7's uninstall, which knew only symlinks, then removed 0 items."""
+        for name in GENERAL:
+            shutil.copytree(self.fixture / "skills" / name, self.skills / name)
+        hand = self.skills / "hand-written"
+        hand.mkdir()
+        (hand / "SKILL.md").write_text("mine\n", encoding="utf-8")
+        commands = self.target / ".claude" / "commands"
+        ours = commands / "agtmls-audit.md"
+        shutil.copy2(self.fixture / "commands" / "agtmls-audit.md", ours)
+        theirs = commands / "mine.md"
+        theirs.write_text("# mine\n", encoding="utf-8")
+        lock = self.record(GENERAL, "copy")
+
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        for name in GENERAL:
+            self.assertFalse((self.skills / name).exists(), f"{name} survived")
+        self.assertFalse(ours.exists(), "a copied registry command survived")
+        self.assertTrue(hand.is_dir(), "a hand-written skill was removed")
+        self.assertTrue(theirs.exists(), "the user's own command was removed")
+        self.assertFalse(lock.exists(), "the lockfile outlived everything it recorded")
+        self.assertIn(f"removed {len(GENERAL) + 2} AgtMLS-managed item(s) from {self.target}", output)
+
+    def test_a_copied_skill_edited_since_install_is_left_in_place(self) -> None:
+        """verify reports a local edit rather than repairing it; uninstall must
+        not delete it either. The lockfile stays, since it still describes a
+        skill that is there."""
+        name = GENERAL[0]
+        shutil.copytree(self.fixture / "skills" / name, self.skills / name)
+        (self.skills / name / "SKILL.md").write_text("edited\n", encoding="utf-8")
+        lock = self.record([name], "copy")
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        self.assertTrue((self.skills / name).is_dir(), "an edited skill was deleted")
+        self.assertIn(f"{name}: modified since install; left in place", output)
+        self.assertIn("removed 0 AgtMLS-managed item(s)", output)
+        self.assertTrue(lock.exists())
+
+    def test_a_recorded_copy_already_gone_is_skipped_and_the_lockfile_dir_is_shared(self) -> None:
+        """Nothing to remove for a skill the user deleted by hand; and .agtmls
+        may hold files that are not ours, so only the lockfile goes."""
+        lock = self.record([GENERAL[0]], "copy")
+        theirs = lock.parent / "notes.txt"
+        theirs.write_text("keep\n", encoding="utf-8")
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        self.assertFalse(lock.exists())
+        self.assertTrue(theirs.exists(), "a file beside the lockfile was removed")
+        self.assertIn("removed 1 AgtMLS-managed item(s)", output)
+
+    def test_verify_of_a_target_whose_skills_dir_is_gone_reports_them_missing(self) -> None:
+        self.record([GENERAL[0]], "copy")
+        problems = self.cli.lockfile.verify(self.target, self.target / ".claude" / "gone")
+        self.assertEqual([(name, status) for name, status, _ in problems], [(GENERAL[0], "missing")])
+
+    def test_a_symlink_uninstall_drops_the_lockfile_it_leaves_stale(self) -> None:
+        name = GENERAL[0]
+        (self.skills / name).symlink_to(self.fixture / "skills" / name)
+        lock = self.record([name], "symlink")
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        self.assertFalse((self.skills / name).is_symlink())
+        self.assertFalse(lock.exists(), "a lockfile with nothing left to describe was kept")
+        self.assertFalse(lock.parent.exists(), "an empty .agtmls directory was left behind")
+        self.assertIn("removed 2 AgtMLS-managed item(s)", output)
+
     def test_only_links_into_the_registry_are_removed(self) -> None:
         ours = self.skills / "using-agtmls"
         ours.symlink_to(self.fixture / "skills" / "using-agtmls")

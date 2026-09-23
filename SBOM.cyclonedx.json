@@ -985,7 +985,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a3487763b3a8bd5e1ba7f483dac422b3c186cf4ab068a41092eabaea6e5e36f1"
+          "content": "9ab3b0c148fddb3fc933ef1c5ef8fb0a6c2a9d8bc5a59ba0a24c5c23e283acc5"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -1095,7 +1095,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4f4e3a26835a3ec61f4e126fd2d70860816bae92f25a06234d059fdbcef0f62c"
+          "content": "727294fa2487d93cd64d4b5bc92ff2d9e55a160321b3af80897fe7bad742ceb5"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1106,7 +1106,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ad4b48ded77fecad5af850ab8c2d60cfe16e30eb552686a094fb605ed8303513"
+          "content": "8b088d80510f93ffc52158bc97939f9ebece48d1d6305db47a2063596bd7ec97"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -3801,7 +3801,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "85f8122b9e15ee609cf776ba9781e5319c1beadced76c380e5f8f11d676fb113"
+          "content": "a0196735e86e071b9ad08cc90398e1f6e56059bcbd18b0af5de48b55dd0fe8e3"
         }
       ],
       "name": "src/agtmls/cli.py",
@@ -4002,7 +4002,7 @@
       "type": "application",
       "version": "0.0.7"
     },
-    "timestamp": "2026-09-23T16:04:37Z",
+    "timestamp": "2026-09-23T17:06:49Z",
     "tools": {
       "components": [
         {

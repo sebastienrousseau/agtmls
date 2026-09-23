@@ -7,6 +7,33 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `agtmls --version` prints the registry version. It was a usage error.
+
+### Fixed
+
+- `uninstall` removed nothing after a `uvx agtmls install`: the wheel's
+  install copies (its cache is ephemeral) and uninstall knew only symlinks
+  into a checkout. It now removes the copied skills the lockfile records,
+  and copied commands and agents that still equal the registry's; a skill
+  edited since install is left in place, as `verify` reports it rather
+  than repairs it. Linked agents are removed too, and a lockfile with
+  nothing left to describe goes with them.
+- `uvx agtmls doctor` reported 30 failures from a healthy install, every
+  one a repository document, workflow or check the wheel never ships.
+  The packaged entry point now runs the doctor with `--installed`, which
+  inspects the registry and the target and skips the checkout
+  inspections and the gate; and copied skills recorded in the lockfile
+  are no longer "missing links".
+- `doctor --target .` inspected the registry, not the caller's repository:
+  the doctor runs with the registry as its working directory, and a
+  relative target was forwarded unresolved. It is resolved against the
+  caller's directory first, as `diff` already was.
+- The doctor expected every bundled skill in a target and reported
+  eighteen missing after a plain install. It now expects the general
+  skills plus the bundles named with `--bundle`, the installer's rule.
+
 ## 0.0.7 - 2026-09-23
 
 ### Breaking

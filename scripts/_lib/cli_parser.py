@@ -16,6 +16,29 @@ import json
 from pathlib import Path
 
 PROVIDERS = Path(__file__).resolve().parents[2] / "providers.json"
+PLUGIN = Path(__file__).resolve().parents[2] / ".claude-plugin" / "plugin.json"
+INDEX = Path(__file__).resolve().parents[2] / "index.json"
+
+
+def registry_version() -> str:
+    """The version `--version` prints.
+
+    plugin.json is the one authored copy, but `make install` ships the
+    registry without it; index.json restates the version and is shipped
+    everywhere. Read only when asked, so no other command pays for it.
+    """
+    for path, key in ((PLUGIN, "version"), (INDEX, "registry_version")):
+        if path.exists():
+            value = json.loads(path.read_text(encoding="utf-8")).get(key)
+            if value:
+                return str(value)
+    return "unknown"
+
+
+class _Version(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"agtmls {registry_version()}")
+        parser.exit()
 
 
 def native_agents() -> list[str]:
@@ -31,6 +54,8 @@ def native_agents() -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     """Every subcommand agtmls accepts."""
     parser = argparse.ArgumentParser(prog="agtmls")
+    # `agtmls --version` used to be a usage error.
+    parser.add_argument("--version", action=_Version, nargs=0, help="print the registry version and exit")
     agents = native_agents()
     # dest must not collide with any subparser option dest: `evidence --command`
     # used to overwrite the subcommand name with its own (list) value, which made
@@ -42,12 +67,14 @@ def build_parser() -> argparse.ArgumentParser:
     doctor.add_argument("--agent", choices=agents)
     doctor.add_argument("--skills-only", action="store_true")
     doctor.add_argument("--bundle", action="append", default=[])
+    doctor.add_argument("--installed", action="store_true")
 
     status = sub.add_parser("status")
     status.add_argument("--target", type=Path)
     status.add_argument("--agent", choices=agents)
     status.add_argument("--skills-only", action="store_true")
     status.add_argument("--bundle", action="append", default=[])
+    status.add_argument("--installed", action="store_true")
 
     sub.add_parser("check")
 

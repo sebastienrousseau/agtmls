@@ -354,6 +354,16 @@ class PackagedWheelLayoutTests(unittest.TestCase):
         _, out = self.call("install", "rust", "claude", "--copy")
         self.assertEqual(json.loads(out).count("--copy"), 1, out)
 
+    def test_doctor_and_status_from_a_wheel_are_told_they_are_installed(self) -> None:
+        """The doctor inspects a checkout unless told otherwise; from a wheel
+        it found 30 missing repository files."""
+        self.fixture(True)
+        for command in ("doctor", "status"):
+            _, out = self.call(command, "--target", "/tmp/x")
+            self.assertEqual(json.loads(out), [command, "--target", "/tmp/x", "--installed"], out)
+        _, out = self.call("doctor", "--installed")
+        self.assertEqual(json.loads(out).count("--installed"), 1, out)
+
     def test_a_checkout_command_is_not_given_the_copy_flag(self) -> None:
         self.fixture(True)
         _, out = self.call("list")
