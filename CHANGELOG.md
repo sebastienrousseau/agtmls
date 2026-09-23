@@ -68,7 +68,6 @@ All notable changes to AgtMLS are recorded here.
 - Updated packaging and manifest validation tooling (`pyproject.toml`, `validate-packaging.py`, `validate-plugin-manifest.py`, `agtmls-doctor.py`, `export-registry.py`) to support dual license declarations.
 - Bumped release metadata through the guarded patch-line release flow to `v0.0.6`.
 
-
 ## 0.0.5 - 2026-08-04
 
 ### Added
@@ -117,7 +116,6 @@ All notable changes to AgtMLS are recorded here.
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
-
 
 ### Added
 
@@ -222,13 +220,11 @@ All notable changes to AgtMLS are recorded here.
 
 - Bumped release metadata through the guarded patch-line release flow.
 
-
 ## 0.0.2 - 2026-07-21
 
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
-
 
 ## 0.0.1 - 2026-07-20
 

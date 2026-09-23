@@ -88,16 +88,14 @@ def update_changelog(version: str, today: str) -> None:
     head, _, rest = text.partition(marker)
     body, sep, tail = rest.partition("\n## ")
     accumulated = body.strip()
-    if accumulated:
-        entry = f"## Unreleased\n\n## {version} - {today}\n\n{accumulated}\n\n"
-    else:
-        entry = (
-            f"## Unreleased\n\n"
-            f"## {version} - {today}\n\n"
-            "### Changed\n\n"
-            "- Bumped release metadata through the guarded patch-line release flow.\n\n"
-        )
-    path.write_text(head + entry + (sep + tail if sep else ""), encoding="utf-8")
+    notes = accumulated or (
+        "### Changed\n\n"
+        "- Bumped release metadata through the guarded patch-line release flow."
+    )
+    entry = f"## Unreleased\n\n## {version} - {today}\n\n{notes}\n"
+    # One blank line before the previous release, one newline at the end: the
+    # old join left two blank lines, which markdownlint (MD012) rejects.
+    path.write_text(head + entry + (f"\n## {tail}" if sep else ""), encoding="utf-8")
 
 
 def main() -> int:

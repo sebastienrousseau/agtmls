@@ -211,13 +211,10 @@ class BumpRefusalTests(FixtureCase):
         path.write_text("# Changelog\n\n## Unreleased\n\n## 0.0.1 - 2026-01-01\n\n- First.\n",
                         encoding="utf-8")
         self.script("bump-version.py").update_changelog("0.0.2", "2099-01-01")
-        # Blank-line runs are collapsed before comparing: the bump currently
-        # leaves two blank lines above the next heading (visible in the real
-        # CHANGELOG under three past releases). That is cosmetic and
-        # reported separately; this case is about which entry lands where.
+        # Exact, blank lines included: the bump used to leave two blank lines
+        # above the previous release's heading, which markdownlint (MD012)
+        # rejects and which had accumulated in the real CHANGELOG.
         text = path.read_text(encoding="utf-8")
-        while "\n\n\n" in text:
-            text = text.replace("\n\n\n", "\n\n")
         self.assertEqual(text, (
             "# Changelog\n\n## Unreleased\n\n## 0.0.2 - 2099-01-01\n\n### Changed\n\n"
             "- Bumped release metadata through the guarded patch-line release flow.\n\n"
@@ -231,7 +228,7 @@ class BumpRefusalTests(FixtureCase):
         self.script("bump-version.py").update_changelog("0.0.1", "2099-01-01")
         self.assertEqual(
             path.read_text(encoding="utf-8"),
-            "# Changelog\n\n## Unreleased\n\n## 0.0.1 - 2099-01-01\n\n- Initial skills.\n\n",
+            "# Changelog\n\n## Unreleased\n\n## 0.0.1 - 2099-01-01\n\n- Initial skills.\n",
         )
 
 
