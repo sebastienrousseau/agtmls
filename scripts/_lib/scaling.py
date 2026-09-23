@@ -47,7 +47,7 @@ def synthetic_registry(target: Path, factor: int) -> int:
     return count
 
 
-def scaling() -> int:
+def scaling(record: bool = False) -> int:
     """Criterion 3.5: growth against registry size, measured rather than argued."""
     sys.path.insert(0, str(SCRIPTS))
     from _lib.digest import skill_digest
@@ -119,10 +119,13 @@ def scaling() -> int:
         # a deliberate curve from an accidental one.
         "cold_paths": ["pairwise"],
     }
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / "scaling.json").write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    # Only a deliberate --record rewrites the published result that
+    # BENCHMARKS.md is generated from; a CI run did, and dirtied the tree.
+    if record:
+        RESULTS.mkdir(parents=True, exist_ok=True)
+        (RESULTS / "scaling.json").write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
 
     # Digest is O(bytes) and must stay linear. Pairwise scoring is O(n^2) by
     # construction -- it compares every description with every other -- so it

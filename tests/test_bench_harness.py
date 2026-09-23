@@ -269,10 +269,15 @@ class BenchMainTests(unittest.TestCase):
         }}), encoding="utf-8")
 
     def test_modes_dispatch_to_their_own_handler(self) -> None:
-        for flag, handler in (("--smoke", "smoke"), ("--scaling", "scaling")):
-            with mock.patch.object(self.mod, handler, return_value=7) as called:
-                self.assertEqual(run_main(self.mod, flag)[0], 7, flag)
-            called.assert_called_once_with()
+        with mock.patch.object(self.mod, "smoke", return_value=7) as called:
+            self.assertEqual(run_main(self.mod, "--smoke")[0], 7)
+        called.assert_called_once_with()
+        # --scaling measures; only --record writes the published result, so a
+        # CI run cannot rewrite benchmarks/results/scaling.json. It did.
+        for extra, record in (((), False), (("--record",), True)):
+            with mock.patch.object(self.mod, "scaling", return_value=7) as called:
+                self.assertEqual(run_main(self.mod, "--scaling", *extra)[0], 7)
+            called.assert_called_once_with(record=record)
         with mock.patch.object(self.mod, "redeclare", return_value=7) as called:
             self.assertEqual(run_main(self.mod, "--redeclare")[0], 7)
         called.assert_called_once_with(self.mod.BASELINE)

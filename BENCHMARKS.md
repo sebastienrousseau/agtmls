@@ -13,6 +13,7 @@ python3 scripts/bench.py --smoke          # one iteration; what the gate runs
 python3 scripts/bench.py --check          # fail on a regression
 python3 scripts/bench.py --write-baseline # re-record bench-baseline.json
 python3 scripts/bench.py --scaling        # growth at 10x registry size
+python3 scripts/bench.py --scaling --record  # ...and publish it to benchmarks/results/
 ```
 
 ## Method

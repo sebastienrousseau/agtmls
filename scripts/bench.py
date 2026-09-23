@@ -30,6 +30,7 @@ all live in BENCHMARKS.md.** Only what a reader of this file needs is here:
     python3 scripts/bench.py --check          # fail on a regression
     python3 scripts/bench.py --write-baseline # re-record bench-baseline.json
     python3 scripts/bench.py --scaling        # growth at 10x registry size
+    python3 scripts/bench.py --scaling --record  # and publish it to benchmarks/results/
 """
 
 from __future__ import annotations
@@ -375,6 +376,10 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="emit the run record instead of a table")
     parser.add_argument(
+        "--record", action="store_true",
+        help="with --scaling, write benchmarks/results/scaling.json (the published result)",
+    )
+    parser.add_argument(
         "--baseline", type=Path, default=None,
         help="baseline to check against or record (default: bench-baseline.json). Ratios "
              "do not transfer between machines, so CI keeps its own, recorded on the runner",
@@ -385,7 +390,7 @@ def main() -> int:
     if args.smoke:
         return smoke()
     if args.scaling:
-        return scaling()
+        return scaling(record=args.record)
     if args.redeclare:
         return redeclare(baseline_path)
 
