@@ -75,6 +75,13 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- `docs/checks.md` listed 47 of the gate's checks in another order and one  check-count:historical
+  invocation the gate does not run. It is now generated from `checks.json`
+  (`generate-checks-doc.py`, itself a gate check). The manpage and the pull
+  request template still called the gate "57-gate"; prose throughout now  check-count:historical
+  says "every check in `checks.json`", so adding a check edits no prose,
+  and `validate-check-manifest.py` scans six more files for a number
+  creeping back.
 - Main's CI failed after every squash merge while every pull request check
   passed. The SBOMs and `provenance.json` were stamped with the date of the
   last commit touching the described files, and provenance named that

@@ -99,7 +99,7 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phase 2 complete; phase 0 repairs landing in 0.0.7. 66-check gate (timing in `benchmarks/results/gate.json`). Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phase 2 complete; phase 0 repairs landing in 0.0.7. Check gate from `checks.json` (timing in `benchmarks/results/gate.json`). Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Python/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |

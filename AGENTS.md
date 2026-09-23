@@ -16,7 +16,7 @@ Everything here also applies to humans. It is addressed to agents because agents
 
 ## Before you claim to be done
 
-The repository has 66 validation gates and tests. Before concluding any task, run:
+The gate is every check in `checks.json`, plus the unit tests. Before concluding any task, run:
 
 ```console
 python3 scripts/run-all-checks.py

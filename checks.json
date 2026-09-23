@@ -34,6 +34,7 @@
     "generate-docs-site.py --check",
     "generate-mcp-resources.py --check",
     "generate-benchmarks-doc.py --check",
+    "generate-checks-doc.py --check",
     "generate-sbom.py --check",
     "validate-sbom-conformance.py",
     "generate-provenance.py --check",

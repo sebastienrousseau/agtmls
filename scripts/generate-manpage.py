@@ -34,7 +34,7 @@ Run the AgtMLS full diagnostic suite verifying configuration, skills, and tools.
 Inspect local workspace installation status and symlinked skills.
 .TP
 \\fBcheck\\fR
-Run the 57-gate validation suite guarding registry integrity.
+Run every check in checks.json, the gate guarding registry integrity.
 .TP
 \\fBaudit\\fR [\\fIpath\\fR] [\\fB\\-\\-\\-all\\fR] [\\fB\\-\\-\\-strict\\fR]
 Statically scan skills for prompt injection, hidden unicode steganography, and dangerous execution.

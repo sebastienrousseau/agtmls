@@ -35,14 +35,28 @@ WORKFLOW = ROOT / ".github" / "workflows" / "validate.yml"
 # search
 # for the other spellings did not find. A count repeated in a dozen files is a
 # claim nobody is enforcing, which is exactly what criterion 5.9 is about.
+#
+# The prose now says "every check in checks.json" instead of a number, so a
+# new check edits nothing here. The scan stays to catch a number creeping
+# back. The list is explicit because scanning every file flags skill content
+# and test fixtures; it grew when a stale "57-gate" was found in the  check-count:historical
+# shipped manpage and the pull request template, neither of which was listed.
 COUNTED = [
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    ".github/workflows/conformance.yml",
     "AGENTS.md",
+    "BENCHMARKS.md",
     "CONTRIBUTING.md",
     "DEVELOPMENT.md",
     "Makefile",
     "README.md",
     "docs/ECOSYSTEM.md",
+    "docs/checks.md",
+    "scripts/bench.py",
+    "scripts/generate-manpage.py",
+    "scripts/run-coverage.py",
     "scripts/run-unit-tests.py",
+    "share/man/man1/agtmls.1",
 ]
 # Any number of digits: limited to two or three, a gate of fewer than ten
 # checks had every stated count go unread.

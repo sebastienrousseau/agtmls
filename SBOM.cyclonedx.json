@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "16b25057ab6cc727aea22159f7f819edfc9c265e01fe9a41ea897b7325786d53"
+          "content": "8009bea5b29134f2a4a572aa39d0170ff4c8348bbb23b9373d6b68a583e0f585"
         }
       ],
       "name": "checks.json",
@@ -1128,7 +1128,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a2e833c522ef92c1e875ab91b537add413ddccaf0b6a78a7b67c485d5c35bbe2"
+          "content": "f6977ce183a97206b48ec2fb0923091b8bdf3a9f51bdcba93365610ff9183f68"
         }
       ],
       "name": "scripts/bench.py",
@@ -1212,6 +1212,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-checks-doc.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "087d1ab24cf4bf402b67fc3d6422725d2a2a680d293ec9c41ae14c67367e6f42"
+        }
+      ],
+      "name": "scripts/generate-checks-doc.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/generate-completions.py",
       "hashes": [
         {
@@ -1238,7 +1249,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2cc2f7539d1f1df11a5e61bf38c46a6c8c020ec80fe0b1ea2f9cb5cd4a52173a"
+          "content": "c3b1cafe9d97c5ae21a37ec3c459036ec15bec4d366a01546b970703b916e5e2"
         }
       ],
       "name": "scripts/generate-manpage.py",
@@ -1458,7 +1469,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "07b8d578b2b3c393ab1390218954bf5d5f27e06160877bfa671fa3582dfddb1b"
+          "content": "a3b37ec533028485366c7b4aeba4557f7e76a5c67b2d36d65b80bdea1c8192c9"
         }
       ],
       "name": "scripts/run-coverage.py",
@@ -1491,7 +1502,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2c00257dbda0f48a74164fa618d1371a21a2ec5a9aa3cad5910e371e5da8395e"
+          "content": "da22b5ef431faada3bc8409b7d5051a7d230bf4feb7b1abf31ac80d0bd46b78c"
         }
       ],
       "name": "scripts/run-unit-tests.py",
@@ -1744,7 +1755,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "88ce1d227834bf27010a0f5cbc80f8ced47bfbc3cc23b3df77bacae50e302844"
+          "content": "5414ab1d8c7c1c30f830f60b9041707df24930f673c6cd61ffc63836da2a19d2"
         }
       ],
       "name": "scripts/validate-check-manifest.py",
@@ -3980,7 +3991,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T12:28:38Z",
+    "timestamp": "2026-09-23T13:32:33Z",
     "tools": {
       "components": [
         {
