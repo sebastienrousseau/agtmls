@@ -974,7 +974,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7720990f31439b2b95120a21c831f841cb034e205a8a593f8519ad11d58ac3b9"
+          "content": "a3487763b3a8bd5e1ba7f483dac422b3c186cf4ab068a41092eabaea6e5e36f1"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -1073,7 +1073,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eea5f08d1be25c52f72735fbf409d3bdcab26474a32345965d4e5b0ddf3994a4"
+          "content": "5b9f00a335c40f1f9d38836bca33dd715c8c6b17d2d9c34c86f18901617ae128"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -1326,7 +1326,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6a85874ce307acb9db1954f122d884ba505c8712752719fe72b6abeeccfe1036"
+          "content": "98ca69fc4b1aaed8ffb14d55e188c1f02c7702cbf2335b10b78292ab87e229b0"
         }
       ],
       "name": "scripts/registry-diff.py",
@@ -3914,7 +3914,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:03:29Z",
+    "timestamp": "2026-09-23T07:05:57Z",
     "tools": {
       "components": [
         {
