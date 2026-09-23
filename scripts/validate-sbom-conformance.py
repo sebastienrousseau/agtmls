@@ -24,6 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SPDX = ROOT / "SBOM.spdx.json"
 CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
+INVALID_BANNER = "The document is invalid"
 
 
 def wheel_paths() -> set[str]:
@@ -72,7 +73,7 @@ def main() -> int:
         if "SPDXID" not in entry:
             errors.append(f"SBOM.spdx.json: file {entry.get('fileName')} has no SPDXID")
             break
-        algorithms = {c["algorithm"] for c in entry.get("checksums", [])}
+        algorithms = {c.get("algorithm") for c in entry.get("checksums", [])}
         if "SHA1" not in algorithms:
             errors.append(f"SBOM.spdx.json: file {entry.get('fileName')} lacks the mandatory SHA1 checksum")
             break
@@ -102,7 +103,10 @@ def main() -> int:
         )
         if "No module named" in proc.stdout:
             raise FileNotFoundError
-        if proc.returncode != 0 or "must" in proc.stdout:
+        # pyspdxtools 0.8.3 exits 1 on every rejection path. Its own banner is
+        # a second, exact signal; matching any output containing "must" was a
+        # guess that would fail the gate on an informational line.
+        if proc.returncode != 0 or INVALID_BANNER in proc.stdout:
             errors.append(f"spdx-tools rejected the document:\n{proc.stdout[:2000]}")
         else:
             validator = "spdx-tools: valid"

@@ -215,13 +215,22 @@ class SbomValidatorTests(SliceFixture):
         self.assertEqual(code, 1, output)
         self.assertIn("spdx-tools rejected the document:\nSPDXID is malformed", output)
 
-    def test_an_upstream_complaint_fails_even_with_exit_zero(self) -> None:
-        """pyspdxtools reports some violations on stdout and still exits 0."""
-        code, output = self.run_validator(
-            spdx_tools=subprocess.CompletedProcess([], 0, stdout="creators must be a list\n")
-        )
+    def test_the_tools_invalid_banner_fails_even_with_exit_zero(self) -> None:
+        """pyspdxtools 0.8.3 exits 1 on every rejection path; the banner is a
+        second, exact signal in case a version logs it and exits 0."""
+        code, output = self.run_validator(spdx_tools=subprocess.CompletedProcess(
+            [], 0, stdout="The document is invalid. The following issues have been found:\n  x\n"
+        ))
         self.assertEqual(code, 1, output)
         self.assertIn("spdx-tools rejected the document", output)
+
+    def test_the_word_must_in_accepting_output_is_not_a_rejection(self) -> None:
+        """Any output containing "must" used to count as a rejection -- a guess
+        that fails the gate on an informational line."""
+        code, output = self.run_validator(spdx_tools=subprocess.CompletedProcess(
+            [], 0, stdout="note: licences must be reviewed\nThe document is valid.\n"
+        ))
+        self.assertEqual(code, 0, output)
 
     def test_an_interpreter_that_cannot_start_skips_the_upstream_check(self) -> None:
         code, output = self.run_validator(spdx_tools=OSError("exec format error"))
@@ -274,6 +283,16 @@ class SbomValidatorTests(SliceFixture):
             self.first = data["files"][0]["fileName"]
         self.spdx(strip)
         self.assert_catches(f"file {self.first} has no SPDXID", count=1)
+
+    def test_a_checksum_without_an_algorithm_is_reported_not_raised(self) -> None:
+        """`c["algorithm"]` raised KeyError on a malformed entry, so the
+        validator crashed on exactly the documents it exists to reject."""
+        def strip(data) -> None:
+            entry = data["files"][0]
+            entry["checksums"] = [{"checksumValue": "0" * 40}]
+            self.first = entry["fileName"]
+        self.spdx(strip)
+        self.assert_catches(f"file {self.first} lacks the mandatory SHA1 checksum", count=1)
 
     def test_a_file_without_a_sha1_checksum_is_caught(self) -> None:
         """SPDX 2.3 makes SHA1 mandatory for files; SHA256 alone is invalid."""
