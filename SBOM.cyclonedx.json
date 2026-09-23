@@ -1887,7 +1887,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6aae79868ba6bcfc6fd8b59fa3560150badad8f95d8de6f33affc573d268ff1f"
+          "content": "57f4ecd755433f5bb9c7fc40dbbd6875002000f3da75fbccc48de688bb97c938"
         }
       ],
       "name": "scripts/validate-sbom-conformance.py",
@@ -3925,7 +3925,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:09:06Z",
+    "timestamp": "2026-09-23T07:11:08Z",
     "tools": {
       "components": [
         {
