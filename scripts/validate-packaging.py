@@ -72,6 +72,39 @@ def parse_force_include(text: str) -> dict[str, str]:
     return pairs
 
 
+def _section(text: str, name: str) -> str:
+    match = re.search(
+        rf"^\[{re.escape(name)}\]\s*$(.*?)(?=^\[|\Z)", text, re.MULTILINE | re.DOTALL
+    )
+    return match.group(1) if match else ""
+
+
+def parse_project(text: str) -> dict:
+    """The [project] fields this check reads, without tomllib, for 3.10.
+
+    Without it, 3.10 skipped the name, console-script and no-dependencies
+    checks and still reported OK, so one leg of the CI matrix ran a weaker
+    gate than the others.
+    """
+    project = _section(text, "project")
+
+    def string(key: str) -> str:
+        match = re.search(rf'^{key}\s*=\s*"([^"]*)"', project, re.MULTILINE)
+        return match.group(1) if match else ""
+
+    deps = re.search(r"^dependencies\s*=\s*\[(.*?)\]", project, re.MULTILINE | re.DOTALL)
+    scripts = {
+        match.group(1): match.group(2)
+        for match in re.finditer(r'^([\w.-]+)\s*=\s*"([^"]*)"', _section(text, "project.scripts"), re.MULTILINE)
+    }
+    return {
+        "name": string("name"),
+        "version": string("version"),
+        "scripts": scripts,
+        "dependencies": re.findall(r'"([^"]*)"', deps.group(1)) if deps else [],
+    }
+
+
 def main() -> int:
     errors: list[str] = []
     if not PYPROJECT.exists():
@@ -82,8 +115,6 @@ def main() -> int:
     if tomllib is not None:
         data = tomllib.loads(text)
         project = data.get("project", {})
-        version = str(project.get("version", ""))
-        scripts = project.get("scripts", {})
         include = (
             data.get("tool", {})
             .get("hatch", {})
@@ -92,16 +123,16 @@ def main() -> int:
             .get("wheel", {})
             .get("force-include", {})
         )
-        if project.get("name") != "agtmls":
-            errors.append("pyproject project.name must be agtmls")
-        if scripts.get("agtmls") != ENTRY_POINT:
-            errors.append(f"console script agtmls must be {ENTRY_POINT}")
-        if project.get("dependencies"):
-            errors.append("registry scripts are stdlib-only; dependencies must stay empty")
-    else:  # pragma: no cover
+    else:
+        project = parse_project(text)
         include = parse_force_include(text)
-        match = re.search(r'^version\s*=\s*"([^"]+)"', text, re.MULTILINE)
-        version = match.group(1) if match else ""
+    version = str(project.get("version", ""))
+    if project.get("name") != "agtmls":
+        errors.append("pyproject project.name must be agtmls")
+    if project.get("scripts", {}).get("agtmls") != ENTRY_POINT:
+        errors.append(f"console script agtmls must be {ENTRY_POINT}")
+    if project.get("dependencies"):
+        errors.append("registry scripts are stdlib-only; dependencies must stay empty")
 
     for rel in REQUIRED:
         if rel not in include:

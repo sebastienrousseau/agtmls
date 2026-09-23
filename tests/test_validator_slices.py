@@ -38,7 +38,6 @@ except ModuleNotFoundError:  # pragma: no cover - 3.10 only
     NO_TOMLLIB = True
 # On 3.10 validate-packaging.py reads only the force-include table and the
 # version, so the checks that need a real TOML parser do not run there.
-TOMLLIB_ONLY = "project metadata checks need tomllib (3.11+)"
 
 
 class SliceFixture(unittest.TestCase):
@@ -183,18 +182,15 @@ class PackagingValidatorTests(SliceFixture):
         self.remove("pyproject.toml")
         self.assert_catches("FAIL: pyproject.toml missing")
 
-    @unittest.skipIf(NO_TOMLLIB, TOMLLIB_ONLY)
     def test_the_wrong_distribution_name_is_caught(self) -> None:
         self.replace("pyproject.toml", 'name = "agtmls"', 'name = "agtmls-fork"')
         self.assert_catches("pyproject project.name must be agtmls", count=1)
 
-    @unittest.skipIf(NO_TOMLLIB, TOMLLIB_ONLY)
     def test_a_console_script_aimed_elsewhere_is_caught(self) -> None:
         """`uvx agtmls` runs whatever this names; the wrong target is a dead CLI."""
         self.replace("pyproject.toml", 'agtmls = "agtmls.cli:main"', 'agtmls = "agtmls.cli:run"')
         self.assert_catches("console script agtmls must be agtmls.cli:main", count=1)
 
-    @unittest.skipIf(NO_TOMLLIB, TOMLLIB_ONLY)
     def test_a_runtime_dependency_is_caught(self) -> None:
         """One dependency turns an instant uvx launch into a resolver run."""
         self.replace("pyproject.toml", "dependencies = []", 'dependencies = ["requests"]')
@@ -266,6 +262,42 @@ class PackagingValidatorTests(SliceFixture):
         )
         self.assertEqual(module.parse_force_include(text), {"skills": "agtmls/_registry/skills"})
 
+
+
+class PackagingWithoutTomllibTests(PackagingValidatorTests):
+    """Every packaging verdict again, on the path Python 3.10 takes.
+
+    3.10 has no tomllib, and the validator used to skip the distribution
+    name, console script and no-dependencies checks there without a word --
+    so one leg of the CI matrix ran a weaker gate while reporting OK.
+    """
+
+    def module(self):
+        module = super().module()
+        module.tomllib = None
+        return module
+
+
+@unittest.skipIf(NO_TOMLLIB, "comparing against tomllib needs 3.11+")
+class ProjectFallbackParserTests(unittest.TestCase):
+    def test_the_fallback_reads_the_shipped_pyproject_as_tomllib_does(self) -> None:
+        import tomllib
+
+        text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        project = tomllib.loads(text)["project"]
+        expected = {
+            "name": project["name"],
+            "version": project["version"],
+            "scripts": project.get("scripts", {}),
+            "dependencies": project.get("dependencies", []),
+        }
+        self.assertEqual(load_script("validate-packaging.py").parse_project(text), expected)
+
+    def test_a_multi_line_dependency_list_is_read_whole(self) -> None:
+        text = '[project]\nname = "x"\ndependencies = [\n  "a>=1",\n  "b",\n]\n[project.scripts]\nx = "m:f"\n'
+        parsed = load_script("validate-packaging.py").parse_project(text)
+        self.assertEqual(parsed["dependencies"], ["a>=1", "b"])
+        self.assertEqual(parsed["scripts"], {"x": "m:f"})
 
 class PythonScriptValidatorTests(SliceFixture):
     """Every script is run as `./scripts/x.py` by someone; each must be runnable.
