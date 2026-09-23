@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Run deterministic behavioral smoke checks for skill contracts."""
 
 from __future__ import annotations
@@ -61,6 +63,9 @@ def main() -> int:
         for needle in forbids.get("skill_contains", []):
             checks += 1
             errors.extend(contains_none("SKILL.md", skill_text, [needle], cf.name))
+        for needle in forbids.get("reference_contains", []):
+            checks += 1
+            errors.extend(contains_none("reference.md", ref_text, [needle], cf.name))
 
     if errors:
         for error in errors:

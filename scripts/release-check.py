@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Run release-focused AgtMLS checks."""
 
 from __future__ import annotations
@@ -17,7 +19,6 @@ CHECKS = [
     ["generate-skill-index.py", "--check"],
     ["generate-catalog.py", "--check"],
     ["generate-docs-site.py", "--check"],
-    ["generate-agent-card.py", "--check"],
     ["generate-mcp-resources.py", "--check"],
     ["generate-sbom.py", "--check"],
     ["generate-provenance.py", "--check"],

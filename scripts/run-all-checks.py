@@ -1,168 +1,263 @@
 #!/usr/bin/env python3
-"""Run the full AgtMLS local validation gate."""
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+"""Run the full AgtMLS local validation gate.
+
+`checks.json` is the gate, and nothing else is. This file used to carry a
+second copy of that list plus a third list naming every script to
+byte-compile. The compile list had already drifted: it named 77 scripts while
+81 were on disk, and one of the four it omitted was `audit-skill.py`, the
+security analyzer. A gate described in three places eventually describes
+something that is not what runs. `validate-python-scripts.py` already parses
+every `scripts/*.py` found on disk, which is both stronger and self-updating,
+so the compile pass is gone rather than repaired.
+
+Checks are independent processes, so they are dispatched concurrently and
+**every** failure is reported. Returning on the first one cost one fix per CI
+round trip. The pool is threads rather than processes on purpose: the work
+happens in child processes, so the parent only waits on them, and threads
+avoid pickling a runner that is loaded by path in the test suite.
+
+Two checks are scheduled alone, because they write inside the working tree
+while they run: `make install` regenerates `completions/` and `share/man/` in
+place, and the install-verification smoke test tampers with a real skill to
+prove a drifted registry is refused. A concurrent reader of either is a flaky
+gate, so tree-mutating checks do not share the pool. See EXCLUSIVE below.
+
+    python3 scripts/run-all-checks.py              # all of it, concurrently
+    python3 scripts/run-all-checks.py --jobs 1     # serial, for bisecting
+    python3 scripts/run-all-checks.py --format json
+"""
 
 from __future__ import annotations
 
+import argparse
+import json
+import os
+import shlex
 import subprocess
 import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CHECKS = [
-    ["validate-skills.py"],
-    ["validate-spec-conformance.py"],
-    ["validate-licence-headers.py"],
-    ["validate-commands.py"],
-    ["validate-plugin-manifest.py"],
-    ["validate-packaging.py"],
-    ["validate-providers.py"],
-    ["validate-profiles.py"],
-    ["validate-templates.py"],
-    ["validate-doc-links.py"],
-    ["validate-json-files.py"],
-    ["validate-python-scripts.py"],
-    ["validate-shell-syntax.py"],
-    ["validate-secrets.py"],
-    ["validate-gitignore.py"],
-    ["validate-cli-surface.py"],
-    ["validate-system-prompts.py"],
-    ["check-skill-collisions.py"],
-    ["validate-eval-cases.py"],
-    ["run-security-evals.py"],
-    ["run-trigger-evals.py"],
-    ["run-behavioral-evals.py"],
-    ["validate-skill-metadata.py"],
-    ["sync-skill-frontmatter.py", "--check"],
-    ["generate-plugin-manifests.py", "--check"],
-    ["generate-skill-index.py", "--check"],
-    ["generate-catalog.py", "--check"],
-    ["generate-docs-site.py", "--check"],
-    ["generate-agent-card.py", "--check"],
-    ["generate-mcp-resources.py", "--check"],
-    ["generate-sbom.py", "--check"],
-    ["validate-sbom-conformance.py"],
-    ["generate-provenance.py", "--check"],
-    ["validate-generated-artifacts.py"],
-    ["validate-docs-site.py"],
-    ["validate-governance.py"],
-    ["validate-skill-index.py"],
-    ["validate-lifecycle.py"],
-    ["validate-version-policy.py"],
-    ["validate-release.py"],
-    ["release-check.py"],
-    ["smoke-release-pack.py"],
-    ["smoke-next-version.py"],
-    ["smoke-bump-version-check.py"],
-    ["smoke-release-dry-run.py"],
-    ["smoke-evolve-evidence.py"],
-    ["smoke-provider-install.py"],
-    ["smoke-live-providers.py"],
-    ["smoke-install.py"],
-    ["smoke-install-safety.py"],
-    ["smoke-install-verify.py"],
-    ["smoke-install-profiles.py"],
-    ["smoke-cli.py"],
-    ["smoke-make-install.py"],
-    ["smoke-export.py"],
-    ["smoke-import.py"],
-    ["smoke-proposal.py"],
-    ["smoke-scaffold.py"],
-    ["run-unit-tests.py"],
-    ["bench.py"],
-    ["validate-check-manifest.py"],
-    ["agtmls-doctor.py", "--skip-gate"],
-]
-COMPILE = [
-    "smoke-install-verify.py",
-    "validate-sbom-conformance.py",
-    "smoke-make-install.py",
-    "smoke-install-safety.py",
-    "run-security-evals.py",
-    "agtmls-doctor.py",
-    "agtmls.py",
-    "bench.py",
-    "smoke-bump-version-check.py",
-    "bump-version.py",
-    "check-skill-collisions.py",
-    "evolve-session.py",
-    "export-registry.py",
-    "generate-agent-card.py",
-    "generate-catalog.py",
-    "generate-docs-site.py",
-    "generate-mcp-resources.py",
-    "generate-provenance.py",
-    "generate-sbom.py",
-    "generate-skill-index.py",
-    "generate-plugin-manifests.py",
-    "sync-skill-frontmatter.py",
-    "import-skill.py",
-    "verify-release-assets.py",
-    "smoke-release-dry-run.py",
-    "smoke-next-version.py",
-    "release-dry-run.py",
-    "next-version.py",
-    "propose-skill-from-session.py",
-    "provider-install.py",
-    "record-evidence.py",
-    "registry-diff.py",
-    "release-check.py",
-    "release-pack.py",
-    "run-all-checks.py",
-    "run-behavioral-evals.py",
-    "run-trigger-evals.py",
-    "run-unit-tests.py",
-    "scaffold-skill.py",
-    "smoke-cli.py",
-    "smoke-evolve-evidence.py",
-    "smoke-export.py",
-    "smoke-import.py",
-    "smoke-install-profiles.py",
-    "smoke-install.py",
-    "smoke-proposal.py",
-    "smoke-provider-install.py",
-    "smoke-live-providers.py",
-    "smoke-release-pack.py",
-    "smoke-scaffold.py",
-    "validate-check-manifest.py",
-    "validate-cli-surface.py",
-    "validate-commands.py",
-    "validate-doc-links.py",
-    "validate-docs-site.py",
-    "validate-eval-cases.py",
-    "validate-generated-artifacts.py",
-    "validate-gitignore.py",
-    "validate-governance.py",
-    "validate-json-files.py",
-    "validate-lifecycle.py",
-    "validate-packaging.py",
-    "validate-plugin-manifest.py",
-    "validate-profiles.py",
-    "validate-providers.py",
-    "validate-python-scripts.py",
-    "validate-release.py",
-    "validate-secrets.py",
-    "validate-shell-syntax.py",
-    "validate-skill-index.py",
-    "validate-skill-metadata.py",
-    "validate-licence-headers.py",
-    "validate-spec-conformance.py",
-    "validate-skills.py",
-    "validate-system-prompts.py",
-    "validate-templates.py",
-    "validate-version-policy.py",
-]
+SCRIPTS = ROOT / "scripts"
+MANIFEST = ROOT / "checks.json"
+RUNS_DIR = ROOT / ".agtmls" / "runs"
+#: A deliberately recorded gate cost, committed. The per-run records under
+#: .agtmls/ are local and ignored, which makes "the gate takes N seconds" a
+#: claim nobody outside this checkout can check. Written only by --record, so
+#: it is a measurement someone took, not a file that churns on every run.
+RECORD = ROOT / "benchmarks" / "results" / "gate.json"
+
+# Checks that write inside the working tree and therefore cannot share the
+# pool with readers of the same files. This annotates manifest entries; it is
+# not a second copy of the manifest, and a unit test fails if a name here
+# stops being a check.
+#
+#   smoke-make-install.py   runs `make install`, whose prerequisites
+#                           regenerate completions/ and share/man/ in place.
+#   smoke-install-verify.py deliberately tampers with
+#                           skills/writing-plans/SKILL.md to prove `install`
+#                           refuses a drifted registry, restoring it in a
+#                           `finally`. Harmless when the gate was serial; with
+#                           a pool, any concurrent reader of skills/ can
+#                           observe the tampered state. It was found exactly
+#                           once in ten gate runs, as `generate-skill-index.py
+#                           --check` reporting index.json stale, because the
+#                           tamper window is one `install` invocation long.
+#
+# The list was derived by measurement, not by reading: run each check alone
+# while polling mtime and size of every file in the tree, and see which ones
+# move. Re-run that when adding a check that writes anything.
+EXCLUSIVE = frozenset({"smoke-make-install.py", "smoke-install-verify.py"})
+
+# Enough history to see a trend in gate duration, bounded so the directory
+# does not grow for the life of the checkout.
+RETAINED_RUNS = 50
+
+
+@dataclass(frozen=True)
+class CheckResult:
+    """One check, its outcome, and what it cost."""
+
+    check: str
+    returncode: int
+    duration_s: float
+    output: str
+
+
+def manifest_checks() -> list[str]:
+    """The gate, read from its single source of truth."""
+    return json.loads(MANIFEST.read_text(encoding="utf-8"))["checks"]
+
+
+def run_one(check: str, scripts_dir: Path | None = None) -> CheckResult:
+    # Read at call time: a default of SCRIPTS froze the path at import.
+    scripts_dir = scripts_dir or SCRIPTS
+    parts = shlex.split(check)
+    cmd = [sys.executable, str(scripts_dir / parts[0]), *parts[1:]]
+    started = time.perf_counter()
+    proc = subprocess.run(
+        cmd,
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return CheckResult(check, proc.returncode, time.perf_counter() - started, proc.stdout)
+
+
+def default_jobs() -> int:
+    return max(1, min(8, os.cpu_count() or 1))
+
+
+def run_checks(
+    checks: list[str], jobs: int | None = None, scripts_dir: Path | None = None
+) -> list[CheckResult]:
+    """Run every check and return every result, in manifest order.
+
+    Never short-circuits: a caller that wants the first failure can find it,
+    but a caller that wants to fix everything in one pass needs all of them.
+    """
+    jobs = jobs or default_jobs()
+    # Indexed rather than keyed by name: a manifest that listed the same check
+    # twice would otherwise collapse to one result and under-report the gate.
+    shared = [(i, c) for i, c in enumerate(checks) if shlex.split(c)[0] not in EXCLUSIVE]
+    alone = [(i, c) for i, c in enumerate(checks) if shlex.split(c)[0] in EXCLUSIVE]
+
+    results: dict[int, CheckResult] = {}
+    if shared:
+        with ThreadPoolExecutor(max_workers=jobs) as pool:
+            for index, result in pool.map(
+                lambda pair: (pair[0], run_one(pair[1], scripts_dir)), shared
+            ):
+                results[index] = result
+    for index, check in alone:
+        results[index] = run_one(check, scripts_dir)
+    return [results[i] for i in range(len(checks))]
+
+
+def record(results: list[CheckResult], wall_s: float, jobs: int) -> Path:
+    """Persist the run so gate duration is a measurement, not a memory."""
+    payload = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "jobs": jobs,
+        "wall_s": round(wall_s, 3),
+        "cpu_s": round(sum(r.duration_s for r in results), 3),
+        "checks": len(results),
+        "failed": [r.check for r in results if r.returncode != 0],
+        "durations": {r.check: round(r.duration_s, 3) for r in results},
+    }
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    path = RUNS_DIR / f"gate-{payload['generated_at'].replace(':', '')}.json"
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # A record per run grows without bound otherwise. Names sort
+    # chronologically, so the oldest are the ones to drop.
+    stale = sorted(RUNS_DIR.glob("gate-*.json"))[:-RETAINED_RUNS]
+    for old in stale:
+        old.unlink()
+    return path
+
+
+def report(results: list[CheckResult], wall_s: float, jobs: int) -> None:
+    failures = [r for r in results if r.returncode != 0]
+    for result in failures:
+        print(f"\n=== FAIL ({result.returncode}) {result.check} ===")
+        print(result.output.rstrip())
+
+    print()
+    slowest = sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
+    for result in slowest:
+        print(f"  {result.duration_s:6.2f}s  {result.check}")
+    serial = sum(r.duration_s for r in results)
+    print(
+        f"\n{len(results)} check(s) in {wall_s:.2f}s wall "
+        f"({serial:.2f}s serial, {jobs} job(s))"
+    )
+    if failures:
+        print(f"FAIL: {len(failures)} of {len(results)} check(s) failed:")
+        for result in failures:
+            print(f"  - {result.check}")
+    else:
+        print(f"OK: {len(results)} check(s) passed")
 
 
 def main() -> int:
-    for check in CHECKS:
-        cmd = [sys.executable, str(ROOT / "scripts" / check[0]), *check[1:]]
-        print(f"$ {' '.join(cmd)}")
-        rc = subprocess.call(cmd, cwd=ROOT)
-        if rc != 0:
-            return rc
-    cmd = [sys.executable, "-m", "py_compile", *[str(ROOT / "scripts" / script) for script in COMPILE]]
-    print(f"$ {' '.join(cmd)}")
-    return subprocess.call(cmd, cwd=ROOT)
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=default_jobs(),
+        help="concurrent checks (default: min(8, cpu count); 1 to serialise)",
+    )
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help=f"also write the measured wall time to {RECORD.name}, for committing",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="human table, or the machine-readable run record",
+    )
+    args = parser.parse_args()
+
+    checks = manifest_checks()
+    started = time.perf_counter()
+    results = run_checks(checks, jobs=args.jobs)
+    wall = time.perf_counter() - started
+
+    path = record(results, wall, args.jobs)
+    if args.record:
+        RECORD.parent.mkdir(parents=True, exist_ok=True)
+        RECORD.write_text(
+            json.dumps(
+                # Top-level keys sorted by hand rather than with sort_keys,
+                # which also re-sorted `slowest` alphabetically and lost
+                # the one thing its order says.
+                dict(sorted(
+                    {
+                        "schema_version": 1,
+                        "generated_by": "scripts/run-all-checks.py --record",
+                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "environment": {"python": sys.version.split()[0]},
+                        "jobs": args.jobs,
+                        "checks": len(results),
+                        "wall_s": round(wall, 3),
+                        "serial_s": round(sum(r.duration_s for r in results), 3),
+                        # A duration from a run that failed is still a duration,
+                        # but it is not "the gate passes in N seconds". Record
+                        # which it was rather than letting the reader assume.
+                        "passed": all(r.returncode == 0 for r in results),
+                        "failed": [r.check for r in results if r.returncode != 0],
+                        "slowest": {
+                            r.check: round(r.duration_s, 3)
+                            for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
+                        },
+                    }.items()
+                )),
+                indent=2,
+            ) + "\n",
+            encoding="utf-8",
+        )
+        print(f"recorded {RECORD.relative_to(ROOT)}")
+    if args.format == "json":
+        print(json.dumps(
+            {"run": str(path.relative_to(ROOT)),
+             "results": [asdict(r) for r in results]},
+            indent=2,
+        ))
+    else:
+        report(results, wall, args.jobs)
+
+    return 1 if any(r.returncode != 0 for r in results) else 0
 
 
 if __name__ == "__main__":

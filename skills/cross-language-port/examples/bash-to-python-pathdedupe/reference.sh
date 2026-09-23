@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 # Reference implementation (SOURCE): dedupe a colon-separated PATH string,
 # preserving first occurrence and dropping empty segments.
 #

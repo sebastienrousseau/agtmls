@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
 complete -c agtmls -f
-complete -c agtmls -n "__fish_use_subcommand" -a "agent-card" -d "agent-card command"
 complete -c agtmls -n "__fish_use_subcommand" -a "audit" -d "audit command"
 complete -c agtmls -n "__fish_use_subcommand" -a "bench" -d "bench command"
 complete -c agtmls -n "__fish_use_subcommand" -a "bump-version" -d "bump-version command"
@@ -36,4 +35,5 @@ complete -c agtmls -n "__fish_use_subcommand" -a "show" -d "show command"
 complete -c agtmls -n "__fish_use_subcommand" -a "stats" -d "stats command"
 complete -c agtmls -n "__fish_use_subcommand" -a "status" -d "status command"
 complete -c agtmls -n "__fish_use_subcommand" -a "uninstall" -d "uninstall command"
+complete -c agtmls -n "__fish_use_subcommand" -a "verify" -d "verify command"
 complete -c agtmls -n "__fish_use_subcommand" -a "verify-release-assets" -d "verify-release-assets command"

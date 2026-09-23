@@ -3,9 +3,10 @@
 
 # AgtMLS Ecosystem — Implementation Plan
 
-**Status:** phases 1 and 3 started. `agtmls-spec` and `agtmls-core` exist
-locally and pass differential conformance; `agtmls-mcp`, `agtmls-lsp`,
-`agtmls-wasm` and `agtmls-action` do not exist yet.
+**Status (0.0.7):** all seven repositories exist (§0.1). Phases 1–5 have
+working code; phase 6 has an LSP server and a 57-line VS Code client
+scaffold; phase 7's scorecard tool exists but no workflow enforces it. The
+commercial tier has no code.
 **Owner:** Sebastien Rousseau
 **Rubric:** every repo is gated against [`SCORECARD.md`](SCORECARD.md).
 
@@ -56,16 +57,31 @@ reproduced before the fix and verified after.
 | Gate ran every check twice (see row above) | Removed |
 | Analyzer walked every character of every file in Python | Compiled character class; line map built lazily, only once a pattern matches |
 
-Gate: **62 checks**, all green, **~40s** (32s and 40s on two idle runs).
+At the time of this phase the gate measured **10.1-13.4s** wall on six jobs
+over ten consecutive runs, against **21.5-23.3s** with `--jobs 1` on the same
+machine state. It has grown since; the current figure is whatever
+`run-all-checks.py --record` last wrote to `benchmarks/results/gate.json`.
 
-That is up from **21.3s** for the original 57 checks. The five added checks each
-copy the registry or shell out to `make`, which is where the extra time goes;
-removing the doctor's duplicate run of the entire gate paid most of it back.
-The scorecard's 60s budget (criterion 3.3) is met, with little headroom —
-§8.5 is still worth doing before more checks land.
+The checks are independent processes, so §8.5's process pool landed: 24.2s
+serial and fail-fast became roughly half that concurrently, reporting every
+failure rather than the first.
+
+An earlier measurement in this section read 6.9s. That was real, and it was
+also wrong, because only one check was then scheduled outside the pool.
+`smoke-install-verify.py` tampers with `skills/writing-plans/SKILL.md` to
+prove a drifted registry is refused, and restores it in a `finally` -- which
+was harmless while the gate was serial and is a race against every concurrent
+reader of `skills/`. It surfaced once in ten runs as `generate-skill-index.py
+--check` reporting a stale index. Scheduling it alone costs about 3s of wall
+time and is not optional.
+
+The remaining cost is concentrated in the checks that copy the registry, plus
+the two that must run alone. The scorecard's 60s budget (criterion 3.3) still
+has real headroom.
 
 An earlier figure of 137s in this document was wrong: it was measured while
-Rust builds were running concurrently. Remaining hub work is in §8.
+Rust builds were running concurrently. A later figure of ~40s was measured
+before the pool. Remaining hub work is in §8.
 
 **Not applied — needs your review.** The CI changes remove or restructure
 existing steps, which the assistant sandbox refused (correctly). They are
@@ -83,8 +99,8 @@ All seven repositories exist and are public.
 
 | Repository | Location | State |
 |---|---|---|
-| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phases 0 and 2 complete. 62-check gate, ~40s. Per-skill `integrity`; install verifies and writes a lockfile |
-| [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Other/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
+| [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phase 2 complete; phase 0 repairs landing in 0.0.7. 66-check gate (timing in `benchmarks/results/gate.json`). Per-skill `integrity`; install verifies and writes a lockfile |
+| [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Python/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
 | [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
 | [`agtmls-action`](https://github.com/sebastienrousseau/agtmls-action) | `Public/JavaScript/agtmls-action` | SARIF to code scanning. Vendors the WASM module; no Rust toolchain at run time |
@@ -95,9 +111,12 @@ All seven repositories exist and are public.
 
 Release workflows exist for crates.io (`agtmls-core`), npm (`agtmls-wasm`) and
 PyPI (`agtmls`), all via Trusted Publishing, so no long-lived token exists to
-leak. **Nothing is published yet**: each needs a one-time trusted publisher
-registered on the registry and a matching GitHub environment, which cannot be
-done from a checkout.
+leak. **None has run yet**: PyPI carries 0.0.3–0.0.5, uploaded by hand before
+the workflow existed, and neither `agtmls-core` on crates.io nor
+`@agtmls/wasm` on npm is published (checked 2026-09-22). `agtmls` has its
+trusted publisher registered on PyPI and a `pypi` environment with a required
+reviewer (set up 2026-09-23); `agtmls-core` and `@agtmls/wasm` still need
+theirs, which cannot be done from a checkout.
 
 ### What the second implementation proved
 
@@ -594,7 +613,7 @@ Promote `agtmls-doctor.py`'s `Reporter` into `scripts/_lib/report.py`;
 ### 8.7 Smaller items
 
 - Rewrite the remaining semicolon-compressed scripts. `generate-sbom.py` and
-  `generate-provenance.py` are done; `generate-agent-card.py`, `bench.py`,
+  `generate-provenance.py` and `generate-mcp-resources.py` are done; `bench.py`,
   `record-evidence.py`, `evolve-session.py`, `validate-governance.py`,
   `generate-docs-site.py`, `generate-completions.py`,
   `generate-plugin-manifests.py`, `validate-packaging.py` and
@@ -603,9 +622,9 @@ Promote `agtmls-doctor.py`'s `Reporter` into `scripts/_lib/report.py`;
 - `validate-secrets.py`: widen beyond 8 suffixes; scan history; add entropy
   and vendor-token patterns.
 - `bench.py` must measure time or be renamed.
-- `agent-card.json` is not an A2A card — `capabilities` is an array where the
-  spec defines an object, and `protocolVersion`, `url`, `preferredTransport`,
-  `defaultInputModes`/`defaultOutputModes` and `provider` are absent.
+- ~~`agent-card.json` is not an A2A card~~ — removed in 0.0.7. It had no
+  consumer and could not conform without a service endpoint; a conforming
+  A2A export can be added when one exists.
 
 ---
 
@@ -621,7 +640,7 @@ Dependencies are real; this order is not negotiable without breaking something.
 | **3** | `agtmls-core` + differential CI | 4–6 | **Done** — L4 verified: digests, rule sets and lockfile verification all identical across both implementations |
 | **4** | `agtmls-wasm` + `agtmls-action` | 2 | **Done** — 410 KB gzipped; SARIF wired to code scanning |
 | **5** | `agtmls-mcp` | 3–4 | **Done** — 5 tools over stdio; path traversal refused; tool failures are content, not protocol errors |
-| **6** | `agtmls-lsp` + VS Code client | 4–6 | **Server done**; the VS Code extension is not written |
+| **6** | `agtmls-lsp` + VS Code client | 4–6 | **Server done**; the VS Code client is a 57-line scaffold with no marketplace build |
 | **7** | Scorecard tool; all repos ≥ 9.5 | 2 | `--fail-under` wired into every repo |
 
 **~6 months part-time.** Phases 4–6 can overlap once phase 3 lands.

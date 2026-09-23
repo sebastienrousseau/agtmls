@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 # noyalib-ci-and-release — reference
 
 Complements `SKILL.md` in the same directory. Date-stamped **2026-07-08**

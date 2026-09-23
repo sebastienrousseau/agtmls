@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Record a local skill invocation evidence event."""
 from __future__ import annotations
-import argparse,json,sys,time,uuid
+
+import argparse
+import json
+import sys
+import time
+import uuid
 from pathlib import Path
+
 ROOT=Path(__file__).resolve().parent.parent
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument('--skill',required=True); ap.add_argument('--out-dir',type=Path,default=ROOT/'.agtmls'/'runs'); ap.add_argument('--command',action='append',default=[]); ap.add_argument('--file',action='append',default=[]); ap.add_argument('--outcome',default='recorded')

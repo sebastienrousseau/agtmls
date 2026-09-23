@@ -21,7 +21,10 @@
       "validate-system-prompts.py",
       "check-skill-collisions.py",
       "validate-eval-cases.py",
+      "sync-spec-rules.py --check",
+      "validate-security-claims.py",
       "run-security-evals.py",
+      "audit-skill.py --all --strict",
       "run-trigger-evals.py",
       "run-behavioral-evals.py",
       "validate-skill-metadata.py",
@@ -30,8 +33,8 @@
       "generate-skill-index.py --check",
       "generate-catalog.py --check",
       "generate-docs-site.py --check",
-      "generate-agent-card.py --check",
       "generate-mcp-resources.py --check",
+      "generate-benchmarks-doc.py --check",
       "generate-sbom.py --check",
       "validate-sbom-conformance.py",
       "generate-provenance.py --check",
@@ -55,20 +58,20 @@
       "smoke-install-verify.py",
       "smoke-install-profiles.py",
       "smoke-cli.py",
+      "smoke-offline.py",
       "smoke-make-install.py",
       "smoke-export.py",
       "smoke-import.py",
       "smoke-proposal.py",
       "smoke-scaffold.py",
       "run-unit-tests.py",
-      "bench.py",
+      "bench.py --smoke",
       "validate-check-manifest.py",
       "agtmls-doctor.py --skip-gate"
     ],
     "materials": [
       "index.json",
       "checks.json",
-      "agent-card.json",
       "mcp-resources.json",
       "SBOM.spdx.json",
       "SBOM.cyclonedx.json"
@@ -86,7 +89,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "6bdfa63c925081928261366a21e1580d8f486124"
+            "gitCommit": "eeffc49b9558ab63564642dce3abc90ca9d03398"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -97,9 +100,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-19T17:45:11Z",
+        "finishedOn": "2026-09-23T09:46:25Z",
         "invocationId": "local",
-        "startedOn": "2026-09-19T17:45:11Z"
+        "startedOn": "2026-09-23T09:46:25Z"
       }
     }
   },
@@ -107,7 +110,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a351d718ccf7168481d4ccc0c39b641ba3c1a70d5f9c8cec25ba3e0937bc3a54"
+        "sha256": "59af957b325856df55b7b73657bd329899f69b7957849f001133f1fae0576d19"
       },
       "name": "agtmls-0.0.6"
     }

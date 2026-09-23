@@ -18,7 +18,6 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Code Generators",
 ]
@@ -78,4 +77,35 @@ include = [
   "*.md",
   "LICENSE-APACHE",
   "LICENSE-MIT",
+]
+
+# Coverage of the tooling, not of the registry data it validates. Subprocess
+# tracing is on because most of this repository's work happens in child
+# processes: the gate runs 64 of them, and a measurement that saw only what
+# the parent executed would report a number with no relationship to what the
+# tests exercise.
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["scripts", "src"]
+omit = [
+  "*/__pycache__/*",
+  "scripts/_lib/scaling.py",
+  # smoke-*.py are tests. They drive installs, exports and `make install`
+  # end to end, and the gate runs each as a subprocess. Measuring how much
+  # of the test code the tests execute is not a coverage number anybody can
+  # act on -- the convention everywhere else is to exclude the suite, and
+  # these are the suite.
+  "scripts/smoke-*.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_also = [
+  # A module's own entry point is exercised by running it, which the gate does
+  # 64 times; counting the two lines that call main() adds noise, not signal.
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
 ]

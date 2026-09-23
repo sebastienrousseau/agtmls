@@ -7,6 +7,93 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Breaking
+
+- `agtmls agent-card` and `agent-card.json` are removed. The file declared
+  itself `not_a2a`, nothing consumed it, and it could not conform to A2A v1.0
+  without a service endpoint.
+
+### Added
+
+- `antigravity` is a native agent for `install`, `verify` and `uninstall`,
+  installing into `.agents/`. `setup-workspace.sh` already accepted it; the
+  CLI rejected it.
+- Benchmarks: nine workloads measured in fresh processes with every raw
+  sample committed under `benchmarks/results/`, a regression gate, and a
+  scaling measurement at ten times the registry.
+- `smoke-offline.py` proves the local tier never opens a network socket.
+- Coverage measurement, with the library core held at 100% of lines and
+  branches. The security analyzer now sits inside that floor.
+- Unit-test coverage of every script is held at or above 98% of lines and
+  branches (`run-coverage.py --scope unit`, run in CI); it stands at 100%.
+- SECURITY.md separates boundaries (digests, install verification, the
+  lockfile, signed tags) from heuristics (the analyzer, policy checks, evals).
+- `scripts/release-preflight.py` refuses to let a release tag be pushed unless
+  it is signed by a key in `KEYS.asc`, titled `AgtMLS v<version>`, on the
+  intended commit, matched by every packaged version, and accompanied by notes
+  with a summary and checksums. `scripts/release-audit.py` reads a published
+  release back from the tag, the GitHub release and PyPI -- including every
+  asset's digest. RELEASE.md describes the flow.
+- The release workflow builds once and publishes those exact files to both the
+  GitHub release and PyPI. It attaches assets to a draft, publishes only when
+  GitHub holds all of them, writes the release body from the prepared notes
+  plus the real checksums, and audits the result before PyPI is approved.
+  v0.0.6's first run attached no assets while reporting success, and its
+  publish job rebuilt the distributions; that deployment was rejected.
+
+### Changed
+
+- A skill's digest no longer includes the release version, so a release
+  moves no content address unless the skill itself changed.
+- The analyzer's rules are a snapshot of a pinned `agtmls-spec` commit
+  (`scripts/_lib/rules.json`), checked for self-consistency in the gate and
+  against the spec in CI, instead of a hand-kept copy.
+- Every measured number in BENCHMARKS.md is generated from the raw results
+  and stamped with their hashes. The scaling section had drifted: it now
+  reports x7.02 (digest) and x110.62 (pairwise) for ten times the registry.
+- README and SECURITY.md describe the analyzer as first-stage triage rather
+  than a defence, and the gate rejects absolute security claims.
+- The `security` and `research` profiles install their own bundles; general
+  profiles no longer pull in the `noyalib` project bundle.
+- The gate audits the shipped registry with `--strict` and runs in parallel;
+  it is now 66 checks.
+- `export` selects skills the way `install` does: without a profile it
+  exports the general skills, and `--bundle NAME` adds that bundle to them.
+  It used to export every bundle when unfiltered, and only the named bundle
+  with `--bundle`.
+
+### Fixed
+
+- AGT-CAP-001 could not fire on any real skill: `allowed-tools` is
+  space-separated and was split on commas only.
+- The licence gate counted `.py` and `.sh` files without reading them; 87
+  files lacked an SPDX header.
+- `mcp-resources.json` used `agtmls://skills/` while agtmls-mcp serves
+  `agtmls://skill/`.
+- The spec-conformance check passed silently in CI when `skills-ref` failed
+  to install.
+- SBOM.cyclonedx.json did not validate against CycloneDX 1.6.
+- Error messages name the command that fixes the problem.
+- `install` refused a tampered skill only if the index gave it a digest; an
+  entry without one is now refused too.
+- `agtmls doctor --agent antigravity` was rejected, and the doctor counted a
+  link into a sibling checkout as an AgtMLS skill.
+- `scaffold-skill` crashed and left a half-created skill when an eval case
+  already existed; it now writes every file or none.
+- `validate-skill-metadata` crashed on malformed `metadata.json`.
+- Behavioral evals now enforce `forbids.reference_contains`.
+- `agtmls diff` looked up relative paths from the checkout rather than the
+  caller's directory, and failed outside it without `--to`.
+- A blank or malformed line in `SHA256SUMS` crashed the release checks, and a
+  tampered artifact was reported three times.
+- The SBOM check treated any validator output containing "must" as a
+  rejection, and crashed on a checksum entry without an algorithm.
+- On Python 3.10 the packaging check skipped the name, console-script and
+  no-dependencies checks.
+- `bump-version` left two blank lines between changelog sections.
+- AGT-CAP-001 no longer says every runtime grants the tools in
+  `allowed-tools`; Claude Code does, Apache Maka does not.
+
 ## 0.0.6 - 2026-09-19
 
 ### Added
@@ -17,7 +104,6 @@ All notable changes to AgtMLS are recorded here.
 
 - Updated packaging and manifest validation tooling (`pyproject.toml`, `validate-packaging.py`, `validate-plugin-manifest.py`, `agtmls-doctor.py`, `export-registry.py`) to support dual license declarations.
 - Bumped release metadata through the guarded patch-line release flow to `v0.0.6`.
-
 
 ## 0.0.5 - 2026-08-04
 
@@ -67,7 +153,6 @@ All notable changes to AgtMLS are recorded here.
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
-
 
 ### Added
 
@@ -172,13 +257,11 @@ All notable changes to AgtMLS are recorded here.
 
 - Bumped release metadata through the guarded patch-line release flow.
 
-
 ## 0.0.2 - 2026-07-21
 
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
-
 
 ## 0.0.1 - 2026-07-20
 

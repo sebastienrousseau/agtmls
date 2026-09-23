@@ -35,7 +35,7 @@
 - [Capabilities at a glance](#capabilities-at-a-glance) — 31 skills, 4 commands, 4 subagents, 13 provider targets
 - [The Discipline Skills Pipeline](#the-discipline-skills-pipeline) — ordered engineering lifecycle from plan to handoff
 - [Anti-Slop & Editorial Doctrine](#anti-slop--editorial-doctrine) — human-voice preservation and AI filler removal
-- [ToxicSkills & Supply Chain Security](#toxicskills--supply-chain-security) — static security analyzer, steganography defense, SBOM
+- [ToxicSkills & Supply Chain Security](#toxicskills--supply-chain-security) — static security analyzer, steganography detection, SBOM
 - [Skill Anatomy & Router Contract](#skill-anatomy--router-contract) — frontmatter specification, trigger cues, progressive disclosure
 - [General Skills vs Project Bundles](#general-skills-vs-project-bundles) — flat directory structure and scoped metadata
 - [Providers & Profiles](#providers--profiles) — native symlinks, runtime plugins, and adapted exports
@@ -49,7 +49,7 @@
 **Operational**
 
 - [When not to use AgtMLS](#when-not-to-use-agtmls) — design scope and intentional boundaries
-- [Development](#development) — make targets, 57-gate validation suite, benchmarks
+- [Development](#development) — make targets, 66-gate validation suite, benchmarks
 - [Security & Hardening](#security--hardening) — zero-dependency architecture, signing keys, private disclosure
 - [Documentation](#documentation) — canonical specifications, ADRs, and developer guides
 - [Stability guarantees](#stability-guarantees) — strict pre-1.0 SemVer (`v0.0.1` → `v0.0.999`), output determinism
@@ -186,7 +186,7 @@ agtmls audit --all --strict
 # Run local diagnostic health checks
 agtmls doctor
 
-# Execute the full 57-gate validation suite
+# Execute the full 66-gate validation suite
 agtmls check
 ```
 
@@ -202,7 +202,7 @@ agtmls check
 | **Subagents** | 4 | Context-isolated autonomous roles (`anti-slop-editor`, `security-sentinel`, `skill-author`, `registry-auditor`) | [`agents/`](agents/) |
 | **Security Auditor** | 1 | Zero-dependency static scanner detecting prompt injection, unicode steganography, and unsafe commands | [`scripts/audit-skill.py`](scripts/audit-skill.py) |
 | **Provider Targets** | 13 | Cross-runtime support via native symlinks, plugin manifests, and adapted markdown bundles | [`providers.json`](providers.json) |
-| **Named Profiles** | 5 | Curated subsets for specific workflows (`minimal`, `polyglot`, `discipline`, `noyalib`, `security`) | [`profiles.json`](profiles.json) |
+| **Named Profiles** | 6 | Curated subsets for specific workflows (`minimal`, `polyglot`, `discipline`, `security`, `research`, `noyalib`) | [`profiles.json`](profiles.json) |
 
 ---
 
@@ -260,7 +260,7 @@ For the full catalog of before-and-after transformations, see [`skills/anti-slop
 
 ## ToxicSkills & Supply Chain Security
 
-AgtMLS includes proactive defense against malicious third-party prompt injection, unauthorized outbound network access, and capability escalation.
+Two kinds of protection, and they are not equally strong. **Content addressing and install verification** are structural: a skill that differs from what the registry published is refused, whatever it contains. **The static analyzer** is first-stage triage: it flags known patterns of prompt injection, hidden Unicode, unsafe execution and capability escalation, and a determined author can evade it — packed or obfuscated payloads bypass static skill scanners over 90% of the time ([arXiv 2607.02357](https://arxiv.org/abs/2607.02357)). [`SECURITY.md`](SECURITY.md#boundaries-and-heuristics) lists which is which.
 
 ### Static Security Auditor (`agtmls audit`)
 
@@ -274,13 +274,13 @@ agtmls audit skills/my-skill
 agtmls audit --all --strict --json
 ```
 
-### Attack Vectors Defended
+### What the analyzer flags
 
 - **Invisible Unicode Steganography** (`AGT-STEG-*`): Zero-width spaces (`\u200B`–`\u200D`, `\uFEFF`), bidirectional override markers (`\u202A`–`\u202E`, `\u2066`–`\u2069`), variation selectors (`\uFE00`–`\uFE0F`), soft hyphens, invisible mathematical operators (`\u2061`–`\u2064`), Hangul fillers, and Unicode tag characters (`\U000E0000`–`\U000E007F`) used to conceal prompt injection from human reviewers.
 - **Prompt Injection & Persona Jailbreaks** (`AGT-INJ-*`): Detection of instruction overrides (`"ignore previous instructions"`), developer-mode exploits, and security guardrail bypasses.
 - **Dangerous Shell Invocations** (`AGT-EXEC-*`): Unauthorized pipe-to-shell commands (`curl | bash`), root wipes (`rm -rf /`), credential access (`~/.ssh`, `~/.aws`), and reverse shells.
 - **Data Exfiltration Pingbacks** (`AGT-EXFIL-*`): Detection of covert markdown image pingbacks intended to leak session context or environment variables.
-- **Capability Escalation** (`AGT-CAP-*`): Frontmatter that grants `Bash`, `Write` or `WebFetch` while `metadata.json` declares those capabilities denied. The runtime honours the frontmatter, so the two disagreeing is the escalation.
+- **Capability Escalation** (`AGT-CAP-*`): Frontmatter that grants `Bash`, `Write` or `WebFetch` while `metadata.json` declares those capabilities denied. Runtimes that pre-approve the tools listed in `allowed-tools`, such as Claude Code, grant what the frontmatter says, so the two disagreeing is the escalation; runtimes that treat the field as informational, such as Apache Maka, do not.
 - **Policy Honesty Checks** (`AGT-POLICY-*`): Skills declaring `executes_commands: false` or `network_access: none` that instruct models to run commands or fetch URLs. A missing or unparseable `metadata.json` is itself a finding — an unattested skill is not a safe skill.
 
 ### Content-addressed skills and install verification
@@ -357,7 +357,6 @@ license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, Antigravity, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:
-  agtmls-version: "0.0.6"
   agtmls-owner: "Sebastien Rousseau"
   agtmls-maturity: "hardened"
   agtmls-risk-level: "low"
@@ -428,7 +427,7 @@ agtmls export --provider anthropic --profile noyalib --out-dir dist
 python3 scripts/agtmls.py doctor
 python3 scripts/agtmls.py status
 
-# Full gate validation (62 checks)
+# Full gate validation (66 checks)
 python3 scripts/agtmls.py check
 
 # Static security audit
@@ -451,7 +450,6 @@ python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-
 # Manifest and artifact generation
 python3 scripts/agtmls.py index --write
 python3 scripts/agtmls.py plugin-manifests --write
-python3 scripts/agtmls.py agent-card --write
 python3 scripts/agtmls.py mcp-resources --write
 python3 scripts/agtmls.py sbom --write
 python3 scripts/agtmls.py provenance --write
@@ -501,9 +499,8 @@ agtmls/
 ├── share/man/man1/              # Generated Unix manpages (agtmls.1)
 ├── skills/                      # 31 flat skill directories (SKILL.md, metadata.json)
 ├── system-prompts/              # Base rules (_base.md) and 9 language profiles
-├── agent-card.json              # A2A agent discovery manifest
 ├── CATALOG.md                   # Human-readable registry catalog
-├── checks.json                  # Canonical 62-check validation registry
+├── checks.json                  # Canonical 66-check validation registry
 ├── index.json                   # Machine-readable skill registry index
 ├── KEYS.asc                     # OpenSSH allowed signers for commit/tag verification
 ├── Makefile                     # Unix build and installation task runner
@@ -521,6 +518,7 @@ agtmls/
 ## When not to use AgtMLS
 
 AgtMLS is designed as a deterministic, versioned engineering skills registry. Do not use AgtMLS if:
+- **You need malware detection for third-party skills**: `agtmls audit` is a static, pattern-based first pass. It does not execute or detonate a skill, and packed or obfuscated payloads can evade it. Pair it with a sandboxed runtime and a human review for anything you did not write.
 - **You need dynamic code execution sandboxing at runtime**: AgtMLS provides declarative skills, system prompts, and static tool configurations. It is not an arbitrary sandbox hypervisor.
 - **You want uncurated prompt dumps**: Every AgtMLS skill must pass semantic collision checks ($< 0.75$), behavioral eval assertions, and frontmatter validation.
 - **Your workflow cannot support reproducible release versioning**: All skills adhere to strict patch-line versioning.
@@ -532,7 +530,7 @@ AgtMLS is designed as a deterministic, versioned engineering skills registry. Do
 Local development requires only standard Python 3.10+ and `make`.
 
 ```bash
-# Run the complete 57-gate validation suite
+# Run the complete 66-gate validation suite
 make check
 
 # Run unit tests
@@ -570,11 +568,12 @@ The canonical documentation entry points:
 | [`CATALOG.md`](CATALOG.md) | The complete index of 31 engineering skills, subagents, and commands. |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architectural layout, generator pipelines, and adapter compilation. |
 | [`docs/cli.md`](docs/cli.md) | Comprehensive CLI command-line reference and examples. |
-| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 57 CI validation gates. |
+| [`docs/checks.md`](docs/checks.md) | Detailed reference of all 66 CI validation gates. |
 | [`DEVELOPMENT.md`](DEVELOPMENT.md) | Developer workflow, local test reproduction, and release verification. |
 | [`AGENTS.md`](AGENTS.md) | Authoritative invariants and rules for AI-assisted contributors. |
 | [`SECURITY.md`](SECURITY.md) | Vulnerability disclosure policy and security posture. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Pull request guidelines, conventional commits, and signing. |
+| [`BENCHMARKS.md`](BENCHMARKS.md) | Measured timings, the regression-detection method, and its limits. |
 | [`CHANGELOG.md`](CHANGELOG.md) | Complete per-release record of additions, fixes, and changes. |
 
 ---

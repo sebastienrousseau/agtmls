@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Export a provider-neutral AgtMLS bundle."""
 
 from __future__ import annotations
@@ -30,8 +32,11 @@ def selected_skill_paths(profile_name: str | None, bundle: list[str]) -> list[Pa
         wanted_bundles.update(profile.get("bundles", []))
     paths = []
     for skill in index.get("skills", []):
-        include = wanted_skills is None and not wanted_bundles
-        include = include or skill.get("name") in (wanted_skills or set())
+        # Without a profile, selection matches `install`: the general skills,
+        # plus any bundle asked for by name. An unfiltered export used to
+        # carry every bundle, and --bundle exported that bundle alone.
+        general = wanted_skills is None and not skill.get("bundle")
+        include = general or skill.get("name") in (wanted_skills or set())
         include = include or skill.get("bundle") in wanted_bundles
         if include:
             paths.append(ROOT / str(skill["path"]))

@@ -7,3 +7,6 @@ __pycache__/
 .agtmls/
 dist/
 *.egg-info/
+.coverage
+.coverage.*
+htmlcov/

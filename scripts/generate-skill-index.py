@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Generate index.json for the AgtMLS skill registry.
 
 The index is intentionally derived from files already in the repo. It gives
@@ -9,16 +11,17 @@ skill body.
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib.digest import skill_digest  # noqa: E402  (needs ROOT on the path first)
+
 SKILLS_DIR = ROOT / "skills"
 COMMANDS_DIR = ROOT / "commands"
 INDEX = ROOT / "index.json"
@@ -195,7 +198,8 @@ def collect() -> dict[str, object]:
             "license": fields.get("license", "MIT"),
             "allowed_tools": fields.get("allowed-tools", "").split(),
             "metadata_path": metadata_path,
-            "version": metadata.get("version", fields.get("version", "0.0.6")),
+            # Set below, from whether the digest moved since the last index.
+            "last_changed_version": None,
             "owner": metadata.get("owner"),
             "maturity": metadata.get("maturity", "hardened" if kind == "general" else "project"),
             "supported_agents": metadata.get("supported_agents", ["claude", "codex", "aider"]),
@@ -220,6 +224,7 @@ def collect() -> dict[str, object]:
         }
         skill["quality"] = quality_score(skill)
         skills.append(skill)
+    apply_change_tracking(skills, plugin.get("version", "0.0.0"))
     bundles = Counter(skill["bundle"] or "_general" for skill in skills)
     routing = sum(1 for skill in skills if skill["evals"]["routing"])
     behavioral = sum(1 for skill in skills if skill["evals"]["behavioral"])
@@ -241,6 +246,44 @@ def collect() -> dict[str, object]:
         "commands": commands,
         "skills": skills,
     }
+
+
+def apply_change_tracking(skills: list[dict], registry_version: str) -> None:
+    """Record the release in which each skill's content last moved.
+
+    Replaces the per-skill `version` that used to be stamped with the
+    registry's on every release. That number carried no information -- a skill
+    untouched for five releases still read as current -- and, because it lived
+    inside SKILL.md, it also moved the skill's digest every time.
+
+    The previous answer is read back out of the committed index.json: if a
+    skill's digest is unchanged, its recorded release is carried forward;
+    otherwise this release is when it changed. Deterministic given the skills,
+    the current index and the registry version. With no index.json to read --
+    a fresh checkout of a tree that never had one -- every skill reads as
+    having changed in this release, which is true of the index if not of the
+    skill, and is the only answer available without history.
+    """
+    previous: dict[str, dict] = {}
+    index_path = ROOT / "index.json"
+    if index_path.exists():
+        try:
+            previous = {
+                entry["name"]: entry
+                for entry in json.loads(index_path.read_text(encoding="utf-8")).get("skills", [])
+                if isinstance(entry, dict) and "name" in entry
+            }
+        except (OSError, ValueError):
+            previous = {}
+    for skill in skills:
+        before = previous.get(skill["name"], {})
+        unchanged = (
+            before.get("integrity") == skill["integrity"]
+            and isinstance(before.get("last_changed_version"), str)
+        )
+        skill["last_changed_version"] = (
+            before["last_changed_version"] if unchanged else registry_version
+        )
 
 
 def main() -> int:

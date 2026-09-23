@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-19T17:45:11Z",
+    "created": "2026-09-23T09:46:25Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1b8df1a9545fc047a76b3d8f49eda1db31874bb6"
+          "checksumValue": "865d13d269ac7d49a4fcc392d34865119f2ad262"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d1989e2511995b370c7337112914ef8c6166019ccbc5d5af5e2a1dd55bf71d2c"
+          "checksumValue": "16b25057ab6cc727aea22159f7f819edfc9c265e01fe9a41ea897b7325786d53"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1249,11 +1249,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "07ed5e5d0ebfc7c5c41345e67def5e8bf922dfa5"
+          "checksumValue": "121aa4bd3f480f8ced3e7fdc92e3ff07fdf29852"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9ae93da9a0dab60887f693c32c8924751daf6efd1c3873d2f4c780bab45dc519"
+          "checksumValue": "258d2bf4012a3d2318064aef7da9f94f072327954423cd0dce163359562609bf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1265,11 +1265,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0c81ff73500b8e9ced70a352fa24c6d5e56ec84a"
+          "checksumValue": "4fdbc6d845c6ae523c6291ebcfa2da4641cfa26a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "893cb0010a01c9ff836ebdc61c2d8c17ce3a08b94fd44e41cc633c415101e6dc"
+          "checksumValue": "1447c25a30676984a47c63bed69d241fb5cb0d1e5d2c53bc3a7796fb8df8fba0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1297,11 +1297,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "73bf7ea397faadccf7c423673aac66df96661849"
+          "checksumValue": "7bca3e2ad91351b6788bc8ca56006e0c57666a17"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "493f98f2e03ec299287176c1cebcbf848822af24c7446020b4ed6f65e223ebce"
+          "checksumValue": "7238c9e4a307b1a39e90fef0efd60055f83ab816e2417809ec2987a144b05e1e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1313,11 +1313,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "af632d03a927c1c118d136f6cd5e648843945736"
+          "checksumValue": "fba76e7e0fa64b214bc62f66e0d355dfd94ad449"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a9117697d9b2bfde7d34ffd264ccf439bc7b2848a3675afb185eaa928be99032"
+          "checksumValue": "1bf837d9b6e83fb01800230d7b2a7a51debda23d05a141e6a41adb3e35cd3739"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1405,15 +1405,63 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-analyzer.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "36bb92deb6280f87cb055b876fd6347591cfd5ea"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1ae57c6f5a20c39c81c4176b7e8f1ca5c73814b69fb858278bb2b14052688a9b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/analyzer.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-checksums.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dc67e1521d3bede5c99d198048e09ea79a5f20ef"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ae3005de979637664e51d15375bcd854f14cbd87aca2e8193fd1c8d9d50f115e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/checksums.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-cli-parser.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dcd663842e01173711dbdf4ebf6f0a22af69c30e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a3487763b3a8bd5e1ba7f483dac422b3c186cf4ab068a41092eabaea6e5e36f1"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/cli_parser.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-covered.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "012b4809cef232b18a428385957e8043f6a11477"
+          "checksumValue": "7bb7219388fd2b87109a776dac5f8dea7127e6aa"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "919ac6bc4c3e9a39e05e17dd4f382f8d6f27a32d6579fdca7f4b4acc17e8ac6f"
+          "checksumValue": "2e03e87f3fdf7ad137f8e381913b33682b2ec284327b3e49b4f83e0ebb190859"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1453,15 +1501,95 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-release-notes.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8ba041847a6ea3f6122b321dd6e5d423720382d7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "120934cd1b417b83661642a587686000b80da7760c5944001b1f68e27d05875e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/release_notes.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-rules.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "08f92d859c660d8fbdecc4433911ad4c74f3cc9b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "54271345cd77ed1e1266d2ed90b1e03a90206f3ec8d7685bf3bc9e5df4a71e83"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/rules.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-rules.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "33169ed798c9b077ab2fe2ead30d565a6fa2f044"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "85fc36b2e408a7d7b2aab302afd69f9200bcc0dfe42fd33d2b8e7db021dd6ac3"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/rules.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-scaling.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "16fdc5f099d4732ef80ccf506b4ea3a53f2bbc24"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "40b496096bd62520856ea739261d1c427ed9ec6484e0f32664f76d69b90b30e9"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/scaling.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-workloads.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "bb9214ab140f6d3b2dab9d3ce8534e4c4d099629"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "73fbef6a47310f4f808e3cc30f70241f631bcb44984060e43efe20d22aeb6020"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/workloads.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-agtmls-doctor.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2f0bb3d8792af369f89b2e071ec821526b409b23"
+          "checksumValue": "0621345d79b11d57da8ae9eb0b32fc2196c82184"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ade96e4e8cbb9f91eb83e18ff148a90f55f04340fce8864a7649d064ecd44093"
+          "checksumValue": "4f4e3a26835a3ec61f4e126fd2d70860816bae92f25a06234d059fdbcef0f62c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1473,11 +1601,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "45a3844d547a7ed4e78d68a30d2d70e31f871311"
+          "checksumValue": "0f0390c59e15ea462434f1a39981968a033d510b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "89138697e00eca695ce5433d11e804f07eb89ac064ba9a0fbafcd569cd146efd"
+          "checksumValue": "ad4b48ded77fecad5af850ab8c2d60cfe16e30eb552686a094fb605ed8303513"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1489,11 +1617,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "34709ba4f3bdfb50c3c979857566f64cb1d2108a"
+          "checksumValue": "b6205c349b7633eb80f75689932d7d38d5ef4fa5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8196fe0eacb6a652890185efc31ce4f160f616bc9487a2ad6b82f74d41b6f3ec"
+          "checksumValue": "30c0364f29d29502db51fcb6d54ba959d0901cd35c4fa37825d8849c5ef611d3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1505,11 +1633,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6e620be6e21ea8a480b509aaeb53c132852823c2"
+          "checksumValue": "88b3c57d8cb15fffb0fc8f95d4900bbd817953d0"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7cf6b33a062f9c93a1f6672be9f5c1cf599aff02023fe383b59ac433bb0f6b7e"
+          "checksumValue": "a2e833c522ef92c1e875ab91b537add413ddccaf0b6a78a7b67c485d5c35bbe2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1521,11 +1649,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f2fa9c8593f5184b3f40ee4cb5553732ee5b9532"
+          "checksumValue": "c63435a2f26c0fdfa04a6b9857a7a3f71a88be52"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "84966f21d68a07141839552182b845ebbfa79019b75bfe0c6098ab88c93d30d8"
+          "checksumValue": "7b0339c538018695885999070e026839ee20a00520ea1655dd5227bd636c17af"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1553,11 +1681,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "e2229be35014f5d618ff635d00ee9934fc96d2b5"
+          "checksumValue": "eaa1cb62874e89613d59d9fca49771af315fac10"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d396f9ac4165e06dde0099b313866586ae3ccfe03a0105ce1265256e9135bbba"
+          "checksumValue": "3458d6d63c5e99619dd05f38d20eb3c99c080c1bc901105434033b3e7a5a3e59"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1569,11 +1697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2c46c2e7160c14ce6df42a19be7390571bacb5f2"
+          "checksumValue": "38f039fc7a62a98ec7e452e03c726de9a01cb664"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "11e0607f0020d4daae890d6ca74aef55c24d2112119ac63c3419378d5d43afbc"
+          "checksumValue": "e86b2aac3e05fd2d8140379d2588e0c306fcbb1f861b19679a30329353e4948d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1585,11 +1713,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4e63e7436b7cc2dd75359ede52f5d44421520dfe"
+          "checksumValue": "bd7e278cb7dedd5b4b67eb25252574ecc7b8bb5c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "efd2806dec6b73c4575c2c60afe453f50dc5746a3fe33ef1ab5bd1ea05b2363d"
+          "checksumValue": "8b6e74cddbbe46ac5f2e14104d2965a953ed2e0ba2cb273fd14b01d5ebae14f3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1597,19 +1725,19 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-scripts-generate-agent-card.py",
+      "SPDXID": "SPDXRef-File-scripts-generate-benchmarks-doc.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c200de1648090142130712232e2a16d0848312a7"
+          "checksumValue": "0608e0149594be572178d3fc60a322175cfa4e58"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b923554cc22721a1da73d4a0ff2b08ba6dd522c2673c81aef52a238fe7128573"
+          "checksumValue": "3a9e06760c7560149dceacd94fc325468d6d5ca5d71c1988b9be53c5b8eb8ecf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./scripts/generate-agent-card.py",
+      "fileName": "./scripts/generate-benchmarks-doc.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1617,11 +1745,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6240029e7641def1bd12f8a2032701e547c39198"
+          "checksumValue": "bf5dc4a9281c2b87ec01cc53328dfc3d3178b004"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e6212ade1ded76b476ed56d96d9568036f3a1949fee3c9e7c139647764eb67ec"
+          "checksumValue": "dad307d1e2a5e2d268ca20789424de34068f860fd36f3ddd0e60eb3e4613e404"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1633,11 +1761,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bb625f607ad0b2c45e87cdad0f37b9ebeca34345"
+          "checksumValue": "340abf4813c142b8e92f108da5ca7cf5222116cb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8e52ce5642f91ee79724b6736f400083233ebba54716c7708a1e05838ef8471c"
+          "checksumValue": "5e90db0eba44024032feb55d36f45aa9b73245e1fdc217a0fc1145f1f093012c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1649,11 +1777,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "03bf3aa03201d4c5977d6831f9d5abd254e790b2"
+          "checksumValue": "12cac4f413159239fb26d3e7e7388563b58ebe18"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c23f4f1de7c949233e24d6eb15cf7bd68945a1bffc09fb28bb75dcdab9eebb4a"
+          "checksumValue": "1f4b1f64b4dfcd26bdf1719407763f91b9ce86f734b02b2a77d7786317d34327"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1665,11 +1793,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b417a2959447a7cf2df05099f1a622b3c8d2b1de"
+          "checksumValue": "f7a493e785782dc8a9d9eb708b4aae17286e0dd5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "97334e6ab5498bd80ff351345a932122a9201814ec1771371aaaa80280e30189"
+          "checksumValue": "2cc2f7539d1f1df11a5e61bf38c46a6c8c020ec80fe0b1ea2f9cb5cd4a52173a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1681,11 +1809,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "978a7088c71021799d94477d77e28e6fa93b1250"
+          "checksumValue": "c676cced97c29f764c816e4f5fba931f81de902a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bd7b72a805448dcc77c16cd22d46c8f9ae78524862b15314c380c15131e76769"
+          "checksumValue": "d7eee50378cd90cc987ec97b8f69b34e1e12f1fc9bfb0d1fd87ee2289850d315"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1697,11 +1825,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f865316cd715ab7222e2e4f2c52ff402b980a64d"
+          "checksumValue": "5dedecb28b4f32e0aa68c523bed08dd7c5d735e2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2c5097397fc0198838392c58994c486834f6f164469ee6b3f0e6a816c8863aa8"
+          "checksumValue": "ed7ab531b85966e97e1d5f8c682718364732914ee5768bf1b9a03557f53a9809"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1713,11 +1841,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1b11dd1935a79ff7c6469b1544a6eb29f78fd47d"
+          "checksumValue": "9001bb7e3fda51e4fbd4bcbf2ab579add5faa9cb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6d6ec33a651e9f34c3fab380032939d72c48c35af997cadb16040a2ab69be752"
+          "checksumValue": "0a05e5205e36159b6adfb4f9552326bdd3604e9b3453c9310fc08347878fa347"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1729,11 +1857,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "7803d6a5f137078321e0a0e861b0ef981ebb90d0"
+          "checksumValue": "3a20da4d0f700bd159774637c08c12ebf8468f55"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "fc2d529c9dc581870dcc06b662b86ddfc8f4e5dcd644cede7a1fb8d5be2fe945"
+          "checksumValue": "af632b7fe2c61afd46ec68e20bd34b1ee4037fb3a726cddb70b3825383c77af8"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1745,11 +1873,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d48826d769d302e1eb8441803130bb84108b075e"
+          "checksumValue": "d1fc63b43bfc37671b5cfef6d97b9164731d1c76"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1ea187628154d72af8c0bf33e55e2d9fba2c6bb9d7be17eedeae3f2a7d9d7afa"
+          "checksumValue": "e6463783253eda890c4e98807779f06edf82284093a4eb8c54a96fc913f1f199"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1761,11 +1889,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "144ecd20d125fe937837519553a5e32503b2b2be"
+          "checksumValue": "b7d395b7225765ca70884e3f1bb6f737b9308a83"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6e1e6c77476b598b0167d81b5055f39a81f1904c9b8636d3495722e472eb3744"
+          "checksumValue": "e1f67c4804876038b19553fa3959766faffb11fd142f161f4478cc28bcd9e666"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1777,11 +1905,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f03a6c5e3eb59afab84ec41262d5341a2e4c4329"
+          "checksumValue": "65446aa1a9b82f39cf73c93b8530e8135c22ffdc"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "40b94b266153e96aec8b2b95f0ace5535d3126922f285edf7717ad09c0f8b32c"
+          "checksumValue": "919f687040af4ff9d247a92dba475cdf65f2a548811608b5d2e562c80810b4f0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1793,11 +1921,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "406f325e84784bc7650354d608e90c51d26cf826"
+          "checksumValue": "e537050ced8ec4cdbfa6083bd823afdd7fc44211"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c53fa65aaf26145109ff4dc03ccca811182f460390735dc08ab2d0b536746a93"
+          "checksumValue": "bcdb4aca38c6584f13cf65fb1ce4c4a7b63c8885ea2a826a497f59e03f2df051"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1809,11 +1937,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1b52dba693d7ba34cb938da0e7db2bedc534b76d"
+          "checksumValue": "c88ed266efa4a060885fcde8c83519cd4a901420"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "254647f57b49aee01349ba7d6dddb20cdbbb340e051ed240fa689b813874e86c"
+          "checksumValue": "1d79aea692c76b9eaa15206feca6fc43777c84e4d39988aec1908562f0134cd2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1825,11 +1953,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f3353fbb628f17f0dae64d132893465016c369ea"
+          "checksumValue": "7e95cf27694cdd20ddf505a1bca4fa9318a4882a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "47908bfbbd2457f2fc3f81c1f11e058f53eea079318abc6b67e49db485cd0c3f"
+          "checksumValue": "19b442e102eade4cad3f52ce4a3ef0e99a098dfa5ca8364e1b9f618022cafe1f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1841,11 +1969,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "3138c99d9e7e35f141aae8811c2f334aadcaa5b6"
+          "checksumValue": "566d24d9725d4f003b5416bf4f1178bdcccf7173"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f3f40d247442a517a671df47930c8d907da8c085f061d721babd482a2df17c40"
+          "checksumValue": "196637eb600829d1d56e30459bb9c21bfcb389d16ff6587013816dc0e30d56ea"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1853,15 +1981,47 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-release-audit.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "af3ee0485af705f6ccca3c5d9fdacebeb4acaeaf"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1e433c7675d00858c051fbc0f328f077e60eb53086e8846cd598790f68554cc5"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/release-audit.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-release-body.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "1d1903ec87fd1972ce1668613b8ad36ab3b48725"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "92317a95d9b38ff0917f48c5f23184c1c5f9febe52d1801ad42d5fc29daee7f4"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/release-body.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-release-check.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a3e41332821e27f3a8ac694881ff57710b0f7d6c"
+          "checksumValue": "0985ab645b4d700c8bcacb4785fed34717c0dca6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4c68ea56d41eb3ec52d014882f47be061318a47863095351afa6289b909d25ce"
+          "checksumValue": "9343a81f6c83e595ea43e119b6ec0aef16dffd1fc2bf28f5b2115e4ab26b8c3c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1873,11 +2033,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "58eb1013a657d144c891f808f1d0ce5f00b62efd"
+          "checksumValue": "b26ddf7f5a4ea64eeb33fcffa6fcfd56e5166f23"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0dbefc8dddb68ce9953b0685795fad5a2aec3fe89732df3eb5e8054e1a7a70bd"
+          "checksumValue": "453339ca32bf73f2777cea8d9d993468917e7aff2db45a6dbfb3b415d101494a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1889,11 +2049,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "91b49ac1df4ef92bcd86ea0205c7fb066adfe7fc"
+          "checksumValue": "9e2e1443234f303a82f8e85aff0b843bb8125c75"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "55b94b9e7c6a398ae80344a74dfd85089f11bfe86d7aaac470bf1e7ab5272e02"
+          "checksumValue": "ec554fac76fa6e6a9d533a92bc58b9461bff6db9843ef30ec0622bad46e93fdb"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1901,15 +2061,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-release-preflight.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "31b9f9fdad1503cf235605ebdc027f0f45a626f0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eda0e6bef812a4890861332aa0f3cbc046d8fa7893f3fabf615442a23fcd341b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/release-preflight.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-run-all-checks.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "da4e822453e5e6816428313a17ab92fe2bf2796a"
+          "checksumValue": "9ffe576b4f5e7448c37482c5098b68d35ff86997"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "248ed599b0942c4f7e4839f5b5afa5915630e847b8df0d0ce02a7fbe97071f50"
+          "checksumValue": "01ea6878b8effb1e29613c4b5b1e70e1bd5c47a04a8112c62f2655e3168ccf4f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1921,11 +2097,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0c70edc81081c210d69ba8bdf0db868f66b87aa7"
+          "checksumValue": "a9ee037178a06e5b5e497fbb0136dd878da09a4a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5e5e0ddb77268e1eaf7123917dd9e1222e0099c6760a4ac425eba0fd4a1c546f"
+          "checksumValue": "ac4060a745db361583b10d9970645fac0491469a492afedc7ef9dfa5c815d8c9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1933,15 +2109,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-run-coverage.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "04995b998bf9a02729d111073fe244eb6122ade4"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "07b8d578b2b3c393ab1390218954bf5d5f27e06160877bfa671fa3582dfddb1b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/run-coverage.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-run-security-evals.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "38cec13b4a657b015427b14f96a0bd7c72de2320"
+          "checksumValue": "d78131fc630100ec213f1b9c1157122eb2e2ab77"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7f1c8e8db09e72f200a2d75ac56f9a974e6824605a9802923371410d3b9b9fe3"
+          "checksumValue": "4e01e065bc80f81fa673f24b057d6d477161df59ea1dc4e8a951f7c4f620602d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1953,11 +2145,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0e266bd42f622dee516e611fc80377906cff61a1"
+          "checksumValue": "df723474a665d4425e37a1f3e23f4a6ffac3793c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "80072d5a5f2f722e2206a1a653b5b177cf662ff252b82de1d9ee15250045176a"
+          "checksumValue": "8d108743b4eaac0eeab2e3df56fbd5bd68746ef22f8444a3f01bc50d92fb4708"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1969,11 +2161,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "49c22dbc641a38b45419772b1994643f1be4718a"
+          "checksumValue": "49def0a6bba48b1f3494ae6b74278869d13b517f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e03c6236d7fa1aacfa63d5db4bdc6e99c92e2a9e9952835feb3cb941df1ea867"
+          "checksumValue": "2c00257dbda0f48a74164fa618d1371a21a2ec5a9aa3cad5910e371e5da8395e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1985,11 +2177,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "124e48073466b215aa5f8ded306f6f16004879c4"
+          "checksumValue": "20eae8c453ed76b5488b565f4b91601afe6bb8bc"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a51ac29803649bdf822afd1881a44f2997ee4ade3194a0cf1de3f1f10d7ebd17"
+          "checksumValue": "2cb8fbdf5b82ef40bcdeec6f95c9f0a934348d14237bd449bcdbb060c96dbf6f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2001,11 +2193,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "578b8d3e5807bc6e79f805851ac761db4cf106ab"
+          "checksumValue": "d69982f60ebbfa0e40419e2f171f1443f673eebf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5623a1dd82c92dbb97907aae7ac730f7b4afc1ec8b0a74f744479c1740d62d78"
+          "checksumValue": "9b34c77b9f457c28fa1dd88cdffb7bb653ba2a01d46c5090606e352435d5c1dd"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2017,11 +2209,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "fa571cffedf2661a92b8f00e9fc5f4301dfd1f8b"
+          "checksumValue": "b81a34f2b618da8305a5b3af2d8932a77acd2399"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0b13eef4a2bf6b157fd01b748b028d3679b1b759e4cb52ae54768adf24205614"
+          "checksumValue": "c8b3363f23fa23bfb48b37f59d96f6f684f50e8152fcbc17deb83da4958935d1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2033,11 +2225,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c47f9ce4708104401aad11ce0afd29bbb78166fc"
+          "checksumValue": "7b5f8b71a9608d91ad8d817e802626d3ccd44251"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "31ec485b365f08febad7527630ffc53bcea07066a96f217050dd911a77e1dd47"
+          "checksumValue": "c4a23faed54079305c3a46b39cf47114bb720092ce06ed1ebb61996ae2d94412"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2049,11 +2241,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "40848c20a36d0893ff86616a4f5352007083c16f"
+          "checksumValue": "7d50bb6e912b70d11a316065b887f4ad5ee31dcf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "eee49b99f19b5448833f49c941a60f2114af16202318723344b306994825f1e9"
+          "checksumValue": "9b0ee3eb4c418059d908ba65c1f0f8683a4c10c2a93f75dae31c4ada16fc10a5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2065,11 +2257,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "72d223d592f5898b47ddeba47b3796972a11e457"
+          "checksumValue": "13c0f1afca352f974b68ead66368f538af0fced9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "eafb1fd9a3b9216403b1663a942a8a44d6c1e8576117c32facd8571e848fd608"
+          "checksumValue": "76fab645f06ad5a66814041f7d17c23af6021d6a4f92994db4753098e4852ceb"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2081,11 +2273,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "3601a65984c630450c8197f68bd6000ad304900b"
+          "checksumValue": "25b0fd36e6674bf1e3246e57813ce4f0d8469581"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0d5aa48c051865c4ce176d5aafd3cde10c4deb5dfd63a093f80f4491c5114dbd"
+          "checksumValue": "e559088b1f16d1db94520adcf4253220d37d2302254531bcac6488d01ec15622"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2097,11 +2289,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "88b9a441e15d9717db08f2483bb000e6b6110688"
+          "checksumValue": "acd8a47b43ee65eb15aa57cdf188449b190ebb92"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0d3f90d6e64a610614be4423c6a4792c378777bbc6003bc632288f56e80f85bf"
+          "checksumValue": "bec3a26c3c248f51acf1305c5c6a47d491f56aa6d1b9a02aece993df2fb2ae82"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2113,11 +2305,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "36ced5da3cc374ce02a0179790723d7edb7978ef"
+          "checksumValue": "a5e6cd2bf77b120b866329f40123b09d122f70d8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "26c1b2611583653ee9038f78da487318182e46db2080f8f8bd0b7d2a891e03b2"
+          "checksumValue": "7791361992df11d147793339cb894eba8c02ee3a169e769fb02e83ca7fb4e8a3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2145,11 +2337,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dccf25b0fd007be1dbd4ca413031cad38c250913"
+          "checksumValue": "845c27b9c9e9ee8d564cee98d9eb46c4d48ccc73"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "de635f16210031cd40df402004156e8728fd85e64f0b8ea0c861add20e6b12d4"
+          "checksumValue": "af2809ec65b47b2967cd4401396c1142fdc99c362b52f1b299c8e2dd3214ca1e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2161,11 +2353,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c6e57b886587e508538c9d17769d281e3d145ac0"
+          "checksumValue": "da6844f7f9ccf8d3403d5aa70f1088d6730923e7"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c2a2c64405da4098b2dcbe43acf91adcdc7c295cb271aabf9a4511df0ff7e695"
+          "checksumValue": "815bc4cf04e5bfde16eafc3b5a452528ccaff51d1605b2691ee7588dc3af73bf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2193,11 +2385,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f5dd2827b3dd2260c6bfeaa72bd41af979478dc3"
+          "checksumValue": "1a584732299f06742891d6455c43e3ef7d773413"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "fe62ebc0b698ee9901746e83a1ddb8be717b5ee7955fc84774ff73b002cdfec9"
+          "checksumValue": "883427f371cc2ea23c4e0d52417c14b1df8013da59b7099da5695312f3e05592"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2205,15 +2397,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-smoke-offline.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "90576f024288acb4b27bec2d3bd3e0b267c80f87"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "902bf828a950b0f27882cfc2cd7320fed66497b00fe55ae41193bc3e7bf26931"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/smoke-offline.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-smoke-proposal.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6a52a0967b0bd63e9eca3903fee59d73094d42e6"
+          "checksumValue": "4ec17d48c0a3bef361cd65b5c3263caab6e53cb4"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c01d97edc0eb14fa8ce4c385fd62db07eb443534d48a89874ca7f5a53b882b4a"
+          "checksumValue": "0a03295585171611a45e8ceee8ffe3668a33392251b62f8161eb5ff83f4e4a90"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2225,11 +2433,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ff6f47a6a66566391e783038a1d5b1c48aab5a88"
+          "checksumValue": "b7b5a7a8e58e339bcf8fd0acd8c2ef91356e4a9b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "58323daa3a7ee507fd20c2fb8f92e884e1fafcf5cf853a38c10644517773e48b"
+          "checksumValue": "118002cf2892fa9ee5bb14c9c522c56f17d3ce57c1567b5c11b49aaf3bb001a6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2241,11 +2449,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "7dc4bc807f598904e01be053797d0938251c6f67"
+          "checksumValue": "88401cbca66df8d15682736a3a5a767f326e7ee8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ab610e4f2369fff999f8a75f29604c52c0197b27ab949d62dc88c8183b977d24"
+          "checksumValue": "9526b2cfe600370514b684bd115dd9960b00addb53bb5850401a8c2517da82c3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2257,11 +2465,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "eb0faeaa9dfdf27d2e1b106b2b6aabc883003f9c"
+          "checksumValue": "fb95744f43e2f62b270c40f775ba5bb5c4cad604"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "04e544b4e70db231fdf39cf5cd654813c8f5dd7b6a0e8d9dce323b5c198fcd3b"
+          "checksumValue": "fc1e399e9fa80ab21a51d70c88f1d060c5c5cfadc0dbcb07819d5ccbb1a29538"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2273,11 +2481,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ffd92fa0980a4917dcb2e1f8ac81650fc0f40e34"
+          "checksumValue": "35f746b6030853c1bdd93e6db526746e066c7f4b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "66e254b53c17cf469adce7b662a147804808962407054d6d02843563aa769799"
+          "checksumValue": "c3bd12f541a0358151392a1b3c2f052dff43651d1d8f3fb13e5ed84720a8cacb"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2289,11 +2497,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "41ace97cf48d36675998bc350edab7cd5e3cfdd3"
+          "checksumValue": "1efe67c8c48d8de48065bef5095ef1692af0be1f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "39b85af1f4a4e4c060b89542356e57e18570dece673423bb0b05ef31b19b9418"
+          "checksumValue": "32f0f5bc79d43831521beea2c743bcbbff41a9618b61208d2710b70fcfd60dc2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2301,15 +2509,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-sync-spec-rules.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f7b7451ec5745561e2e06cdc0890cde7b6529b72"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7c4d199b41b8e918346f4f12e37bc61f74a4ad7b58253addc2e1d29a0be5d6ea"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/sync-spec-rules.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-validate-check-manifest.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "46e0568d39c714cccdc48f78ed34ea2f6fafb9cd"
+          "checksumValue": "4a0ef5cfddbd6885a6ca24e110abd4842c610d76"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "87d43fd652a2e882fbc44d9ba4ef9e967b38adbc3a0947f7237db5d98e756687"
+          "checksumValue": "88ce1d227834bf27010a0f5cbc80f8ced47bfbc3cc23b3df77bacae50e302844"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2321,11 +2545,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d1ce38965a941aa81fe9ef66db84226d8b9e9874"
+          "checksumValue": "6ec4aee31d0b43072adc20076643011268511f66"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "615b3b7f297d2c5a37c982f2a337b25e47cf53004f1c0c0266098e9c38f59169"
+          "checksumValue": "3b46ce668139d1390b96385b9a1bd60723f99b0b8b64d2060006934b8dfe862d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2337,11 +2561,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6b1c98698ad5431bbf1e6cd0d216e081242261e8"
+          "checksumValue": "eb85d19cbc588f972021afdb60c056d16fc3884f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3ef23fd918f1e2302ead7971515352e5912dc06a8cbd8463c55ce4f2bf33d9e7"
+          "checksumValue": "ae443f9be4b7c004b9db49c5ada542adacedd86f6831a8faf7075589d0b67221"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2353,11 +2577,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b69f887076f660e68e406e69bce7572260fabed7"
+          "checksumValue": "a341d4187350ddbfa9b2215100e6d28caf69036a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "48a3afe7e0728eb46d31e6902178fa75b5e3a96293bcabbe39fc7c0ea70bb8b4"
+          "checksumValue": "3195b3263d63f673c2128edb4910115ee694af3c8f0d6b77aea2f678924d6ac7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2369,11 +2593,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5074d3719d44e9e8149ebb96da15fa0f0c4b9e43"
+          "checksumValue": "1077d53c22533134031d18572a8baa7c21109fb0"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "41357a14bab8ad10258151bc1b8da6f6fe78e164d30954f61c1a5620a2142e78"
+          "checksumValue": "69a51ec7fa6228c2d8b0d8fba73173bbe9464463255a66d5d81ddfbaa0fe7296"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2385,11 +2609,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f6c03d57bcdf1dc9eef464cc9788016180e715a5"
+          "checksumValue": "50c231f4ba996cf2d7437942a716c46da16610a8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5603d435c546b08880b90341b20d8e0f14986e187e85af18496bce22bcb8a60a"
+          "checksumValue": "cef2e9d22264d9b2d38846d598ae8e644cb326cfbe95cbde8515e04e7cb96327"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2401,11 +2625,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "94e1e1467b682506f7075118128ea77d41248566"
+          "checksumValue": "3fb7f8d3315e94bca364af5f9059c8fac0ea3521"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0c50e59043f18da7b86bc46b1dc905a5a760f5b09a4936a0a566b2fc26b80a1b"
+          "checksumValue": "9b9e43dcd3044f0d0abf8e57c433858d4cf3c4da43b7ae5985582c3d0c69484d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2417,11 +2641,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "48d085195bae4866ca19277165548aeb63162e1b"
+          "checksumValue": "56a24f751a28816555d7cb53413720d5dc94203f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2b436fbadef2a1abd24f8e937fc2ea9c278e4a9f2581ee8179d6a042f52ab34d"
+          "checksumValue": "07052dee77b7eaa2093e933117ae81ea616e87f746d22fcffc74e4bfae40abb0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2433,11 +2657,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9bf300b001b9dc49c0808a3f88c8547ca3b9f5de"
+          "checksumValue": "e5f8246675985175dc3cd73a8bcab48951aaa977"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ee95b3a75b8693bf62ea0290a3091eee1ba1bfea960bed6fa1f3c0595699202f"
+          "checksumValue": "6d38c79518eabb02e159a696ec564eb5c374796f97f36f7de93f05294ec9fa2d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2449,11 +2673,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9330e7b25e67e8da19c51362c97c220e38174be8"
+          "checksumValue": "b8a89f618507eb7b2bb065d2530dc60b0b3027ea"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4dcf34c39f834671cc67c203ded2649e36d20457005f670af1107942201de1f2"
+          "checksumValue": "a2c5c2882bbfeb314d35722d3573738dc271cde39f435f2c0d8d24a5b2abed00"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2465,11 +2689,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c1a11b258ca21a23761d140073c13d3bc88f4a0c"
+          "checksumValue": "817401bc23a0d5094e3f7f301e307b5052d56365"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5cf3b45fd8d83303ef441f889ac83399b2163963161d10350bbb567e11a2edd9"
+          "checksumValue": "eed8c59a859855d310390831abeafca9eb330a63d7725a95915bf56f9e3a9835"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2481,11 +2705,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6d5da791784b82e7501b9f387d10f19638ced450"
+          "checksumValue": "0fad68b1e27e9076ecd3a21fd5c45d069192adb6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "97817017ffb5a64645608dc58dadf5b8d48b56f89d98d46c586d801c506f9338"
+          "checksumValue": "7cb209581bcc7d9aa46de5016fc93f10c8f4af73939fba3134280eb8c3129dee"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2497,11 +2721,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "058d4633b1e87d0d0975d4ee43f792d39c35f7d7"
+          "checksumValue": "e0de858a0099b5dc89050a754fd81d1134e3d01b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0f5aa725dc31e1bbe585923ac4491b30fb09042f172fba3abe7ad494e395bb10"
+          "checksumValue": "c58b6ddb64874a278d02d3fca48105992c0a8642e08376461e04a7a8e637b4b6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2513,11 +2737,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b0cbcc19532c72e15844fcbb817f832d5db5256c"
+          "checksumValue": "44b06814abfd63447063139157566156339b336f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "43e73cc4f20fd3df024db63f36894e983791e938d560f5308d65ae9f7a60576e"
+          "checksumValue": "29a8289fc22831156f1f8afa7b14674c310de6278c27b13b5b30b56efa4fb85a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2529,11 +2753,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "cbac12d3a01c698c793f4c37f0b0ab24bd536fd7"
+          "checksumValue": "ea54ce34701134be8c1d360334ff3fe4b14cb080"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ab4a48b15de6cfc2e46f55b15132a55f627f8ce1c05f43dca42f6cc37af3ea5d"
+          "checksumValue": "1f9a1c7867e697e843ddd5149ec06384b20faaa5cd00e5e5908a19232819a799"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2545,11 +2769,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a92712888ce7415b49a231168385c707deba0bbb"
+          "checksumValue": "12ff93a321fc4863a1b9825fb74afaf73678399d"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "431e427693c61658dc7b1f32b65ccc5475d7f2699594fb9f3bfdf34430933fde"
+          "checksumValue": "7800020218fa58fc154647e9b355bc315615e447cad0885114168d9f7c39ce0d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2561,11 +2785,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "58eebbbec8f53c6365e4a96009d3e553e7fa64ca"
+          "checksumValue": "1e1b5acc1f9d3be3e7697851d8624f845309c561"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "31428a4ac8e4ab336cdf7b3549ade66b268f9ea53c7ff26fe83c1b777f21d44a"
+          "checksumValue": "d0e517b1183fd6c388eb12199f5b049307164c27a9cbf7784a17de182279deba"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2577,11 +2801,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a88c5010a941a53bc4cab17aba791be5d6db002e"
+          "checksumValue": "063602382daa332836897b8aafd5f1652dfc93ab"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "eba96877dd0385fb66eb6306aee05b2d7702b6f23bcc43b34a92b0d834254918"
+          "checksumValue": "619c514fea3ae66eb22e9f983f3a14c713a1e13e40ca2c3037b27416026ccf77"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2593,11 +2817,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4ed299b32dcd28706e22c4ab6ae3dd37a23f9842"
+          "checksumValue": "c7aab1d94fdba989d402be473e8ba423834361e5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6aae79868ba6bcfc6fd8b59fa3560150badad8f95d8de6f33affc573d268ff1f"
+          "checksumValue": "57f4ecd755433f5bb9c7fc40dbbd6875002000f3da75fbccc48de688bb97c938"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2609,11 +2833,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0f024934387d7c88848e8c748fa86f4d43b5ec1e"
+          "checksumValue": "f67ef59292c787f8c41209c1c16f69caf482172c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2067389680e16be0221a40faef1228558ee7da95f84a41e4a128de8c1e5a54af"
+          "checksumValue": "fdbb40d467845e174298d3c21944048650f5d74c535405f717ee807cd71a07d7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2621,15 +2845,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-validate-security-claims.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "21ac5be74244b4e7c89ac2d748044bdb9e5b7571"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4562f0d55d3315254f7221a4c817125b781395c8aa9e115e912ff850931920c8"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/validate-security-claims.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-validate-shell-syntax.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "60e6a907214d1369515a076abeeb49ddc6049b08"
+          "checksumValue": "e67421c64880109bab9217c284bf69155f0dc5ae"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "29bc9e96539455dce296eecae88a090e0aee2c4dbdac58aa4922c5cc47156954"
+          "checksumValue": "602bfb0d257b1e6ce9886ef6b4c058323ef9657b504e719e53e0d8c583d7da05"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2641,11 +2881,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "26c533ca3bff6a5c2a9cbaeb6a0d32eea8902a06"
+          "checksumValue": "51c5e51869ff2d768280c8562624f4fa8c771612"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "aa278a3eb222c2e61f64db91e12916002199debc700d543e02ec7767404996bd"
+          "checksumValue": "7cc0d8a4c222000c73e13f1dbeb86aebad5e2c261816dd51b7adf993dc85e87d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2657,11 +2897,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f1bc25104a06cc376736f91ba6e222dff5d574f4"
+          "checksumValue": "28f2d2b35aaba04d1182f745feeaa47dd7092521"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d8994097c885921b042fe2d6946205a44347ce9c4840dab6ff961fba76c401c6"
+          "checksumValue": "3da32c06d5d26cf60063ac5da6e9390ba493d64d73477224eea91c4f04f1130c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2673,11 +2913,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "204d0dac8986f0c78977c3b9d7dc4f6826c77816"
+          "checksumValue": "655db9529ae87582e7f326d1d7028a91f1a09c99"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d10e1bfea563ebd3b0b9e3ceada3b7ab3b83e45884b5d132218eb0761462c83a"
+          "checksumValue": "19450369920ac01004c043a0ed77bc48b219d36d017af88299372fdd46577bf2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2689,11 +2929,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "292a4c8162103c05145afa959e7f4d92cbdcdf61"
+          "checksumValue": "d17a0656da54421d3ce867ec1944a798a5517778"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "196895d0f5089103b142c6a544bd0e6fe65efad9098ed0d07aceb0529772c62e"
+          "checksumValue": "4b84c0bf04ac16e967b816f20270ba2b7dc7977812212b122aa8fde0b752332b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2705,11 +2945,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f5c941936979abfb3f8b58302555d3a8fed85d7c"
+          "checksumValue": "8b9b843f5abe7e4e8ed03e328974b68e98a64ed2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "860cf80b3f2ba960a2494e8c4e186c28b9b499c96426ebafcff7e07a119e6163"
+          "checksumValue": "23711c9a6fe7934e9b6112090a7ed528a2af5a085a58045095b169cc8ee6a4ed"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2721,11 +2961,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6cf57203700609c66a7141a9c8b6aa7484fc3fb1"
+          "checksumValue": "f2f158b5b181673c3df25cdadeb189662d33cf98"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c032958c443ad6b5f8f0c84b394f17c06044c42b6a4d1e594e2e4817eece6383"
+          "checksumValue": "7d2206fc6f10833aa21ccb06e7c18b95b257def28c88a3b72ab7220f6f2ef57b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2737,11 +2977,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f036a8f6378c1470ce502c973bb67443675b5a2f"
+          "checksumValue": "88b4fa383a8cf8c53e82d37a680dd9ec923cf366"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "dfd33d7622d6454592b44e96a1d5f054f0849bb34b7aea79319273f6b80bf72c"
+          "checksumValue": "7bb8cc428822d1993252866a592ccfeef60e07520cee05f85a9761997fb34d5e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2753,11 +2993,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "387c3d1836bdca16254d9555f2e23915b755fd0d"
+          "checksumValue": "a780d6784c852bed0cf598388ca00bf2233a863a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "75f474513b9ad4b23c38a302fc5e7ea70e9e357e46f90e97cd11d8e8ec9dcd1b"
+          "checksumValue": "1a369ecb1f268072c508d0426f13555c8f9c17cc5a80c64c4c6f40884fbc8d0a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2769,11 +3009,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "92795c1c78928c2dd11bce00dffc7782db089894"
+          "checksumValue": "d94d6e456923e612d517f955a9b12c4b2b483715"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "31e47de88781b887b9e0c027f0c2ce189c7f13f71e5907344628da40251be9a6"
+          "checksumValue": "c829bc054c4eb6a6c8448f722b293bd3ceb53870f17b3d4b83c05d02e274b2b7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2785,11 +3025,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a8e435577628d6484bb5ae3fa38a8cc993e2b951"
+          "checksumValue": "7d6fc845225d05283d1a0bbbdef543bbccab05f8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ddc320a9db9c6a8a14c658b3ee6d4a05fa2ff9dc1b269f9a1bbe41ea5908b2fb"
+          "checksumValue": "3c05182318116f5c265894084c95b445b775f20a56d6be64131bf7626a3063b3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2817,11 +3057,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8c34e0b88be167c269e5a32a59edca75bec7e806"
+          "checksumValue": "9f476e413b3bba941e1007f9ad511040adc6cdef"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7c858d3424e1563063944fb1ea01e5f8c99853e7fa5a2470dfbba82df8cbd33f"
+          "checksumValue": "8b26c1c563a7d769d7cc08b5b5a1cebe4ecd44685854ae17a52fced368abb385"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2833,11 +3073,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8490d5987942f851b3fd75328570e5b0c3ddee69"
+          "checksumValue": "144fe5e2015e98ee4b3a57a5dfbf9c9674472519"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d234114aca8bcccd68a1bd24f6cc660755ecb30862e23d215742c3840f13f1c3"
+          "checksumValue": "84937ce02cb35a67efe7c61c5446248f801dfa62eb7a0b1c8943d9b21dbc858c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2865,11 +3105,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ed884dadef8419df56f66a0e825a83a168a38846"
+          "checksumValue": "6d5aafcef8a484326a5e45d0ff550f78cb867044"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0391d9ffb8da6ac080e2d9f315a327e0521fd4861efe2810a097bd981692f9be"
+          "checksumValue": "bc64a38eb03dae45742f8add235685669395294314922c72e44a2f5d3bcfe7bc"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2881,11 +3121,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "baad9703a69c453897377de5549ae6bf0dbad8a9"
+          "checksumValue": "db430fbee788bd5949221ec308b336293ab3726b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "checksumValue": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2913,11 +3153,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a784a686cc3a09f7c55691164b06f83742dd6efd"
+          "checksumValue": "396e4909ea6350746ce1dc8160248783c3c15ec8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b8360a55ae5f97b1bdb11caf6f3360a2aca54165e8adec00748b2f766224ade5"
+          "checksumValue": "ab75dcbeb8718c162adab26ec5f9e723e3bc489910ba9e53c3826b87088a602c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2929,11 +3169,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "baad9703a69c453897377de5549ae6bf0dbad8a9"
+          "checksumValue": "db430fbee788bd5949221ec308b336293ab3726b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "checksumValue": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2961,11 +3201,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "587e64ac66d670d0c05b6e217ee33e3f25e3c358"
+          "checksumValue": "74257fef6a6329b792124bd45d78bbdbeaa08be2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d6c5ddc58fb640d3e0215ee577ac149ee54517f06df68b4a16f8d244cd12ed23"
+          "checksumValue": "c87c73c113c2e9a4c84fbbcee6842a343a6ead3831ad7b3c3e180c553e7bb306"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3041,11 +3281,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f85d65ad4ba8c21ce50292771a89d02019035a2f"
+          "checksumValue": "75970eb00b8e11de4431f5bd26bd301be9723f89"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bd2ec119f36aba1f45266015a47083ab71be73e9e31c1d39979074984632431d"
+          "checksumValue": "ab803aa4a7c2dfc36b66b7c2d4a4e22493c7cb4f56c25dbecca680df2e358045"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3057,11 +3297,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "cad5d0ce1f1af8f6996bfc5cb9380cd33c5e6198"
+          "checksumValue": "b5bc2d776644af4df68b76bf50a31f0b8acc64b9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2ae9eaf6eaf28cba66f01bdf0fec8b9cea53f7b6dc7fc9aee5559197da745f07"
+          "checksumValue": "bb5384c0c0cba6d10a0196580e177c8d04c6f18dcd3a43952eb0a16c1d7f6428"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3073,11 +3313,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "219d5b1b138aaf5a9cf4a7f111d9184502465b1b"
+          "checksumValue": "f95ecedbf2d27e1cf03b49e2f528cc30795e607c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ce918ca306ba98b37b14c02ec84672f7c319afe9d506f9064645c8570196b3bb"
+          "checksumValue": "1d39f4a026264af634aafc3b9682b3db044951d409af8323d3b7b40fc95a9b5c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3105,11 +3345,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "356d01df3dd663109268924b27b9dc2fd8e550ba"
+          "checksumValue": "3d68ab17cc3f1863353df0d83ef1c831c64bfb94"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4579f0634a7fd538a3360571d58a8ce2da3b76f5652e3443cb5646fba98b6fed"
+          "checksumValue": "9a9c9e20f68bd8ef289c91fe48a775759e5c87fab43fe12f7f493289e62abd26"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3201,11 +3441,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1e65a3e765a5bdfcc0efe7c37119f27d1bf5bd71"
+          "checksumValue": "31deccd1ac3bed3ab1dcfc8815b6ce22121503f0"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "29de69bcf05910ba1aa4298ddf2e2c043100490752072c5aa0437d6c436aea70"
+          "checksumValue": "e8db123feaf2b00e4c6ab7d52e9a324120096e70dfe00f142d78e5c9af4e277b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3313,11 +3553,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "7f47c7dc88c97e8fbd8bae9d2e9dcbbaa76e3522"
+          "checksumValue": "8974a2bd711509d387d9d0ac6891e44b669f7b35"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a527223585f6c9b9ca09a5f8197f67f10f81edf5e3296b11417fd375be7b21e7"
+          "checksumValue": "eb388d7864473c534eb90ec7fb30ca244ad646f948e4126a9da4e65e477043b1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3409,11 +3649,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b0a0dbb9234452b150f1ccbc01b5e3b876cff45b"
+          "checksumValue": "b237efe67bc377cf3fce1cd0b565aafc974fd08e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "79438e78ca28d3f805521b2a6d2e6f68954b6c0e9d8c530dec8dec845eb36844"
+          "checksumValue": "e02e0df7099d9ac0711ccb4993941e4baaa1ac8a688832d0729d4c49e6a3d951"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3425,11 +3665,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "48eb9d440a70236f68a6c170cde08e8eaccaadc4"
+          "checksumValue": "3d40e88748bd01648c67f714f50c48ecdc32e9bf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5c632c143bee361687c2748e9fee314b137b4d499e2a6a12f4049928fc3cb283"
+          "checksumValue": "e516071a269b0b6e6740264e374895558efff8c7bbdfdce816cfeffc4066a643"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3505,11 +3745,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "46fbabe62002f8e9d7bc5474c6817fa10f7af1ad"
+          "checksumValue": "fd4848f7dfd1b6cd23cb04c0a0e3de2784a00939"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f534c9fa004d223ae8de5c8f793a376e7c640d067bea29eef47b7cb6a702723f"
+          "checksumValue": "caae7925ca8f98893ef9621253db23571911b943cbf471992e2e2f1146da30cf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3521,11 +3761,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "234b648a9c115ef5d263748051064359b9acd126"
+          "checksumValue": "db57e2cc78ecae8b1024deb3aef5ef24a0a79496"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0449996e2e067f495b4828c1cc26658373b1a3216100484366a3b8529864db61"
+          "checksumValue": "710e09bc99b1651ce41fd2bc2f2d3ea4b54d8cedd1be544868d0dd43193835a2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3601,11 +3841,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2e982f4ec67e45d371bbdb60ee2c56661a445548"
+          "checksumValue": "77aa50f43b1d3073dfce876c5e0b43a9cb751094"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2f80b46e83542424b1b900745c405fa64baf2cc929471b1d66886ed641162098"
+          "checksumValue": "d1edab6305e9e6967a6eccf97da7a7cca25f49cf6efc711702d41689aef88fe5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3617,11 +3857,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1615bef9c9f0744255f05f3c0dc81e1918795f0f"
+          "checksumValue": "5958bb1adb6ca0862c59dd92a89e4a0a9dfbe66a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cafef32d1e31f7eec221305f68ef89027596d4414b288b81e32248ea3fb03a85"
+          "checksumValue": "b8df3136b9c663eaedee535669be4a1bf65d864366e7de20115bded7fe7c84fe"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3681,11 +3921,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "67d37df70abaf370621948feb2a71fb71f8a5ad3"
+          "checksumValue": "d8a80c2173d1ac3165e8c418d70169b76e303595"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b66c9a8559ce9a8a6698bfd84c4b173bf0bb360e4d4c0b7d73b4650bf5dc5b45"
+          "checksumValue": "21db3e3d7850bc46bc4a982180734b2fa32d68e7a59acaf310f8cebec9956e80"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3713,11 +3953,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4b5c18f083e986cb1ee8abea5a791d6397261bbf"
+          "checksumValue": "663def62fa0c24d9eb3fb2cd706207ef3cfecbf9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "146ba1fde7556ffd057f816623429ccb8a57801bf69c8720ce935787f4575efa"
+          "checksumValue": "c85f9b940f72e7df59c96ff65bd5a78d8d5c873642a04fb5b33fa1e8a60198a2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3809,11 +4049,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "855ded3643d3c03c2c1697ab380e61b517c845d6"
+          "checksumValue": "dc065e4e2f8041b6dae31ce53a940ad25313ff80"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "da1591d9c5ba252acbf47672a3445d739db3a7caf5aced7de30c5aec61ad4385"
+          "checksumValue": "1947a5d18e54c298b415c8051ec56297c67cf642c04612115444b532841d8ed5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3841,11 +4081,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5473a17c74a8d8dba67df57611796e81a5611b2d"
+          "checksumValue": "a418c660e2f46d8b8f8aab83f6e7a6e5e170b148"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "043ba5a66886418cc9a7f77382f3a0a9ae6f0f76721ff36ab5bdf847bd19249b"
+          "checksumValue": "bb3ed18ff934c64bee4e84731029b797d9b757155bef27fb2180e1ee569fc405"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3857,11 +4097,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "09962b2040d775e723e1d3200a5cf2d1bf8b4a6b"
+          "checksumValue": "45c40b2419ad4f1d7ea5b5228ee1ce2730a71d99"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9e41f4879c6184397312499b287ba0b54b88eabb31cba7ccb4e5107dfaed9198"
+          "checksumValue": "54a903b6845ac0ce259fec8596b1ef227c466e49112dd4e0a4a0cba09d514403"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3889,11 +4129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "468254b23bc99530ff84a3cd3727244a6b090301"
+          "checksumValue": "77db947ae3cae5df4991178bd0d566ea00be83e3"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b251f4e1a471886ab40a5e1ebd9bebf2892c8dce912846eb6baec10081ad5ca6"
+          "checksumValue": "f3c49e0711bed62977e74ff7a8b69bdf6eb314a43e52b0ec97a1704c27a64f4a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3921,11 +4161,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2daeb30ebe2e5e2c0da162dab7aa667f8fb89c31"
+          "checksumValue": "bddbf57c37248a441304e8944f360d6ad0de79e6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4f5d68772fc072fc13f97d9e3f9528808ce7a70b4242dc2fd77e869b6856fe23"
+          "checksumValue": "0d05cc0654535afc2758aff6253d4daaa3dcf9280938317ee344a02883a2601f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3969,11 +4209,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a417f85abe8ad0990c973470eff28730c3aaf7eb"
+          "checksumValue": "9d3174905037be75ea931b43780d0894e72e30f9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bf3359d12436d73583b44f5888f17762fba4031f6be3e37fe963a713a794cc70"
+          "checksumValue": "868bd645b1f8584e3912ace290433752101924e00765004eaa7f2b8b6911faf5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3985,11 +4225,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "baad9703a69c453897377de5549ae6bf0dbad8a9"
+          "checksumValue": "db430fbee788bd5949221ec308b336293ab3726b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "checksumValue": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4017,11 +4257,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f5f6d19bbf76c0d9eb7ff584b60b5c0d1ace813a"
+          "checksumValue": "b5693a6164b9a488fcca1eac384f768fcd359526"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2cf2d60c6ff5028b7b59788358664fa8737743abb9e83bd64a1ec0b85a7ee8de"
+          "checksumValue": "939620d3bd2851dc9b88cd50d49ee4d3fd60fa9da38df2ad53b6d4e66cf9f990"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4033,11 +4273,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "baad9703a69c453897377de5549ae6bf0dbad8a9"
+          "checksumValue": "db430fbee788bd5949221ec308b336293ab3726b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "checksumValue": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4065,11 +4305,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "29aecae4a1210bf64d82676d373c51bd49e17efa"
+          "checksumValue": "b8f6dfb41dd08ba1185bed7f2873d0e2d8fed1d9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0b07443d40fccee627f77b5cdcfa91beb2aa3d556f4d8a4e7a54f8297bdce190"
+          "checksumValue": "2c9fad0795a9f58b1b450d1f46345931da48486439ecaa29a5aaa19fc92c57bc"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4081,11 +4321,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4a51080d1da2b16ae499725d5c01cf62f1883b68"
+          "checksumValue": "1c5d43692ed745fc58079e38e138dc0e79a7d68e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "checksumValue": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4113,11 +4353,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ab6fa33559ce16f9aedbe788efa32da4ffe5daa3"
+          "checksumValue": "13b0318bb8c79c3b608d14e2fc844e5abceb25d4"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e92198bd876d5ac5a79cd11a02cc82bd2d85762e3409aa213e8ff1ae1dec11f2"
+          "checksumValue": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4129,11 +4369,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4161,11 +4401,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2828e4f13bf5bbdeda921692ed173f59f7b78ab0"
+          "checksumValue": "990d747096432f47be90117104e016bf89f87040"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e6daaa099b1e91fa035a92bd202788d9965c7d2c830c3cbf39ccbc8b8a2c77cd"
+          "checksumValue": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4177,11 +4417,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4209,11 +4449,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1e075163f80cc2b9f8cce1607090516cb39ff501"
+          "checksumValue": "4b301529f0e82d49bfa837188f0f63039c6b19b7"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2d8052d0b33c4f53fb9bf460362f98012574331bdab782f2ecadabdc0c06f96b"
+          "checksumValue": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4225,11 +4465,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4257,11 +4497,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d2e49be951a2921f923fea074cde32175cdf6a3d"
+          "checksumValue": "4cde7dee9057e52112ff94435e03201797793616"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "52a5c5b6f30d29e7cd4c1fe54d6478c24c21c64b8ef219e590f4ece77b50fb50"
+          "checksumValue": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4273,11 +4513,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4289,11 +4529,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "3605cec78cb1784b4b529b7fc1c6d5ed22a6873e"
+          "checksumValue": "88bfc2c80076d00dd5cc44b7fc28c0a5854bf794"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3ad0401cddf11510b11559c46878215e331d831318d9a20fd421e09d5258d2c0"
+          "checksumValue": "ff86182020a5d587eec03e9a9bda61cad70e2c3f5a3d83ca70415554ae29e32b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4305,11 +4545,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bf0d826dba89a9f40ef369cc42064c85e3a25f2c"
+          "checksumValue": "48b65441525d37fa9e666bbbbc770f0de3f4c800"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1b701e692029b525e2a02320f4abc8f6498b4cd6feada5a6f8b70c1c93179401"
+          "checksumValue": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4321,11 +4561,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4353,11 +4593,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2d27f8f7cf88113bf7e8b9e520b22e6107ec6bca"
+          "checksumValue": "c2ef755bf1ac7d61d340a3ee4f166fc2c36d2929"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5283dd540f639f75cbd8d554c68dc6958a8772d89d9aa09e9e6b25c9048e2bd7"
+          "checksumValue": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4369,11 +4609,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4385,11 +4625,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0923b42777aa736acb0e16bdd4b48a21cb5fe61a"
+          "checksumValue": "9e64954adaa636e3732e80fe1bd2741abd0c6bb7"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e43c738e6c90afa7af87a3dde9c71275ab433074a4cb05c02769bbc014821722"
+          "checksumValue": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4401,11 +4641,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bb662247c10a0928f127a4d497341bd54bf7d102"
+          "checksumValue": "cf8b26d7f4cb80f89e8569d723dffcd488f4aafe"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c0444e7526137f49200e7db558e1b785066af5c839499442f887fa521bbee0ae"
+          "checksumValue": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4417,11 +4657,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4449,11 +4689,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "81b6eb47a726998eb5c53ffb929c39322376fa6c"
+          "checksumValue": "d43c373ce5850e8d8e1093a5c44b679523344894"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2288fa6491b475432c64e0cd1811e5a181310a45b0ffec8832dfee57c8d69a60"
+          "checksumValue": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4465,11 +4705,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4497,11 +4737,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "99dbdfec3a66762ab3c4542d9eee04997b138219"
+          "checksumValue": "85eb0c6fe531ec773586ea7244ba776be76f8659"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "866f75021dfb7a957754da241f01f935055c1ab7af6c7fa88510e06b75f0abdc"
+          "checksumValue": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4513,11 +4753,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4545,11 +4785,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "269e7b4b79e8ce66fee751c80c0d1c0191bcfb1f"
+          "checksumValue": "dd7b3842680825af099b6ecfa08501bb14ecc9e9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7a7c2e9a416bc05e69d164bcd9a19d533f537f3a2389cd2d810cafabf6a7c04a"
+          "checksumValue": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4561,11 +4801,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4593,11 +4833,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a615b78fa0e7cd13e388eb1b42224cc60832ceff"
+          "checksumValue": "169b04033a3b5554de9057b0ac14361b8b8b9076"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d66bce200a0deb18cd2b25d39bbc3cd2779480e8eb6defbe4729d4c51e5e56b2"
+          "checksumValue": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4609,11 +4849,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4641,11 +4881,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "106ec23659af0df205d4c7ce707c28dc2833524e"
+          "checksumValue": "3d5710428f124ca59badf5291e93901365366cfb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f6f341dae9d20b7715650bd01443bdc7d6f30ba53ccd00343fedd2a8f0fcba68"
+          "checksumValue": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4657,11 +4897,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4689,11 +4929,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1ea992a42aab16880a6d9a84fcb60e807a4a7dbf"
+          "checksumValue": "d4948e0a7a92ba3d1364e5680a3e1c2f1f69ec0a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4798916e23f9d69af06384aa630e910895c232777cfb4e93a4fcafa1472340c1"
+          "checksumValue": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4705,11 +4945,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4721,11 +4961,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2ea80f35fa8a6388c3d653a74763717b448705e3"
+          "checksumValue": "2824e38b4272c5bcc81c38084a1123a3852fa8fa"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9615efd4831898ade0b6267ee09fb580fb1f14d7038a6a78fd1b811eeba39adf"
+          "checksumValue": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4737,11 +4977,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "11af23dd72b3691c07f1ff1d4039cf177028442f"
+          "checksumValue": "7408b2cdb722fea85db3835227c3b155bfa00302"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bb1c2dbc6605bb0f8825ccdb0c35ae7d1a3271239e10e89a5196373f0fbb7bf3"
+          "checksumValue": "9d6a96810ab6b3d76392842d92ab2df5fc5aa1a38c6cc614bc0a94365b38b2ec"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4753,11 +4993,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "71425c62cfbb73d30f1e39d5b026c444d87348a9"
+          "checksumValue": "fe7b776b92748deda48055fdb8ad07d041ff0c67"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9e4bac3b8401ecd857154c44a0debc468dd4d95f377b84d86380a79f3b48b12e"
+          "checksumValue": "0ad444de898031368c5552aae7e2344cab8dd6ce488a6ce78440a81d4e7be1a6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4785,11 +5025,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8d951cba12e4f3f36d0cd9d1202e169d8a9757be"
+          "checksumValue": "0ef73483fad7e2009ebae4f66d51ff2775e4f8b5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1eee278e630cad70ae157da85fca0823a91ee0392b617ead744a6b8b95f38bc3"
+          "checksumValue": "c1edd156b87ec8d6ba9485714c46297433e51929a6c08eeea979085b93dfaabc"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4801,11 +5041,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4a51080d1da2b16ae499725d5c01cf62f1883b68"
+          "checksumValue": "1c5d43692ed745fc58079e38e138dc0e79a7d68e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "checksumValue": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4833,11 +5073,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a667425fb184811d7c981cc3a1f728456d62f7b4"
+          "checksumValue": "1aa70b6ea0db64340cfff65d385953e209aa99d0"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4808efd0120e3200a15dad4988ce42f7e41a3dda2603f8975dc13a3f6dd16cdd"
+          "checksumValue": "916cfb8f5adf2b672cfe00bd710afddb5a8ab8f55c303100e37afa9e3ea66794"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4849,11 +5089,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4a51080d1da2b16ae499725d5c01cf62f1883b68"
+          "checksumValue": "1c5d43692ed745fc58079e38e138dc0e79a7d68e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "checksumValue": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4881,11 +5121,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6790616f34940e4d7b919afb73cb209e7d8e373c"
+          "checksumValue": "e458cbafee265d77e128dc0ce114544911aaccbf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "5ffa0d613060fbe0d245f631855f7f019801320e08bc010d5eba2d62a137dea3"
+          "checksumValue": "1526e2c7d09734f0f88fd6067fdf7e202e60c80d1f6f351c09f6ee834c0ad971"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4897,11 +5137,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "44997f33729b2a3c150c8fbf089bb33221f76227"
+          "checksumValue": "319c2bea50fa0c1f7c0643c9b9f345426ea47ece"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "49777a125cbd309a9eaaf8c4b748ba2f3d9b91d0905bbf4dff49d22f3a8becb2"
+          "checksumValue": "2b342f8875c554032873363a2f1f09993aa1b9218c65613f1375f73bb5ec8dd9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4929,11 +5169,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "fc01284ff65d24f581cc9c184a685fa591e2aedd"
+          "checksumValue": "7b77e0751a48c8ca96768a57e54f20dbc9bc19bd"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a3e1dca05cc3d495b89c32f914265054a86d5d3745e8ac943ce8c50983ca4981"
+          "checksumValue": "f3efe34e331b12893f3e2ef0fe91e69fc0413e574f3dd1497a7bdd6c5fbb4923"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4945,11 +5185,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6dc73fdae3b50abedaa9685e0aee43ef155b01cb"
+          "checksumValue": "3967555e7796f639588ab7c5a874466a1b300684"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3eb11a55fd77a574380b9d9176126c458afdb4fafebbf2ef238a972146af92c1"
+          "checksumValue": "c56733bb8ddcdacc3afaf8b9911ce4fbf442b57690a536f0a47757fb1607a141"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4977,11 +5217,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b7ab5c7b377993993cce9d04837b7c1585e38537"
+          "checksumValue": "b01ced3e01b487ad0e9b7f1ebbc24f78f7a3da21"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cadedbfd8084df4005ce138b7a737b34877a732ef037e5898ca001da9c6a12fb"
+          "checksumValue": "189be118105e54e33a605e6bc3b3fefcb0a6ad63fe2371a4d4f15e2d61a4d0c5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4993,11 +5233,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a00fc60783364fb2f75a21f00f080717eab6dfe9"
+          "checksumValue": "e755bf4404d1b136c4d1cbb933a05f9f934faecb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b933613bad641abe0b2e68e95ea8c54abdc8bc2a6a21f4c3afc9061337ca3246"
+          "checksumValue": "a343cb216f192398ebf668a94a2c60ef8d486bbe2ee1016e184891bd2fdda438"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5025,11 +5265,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b4b283edd5a09c879f00bfd04e2d199b02ffa97d"
+          "checksumValue": "5b9c240882c05ebd108c6a18a65c10760641ce24"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c86cb09e0f6f09f74cef1226d8a2abbd9ef8f9349cc9c1701f87915d0f6b171e"
+          "checksumValue": "163a96ff7a646346c8e8b4050584aa2eccf3fef2789cd40456bd0f9202893c0c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5041,11 +5281,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5603d7400d4068638ad75ce0703d2575ff322725"
+          "checksumValue": "30f0415d081409e67ecf6fc49e233ce9512586e5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0af354b1b350ae651549e8e8d6fb0835ca1ab9dc7094fad95e6cd9d13f7faaab"
+          "checksumValue": "4508f8bd8c81be3aaf3377b1d4ec37ae970fa4a496e7fc99146b0040d5b6f675"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5073,11 +5313,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2d633759042ebfe8625bff12906880d9cb9c9532"
+          "checksumValue": "2c8551c7daaf3eb5b45b96ebf29efd050d50a3fb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3b57709f7d2af72ea07a6b70e42a583a82aed19e5df623935bfd207dc3a6016f"
+          "checksumValue": "4b34af64cae0572c78441125dd924b022a591873a0ffead584fca7a9eeea4715"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5089,11 +5329,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4ac2659230c09da75f356d18de77cbcb0f406ad2"
+          "checksumValue": "fd4972a8ec5f38a3b85d826949d3ee3d8bf597e9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "0157932f8a5d57b902ce35f4ba43386f71d35547af77040653b01167e5dae82c"
+          "checksumValue": "5a32f1a9ca6b0e9f97c5d4b41377f55809e8b2c2544e3e620b2b622460e5966e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5121,11 +5361,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "28ad290cafe74115f06ba4b87316c3990589ad6d"
+          "checksumValue": "3070244e783c7258d94cabd081c3bc5af841893a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6177ad3efc67815a245019f0dcb1af57d317fef11fb697e512dc4b496a0b8cf0"
+          "checksumValue": "d3f03a53a170b97d4eab30849348eecf55d758b194b587b22e234861c8fb9548"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5137,11 +5377,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "baad9703a69c453897377de5549ae6bf0dbad8a9"
+          "checksumValue": "db430fbee788bd5949221ec308b336293ab3726b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "checksumValue": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5169,11 +5409,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c2866ea506ab4555c9147254e21e04f63e5057bc"
+          "checksumValue": "3a71dc00dfd336153be289013e068f89a040132a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "13a5ac094ee463b698a7e44afaeee89e3e96abdaf0a4f910b2834004c139ac93"
+          "checksumValue": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5185,11 +5425,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dd393e35cce9895b132a9f1d0946aa9402bcdbe3"
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5489,11 +5729,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a13ebc4b5c049dd0b9efb59a505183497e029321"
+          "checksumValue": "39e1d3c1252c91c38e787bb09ebaa0dc35290dfb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f718374de8a2c295178377f6aef0159187756bf9465e056cfca121e195fb3a42"
+          "checksumValue": "27288e7eb02de75ad1c71a01a203d4d0703ecb52c7cb4c8e7769cb40561452b8"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5619,9 +5859,17 @@
         "SPDXRef-File-references-noyalib-bundle.md",
         "SPDXRef-File-references-registry-schema.md",
         "SPDXRef-File-scripts--lib---init--.py",
+        "SPDXRef-File-scripts--lib-analyzer.py",
+        "SPDXRef-File-scripts--lib-checksums.py",
+        "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
+        "SPDXRef-File-scripts--lib-release-notes.py",
+        "SPDXRef-File-scripts--lib-rules.json",
+        "SPDXRef-File-scripts--lib-rules.py",
+        "SPDXRef-File-scripts--lib-scaling.py",
+        "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",
         "SPDXRef-File-scripts-agtmls.py",
         "SPDXRef-File-scripts-audit-skill.py",
@@ -5631,7 +5879,7 @@
         "SPDXRef-File-scripts-check-skill-collisions.py",
         "SPDXRef-File-scripts-evolve-session.py",
         "SPDXRef-File-scripts-export-registry.py",
-        "SPDXRef-File-scripts-generate-agent-card.py",
+        "SPDXRef-File-scripts-generate-benchmarks-doc.py",
         "SPDXRef-File-scripts-generate-catalog.py",
         "SPDXRef-File-scripts-generate-completions.py",
         "SPDXRef-File-scripts-generate-docs-site.py",
@@ -5647,11 +5895,15 @@
         "SPDXRef-File-scripts-provider-install.py",
         "SPDXRef-File-scripts-record-evidence.py",
         "SPDXRef-File-scripts-registry-diff.py",
+        "SPDXRef-File-scripts-release-audit.py",
+        "SPDXRef-File-scripts-release-body.py",
         "SPDXRef-File-scripts-release-check.py",
         "SPDXRef-File-scripts-release-dry-run.py",
         "SPDXRef-File-scripts-release-pack.py",
+        "SPDXRef-File-scripts-release-preflight.py",
         "SPDXRef-File-scripts-run-all-checks.py",
         "SPDXRef-File-scripts-run-behavioral-evals.py",
+        "SPDXRef-File-scripts-run-coverage.py",
         "SPDXRef-File-scripts-run-security-evals.py",
         "SPDXRef-File-scripts-run-trigger-evals.py",
         "SPDXRef-File-scripts-run-unit-tests.py",
@@ -5669,12 +5921,14 @@
         "SPDXRef-File-scripts-smoke-live-providers.py",
         "SPDXRef-File-scripts-smoke-make-install.py",
         "SPDXRef-File-scripts-smoke-next-version.py",
+        "SPDXRef-File-scripts-smoke-offline.py",
         "SPDXRef-File-scripts-smoke-proposal.py",
         "SPDXRef-File-scripts-smoke-provider-install.py",
         "SPDXRef-File-scripts-smoke-release-dry-run.py",
         "SPDXRef-File-scripts-smoke-release-pack.py",
         "SPDXRef-File-scripts-smoke-scaffold.py",
         "SPDXRef-File-scripts-sync-skill-frontmatter.py",
+        "SPDXRef-File-scripts-sync-spec-rules.py",
         "SPDXRef-File-scripts-validate-check-manifest.py",
         "SPDXRef-File-scripts-validate-cli-surface.py",
         "SPDXRef-File-scripts-validate-commands.py",
@@ -5695,6 +5949,7 @@
         "SPDXRef-File-scripts-validate-release.py",
         "SPDXRef-File-scripts-validate-sbom-conformance.py",
         "SPDXRef-File-scripts-validate-secrets.py",
+        "SPDXRef-File-scripts-validate-security-claims.py",
         "SPDXRef-File-scripts-validate-shell-syntax.py",
         "SPDXRef-File-scripts-validate-skill-index.py",
         "SPDXRef-File-scripts-validate-skill-metadata.py",

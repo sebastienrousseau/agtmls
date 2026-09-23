@@ -34,10 +34,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install reference validator
-        # skills-ref requires Python >=3.11. It is optional: without it
-        # validate-spec-conformance.py reports SKIP, and 3.11+ legs still
-        # enforce the spec. Never fail the run over a dev-only tool.
-        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0' || true
+        # skills-ref requires Python >=3.11, so the 3.10 leg skips it. On 3.11+
+        # a failed install must fail the run: validate-spec-conformance.py
+        # treats a missing validator in CI as FAIL, not SKIP.
+        if: matrix.python-version != '3.10'
+        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
       - name: Verify commit signatures
         # README states signing is required. Until this step, that was an
         # honour-system policy rather than a control.
@@ -103,8 +104,14 @@ jobs:
         run: python3 scripts/check-skill-collisions.py
       - name: Validate Eval Cases
         run: python3 scripts/validate-eval-cases.py
+      - name: Check Spec Rule Snapshot
+        run: python3 scripts/sync-spec-rules.py --check
+      - name: Validate Security Claims
+        run: python3 scripts/validate-security-claims.py
       - name: Run Security Evals
         run: python3 scripts/run-security-evals.py
+      - name: Audit Registry Skills
+        run: python3 scripts/audit-skill.py --all --strict
       - name: Run Trigger Evals
         run: python3 scripts/run-trigger-evals.py
       - name: Run Behavioral Evals
@@ -121,10 +128,10 @@ jobs:
         run: python3 scripts/generate-catalog.py --check
       - name: Generate Docs Site Check
         run: python3 scripts/generate-docs-site.py --check
-      - name: Generate Agent Card Check
-        run: python3 scripts/generate-agent-card.py --check
       - name: Generate Mcp Resources Check
         run: python3 scripts/generate-mcp-resources.py --check
+      - name: Generate Benchmarks Doc Check
+        run: python3 scripts/generate-benchmarks-doc.py --check
       - name: Generate Sbom Check
         run: python3 scripts/generate-sbom.py --check
       - name: Validate Sbom Conformance
@@ -159,6 +166,11 @@ jobs:
         run: python3 scripts/smoke-evolve-evidence.py
       - name: Smoke Provider Install
         run: python3 scripts/smoke-provider-install.py
+      - name: Smoke Live Providers
+        # Deliberately keyless here: the script exits 0 with no credentials,
+        # and live-provider-smoke.yml does the credentialed run on a schedule.
+        # This step exists so CI runs every check in checks.json.
+        run: python3 scripts/smoke-live-providers.py
       - name: Smoke Install
         run: python3 scripts/smoke-install.py
       - name: Smoke Install Safety
@@ -169,6 +181,9 @@ jobs:
         run: python3 scripts/smoke-install-profiles.py
       - name: Smoke Cli
         run: python3 scripts/smoke-cli.py
+      - name: Smoke Offline
+        # "No telemetry" is a positioning claim; this is the control behind it.
+        run: python3 scripts/smoke-offline.py
       - name: Smoke Make Install
         run: python3 scripts/smoke-make-install.py
       - name: Smoke Export
@@ -182,13 +197,16 @@ jobs:
       - name: Run Unit Tests
         run: python3 scripts/run-unit-tests.py
       - name: Bench
-        run: python3 scripts/bench.py
+        # --smoke: one iteration per workload, no timing assertions. The
+        # regression check needs an idle machine, and runs in bench.yml.
+        run: python3 scripts/bench.py --smoke
       - name: Validate Check Manifest
         run: python3 scripts/validate-check-manifest.py
       - name: Agtmls Doctor
-        run: python3 scripts/agtmls-doctor.py
-      - name: Compile maintenance CLIs
-        run: python3 -m py_compile scripts/smoke-install-verify.py scripts/validate-sbom-conformance.py scripts/run-security-evals.py scripts/smoke-install-safety.py scripts/smoke-make-install.py scripts/agtmls-doctor.py scripts/agtmls.py scripts/bench.py scripts/check-skill-collisions.py scripts/evolve-session.py scripts/export-registry.py scripts/generate-agent-card.py scripts/generate-catalog.py scripts/generate-docs-site.py scripts/generate-mcp-resources.py scripts/generate-provenance.py scripts/generate-sbom.py scripts/generate-skill-index.py scripts/import-skill.py scripts/propose-skill-from-session.py scripts/provider-install.py scripts/record-evidence.py scripts/registry-diff.py scripts/release-check.py scripts/release-pack.py scripts/run-all-checks.py scripts/run-behavioral-evals.py scripts/run-trigger-evals.py scripts/run-unit-tests.py scripts/scaffold-skill.py scripts/smoke-cli.py scripts/smoke-evolve-evidence.py scripts/smoke-export.py scripts/smoke-import.py scripts/smoke-install-profiles.py scripts/smoke-install.py scripts/smoke-proposal.py scripts/smoke-provider-install.py scripts/smoke-live-providers.py scripts/smoke-release-pack.py scripts/smoke-scaffold.py scripts/validate-check-manifest.py scripts/validate-cli-surface.py scripts/validate-commands.py scripts/validate-doc-links.py scripts/validate-docs-site.py scripts/validate-eval-cases.py scripts/validate-generated-artifacts.py scripts/validate-gitignore.py scripts/validate-governance.py scripts/validate-json-files.py scripts/validate-lifecycle.py scripts/validate-plugin-manifest.py scripts/validate-profiles.py scripts/validate-providers.py scripts/validate-python-scripts.py scripts/validate-release.py scripts/validate-secrets.py scripts/validate-shell-syntax.py scripts/validate-skill-index.py scripts/validate-skill-metadata.py scripts/validate-skills.py scripts/validate-system-prompts.py scripts/validate-templates.py scripts/validate-version-policy.py scripts/next-version.py scripts/release-dry-run.py scripts/smoke-next-version.py scripts/smoke-release-dry-run.py scripts/verify-release-assets.py scripts/bump-version.py scripts/smoke-bump-version-check.py
+        # Every check in checks.json already ran as its own step above. Without
+        # --skip-gate the doctor runs the entire gate a second time, on every
+        # leg of the matrix.
+        run: python3 scripts/agtmls-doctor.py --skip-gate
 
   # Branch protection requires a status check literally named
   # "validate-skills". Matrix legs report as "checks (os, version)", which

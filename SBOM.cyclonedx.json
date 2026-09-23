@@ -1,3102 +1,3954 @@
 {
   "bomFormat": "CycloneDX",
-  "components": [],
-  "files": [
+  "components": [
     {
+      "bom-ref": "CATALOG.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "199c9a147f88db778b7795c874d6d6622ecd93278995d173382500ff49a73f5c"
         }
       ],
-      "name": "CATALOG.md"
+      "name": "CATALOG.md",
+      "type": "file"
     },
     {
+      "bom-ref": "LICENSE-APACHE",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "96bd8666cb191d86e4108d674120391148d050afaaed373dbcca29d41af310e4"
         }
       ],
-      "name": "LICENSE-APACHE"
+      "name": "LICENSE-APACHE",
+      "type": "file"
     },
     {
+      "bom-ref": "LICENSE-MIT",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "0bbbd45c3890a3dbdc4614f1dac05de29053165039aedf71ffc7adb85e2ad810"
         }
       ],
-      "name": "LICENSE-MIT"
+      "name": "LICENSE-MIT",
+      "type": "file"
     },
     {
+      "bom-ref": "agents/anti-slop-editor.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "49c6ba40da78cdff4f07d6535563686c387f12e96ca0fb5e129eade00049825d"
         }
       ],
-      "name": "agents/anti-slop-editor.md"
+      "name": "agents/anti-slop-editor.md",
+      "type": "file"
     },
     {
+      "bom-ref": "agents/registry-auditor.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "dc33eba55052f93c61826b9cc0c4872a8296c609ba7678f0cfae706587ff4414"
         }
       ],
-      "name": "agents/registry-auditor.md"
+      "name": "agents/registry-auditor.md",
+      "type": "file"
     },
     {
+      "bom-ref": "agents/security-sentinel.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5f3d353408d63e4fc149840dcf5c6c06d44e03070a066918acba199f62242c68"
         }
       ],
-      "name": "agents/security-sentinel.md"
+      "name": "agents/security-sentinel.md",
+      "type": "file"
     },
     {
+      "bom-ref": "agents/skill-author.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "74f791c31942580facf1130fc3a0d79544b204dfa67f011f387eb396c0af7e16"
         }
       ],
-      "name": "agents/skill-author.md"
+      "name": "agents/skill-author.md",
+      "type": "file"
     },
     {
+      "bom-ref": "checks.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d1989e2511995b370c7337112914ef8c6166019ccbc5d5af5e2a1dd55bf71d2c"
+          "content": "16b25057ab6cc727aea22159f7f819edfc9c265e01fe9a41ea897b7325786d53"
         }
       ],
-      "name": "checks.json"
+      "name": "checks.json",
+      "type": "file"
     },
     {
+      "bom-ref": "commands/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "bea07b284b39008dd7c99ca0be631d82d178035cd6702bb79c4492ec37fbf579"
         }
       ],
-      "name": "commands/README.md"
+      "name": "commands/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "commands/agtmls-audit.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "84a86bcaf7d72659c9cee3404804bb2b769021e9a004b9608d7ccd94ae35ff44"
         }
       ],
-      "name": "commands/agtmls-audit.md"
+      "name": "commands/agtmls-audit.md",
+      "type": "file"
     },
     {
+      "bom-ref": "commands/agtmls-new-skill.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "750b92aeadebeb2fbf5ceb6f51e91aa75cadb072708cc34d0908b74f22d3a342"
         }
       ],
-      "name": "commands/agtmls-new-skill.md"
+      "name": "commands/agtmls-new-skill.md",
+      "type": "file"
     },
     {
+      "bom-ref": "commands/agtmls-release.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7f45a52238c79a203d90be0ea45d3849a5760669a129baf0edb2dd6999d44ce3"
         }
       ],
-      "name": "commands/agtmls-release.md"
+      "name": "commands/agtmls-release.md",
+      "type": "file"
     },
     {
+      "bom-ref": "commands/agtmls.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b9c15f41bb351aff20639700157c920e3d475e90d3d2b564bc856ee95d036506"
         }
       ],
-      "name": "commands/agtmls.md"
+      "name": "commands/agtmls.md",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c5c0b1ba8106658a7f48ff76ae309b0c90ff96e83a704989d60c0b49ed92e00a"
         }
       ],
-      "name": "evals/README.md"
+      "name": "evals/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "18ec534751ebe983e766618d77e141f847375cb198869cc6f8f709bc84245bd8"
         }
       ],
-      "name": "evals/behavioral/README.md"
+      "name": "evals/behavioral/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/agent-loop-design.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "fd9db44aec901859880ea7df86b0ba2152220316812333b1cae90390de1a7dc4"
         }
       ],
-      "name": "evals/behavioral/cases/agent-loop-design.json"
+      "name": "evals/behavioral/cases/agent-loop-design.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/ai-supply-chain-security.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5e7b9c5b1233e92088781470cac73ed31d5d30d07baee1dd9e1f96a2f42445ca"
         }
       ],
-      "name": "evals/behavioral/cases/ai-supply-chain-security.json"
+      "name": "evals/behavioral/cases/ai-supply-chain-security.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/anti-slop-pr-and-writing.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2a380d4a0a3a60934402445a6e2a142fae75535be4b52e032fd769d0cf2f10bd"
         }
       ],
-      "name": "evals/behavioral/cases/anti-slop-pr-and-writing.json"
+      "name": "evals/behavioral/cases/anti-slop-pr-and-writing.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/brainstorming.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ea482c68ded86992f124a29754c9d98681479c9da11a2315c9f6a6f4c5f5e5ca"
         }
       ],
-      "name": "evals/behavioral/cases/brainstorming.json"
+      "name": "evals/behavioral/cases/brainstorming.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/cross-language-port.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "75c404983cc6855d1d1e57c229a1a8aea09c1a05dae308425ab3ae0eeaaea28c"
         }
       ],
-      "name": "evals/behavioral/cases/cross-language-port.json"
+      "name": "evals/behavioral/cases/cross-language-port.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/giving-code-review.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "39c2c205e3a4ac4e8ef7f77c5c750703c8532451d694a15fda81e3568dca9016"
         }
       ],
-      "name": "evals/behavioral/cases/giving-code-review.json"
+      "name": "evals/behavioral/cases/giving-code-review.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/handoff.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "16887bbc884e6456734dfa550440a9fb52be5bec92708fc68ee7f0d75469b70f"
         }
       ],
-      "name": "evals/behavioral/cases/handoff.json"
+      "name": "evals/behavioral/cases/handoff.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/incident-response.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "074984bc6463453e19857921ba7864c4878c727a202bfd8350cff9a76489c8be"
         }
       ],
-      "name": "evals/behavioral/cases/incident-response.json"
+      "name": "evals/behavioral/cases/incident-response.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-architecture-contract.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ccf1af1ad68a5ba064c2700c05e80a983cdeb4c30cbc08c05845b5f48e9786a1"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-architecture-contract.json"
+      "name": "evals/behavioral/cases/noyalib-architecture-contract.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-build-and-env.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "55d21434ea04e86feafd0d8847cb0ce2f4d7b0310238d284ecb81856176eb4e3"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-build-and-env.json"
+      "name": "evals/behavioral/cases/noyalib-build-and-env.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-change-control.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d9933161e0b44559219553bb8fdaff0ce6bf847ec618be6c8f443607c07d7997"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-change-control.json"
+      "name": "evals/behavioral/cases/noyalib-change-control.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-ci-and-release.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5aa0857e1529f033bae9c8cff0ca881759df3d85b669dcf2cf9ddb8814f22b1e"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-ci-and-release.json"
+      "name": "evals/behavioral/cases/noyalib-ci-and-release.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-config-and-flags.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c0c9746db9218e7d38f0a6d942c849dc39e47787a3a1200f8085f8ba5ce5cf22"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-config-and-flags.json"
+      "name": "evals/behavioral/cases/noyalib-config-and-flags.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-coverage-campaign.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7a448690c76ec95a3b45c4e924ff4387c5f432fe735978371a37a381af76f7f8"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-coverage-campaign.json"
+      "name": "evals/behavioral/cases/noyalib-coverage-campaign.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-debugging-playbook.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e2eabda2fd94fde81d98b01aad9a86bd988757d04eb0cd2d989a136dd60b6fe0"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-debugging-playbook.json"
+      "name": "evals/behavioral/cases/noyalib-debugging-playbook.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-diagnostics-and-tooling.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5fca89e2b35ed9ae49a57f361a26360da9ef4c96f5d5f29a4e12dbee3ff56d44"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-diagnostics-and-tooling.json"
+      "name": "evals/behavioral/cases/noyalib-diagnostics-and-tooling.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-docs-and-writing.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e20c2dac4d0b24d6df57cb2fec8a3b25635a3ece3776b7523d747c2c0720602c"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-docs-and-writing.json"
+      "name": "evals/behavioral/cases/noyalib-docs-and-writing.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-external-positioning.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "411966f6c4091ddd7ef79e38b48c7ecd156c768ca586ba86b4d423cf20297c87"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-external-positioning.json"
+      "name": "evals/behavioral/cases/noyalib-external-positioning.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-failure-archaeology.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "668991557155493d12b61d377e13eceb5c4d7ab33960b8dc9af5554ab13e55a5"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-failure-archaeology.json"
+      "name": "evals/behavioral/cases/noyalib-failure-archaeology.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-research-frontier.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "17ae4e754b0f49232198bf0e8caf0691058f949ebb3266c2a5cb1d476d3c99d7"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-research-frontier.json"
+      "name": "evals/behavioral/cases/noyalib-research-frontier.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/noyalib-validation-and-qa.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "dafacdec641c6d915983adad1eb32c261c101ce137041a44645f44347af7c6e9"
         }
       ],
-      "name": "evals/behavioral/cases/noyalib-validation-and-qa.json"
+      "name": "evals/behavioral/cases/noyalib-validation-and-qa.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/pr-review-and-release.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "19d1a09c4dab01627993db0f2662632eeca21223caaef1e662624ddf44c412da"
         }
       ],
-      "name": "evals/behavioral/cases/pr-review-and-release.json"
+      "name": "evals/behavioral/cases/pr-review-and-release.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/receiving-code-review.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ef18cb5676a0a8dece3ec1f72d28065e130b61fb64355c54205c9a88cfef8d8b"
         }
       ],
-      "name": "evals/behavioral/cases/receiving-code-review.json"
+      "name": "evals/behavioral/cases/receiving-code-review.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/refactoring-safely.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "a0c15faae1d8b6e5e8f08e18d4c6e23385f77187ca8a0a5f76894a9b1bc1a8bd"
         }
       ],
-      "name": "evals/behavioral/cases/refactoring-safely.json"
+      "name": "evals/behavioral/cases/refactoring-safely.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/systematic-debugging.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "74956122cc5a16f584e81bf3219a2a51e4eb35e40e6786a54f77d05ecdddef1d"
         }
       ],
-      "name": "evals/behavioral/cases/systematic-debugging.json"
+      "name": "evals/behavioral/cases/systematic-debugging.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/test-driven-development.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "a432d9255093c981c3d66e2aa8024a131f188f5304155b0659e0d8f379fdb300"
         }
       ],
-      "name": "evals/behavioral/cases/test-driven-development.json"
+      "name": "evals/behavioral/cases/test-driven-development.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/using-agtmls.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5ec2f4b57f3e43c6b3ed3078aef47f1da0ce6e482a47bba76a9cbd7600a629b1"
         }
       ],
-      "name": "evals/behavioral/cases/using-agtmls.json"
+      "name": "evals/behavioral/cases/using-agtmls.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/verification-before-completion.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "0dc75f750ac20ea9a32371071a7939ab7498dda5843940c77c3262f82ed02e6f"
         }
       ],
-      "name": "evals/behavioral/cases/verification-before-completion.json"
+      "name": "evals/behavioral/cases/verification-before-completion.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/web-research-and-source-triage.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "878d3c244d57f6e92eadb179e453e5e0f44450052fc91731395f81053993d0e7"
         }
       ],
-      "name": "evals/behavioral/cases/web-research-and-source-triage.json"
+      "name": "evals/behavioral/cases/web-research-and-source-triage.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/writing-plans.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "9a381ba51afc7c3f6609a05aed102144184229c602b33fd1b4fd9a35d5bc1232"
         }
       ],
-      "name": "evals/behavioral/cases/writing-plans.json"
+      "name": "evals/behavioral/cases/writing-plans.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/yaml-domain-reference.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d37d158f32c7fe8be8f1ae7572a5288c634ab99b89723f4127eb565bc8887ccb"
         }
       ],
-      "name": "evals/behavioral/cases/yaml-domain-reference.json"
+      "name": "evals/behavioral/cases/yaml-domain-reference.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/agent-loop-design.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "706eebd1f16536d1426d6ee7141c3e5e5abee8eecee16203a656f8a0499e4ee4"
         }
       ],
-      "name": "evals/cases/agent-loop-design.json"
+      "name": "evals/cases/agent-loop-design.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/ai-supply-chain-security.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "90273de4fe329e63db8beec93359e893634835ec7e77079feeeaf2c1690a71f2"
         }
       ],
-      "name": "evals/cases/ai-supply-chain-security.json"
+      "name": "evals/cases/ai-supply-chain-security.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/anti-slop-pr-and-writing.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "13b0337585f119050da3c796a95e1725ff881c6ee163a8e06b398173875f4306"
         }
       ],
-      "name": "evals/cases/anti-slop-pr-and-writing.json"
+      "name": "evals/cases/anti-slop-pr-and-writing.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/brainstorming.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "adaa11d2de08a38aad5aebc0a138da87a210c462d5bed9dcd578346ac13c5e94"
         }
       ],
-      "name": "evals/cases/brainstorming.json"
+      "name": "evals/cases/brainstorming.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/cross-language-port.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "456018363700131e25b0facbe0f103f31b486b12cb34d632729279cabd865d84"
         }
       ],
-      "name": "evals/cases/cross-language-port.json"
+      "name": "evals/cases/cross-language-port.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/giving-code-review.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "cd1c90affd2e0afea49c0f3799a885e16525edba55190e432d1091a01a520468"
         }
       ],
-      "name": "evals/cases/giving-code-review.json"
+      "name": "evals/cases/giving-code-review.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/handoff.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c2e59455ae2ca88aa2444f62194cc7c901ac3825cb78d9ec32043d85dd796dae"
         }
       ],
-      "name": "evals/cases/handoff.json"
+      "name": "evals/cases/handoff.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/incident-response.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d3545b2c9d077795f41920aff1a3913410a53131c113ee0a1ec3de36fb4f9896"
         }
       ],
-      "name": "evals/cases/incident-response.json"
+      "name": "evals/cases/incident-response.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-architecture-contract.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "660943f8776e8803b8211c48b74903bd9e6607d84e015d1abd3a4d545f893d90"
         }
       ],
-      "name": "evals/cases/noyalib-architecture-contract.json"
+      "name": "evals/cases/noyalib-architecture-contract.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-build-and-env.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7aa72c4140e651d2697648081cbcd4acdf6a4acf7d49457e586789fd15451104"
         }
       ],
-      "name": "evals/cases/noyalib-build-and-env.json"
+      "name": "evals/cases/noyalib-build-and-env.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-change-control.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c26d48799ceff81d458f4376e496a2ecb8bc8fd5a7aa50ea6409564c83471cd7"
         }
       ],
-      "name": "evals/cases/noyalib-change-control.json"
+      "name": "evals/cases/noyalib-change-control.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-ci-and-release.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f8a4e3ede1e2cf110d09e3d9b4853bbc3a5edf8cab7c755efaa30afd11f31084"
         }
       ],
-      "name": "evals/cases/noyalib-ci-and-release.json"
+      "name": "evals/cases/noyalib-ci-and-release.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-config-and-flags.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "0c0f54dd51b86731b72c5c07c94906d95277ae6fbcf378df54f462302d243587"
         }
       ],
-      "name": "evals/cases/noyalib-config-and-flags.json"
+      "name": "evals/cases/noyalib-config-and-flags.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-coverage-campaign.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "6f705f83a792acc31201ddf6195495016bd8258fb05f3211026836800e456caa"
         }
       ],
-      "name": "evals/cases/noyalib-coverage-campaign.json"
+      "name": "evals/cases/noyalib-coverage-campaign.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-debugging-playbook.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ce426f1a0fb2b5223a70985c2808ff74371537bd3e4a1df8c8c4eb8ebee98f7e"
         }
       ],
-      "name": "evals/cases/noyalib-debugging-playbook.json"
+      "name": "evals/cases/noyalib-debugging-playbook.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-diagnostics-and-tooling.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "090babc854fa8889549d71691b34995ae73d595886195d09f417fe5006e85f84"
         }
       ],
-      "name": "evals/cases/noyalib-diagnostics-and-tooling.json"
+      "name": "evals/cases/noyalib-diagnostics-and-tooling.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-docs-and-writing.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d71a0250604c69d67bdff1ad3f22b771dc41997f2f2878ebad7ceb1cef260058"
         }
       ],
-      "name": "evals/cases/noyalib-docs-and-writing.json"
+      "name": "evals/cases/noyalib-docs-and-writing.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-external-positioning.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "09c9d681d4e0dc10f3ccc9c16ad30a5cbfbdc85db0d139cd8caecca011719315"
         }
       ],
-      "name": "evals/cases/noyalib-external-positioning.json"
+      "name": "evals/cases/noyalib-external-positioning.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-failure-archaeology.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "cf389e0465babd898a62e8f5b868031aa287496449eeafac65e26285615c6f6d"
         }
       ],
-      "name": "evals/cases/noyalib-failure-archaeology.json"
+      "name": "evals/cases/noyalib-failure-archaeology.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-research-frontier.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4eb483aea7e47345ab666ffb13978d381f8e5560761a4dd28378f1afe4f0afd3"
         }
       ],
-      "name": "evals/cases/noyalib-research-frontier.json"
+      "name": "evals/cases/noyalib-research-frontier.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/noyalib-validation-and-qa.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1c788348ea9492bf67055dfec0c7cc1194034207026ef7aa0473a9d5311382f3"
         }
       ],
-      "name": "evals/cases/noyalib-validation-and-qa.json"
+      "name": "evals/cases/noyalib-validation-and-qa.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/pr-review-and-release.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "0ffb3920feffeab3d5fdbf20f791be9dd226c3b2e7d3c9f81f5ea55d8b401ecc"
         }
       ],
-      "name": "evals/cases/pr-review-and-release.json"
+      "name": "evals/cases/pr-review-and-release.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/receiving-code-review.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "a8977ad11e612684ff6e48f0bbc3fef4a5eb4acc4ac3419c634c12c58161b211"
         }
       ],
-      "name": "evals/cases/receiving-code-review.json"
+      "name": "evals/cases/receiving-code-review.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/refactoring-safely.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "eba7b3211a3c48b9a161a731a000566e5fd5794f0a3ae16ccc4279745c7e1873"
         }
       ],
-      "name": "evals/cases/refactoring-safely.json"
+      "name": "evals/cases/refactoring-safely.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/systematic-debugging.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "60c0d6c628b7aa7b0862c0a8c83e54550f4a6410cf9607646a334edc62c6b268"
         }
       ],
-      "name": "evals/cases/systematic-debugging.json"
+      "name": "evals/cases/systematic-debugging.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/test-driven-development.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "efd7477ae39c7eb4cabbf0a6b3b8a7c9b67498cf7c8d7a25dd19032e7b200c7d"
         }
       ],
-      "name": "evals/cases/test-driven-development.json"
+      "name": "evals/cases/test-driven-development.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/using-agtmls.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1a4d3117fa5cb1654ac8126aea51a792d35323eb0790665b8fb853ae8a707fb5"
         }
       ],
-      "name": "evals/cases/using-agtmls.json"
+      "name": "evals/cases/using-agtmls.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/verification-before-completion.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f31e8cb4816b7b44345d793bfe80f0feead6e057055a3fee90ba4f7fab78cb67"
         }
       ],
-      "name": "evals/cases/verification-before-completion.json"
+      "name": "evals/cases/verification-before-completion.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/web-research-and-source-triage.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "172af6d812158e917f2757b67765c6d68c45f5d4df4b8e75265c8668a1f74613"
         }
       ],
-      "name": "evals/cases/web-research-and-source-triage.json"
+      "name": "evals/cases/web-research-and-source-triage.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/writing-plans.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f867fd15e0ce14c5cdaf48746f55d97fd3c3d40fd3a539d9ba293eff0f54a4b1"
         }
       ],
-      "name": "evals/cases/writing-plans.json"
+      "name": "evals/cases/writing-plans.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/cases/yaml-domain-reference.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "086007f9c3488870ae9db9a0fdb8f99355e6edff8dbdac618ed9f3d88a26ca15"
         }
       ],
-      "name": "evals/cases/yaml-domain-reference.json"
+      "name": "evals/cases/yaml-domain-reference.json",
+      "type": "file"
     },
     {
+      "bom-ref": "evals/security/corpus.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9ae93da9a0dab60887f693c32c8924751daf6efd1c3873d2f4c780bab45dc519"
+          "content": "258d2bf4012a3d2318064aef7da9f94f072327954423cd0dce163359562609bf"
         }
       ],
-      "name": "evals/security/corpus.json"
+      "name": "evals/security/corpus.json",
+      "type": "file"
     },
     {
+      "bom-ref": "index.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "893cb0010a01c9ff836ebdc61c2d8c17ce3a08b94fd44e41cc633c415101e6dc"
+          "content": "1447c25a30676984a47c63bed69d241fb5cb0d1e5d2c53bc3a7796fb8df8fba0"
         }
       ],
-      "name": "index.json"
+      "name": "index.json",
+      "type": "file"
     },
     {
+      "bom-ref": "lifecycle.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "534c73aad60816ab97d2d7ee0f5f43b3a57269da6080dc368a2f5162f9685221"
         }
       ],
-      "name": "lifecycle.json"
+      "name": "lifecycle.json",
+      "type": "file"
     },
     {
+      "bom-ref": "profiles.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "493f98f2e03ec299287176c1cebcbf848822af24c7446020b4ed6f65e223ebce"
+          "content": "7238c9e4a307b1a39e90fef0efd60055f83ab816e2417809ec2987a144b05e1e"
         }
       ],
-      "name": "profiles.json"
+      "name": "profiles.json",
+      "type": "file"
     },
     {
+      "bom-ref": "providers.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a9117697d9b2bfde7d34ffd264ccf439bc7b2848a3675afb185eaa928be99032"
+          "content": "1bf837d9b6e83fb01800230d7b2a7a51debda23d05a141e6a41adb3e35cd3739"
         }
       ],
-      "name": "providers.json"
+      "name": "providers.json",
+      "type": "file"
     },
     {
+      "bom-ref": "references/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "fb76060660c42dd610a8bb57415b5a5f205e649341f9461867d93bcaf121cc24"
         }
       ],
-      "name": "references/README.md"
+      "name": "references/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "references/definition-of-done.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "803fcc228a4d3ab845403d7a8ee451812c461cc77dd2452849ec524b674d01bb"
         }
       ],
-      "name": "references/definition-of-done.md"
+      "name": "references/definition-of-done.md",
+      "type": "file"
     },
     {
+      "bom-ref": "references/noyalib-bundle.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "a1720452350e7fe3c95baeb49cb8570d006ab4ab184b7589c7424c6eada886d1"
         }
       ],
-      "name": "references/noyalib-bundle.md"
+      "name": "references/noyalib-bundle.md",
+      "type": "file"
     },
     {
+      "bom-ref": "references/registry-schema.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e487f11c461c69c4a36c9c171efead9bce24fe54f2ed77005dd127b3a80bee60"
         }
       ],
-      "name": "references/registry-schema.md"
+      "name": "references/registry-schema.md",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/__init__.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "feb485e13a51aefdf70c8d56d649fee00d2269972621690f96ef175dd95be376"
         }
       ],
-      "name": "scripts/_lib/__init__.py"
+      "name": "scripts/_lib/__init__.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/analyzer.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "919ac6bc4c3e9a39e05e17dd4f382f8d6f27a32d6579fdca7f4b4acc17e8ac6f"
+          "content": "1ae57c6f5a20c39c81c4176b7e8f1ca5c73814b69fb858278bb2b14052688a9b"
         }
       ],
-      "name": "scripts/_lib/covered.py"
+      "name": "scripts/_lib/analyzer.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/checksums.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ae3005de979637664e51d15375bcd854f14cbd87aca2e8193fd1c8d9d50f115e"
+        }
+      ],
+      "name": "scripts/_lib/checksums.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/cli_parser.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a3487763b3a8bd5e1ba7f483dac422b3c186cf4ab068a41092eabaea6e5e36f1"
+        }
+      ],
+      "name": "scripts/_lib/cli_parser.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/covered.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2e03e87f3fdf7ad137f8e381913b33682b2ec284327b3e49b4f83e0ebb190859"
+        }
+      ],
+      "name": "scripts/_lib/covered.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/digest.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "8ed514b3c34e362bd4da9301db0a8e2f9753ad26b405dd836593f9b59393e537"
         }
       ],
-      "name": "scripts/_lib/digest.py"
+      "name": "scripts/_lib/digest.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/lockfile.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f998a80d385ae43ae58b4cf6ff4296021b4b48a291bb66a727ed0df5ce40f4e3"
         }
       ],
-      "name": "scripts/_lib/lockfile.py"
+      "name": "scripts/_lib/lockfile.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/release_notes.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ade96e4e8cbb9f91eb83e18ff148a90f55f04340fce8864a7649d064ecd44093"
+          "content": "120934cd1b417b83661642a587686000b80da7760c5944001b1f68e27d05875e"
         }
       ],
-      "name": "scripts/agtmls-doctor.py"
+      "name": "scripts/_lib/release_notes.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/rules.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "89138697e00eca695ce5433d11e804f07eb89ac064ba9a0fbafcd569cd146efd"
+          "content": "54271345cd77ed1e1266d2ed90b1e03a90206f3ec8d7685bf3bc9e5df4a71e83"
         }
       ],
-      "name": "scripts/agtmls.py"
+      "name": "scripts/_lib/rules.json",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/rules.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8196fe0eacb6a652890185efc31ce4f160f616bc9487a2ad6b82f74d41b6f3ec"
+          "content": "85fc36b2e408a7d7b2aab302afd69f9200bcc0dfe42fd33d2b8e7db021dd6ac3"
         }
       ],
-      "name": "scripts/audit-skill.py"
+      "name": "scripts/_lib/rules.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/scaling.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7cf6b33a062f9c93a1f6672be9f5c1cf599aff02023fe383b59ac433bb0f6b7e"
+          "content": "40b496096bd62520856ea739261d1c427ed9ec6484e0f32664f76d69b90b30e9"
         }
       ],
-      "name": "scripts/bench.py"
+      "name": "scripts/_lib/scaling.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/workloads.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "84966f21d68a07141839552182b845ebbfa79019b75bfe0c6098ab88c93d30d8"
+          "content": "73fbef6a47310f4f808e3cc30f70241f631bcb44984060e43efe20d22aeb6020"
         }
       ],
-      "name": "scripts/bump-version.py"
+      "name": "scripts/_lib/workloads.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/agtmls-doctor.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4f4e3a26835a3ec61f4e126fd2d70860816bae92f25a06234d059fdbcef0f62c"
+        }
+      ],
+      "name": "scripts/agtmls-doctor.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/agtmls.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ad4b48ded77fecad5af850ab8c2d60cfe16e30eb552686a094fb605ed8303513"
+        }
+      ],
+      "name": "scripts/agtmls.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/audit-skill.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "30c0364f29d29502db51fcb6d54ba959d0901cd35c4fa37825d8849c5ef611d3"
+        }
+      ],
+      "name": "scripts/audit-skill.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/bench.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a2e833c522ef92c1e875ab91b537add413ddccaf0b6a78a7b67c485d5c35bbe2"
+        }
+      ],
+      "name": "scripts/bench.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/bump-version.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7b0339c538018695885999070e026839ee20a00520ea1655dd5227bd636c17af"
+        }
+      ],
+      "name": "scripts/bump-version.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/check-publishing-readiness.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "06da54d2f27a63c81bf6836e6f2bb0400636e4c3ea0818eb8b9cc77b8f7deca9"
         }
       ],
-      "name": "scripts/check-publishing-readiness.py"
+      "name": "scripts/check-publishing-readiness.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/check-skill-collisions.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d396f9ac4165e06dde0099b313866586ae3ccfe03a0105ce1265256e9135bbba"
+          "content": "3458d6d63c5e99619dd05f38d20eb3c99c080c1bc901105434033b3e7a5a3e59"
         }
       ],
-      "name": "scripts/check-skill-collisions.py"
+      "name": "scripts/check-skill-collisions.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/evolve-session.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "11e0607f0020d4daae890d6ca74aef55c24d2112119ac63c3419378d5d43afbc"
+          "content": "e86b2aac3e05fd2d8140379d2588e0c306fcbb1f861b19679a30329353e4948d"
         }
       ],
-      "name": "scripts/evolve-session.py"
+      "name": "scripts/evolve-session.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/export-registry.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "efd2806dec6b73c4575c2c60afe453f50dc5746a3fe33ef1ab5bd1ea05b2363d"
+          "content": "8b6e74cddbbe46ac5f2e14104d2965a953ed2e0ba2cb273fd14b01d5ebae14f3"
         }
       ],
-      "name": "scripts/export-registry.py"
+      "name": "scripts/export-registry.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-benchmarks-doc.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b923554cc22721a1da73d4a0ff2b08ba6dd522c2673c81aef52a238fe7128573"
+          "content": "3a9e06760c7560149dceacd94fc325468d6d5ca5d71c1988b9be53c5b8eb8ecf"
         }
       ],
-      "name": "scripts/generate-agent-card.py"
+      "name": "scripts/generate-benchmarks-doc.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-catalog.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e6212ade1ded76b476ed56d96d9568036f3a1949fee3c9e7c139647764eb67ec"
+          "content": "dad307d1e2a5e2d268ca20789424de34068f860fd36f3ddd0e60eb3e4613e404"
         }
       ],
-      "name": "scripts/generate-catalog.py"
+      "name": "scripts/generate-catalog.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-completions.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8e52ce5642f91ee79724b6736f400083233ebba54716c7708a1e05838ef8471c"
+          "content": "5e90db0eba44024032feb55d36f45aa9b73245e1fdc217a0fc1145f1f093012c"
         }
       ],
-      "name": "scripts/generate-completions.py"
+      "name": "scripts/generate-completions.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-docs-site.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c23f4f1de7c949233e24d6eb15cf7bd68945a1bffc09fb28bb75dcdab9eebb4a"
+          "content": "1f4b1f64b4dfcd26bdf1719407763f91b9ce86f734b02b2a77d7786317d34327"
         }
       ],
-      "name": "scripts/generate-docs-site.py"
+      "name": "scripts/generate-docs-site.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-manpage.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "97334e6ab5498bd80ff351345a932122a9201814ec1771371aaaa80280e30189"
+          "content": "2cc2f7539d1f1df11a5e61bf38c46a6c8c020ec80fe0b1ea2f9cb5cd4a52173a"
         }
       ],
-      "name": "scripts/generate-manpage.py"
+      "name": "scripts/generate-manpage.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-mcp-resources.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bd7b72a805448dcc77c16cd22d46c8f9ae78524862b15314c380c15131e76769"
+          "content": "d7eee50378cd90cc987ec97b8f69b34e1e12f1fc9bfb0d1fd87ee2289850d315"
         }
       ],
-      "name": "scripts/generate-mcp-resources.py"
+      "name": "scripts/generate-mcp-resources.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-plugin-manifests.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2c5097397fc0198838392c58994c486834f6f164469ee6b3f0e6a816c8863aa8"
+          "content": "ed7ab531b85966e97e1d5f8c682718364732914ee5768bf1b9a03557f53a9809"
         }
       ],
-      "name": "scripts/generate-plugin-manifests.py"
+      "name": "scripts/generate-plugin-manifests.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-provenance.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6d6ec33a651e9f34c3fab380032939d72c48c35af997cadb16040a2ab69be752"
+          "content": "0a05e5205e36159b6adfb4f9552326bdd3604e9b3453c9310fc08347878fa347"
         }
       ],
-      "name": "scripts/generate-provenance.py"
+      "name": "scripts/generate-provenance.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-sbom.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fc2d529c9dc581870dcc06b662b86ddfc8f4e5dcd644cede7a1fb8d5be2fe945"
+          "content": "af632b7fe2c61afd46ec68e20bd34b1ee4037fb3a726cddb70b3825383c77af8"
         }
       ],
-      "name": "scripts/generate-sbom.py"
+      "name": "scripts/generate-sbom.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/generate-skill-index.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1ea187628154d72af8c0bf33e55e2d9fba2c6bb9d7be17eedeae3f2a7d9d7afa"
+          "content": "e6463783253eda890c4e98807779f06edf82284093a4eb8c54a96fc913f1f199"
         }
       ],
-      "name": "scripts/generate-skill-index.py"
+      "name": "scripts/generate-skill-index.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/import-skill.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6e1e6c77476b598b0167d81b5055f39a81f1904c9b8636d3495722e472eb3744"
+          "content": "e1f67c4804876038b19553fa3959766faffb11fd142f161f4478cc28bcd9e666"
         }
       ],
-      "name": "scripts/import-skill.py"
+      "name": "scripts/import-skill.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/next-version.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "40b94b266153e96aec8b2b95f0ace5535d3126922f285edf7717ad09c0f8b32c"
+          "content": "919f687040af4ff9d247a92dba475cdf65f2a548811608b5d2e562c80810b4f0"
         }
       ],
-      "name": "scripts/next-version.py"
+      "name": "scripts/next-version.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/propose-skill-from-session.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c53fa65aaf26145109ff4dc03ccca811182f460390735dc08ab2d0b536746a93"
+          "content": "bcdb4aca38c6584f13cf65fb1ce4c4a7b63c8885ea2a826a497f59e03f2df051"
         }
       ],
-      "name": "scripts/propose-skill-from-session.py"
+      "name": "scripts/propose-skill-from-session.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/provider-install.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "254647f57b49aee01349ba7d6dddb20cdbbb340e051ed240fa689b813874e86c"
+          "content": "1d79aea692c76b9eaa15206feca6fc43777c84e4d39988aec1908562f0134cd2"
         }
       ],
-      "name": "scripts/provider-install.py"
+      "name": "scripts/provider-install.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/record-evidence.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "47908bfbbd2457f2fc3f81c1f11e058f53eea079318abc6b67e49db485cd0c3f"
+          "content": "19b442e102eade4cad3f52ce4a3ef0e99a098dfa5ca8364e1b9f618022cafe1f"
         }
       ],
-      "name": "scripts/record-evidence.py"
+      "name": "scripts/record-evidence.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/registry-diff.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f3f40d247442a517a671df47930c8d907da8c085f061d721babd482a2df17c40"
+          "content": "196637eb600829d1d56e30459bb9c21bfcb389d16ff6587013816dc0e30d56ea"
         }
       ],
-      "name": "scripts/registry-diff.py"
+      "name": "scripts/registry-diff.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-audit.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4c68ea56d41eb3ec52d014882f47be061318a47863095351afa6289b909d25ce"
+          "content": "1e433c7675d00858c051fbc0f328f077e60eb53086e8846cd598790f68554cc5"
         }
       ],
-      "name": "scripts/release-check.py"
+      "name": "scripts/release-audit.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-body.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0dbefc8dddb68ce9953b0685795fad5a2aec3fe89732df3eb5e8054e1a7a70bd"
+          "content": "92317a95d9b38ff0917f48c5f23184c1c5f9febe52d1801ad42d5fc29daee7f4"
         }
       ],
-      "name": "scripts/release-dry-run.py"
+      "name": "scripts/release-body.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-check.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "55b94b9e7c6a398ae80344a74dfd85089f11bfe86d7aaac470bf1e7ab5272e02"
+          "content": "9343a81f6c83e595ea43e119b6ec0aef16dffd1fc2bf28f5b2115e4ab26b8c3c"
         }
       ],
-      "name": "scripts/release-pack.py"
+      "name": "scripts/release-check.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-dry-run.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "248ed599b0942c4f7e4839f5b5afa5915630e847b8df0d0ce02a7fbe97071f50"
+          "content": "453339ca32bf73f2777cea8d9d993468917e7aff2db45a6dbfb3b415d101494a"
         }
       ],
-      "name": "scripts/run-all-checks.py"
+      "name": "scripts/release-dry-run.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-pack.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5e5e0ddb77268e1eaf7123917dd9e1222e0099c6760a4ac425eba0fd4a1c546f"
+          "content": "ec554fac76fa6e6a9d533a92bc58b9461bff6db9843ef30ec0622bad46e93fdb"
         }
       ],
-      "name": "scripts/run-behavioral-evals.py"
+      "name": "scripts/release-pack.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/release-preflight.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7f1c8e8db09e72f200a2d75ac56f9a974e6824605a9802923371410d3b9b9fe3"
+          "content": "eda0e6bef812a4890861332aa0f3cbc046d8fa7893f3fabf615442a23fcd341b"
         }
       ],
-      "name": "scripts/run-security-evals.py"
+      "name": "scripts/release-preflight.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-all-checks.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "80072d5a5f2f722e2206a1a653b5b177cf662ff252b82de1d9ee15250045176a"
+          "content": "01ea6878b8effb1e29613c4b5b1e70e1bd5c47a04a8112c62f2655e3168ccf4f"
         }
       ],
-      "name": "scripts/run-trigger-evals.py"
+      "name": "scripts/run-all-checks.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-behavioral-evals.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e03c6236d7fa1aacfa63d5db4bdc6e99c92e2a9e9952835feb3cb941df1ea867"
+          "content": "ac4060a745db361583b10d9970645fac0491469a492afedc7ef9dfa5c815d8c9"
         }
       ],
-      "name": "scripts/run-unit-tests.py"
+      "name": "scripts/run-behavioral-evals.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-coverage.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a51ac29803649bdf822afd1881a44f2997ee4ade3194a0cf1de3f1f10d7ebd17"
+          "content": "07b8d578b2b3c393ab1390218954bf5d5f27e06160877bfa671fa3582dfddb1b"
         }
       ],
-      "name": "scripts/scaffold-skill.py"
+      "name": "scripts/run-coverage.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-security-evals.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5623a1dd82c92dbb97907aae7ac730f7b4afc1ec8b0a74f744479c1740d62d78"
+          "content": "4e01e065bc80f81fa673f24b057d6d477161df59ea1dc4e8a951f7c4f620602d"
         }
       ],
-      "name": "scripts/setup-workspace.sh"
+      "name": "scripts/run-security-evals.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-trigger-evals.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0b13eef4a2bf6b157fd01b748b028d3679b1b759e4cb52ae54768adf24205614"
+          "content": "8d108743b4eaac0eeab2e3df56fbd5bd68746ef22f8444a3f01bc50d92fb4708"
         }
       ],
-      "name": "scripts/smoke-bump-version-check.py"
+      "name": "scripts/run-trigger-evals.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/run-unit-tests.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "31ec485b365f08febad7527630ffc53bcea07066a96f217050dd911a77e1dd47"
+          "content": "2c00257dbda0f48a74164fa618d1371a21a2ec5a9aa3cad5910e371e5da8395e"
         }
       ],
-      "name": "scripts/smoke-cli.py"
+      "name": "scripts/run-unit-tests.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/scaffold-skill.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eee49b99f19b5448833f49c941a60f2114af16202318723344b306994825f1e9"
+          "content": "2cb8fbdf5b82ef40bcdeec6f95c9f0a934348d14237bd449bcdbb060c96dbf6f"
         }
       ],
-      "name": "scripts/smoke-evolve-evidence.py"
+      "name": "scripts/scaffold-skill.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/setup-workspace.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eafb1fd9a3b9216403b1663a942a8a44d6c1e8576117c32facd8571e848fd608"
+          "content": "9b34c77b9f457c28fa1dd88cdffb7bb653ba2a01d46c5090606e352435d5c1dd"
         }
       ],
-      "name": "scripts/smoke-export.py"
+      "name": "scripts/setup-workspace.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-bump-version-check.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0d5aa48c051865c4ce176d5aafd3cde10c4deb5dfd63a093f80f4491c5114dbd"
+          "content": "c8b3363f23fa23bfb48b37f59d96f6f684f50e8152fcbc17deb83da4958935d1"
         }
       ],
-      "name": "scripts/smoke-import.py"
+      "name": "scripts/smoke-bump-version-check.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-cli.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0d3f90d6e64a610614be4423c6a4792c378777bbc6003bc632288f56e80f85bf"
+          "content": "c4a23faed54079305c3a46b39cf47114bb720092ce06ed1ebb61996ae2d94412"
         }
       ],
-      "name": "scripts/smoke-install-profiles.py"
+      "name": "scripts/smoke-cli.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-evolve-evidence.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "26c1b2611583653ee9038f78da487318182e46db2080f8f8bd0b7d2a891e03b2"
+          "content": "9b0ee3eb4c418059d908ba65c1f0f8683a4c10c2a93f75dae31c4ada16fc10a5"
         }
       ],
-      "name": "scripts/smoke-install-safety.py"
+      "name": "scripts/smoke-evolve-evidence.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-export.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "76fab645f06ad5a66814041f7d17c23af6021d6a4f92994db4753098e4852ceb"
+        }
+      ],
+      "name": "scripts/smoke-export.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/smoke-import.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e559088b1f16d1db94520adcf4253220d37d2302254531bcac6488d01ec15622"
+        }
+      ],
+      "name": "scripts/smoke-import.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/smoke-install-profiles.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bec3a26c3c248f51acf1305c5c6a47d491f56aa6d1b9a02aece993df2fb2ae82"
+        }
+      ],
+      "name": "scripts/smoke-install-profiles.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/smoke-install-safety.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7791361992df11d147793339cb894eba8c02ee3a169e769fb02e83ca7fb4e8a3"
+        }
+      ],
+      "name": "scripts/smoke-install-safety.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/smoke-install-verify.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d7d609e929e53c7e3b4a2da20d049eb060ad8821730c6178ac81bf6f75d9a704"
         }
       ],
-      "name": "scripts/smoke-install-verify.py"
+      "name": "scripts/smoke-install-verify.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-install.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "de635f16210031cd40df402004156e8728fd85e64f0b8ea0c861add20e6b12d4"
+          "content": "af2809ec65b47b2967cd4401396c1142fdc99c362b52f1b299c8e2dd3214ca1e"
         }
       ],
-      "name": "scripts/smoke-install.py"
+      "name": "scripts/smoke-install.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-live-providers.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c2a2c64405da4098b2dcbe43acf91adcdc7c295cb271aabf9a4511df0ff7e695"
+          "content": "815bc4cf04e5bfde16eafc3b5a452528ccaff51d1605b2691ee7588dc3af73bf"
         }
       ],
-      "name": "scripts/smoke-live-providers.py"
+      "name": "scripts/smoke-live-providers.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-make-install.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b6160dcda60feec7058de0fcef6cbf1e604e12a9c9a2204fead8b9ac1022b3c1"
         }
       ],
-      "name": "scripts/smoke-make-install.py"
+      "name": "scripts/smoke-make-install.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-next-version.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fe62ebc0b698ee9901746e83a1ddb8be717b5ee7955fc84774ff73b002cdfec9"
+          "content": "883427f371cc2ea23c4e0d52417c14b1df8013da59b7099da5695312f3e05592"
         }
       ],
-      "name": "scripts/smoke-next-version.py"
+      "name": "scripts/smoke-next-version.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-offline.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c01d97edc0eb14fa8ce4c385fd62db07eb443534d48a89874ca7f5a53b882b4a"
+          "content": "902bf828a950b0f27882cfc2cd7320fed66497b00fe55ae41193bc3e7bf26931"
         }
       ],
-      "name": "scripts/smoke-proposal.py"
+      "name": "scripts/smoke-offline.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-proposal.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "58323daa3a7ee507fd20c2fb8f92e884e1fafcf5cf853a38c10644517773e48b"
+          "content": "0a03295585171611a45e8ceee8ffe3668a33392251b62f8161eb5ff83f4e4a90"
         }
       ],
-      "name": "scripts/smoke-provider-install.py"
+      "name": "scripts/smoke-proposal.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-provider-install.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ab610e4f2369fff999f8a75f29604c52c0197b27ab949d62dc88c8183b977d24"
+          "content": "118002cf2892fa9ee5bb14c9c522c56f17d3ce57c1567b5c11b49aaf3bb001a6"
         }
       ],
-      "name": "scripts/smoke-release-dry-run.py"
+      "name": "scripts/smoke-provider-install.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-release-dry-run.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "04e544b4e70db231fdf39cf5cd654813c8f5dd7b6a0e8d9dce323b5c198fcd3b"
+          "content": "9526b2cfe600370514b684bd115dd9960b00addb53bb5850401a8c2517da82c3"
         }
       ],
-      "name": "scripts/smoke-release-pack.py"
+      "name": "scripts/smoke-release-dry-run.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-release-pack.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "66e254b53c17cf469adce7b662a147804808962407054d6d02843563aa769799"
+          "content": "fc1e399e9fa80ab21a51d70c88f1d060c5c5cfadc0dbcb07819d5ccbb1a29538"
         }
       ],
-      "name": "scripts/smoke-scaffold.py"
+      "name": "scripts/smoke-release-pack.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/smoke-scaffold.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "39b85af1f4a4e4c060b89542356e57e18570dece673423bb0b05ef31b19b9418"
+          "content": "c3bd12f541a0358151392a1b3c2f052dff43651d1d8f3fb13e5ed84720a8cacb"
         }
       ],
-      "name": "scripts/sync-skill-frontmatter.py"
+      "name": "scripts/smoke-scaffold.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/sync-skill-frontmatter.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "87d43fd652a2e882fbc44d9ba4ef9e967b38adbc3a0947f7237db5d98e756687"
+          "content": "32f0f5bc79d43831521beea2c743bcbbff41a9618b61208d2710b70fcfd60dc2"
         }
       ],
-      "name": "scripts/validate-check-manifest.py"
+      "name": "scripts/sync-skill-frontmatter.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/sync-spec-rules.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "615b3b7f297d2c5a37c982f2a337b25e47cf53004f1c0c0266098e9c38f59169"
+          "content": "7c4d199b41b8e918346f4f12e37bc61f74a4ad7b58253addc2e1d29a0be5d6ea"
         }
       ],
-      "name": "scripts/validate-cli-surface.py"
+      "name": "scripts/sync-spec-rules.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-check-manifest.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3ef23fd918f1e2302ead7971515352e5912dc06a8cbd8463c55ce4f2bf33d9e7"
+          "content": "88ce1d227834bf27010a0f5cbc80f8ced47bfbc3cc23b3df77bacae50e302844"
         }
       ],
-      "name": "scripts/validate-commands.py"
+      "name": "scripts/validate-check-manifest.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-cli-surface.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "48a3afe7e0728eb46d31e6902178fa75b5e3a96293bcabbe39fc7c0ea70bb8b4"
+          "content": "3b46ce668139d1390b96385b9a1bd60723f99b0b8b64d2060006934b8dfe862d"
         }
       ],
-      "name": "scripts/validate-doc-links.py"
+      "name": "scripts/validate-cli-surface.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-commands.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "41357a14bab8ad10258151bc1b8da6f6fe78e164d30954f61c1a5620a2142e78"
+          "content": "ae443f9be4b7c004b9db49c5ada542adacedd86f6831a8faf7075589d0b67221"
         }
       ],
-      "name": "scripts/validate-docs-site.py"
+      "name": "scripts/validate-commands.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-doc-links.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5603d435c546b08880b90341b20d8e0f14986e187e85af18496bce22bcb8a60a"
+          "content": "3195b3263d63f673c2128edb4910115ee694af3c8f0d6b77aea2f678924d6ac7"
         }
       ],
-      "name": "scripts/validate-eval-cases.py"
+      "name": "scripts/validate-doc-links.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-docs-site.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0c50e59043f18da7b86bc46b1dc905a5a760f5b09a4936a0a566b2fc26b80a1b"
+          "content": "69a51ec7fa6228c2d8b0d8fba73173bbe9464463255a66d5d81ddfbaa0fe7296"
         }
       ],
-      "name": "scripts/validate-generated-artifacts.py"
+      "name": "scripts/validate-docs-site.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-eval-cases.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2b436fbadef2a1abd24f8e937fc2ea9c278e4a9f2581ee8179d6a042f52ab34d"
+          "content": "cef2e9d22264d9b2d38846d598ae8e644cb326cfbe95cbde8515e04e7cb96327"
         }
       ],
-      "name": "scripts/validate-gitignore.py"
+      "name": "scripts/validate-eval-cases.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-generated-artifacts.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ee95b3a75b8693bf62ea0290a3091eee1ba1bfea960bed6fa1f3c0595699202f"
+          "content": "9b9e43dcd3044f0d0abf8e57c433858d4cf3c4da43b7ae5985582c3d0c69484d"
         }
       ],
-      "name": "scripts/validate-governance.py"
+      "name": "scripts/validate-generated-artifacts.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-gitignore.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4dcf34c39f834671cc67c203ded2649e36d20457005f670af1107942201de1f2"
+          "content": "07052dee77b7eaa2093e933117ae81ea616e87f746d22fcffc74e4bfae40abb0"
         }
       ],
-      "name": "scripts/validate-json-files.py"
+      "name": "scripts/validate-gitignore.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-governance.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5cf3b45fd8d83303ef441f889ac83399b2163963161d10350bbb567e11a2edd9"
+          "content": "6d38c79518eabb02e159a696ec564eb5c374796f97f36f7de93f05294ec9fa2d"
         }
       ],
-      "name": "scripts/validate-licence-headers.py"
+      "name": "scripts/validate-governance.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-json-files.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "97817017ffb5a64645608dc58dadf5b8d48b56f89d98d46c586d801c506f9338"
+          "content": "a2c5c2882bbfeb314d35722d3573738dc271cde39f435f2c0d8d24a5b2abed00"
         }
       ],
-      "name": "scripts/validate-lifecycle.py"
+      "name": "scripts/validate-json-files.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-licence-headers.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0f5aa725dc31e1bbe585923ac4491b30fb09042f172fba3abe7ad494e395bb10"
+          "content": "eed8c59a859855d310390831abeafca9eb330a63d7725a95915bf56f9e3a9835"
         }
       ],
-      "name": "scripts/validate-packaging.py"
+      "name": "scripts/validate-licence-headers.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-lifecycle.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "43e73cc4f20fd3df024db63f36894e983791e938d560f5308d65ae9f7a60576e"
+          "content": "7cb209581bcc7d9aa46de5016fc93f10c8f4af73939fba3134280eb8c3129dee"
         }
       ],
-      "name": "scripts/validate-plugin-manifest.py"
+      "name": "scripts/validate-lifecycle.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-packaging.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ab4a48b15de6cfc2e46f55b15132a55f627f8ce1c05f43dca42f6cc37af3ea5d"
+          "content": "c58b6ddb64874a278d02d3fca48105992c0a8642e08376461e04a7a8e637b4b6"
         }
       ],
-      "name": "scripts/validate-profiles.py"
+      "name": "scripts/validate-packaging.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-plugin-manifest.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "431e427693c61658dc7b1f32b65ccc5475d7f2699594fb9f3bfdf34430933fde"
+          "content": "29a8289fc22831156f1f8afa7b14674c310de6278c27b13b5b30b56efa4fb85a"
         }
       ],
-      "name": "scripts/validate-providers.py"
+      "name": "scripts/validate-plugin-manifest.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-profiles.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "31428a4ac8e4ab336cdf7b3549ade66b268f9ea53c7ff26fe83c1b777f21d44a"
+          "content": "1f9a1c7867e697e843ddd5149ec06384b20faaa5cd00e5e5908a19232819a799"
         }
       ],
-      "name": "scripts/validate-python-scripts.py"
+      "name": "scripts/validate-profiles.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-providers.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eba96877dd0385fb66eb6306aee05b2d7702b6f23bcc43b34a92b0d834254918"
+          "content": "7800020218fa58fc154647e9b355bc315615e447cad0885114168d9f7c39ce0d"
         }
       ],
-      "name": "scripts/validate-release.py"
+      "name": "scripts/validate-providers.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-python-scripts.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6aae79868ba6bcfc6fd8b59fa3560150badad8f95d8de6f33affc573d268ff1f"
+          "content": "d0e517b1183fd6c388eb12199f5b049307164c27a9cbf7784a17de182279deba"
         }
       ],
-      "name": "scripts/validate-sbom-conformance.py"
+      "name": "scripts/validate-python-scripts.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-release.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2067389680e16be0221a40faef1228558ee7da95f84a41e4a128de8c1e5a54af"
+          "content": "619c514fea3ae66eb22e9f983f3a14c713a1e13e40ca2c3037b27416026ccf77"
         }
       ],
-      "name": "scripts/validate-secrets.py"
+      "name": "scripts/validate-release.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-sbom-conformance.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "29bc9e96539455dce296eecae88a090e0aee2c4dbdac58aa4922c5cc47156954"
+          "content": "57f4ecd755433f5bb9c7fc40dbbd6875002000f3da75fbccc48de688bb97c938"
         }
       ],
-      "name": "scripts/validate-shell-syntax.py"
+      "name": "scripts/validate-sbom-conformance.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-secrets.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aa278a3eb222c2e61f64db91e12916002199debc700d543e02ec7767404996bd"
+          "content": "fdbb40d467845e174298d3c21944048650f5d74c535405f717ee807cd71a07d7"
         }
       ],
-      "name": "scripts/validate-skill-index.py"
+      "name": "scripts/validate-secrets.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-security-claims.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d8994097c885921b042fe2d6946205a44347ce9c4840dab6ff961fba76c401c6"
+          "content": "4562f0d55d3315254f7221a4c817125b781395c8aa9e115e912ff850931920c8"
         }
       ],
-      "name": "scripts/validate-skill-metadata.py"
+      "name": "scripts/validate-security-claims.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-shell-syntax.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d10e1bfea563ebd3b0b9e3ceada3b7ab3b83e45884b5d132218eb0761462c83a"
+          "content": "602bfb0d257b1e6ce9886ef6b4c058323ef9657b504e719e53e0d8c583d7da05"
         }
       ],
-      "name": "scripts/validate-skills.py"
+      "name": "scripts/validate-shell-syntax.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-skill-index.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "196895d0f5089103b142c6a544bd0e6fe65efad9098ed0d07aceb0529772c62e"
+          "content": "7cc0d8a4c222000c73e13f1dbeb86aebad5e2c261816dd51b7adf993dc85e87d"
         }
       ],
-      "name": "scripts/validate-spec-conformance.py"
+      "name": "scripts/validate-skill-index.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-skill-metadata.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "860cf80b3f2ba960a2494e8c4e186c28b9b499c96426ebafcff7e07a119e6163"
+          "content": "3da32c06d5d26cf60063ac5da6e9390ba493d64d73477224eea91c4f04f1130c"
         }
       ],
-      "name": "scripts/validate-system-prompts.py"
+      "name": "scripts/validate-skill-metadata.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-skills.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c032958c443ad6b5f8f0c84b394f17c06044c42b6a4d1e594e2e4817eece6383"
+          "content": "19450369920ac01004c043a0ed77bc48b219d36d017af88299372fdd46577bf2"
         }
       ],
-      "name": "scripts/validate-templates.py"
+      "name": "scripts/validate-skills.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-spec-conformance.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dfd33d7622d6454592b44e96a1d5f054f0849bb34b7aea79319273f6b80bf72c"
+          "content": "4b84c0bf04ac16e967b816f20270ba2b7dc7977812212b122aa8fde0b752332b"
         }
       ],
-      "name": "scripts/validate-version-policy.py"
+      "name": "scripts/validate-spec-conformance.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-system-prompts.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "75f474513b9ad4b23c38a302fc5e7ea70e9e357e46f90e97cd11d8e8ec9dcd1b"
+          "content": "23711c9a6fe7934e9b6112090a7ed528a2af5a085a58045095b169cc8ee6a4ed"
         }
       ],
-      "name": "scripts/verify-release-assets.py"
+      "name": "scripts/validate-system-prompts.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-templates.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "31e47de88781b887b9e0c027f0c2ce189c7f13f71e5907344628da40251be9a6"
+          "content": "7d2206fc6f10833aa21ccb06e7c18b95b257def28c88a3b72ab7220f6f2ef57b"
         }
       ],
-      "name": "skills/agent-loop-design/SKILL.md"
+      "name": "scripts/validate-templates.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/validate-version-policy.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ddc320a9db9c6a8a14c658b3ee6d4a05fa2ff9dc1b269f9a1bbe41ea5908b2fb"
+          "content": "7bb8cc428822d1993252866a592ccfeef60e07520cee05f85a9761997fb34d5e"
         }
       ],
-      "name": "skills/agent-loop-design/metadata.json"
+      "name": "scripts/validate-version-policy.py",
+      "type": "file"
     },
     {
+      "bom-ref": "scripts/verify-release-assets.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1a369ecb1f268072c508d0426f13555c8f9c17cc5a80c64c4c6f40884fbc8d0a"
+        }
+      ],
+      "name": "scripts/verify-release-assets.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/agent-loop-design/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c829bc054c4eb6a6c8448f722b293bd3ceb53870f17b3d4b83c05d02e274b2b7"
+        }
+      ],
+      "name": "skills/agent-loop-design/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/agent-loop-design/metadata.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3c05182318116f5c265894084c95b445b775f20a56d6be64131bf7626a3063b3"
+        }
+      ],
+      "name": "skills/agent-loop-design/metadata.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/agent-loop-design/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d259e9dcaac43d9c0b13ea4e5b735b96a7c9c82efe46df1c569cb3df96252059"
         }
       ],
-      "name": "skills/agent-loop-design/reference.md"
+      "name": "skills/agent-loop-design/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/ai-supply-chain-security/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7c858d3424e1563063944fb1ea01e5f8c99853e7fa5a2470dfbba82df8cbd33f"
+          "content": "8b26c1c563a7d769d7cc08b5b5a1cebe4ecd44685854ae17a52fced368abb385"
         }
       ],
-      "name": "skills/ai-supply-chain-security/SKILL.md"
+      "name": "skills/ai-supply-chain-security/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/ai-supply-chain-security/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d234114aca8bcccd68a1bd24f6cc660755ecb30862e23d215742c3840f13f1c3"
+          "content": "84937ce02cb35a67efe7c61c5446248f801dfa62eb7a0b1c8943d9b21dbc858c"
         }
       ],
-      "name": "skills/ai-supply-chain-security/metadata.json"
+      "name": "skills/ai-supply-chain-security/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/ai-supply-chain-security/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "bc6b1477ca3cd5cf21a9e7d9ffddc529020a77032ae34bf3a25102269906cdb3"
         }
       ],
-      "name": "skills/ai-supply-chain-security/reference.md"
+      "name": "skills/ai-supply-chain-security/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/anti-slop-pr-and-writing/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0391d9ffb8da6ac080e2d9f315a327e0521fd4861efe2810a097bd981692f9be"
+          "content": "bc64a38eb03dae45742f8add235685669395294314922c72e44a2f5d3bcfe7bc"
         }
       ],
-      "name": "skills/anti-slop-pr-and-writing/SKILL.md"
+      "name": "skills/anti-slop-pr-and-writing/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/anti-slop-pr-and-writing/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
-      "name": "skills/anti-slop-pr-and-writing/metadata.json"
+      "name": "skills/anti-slop-pr-and-writing/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/anti-slop-pr-and-writing/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d76c7b705e364ec9514f2d5301cbdf781e367d243f765eadfb5015992244d5cf"
         }
       ],
-      "name": "skills/anti-slop-pr-and-writing/reference.md"
+      "name": "skills/anti-slop-pr-and-writing/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/brainstorming/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b8360a55ae5f97b1bdb11caf6f3360a2aca54165e8adec00748b2f766224ade5"
+          "content": "ab75dcbeb8718c162adab26ec5f9e723e3bc489910ba9e53c3826b87088a602c"
         }
       ],
-      "name": "skills/brainstorming/SKILL.md"
+      "name": "skills/brainstorming/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/brainstorming/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
-      "name": "skills/brainstorming/metadata.json"
+      "name": "skills/brainstorming/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/brainstorming/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f4fb3d683e133f75c3aff0cb83ccf5d2a55f06cffb731f4497f9453c399e6b18"
         }
       ],
-      "name": "skills/brainstorming/reference.md"
+      "name": "skills/brainstorming/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d6c5ddc58fb640d3e0215ee577ac149ee54517f06df68b4a16f8d244cd12ed23"
+          "content": "c87c73c113c2e9a4c84fbbcee6842a343a6ead3831ad7b3c3e180c553e7bb306"
         }
       ],
-      "name": "skills/cross-language-port/SKILL.md"
+      "name": "skills/cross-language-port/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c084a9ce9d36d7c7bad3c7e9948bcd071289888cc2a68fc5388f80cb8a9cf8ce"
         }
       ],
-      "name": "skills/cross-language-port/examples/README.md"
+      "name": "skills/cross-language-port/examples/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "496fad78d5345faa5a186e24807557064178e532b00af606066d0e9824a41579"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/README.md"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "9548dd1096c4bf25640cba8957cb7bed87cf0603d39fe9832f706e1c2e3268d8"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d3fc37209615db1216cc8dd3047cff6f6654f322a94595bdaf42d62bf1f45001"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/port.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bd2ec119f36aba1f45266015a47083ab71be73e9e31c1d39979074984632431d"
+          "content": "ab803aa4a7c2dfc36b66b7c2d4a4e22493c7cb4f56c25dbecca680df2e358045"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/port.py"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/port.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/reference.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2ae9eaf6eaf28cba66f01bdf0fec8b9cea53f7b6dc7fc9aee5559197da745f07"
+          "content": "bb5384c0c0cba6d10a0196580e177c8d04c6f18dcd3a43952eb0a16c1d7f6428"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/reference.sh"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/reference.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/bash-to-python-pathdedupe/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ce918ca306ba98b37b14c02ec84672f7c319afe9d506f9064645c8570196b3bb"
+          "content": "1d39f4a026264af634aafc3b9682b3db044951d409af8323d3b7b40fc95a9b5c"
         }
       ],
-      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/verify.sh"
+      "name": "skills/cross-language-port/examples/bash-to-python-pathdedupe/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/boundary-traps/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "569820b2f8e7738f3af7a9c46a77510b4af43058a290fd8258ae849fd8c68031"
         }
       ],
-      "name": "skills/cross-language-port/examples/boundary-traps/README.md"
+      "name": "skills/cross-language-port/examples/boundary-traps/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/boundary-traps/integer-width/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4579f0634a7fd538a3360571d58a8ce2da3b76f5652e3443cb5646fba98b6fed"
+          "content": "9a9c9e20f68bd8ef289c91fe48a775759e5c87fab43fe12f7f493289e62abd26"
         }
       ],
-      "name": "skills/cross-language-port/examples/boundary-traps/integer-width/verify.sh"
+      "name": "skills/cross-language-port/examples/boundary-traps/integer-width/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4e3225f59652d4bfc34a4b517c6433370bacc7312ffff004c63091f53cea7113"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/README.md"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "45a6e93d0b6b9432a0872bc630f6ebda52fd041916e4258b810f96c81793a6a6"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "eff9d5aba99557d96678e6aa8034a0c5268cc879043cc5db22ecf78fde7ba5b0"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/port.rs",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "bc5505e57f6186cbbcd2a79a52123768eacb7057168cd998dfee57b9a71d21d8"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/port.rs"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/port.rs",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/reference.go",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "8072b6058c0532c15dc63108a42e9b7c1409b8b2afe613553147fd7a70c0b612"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/reference.go"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/reference.go",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/go-to-rust-fraction/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "29de69bcf05910ba1aa4298ddf2e2c043100490752072c5aa0437d6c436aea70"
+          "content": "e8db123feaf2b00e4c6ab7d52e9a324120096e70dfe00f142d78e5c9af4e277b"
         }
       ],
-      "name": "skills/cross-language-port/examples/go-to-rust-fraction/verify.sh"
+      "name": "skills/cross-language-port/examples/go-to-rust-fraction/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "887a1a0e4eba73ebfd4351d874727a47dce70b7df81a5e2cc6eedc457f0f5fc3"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/README.md"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "569b5a9bf1e3998590cdac5422d3901a199eb56fff99ca380b8658895cea0822"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d94f419f066beb709902f3e79e7148ad7347de4c3ed0f6f7b797f964b61bdcb0"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/package.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f69ed17eea98f49ee075f676bae79df9cb779e54d5887b94d94313d34511170c"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/package.json"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/package.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/port.ts",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e00538fc6434f5c7de0cd00a8c3410e997107f575c7083ea90aecedae7c182e0"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/port.ts"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/port.ts",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/reference.js",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "afaae92023b2dbbd807b8385a2c58c9c2a950bfa8b1fc132f14cb4e3c7627dbe"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/reference.js"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/reference.js",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/js-to-ts-configvalidate/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a527223585f6c9b9ca09a5f8197f67f10f81edf5e3296b11417fd375be7b21e7"
+          "content": "eb388d7864473c534eb90ec7fb30ca244ad646f948e4126a9da4e65e477043b1"
         }
       ],
-      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/verify.sh"
+      "name": "skills/cross-language-port/examples/js-to-ts-configvalidate/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ad8c630e925117ef5661e70f334d89d185a5b359834eb1341cbd1a37b237edca"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/README.md"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/compile_flags.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "51102ce3636393db1e736cd5eb1bc8e3b26f6a959e366ac47c68d98c07f00fdb"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/compile_flags.txt"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/compile_flags.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4a68bf9647262a8b8f6a2241317d12179a543e85b993fb3f45f1c63669dd420e"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d5cf87ce760145a1b71e5cb2148ec47226583c38894b0804c4a9efa7b81768e6"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/port.cpp",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b0b92f96fc90e1cacc87bc91c616e30b4866039ef5fb66151284b48aeef4d2f8"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/port.cpp"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/port.cpp",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/reference.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "79438e78ca28d3f805521b2a6d2e6f68954b6c0e9d8c530dec8dec845eb36844"
+          "content": "e02e0df7099d9ac0711ccb4993941e4baaa1ac8a688832d0729d4c49e6a3d951"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/reference.py"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/reference.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-cpp-hexcolor/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5c632c143bee361687c2748e9fee314b137b4d499e2a6a12f4049928fc3cb283"
+          "content": "e516071a269b0b6e6740264e374895558efff8c7bbdfdce816cfeffc4066a643"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/verify.sh"
+      "name": "skills/cross-language-port/examples/py-to-cpp-hexcolor/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2edc93f2802a795bdc7c5a9d26d84f3a907ec9fc6f6e6e53466d009058c4b1ad"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/README.md"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4ee5e036e87d32c9cf06ae6e7b8cc8dcf77c39e2f53f5b2bd05cb40f5354381d"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "94cb0a7e3bb1d01aad035d1531d89137797af3fbee41d516fd8c2b1207f139b7"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/port.go",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "75faf8b873858ee98cc055509e7bb00d6b1749b4b91a58faf0510633d2e4ef9b"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/port.go"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/port.go",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/reference.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f534c9fa004d223ae8de5c8f793a376e7c640d067bea29eef47b7cb6a702723f"
+          "content": "caae7925ca8f98893ef9621253db23571911b943cbf471992e2e2f1146da30cf"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/reference.py"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/reference.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-go-duration/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0449996e2e067f495b4828c1cc26658373b1a3216100484366a3b8529864db61"
+          "content": "710e09bc99b1651ce41fd2bc2f2d3ea4b54d8cedd1be544868d0dd43193835a2"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-go-duration/verify.sh"
+      "name": "skills/cross-language-port/examples/py-to-go-duration/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c3fdafbc718cb279e5f97ac7d204e9d6cc8375efb3498f5f28b2372133f7c3a6"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/README.md"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "a16c39dd38c3ba28f5f5366fa1c7dc61ae56616c89ff85c737a0fa84d368205a"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7faeeb23d32c752ea094e4641ee52fd16e2883c9ae7f5aa477faa6c52ec5fddb"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/port.rs",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e9c0b9dab64f0058c1ffab8338dcb2ea720a10c7119ae5dad366f916bbc0fd66"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/port.rs"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/port.rs",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/reference.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2f80b46e83542424b1b900745c405fa64baf2cc929471b1d66886ed641162098"
+          "content": "d1edab6305e9e6967a6eccf97da7a7cca25f49cf6efc711702d41689aef88fe5"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/reference.py"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/reference.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/py-to-rust-iban/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cafef32d1e31f7eec221305f68ef89027596d4414b288b81e32248ea3fb03a85"
+          "content": "b8df3136b9c663eaedee535669be4a1bf65d864366e7de20115bded7fe7c84fe"
         }
       ],
-      "name": "skills/cross-language-port/examples/py-to-rust-iban/verify.sh"
+      "name": "skills/cross-language-port/examples/py-to-rust-iban/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "54c705d86feea1c9883d0e5a2d7780a4923e8c124ec00d3ce1bc8d602b600b7e"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/README.md"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f98dc876b89484c401078960dc0765bf64fc140a49b0333db7cf060ed75455b4"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "99a9c4bd101217763e76f8cdd795fb58077356e30d5021289a0b5f199dc8aefa"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/port.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b66c9a8559ce9a8a6698bfd84c4b173bf0bb360e4d4c0b7d73b4650bf5dc5b45"
+          "content": "21db3e3d7850bc46bc4a982180734b2fa32d68e7a59acaf310f8cebec9956e80"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/port.py"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/port.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/reference.rb",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "04b12c949c92d94fcdd36f8d5ee0d8c6c0507541850b4f718416b3200082f789"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/reference.rb"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/reference.rb",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/ruby-to-python-histogram/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "146ba1fde7556ffd057f816623429ccb8a57801bf69c8720ce935787f4575efa"
+          "content": "c85f9b940f72e7df59c96ff65bd5a78d8d5c873642a04fb5b33fa1e8a60198a2"
         }
       ],
-      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/verify.sh"
+      "name": "skills/cross-language-port/examples/ruby-to-python-histogram/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f5abca2127046f9798bc01bccf95009e5079bd2004b41db79dff784a4ce8e276"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/README.md"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/corpus/expected.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "91af0f37dd75e0967bb84f51d72eff7c99caacc68ab5cf23136bc9baac958016"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/corpus/expected.txt"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/corpus/expected.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/corpus/input.txt",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f5d330a7f420f74428eaffccc73c807f0fda627d460d0a51002635afc45debe1"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/corpus/input.txt"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/corpus/input.txt",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/port.swift",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "bc0aa26e5b77439fe5d473639ebd3db9afeabf7b4df9065eb5a9c82e6982168b"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/port.swift"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/port.swift",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/reference.rs",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7c60b152bca67a5019fadddbc6aeb951a6d2523543320bc7e038eaa14b8cc5bb"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/reference.rs"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/reference.rs",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/examples/rust-to-swift-op/verify.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "da1591d9c5ba252acbf47672a3445d739db3a7caf5aced7de30c5aec61ad4385"
+          "content": "1947a5d18e54c298b415c8051ec56297c67cf642c04612115444b532841d8ed5"
         }
       ],
-      "name": "skills/cross-language-port/examples/rust-to-swift-op/verify.sh"
+      "name": "skills/cross-language-port/examples/rust-to-swift-op/verify.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1fe917880ed1143759f69d7186a0f8c279d5762f633ddc2a771d6bba4f4ac60b"
         }
       ],
-      "name": "skills/cross-language-port/harness/README.md"
+      "name": "skills/cross-language-port/harness/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/golden-diff.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "043ba5a66886418cc9a7f77382f3a0a9ae6f0f76721ff36ab5bdf847bd19249b"
+          "content": "bb3ed18ff934c64bee4e84731029b797d9b757155bef27fb2180e1ee569fc405"
         }
       ],
-      "name": "skills/cross-language-port/harness/golden-diff.sh"
+      "name": "skills/cross-language-port/harness/golden-diff.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/port-check.sh",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9e41f4879c6184397312499b287ba0b54b88eabb31cba7ccb4e5107dfaed9198"
+          "content": "54a903b6845ac0ce259fec8596b1ef227c466e49112dd4e0a4a0cba09d514403"
         }
       ],
-      "name": "skills/cross-language-port/harness/port-check.sh"
+      "name": "skills/cross-language-port/harness/port-check.sh",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/templates/fast-check_diff.mjs",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "9221ba5df0b16db55321bc08a8461cb0dae832df4e8e8fbefef113fb72e3b131"
         }
       ],
-      "name": "skills/cross-language-port/harness/templates/fast-check_diff.mjs"
+      "name": "skills/cross-language-port/harness/templates/fast-check_diff.mjs",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/templates/hypothesis_diff.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b251f4e1a471886ab40a5e1ebd9bebf2892c8dce912846eb6baec10081ad5ca6"
+          "content": "f3c49e0711bed62977e74ff7a8b69bdf6eb314a43e52b0ec97a1704c27a64f4a"
         }
       ],
-      "name": "skills/cross-language-port/harness/templates/hypothesis_diff.py"
+      "name": "skills/cross-language-port/harness/templates/hypothesis_diff.py",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/harness/templates/proptest_diff.rs",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "d7a3934f3a3e8a479b77aa3e6ddcce17cb4dfad6e7c8c3c2feb75a673db8937c"
         }
       ],
-      "name": "skills/cross-language-port/harness/templates/proptest_diff.rs"
+      "name": "skills/cross-language-port/harness/templates/proptest_diff.rs",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4f5d68772fc072fc13f97d9e3f9528808ce7a70b4242dc2fd77e869b6856fe23"
+          "content": "0d05cc0654535afc2758aff6253d4daaa3dcf9280938317ee344a02883a2601f"
         }
       ],
-      "name": "skills/cross-language-port/metadata.json"
+      "name": "skills/cross-language-port/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b7606a2bdff360cc5cb30a80171c63a03a32707c867726ed42e7e916c639dab1"
         }
       ],
-      "name": "skills/cross-language-port/reference.md"
+      "name": "skills/cross-language-port/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/cross-language-port/triggers.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e4ad4a5df256e07c777edaa0677de16cb3949048d49c348bb6ed72a2b2a321bd"
         }
       ],
-      "name": "skills/cross-language-port/triggers.md"
+      "name": "skills/cross-language-port/triggers.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/giving-code-review/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf3359d12436d73583b44f5888f17762fba4031f6be3e37fe963a713a794cc70"
+          "content": "868bd645b1f8584e3912ace290433752101924e00765004eaa7f2b8b6911faf5"
         }
       ],
-      "name": "skills/giving-code-review/SKILL.md"
+      "name": "skills/giving-code-review/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/giving-code-review/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
-      "name": "skills/giving-code-review/metadata.json"
+      "name": "skills/giving-code-review/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/giving-code-review/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "fd4c1d48b8018bffa1371dfbc126f034e6f4f55c1b97eed1e6e3b14f99062b77"
         }
       ],
-      "name": "skills/giving-code-review/reference.md"
+      "name": "skills/giving-code-review/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/handoff/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2cf2d60c6ff5028b7b59788358664fa8737743abb9e83bd64a1ec0b85a7ee8de"
+          "content": "939620d3bd2851dc9b88cd50d49ee4d3fd60fa9da38df2ad53b6d4e66cf9f990"
         }
       ],
-      "name": "skills/handoff/SKILL.md"
+      "name": "skills/handoff/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/handoff/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
-      "name": "skills/handoff/metadata.json"
+      "name": "skills/handoff/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/handoff/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "65a3dde09f8da9082f86bac4f0c25fa746680d9ea416176badd19dccc626edc5"
         }
       ],
-      "name": "skills/handoff/reference.md"
+      "name": "skills/handoff/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/incident-response/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0b07443d40fccee627f77b5cdcfa91beb2aa3d556f4d8a4e7a54f8297bdce190"
+          "content": "2c9fad0795a9f58b1b450d1f46345931da48486439ecaa29a5aaa19fc92c57bc"
         }
       ],
-      "name": "skills/incident-response/SKILL.md"
+      "name": "skills/incident-response/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/incident-response/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
-      "name": "skills/incident-response/metadata.json"
+      "name": "skills/incident-response/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/incident-response/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2b038ca25deb9a0d970da6a415e931a33d00248e5a117d50660c5c8c79994727"
         }
       ],
-      "name": "skills/incident-response/reference.md"
+      "name": "skills/incident-response/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-architecture-contract/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e92198bd876d5ac5a79cd11a02cc82bd2d85762e3409aa213e8ff1ae1dec11f2"
+          "content": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
         }
       ],
-      "name": "skills/noyalib-architecture-contract/SKILL.md"
+      "name": "skills/noyalib-architecture-contract/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-architecture-contract/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-architecture-contract/metadata.json"
+      "name": "skills/noyalib-architecture-contract/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-architecture-contract/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ab9194cb8de7bbbc482b7b9048762b5d362af27f47ae0fa9f3a384a87493a589"
         }
       ],
-      "name": "skills/noyalib-architecture-contract/reference.md"
+      "name": "skills/noyalib-architecture-contract/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-build-and-env/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e6daaa099b1e91fa035a92bd202788d9965c7d2c830c3cbf39ccbc8b8a2c77cd"
+          "content": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
         }
       ],
-      "name": "skills/noyalib-build-and-env/SKILL.md"
+      "name": "skills/noyalib-build-and-env/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-build-and-env/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-build-and-env/metadata.json"
+      "name": "skills/noyalib-build-and-env/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-build-and-env/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "242ad0761ffc6ad363723b87a1ac2af04e9f65902b29926b4728dc13b4ca0592"
         }
       ],
-      "name": "skills/noyalib-build-and-env/reference.md"
+      "name": "skills/noyalib-build-and-env/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-change-control/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2d8052d0b33c4f53fb9bf460362f98012574331bdab782f2ecadabdc0c06f96b"
+          "content": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
         }
       ],
-      "name": "skills/noyalib-change-control/SKILL.md"
+      "name": "skills/noyalib-change-control/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-change-control/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-change-control/metadata.json"
+      "name": "skills/noyalib-change-control/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-change-control/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "ad26b617b9fe5903b176e2c74c250ea7fa9d7b5010bbe4ccb74f074bb7d012a8"
         }
       ],
-      "name": "skills/noyalib-change-control/reference.md"
+      "name": "skills/noyalib-change-control/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-ci-and-release/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "52a5c5b6f30d29e7cd4c1fe54d6478c24c21c64b8ef219e590f4ece77b50fb50"
+          "content": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
         }
       ],
-      "name": "skills/noyalib-ci-and-release/SKILL.md"
+      "name": "skills/noyalib-ci-and-release/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-ci-and-release/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-ci-and-release/metadata.json"
+      "name": "skills/noyalib-ci-and-release/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-ci-and-release/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3ad0401cddf11510b11559c46878215e331d831318d9a20fd421e09d5258d2c0"
+          "content": "ff86182020a5d587eec03e9a9bda61cad70e2c3f5a3d83ca70415554ae29e32b"
         }
       ],
-      "name": "skills/noyalib-ci-and-release/reference.md"
+      "name": "skills/noyalib-ci-and-release/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-config-and-flags/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1b701e692029b525e2a02320f4abc8f6498b4cd6feada5a6f8b70c1c93179401"
+          "content": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
         }
       ],
-      "name": "skills/noyalib-config-and-flags/SKILL.md"
+      "name": "skills/noyalib-config-and-flags/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-config-and-flags/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-config-and-flags/metadata.json"
+      "name": "skills/noyalib-config-and-flags/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-config-and-flags/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2a3515a1a201cd3e346050c0c050821b4cb1e8708ca55d4d859a99601442688f"
         }
       ],
-      "name": "skills/noyalib-config-and-flags/reference.md"
+      "name": "skills/noyalib-config-and-flags/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-coverage-campaign/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5283dd540f639f75cbd8d554c68dc6958a8772d89d9aa09e9e6b25c9048e2bd7"
+          "content": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
         }
       ],
-      "name": "skills/noyalib-coverage-campaign/SKILL.md"
+      "name": "skills/noyalib-coverage-campaign/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-coverage-campaign/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-coverage-campaign/metadata.json"
+      "name": "skills/noyalib-coverage-campaign/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-coverage-campaign/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e43c738e6c90afa7af87a3dde9c71275ab433074a4cb05c02769bbc014821722"
+          "content": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
         }
       ],
-      "name": "skills/noyalib-coverage-campaign/reference.md"
+      "name": "skills/noyalib-coverage-campaign/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-debugging-playbook/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c0444e7526137f49200e7db558e1b785066af5c839499442f887fa521bbee0ae"
+          "content": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
         }
       ],
-      "name": "skills/noyalib-debugging-playbook/SKILL.md"
+      "name": "skills/noyalib-debugging-playbook/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-debugging-playbook/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-debugging-playbook/metadata.json"
+      "name": "skills/noyalib-debugging-playbook/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-debugging-playbook/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1b4fb6c0e78e3fb5ce433040b9c382cbf064b7256ec6ad86501933c97709dde0"
         }
       ],
-      "name": "skills/noyalib-debugging-playbook/reference.md"
+      "name": "skills/noyalib-debugging-playbook/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-diagnostics-and-tooling/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2288fa6491b475432c64e0cd1811e5a181310a45b0ffec8832dfee57c8d69a60"
+          "content": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
         }
       ],
-      "name": "skills/noyalib-diagnostics-and-tooling/SKILL.md"
+      "name": "skills/noyalib-diagnostics-and-tooling/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-diagnostics-and-tooling/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-diagnostics-and-tooling/metadata.json"
+      "name": "skills/noyalib-diagnostics-and-tooling/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-diagnostics-and-tooling/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b10ca9031d1536596ec12b1327e762b2d54d5518c623c101dc82b22f43dfb470"
         }
       ],
-      "name": "skills/noyalib-diagnostics-and-tooling/reference.md"
+      "name": "skills/noyalib-diagnostics-and-tooling/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-docs-and-writing/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "866f75021dfb7a957754da241f01f935055c1ab7af6c7fa88510e06b75f0abdc"
+          "content": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
         }
       ],
-      "name": "skills/noyalib-docs-and-writing/SKILL.md"
+      "name": "skills/noyalib-docs-and-writing/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-docs-and-writing/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-docs-and-writing/metadata.json"
+      "name": "skills/noyalib-docs-and-writing/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-docs-and-writing/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
         }
       ],
-      "name": "skills/noyalib-docs-and-writing/reference.md"
+      "name": "skills/noyalib-docs-and-writing/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-external-positioning/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7a7c2e9a416bc05e69d164bcd9a19d533f537f3a2389cd2d810cafabf6a7c04a"
+          "content": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
         }
       ],
-      "name": "skills/noyalib-external-positioning/SKILL.md"
+      "name": "skills/noyalib-external-positioning/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-external-positioning/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-external-positioning/metadata.json"
+      "name": "skills/noyalib-external-positioning/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-external-positioning/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e3cf3a095b12d37fac254afb1ff63e28b278baa196c2e58c251a881f0226e8d5"
         }
       ],
-      "name": "skills/noyalib-external-positioning/reference.md"
+      "name": "skills/noyalib-external-positioning/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-failure-archaeology/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d66bce200a0deb18cd2b25d39bbc3cd2779480e8eb6defbe4729d4c51e5e56b2"
+          "content": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
         }
       ],
-      "name": "skills/noyalib-failure-archaeology/SKILL.md"
+      "name": "skills/noyalib-failure-archaeology/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-failure-archaeology/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-failure-archaeology/metadata.json"
+      "name": "skills/noyalib-failure-archaeology/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-failure-archaeology/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "c9ca2175061968cee739109a718a42cc81aec04534d8da97de8a145ae2ed0983"
         }
       ],
-      "name": "skills/noyalib-failure-archaeology/reference.md"
+      "name": "skills/noyalib-failure-archaeology/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-research-frontier/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f6f341dae9d20b7715650bd01443bdc7d6f30ba53ccd00343fedd2a8f0fcba68"
+          "content": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
         }
       ],
-      "name": "skills/noyalib-research-frontier/SKILL.md"
+      "name": "skills/noyalib-research-frontier/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-research-frontier/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-research-frontier/metadata.json"
+      "name": "skills/noyalib-research-frontier/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-research-frontier/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1f8fced0eff741441bf228b9b02f34350bacccaada7def9ae3eabc8ead2dba27"
         }
       ],
-      "name": "skills/noyalib-research-frontier/reference.md"
+      "name": "skills/noyalib-research-frontier/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-validation-and-qa/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4798916e23f9d69af06384aa630e910895c232777cfb4e93a4fcafa1472340c1"
+          "content": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
         }
       ],
-      "name": "skills/noyalib-validation-and-qa/SKILL.md"
+      "name": "skills/noyalib-validation-and-qa/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-validation-and-qa/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/noyalib-validation-and-qa/metadata.json"
+      "name": "skills/noyalib-validation-and-qa/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/noyalib-validation-and-qa/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9615efd4831898ade0b6267ee09fb580fb1f14d7038a6a78fd1b811eeba39adf"
+          "content": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
         }
       ],
-      "name": "skills/noyalib-validation-and-qa/reference.md"
+      "name": "skills/noyalib-validation-and-qa/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/pr-review-and-release/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bb1c2dbc6605bb0f8825ccdb0c35ae7d1a3271239e10e89a5196373f0fbb7bf3"
+          "content": "9d6a96810ab6b3d76392842d92ab2df5fc5aa1a38c6cc614bc0a94365b38b2ec"
         }
       ],
-      "name": "skills/pr-review-and-release/SKILL.md"
+      "name": "skills/pr-review-and-release/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/pr-review-and-release/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9e4bac3b8401ecd857154c44a0debc468dd4d95f377b84d86380a79f3b48b12e"
+          "content": "0ad444de898031368c5552aae7e2344cab8dd6ce488a6ce78440a81d4e7be1a6"
         }
       ],
-      "name": "skills/pr-review-and-release/metadata.json"
+      "name": "skills/pr-review-and-release/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/pr-review-and-release/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "fa6889f30af9118ec6ae2fa5d8f0a2236b943a0550276850668725405c9f64ad"
         }
       ],
-      "name": "skills/pr-review-and-release/reference.md"
+      "name": "skills/pr-review-and-release/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/receiving-code-review/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1eee278e630cad70ae157da85fca0823a91ee0392b617ead744a6b8b95f38bc3"
+          "content": "c1edd156b87ec8d6ba9485714c46297433e51929a6c08eeea979085b93dfaabc"
         }
       ],
-      "name": "skills/receiving-code-review/SKILL.md"
+      "name": "skills/receiving-code-review/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/receiving-code-review/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
-      "name": "skills/receiving-code-review/metadata.json"
+      "name": "skills/receiving-code-review/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/receiving-code-review/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e1eb07e4315970a34a91d5c35817be7efeab3acf71d4986db73d29dc5945c8c7"
         }
       ],
-      "name": "skills/receiving-code-review/reference.md"
+      "name": "skills/receiving-code-review/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/refactoring-safely/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4808efd0120e3200a15dad4988ce42f7e41a3dda2603f8975dc13a3f6dd16cdd"
+          "content": "916cfb8f5adf2b672cfe00bd710afddb5a8ab8f55c303100e37afa9e3ea66794"
         }
       ],
-      "name": "skills/refactoring-safely/SKILL.md"
+      "name": "skills/refactoring-safely/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/refactoring-safely/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2c38d35d60b06913836bc3db0a7f399dc1bd9467c388306593deb870653848e"
+          "content": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
         }
       ],
-      "name": "skills/refactoring-safely/metadata.json"
+      "name": "skills/refactoring-safely/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/refactoring-safely/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "778180f4263b44ffdf397b05615d2e6041586cdfd72394a2c955472262df3221"
         }
       ],
-      "name": "skills/refactoring-safely/reference.md"
+      "name": "skills/refactoring-safely/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/systematic-debugging/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5ffa0d613060fbe0d245f631855f7f019801320e08bc010d5eba2d62a137dea3"
+          "content": "1526e2c7d09734f0f88fd6067fdf7e202e60c80d1f6f351c09f6ee834c0ad971"
         }
       ],
-      "name": "skills/systematic-debugging/SKILL.md"
+      "name": "skills/systematic-debugging/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/systematic-debugging/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "49777a125cbd309a9eaaf8c4b748ba2f3d9b91d0905bbf4dff49d22f3a8becb2"
+          "content": "2b342f8875c554032873363a2f1f09993aa1b9218c65613f1375f73bb5ec8dd9"
         }
       ],
-      "name": "skills/systematic-debugging/metadata.json"
+      "name": "skills/systematic-debugging/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/systematic-debugging/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b3f24863a114c8947f360575e2415076807d878766b9dcaeb117bc3654632e35"
         }
       ],
-      "name": "skills/systematic-debugging/reference.md"
+      "name": "skills/systematic-debugging/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/test-driven-development/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a3e1dca05cc3d495b89c32f914265054a86d5d3745e8ac943ce8c50983ca4981"
+          "content": "f3efe34e331b12893f3e2ef0fe91e69fc0413e574f3dd1497a7bdd6c5fbb4923"
         }
       ],
-      "name": "skills/test-driven-development/SKILL.md"
+      "name": "skills/test-driven-development/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/test-driven-development/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3eb11a55fd77a574380b9d9176126c458afdb4fafebbf2ef238a972146af92c1"
+          "content": "c56733bb8ddcdacc3afaf8b9911ce4fbf442b57690a536f0a47757fb1607a141"
         }
       ],
-      "name": "skills/test-driven-development/metadata.json"
+      "name": "skills/test-driven-development/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/test-driven-development/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4a54b6f05b9f71a975302a17812d22c93b6eb5960d4d5ac3a2c4e83e7d20ff62"
         }
       ],
-      "name": "skills/test-driven-development/reference.md"
+      "name": "skills/test-driven-development/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/using-agtmls/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cadedbfd8084df4005ce138b7a737b34877a732ef037e5898ca001da9c6a12fb"
+          "content": "189be118105e54e33a605e6bc3b3fefcb0a6ad63fe2371a4d4f15e2d61a4d0c5"
         }
       ],
-      "name": "skills/using-agtmls/SKILL.md"
+      "name": "skills/using-agtmls/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/using-agtmls/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b933613bad641abe0b2e68e95ea8c54abdc8bc2a6a21f4c3afc9061337ca3246"
+          "content": "a343cb216f192398ebf668a94a2c60ef8d486bbe2ee1016e184891bd2fdda438"
         }
       ],
-      "name": "skills/using-agtmls/metadata.json"
+      "name": "skills/using-agtmls/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/using-agtmls/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5126aeb0c398bccb55515b8e3a8b5e7daac2e5c6482a2a48a997eb382b5a18e6"
         }
       ],
-      "name": "skills/using-agtmls/reference.md"
+      "name": "skills/using-agtmls/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/verification-before-completion/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c86cb09e0f6f09f74cef1226d8a2abbd9ef8f9349cc9c1701f87915d0f6b171e"
+          "content": "163a96ff7a646346c8e8b4050584aa2eccf3fef2789cd40456bd0f9202893c0c"
         }
       ],
-      "name": "skills/verification-before-completion/SKILL.md"
+      "name": "skills/verification-before-completion/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/verification-before-completion/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0af354b1b350ae651549e8e8d6fb0835ca1ab9dc7094fad95e6cd9d13f7faaab"
+          "content": "4508f8bd8c81be3aaf3377b1d4ec37ae970fa4a496e7fc99146b0040d5b6f675"
         }
       ],
-      "name": "skills/verification-before-completion/metadata.json"
+      "name": "skills/verification-before-completion/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/verification-before-completion/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "5eca86c3672b4c54995786a467c0ffd586616407371cd22279a5d92f4d9ab5b6"
         }
       ],
-      "name": "skills/verification-before-completion/reference.md"
+      "name": "skills/verification-before-completion/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/web-research-and-source-triage/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3b57709f7d2af72ea07a6b70e42a583a82aed19e5df623935bfd207dc3a6016f"
+          "content": "4b34af64cae0572c78441125dd924b022a591873a0ffead584fca7a9eeea4715"
         }
       ],
-      "name": "skills/web-research-and-source-triage/SKILL.md"
+      "name": "skills/web-research-and-source-triage/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/web-research-and-source-triage/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0157932f8a5d57b902ce35f4ba43386f71d35547af77040653b01167e5dae82c"
+          "content": "5a32f1a9ca6b0e9f97c5d4b41377f55809e8b2c2544e3e620b2b622460e5966e"
         }
       ],
-      "name": "skills/web-research-and-source-triage/metadata.json"
+      "name": "skills/web-research-and-source-triage/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/web-research-and-source-triage/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "8d9a39acf403839d730dc1bbed0145f5eae1312100dece2f332ad092b4a1294b"
         }
       ],
-      "name": "skills/web-research-and-source-triage/reference.md"
+      "name": "skills/web-research-and-source-triage/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/writing-plans/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6177ad3efc67815a245019f0dcb1af57d317fef11fb697e512dc4b496a0b8cf0"
+          "content": "d3f03a53a170b97d4eab30849348eecf55d758b194b587b22e234861c8fb9548"
         }
       ],
-      "name": "skills/writing-plans/SKILL.md"
+      "name": "skills/writing-plans/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/writing-plans/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a86b53a8291494ee440094c9a8bca2b27a69ab8c7af20becfe21a905c73b63b"
+          "content": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
         }
       ],
-      "name": "skills/writing-plans/metadata.json"
+      "name": "skills/writing-plans/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/writing-plans/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "7415c3aed2776580a8ccbed9190354e091127807240d6888b81f21984deb6d46"
         }
       ],
-      "name": "skills/writing-plans/reference.md"
+      "name": "skills/writing-plans/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/yaml-domain-reference/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "13a5ac094ee463b698a7e44afaeee89e3e96abdaf0a4f910b2834004c139ac93"
+          "content": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
         }
       ],
-      "name": "skills/yaml-domain-reference/SKILL.md"
+      "name": "skills/yaml-domain-reference/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/yaml-domain-reference/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a725df65e6e6685afae46aed7cf6b5120a8477b979d3d3f6deae41e90b567e0c"
+          "content": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
         }
       ],
-      "name": "skills/yaml-domain-reference/metadata.json"
+      "name": "skills/yaml-domain-reference/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "skills/yaml-domain-reference/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b1a514b379d1a4aca0e2b48c72f5d972325026953439c8b466acc1804c073832"
         }
       ],
-      "name": "skills/yaml-domain-reference/reference.md"
+      "name": "skills/yaml-domain-reference/reference.md",
+      "type": "file"
     },
     {
+      "bom-ref": "src/agtmls/__init__.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "03abe1f815842d5577f40ef7f9a9a409e19bbbb0c8d7a878f411529c3cc96807"
         }
       ],
-      "name": "src/agtmls/__init__.py"
+      "name": "src/agtmls/__init__.py",
+      "type": "file"
     },
     {
+      "bom-ref": "src/agtmls/__main__.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b6236eba8e8a733d44454588ef3348791c0946b34959ff56c914458aa144cebe"
         }
       ],
-      "name": "src/agtmls/__main__.py"
+      "name": "src/agtmls/__main__.py",
+      "type": "file"
     },
     {
+      "bom-ref": "src/agtmls/cli.py",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "85f8122b9e15ee609cf776ba9781e5319c1beadced76c380e5f8f11d676fb113"
         }
       ],
-      "name": "src/agtmls/cli.py"
+      "name": "src/agtmls/cli.py",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/_base.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "35e3de48d123500a4c4d0deb40a215ca66ee1d78d74305d32d1425206fef3c4a"
         }
       ],
-      "name": "system-prompts/_base.md"
+      "name": "system-prompts/_base.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/bash.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "e3df24a17d80209c55643d2ef32d94683a7329d6f7effbad0668396d77deedb3"
         }
       ],
-      "name": "system-prompts/bash.md"
+      "name": "system-prompts/bash.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/cpp.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "eca6d0acd4056f54fcea965868bae99ee00578e0067518f0f8a4c3659f5bcbac"
         }
       ],
-      "name": "system-prompts/cpp.md"
+      "name": "system-prompts/cpp.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/go.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "f67167cc966049e0440e6c57484cd3a18be29638fe8d2346414ef13b016cffa2"
         }
       ],
-      "name": "system-prompts/go.md"
+      "name": "system-prompts/go.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/javascript.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "55167dfa7a2679b19f554bb18503ded121080800744e044a5e6c3cb216b1956e"
         }
       ],
-      "name": "system-prompts/javascript.md"
+      "name": "system-prompts/javascript.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/python.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "db7bccf013e3ab828845d401e0dd6924ea377df94d4146953973727f5c15b030"
         }
       ],
-      "name": "system-prompts/python.md"
+      "name": "system-prompts/python.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/ruby.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "0257546ef21ef2a9381188412c9f9332fd3a12f0733ebe3cdd143bdb2c0d981d"
         }
       ],
-      "name": "system-prompts/ruby.md"
+      "name": "system-prompts/ruby.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/rust.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "4264e75a945943cf4c2a7ad4b9ddc1ded7822c662d103c6404bdafa11ec6c25e"
         }
       ],
-      "name": "system-prompts/rust.md"
+      "name": "system-prompts/rust.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/swift.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "51824ad50b76cd8984091f913b383e0de1e1534f648e0b34cd9b9b391a3dc4d6"
         }
       ],
-      "name": "system-prompts/swift.md"
+      "name": "system-prompts/swift.md",
+      "type": "file"
     },
     {
+      "bom-ref": "system-prompts/typescript.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2dd9e00a6239a1887c3a65ad3ca8081b907548a1ae52919d0db6264eb690b3cf"
         }
       ],
-      "name": "system-prompts/typescript.md"
+      "name": "system-prompts/typescript.md",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/README.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "1f87f20ccbb30efa4468f3c0c57cef16b769da50d76b7ee980ff73181603e39b"
         }
       ],
-      "name": "templates/README.md"
+      "name": "templates/README.md",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/evals/behavioral.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "b3bd168d907855ff560aa1cdc43a8cbc75c7f4a7f2ea3b9bd47cbbc63ddef2e0"
         }
       ],
-      "name": "templates/evals/behavioral.json"
+      "name": "templates/evals/behavioral.json",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/evals/routing.json",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "2af77216afa360bf3de12f7214855f5a1ea4cc1fcc10da2a0e21537060549e27"
         }
       ],
-      "name": "templates/evals/routing.json"
+      "name": "templates/evals/routing.json",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/skill/SKILL.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "45fe87f38ac408752294d4cf042efb8cde42d1358cd09df201f3d7d92584871c"
         }
       ],
-      "name": "templates/skill/SKILL.md"
+      "name": "templates/skill/SKILL.md",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/skill/metadata.json",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f718374de8a2c295178377f6aef0159187756bf9465e056cfca121e195fb3a42"
+          "content": "27288e7eb02de75ad1c71a01a203d4d0703ecb52c7cb4c8e7769cb40561452b8"
         }
       ],
-      "name": "templates/skill/metadata.json"
+      "name": "templates/skill/metadata.json",
+      "type": "file"
     },
     {
+      "bom-ref": "templates/skill/reference.md",
       "hashes": [
         {
           "alg": "SHA-256",
           "content": "80a3f78ac3433e85a13d18350c760a8fc59ae453f513edf1d68566ba486d769a"
         }
       ],
-      "name": "templates/skill/reference.md"
+      "name": "templates/skill/reference.md",
+      "type": "file"
     }
   ],
   "metadata": {
@@ -3117,7 +3969,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-19T17:45:11Z",
+    "timestamp": "2026-09-23T09:46:25Z",
     "tools": {
       "components": [
         {

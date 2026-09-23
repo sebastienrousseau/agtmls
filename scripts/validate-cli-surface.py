@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate CLI subcommands against docs and command files."""
 
 from __future__ import annotations
@@ -9,7 +11,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CLI = ROOT / "scripts" / "agtmls.py"
+# The subcommands moved out of agtmls.py so the surface could be read on
+# its own. This check follows them rather than parsing the dispatch.
+CLI = ROOT / "scripts" / "_lib" / "cli_parser.py"
 README = ROOT / "README.md"
 # The command reference moved out of the README to keep it readable; the
 # surface must still be documented somewhere a user will find it.
@@ -52,7 +56,6 @@ def main() -> int:
         "bump-version",
         "evolve",
         "evidence",
-        "agent-card",
         "mcp-resources",
         "plugin-manifests",
         "sbom",

@@ -26,14 +26,19 @@ SOURCE_DIRS = [
     "skills", "src", "system-prompts", "templates",
 ]
 SOURCE_FILES = [
-    "index.json", "profiles.json", "providers.json",
-    "lifecycle.json", "checks.json", "CATALOG.md",
+    "profiles.json", "providers.json", "lifecycle.json", "checks.json",
     "LICENSE-APACHE", "LICENSE-MIT",
 ]
 
 # Generated, therefore excluded from the timestamp basis. Listed so the
-# exclusion is explicit rather than implied by absence.
+# exclusion is explicit rather than implied by absence. index.json and
+# CATALOG.md sat in SOURCE_FILES too, contradicting the rule above; they are
+# derived from skills/, which the basis already covers.
 GENERATED = [
     "SBOM.spdx.json", "SBOM.cyclonedx.json", "provenance.json",
-    "agent-card.json", "mcp-resources.json", "CATALOG.md",
+    "mcp-resources.json", "CATALOG.md", "index.json",
 ]
+
+# What the SBOM lists: everything shipped, generated or not. The wheel ships
+# index.json, so an SBOM without it describes the wrong artifact.
+SBOM_FILES = [*SOURCE_FILES, "index.json", "CATALOG.md"]

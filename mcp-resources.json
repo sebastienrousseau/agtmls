@@ -5,217 +5,217 @@
       "mimeType": "text/markdown",
       "name": "agent-loop-design",
       "path": "skills/agent-loop-design/SKILL.md",
-      "uri": "agtmls://skills/agent-loop-design"
+      "uri": "agtmls://skill/agent-loop-design"
     },
     {
       "description": "Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.",
       "mimeType": "text/markdown",
       "name": "ai-supply-chain-security",
       "path": "skills/ai-supply-chain-security/SKILL.md",
-      "uri": "agtmls://skills/ai-supply-chain-security"
+      "uri": "agtmls://skill/ai-supply-chain-security"
     },
     {
       "description": "Eliminate AI slop, clich\u00e9s, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts.",
       "mimeType": "text/markdown",
       "name": "anti-slop-pr-and-writing",
       "path": "skills/anti-slop-pr-and-writing/SKILL.md",
-      "uri": "agtmls://skills/anti-slop-pr-and-writing"
+      "uri": "agtmls://skill/anti-slop-pr-and-writing"
     },
     {
       "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
       "mimeType": "text/markdown",
       "name": "brainstorming",
       "path": "skills/brainstorming/SKILL.md",
-      "uri": "agtmls://skills/brainstorming"
+      "uri": "agtmls://skill/brainstorming"
     },
     {
       "description": "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns.",
       "mimeType": "text/markdown",
       "name": "cross-language-port",
       "path": "skills/cross-language-port/SKILL.md",
-      "uri": "agtmls://skills/cross-language-port"
+      "uri": "agtmls://skill/cross-language-port"
     },
     {
       "description": "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently.",
       "mimeType": "text/markdown",
       "name": "giving-code-review",
       "path": "skills/giving-code-review/SKILL.md",
-      "uri": "agtmls://skills/giving-code-review"
+      "uri": "agtmls://skill/giving-code-review"
     },
     {
       "description": "Write the note that lets someone else \u2014 or a later session \u2014 resume work in progress without re-deriving it. Load when context is running out, when pausing unfinished work, when switching who or what continues it, and when asked where things stand. Records tree state, evidence, the next concrete action, and the dead ends. Not a summary of what you did.",
       "mimeType": "text/markdown",
       "name": "handoff",
       "path": "skills/handoff/SKILL.md",
-      "uri": "agtmls://skills/handoff"
+      "uri": "agtmls://skill/handoff"
     },
     {
       "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
       "mimeType": "text/markdown",
       "name": "incident-response",
       "path": "skills/incident-response/SKILL.md",
-      "uri": "agtmls://skills/incident-response"
+      "uri": "agtmls://skill/incident-response"
     },
     {
       "description": "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology).",
       "mimeType": "text/markdown",
       "name": "noyalib-architecture-contract",
       "path": "skills/noyalib-architecture-contract/SKILL.md",
-      "uri": "agtmls://skills/noyalib-architecture-contract"
+      "uri": "agtmls://skill/noyalib-architecture-contract"
     },
     {
       "description": "Recreate a working noyalib dev environment and fix toolchain, MSRV, and Apple-Silicon traps. Use when cargo build, cargo test, make, fuzz, Miri, or coverage fails before the code is in scope.",
       "mimeType": "text/markdown",
       "name": "noyalib-build-and-env",
       "path": "skills/noyalib-build-and-env/SKILL.md",
-      "uri": "agtmls://skills/noyalib-build-and-env"
+      "uri": "agtmls://skill/noyalib-build-and-env"
     },
     {
       "description": "The noyalib rulebook: classify a change, pick the gates it must pass, non-negotiables (unsafe, signed commits, ADR triggers, MSRV, panic policy), PR flow. Use for 'am I allowed to do X' or judging release readiness. Not the runbook (noyalib-ci-and-release).",
       "mimeType": "text/markdown",
       "name": "noyalib-change-control",
       "path": "skills/noyalib-change-control/SKILL.md",
-      "uri": "agtmls://skills/noyalib-change-control"
+      "uri": "agtmls://skill/noyalib-change-control"
     },
     {
       "description": "Operate noyalib CI and ship releases: workflow graph, cache-poisoning doctrine, supply-chain gates, tag-driven release flow. Use for red CI, release prep, tagging, cargo-vet or cargo-deny failures. Not which-gates-apply (noyalib-change-control).",
       "mimeType": "text/markdown",
       "name": "noyalib-ci-and-release",
       "path": "skills/noyalib-ci-and-release/SKILL.md",
-      "uri": "agtmls://skills/noyalib-ci-and-release"
+      "uri": "agtmls://skill/noyalib-ci-and-release"
     },
     {
       "description": "Every noyalib configuration axis: Cargo features, ParserConfig DoS budgets and toggles, SerializerConfig, preset constructors. Use for 'what does feature X do', 'how do I limit Y', 'what is the default for max_document_length', 'does strict reject duplicate keys', or adding a new axis safely.",
       "mimeType": "text/markdown",
       "name": "noyalib-config-and-flags",
       "path": "skills/noyalib-config-and-flags/SKILL.md",
-      "uri": "agtmls://skills/noyalib-config-and-flags"
+      "uri": "agtmls://skill/noyalib-config-and-flags"
     },
     {
       "description": "Raise noyalib line, branch, and function coverage toward the 98% target. Use for 'raise coverage', llvm-cov gaps, coverage-gap triage, ratcheting fail-under thresholds, or picking the next coverage target. Fences off the known wrong turns (chasing 100%, weakening thresholds).",
       "mimeType": "text/markdown",
       "name": "noyalib-coverage-campaign",
       "path": "skills/noyalib-coverage-campaign/SKILL.md",
-      "uri": "agtmls://skills/noyalib-coverage-campaign"
+      "uri": "agtmls://skill/noyalib-coverage-campaign"
     },
     {
       "description": "Symptom-driven triage for noyalib: failing tests, a no_std build that broke despite green CI, surprising parse results, wrong spans, unexpected budget errors, Value-vs-struct disagreement, column desync. Use when answering 'why does the parse differ' fast.",
       "mimeType": "text/markdown",
       "name": "noyalib-debugging-playbook",
       "path": "skills/noyalib-debugging-playbook/SKILL.md",
-      "uri": "agtmls://skills/noyalib-debugging-playbook"
+      "uri": "agtmls://skill/noyalib-debugging-playbook"
     },
     {
       "description": "Measure instead of eyeball. Use when running or reading coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib, when interpreting what an llvm-cov regions percentage means, or when a claim needs evidence rather than assertion.",
       "mimeType": "text/markdown",
       "name": "noyalib-diagnostics-and-tooling",
       "path": "skills/noyalib-diagnostics-and-tooling/SKILL.md",
-      "uri": "agtmls://skills/noyalib-diagnostics-and-tooling"
+      "uri": "agtmls://skill/noyalib-diagnostics-and-tooling"
     },
     {
       "description": "Maintain noyalib's docs of record and house writing style. Use when authoring or editing README, CHANGELOG, RELEASE-NOTES-vX.Y.Z.md, ADRs under doc/adr/, doc/POLICIES.md, doc/ARCHITECTURE.md, doc/USER-GUIDE.md, GLOSSARY.md, MIGRATION*.md, GETTING_STARTED.md, or crate-level and item-level rustdoc. Covers house rustdoc style (# Examples, # Errors, runnable doctests), commit-message archaeology (Assisted-by trailer, symptom/root-cause bodies), SPDX/REUSE headers per file type, ADR lifecycle (when required, template, post-implementation updates), release-notes template, and the version-refs release audit. Do NOT use for release mechanics (see noyalib-ci-and-release) or competitive positioning (see noyalib-external-positioning).",
       "mimeType": "text/markdown",
       "name": "noyalib-docs-and-writing",
       "path": "skills/noyalib-docs-and-writing/SKILL.md",
-      "uri": "agtmls://skills/noyalib-docs-and-writing"
+      "uri": "agtmls://skill/noyalib-docs-and-writing"
     },
     {
       "description": "How noyalib is described publicly: ecosystem map, provable differentiators, claiming rules, migration guides, and the COMPARISON matrix against other Rust YAML crates. Use when writing or reviewing README claims, release notes, launch copy, 'why noyalib vs X', or 'can we claim noyalib is faster than yaml-rust2 or saphyr'. Dated claims must be re-verified before publishing.",
       "mimeType": "text/markdown",
       "name": "noyalib-external-positioning",
       "path": "skills/noyalib-external-positioning/SKILL.md",
-      "uri": "agtmls://skills/noyalib-external-positioning"
+      "uri": "agtmls://skill/noyalib-external-positioning"
     },
     {
       "description": "The chronicle of noyalib's settled battles: symptom, root cause, evidence, and what NOT to retry. Load BEFORE proposing a fix or refactor - 'has this been tried', 'why is X shaped that way', 'is there regression history here', 'look up the cache poisoning incident behind no_std', 'was the BOM column desync ever fixed'.",
       "mimeType": "text/markdown",
       "name": "noyalib-failure-archaeology",
       "path": "skills/noyalib-failure-archaeology/SKILL.md",
-      "uri": "agtmls://skills/noyalib-failure-archaeology"
+      "uri": "agtmls://skill/noyalib-failure-archaeology"
     },
     {
       "description": "Open research directions for noyalib and the evidence bar an idea must clear. Use for 'is there a research angle', 'what's worth a paper, RFC, or upstream PR', or setting a falsifiable spec-conformance milestone. Ambitions stay OPEN and CANDIDATE, never roadmap commitments.",
       "mimeType": "text/markdown",
       "name": "noyalib-research-frontier",
       "path": "skills/noyalib-research-frontier/SKILL.md",
-      "uri": "agtmls://skills/noyalib-research-frontier"
+      "uri": "agtmls://skill/noyalib-research-frontier"
     },
     {
       "description": "What counts as evidence in noyalib. Use before opening a PR, claiming a fix is done, or adding a test: the evidence bar, test taxonomy, doctest rules, cross-loader parity regression tests, acceptance thresholds. Not running tools (noyalib-diagnostics-and-tooling).",
       "mimeType": "text/markdown",
       "name": "noyalib-validation-and-qa",
       "path": "skills/noyalib-validation-and-qa/SKILL.md",
-      "uri": "agtmls://skills/noyalib-validation-and-qa"
+      "uri": "agtmls://skill/noyalib-validation-and-qa"
     },
     {
       "description": "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
       "mimeType": "text/markdown",
       "name": "pr-review-and-release",
       "path": "skills/pr-review-and-release/SKILL.md",
-      "uri": "agtmls://skills/pr-review-and-release"
+      "uri": "agtmls://skill/pr-review-and-release"
     },
     {
       "description": "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes.",
       "mimeType": "text/markdown",
       "name": "receiving-code-review",
       "path": "skills/receiving-code-review/SKILL.md",
-      "uri": "agtmls://skills/receiving-code-review"
+      "uri": "agtmls://skill/receiving-code-review"
     },
     {
       "description": "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits.",
       "mimeType": "text/markdown",
       "name": "refactoring-safely",
       "path": "skills/refactoring-safely/SKILL.md",
-      "uri": "agtmls://skills/refactoring-safely"
+      "uri": "agtmls://skill/refactoring-safely"
     },
     {
       "description": "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing.",
       "mimeType": "text/markdown",
       "name": "systematic-debugging",
       "path": "skills/systematic-debugging/SKILL.md",
-      "uri": "agtmls://skills/systematic-debugging"
+      "uri": "agtmls://skill/systematic-debugging"
     },
     {
       "description": "Write the failing test first, then the code that makes it pass. Load when adding behaviour, changing behaviour, or pinning a bug, and whenever a test was authored after the code it covers. Enforces red-green-refactor with an observed red phase, so a test that never failed is never mistaken for proof.",
       "mimeType": "text/markdown",
       "name": "test-driven-development",
       "path": "skills/test-driven-development/SKILL.md",
-      "uri": "agtmls://skills/test-driven-development"
+      "uri": "agtmls://skill/test-driven-development"
     },
     {
       "description": "Meta-router for the AgtMLS skill catalog. Read first when unsure which AgtMLS skill applies, when several look relevant, when asking 'is there a skill for porting or noyalib work', or when onboarding to how the hub's skills and shared references fit together.",
       "mimeType": "text/markdown",
       "name": "using-agtmls",
       "path": "skills/using-agtmls/SKILL.md",
-      "uri": "agtmls://skills/using-agtmls"
+      "uri": "agtmls://skill/using-agtmls"
     },
     {
       "description": "The gate between doing work and claiming it is done. Load before saying finished, fixed, working, or ready, before marking a task complete, and before reporting an outcome to a human. Converts each claim into the observation that would justify it, and names the rationalizations that let unverified work ship. Not the project's own evidence bar or test taxonomy.",
       "mimeType": "text/markdown",
       "name": "verification-before-completion",
       "path": "skills/verification-before-completion/SKILL.md",
-      "uri": "agtmls://skills/verification-before-completion"
+      "uri": "agtmls://skill/verification-before-completion"
     },
     {
       "description": "Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.",
       "mimeType": "text/markdown",
       "name": "web-research-and-source-triage",
       "path": "skills/web-research-and-source-triage/SKILL.md",
-      "uri": "agtmls://skills/web-research-and-source-triage"
+      "uri": "agtmls://skill/web-research-and-source-triage"
     },
     {
       "description": "Turn a vague or multi-step request into an ordered list of small steps, each with its own done-condition and verification. Load before starting work that touches several files, has unclear scope, or spans more than one session, and when a request needs decomposing before any code is written. Produces a plan a reviewer can check against, not a to-do list.",
       "mimeType": "text/markdown",
       "name": "writing-plans",
       "path": "skills/writing-plans/SKILL.md",
-      "uri": "agtmls://skills/writing-plans"
+      "uri": "agtmls://skill/writing-plans"
     },
     {
       "description": "YAML 1.2.2 semantics as noyalib implements them: scalar resolution, block vs flow, chomping, anchors, aliases, merge keys with DoS budgets, tags, 1.1-vs-1.2 flags, the Norway problem, and whether nan or octal 0o7 scalars resolve. Use for spec-conformance and plain-scalar questions.",
       "mimeType": "text/markdown",
       "name": "yaml-domain-reference",
       "path": "skills/yaml-domain-reference/SKILL.md",
-      "uri": "agtmls://skills/yaml-domain-reference"
+      "uri": "agtmls://skill/yaml-domain-reference"
     }
   ],
   "schema_version": 1

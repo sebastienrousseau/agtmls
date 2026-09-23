@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Run shell syntax checks on repository shell scripts."""
 
 from __future__ import annotations
@@ -8,7 +10,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", "__pycache__"}
+# Not ours to check: VCS internals, caches, build output, vendored packages
+# and local run state. A dependency's script with a syntax error is not a
+# defect in this repository.
+SKIP_DIRS = {".git", "__pycache__", "dist", "node_modules", ".agtmls", ".venv", ".ruff_cache"}
 
 
 def iter_shell() -> list[Path]:

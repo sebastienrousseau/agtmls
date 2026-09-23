@@ -1,0 +1,247 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: conformance
+
+# Separate from validate.yml on purpose. These validators are third-party
+# packages with their own dependency trees, and the 66-check gate is
+# stdlib-only and runnable offline -- which is a property worth keeping, so
+# the checks that need a network live here instead of weakening it.
+#
+# What this answers: an emitted format and a conformant one are different
+# claims. SBOM.cyclonedx.json carried a top-level `files` key, which the 1.6
+# schema forbids, and was rejected by every validator for as long as it had
+# existed, because nothing had ever run one.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  spec-rules:
+    name: Analyzer rules match the pinned agtmls-spec commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Read the pinned spec commit
+        id: pin
+        run: |
+          echo "commit=$(python3 -c 'import json; print(json.load(open("scripts/_lib/rules.json"))["source"]["commit"])')" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: sebastienrousseau/agtmls-spec
+          ref: ${{ steps.pin.outputs.commit }}
+          path: agtmls-spec
+      - name: Snapshot equals the spec it names
+        # rules.json is the only copy of the rule set in this repository.
+        # This is what proves it is a copy and not a fork.
+        run: python3 scripts/sync-spec-rules.py --check --from agtmls-spec --commit "${{ steps.pin.outputs.commit }}"
+
+  sbom:
+    name: SBOMs validate against their own schemas
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install validators
+        # Pinned: an unpinned validator can start passing or failing for
+        # reasons that have nothing to do with this repository.
+        run: |
+          python3 -m pip install --disable-pip-version-check \
+            'spdx-tools==0.8.3' 'cyclonedx-python-lib[json-validation]==8.5.0'
+      - name: SPDX 2.3
+        run: pyspdxtools -i SBOM.spdx.json
+      - name: CycloneDX 1.6
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from cyclonedx.schema import SchemaVersion
+          from cyclonedx.validation.json import JsonStrictValidator
+
+          text = open("SBOM.cyclonedx.json", encoding="utf-8").read()
+          spec = json.loads(text)["specVersion"]
+          error = JsonStrictValidator(SchemaVersion.from_version(spec)).validate_str(text)
+          if error is not None:
+              print(f"FAIL: SBOM.cyclonedx.json is not valid CycloneDX {spec}")
+              print(error)
+              sys.exit(1)
+          print(f"OK: SBOM.cyclonedx.json is valid CycloneDX {spec}")
+          PY
+      - name: The validators must be able to fail
+        # A validator that passes everything is indistinguishable from one
+        # that was never wired up. Corrupt a copy and require a rejection.
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+
+          document = json.load(open("SBOM.cyclonedx.json", encoding="utf-8"))
+          document["components"][0]["type"] = "not-a-valid-type"
+          json.dump(document, open("/tmp/bad.cyclonedx.json", "w", encoding="utf-8"))
+
+          from cyclonedx.schema import SchemaVersion
+          from cyclonedx.validation.json import JsonStrictValidator
+
+          text = open("/tmp/bad.cyclonedx.json", encoding="utf-8").read()
+          spec = json.loads(text)["specVersion"]
+          if JsonStrictValidator(SchemaVersion.from_version(spec)).validate_str(text) is None:
+              sys.exit("FAIL: the CycloneDX validator accepted a corrupted document")
+
+          spdx = json.load(open("SBOM.spdx.json", encoding="utf-8"))
+          spdx["files"][0].pop("checksums", None)
+          json.dump(spdx, open("/tmp/bad.spdx.json", "w", encoding="utf-8"))
+          proc = subprocess.run(["pyspdxtools", "-i", "/tmp/bad.spdx.json"], check=False)
+          if proc.returncode == 0:
+              sys.exit("FAIL: the SPDX validator accepted a corrupted document")
+          print("OK: both validators reject a corrupted document")
+          PY
+
+  wheel-size:
+    name: the wheel stays under its committed ceiling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check build
+      - name: Build and measure
+        # The registry ships inside the wheel, so the wheel grows with every
+        # skill. Measured at 614,750 bytes for 31 skills; the ceiling is a
+        # little over 1.7x that, which absorbs ordinary growth and still
+        # catches something large arriving by accident -- a vendored binary,
+        # a committed model, a directory nobody meant to force-include.
+        env:
+          MAX_WHEEL_BYTES: "1048576"
+        run: |
+          python3 -m build --wheel --outdir dist .
+          python3 - <<'PY'
+          import os, pathlib, sys
+
+          ceiling = int(os.environ["MAX_WHEEL_BYTES"])
+          wheels = sorted(pathlib.Path("dist").glob("*.whl"))
+          if not wheels:
+              sys.exit("FAIL: no wheel was built")
+          size = wheels[0].stat().st_size
+          share = size / ceiling * 100
+          print(f"{wheels[0].name}: {size} bytes, {share:.0f}% of the {ceiling}-byte ceiling")
+          if size > ceiling:
+              sys.exit(
+                  f"FAIL: the wheel is {size - ceiling} bytes over its ceiling. "
+                  "Raise MAX_WHEEL_BYTES deliberately, or find what grew."
+              )
+          PY
+
+  api-diff:
+    name: the public API has not broken since the last release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check 'griffe==2.3.0'
+      - name: Compare against the newest release tag
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+
+          tags = subprocess.run(
+              ["git", "tag", "--list", "v0.0.*", "--sort=-v:refname"],
+              capture_output=True, text=True, check=False,
+          ).stdout.split()
+          if not tags:
+              print("no release tag yet; nothing to compare against")
+              sys.exit(0)
+          against = tags[0]
+
+          # griffe exits non-zero for any change, including __version__ moving,
+          # which happens on every single release. A gate that fires every
+          # release is a gate people learn to ignore, so the version attribute
+          # is the one expected difference and everything else is a breakage.
+          benign = re.compile(r"__version__: Attribute value was changed")
+          proc = subprocess.run(
+              ["griffe", "check", "agtmls", "-s", "src", "-a", against, "-f", "oneline"],
+              capture_output=True, text=True, check=False,
+          )
+          lines = [l for l in (proc.stdout + proc.stderr).splitlines() if l.strip()]
+          breakages = [l for l in lines if not benign.search(l)]
+          for line in lines:
+              print(("BREAK " if line in breakages else "ok    ") + line)
+          if breakages:
+              print(f"\nFAIL: {len(breakages)} public API breakage(s) since {against}. "
+                    "Restore the symbol, or make the removal deliberate and say so "
+                    "in CHANGELOG.md.")
+              sys.exit(1)
+          print(f"\nOK: no public API breakage since {against}")
+          PY
+
+  coverage:
+    name: coverage holds at its committed floor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      # skills-ref too: the `all` scope runs the whole gate, and in CI the
+      # spec check fails rather than skips when its validator is missing.
+      - run: python3 -m pip install --disable-pip-version-check 'coverage==7.16.1' 'skills-ref==0.1.0'
+      - name: The library core
+        # Measured from the unit suite alone, in-process, so the number
+        # reflects tests rather than incidental execution by the gate.
+        run: python3 scripts/run-coverage.py --scope core
+      - name: Every script, from the unit suite (project rule, >= 98%)
+        run: python3 scripts/run-coverage.py --scope unit
+      - name: Every script, via the gate
+        run: python3 scripts/run-coverage.py --scope all
+      - name: The floor must not have been quietly lowered
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+
+          committed = json.loads(open("coverage-floor.json", encoding="utf-8").read())["floors"]
+          base = subprocess.run(
+              ["git", "show", "origin/main:coverage-floor.json"],
+              capture_output=True, text=True, check=False,
+          )
+          if base.returncode != 0:
+              print("no baseline on origin/main; nothing to compare")
+              sys.exit(0)
+          previous = json.loads(base.stdout)["floors"]
+          dropped = {
+              scope: (was, committed.get(scope))
+              for scope, was in previous.items()
+              if committed.get(scope, 0) < was
+          }
+          if dropped:
+              for scope, (was, now) in dropped.items():
+                  print(f"FAIL: the {scope} floor moved down, {was}% -> {now}%")
+              sys.exit(
+                  "A floor that moves down is a target. Raise coverage, or say in "
+                  "the commit message why the floor is being lowered."
+              )
+          print(f"OK: {len(committed)} floor(s) held or raised")
+          PY

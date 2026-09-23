@@ -80,7 +80,7 @@ def audit(source: Path) -> tuple[list[dict], str]:
     """Run the analyzer over the import candidate."""
     proc = subprocess.run(
         [sys.executable, str(AUDIT), str(source), "--strict", "--format", "json"],
-        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        cwd=ROOT, text=True, capture_output=True, check=False,
     )
     try:
         return json.loads(proc.stdout).get("findings", []), proc.stdout
@@ -134,7 +134,7 @@ def main() -> int:
 
     findings: list[dict] = []
     if not args.skip_audit:
-        findings, report = audit(args.source)
+        findings, _report = audit(args.source)
         blocking = [
             f for f in findings
             if f["severity"] in BLOCKING_SEVERITIES

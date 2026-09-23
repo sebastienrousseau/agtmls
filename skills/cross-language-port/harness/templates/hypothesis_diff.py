@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 """Differential property test TEMPLATE (Python `hypothesis`).
 
 Assert the PORT agrees with the SOURCE (used as an oracle) over generated
@@ -18,7 +20,7 @@ PORT_CMD = ["./port"]  # compiled target path, or an interpreter command
 
 
 def run(cmd: list[str], stdin: str) -> str:
-    return subprocess.run(cmd, input=stdin, capture_output=True, text=True).stdout
+    return subprocess.run(cmd, input=stdin, capture_output=True, text=True, check=False).stdout
 
 
 # Shape the alphabet/size to your function's real input domain — the tighter

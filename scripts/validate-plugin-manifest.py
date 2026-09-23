@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate the AgtMLS plugin manifest and marketplace catalog.
 
 Two manifests gate distribution through the Claude Code plugin system:
@@ -192,12 +194,13 @@ def main() -> int:
     errors: list[str] = []
     for path, label in ((MANIFEST, "plugin.json"), (MARKETPLACE, "marketplace.json")):
         if not path.exists():
-            print(f"FAIL: .claude-plugin/{label} missing")
+            print(f"FAIL: .claude-plugin/{label} missing; run generate-plugin-manifests.py --write")
             return 1
         try:
             json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
-            print(f"FAIL: .claude-plugin/{label} invalid JSON: {exc}")
+            print(f"FAIL: .claude-plugin/{label} invalid JSON: {exc}; fix it by hand or "
+                  "regenerate with generate-plugin-manifests.py --write")
             return 1
 
     plugin = check_plugin(errors)

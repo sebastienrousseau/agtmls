@@ -26,7 +26,6 @@ python3 scripts/agtmls.py release-dry-run --version 0.0.1 --skip-check
 python3 scripts/agtmls.py verify-release-assets --tag v0.0.1
 python3 scripts/agtmls.py evolve transcript.txt --skill-name candidate-skill
 python3 scripts/agtmls.py evidence --skill cross-language-port --command pytest --file src/example.py
-python3 scripts/agtmls.py agent-card --write
 python3 scripts/agtmls.py mcp-resources --write
 python3 scripts/agtmls.py plugin-manifests --write
 python3 scripts/agtmls.py sbom --write

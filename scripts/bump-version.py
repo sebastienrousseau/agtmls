@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Bump AgtMLS metadata to the next allowed patch-line version."""
 
 from __future__ import annotations
@@ -7,21 +9,22 @@ import argparse
 import json
 import subprocess
 import sys
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# The registry version lives here and nowhere else that is authored. Skills
+# used to be in this list -- every metadata.json rewritten on every release --
+# which made a release a 129-file diff and put the version inside each skill's
+# content address. A skill's identity is its digest now, and index.json records
+# which release last moved it.
 VERSION_FILES = [
     ROOT / ".claude-plugin" / "plugin.json",
-    # Derived, not hardcoded: the skill tree is flat, so every skill owns a
-    # metadata.json and a new skill must not silently escape the version bump.
-    *sorted((ROOT / "skills").glob("*/metadata.json")),
-    ROOT / "templates" / "skill" / "metadata.json",
 ]
 TEXT_DEFAULT_FILES = [
-    # import-skill.py deliberately absent: it reads the version from
-    # plugin.json instead of carrying a literal for this script to patch.
-    ROOT / "scripts" / "generate-skill-index.py",
+    # import-skill.py, generate-skill-index.py and generate-manpage.py are
+    # deliberately absent: each reads the version from plugin.json rather than
+    # carrying a literal for this script to patch.
     # The published package version must move with the registry version, or a
     # PyPI release ships a wheel whose metadata contradicts its contents.
     ROOT / "pyproject.toml",
@@ -36,7 +39,6 @@ GENERATORS = [
     ["generate-skill-index.py", "--write"],
     ["generate-catalog.py", "--write"],
     ["generate-docs-site.py", "--write"],
-    ["generate-agent-card.py", "--write"],
     ["generate-mcp-resources.py", "--write"],
     ["generate-sbom.py", "--write"],
     ["generate-provenance.py", "--write"],
@@ -86,22 +88,20 @@ def update_changelog(version: str, today: str) -> None:
     head, _, rest = text.partition(marker)
     body, sep, tail = rest.partition("\n## ")
     accumulated = body.strip()
-    if accumulated:
-        entry = f"## Unreleased\n\n## {version} - {today}\n\n{accumulated}\n\n"
-    else:
-        entry = (
-            f"## Unreleased\n\n"
-            f"## {version} - {today}\n\n"
-            "### Changed\n\n"
-            "- Bumped release metadata through the guarded patch-line release flow.\n\n"
-        )
-    path.write_text(head + entry + (sep + tail if sep else ""), encoding="utf-8")
+    notes = accumulated or (
+        "### Changed\n\n"
+        "- Bumped release metadata through the guarded patch-line release flow."
+    )
+    entry = f"## Unreleased\n\n## {version} - {today}\n\n{notes}\n"
+    # One blank line before the previous release, one newline at the end: the
+    # old join left two blank lines, which markdownlint (MD012) rejects.
+    path.write_text(head + entry + (f"\n## {tail}" if sep else ""), encoding="utf-8")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", help="target version; defaults to scripts/next-version.py")
-    parser.add_argument("--date", default=date.today().isoformat())
+    parser.add_argument("--date", default=datetime.now(timezone.utc).date().isoformat())
     parser.add_argument("--check", action="store_true", help="only validate that the requested version is the next allowed version")
     args = parser.parse_args()
 

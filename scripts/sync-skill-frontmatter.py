@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Mirror metadata.json into spec-portable SKILL.md frontmatter.
 
 `metadata.json` is an AgtMLS-private sidecar: Claude Code, Cursor, Gemini
@@ -84,7 +86,11 @@ def derive_metadata(metadata: dict[str, object]) -> list[tuple[str, str]]:
     if not isinstance(policy, dict):
         policy = {}
     pairs = [
-        ("agtmls-version", str(metadata.get("version", ""))),
+        # No version. It used to be stamped here with the registry's version on
+        # every release, which put the release into each skill's content
+        # address -- so all 31 digests moved whether or not a skill changed,
+        # and `verify` could not tell a bump from tampering. A skill's identity
+        # is its digest; index.json records which release last moved it.
         ("agtmls-owner", str(metadata.get("owner", ""))),
         ("agtmls-maturity", str(metadata.get("maturity", ""))),
         ("agtmls-bundle", str(metadata.get("bundle") or "")),
@@ -167,7 +173,8 @@ def main() -> int:
         rel = skill_md.relative_to(ROOT).as_posix()
         wanted = render(skill_md)
         if wanted is None:
-            print(f"FAIL: {rel}: unparseable frontmatter or missing metadata.json")
+            print(f"FAIL: {rel}: unparseable frontmatter or missing metadata.json; see "
+                  "templates/skill/ for the shape both must have")
             return 1
         if wanted == skill_md.read_text(encoding="utf-8"):
             continue
@@ -182,7 +189,8 @@ def main() -> int:
         return 0
     if stale:
         for rel in stale:
-            print(f"FAIL: {rel}: frontmatter out of sync with metadata.json")
+            print(f"FAIL: {rel}: frontmatter out of sync with metadata.json; run "
+                  "sync-skill-frontmatter.py --write")
         print()
         print(f"FAIL: {len(stale)} stale skill(s); run sync-skill-frontmatter.py --write")
         return 1

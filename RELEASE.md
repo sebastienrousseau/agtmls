@@ -35,6 +35,59 @@ surface, plugin metadata, and validation gates agree.
 7. Confirm `VERSIONING.md`: versions increment by exactly `0.0.1`; the next release after `v0.0.1` is `v0.0.2`, and `v0.1.0` is forbidden until `v0.0.999` exists.
 8. Tag only after CI is green.
 
+## Tagging, publishing and the audit
+
+A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
+`scripts/release-preflight.py` passes, and nothing counts as released until
+`scripts/release-audit.py` reads it back from every place it was published.
+
+1. Write the release notes in `docs/release-notes/v<version>.md`: a
+   `## Summary` of user-visible changes as bullets, and a `## Checksums`
+   section. A commit list is not a summary.
+2. Create the signed, annotated tag on the release commit:
+
+   ```sh
+   git tag -s v<version> <commit> -m "AgtMLS v<version>"
+   ```
+
+3. Run the preflight. It checks the tag is signed by a key in `KEYS.asc`,
+   titled exactly `AgtMLS v<version>`, points at `<commit>`, and that every
+   packaged version at that commit is `<version>`:
+
+   ```sh
+   python3 scripts/release-preflight.py --tag v<version> --commit <commit> \
+       --notes docs/release-notes/v<version>.md --pending-checksums
+   ```
+
+   The artifacts are built by `release.yml` after the tag is pushed, and the
+   build is not byte-reproducible, so their checksums cannot exist before the
+   push. The notes' Checksums section says `pending` and the preflight runs
+   with `--pending-checksums`. This is a standing deviation from the
+   "checksums before push" rule in AGENTS.md, closed in step 4 instead:
+   nothing is visible or publishable until the real checksums are checked.
+   Reproducible builds would remove it.
+4. Push the tag. `release.yml` then, in order:
+   - builds once, and writes one `SHA256SUMS` over every asset, wheel and
+     sdist included;
+   - writes the release body with `scripts/release-body.py`: the prepared
+     notes, their Checksums section replaced by that `SHA256SUMS`;
+   - attaches the assets to a **draft** release, and refuses to publish it
+     unless GitHub holds every one;
+   - publishes the release and runs `scripts/release-audit.py --before-pypi`;
+   - stops at the `pypi` environment, which needs a maintainer's approval.
+     The publish job uploads the build job's files, never a rebuild.
+5. Approve the `pypi` deployment, then run the audit in full:
+
+   ```sh
+   python3 scripts/release-audit.py --tag v<version> --commit <commit>
+   ```
+
+   The release is done when it passes.
+
+To re-release an existing tag whose release was left incomplete, dispatch the
+workflow with that tag and `dry_run: false`. It reuses the release only if it
+has no assets; it never replaces a release that shipped.
+
 ## Tag protection
 
 Treat published `v*` tags as immutable. See `docs/tag-protection.md`. Repository settings should protect `v*` tags from deletion or force-push where GitHub tag protection/rulesets are available.

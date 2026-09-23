@@ -32,6 +32,9 @@ python3 scripts/validate-cli-surface.py
 python3 scripts/validate-system-prompts.py
 python3 scripts/check-skill-collisions.py
 python3 scripts/validate-eval-cases.py
+python3 scripts/sync-spec-rules.py --check
+python3 scripts/validate-security-claims.py
+python3 scripts/generate-benchmarks-doc.py --check
 python3 scripts/run-trigger-evals.py
 python3 scripts/run-behavioral-evals.py
 python3 scripts/validate-skill-metadata.py

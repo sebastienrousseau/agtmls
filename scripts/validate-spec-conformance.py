@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate every skill with the Agent Skills *reference* implementation.
 
 `validate-skills.py` enforces our reading of the spec plus the stricter AgtMLS
@@ -7,8 +9,10 @@ the agentskills project — the tool other publishers validate against. The two
 can disagree, and when they do the reference implementation wins.
 
 The dependency is optional so the gate stays runnable on a machine with no
-network: if `agentskills` is not importable, this reports SKIP and exits 0.
-CI installs it, so pull requests always get the real check.
+network: locally, if `agentskills` is not importable, this reports SKIP and
+exits 0. In CI (`CI` set) a missing validator is a FAIL on every Python the
+reference supports (3.11+): it used to SKIP there too, and CI installed it
+with `|| true`, so one failed install turned the spec check off unnoticed.
 
     pip install skills-ref
     python3 scripts/validate-spec-conformance.py
@@ -16,6 +20,7 @@ CI installs it, so pull requests always get the real check.
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -23,6 +28,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
+# skills-ref declares requires-python >= 3.11.
+REFERENCE_FLOOR = (3, 11)
+PYTHON = sys.version_info[:2]
 
 
 def runner() -> list[str] | None:
@@ -43,7 +51,11 @@ def runner() -> list[str] | None:
 def main() -> int:
     cmd = runner()
     if cmd is None:
-        print("SKIP: skills-ref is not installed (pip install skills-ref); spec check not run")
+        if os.environ.get("CI") and PYTHON >= REFERENCE_FLOOR:
+            print("FAIL: skills-ref is not installed, and CI must run the spec check on Python 3.11+")
+            return 1
+        reason = "Python < 3.11" if PYTHON < REFERENCE_FLOOR else "pip install skills-ref"
+        print(f"SKIP: skills-ref is not available ({reason}); spec check not run")
         return 0
 
     skills = sorted(p.parent for p in SKILLS_DIR.glob("*/SKILL.md"))

@@ -31,10 +31,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from _lib.covered import (
+    SBOM_FILES as COVERED_FILES,
+)
 from _lib.covered import (  # noqa: E402  (ROOT must be on the path first)
     SOURCE_DIRS as COVERED_DIRS,
-    SOURCE_FILES as COVERED_FILES,
 )
+
 OUT_SPDX = ROOT / "SBOM.spdx.json"
 OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
 
@@ -195,12 +198,19 @@ def render_cyclonedx(paths: list[Path]) -> dict:
                 "licenses": [{"expression": "Apache-2.0 OR MIT"}],
             },
         },
-        # Deliberately empty: the package has no runtime dependencies, and an
-        # empty list states that in a form a scanner can read.
-        "components": [],
-        "files": [
-            {"name": p.relative_to(ROOT).as_posix(),
-             "hashes": [{"alg": "SHA-256", "content": checksums(p)["SHA256"]}]}
+        # CycloneDX has no top-level `files`: the schema sets
+        # additionalProperties false, so the previous shape was rejected by
+        # every 1.6 validator. Files are components of type "file", which is
+        # how the spec models them. The package still has no runtime
+        # dependencies -- that is stated by the absence of any component of
+        # type "library", not by an empty list.
+        "components": [
+            {
+                "type": "file",
+                "bom-ref": p.relative_to(ROOT).as_posix(),
+                "name": p.relative_to(ROOT).as_posix(),
+                "hashes": [{"alg": "SHA-256", "content": checksums(p)["SHA256"]}],
+            }
             for p in paths
         ],
     }

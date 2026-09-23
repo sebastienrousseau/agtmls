@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Create a redacted skill-evolution proposal from a session transcript."""
 from __future__ import annotations
-import argparse, hashlib, json, re, sys, time
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+import time
 from pathlib import Path
+
 ROOT=Path(__file__).resolve().parent.parent
 SECRET_PATTERNS=[re.compile(r"sk-[A-Za-z0-9_-]{12,}"), re.compile(r"(?i)(api[_-]?key|token|secret|password)\s*[:=]\s*\S+")]
 def slug(v:str)->str:

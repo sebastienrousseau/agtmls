@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
 set -euo pipefail
 cd "$(dirname "$0")"
 bin="$(mktemp -u)"; trap 'rm -f "$bin"' EXIT

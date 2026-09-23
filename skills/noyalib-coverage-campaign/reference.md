@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
+<!-- SPDX-License-Identifier: MIT -->
+
 > Reference material complementing `SKILL.md` in this directory
 > (`noyalib-coverage-campaign`).
 > Split extracted 2026-07-08. Load this file only when the compact

@@ -1,0 +1,33 @@
+{
+  "cold_paths": [
+    "pairwise"
+  ],
+  "environment": {
+    "machine": "arm64",
+    "platform": "macOS-26.7-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.12.14"
+  },
+  "generated_at": "2026-09-22T14:43:59Z",
+  "generated_by": "scripts/bench.py --scaling",
+  "growth": {
+    "digest": 7.02,
+    "pairwise": 110.62,
+    "size": 10.0
+  },
+  "rows": [
+    {
+      "digest_ms": 29.69,
+      "factor": 1,
+      "pairwise_ms": 1.89,
+      "skills": 31
+    },
+    {
+      "digest_ms": 208.49,
+      "factor": 10,
+      "pairwise_ms": 209.07,
+      "skills": 310
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Optional live API smoke tests for provider backends.
 
 The script exits successfully when no provider credentials are configured. When a
@@ -37,7 +39,6 @@ def bearer(token: str) -> dict[str, str]:
 def probes() -> list[Probe]:
     openai = os.environ.get("OPENAI_API_KEY", "")
     anthropic = os.environ.get("ANTHROPIC_API_KEY", "")
-    gemini = os.environ.get("GEMINI_API_KEY", "")
     mistral = os.environ.get("MISTRAL_API_KEY", "")
     deepseek = os.environ.get("DEEPSEEK_API_KEY", "")
     qwen = os.environ.get("QWEN_API_KEY", "")

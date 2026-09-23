@@ -5,7 +5,6 @@ license: MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:
-  agtmls-version: "0.0.6"
   agtmls-owner: "Sebastien Rousseau"
   agtmls-maturity: "project"
   agtmls-bundle: "noyalib"

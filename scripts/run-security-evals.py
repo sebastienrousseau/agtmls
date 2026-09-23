@@ -48,7 +48,7 @@ def materialise(case: dict, root: Path) -> Path:
 def audit(target: Path) -> list[dict]:
     proc = subprocess.run(
         [sys.executable, str(AUDIT), str(target), "--strict", "--format", "json"],
-        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        cwd=ROOT, text=True, capture_output=True, check=False,
     )
     try:
         return json.loads(proc.stdout)["findings"]

@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -14,7 +15,7 @@ MAN_FILE = ROOT / "share" / "man" / "man1" / "agtmls.1"
 
 MANPAGE_TEMPLATE = """.\\" SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 .\\" SPDX-License-Identifier: Apache-2.0 OR MIT
-.TH AGTMLS 1 "March 2026" "agtmls 0.0.6" "User Commands"
+.TH AGTMLS 1 "March 2026" "agtmls {version}" "User Commands"
 .SH NAME
 agtmls \\- The universal agent skills registry
 .SH SYNOPSIS
@@ -62,6 +63,19 @@ Apache-2.0 OR MIT
 """
 
 
+def rendered() -> str:
+    """The manpage, with the version read from the one file that declares it.
+
+    It was written into the template by hand, so `bump-version.py` had to
+    patch this script's source to keep the manpage honest -- one more place
+    the version could disagree with itself.
+    """
+    version = json.loads(
+        (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
+    )["version"]
+    return MANPAGE_TEMPLATE.format(version=version)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true", help="write manpage to share/man/man1/agtmls.1")
@@ -70,12 +84,12 @@ def main() -> int:
 
     if args.write:
         MAN_FILE.parent.mkdir(parents=True, exist_ok=True)
-        MAN_FILE.write_text(MANPAGE_TEMPLATE, encoding="utf-8")
+        MAN_FILE.write_text(rendered(), encoding="utf-8")
         print(f"wrote {MAN_FILE.relative_to(ROOT)}")
         return 0
 
     if args.check:
-        if not MAN_FILE.exists() or MAN_FILE.read_text(encoding="utf-8") != MANPAGE_TEMPLATE:
+        if not MAN_FILE.exists() or MAN_FILE.read_text(encoding="utf-8") != rendered():
             print(f"FAIL: stale manpage at {MAN_FILE.relative_to(ROOT)} (run generate-manpage.py --write)", file=sys.stderr)
             return 1
         print("OK: manpage is current")

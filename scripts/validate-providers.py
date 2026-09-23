@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate provider compatibility metadata."""
 
 from __future__ import annotations
@@ -9,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PROVIDERS = ROOT / "providers.json"
-NATIVE = {"claude", "codex", "aider"}
+NATIVE = {"aider", "antigravity", "claude", "codex"}
 REQUIRED_EXPORTS = {"generic", "openai", "anthropic", "google-gemini", "mistral", "deepseek", "qwen", "ollama", "github-copilot", "cursor", "windsurf", "zed", "continue"}
 # Runtimes that consume a plugin manifest rather than a symlink install or
 # a Markdown export. Each entry's manifest_files must exist in the repo.

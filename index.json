@@ -67,8 +67,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:497e688ab14aab52254e9028ab478f11b1b4ae48a4d10930c57c977542d2f28b",
+      "integrity": "sha256:bfce0ad704c8ce7c3c068b5c262a720395126119f3fd74aeb2fba5d0caee3921",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/agent-loop-design/metadata.json",
@@ -112,8 +113,7 @@
         "loops",
         "review",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -130,8 +130,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:d0ede16b27e7479ce90178cf3ae84ec6de5967c2f49c92bf90fdbd1021a241c1",
+      "integrity": "sha256:667559db2062f1355d5f0331c0bba64abbe79b0fba2863885384c887acdf2231",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/ai-supply-chain-security/metadata.json",
@@ -175,8 +176,7 @@
         "release",
         "security",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -194,8 +194,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:15a3802e12038c0912715d4b884ee5a05bc85afb71ed55e93b09766436e05946",
+      "integrity": "sha256:4442aee0348548d53916e9c4a17391664f3fe0c087ec6df40c0d73f3546a43bb",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/anti-slop-pr-and-writing/metadata.json",
@@ -239,8 +240,7 @@
         "docs",
         "release",
         "review"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -258,8 +258,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:633f0df00eacabf64f13f23af4f728bce347e787248c3732f297b5fff270e6ae",
+      "integrity": "sha256:5fcd619d2bdb070157f3b2b05c523a855f49af5233ac29abe72bb2793bdfef85",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/brainstorming/metadata.json",
@@ -303,8 +304,7 @@
         "ci",
         "config",
         "planning"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -325,8 +325,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:8a9bee28a846d03a01f8432a4b06d0679b40b3ee68c18a765a1f08a3ec511879",
+      "integrity": "sha256:d621fe3bfb6557d3729f185ecded769378e6d4cf99e71c3800cac6f557c98245",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/cross-language-port/metadata.json",
@@ -371,8 +372,7 @@
       ],
       "tags": [
         "porting"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -390,8 +390,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:d2ad656d17e6a98fd23a46f71d208f29d309844b2a134dc4b5f8a23b8392a589",
+      "integrity": "sha256:fd11957025cd00137da1569b6b2ccd11e4fb6b07273ac0a7822898ca618bf6b1",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/giving-code-review/metadata.json",
@@ -434,8 +435,7 @@
       "tags": [
         "ci",
         "review"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -453,8 +453,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:75ba2ba12732f2bd4dfe2d385bb6c52868308cbd2ad9f49b23973a93e81ef2d0",
+      "integrity": "sha256:492069fd453591bb2659f7675e7d256d789b9fe6edb18363082371772badcaba",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/handoff/metadata.json",
@@ -497,8 +498,7 @@
       "tags": [
         "continuity",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -517,8 +517,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:3104e3262b18270600928b682eacc17cd78e55f0cbf7eea9a3eb7077eeaf7ece",
+      "integrity": "sha256:0817ffd098efd771d101fd7e879237f015de2f77e7fbf5c07871d4da332f80ed",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/incident-response/metadata.json",
@@ -562,8 +563,7 @@
         "ci",
         "debugging",
         "incident"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -584,8 +584,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:331cca8bbb1c2e3ea798e03b7849795cb20094a43f053742622422c0089082be",
+      "integrity": "sha256:2419d86c092da0bac84db62979cd5eae51428845a89585ff92bf977993bcd335",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-architecture-contract/metadata.json",
@@ -633,8 +634,7 @@
         "ci",
         "incident",
         "noyalib"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -655,8 +655,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:fdf72d06bbb605e942f182e018f917163c1155da26c3b3f083672e78c4d0732b",
+      "integrity": "sha256:bcc5d36ac1a4fd43e1bffd902beb986fe62348b8e9bc4c871a4e1a78be18b33d",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-build-and-env/metadata.json",
@@ -704,8 +705,7 @@
         "diagnostics",
         "noyalib",
         "qa"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -726,8 +726,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:94754f1a369323185ec5fc765584efdadaded3d2cb2f5d3ec8c0a288710efa7c",
+      "integrity": "sha256:8aa3999e81c6e3d1a4962eb5b2642be87b323db35a6c154554b88b263852910b",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-change-control/metadata.json",
@@ -775,8 +776,7 @@
         "noyalib",
         "release",
         "security"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -797,8 +797,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:c30d051d58a8915fdbc33ec99abdfdb8eeaff838853b3bd78aad13db0e196e3c",
+      "integrity": "sha256:04b2fb128fd56fc4a3707a22c3c588154f777fa1d2adaa2c1228376f30a6615e",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-ci-and-release/metadata.json",
@@ -845,8 +846,7 @@
         "ci",
         "noyalib",
         "release"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -867,8 +867,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:a9557e1197986596f41a7f2e659495539c19426fa2d6a4ec362c32f1e0f8d394",
+      "integrity": "sha256:fd04e90b1a1e5395a42334edc58c93a820ff252bb4a20c3165e4380859eb1500",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-config-and-flags/metadata.json",
@@ -914,8 +915,7 @@
       "tags": [
         "config",
         "noyalib"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -936,8 +936,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:a5315e2353d80bb8efe4dbe4c398096b1700feb193fad9711935546ffafac84f",
+      "integrity": "sha256:c577909c0cde086c36fcfc81dc89628606a16c17ab5de76cc40ef6edc22eda31",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-coverage-campaign/metadata.json",
@@ -984,8 +985,7 @@
         "coverage",
         "debugging",
         "noyalib"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1006,8 +1006,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:983d55e43dbf562aff6c5b2d3b39d90dde2e874d8ea0a5b35c2f990ea2cb5c6c",
+      "integrity": "sha256:c92cd14b9164d3c0077f4cdc4c54f52f00739d93e8986a72657db49f40362fde",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-debugging-playbook/metadata.json",
@@ -1055,8 +1056,7 @@
         "debugging",
         "noyalib",
         "qa"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1077,8 +1077,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:dad2e15336c981511074f716696991dd7ab622318bde1aa5d7f79757d0fbe2bd",
+      "integrity": "sha256:c98216382972cbb57ea56495dfdf68c1c1763a3e7d3157be17dc3eeb7f9f1305",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-diagnostics-and-tooling/metadata.json",
@@ -1126,8 +1127,7 @@
         "diagnostics",
         "noyalib",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1148,8 +1148,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:bc5d2b499bd6a8550b251610c5fe20f8013caa5f131b300c22666337a5ae86d3",
+      "integrity": "sha256:5ebafa2d39665818557186087bf2c5c7c956e70828231b6b38b03fd9f21b9f6d",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-docs-and-writing/metadata.json",
@@ -1199,8 +1200,7 @@
         "noyalib",
         "qa",
         "release"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1221,8 +1221,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:aa0bf3e063445bb8c238cc35b188a741d233502583040b110fdbcf5c075ac188",
+      "integrity": "sha256:1735eb9ac0be4b1a9c6d8988102d2e8a3888b384009ca65705835d727bb72aae",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-external-positioning/metadata.json",
@@ -1271,8 +1272,7 @@
         "release",
         "review",
         "yaml"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1293,8 +1293,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:abdaa7a52e02ec7cbaf7282161a3bec46fe6b980a14e6222d29ece2e0cdb4453",
+      "integrity": "sha256:82ed47f2057b2f941a9c57e2a75266caef1b8af538941cb9d89577c03707c4a1",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-failure-archaeology/metadata.json",
@@ -1343,8 +1344,7 @@
         "noyalib",
         "refactoring",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1365,8 +1365,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:9f1fdfdf591a54785e4f95b21de9731a9d66765732c91d20c5f50d736465b2e7",
+      "integrity": "sha256:28cd4b69ce5f60c7b3de21b88f58e4114cd1d56c1268e31b5646f2f2bd2a6179",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-research-frontier/metadata.json",
@@ -1413,8 +1414,7 @@
         "noyalib",
         "research",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1435,8 +1435,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:6784ba823f3866f9ce5259d258f71c88e4c6e51cf4d9232865ac4d9857815491",
+      "integrity": "sha256:e050ab2f4d116d848906d818552a63d0a5a7ee6ebf1d93e815d3905326f9d447",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/noyalib-validation-and-qa/metadata.json",
@@ -1484,8 +1485,7 @@
         "noyalib",
         "qa",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1504,8 +1504,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:16b1734828bc18823b8bc5ed2c2fee8cdfad4cadeb51e0d280c3a9f0d99032f3",
+      "integrity": "sha256:2298f158338ee0b18a1320872b1c24ee7823a75d8a9ffe88f74c893f60554123",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/pr-review-and-release/metadata.json",
@@ -1551,8 +1552,7 @@
         "engineering",
         "release",
         "review"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1571,8 +1571,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:f1216195faa2deb6eace7468755b1ce330ed6b005de6a48b4ff9c1cc4f7bd2e6",
+      "integrity": "sha256:7a1b6e69f9a787dd7a9113e7036f87f2c5b2c4d65cd5e81431d5bd113f94b6ba",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/receiving-code-review/metadata.json",
@@ -1615,8 +1616,7 @@
       "tags": [
         "ci",
         "review"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1635,8 +1635,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:9f3659bd45194463831d095ded85a4995202c6744d5373e37546fec6ae6e1574",
+      "integrity": "sha256:81d0c49e0f2d926ea76aa1ed2e5b7e831cc46145bb0602110ae52f93bc8326a4",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/refactoring-safely/metadata.json",
@@ -1678,8 +1679,7 @@
       ],
       "tags": [
         "refactoring"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1698,8 +1698,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:924496a7d278ac778dc5d56042cc89253fcb4334a86aab63dda1d5d9fb8b54ee",
+      "integrity": "sha256:efc2bc1ff23a6e6d843c024e2dbb28ff5279ba37fed604eb25ec7d516f6480be",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/systematic-debugging/metadata.json",
@@ -1744,8 +1745,7 @@
       "tags": [
         "debugging",
         "qa"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1764,8 +1764,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:cbc82c78abdce770a54b43745bc9903b86b99a08831c9c3c3691efb45589fb7f",
+      "integrity": "sha256:79516d2c4f5a5cd74e71fead3341b83e5fb040c89a35d3bba96e2b0d24a75e38",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/test-driven-development/metadata.json",
@@ -1810,8 +1811,7 @@
       "tags": [
         "qa",
         "refactoring"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1827,8 +1827,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:a6521d68a8db34a6d1032cf8ef35c2210d68d957c2af72b266a3f2f929fa1ea1",
+      "integrity": "sha256:2f58b86ed07a19afb90339abb9c270fe3e32d89dc6440a5b7d05f13c0226be96",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/using-agtmls/metadata.json",
@@ -1872,8 +1873,7 @@
         "noyalib",
         "porting",
         "routing"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1890,8 +1890,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:d71442fbf2f044cbbf0b44f150bda37d35fb057b992378ac944e3e3e5c95373a",
+      "integrity": "sha256:21cdf9977673765d4566ce5aefab27ea51370f704e7cdc5a25e272f2f2b7e4be",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/verification-before-completion/metadata.json",
@@ -1935,8 +1936,7 @@
         "porting",
         "qa",
         "validation"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -1954,8 +1954,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:d0b3623a5cf2be3cacb1d650c4c8c9adfa0e4f6d0043b6ed79c4908c2411a897",
+      "integrity": "sha256:403d6ed475099784c1dcc8bb352e68e1be7383cd071637a83852d6a0bd35b640",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/web-research-and-source-triage/metadata.json",
@@ -2002,8 +2003,7 @@
         "research",
         "validation",
         "web-reach"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -2021,8 +2021,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:1e90f630c6844631253eba8424ce0440d75067ca9a354a0c2853f782db1edcef",
+      "integrity": "sha256:e25a2fd213836da9ee8efe9c713a13f83b66bd2f1da55445ade508eb61ee92ff",
       "kind": "general",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "hardened",
       "metadata_path": "skills/writing-plans/metadata.json",
@@ -2067,8 +2068,7 @@
         "docs",
         "planning",
         "review"
-      ],
-      "version": "0.0.6"
+      ]
     },
     {
       "allowed_tools": [
@@ -2089,8 +2089,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:c8de099fee0afad02a91645c4c4db0925f09a4561121d6ea0d88d52e049d3c6f",
+      "integrity": "sha256:8551c9e493cec9e71b7e6223b1f648afdfd4389f956bd6d9bf1643beef2aca3a",
       "kind": "project",
+      "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
       "metadata_path": "skills/yaml-domain-reference/metadata.json",
@@ -2137,8 +2138,7 @@
         "config",
         "noyalib",
         "yaml"
-      ],
-      "version": "0.0.6"
+      ]
     }
   ]
 }

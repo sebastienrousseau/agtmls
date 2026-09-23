@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: bench
+
+# Deliberately not part of validate.yml. The regression check compares timing
+# ratios, and running it on ten matrix legs of shared runners would report
+# noise as regressions until people learned to ignore it. One job, one runner,
+# no matrix.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      record:
+        description: "Re-record bench-baseline.ci.json on this runner instead of checking"
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      # Ratios recorded on the maintainer's laptop did not transfer to this
+      # runner: the first CI run flagged every workload at +37-64% with
+      # nothing changed. CI is held to a baseline recorded here, on the runner.
+      - name: Record the CI baseline
+        if: inputs.record
+        run: python3 scripts/bench.py --write-baseline --baseline bench-baseline.ci.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: inputs.record
+        with:
+          name: bench-baseline-ci
+          path: bench-baseline.ci.json
+          retention-days: 30
+      - name: Regression check
+        if: ${{ !inputs.record }}
+        run: python3 scripts/bench.py --check --baseline bench-baseline.ci.json
+      - name: Scaling at 10x registry size
+        if: ${{ !inputs.record }}
+        run: python3 scripts/bench.py --scaling
+      - name: The check must not dirty the tree
+        if: ${{ !inputs.record }}
+        # --check writes its record to .agtmls/, which is ignored. If a run
+        # ever modifies a committed file, the baseline has become a thing CI
+        # rewrites rather than a contract it is held to.
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: bench-records
+          path: .agtmls/runs/
+          retention-days: 30

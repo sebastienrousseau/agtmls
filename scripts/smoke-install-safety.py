@@ -15,7 +15,6 @@ Every case below is a property the installer must hold for any consumer repo.
 from __future__ import annotations
 
 import filecmp
-import shutil
 import subprocess
 import sys
 import tempfile

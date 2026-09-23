@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate optional skill metadata.json files."""
 
 from __future__ import annotations
@@ -19,15 +21,6 @@ RISK_LEVELS = {"low", "medium", "high"}
 SAFETY_BOOLEANS = ["writes_files", "executes_commands", "handles_secrets", "requires_human_review"]
 
 
-def metadata_for(skill_dir: Path) -> tuple[Path | None, dict[str, object]]:
-    """The skill's own metadata.json. The tree is flat, so there is no bundle
-    directory to inherit from — every skill owns its file."""
-    direct = skill_dir / "metadata.json"
-    if direct.exists():
-        return direct, json.loads(direct.read_text(encoding="utf-8"))
-    return None, {}
-
-
 def main() -> int:
     errors: list[str] = []
     metadata_files = sorted(SKILLS_DIR.glob("*/metadata.json"))
@@ -37,8 +30,12 @@ def main() -> int:
         except json.JSONDecodeError as exc:
             errors.append(f"{mf.relative_to(ROOT)}: invalid JSON: {exc}")
             continue
-        if not SEMVER.match(str(data.get("version", ""))):
-            errors.append(f"{mf.relative_to(ROOT)}: version must be semver X.Y.Z")
+        if "version" in data:
+            errors.append(
+                f"{mf.relative_to(ROOT)}: must not carry a version; a skill is "
+                "identified by its digest, and index.json records the release "
+                "that last moved it"
+            )
         if not data.get("owner"):
             errors.append(f"{mf.relative_to(ROOT)}: missing owner")
         # Bundle membership is a field, not a parent directory: the skill
@@ -71,12 +68,12 @@ def main() -> int:
             if policy.get("risk_level") == "high" and not policy.get("requires_human_review"):
                 errors.append(f"{mf.relative_to(ROOT)}: high-risk skills must require human review")
 
+    # Every skill owns its metadata.json: the tree is flat, so there is no
+    # bundle directory to inherit one from. Its contents were judged above;
+    # parsing it again here crashed on the malformed file just reported.
     for skill_md in sorted(SKILLS_DIR.glob("*/SKILL.md")):
-        meta_path, data = metadata_for(skill_md.parent)
-        if not data:
+        if not (skill_md.parent / "metadata.json").is_file():
             errors.append(f"{skill_md.parent.relative_to(ROOT)}: no metadata.json")
-        elif meta_path is not None and not meta_path.exists():
-            errors.append(f"{skill_md.parent.relative_to(ROOT)}: metadata path disappeared")
 
     if errors:
         for error in errors:
