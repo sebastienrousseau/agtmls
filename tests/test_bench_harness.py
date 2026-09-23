@@ -269,12 +269,46 @@ class BenchMainTests(unittest.TestCase):
         }}), encoding="utf-8")
 
     def test_modes_dispatch_to_their_own_handler(self) -> None:
-        for flag, handler in (("--smoke", "smoke"), ("--scaling", "scaling"),
-                              ("--redeclare", "redeclare")):
+        for flag, handler in (("--smoke", "smoke"), ("--scaling", "scaling")):
             with mock.patch.object(self.mod, handler, return_value=7) as called:
                 self.assertEqual(run_main(self.mod, flag)[0], 7, flag)
             called.assert_called_once_with()
+        with mock.patch.object(self.mod, "redeclare", return_value=7) as called:
+            self.assertEqual(run_main(self.mod, "--redeclare")[0], 7)
+        called.assert_called_once_with(self.mod.BASELINE)
         self.assertEqual(self.runs, [], "a dispatched mode must not measure")
+
+    def test_check_can_be_held_to_another_machines_baseline(self) -> None:
+        """Ratios recorded on a laptop did not transfer to a CI runner: the
+        first CI run flagged every workload at +37-64% with nothing changed.
+        CI keeps its own baseline, recorded on the runner."""
+        ci = self.root / "bench-baseline.ci.json"
+        ci.write_text(json.dumps({"workloads": {"w": {"ratio_to_calibration": 4.8, "spread_cv": 0.0}}}),
+                      encoding="utf-8")
+        self.baseline(w=3.0)
+        code, out = self.drive([suite_report(w=entry(4.8))], "--check", "--check-repeats", "1",
+                               "--baseline", str(ci))
+        self.assertEqual(code, 0, out)
+        code, out = self.drive([suite_report(w=entry(4.8))], "--check", "--check-repeats", "1")
+        self.assertEqual(code, 1, "the laptop baseline still judges a laptop-shaped run")
+
+    def test_a_missing_named_baseline_is_named(self) -> None:
+        code, out = self.drive([suite_report(w=entry(2.0))], "--check", "--check-repeats", "1",
+                               "--baseline", str(self.root / "bench-baseline.ci.json"))
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: no bench-baseline.ci.json; run bench.py --write-baseline", out)
+
+    def test_recording_another_baseline_leaves_the_published_results_alone(self) -> None:
+        """benchmarks/results/ and BENCHMARKS.md describe the recorded
+        machine; a CI baseline is a gate reference, not a publication."""
+        ci = self.root / "bench-baseline.ci.json"
+        code, out = self.drive([suite_report(w=entry(2.0))], "--write-baseline", "--repeats", "1",
+                               "--baseline", str(ci))
+        self.assertEqual(code, 0, out)
+        self.assertIn("wrote bench-baseline.ci.json", out)
+        self.assertEqual(json.loads(ci.read_text(encoding="utf-8"))["workloads"]["w"]["ratio_to_calibration"], 2.0)
+        self.assertFalse(self.mod.BASELINE.exists())
+        self.assertFalse(self.mod.RESULTS.exists())
 
     def test_a_plain_run_measures_once_and_writes_only_local_history(self) -> None:
         """A run in CI must not dirty the tree, so neither the baseline nor

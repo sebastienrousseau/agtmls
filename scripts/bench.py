@@ -288,7 +288,7 @@ def as_baseline(reports: list[dict[str, object]]) -> dict[str, object]:
     }
 
 
-def redeclare() -> int:
+def redeclare(path: Path | None = None) -> int:
     """Refresh what the baseline *declares*, leaving what it *measured* alone.
 
     Which workloads are interactive, and how much regression each is allowed,
@@ -300,10 +300,11 @@ def redeclare() -> int:
 
     So this rewrites the derived fields and refuses to touch the numbers.
     """
-    if not BASELINE.exists():
-        print(f"FAIL: no {BASELINE.name}; run bench.py --write-baseline")
+    path = path or BASELINE
+    if not path.exists():
+        print(f"FAIL: no {path.name}; run bench.py --write-baseline")
         return 1
-    data = json.loads(BASELINE.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
     known = set(workloads())
     recorded = set(data.get("workloads", {}))
     if recorded != known:
@@ -322,8 +323,8 @@ def redeclare() -> int:
     data["noise_sigmas"] = NOISE_SIGMAS
     data["regression_threshold_floor"] = REGRESSION_THRESHOLD
     data["cold_start_budget_ms"] = COLD_START_BUDGET_MS
-    BASELINE.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(f"OK: refreshed {len(changed)} declaration(s) in {BASELINE.name}; "
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"OK: refreshed {len(changed)} declaration(s) in {path.name}; "
           "no measurement was altered")
     return 0
 
@@ -373,14 +374,20 @@ def main() -> int:
         help=f"full suite runs behind a --check verdict (default: {CHECK_REPEATS})",
     )
     parser.add_argument("--json", action="store_true", help="emit the run record instead of a table")
+    parser.add_argument(
+        "--baseline", type=Path, default=None,
+        help="baseline to check against or record (default: bench-baseline.json). Ratios "
+             "do not transfer between machines, so CI keeps its own, recorded on the runner",
+    )
     args = parser.parse_args()
+    baseline_path = args.baseline or BASELINE
 
     if args.smoke:
         return smoke()
     if args.scaling:
         return scaling()
     if args.redeclare:
-        return redeclare()
+        return redeclare(baseline_path)
 
     if args.write_baseline:
         # One run cannot observe its own run-to-run spread, and the spread is
@@ -392,9 +399,14 @@ def main() -> int:
         report = reports[-1]
         print()
         print_table(report)
-        BASELINE.write_text(
+        baseline_path.write_text(
             json.dumps(as_baseline(reports), indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
+        if baseline_path != BASELINE:
+            # Another machine's baseline is a gate reference, not the
+            # published measurement BENCHMARKS.md is generated from.
+            print(f"\nwrote {baseline_path.name}")
+            return 0
         RESULTS.mkdir(parents=True, exist_ok=True)
         (RESULTS / "latency.json").write_text(
             json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -449,10 +461,10 @@ def main() -> int:
     if not args.check:
         return 0
 
-    if not BASELINE.exists():
-        print(f"\nFAIL: no {BASELINE.name}; run bench.py --write-baseline")
+    if not baseline_path.exists():
+        print(f"\nFAIL: no {baseline_path.name}; run bench.py --write-baseline")
         return 1
-    baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     problems = regressions(report, baseline) + budget_failures(report)
 
     if problems:

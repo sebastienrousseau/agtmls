@@ -83,6 +83,15 @@ Verified in both directions on the recorded machine: a clean tree passes with
 all eight workloads inside 20%, and a 10ms sleep injected into `cli-list`
 fails with exactly one finding (`+37%`) and no false positives.
 
+**Ratios do not transfer between machines.** The ratio to calibration was
+meant to make a baseline portable; it does not travel from a laptop to a CI
+runner. The first CI run of `--check` against the laptop baseline flagged
+every workload at +37–64% with nothing changed, while the same check passed
+on the laptop. CI therefore runs `--check --baseline bench-baseline.ci.json`,
+recorded on the runner itself by dispatching the `bench` workflow with
+`record: true`. The laptop baseline, and everything in this document, stays
+the published measurement.
+
 **What this still does not survive: a thermally saturated machine.** Running
 `--check` immediately after several back-to-back suite runs reported every
 workload 47–106% slower, with nothing changed. Under sustained throttling the
