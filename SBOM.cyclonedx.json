@@ -1161,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "44b91b3b2f1a406c1748276f2848be70a6aab35e52de78efa11f0578d0d57b20"
+          "content": "8b6e74cddbbe46ac5f2e14104d2965a953ed2e0ba2cb273fd14b01d5ebae14f3"
         }
       ],
       "name": "scripts/export-registry.py",
@@ -3925,7 +3925,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:24:03Z",
+    "timestamp": "2026-09-23T07:25:55Z",
     "tools": {
       "components": [
         {
