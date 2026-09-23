@@ -853,10 +853,21 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c977eb48440a49fd6e5369ce67f8c9aeddd26faf3be2e6eb5c0082b6cac17606"
+          "content": "bd831824c787935d56c378efe57e0252ac1aaf2a62e75ac54fa9377c982252c8"
         }
       ],
       "name": "evals/security/corpus.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/security/floor.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "726dc091da9f14f5c6f3c1b91cc58cbd812d5910c08e99239a494d462b5fbb36"
+        }
+      ],
+      "name": "evals/security/floor.json",
       "type": "file"
     },
     {
@@ -897,7 +908,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1bf837d9b6e83fb01800230d7b2a7a51debda23d05a141e6a41adb3e35cd3739"
+          "content": "df293e985e2af9e3aee0aee92b3967d9e02c086e00c491f20f79ea3e08a114bc"
         }
       ],
       "name": "providers.json",
@@ -963,7 +974,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a5146f0b44f773c0f5b9010ae43986c8ea44ce62dec9ff8d6581b985c82fe922"
+          "content": "900ef5ee458e0c4b36fe6530fe45f99600f54eec3205cb8e048dce53b736ee3e"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -1480,7 +1491,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4e01e065bc80f81fa673f24b057d6d477161df59ea1dc4e8a951f7c4f620602d"
+          "content": "91dbe96eb7b8953346328d80e5ff6f4d936a46c7ca5ebfa2c45a13d4998f0ae2"
         }
       ],
       "name": "scripts/run-security-evals.py",
@@ -1920,7 +1931,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7800020218fa58fc154647e9b355bc315615e447cad0885114168d9f7c39ce0d"
+          "content": "5a3a2f95ac146fcd2c7650ef016720ca5715c2969b4b89c99891147edc1ba6e4"
         }
       ],
       "name": "scripts/validate-providers.py",
@@ -4002,7 +4013,7 @@
       "type": "application",
       "version": "0.0.7"
     },
-    "timestamp": "2026-09-23T17:24:43Z",
+    "timestamp": "2026-09-23T21:09:34Z",
     "tools": {
       "components": [
         {

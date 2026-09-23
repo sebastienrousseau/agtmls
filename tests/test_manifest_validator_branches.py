@@ -193,6 +193,20 @@ class ProviderBranchTests(BrokenTreeCase):
         )
         self.assert_fails(self.SCRIPT, "FAIL: native agent claude install_mode must be symlink")
 
+    def test_a_native_agent_must_say_what_allowed_tools_means_to_it(self) -> None:
+        """Claude Code pre-approves the field; the Agent Skills spec makes it a
+        declaration. AGT-CAP-001 reports escalation per target from this."""
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].pop("allowed_tools_semantics"))
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude missing allowed_tools_semantics")
+        self.edit_json(
+            self.FILE,
+            lambda data: data["native_agents"]["claude"].__setitem__("allowed_tools_semantics", "maybe"),
+        )
+        self.assert_fails(
+            self.SCRIPT,
+            "FAIL: native agent claude allowed_tools_semantics must be grant, declaration or ignored",
+        )
+
     def test_plugin_targets_that_are_not_an_object_are_refused(self) -> None:
         """Treated as empty afterwards, so every required target is then missing."""
         self.edit_json(self.FILE, lambda data: data.__setitem__("plugin_targets", []))
