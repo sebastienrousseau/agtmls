@@ -28,6 +28,12 @@ All notable changes to AgtMLS are recorded here.
   branches (`run-coverage.py --scope unit`, run in CI); it stands at 100%.
 - SECURITY.md separates boundaries (digests, install verification, the
   lockfile, signed tags) from heuristics (the analyzer, policy checks, evals).
+- `scripts/release-preflight.py` refuses to let a release tag be pushed unless
+  it is signed by a key in `KEYS.asc`, titled `AgtMLS v<version>`, on the
+  intended commit, matched by every packaged version, and accompanied by notes
+  with a summary and checksums. `scripts/release-audit.py` reads a published
+  release back from the tag, the GitHub release and PyPI. RELEASE.md describes
+  the flow.
 
 ### Changed
 
