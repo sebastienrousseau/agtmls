@@ -132,11 +132,6 @@ class BumpVersionTests(ReleaseFixtureBase):
 class VersionPolicyGateTests(ReleaseFixtureBase):
     """The sequencing rule, driven end to end rather than through its helper."""
 
-    def policy(self, released: list[tuple[int, int, int]]):
-        module = self.script("validate-version-policy.py")
-        module.released_versions = lambda: released
-        return module
-
     def test_a_tree_at_the_next_allowed_version_passes(self) -> None:
         module = self.script("validate-version-policy.py")
         code, output = run_main(module)

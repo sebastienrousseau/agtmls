@@ -83,7 +83,6 @@ def main() -> int:
     errors: list[str] = []
     plugin = read_json(ROOT / ".claude-plugin" / "plugin.json")
     current = str(plugin.get("version", ""))
-    parsed = parse_version(current)
     errors.extend(sequencing_errors(current, []))
 
     for path in METADATA_FILES:
