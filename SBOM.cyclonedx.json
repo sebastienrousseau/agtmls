@@ -1359,10 +1359,21 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6e85ab49a8e739765cf21c1fd4dcdb79992918405ee77a42363e77fbd11fee6c"
+          "content": "1e433c7675d00858c051fbc0f328f077e60eb53086e8846cd598790f68554cc5"
         }
       ],
       "name": "scripts/release-audit.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/release-body.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "92317a95d9b38ff0917f48c5f23184c1c5f9febe52d1801ad42d5fc29daee7f4"
+        }
+      ],
+      "name": "scripts/release-body.py",
       "type": "file"
     },
     {
@@ -3958,7 +3969,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T08:33:42Z",
+    "timestamp": "2026-09-23T09:23:40Z",
     "tools": {
       "components": [
         {
