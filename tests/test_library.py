@@ -210,9 +210,12 @@ class CoveredPathTests(unittest.TestCase):
         """Provenance timestamped from its own materials never settles."""
         basis = set(covered.SOURCE_DIRS) | set(covered.SOURCE_FILES)
         for artifact in covered.GENERATED:
-            if artifact == "CATALOG.md":
-                continue  # generated, and shipped: covered by the SBOM, not the basis
             self.assertNotIn(artifact, basis, f"{artifact} is generated and in the basis")
+
+    def test_the_sbom_lists_the_generated_files_the_wheel_ships(self) -> None:
+        """Splitting the basis from the SBOM list must not drop shipped files."""
+        self.assertLessEqual({"index.json", "CATALOG.md"}, set(covered.SBOM_FILES))
+        self.assertLessEqual(set(covered.SOURCE_FILES), set(covered.SBOM_FILES))
 
     def test_every_source_path_exists(self) -> None:
         for name in covered.SOURCE_DIRS:
@@ -230,7 +233,9 @@ class CoveredPathTests(unittest.TestCase):
             for line in section.splitlines()
             if "=" in line and not line.strip().startswith("#")
         }
-        basis = set(covered.SOURCE_DIRS) | set(covered.SOURCE_FILES)
+        # A shipped generated file (index.json) is described by the SBOM, and
+        # its date follows the skills/ it is generated from.
+        basis = set(covered.SOURCE_DIRS) | set(covered.SBOM_FILES)
         for path in shipped:
             if path.startswith(".") or path.startswith("LICENSE"):
                 continue

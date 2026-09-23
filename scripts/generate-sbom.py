@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib.covered import (  # noqa: E402  (ROOT must be on the path first)
     SOURCE_DIRS as COVERED_DIRS,
-    SOURCE_FILES as COVERED_FILES,
+    SBOM_FILES as COVERED_FILES,
 )
 OUT_SPDX = ROOT / "SBOM.spdx.json"
 OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
