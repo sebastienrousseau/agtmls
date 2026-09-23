@@ -232,6 +232,13 @@ class VerifySumsTests(TreeCase):
         self.assertEqual(len(errors), 1, errors)
         self.assertTrue(errors[0].startswith(f"checksum mismatch for {artifact.name}"))
 
+    def test_a_blank_line_in_the_checksums_is_not_a_crash(self) -> None:
+        write_release(self.out, ["openai"])
+        sums = self.out / "SHA256SUMS"
+        sums.write_text("\n" + sums.read_text(encoding="utf-8") + "\nbroken\n", encoding="utf-8")
+        self.assertEqual(self.mod.verify_sums(self.out),
+                         ["SHA256SUMS line 4 is not '<sha256>  <file>': 'broken'"])
+
     def test_a_manifest_disagreeing_with_the_checksums_is_reported(self) -> None:
         write_release(self.out, ["openai", "generic"])
         manifest = self.out / "release-manifest.json"
@@ -446,7 +453,19 @@ class PublishedAssetTests(TreeCase):
         failures = self.failures(output)
         self.assertIn(f"SHA256SUMS mismatch for {name}", failures)
         self.assertIn(f"release-manifest checksum mismatch for {name}", failures)
-        self.assertIn(f"checksum mismatch for {name}", failures)
+        # Reported once per source, not a third time by the whole-file sweep,
+        # which exists for summed files the manifest does not list.
+        self.assertNotIn(f"checksum mismatch for {name}", failures)
+
+    def test_a_blank_or_malformed_checksum_line_is_reported_not_raised(self) -> None:
+        with (self.source / "SHA256SUMS").open("a", encoding="utf-8") as fh:
+            fh.write("\nnot a checksum line\n")
+        code, output, _ = self.verify("--tag", "v0.0.2")
+        self.assertEqual(code, 1)
+        self.assertEqual(self.failures(output), [
+            "SHA256SUMS line 4 is not '<sha256>  <file>': 'not a checksum line'",
+            "1 release asset issue(s)",
+        ])
 
     def test_an_artifact_that_is_not_a_tarball_is_reported(self) -> None:
         self.artifacts[0].write_bytes(b"<html>rate limited</html>")

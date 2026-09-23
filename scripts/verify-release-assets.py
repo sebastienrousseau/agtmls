@@ -10,10 +10,14 @@ import hashlib
 import json
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
 import urllib.request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
 
 REPO = "sebastienrousseau/agtmls"
 BASE_ASSETS = ["release-manifest.json", "SHA256SUMS"]
@@ -85,11 +89,10 @@ def main() -> int:
             print()
             print(f"FAIL: {len(missing)} release asset issue(s)")
             return 1
-        sums = {}
-        for line in (out_dir / "SHA256SUMS").read_text(encoding="utf-8").splitlines():
-            digest, name = line.split(maxsplit=1)
-            sums[name.strip()] = digest
+        sums, problems = parse_sums((out_dir / "SHA256SUMS").read_text(encoding="utf-8"))
+        errors.extend(problems)
         manifest = json.loads((out_dir / "release-manifest.json").read_text(encoding="utf-8"))
+        in_manifest = {item["file"] for item in manifest.get("artifacts", [])}
         for item in manifest.get("artifacts", []):
             name = item["file"]
             artifact = out_dir / name
@@ -111,7 +114,9 @@ def main() -> int:
                 if required not in names:
                     errors.append(f"{name} missing {required}")
         for name, expected in sums.items():
-            if name == "SHA256SUMS":
+            # Manifest artifacts were compared against both sources above;
+            # this sweep is for summed files the manifest does not list.
+            if name == "SHA256SUMS" or name in in_manifest:
                 continue
             path = out_dir / name
             if path.exists() and sha256(path) != expected:

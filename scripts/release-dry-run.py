@@ -14,6 +14,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
 
 
 def run(cmd: list[str]) -> int:
@@ -37,9 +39,10 @@ def verify_sums(out_dir: Path) -> list[str]:
         return ["SHA256SUMS missing"]
     if not manifest.exists():
         errors.append("release-manifest.json missing")
-    for line in sums.read_text(encoding="utf-8").splitlines():
-        expected, name = line.split(maxsplit=1)
-        artifact = out_dir / name.strip()
+    summed, problems = parse_sums(sums.read_text(encoding="utf-8"))
+    errors.extend(problems)
+    for name, expected in summed.items():
+        artifact = out_dir / name
         if not artifact.exists():
             errors.append(f"artifact listed in SHA256SUMS is missing: {name}")
             continue
@@ -49,8 +52,7 @@ def verify_sums(out_dir: Path) -> list[str]:
     if manifest.exists():
         data = json.loads(manifest.read_text(encoding="utf-8"))
         listed = {item["file"] for item in data.get("artifacts", [])}
-        summed = {line.split(maxsplit=1)[1].strip() for line in sums.read_text(encoding="utf-8").splitlines()}
-        if listed != summed:
+        if listed != set(summed):
             errors.append("release manifest artifact list does not match SHA256SUMS")
     return errors
 
