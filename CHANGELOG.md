@@ -22,6 +22,8 @@ All notable changes to AgtMLS are recorded here.
   sample committed under `benchmarks/results/`, a regression gate, and a
   scaling measurement at ten times the registry.
 - `smoke-offline.py` proves the local tier never opens a network socket.
+- CodeQL scans the Python and the workflows (`codeql.yml`, security-extended
+  queries), on every pull request, on main, and weekly.
 - CI lints `scripts/` and `tests/` with a pinned ruff (`conformance.yml`).
   `pyproject.toml` enables E402 and SLF001, the rules the code already
   carried reasoned `noqa` directives for; without them each directive was
