@@ -81,8 +81,10 @@ It proves the pipeline without putting anything on a registry.
 ### 4. Release
 
 ```bash
-git tag -s v0.0.7 -m "v0.0.7"
-git push origin v0.0.7
+git tag -s v<version> <commit> -m "AgtMLS v<version>"
+python3 scripts/release-preflight.py --tag v<version> --commit <commit> \
+    --notes docs/release-notes/v<version>.md --pending-checksums
+git push origin refs/tags/v<version>
 ```
 
 The tag is the trigger. Each workflow checks the tag against the version in the

@@ -33,6 +33,12 @@ TEXT_DEFAULT_FILES = [
     # validate-plugin-manifest.py fails if either drifts from plugin.json.
     ROOT / ".claude-plugin" / "marketplace.json",
 ]
+# CITATION.cff writes the version unquoted (`version: N.N.N`), so the
+# quoted-string replacement above cannot reach it; one release was bumped
+# with the citation left a version behind.
+YAML_VERSION_FILES = [
+    ROOT / "CITATION.cff",
+]
 GENERATORS = [
     ["sync-skill-frontmatter.py", "--write"],
     ["generate-plugin-manifests.py", "--write"],
@@ -40,6 +46,8 @@ GENERATORS = [
     ["generate-catalog.py", "--write"],
     ["generate-docs-site.py", "--write"],
     ["generate-mcp-resources.py", "--write"],
+    # Before the SBOM, which describes the manpage among the shipped files.
+    ["generate-manpage.py", "--write"],
     ["generate-sbom.py", "--write"],
     ["generate-provenance.py", "--write"],
 ]
@@ -70,6 +78,16 @@ def replace_text_default(path: Path, old: str, new: str) -> None:
     text = path.read_text(encoding="utf-8")
     text = text.replace(f'"{old}"', f'"{new}"')
     path.write_text(text, encoding="utf-8")
+
+
+def replace_yaml_version(path: Path, old: str, new: str) -> bool:
+    """Move an unquoted `version:` line; False, with a FAIL line, if there is none."""
+    text = path.read_text(encoding="utf-8")
+    if f"version: {old}\n" not in text:
+        print(f"FAIL: {path.relative_to(ROOT)} does not say `version: {old}`")
+        return False
+    path.write_text(text.replace(f"version: {old}\n", f"version: {new}\n"), encoding="utf-8")
+    return True
 
 
 def update_changelog(version: str, today: str) -> None:
@@ -119,6 +137,9 @@ def main() -> int:
         replace_json_version(path, target)
     for path in TEXT_DEFAULT_FILES:
         replace_text_default(path, old, target)
+    for path in YAML_VERSION_FILES:
+        if not replace_yaml_version(path, old, target):
+            return 1
     update_changelog(target, args.date)
     for item in GENERATORS:
         proc = run([sys.executable, str(ROOT / "scripts" / item[0]), *item[1:]])

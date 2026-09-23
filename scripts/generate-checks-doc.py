@@ -4,7 +4,7 @@
 """Render the check list in docs/checks.md from checks.json.
 
 docs/checks.md was a hand-kept copy of the gate, and nothing compared it with
-the manifest. By v0.0.7 it listed 47 of the 66 checks, in a different order,  check-count:historical
+the manifest. By the seventh release it listed 47 of the 66 checks, in a different order,  check-count:historical
 and named one invocation (`agtmls-doctor.py` without `--skip-gate`) the gate
 does not run. The list now lives between markers:
 

@@ -10,8 +10,8 @@ every packaged version at that commit is <version>, and that the prepared
 release notes carry a user-visible summary and the artifact checksums.
 Published tags are protected from deletion, so a wrong one is permanent.
 
-    python3 scripts/release-preflight.py --tag v0.0.7 --commit <sha> \\
-        --notes docs/release-notes/v0.0.7.md --sums dist/release/SHA256SUMS
+    python3 scripts/release-preflight.py --tag v<version> --commit <sha> \\
+        --notes docs/release-notes/v<version>.md --sums dist/release/SHA256SUMS
 
 Checksums exist only once the artifacts are built. `--pending-checksums`
 accepts a notes file whose Checksums section says `pending`, for a release
@@ -93,7 +93,7 @@ def check_notes(notes: Path, sums: Path | None, pending: bool) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--tag", required=True, help="e.g. v0.0.7")
+    parser.add_argument("--tag", required=True, help="the release tag, v<version>")
     parser.add_argument("--commit", required=True, help="the commit the tag must point at")
     parser.add_argument("--notes", type=Path, required=True, help="the prepared release notes")
     parser.add_argument("--sums", type=Path, help="SHA256SUMS of the built artifacts")

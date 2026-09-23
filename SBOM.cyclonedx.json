@@ -6,7 +6,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "199c9a147f88db778b7795c874d6d6622ecd93278995d173382500ff49a73f5c"
+          "content": "3e17aa4145fa8ad048c6020ec4e5cfdd91d2eee226c747eccd715443d585a2b9"
         }
       ],
       "name": "CATALOG.md",
@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "64910306fb5e73b57e0a3e4a4559a985be06b155759414c4700be5ae392735b1"
+          "content": "49e49820561edb4f676a9f2addabd9085946f0354bde4e1004ff5076f700b972"
         }
       ],
       "name": "checks.json",
@@ -864,7 +864,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1447c25a30676984a47c63bed69d241fb5cb0d1e5d2c53bc3a7796fb8df8fba0"
+          "content": "85261dbeff9f03947582e6fbf57929ca9775329bd9f4db42dacf1f5521efe0ef"
         }
       ],
       "name": "index.json",
@@ -1139,7 +1139,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7b0339c538018695885999070e026839ee20a00520ea1655dd5227bd636c17af"
+          "content": "76c7206588854876a8395cecce317f49b5cf6e07aceb5e7efc66278d3ed95c00"
         }
       ],
       "name": "scripts/bump-version.py",
@@ -1216,7 +1216,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "087d1ab24cf4bf402b67fc3d6422725d2a2a680d293ec9c41ae14c67367e6f42"
+          "content": "566a1fbb6be5e40a9568e079bc90a0dc602a0d288696af5774178606ab7bef84"
         }
       ],
       "name": "scripts/generate-checks-doc.py",
@@ -1392,7 +1392,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "92317a95d9b38ff0917f48c5f23184c1c5f9febe52d1801ad42d5fc29daee7f4"
+          "content": "9436ac0b7ca1c9e9122c170c6c7c95cb8ced2cc26d5917ab7004f76e77939bff"
         }
       ],
       "name": "scripts/release-body.py",
@@ -1436,7 +1436,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eda0e6bef812a4890861332aa0f3cbc046d8fa7893f3fabf615442a23fcd341b"
+          "content": "f8b5a130e59bea36cffca23b9e71f6a797df9c4ddf12c393013b6a449c994a76"
         }
       ],
       "name": "scripts/release-preflight.py",
@@ -3779,7 +3779,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "03abe1f815842d5577f40ef7f9a9a409e19bbbb0c8d7a878f411529c3cc96807"
+          "content": "1dbcbd4614879ea6520b63d9b703730aac4efcbb7f202ad72ae611566b4a9c5a"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -3991,24 +3991,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.6",
+      "bom-ref": "pkg:pypi/agtmls@0.0.7",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.6",
+      "purl": "pkg:pypi/agtmls@0.0.7",
       "type": "application",
-      "version": "0.0.6"
+      "version": "0.0.7"
     },
-    "timestamp": "2026-09-23T13:44:37Z",
+    "timestamp": "2026-09-23T16:04:37Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.6"
+          "version": "0.0.7"
         }
       ]
     }

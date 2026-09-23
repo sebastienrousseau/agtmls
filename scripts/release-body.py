@@ -10,7 +10,7 @@ replaced by the SHA256SUMS it just wrote. A release with no prepared notes
 fails here, rather than shipping the one-line default v0.0.1-v0.0.5 went out
 with.
 
-    python3 scripts/release-body.py --tag v0.0.7 --notes-dir docs/release-notes \\
+    python3 scripts/release-body.py --tag v<version> --notes-dir docs/release-notes \\
         --sums dist/release/SHA256SUMS --out body.md
 """
 
