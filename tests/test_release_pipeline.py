@@ -483,6 +483,18 @@ class PublishedAssetTests(TreeCase):
         self.assertEqual(self.failures(output)[0],
                          f"{self.artifacts[1].name} missing agtmls/ADAPTERS.md")
 
+    def test_a_summed_file_outside_the_manifest_that_matches_passes(self) -> None:
+        """The sweep reports mismatches, not every file it reads."""
+        import hashlib
+
+        notes = self.source / "NOTES.md"
+        notes.write_text("notes\n", encoding="utf-8")
+        digest = hashlib.sha256(notes.read_bytes()).hexdigest()
+        with (self.source / "SHA256SUMS").open("a", encoding="utf-8") as fh:
+            fh.write(f"{digest}  NOTES.md\n")
+        code, output, _ = self.verify("--tag", "v0.0.2")
+        self.assertEqual(code, 0, output)
+
     def test_every_summed_file_is_checked_not_only_manifest_ones(self) -> None:
         """A self-referencing SHA256SUMS line is skipped, not compared to itself."""
         (self.source / "NOTES.md").write_text("notes\n", encoding="utf-8")
