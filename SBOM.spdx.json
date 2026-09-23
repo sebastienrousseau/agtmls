@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-23T07:33:49Z",
+    "created": "2026-09-23T08:33:42Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1501,6 +1501,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-release-notes.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8ba041847a6ea3f6122b321dd6e5d423720382d7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "120934cd1b417b83661642a587686000b80da7760c5944001b1f68e27d05875e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/release_notes.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-rules.json",
       "checksums": [
         {
@@ -1965,6 +1981,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-release-audit.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "de7f3db0189df885f7386d770b8e06e79640eaf1"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6e85ab49a8e739765cf21c1fd4dcdb79992918405ee77a42363e77fbd11fee6c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/release-audit.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-release-check.py",
       "checksums": [
         {
@@ -2010,6 +2042,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/release-pack.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-release-preflight.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "31b9f9fdad1503cf235605ebdc027f0f45a626f0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eda0e6bef812a4890861332aa0f3cbc046d8fa7893f3fabf615442a23fcd341b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/release-preflight.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5801,6 +5849,7 @@
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
+        "SPDXRef-File-scripts--lib-release-notes.py",
         "SPDXRef-File-scripts--lib-rules.json",
         "SPDXRef-File-scripts--lib-rules.py",
         "SPDXRef-File-scripts--lib-scaling.py",
@@ -5830,9 +5879,11 @@
         "SPDXRef-File-scripts-provider-install.py",
         "SPDXRef-File-scripts-record-evidence.py",
         "SPDXRef-File-scripts-registry-diff.py",
+        "SPDXRef-File-scripts-release-audit.py",
         "SPDXRef-File-scripts-release-check.py",
         "SPDXRef-File-scripts-release-dry-run.py",
         "SPDXRef-File-scripts-release-pack.py",
+        "SPDXRef-File-scripts-release-preflight.py",
         "SPDXRef-File-scripts-run-all-checks.py",
         "SPDXRef-File-scripts-run-behavioral-evals.py",
         "SPDXRef-File-scripts-run-coverage.py",

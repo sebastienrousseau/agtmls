@@ -1025,6 +1025,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/release_notes.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "120934cd1b417b83661642a587686000b80da7760c5944001b1f68e27d05875e"
+        }
+      ],
+      "name": "scripts/_lib/release_notes.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/rules.json",
       "hashes": [
         {
@@ -1344,6 +1355,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/release-audit.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6e85ab49a8e739765cf21c1fd4dcdb79992918405ee77a42363e77fbd11fee6c"
+        }
+      ],
+      "name": "scripts/release-audit.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/release-check.py",
       "hashes": [
         {
@@ -1374,6 +1396,17 @@
         }
       ],
       "name": "scripts/release-pack.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/release-preflight.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eda0e6bef812a4890861332aa0f3cbc046d8fa7893f3fabf615442a23fcd341b"
+        }
+      ],
+      "name": "scripts/release-preflight.py",
       "type": "file"
     },
     {
@@ -3925,7 +3958,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:33:49Z",
+    "timestamp": "2026-09-23T08:33:42Z",
     "tools": {
       "components": [
         {
