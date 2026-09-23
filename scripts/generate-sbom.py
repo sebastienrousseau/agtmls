@@ -10,11 +10,11 @@ every SPDX validator. It also covered four directories while the wheel ships
 nine, so `agents/`, `evals/`, `references/`, `templates/` and `src/` had no
 coverage at all -- an SBOM that did not describe the artifact it accompanied.
 
-Determinism: `created` is the commit date of the most recent commit touching
-a covered path. That is stable between releases (so the `--check` gate does
-not fail on every unrelated commit) and moves exactly when the described
-content moves -- unlike the hardcoded epoch it replaces, which was
-deterministic by being false.
+Determinism: `created` is when the described content last changed, kept in
+the SBOM itself (see `_lib/stamp.py`). It moves exactly when the content
+moves -- unlike the hardcoded epoch before it, which was deterministic by
+being false, and unlike the commit date after that, which a squash merge
+moved without any content moving at all.
 """
 
 from __future__ import annotations
@@ -22,8 +22,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
-import subprocess
 import sys
 import uuid
 from pathlib import Path
@@ -31,10 +29,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from _lib import stamp  # noqa: E402  (ROOT must be on the path first)
 from _lib.covered import (
     SBOM_FILES as COVERED_FILES,
 )
-from _lib.covered import (  # noqa: E402  (ROOT must be on the path first)
+from _lib.covered import (
     SOURCE_DIRS as COVERED_DIRS,
 )
 
@@ -86,28 +85,6 @@ def covered_paths() -> list[Path]:
     return sorted(paths, key=lambda p: p.relative_to(ROOT).as_posix())
 
 
-def created_at(paths: list[Path]) -> str:
-    """Commit date of the newest commit touching a covered path."""
-    epoch = os.environ.get("SOURCE_DATE_EPOCH")
-    if epoch:
-        from datetime import datetime, timezone
-
-        return datetime.fromtimestamp(int(epoch), tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    try:
-        relative = sorted({p.relative_to(ROOT).parts[0] for p in paths})
-        proc = subprocess.run(
-            ["git", "log", "-1", "--format=%cd", "--date=format:%Y-%m-%dT%H:%M:%SZ", "--", *relative],
-            cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=False,
-        )
-        stamp = proc.stdout.strip()
-        if stamp:
-            return stamp
-    except OSError:
-        pass
-    # An sdist unpacked outside git has neither; say so rather than invent one.
-    return "1970-01-01T00:00:00Z"
-
-
 def version() -> str:
     plugin = ROOT / ".claude-plugin" / "plugin.json"
     return json.loads(plugin.read_text(encoding="utf-8"))["version"]
@@ -119,7 +96,7 @@ def spdx_id(relative: str) -> str:
     return f"SPDXRef-File-{safe}"
 
 
-def render_spdx(paths: list[Path]) -> dict:
+def render_spdx(paths: list[Path], created: str) -> dict:
     release = version()
     files = []
     for path in paths:
@@ -142,7 +119,7 @@ def render_spdx(paths: list[Path]) -> dict:
         "name": f"agtmls-{release}",
         "documentNamespace": f"{NAMESPACE_BASE}/{release}/{NAMESPACE_UUID}",
         "creationInfo": {
-            "created": created_at(paths),
+            "created": created,
             "creators": [
                 "Tool: agtmls-generate-sbom",
                 "Person: Sebastien Rousseau",
@@ -175,7 +152,7 @@ def render_spdx(paths: list[Path]) -> dict:
     }
 
 
-def render_cyclonedx(paths: list[Path]) -> dict:
+def render_cyclonedx(paths: list[Path], created: str) -> dict:
     """CycloneDX 1.6 is what most enterprise scanners ingest."""
     release = version()
     return {
@@ -184,7 +161,7 @@ def render_cyclonedx(paths: list[Path]) -> dict:
         "serialNumber": f"urn:uuid:{NAMESPACE_UUID}",
         "version": 1,
         "metadata": {
-            "timestamp": created_at(paths),
+            "timestamp": created,
             "tools": {"components": [
                 {"type": "application", "name": "agtmls-generate-sbom", "version": release}
             ]},
@@ -225,26 +202,26 @@ def main() -> int:
 
     paths = covered_paths()
     targets = [
-        (OUT_SPDX, json.dumps(render_spdx(paths), indent=2, sort_keys=True) + "\n"),
-        (OUT_CYCLONEDX, json.dumps(render_cyclonedx(paths), indent=2, sort_keys=True) + "\n"),
+        (OUT_SPDX, lambda created: render_spdx(paths, created),
+         lambda doc: doc["creationInfo"]["created"]),
+        (OUT_CYCLONEDX, lambda created: render_cyclonedx(paths, created),
+         lambda doc: doc["metadata"]["timestamp"]),
     ]
 
     if args.write:
-        for out, text in targets:
-            out.write_text(text, encoding="utf-8")
+        for out, render, locate in targets:
+            out.write_text(stamp.settle(out, render, locate), encoding="utf-8")
             print(f"wrote {out.relative_to(ROOT)} ({len(paths)} files)")
         return 0
     if args.check:
-        stale = [
-            out.name for out, text in targets
-            if (out.read_text(encoding="utf-8") if out.exists() else "") != text
-        ]
+        stale = [out.name for out, render, locate in targets if not stamp.current(out, render, locate)]
         if stale:
             print(f"FAIL: {', '.join(stale)} stale; run generate-sbom.py --write")
             return 1
         print(f"OK: SBOM is current ({len(paths)} files, SPDX 2.3 + CycloneDX 1.6)")
         return 0
-    print(targets[0][1] if args.format == "spdx" else targets[1][1], end="")
+    out, render, locate = targets[0] if args.format == "spdx" else targets[1]
+    print(stamp.settle(out, render, locate), end="")
     return 0
 
 

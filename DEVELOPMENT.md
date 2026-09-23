@@ -67,35 +67,27 @@ python3 scripts/release-dry-run.py --version $(python3 scripts/next-version.py)
 python3 scripts/run-all-checks.py
 ```
 
-## Regenerating the SBOM after a commit
+## Regenerating the SBOM and provenance
 
-`SBOM.spdx.json` and `provenance.json` take their timestamp from the commit
-that last changed a path they describe. That is deliberate: the previous
-generator hardcoded `1970-01-01T00:00:00Z` to satisfy the determinism gate,
-which made the field deterministic by making it false.
-
-The consequence is an ordering requirement. A commit that touches `scripts/`,
-`skills/`, `index.json` or any other covered path moves the timestamp, so the
-gate will report the SBOM stale immediately afterwards:
+`SBOM.spdx.json`, `SBOM.cyclonedx.json` and `provenance.json` hash what they
+describe, so a change to a covered path makes them stale. Regenerate them in
+the same commit as the change:
 
 ```bash
-git commit -m 'fix(scripts): ...'        # gate now reports a stale SBOM
 python3 scripts/generate-sbom.py --write
 python3 scripts/generate-provenance.py --write
-git commit SBOM.spdx.json SBOM.cyclonedx.json provenance.json \
-  -m 'chore: regenerate supply-chain artifacts'
 ```
 
-The regeneration commit must contain **only** generated files. Mixing an
-authored change into it moves the timestamp again and you go round once more.
+Their timestamp is when the described content last changed, and each file
+keeps its own: `--write` leaves the stamp alone while nothing else moved, and
+`--check` compares against the stamp the file holds. Nothing is read from git,
+so the verdict depends on the tree alone -- a squash merge, a rebase or an
+sdist with no history cannot make a current file stale.
 
-This converges in exactly one step, and `scripts/_lib/covered.py` is why: both
-generators take their date from **authored** paths only, never from a generated
-artifact. Committing the regenerated files cannot move a timestamp derived from
-files they are not.
-
-Getting that wrong is easy and was got wrong here first: provenance originally
-timestamped itself from its own materials, which include `SBOM.spdx.json`, so
-committing a regenerated SBOM invalidated provenance and the pair never
-settled. If a new path joins `SOURCE_DIRS` or `SOURCE_FILES`, check it is
-authored rather than generated.
+It used to be otherwise, and main paid for it. The timestamp was the date of
+the last commit touching a covered path, and provenance named that commit.
+GitHub's squash merge lands the same tree as a new commit with a new date, so
+every artifact regenerated on a branch was stale the moment it merged, and
+main's CI failed after each squash merge while every pull request check
+passed. `tests/test_supply_chain_stamps.py` replays a squash merge against a
+real repository so that cannot come back.

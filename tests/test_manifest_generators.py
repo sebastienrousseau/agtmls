@@ -16,7 +16,7 @@ import json
 import os
 from unittest import mock
 
-from .subset_support import SubsetCase, fake_git
+from .subset_support import SubsetCase
 
 MANIFESTS = (
     ".agents/plugins/marketplace.json", ".codex-plugin/plugin.json",
@@ -139,32 +139,13 @@ class SbomCoverageTests(SubsetCase):
             self.assertNotIn(excluded, listed)
         self.assertFalse(any(p.startswith(("skills/", "src/", "index.json")) for p in listed), listed)
 
-    def test_the_date_is_asked_of_git_for_the_covered_top_level_paths(self) -> None:
-        module = self.script()
-        module.subprocess = fake_git("2026-05-06T07:08:09Z\n")
-        paths = module.covered_paths()
-        self.assertEqual(module.created_at(paths), "2026-05-06T07:08:09Z")
-        (argv,) = module.subprocess.calls
-        self.assertEqual(argv[argv.index("--") + 1:], ["LICENSE-MIT", "templates"])
-
-    def test_without_history_the_date_is_the_epoch_not_an_invention(self) -> None:
-        for label, git in (("no output", fake_git("")), ("no git", fake_git(raises=OSError))):
-            with self.subTest(git=label):
-                module = self.script()
-                module.subprocess = git
-                self.assertEqual(module.created_at(module.covered_paths()), "1970-01-01T00:00:00Z")
-
-    def test_source_date_epoch_pins_the_date_without_asking_git(self) -> None:
-        os.environ["SOURCE_DATE_EPOCH"] = "0"
-        module = self.script()
-        module.subprocess = fake_git("2026-05-06T07:08:09Z\n")
-        self.assertEqual(module.created_at([]), "1970-01-01T00:00:00Z")
-        self.assertEqual(module.subprocess.calls, [])
+    def test_git_is_never_consulted(self) -> None:
+        """History is not content: a squash merge moved the old commit date."""
+        self.assertFalse(hasattr(self.script(), "subprocess"))
 
     def test_no_flag_prints_the_chosen_format(self) -> None:
         version = json.loads(self.path(".claude-plugin/plugin.json").read_text(encoding="utf-8"))["version"]
         module = self.script()
-        module.subprocess = fake_git("")
         code, output = self.drive(module=module)
         self.assertEqual(code, 0, output)
         spdx = json.loads(output)

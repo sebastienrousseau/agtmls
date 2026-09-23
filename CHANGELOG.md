@@ -71,6 +71,16 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- Main's CI failed after every squash merge while every pull request check
+  passed. The SBOMs and `provenance.json` were stamped with the date of the
+  last commit touching the described files, and provenance named that
+  commit; a squash merge lands the same tree as a new commit, so the files
+  were stale on arrival. The stamp is now when the described content last
+  changed, kept in each file and preserved by `--write` while nothing else
+  moves; provenance pins its source by the SBOM's digest instead of a commit
+  hash. Neither generator reads git, so the verdict depends on the tree
+  alone. The old stamp was also off by the committer's UTC offset: it
+  printed the commit's local time with a `Z` suffix.
 - AGT-CAP-001 could not fire on any real skill: `allowed-tools` is
   space-separated and was split on commas only.
 - The licence gate counted `.py` and `.sh` files without reading them; 87
