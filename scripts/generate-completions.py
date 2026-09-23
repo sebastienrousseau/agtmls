@@ -33,7 +33,7 @@ def subcommands() -> list[str]:
     # rather than walked: a traceback here would tell the reader about
     # argparse internals instead of about their parser.
     group = parser._subparsers  # noqa: SLF001  (argparse exposes no public accessor)
-    for action in getattr(group, "_group_actions", []):  # noqa: SLF001  (no public accessor either)
+    for action in getattr(group, "_group_actions", []):  # no public accessor either
         if isinstance(action, argparse._SubParsersAction):  # noqa: SLF001  (the class is private too)
             return sorted(action.choices)
     raise SystemExit(

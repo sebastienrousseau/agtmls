@@ -109,6 +109,21 @@ jobs:
           print("OK: both validators reject a corrupted document")
           PY
 
+  lint:
+    name: ruff finds nothing in scripts or tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      # Pinned: ruff's default rule set grows between releases, and the
+      # policy is pyproject.toml's, not whichever ruff a runner resolves.
+      # A linter only; the scripts it reads stay stdlib-only.
+      - run: python3 -m pip install --disable-pip-version-check 'ruff==0.16.7'
+      - run: ruff check --output-format github .
+
   wheel-size:
     name: the wheel stays under its committed ceiling
     runs-on: ubuntu-latest

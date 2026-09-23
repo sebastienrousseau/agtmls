@@ -22,6 +22,10 @@ All notable changes to AgtMLS are recorded here.
   sample committed under `benchmarks/results/`, a regression gate, and a
   scaling measurement at ten times the registry.
 - `smoke-offline.py` proves the local tier never opens a network socket.
+- CI lints `scripts/` and `tests/` with a pinned ruff (`conformance.yml`).
+  `pyproject.toml` enables E402 and SLF001, the rules the code already
+  carried reasoned `noqa` directives for; without them each directive was
+  itself a finding, and 26 of them made a clean run impossible.
 - Coverage measurement, with the library core held at 100% of lines and
   branches. The security analyzer now sits inside that floor.
 - Unit-test coverage of every script is held at or above 98% of lines and

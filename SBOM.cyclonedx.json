@@ -1216,7 +1216,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5e90db0eba44024032feb55d36f45aa9b73245e1fdc217a0fc1145f1f093012c"
+          "content": "debd91bb6d9d6c25f3e90f7c0564be37a6e63e6ca2816c2ab32f6e790cdc46c7"
         }
       ],
       "name": "scripts/generate-completions.py",
@@ -1282,7 +1282,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "96e3967b8272a518a86a867582b0737ae4cbd9fe4879eb7786b6b106a97a0e5b"
+          "content": "a7322ebd0103624e7a5c6bf396ddcefa049363ef3e664e0ee11160f95371a140"
         }
       ],
       "name": "scripts/generate-sbom.py",
@@ -2063,7 +2063,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a369ecb1f268072c508d0426f13555c8f9c17cc5a80c64c4c6f40884fbc8d0a"
+          "content": "1d7c91c2d30cec16cd1767bc204d96c0f78f392e5ffbee7621a03d29c3b55c3a"
         }
       ],
       "name": "scripts/verify-release-assets.py",
@@ -3980,7 +3980,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T10:18:10Z",
+    "timestamp": "2026-09-23T12:28:38Z",
     "tools": {
       "components": [
         {
