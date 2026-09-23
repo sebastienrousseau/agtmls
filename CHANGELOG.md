@@ -27,6 +27,19 @@ All notable changes to AgtMLS are recorded here.
   `--baseline FILE`, so a CI gate fails on new findings only. Findings
   carry a fingerprint over rule, file and message, not the line.
 - `agtmls --version` prints the registry version. It was a usage error.
+- `providers.json` says what each native agent does with a skill's
+  `allowed-tools`: `grant` (Claude Code pre-approves them), `declaration`
+  (the Agent Skills spec's reading: aider, antigravity, codex) or
+  `ignored`. AGT-CAP-001 now reports effective escalation per target
+  from that table instead of a generic claim about runtimes.
+- The security corpus grows from 22 to 73 cases: one or more per rule,
+  in scripts and configs as well as Markdown, and twelve benign
+  negatives every detector must stay silent on. `run-security-evals.py`
+  now reports precision and recall and holds them to
+  `evals/security/floor.json` (1.0 and 1.0), which `--update` may raise
+  and never lower; a miss within the floor is a warning. A
+  `must_not_detect` entry may name a severity, so a quoted attack can
+  require "nothing at HIGH" without requiring silence.
 
 ### Fixed
 

@@ -37,6 +37,8 @@ AUDITABLE_SUFFIXES = {
     ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg",
 }
 SKIP_PARTS = {"__pycache__", ".git", "node_modules", "target", ".venv"}
+# Which runtimes grant a skill's allowed-tools and which only read them.
+PROVIDERS = Path(__file__).resolve().parents[2] / "providers.json"
 # A hostile skill should not be able to exhaust memory during its own audit.
 MAX_AUDIT_BYTES = 5 * 1024 * 1024
 
@@ -306,6 +308,42 @@ def load_policy(skill_dir: Path) -> tuple[dict, list[Finding]]:
     return policy, []
 
 
+def allowed_tools_semantics() -> dict[str, list[str]]:
+    """Native agents grouped by what allowed-tools means to them.
+
+    From providers.json: `grant` (the runtime pre-approves the tools, as
+    Claude Code does), `declaration` (read, granting nothing, as the Agent
+    Skills spec defines the field) or `ignored`. Without the table the
+    caller falls back to the generic wording.
+    """
+    try:
+        agents = json.loads(PROVIDERS.read_text(encoding="utf-8"))["native_agents"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
+    groups: dict[str, list[str]] = {}
+    for name in sorted(agents):
+        semantics = agents[name].get("allowed_tools_semantics") if isinstance(agents[name], dict) else None
+        if isinstance(semantics, str):
+            groups.setdefault(semantics, []).append(name)
+    return groups
+
+
+def escalation_rationale() -> str:
+    """Who grants a denied capability, per target, so the finding is about
+    effective escalation rather than a claim about every runtime."""
+    groups = allowed_tools_semantics()
+    if not groups:
+        return "runtimes that pre-approve allowed-tools, such as Claude Code, will grant it"
+    parts = []
+    if groups.get("grant"):
+        parts.append(f"runtimes that pre-approve allowed-tools grant it: {', '.join(groups['grant'])}")
+    if groups.get("declaration"):
+        parts.append(f"these read it as a declaration: {', '.join(groups['declaration'])}")
+    if groups.get("ignored"):
+        parts.append(f"these ignore it: {', '.join(groups['ignored'])}")
+    return "; ".join(parts)
+
+
 def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
     """Frontmatter must not grant a capability the safety policy denies.
 
@@ -317,6 +355,7 @@ def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
     if not skill_md.exists():
         return []
     findings: list[Finding] = []
+    rationale = escalation_rationale()
     for tool in frontmatter_tools(skill_md):
         # `Bash(git log:*)` narrows Bash; it still grants executes_commands.
         capability = TOOL_CAPABILITIES.get(tool.split("(", 1)[0])
@@ -333,11 +372,7 @@ def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
                     line=1,
                     severity="HIGH",
                     category="capability_escalation",
-                    message=(
-                        f"Frontmatter grants '{tool}' but safety_policy denies "
-                        f"{capability}; runtimes that pre-approve allowed-tools, "
-                        "such as Claude Code, will grant it"
-                    ),
+                    message=f"Frontmatter grants '{tool}' but safety_policy denies {capability}; {rationale}",
                     rule="AGT-CAP-001",
                 )
             )

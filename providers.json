@@ -82,6 +82,7 @@
   "native_agents": {
     "aider": {
       "agents_dir": ".aider/agents",
+      "allowed_tools_semantics": "declaration",
       "commands_dir": ".aider/commands",
       "install_mode": "symlink",
       "prompt_file": "CONVENTIONS.md",
@@ -89,6 +90,7 @@
     },
     "antigravity": {
       "agents_dir": ".agents/agents",
+      "allowed_tools_semantics": "declaration",
       "commands_dir": ".agents/commands",
       "install_mode": "symlink",
       "prompt_file": "AGENTS.md",
@@ -96,6 +98,7 @@
     },
     "claude": {
       "agents_dir": ".claude/agents",
+      "allowed_tools_semantics": "grant",
       "commands_dir": ".claude/commands",
       "install_mode": "symlink",
       "prompt_file": "CLAUDE.md",
@@ -103,6 +106,7 @@
     },
     "codex": {
       "agents_dir": ".codex/agents",
+      "allowed_tools_semantics": "declaration",
       "commands_dir": ".codex/commands",
       "install_mode": "symlink",
       "prompt_file": "AGENTS.md",

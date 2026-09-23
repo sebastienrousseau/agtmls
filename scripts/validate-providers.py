@@ -39,6 +39,17 @@ def main() -> int:
                 errors.append(f"native agent {name} missing {key}")
         if item.get("install_mode") != "symlink":
             errors.append(f"native agent {name} install_mode must be symlink")
+        # What the runtime does with a skill's allowed-tools: Claude Code
+        # pre-approves them (grant); the Agent Skills spec makes the field a
+        # declaration; a runtime that never reads it ignores it. AGT-CAP-001
+        # reports escalation per target from this.
+        semantics = item.get("allowed_tools_semantics")
+        if semantics is None:
+            errors.append(f"native agent {name} missing allowed_tools_semantics")
+        elif semantics not in {"grant", "declaration", "ignored"}:
+            errors.append(
+                f"native agent {name} allowed_tools_semantics must be grant, declaration or ignored"
+            )
     plugins = data.get("plugin_targets", {})
     if not isinstance(plugins, dict):
         errors.append("plugin_targets must be an object")

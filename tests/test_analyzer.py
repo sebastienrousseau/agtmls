@@ -280,6 +280,41 @@ class CapabilityEscalationTests(Workspace):
         self.assertNotIn("the runtime honours", finding.message)
         self.assertIn("runtimes that pre-approve allowed-tools", finding.message)
 
+    def test_the_message_names_the_targets_that_grant_and_those_that_declare(self) -> None:
+        """Effective escalation is per target: providers.json says which
+        runtimes grant allowed-tools and which only read it."""
+        (finding,) = analyzer.check_capability_escalation(
+            self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
+        )
+        self.assertIn("grant it: claude", finding.message)
+        self.assertIn("a declaration: aider, antigravity, codex", finding.message)
+
+    def test_without_a_provider_table_the_message_stays_generic(self) -> None:
+        with mock.patch.object(analyzer, "PROVIDERS", self.tmp / "absent.json"):
+            (finding,) = analyzer.check_capability_escalation(
+                self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
+            )
+        self.assertIn("runtimes that pre-approve allowed-tools", finding.message)
+        self.assertNotIn("grant it:", finding.message)
+
+    def test_every_semantics_value_is_named_and_an_agent_without_one_is_skipped(self) -> None:
+        table = self.tmp / "providers.json"
+        table.write_text(json.dumps({"native_agents": {
+            "old": {"prompt_file": "X.md"},
+            "reader": {"allowed_tools_semantics": "declaration"},
+            "deaf": {"allowed_tools_semantics": "ignored"},
+            "odd": "not an object",
+        }}), encoding="utf-8")
+        with mock.patch.object(analyzer, "PROVIDERS", table):
+            self.assertEqual(
+                analyzer.allowed_tools_semantics(), {"declaration": ["reader"], "ignored": ["deaf"]},
+            )
+            rationale = analyzer.escalation_rationale()
+        self.assertEqual(rationale, "these read it as a declaration: reader; these ignore it: deaf")
+        table.write_text(json.dumps({"native_agents": {"only": {"allowed_tools_semantics": "grant"}}}), encoding="utf-8")
+        with mock.patch.object(analyzer, "PROVIDERS", table):
+            self.assertEqual(analyzer.escalation_rationale(), "runtimes that pre-approve allowed-tools grant it: only")
+
     def test_web_fetch_needs_network_access_declared(self) -> None:
         self.assertEqual(self.escalations("WebFetch", {"network_access": "none"}), ["AGT-CAP-001"])
         self.assertEqual(self.escalations("WebFetch", {"network_access": "optional"}), [])

@@ -1,0 +1,8 @@
+{
+  "floors": {
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "note": "Floors may rise and must never fall. precision = detections / (detections + false positives); recall = detections / (detections + misses), over evals/security/corpus.json.",
+  "schema_version": 1
+}

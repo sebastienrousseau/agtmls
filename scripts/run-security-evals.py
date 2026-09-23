@@ -21,6 +21,7 @@ be replayed against any future reimplementation of the same ruleset.
 
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import sys
@@ -56,9 +57,43 @@ def audit(target: Path) -> list[dict]:
         raise SystemExit(f"audit produced no JSON for {target.name}: {exc}\n{proc.stdout}\n{proc.stderr}")
 
 
+FLOOR = ROOT / "evals" / "security" / "floor.json"
+DEFAULT_FLOORS = {"precision": 1.0, "recall": 1.0}
+
+
+def read_floors() -> dict[str, float]:
+    """The precision and recall the corpus must hold; 1.0 each without a file."""
+    if not FLOOR.exists():
+        return dict(DEFAULT_FLOORS)
+    floors = json.loads(FLOOR.read_text(encoding="utf-8")).get("floors", {})
+    return {key: float(floors.get(key, DEFAULT_FLOORS[key])) for key in DEFAULT_FLOORS}
+
+
+def write_floors(floors: dict[str, float]) -> None:
+    FLOOR.write_text(json.dumps({
+        "schema_version": 1,
+        "floors": floors,
+        "note": "Floors may rise and must never fall. precision = detections / (detections + "
+                "false positives); recall = detections / (detections + misses), over "
+                "evals/security/corpus.json.",
+    }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def negative(want) -> tuple[str, str]:
+    """A must_not_detect entry: a bare category, or one with a severity floor."""
+    if isinstance(want, str):
+        return want, "LOW"
+    return want["category"], want.get("min_severity", "LOW")
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--update", action="store_true", help="raise the floor to what the corpus holds now")
+    args = parser.parse_args()
     corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
-    errors: list[str] = []
+    floors = read_floors()
+    misses: list[str] = []
+    false_positives: list[str] = []
     detected = 0
 
     with tempfile.TemporaryDirectory() as raw:
@@ -79,24 +114,54 @@ def main() -> int:
                     detected += 1
                 else:
                     where = f" in {want['in_file']}" if want.get("in_file") else ""
-                    errors.append(
+                    misses.append(
                         f"{name}: missed {want['category']} "
                         f">= {want.get('min_severity', 'LOW')}{where} "
                         f"-- {case['description']}"
                     )
 
-            for category in case.get("must_not_detect", []):
-                noise = [f for f in findings if f["category"] == category]
+            for want in case.get("must_not_detect", []):
+                category, severity = negative(want)
+                noise = [f for f in findings if f["category"] == category and RANK[f["severity"]] >= RANK[severity]]
                 if noise:
-                    errors.append(f"{name}: false positive {category}: {noise[0]['message']}")
+                    bound = f" >= {severity}" if severity != "LOW" else ""
+                    false_positives.append(f"{name}: false positive {category}{bound}: {noise[0]['message']}")
 
-    if errors:
-        for error in errors:
-            print(f"FAIL: {error}")
+    # Precision and recall over the corpus's expectations: a detection is a
+    # satisfied must_detect, a miss an unsatisfied one, a false positive a
+    # violated must_not_detect. The floor is what the gate holds, so a case
+    # written ahead of its rule is a warning until the floor rises over it.
+    precision = detected / (detected + len(false_positives)) if detected or false_positives else 1.0
+    recall = detected / (detected + len(misses)) if detected or misses else 1.0
+    below = [
+        f"FAIL: {metric} {value:.3f} is below the floor {floors[metric]:.3f}"
+        for metric, value in (("precision", precision), ("recall", recall))
+        if value < floors[metric]
+    ]
+    level = "FAIL" if below else "WARN"
+    for line in [*misses, *false_positives]:
+        print(f"{level}: {line}")
+    print(
+        f"precision {precision:.3f} ({detected}/{detected + len(false_positives)}), "
+        f"recall {recall:.3f} ({detected}/{detected + len(misses)}) "
+        f"over {len(corpus['cases'])} case(s)"
+    )
+    if below:
+        for line in below:
+            print(line)
         print()
-        print(f"FAIL: {len(errors)} security conformance issue(s) across {len(corpus['cases'])} case(s)")
+        print(f"FAIL: {len(misses) + len(false_positives)} security conformance issue(s) across {len(corpus['cases'])} case(s)")
         return 1
-    print(f"OK: security corpus passed -- {len(corpus['cases'])} case(s), {detected} detection(s)")
+    if args.update:
+        raised = {"precision": max(floors["precision"], precision), "recall": max(floors["recall"], recall)}
+        if raised != floors:
+            write_floors(raised)
+            print(f"raised the floor to precision {raised['precision']:.3f}, recall {raised['recall']:.3f}")
+    if misses or false_positives:
+        print(f"OK: security corpus holds its floor -- {len(corpus['cases'])} case(s), {detected} detection(s), "
+              f"{len(misses)} miss(es), {len(false_positives)} false positive(s)")
+    else:
+        print(f"OK: security corpus passed -- {len(corpus['cases'])} case(s), {detected} detection(s)")
     return 0
 
 
