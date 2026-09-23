@@ -45,10 +45,10 @@ def subset_fixture(destination: Path, names: tuple[str, ...]) -> Path:
 def fake_git(stdout: str = "", *, raises: type[BaseException] | None = None):
     """A stand-in for the `subprocess` module that records what was asked.
 
-    Provenance and the SBOM take their timestamps from `git log`. The fixture
-    is not a repository, and the real answer moves with every commit, so a
-    test that let git run would assert either nothing or something that stops
-    being true tomorrow. `stdout` may be a callable of the argv.
+    The fixture is not a repository, and the real answer moves with every
+    commit, so a test that let git run would assert either nothing or
+    something that stops being true tomorrow. `stdout` may be a callable of
+    the argv.
     """
     calls: list[list[str]] = []
 

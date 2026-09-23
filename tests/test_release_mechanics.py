@@ -32,11 +32,10 @@ class ReleaseFixtureBase(unittest.TestCase):
         return module
 
     def use_fixed_clock(self) -> None:
-        """The fixture has no git history, so the artifacts have no commit date.
+        """Pin the stamp a freshly written artifact takes.
 
-        SOURCE_DATE_EPOCH is the override a reproducible build would set, and
-        without it the generators fall back to the epoch placeholder that
-        conformance correctly refuses.
+        SOURCE_DATE_EPOCH is the override a reproducible build would set;
+        without it the stamp is the wall clock, which a test cannot assert.
         """
         import os
 

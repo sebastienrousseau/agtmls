@@ -406,7 +406,7 @@ class EveryValidatorTests(ValidatorFailureBase):
         "validate-cli-surface.py",      # parses the real parser source
         "validate-sbom-conformance.py", # diffs against the real pyproject
         "generate-sbom.py",             # hashes the real tree
-        "generate-provenance.py",       # reads git
+        "generate-provenance.py",       # digests the real SBOM
         "generate-docs-site.py",        # embeds the real version
         "generate-plugin-manifests.py", # writes outside the fixture
         "sync-skill-frontmatter.py",    # rewrites skills in place

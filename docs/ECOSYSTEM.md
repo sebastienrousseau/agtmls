@@ -46,7 +46,7 @@ reproduced before the fix and verified after.
 | `SBOM.spdx.json` failed every SPDX validator | `pyspdxtools -i SBOM.spdx.json`: **0 errors**. `creationInfo`, `packages`, `relationships`, per-file `SPDXID` and the mandatory SHA1 all present |
 | SBOM described 4 of 9 shipped paths | Now 338 files across all 17; `validate-sbom-conformance.py` diffs against `pyproject.toml` and caught two missing licence files while being written |
 | No CycloneDX output | `SBOM.cyclonedx.json`, CycloneDX 1.6 |
-| `provenance.json` hardcoded `1970-01-01T00:00:00Z` | Real in-toto Statement; timestamp is the commit date of the last change to a material — deterministic *and* true |
+| `provenance.json` hardcoded `1970-01-01T00:00:00Z` | Real in-toto Statement; timestamp is when the materials last changed, kept in the statement — deterministic *and* true, and unmoved by a squash merge |
 
 **Packaging and performance**
 

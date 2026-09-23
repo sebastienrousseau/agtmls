@@ -996,7 +996,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2e03e87f3fdf7ad137f8e381913b33682b2ec284327b3e49b4f83e0ebb190859"
+          "content": "73ea543b4580e8e19226b14c7778aa8ac2d447156c72979c879584a4ae1493be"
         }
       ],
       "name": "scripts/_lib/covered.py",
@@ -1066,6 +1066,17 @@
         }
       ],
       "name": "scripts/_lib/scaling.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/stamp.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "efb9668351d0276acac5f92b5b6a8a35a98174eb750b5bab09444c73bcdb3999"
+        }
+      ],
+      "name": "scripts/_lib/stamp.py",
       "type": "file"
     },
     {
@@ -1260,7 +1271,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0a05e5205e36159b6adfb4f9552326bdd3604e9b3453c9310fc08347878fa347"
+          "content": "e3ddefc5d8e4d645baaa5871cac567af46ed23333f5a9bd097cd07029c568229"
         }
       ],
       "name": "scripts/generate-provenance.py",
@@ -1271,7 +1282,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "af632b7fe2c61afd46ec68e20bd34b1ee4037fb3a726cddb70b3825383c77af8"
+          "content": "96e3967b8272a518a86a867582b0737ae4cbd9fe4879eb7786b6b106a97a0e5b"
         }
       ],
       "name": "scripts/generate-sbom.py",
@@ -3969,7 +3980,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T10:10:24Z",
+    "timestamp": "2026-09-23T10:18:10Z",
     "tools": {
       "components": [
         {

@@ -206,12 +206,6 @@ class LockfileTests(unittest.TestCase):
 class CoveredPathTests(unittest.TestCase):
     """One definition of what the supply-chain artifacts describe."""
 
-    def test_no_generated_artifact_is_in_the_timestamp_basis(self) -> None:
-        """Provenance timestamped from its own materials never settles."""
-        basis = set(covered.SOURCE_DIRS) | set(covered.SOURCE_FILES)
-        for artifact in covered.GENERATED:
-            self.assertNotIn(artifact, basis, f"{artifact} is generated and in the basis")
-
     def test_the_sbom_lists_the_generated_files_the_wheel_ships(self) -> None:
         """Splitting the basis from the SBOM list must not drop shipped files."""
         self.assertLessEqual({"index.json", "CATALOG.md"}, set(covered.SBOM_FILES))
@@ -233,8 +227,7 @@ class CoveredPathTests(unittest.TestCase):
             for line in section.splitlines()
             if "=" in line and not line.strip().startswith("#")
         }
-        # A shipped generated file (index.json) is described by the SBOM, and
-        # its date follows the skills/ it is generated from.
+        # A shipped generated file (index.json) is described by the SBOM too.
         basis = set(covered.SOURCE_DIRS) | set(covered.SBOM_FILES)
         for path in shipped:
             if path.startswith((".", "LICENSE")):

@@ -12,11 +12,12 @@ them only in the passing direction; these tests make them fail on purpose.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from unittest import mock
 
-from .subset_support import SubsetCase, fake_git
+from .subset_support import SubsetCase
 
 
 class ProvenanceTests(SubsetCase):
@@ -29,53 +30,27 @@ class ProvenanceTests(SubsetCase):
     )
 
     def setUp(self) -> None:
-        # SOURCE_DATE_EPOCH, if the caller's shell set it, would bypass git.
+        # SOURCE_DATE_EPOCH pins the stamp a fresh statement takes.
         patcher = mock.patch.dict(os.environ)
         patcher.start()
         self.addCleanup(patcher.stop)
-        os.environ.pop("SOURCE_DATE_EPOCH", None)
+        os.environ["SOURCE_DATE_EPOCH"] = "86400"
 
-    def module_with_git(self, stdout=""):
+    def test_the_source_is_pinned_by_content_not_by_a_commit(self) -> None:
+        """A squash merge gives the same tree a new commit; a digest survives it."""
         module = self.script()
-        module.subprocess = fake_git(stdout)
-        return module
-
-    def test_dates_and_ref_come_from_the_last_authored_commit(self) -> None:
-        """The pathspec is the convergence property: no generated artifact in it.
-
-        Deriving the date from SBOM.spdx.json meant committing a regenerated
-        SBOM moved provenance's timestamp, so the pair never settled.
-        """
-        module = self.module_with_git(
-            lambda argv: "2026-01-02T03:04:05Z\n" if "--format=%cd" in argv else "c0ffee\n"
-        )
-        statement = module.render()
+        self.assertFalse(hasattr(module, "subprocess"), "provenance must not consult git")
+        statement = module.render("2026-01-02T03:04:05Z")
         metadata = statement["predicate"]["runDetails"]["metadata"]
         self.assertEqual(metadata["startedOn"], "2026-01-02T03:04:05Z")
         self.assertEqual(metadata["finishedOn"], "2026-01-02T03:04:05Z")
-        dependency = statement["predicate"]["buildDefinition"]["resolvedDependencies"][0]
-        self.assertEqual(dependency["digest"], {"gitCommit": "c0ffee"})
-        for argv in module.subprocess.calls:
-            pathspec = argv[argv.index("--") + 1:]
-            self.assertEqual(pathspec, [*module.SOURCE_DIRS, *module.SOURCE_FILES])
-            for generated in ("SBOM.spdx.json", "SBOM.cyclonedx.json", "provenance.json"):
-                self.assertNotIn(generated, pathspec)
-
-    def test_source_date_epoch_overrides_git_for_the_timestamp(self) -> None:
-        """Reproducible builds pin the clock; git must not be asked for it."""
-        os.environ["SOURCE_DATE_EPOCH"] = "86400"
-        module = self.module_with_git("c0ffee\n")
-        self.assertEqual(module.built_at(), "1970-01-02T00:00:00Z")
-        self.assertEqual(module.subprocess.calls, [])
-
-    def test_outside_git_the_statement_says_so_instead_of_inventing(self) -> None:
-        """An sdist has no history; the fallback is the epoch and `unknown`."""
-        module = self.module_with_git("")
-        self.assertEqual(module.built_at(), "1970-01-01T00:00:00Z")
-        self.assertEqual(module.source_ref(), "unknown")
+        (dependency,) = statement["predicate"]["buildDefinition"]["resolvedDependencies"]
+        sbom = hashlib.sha256(self.path("SBOM.spdx.json").read_bytes()).hexdigest()
+        self.assertEqual(dependency["digest"], {"sha256": sbom})
+        self.assertNotIn("gitCommit", json.dumps(statement))
 
     def test_the_subject_digest_moves_with_any_material(self) -> None:
-        module = self.module_with_git("")
+        module = self.script()
         before = module.material_digest()
         self.preserve("checks.json")
         path = self.path("checks.json")
@@ -86,14 +61,14 @@ class ProvenanceTests(SubsetCase):
         """A digest over fewer files than it claims would be a false statement."""
         self.preserve("mcp-resources.json")
         self.path("mcp-resources.json").unlink()
-        module = self.module_with_git("")
+        module = self.script()
         with self.assertRaises(SystemExit) as caught:
             module.material_digest()
         self.assertIn("mcp-resources.json", str(caught.exception.code))
 
     def test_the_statement_is_an_unsigned_in_toto_envelope(self) -> None:
         """It must not be mistaken for the signed provenance release.yml emits."""
-        statement = self.module_with_git("").render()
+        statement = self.script().render("2026-01-02T03:04:05Z")
         self.assertEqual(statement["_type"], "https://in-toto.io/Statement/v1")
         self.assertFalse(statement["agtmls"]["signed"])
         version = json.loads(self.path("index.json").read_text(encoding="utf-8"))["registry_version"]
@@ -103,29 +78,33 @@ class ProvenanceTests(SubsetCase):
 
     def test_write_then_check_agree_and_tampering_is_caught(self) -> None:
         self.preserve("provenance.json")
-        code, output = self.drive("--write", module=self.module_with_git("x\n"))
+        code, output = self.drive("--write", module=self.script())
         self.assertEqual((code, output.strip()), (0, "wrote provenance.json"))
-        code, output = self.drive("--check", module=self.module_with_git("x\n"))
+        code, output = self.drive("--check", module=self.script())
         self.assertEqual(code, 0, output)
         self.assertIn("OK: provenance is current", output)
-        # A different answer from git is a different statement: stale.
-        code, output = self.drive("--check", module=self.module_with_git("y\n"))
+        # A changed material is a different statement: stale.
+        self.preserve("checks.json")
+        checks = self.path("checks.json")
+        checks.write_text(checks.read_text(encoding="utf-8") + " ", encoding="utf-8")
+        code, output = self.drive("--check")
         self.assertEqual(code, 1, output)
         self.assertIn("provenance.json is stale", output)
 
     def test_check_fails_when_the_statement_is_missing(self) -> None:
         self.preserve("provenance.json")
         self.path("provenance.json").unlink()
-        code, output = self.drive("--check", module=self.module_with_git("x\n"))
+        code, output = self.drive("--check", module=self.script())
         self.assertEqual(code, 1, output)
 
     def test_no_flag_prints_the_statement_and_writes_nothing(self) -> None:
         self.preserve("provenance.json")
         before = self.path("provenance.json").read_bytes()
-        module = self.module_with_git("x\n")
+        module = self.script()
         code, output = self.drive(module=module)
         self.assertEqual(code, 0)
-        self.assertEqual(json.loads(output), module.render())
+        # Exactly what --write would store, stamp included.
+        self.assertEqual(output, module.stamp.settle(module.OUT, module.render, module.built_on))
         self.assertEqual(self.path("provenance.json").read_bytes(), before)
 
 
