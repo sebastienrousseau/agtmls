@@ -396,7 +396,7 @@ class EveryValidatorTests(ValidatorFailureBase):
     #: Checks that need a git history, a network, or a subprocess of their own.
     NEEDS_MORE_THAN_A_TREE = {
         "validate-python-scripts.py",   # reads scripts/, which the fixture copies but does not own
-        "validate-shell-syntax.py",     # shells out to sh -n
+        "validate-shell-syntax.py",     # shells out to bash -n
         "validate-spec-conformance.py", # optional external reference implementation
         "validate-version-policy.py",   # reads git tags
         "validate-packaging.py",        # asserts the real wheel layout

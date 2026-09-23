@@ -352,9 +352,13 @@ class ShellSyntaxValidatorTests(SliceFixture):
 
     @classmethod
     def populate(cls) -> None:
-        # Copies that live where no shipped script does: VCS internals and
-        # bytecode caches. Checking them would report files nobody wrote.
-        for skipped in (".git/hooks/pre-commit.sh", "scripts/__pycache__/stale.sh"):
+        # Copies that live where no shipped script does: VCS internals, caches,
+        # build output, vendored packages and local run state. Checking them
+        # would report files nobody here wrote -- and fail on a dependency's.
+        for skipped in (
+            ".git/hooks/pre-commit.sh", "scripts/__pycache__/stale.sh", "dist/pkg/install.sh",
+            "node_modules/tool/build.sh", ".agtmls/runs/probe.sh", ".venv/bin/activate.sh",
+        ):
             path = cls.fixture / skipped
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("if then fi\n", encoding="utf-8")
