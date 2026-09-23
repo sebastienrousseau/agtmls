@@ -117,6 +117,58 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(analyzer.normalize("\uff41\u200b\u00adb"), "ab")
 
 
+class DataDrivenRulesTests(unittest.TestCase):
+    """Every pattern rule in the snapshot runs, with the category, severity and
+    scope the rule declares. The Rust implementation already does this; a rule
+    of a category Python did not hard-code fired there and not here."""
+
+    PATH = Path("hooks.json")
+
+    def rule(self, **fields) -> dict:
+        base = {"id": "AGT-TEST-001", "category": "supply_chain", "severity": "medium",
+                "title": "Test rule", "description": "A test rule fired", "scope": "normalised",
+                "pattern": r"(?i)\bnpx\s+[\w./-]+@latest\b"}
+        base.update(fields)
+        return base
+
+    def test_a_rule_of_a_new_category_fires_with_its_own_severity(self) -> None:
+        with mock.patch.object(analyzer, "PATTERN_RULES", analyzer.compile_rules([self.rule()])):
+            findings = analyzer.audit_file_content(self.PATH, "run npx foo@latest now\n")
+        self.assertEqual([(f.rule, f.category, f.severity, f.message) for f in findings],
+                         [("AGT-TEST-001", "supply_chain", "MEDIUM", "A test rule fired")])
+
+    def test_a_normalised_rule_sees_folded_text_and_a_raw_rule_does_not(self) -> None:
+        folded = analyzer.compile_rules([self.rule(pattern=r"(?i)\bnpx\s+foo@latest\b")])
+        with mock.patch.object(analyzer, "PATTERN_RULES", folded):
+            self.assertEqual(len(analyzer.audit_file_content(self.PATH, "npx\n   foo@latest\n")), 1)
+            self.assertEqual(len(analyzer.audit_file_content(self.PATH, "npx f\u200boo@latest\n")), 2, "the rule and STEG")
+        raw = analyzer.compile_rules([self.rule(scope="raw", pattern=r"(?i)npx foo@latest")])
+        with mock.patch.object(analyzer, "PATTERN_RULES", raw):
+            self.assertEqual(len(analyzer.audit_file_content(self.PATH, "npx\n   foo@latest\n")), 0)
+            self.assertEqual(len(analyzer.audit_file_content(self.PATH, "npx foo@latest\n")), 1)
+
+    def test_two_rules_with_one_message_on_one_line_report_once(self) -> None:
+        twins = analyzer.compile_rules([self.rule(id="AGT-TEST-001"), self.rule(id="AGT-TEST-002")])
+        with mock.patch.object(analyzer, "PATTERN_RULES", twins):
+            findings = analyzer.audit_file_content(self.PATH, "npx foo@latest\n")
+        self.assertEqual([f.rule for f in findings], ["AGT-TEST-001"])
+
+    def test_a_match_beyond_the_line_map_falls_back_to_line_one(self) -> None:
+        with mock.patch.object(analyzer, "PATTERN_RULES", analyzer.compile_rules([self.rule()])), \
+                mock.patch.object(analyzer, "line_map", lambda text: []):
+            findings = analyzer.audit_file_content(self.PATH, "\n\nnpx foo@latest\n")
+        self.assertEqual([f.line for f in findings], [1])
+
+    def test_a_structural_rule_without_a_pattern_is_not_a_pattern_rule(self) -> None:
+        compiled = analyzer.compile_rules([self.rule(), {"id": "AGT-X-001", "category": "x", "severity": "high", "kind": "structural"}])
+        self.assertEqual([rule.id for rule in compiled], ["AGT-TEST-001"])
+
+    def test_the_snapshot_yields_the_three_shipped_categories_and_nothing_else_today(self) -> None:
+        self.assertEqual({rule.category for rule in analyzer.PATTERN_RULES},
+                         {"prompt_injection", "unsafe_execution", "data_exfiltration"})
+        self.assertEqual({rule.severity for rule in analyzer.PATTERN_RULES}, {"HIGH"})
+
+
 class QuotedContextTests(unittest.TestCase):
     """A skill that quotes an attack to teach against it is not attacking."""
 

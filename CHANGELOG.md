@@ -40,6 +40,12 @@ All notable changes to AgtMLS are recorded here.
   and never lower; a miss within the floor is a warning. A
   `must_not_detect` entry may name a severity, so a quoted attack can
   require "nothing at HIGH" without requiring silence.
+- The analyzer runs every pattern rule in the spec snapshot with the
+  category, severity and scope the rule declares, instead of three
+  hard-coded categories at HIGH. The Rust implementation already did;
+  a rule of a category Python never named fired there and not here,
+  which the differential conformance run would have caught only after
+  the rule shipped. With today's nineteen rules nothing changes.
 - `audit --foreign <path|git-url@sha>` audits every skill in a repository
   that is not this registry: a Claude marketplace, a plugin manifest or a
   skills directory, per plugin and skill, against the skill's own policy
