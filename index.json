@@ -325,7 +325,7 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:eaf8cc38336e2c32ad49460f07a04fc35fcff63790c68a8571e6c9275d69bedc",
+      "integrity": "sha256:d621fe3bfb6557d3729f185ecded769378e6d4cf99e71c3800cac6f557c98245",
       "kind": "general",
       "last_changed_version": "0.0.6",
       "license": "MIT",

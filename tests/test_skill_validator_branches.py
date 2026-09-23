@@ -15,7 +15,6 @@ would pass as long as any one rule still fired.
 from __future__ import annotations
 
 import json
-import unittest
 
 from .validator_harness import BrokenTreeCase
 

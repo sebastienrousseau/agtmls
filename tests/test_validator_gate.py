@@ -23,6 +23,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 
 from .support import ROOT, load_script, registry_fixture, retarget, run_main
 
@@ -89,7 +90,7 @@ class ValidatorFailureBase(unittest.TestCase):
         return output
 
     def some_skill(self) -> Path:
-        return sorted((self.fixture / "skills").glob("*/SKILL.md"))[0]
+        return min((self.fixture / "skills").glob("*/SKILL.md"))
 
 
 class SkillValidatorTests(ValidatorFailureBase):
@@ -116,7 +117,7 @@ class SkillValidatorTests(ValidatorFailureBase):
 
     def test_a_skill_that_reintroduces_a_version_is_caught(self) -> None:
         """The field whose removal made the digest stable."""
-        metadata = sorted((self.fixture / "skills").glob("*/metadata.json"))[0]
+        metadata = min((self.fixture / "skills").glob("*/metadata.json"))
         self.edit_json(
             str(metadata.relative_to(self.fixture)),
             lambda data: data.__setitem__("version", "0.0.6"),
@@ -124,7 +125,7 @@ class SkillValidatorTests(ValidatorFailureBase):
         self.assertIn("version", self.assert_catches("validate-skill-metadata.py"))
 
     def test_metadata_with_an_unknown_risk_level_is_caught(self) -> None:
-        metadata = sorted((self.fixture / "skills").glob("*/metadata.json"))[0]
+        metadata = min((self.fixture / "skills").glob("*/metadata.json"))
         self.edit_json(
             str(metadata.relative_to(self.fixture)),
             lambda data: data["safety_policy"].__setitem__("risk_level", "catastrophic"),
@@ -176,7 +177,7 @@ class ManifestValidatorTests(ValidatorFailureBase):
 
     def test_a_profile_naming_a_bundle_that_does_not_exist_is_caught(self) -> None:
         def mutate(data: dict) -> None:
-            first = sorted(data["profiles"])[0]
+            first = min(data["profiles"])
             data["profiles"][first]["bundles"] = ["no-such-bundle"]
 
         self.edit_json("profiles.json", mutate)
@@ -394,7 +395,7 @@ class EveryValidatorTests(ValidatorFailureBase):
     """
 
     #: Checks that need a git history, a network, or a subprocess of their own.
-    NEEDS_MORE_THAN_A_TREE = {
+    NEEDS_MORE_THAN_A_TREE: ClassVar[set[str]] = {
         "validate-python-scripts.py",   # reads scripts/, which the fixture copies but does not own
         "validate-shell-syntax.py",     # shells out to bash -n
         "validate-spec-conformance.py", # optional external reference implementation

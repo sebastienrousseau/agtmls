@@ -29,11 +29,9 @@ SKILLS_DIR = ROOT / "skills"
 
 # Terms shared by every skill in a single-project family carry no signal and
 # would inflate similarity; drop the obvious stopwords + project boilerplate.
-STOP = set(
-    """a an the and or of to in on for with when this that is are be it its as at by from into
-    you your load use uses using skill covers see also not need needs which what how do does
-    noyalib repo v0 0 14 date stamped branch feat release""".split()
-)
+STOP = {
+    "a", "an", "the", "and", "or", "of", "to", "in", "on", "for", "with", "when", "this", "that", "is", "are", "be", "it", "its", "as", "at", "by", "from", "into", "you", "your", "load", "use", "uses", "using", "skill", "covers", "see", "also", "not", "need", "needs", "which", "what", "how", "do", "does", "noyalib", "repo", "v0", "0", "14", "date", "stamped", "branch", "feat", "release"
+}
 TOKEN = re.compile(r"[a-z0-9_]+")
 
 

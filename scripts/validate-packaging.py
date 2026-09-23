@@ -154,7 +154,7 @@ def main() -> int:
         errors.append(f"pyproject version {version} must match plugin.json {plugin_version}")
 
     if INIT.exists():
-        match = re.search(r'^__version__\s*=\s*"([^"]+)"', INIT.read_text(encoding="utf-8"), re.M)
+        match = re.search(r'^__version__\s*=\s*"([^"]+)"', INIT.read_text(encoding="utf-8"), re.MULTILINE)
         if not match:
             errors.append("src/agtmls/__init__.py must define __version__")
         elif match.group(1) != plugin_version:

@@ -31,10 +31,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from _lib.covered import (  # noqa: E402  (ROOT must be on the path first)
-    SOURCE_DIRS as COVERED_DIRS,
+from _lib.covered import (
     SBOM_FILES as COVERED_FILES,
 )
+from _lib.covered import (  # noqa: E402  (ROOT must be on the path first)
+    SOURCE_DIRS as COVERED_DIRS,
+)
+
 OUT_SPDX = ROOT / "SBOM.spdx.json"
 OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
 

@@ -14,7 +14,7 @@ import argparse
 import re
 import sys
 from collections import Counter
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,10 +38,9 @@ def redact(text: str) -> str:
 
 
 def top_terms(text: str) -> list[str]:
-    stop = set(
-        "the and for with that this from into have need when what how why you your are was were not but can"
-        .split()
-    )
+    stop = {
+        "the", "and", "for", "with", "that", "this", "from", "into", "have", "need", "when", "what", "how", "why", "you", "your", "are", "was", "were", "not", "but", "can"
+    }
     words = [w.lower() for w in WORD.findall(text) if w.lower() not in stop]
     return [term for term, _ in Counter(words).most_common(20)]
 
@@ -55,13 +54,14 @@ def render(name: str, transcript: str) -> str:
         f"Draft proposal for a reusable AgtMLS skill. Use when future sessions repeat "
         f"the workflow observed in this transcript around {', '.join(terms[:5]) or name}."
     )
-    return f"""<!-- SPDX-FileCopyrightText: {date.today().year} Sebastien Rousseau -->
+    today = datetime.now(timezone.utc).date()
+    return f"""<!-- SPDX-FileCopyrightText: {today.year} Sebastien Rousseau -->
 <!-- SPDX-License-Identifier: MIT -->
 
 # Skill Proposal: {name}
 
 Status: draft, human review required
-Date: {date.today().isoformat()}
+Date: {today.isoformat()}
 
 ## Candidate frontmatter
 

@@ -302,31 +302,33 @@ def check_skill_honesty(skill_dir: Path) -> list[Finding]:
     findings.extend(check_capability_escalation(skill_dir, policy))
     body = read_capped(skill_md) or ""
 
-    if policy.get("executes_commands") is False:
-        if re.search(r"(?i)\brun\s+(?:the\s+following|this)\s+(?:script|command|bash)", body):
-            findings.append(
-                Finding(
-                    file_path=skill_md,
-                    line=1,
-                    severity="MEDIUM",
-                    category="policy_honesty",
-                    message="Skill claims executes_commands=false but text instructs agent to run commands",
-                    rule="AGT-POLICY-004",
-                )
+    if policy.get("executes_commands") is False and re.search(
+        r"(?i)\brun\s+(?:the\s+following|this)\s+(?:script|command|bash)", body
+    ):
+        findings.append(
+            Finding(
+                file_path=skill_md,
+                line=1,
+                severity="MEDIUM",
+                category="policy_honesty",
+                message="Skill claims executes_commands=false but text instructs agent to run commands",
+                rule="AGT-POLICY-004",
             )
+        )
 
-    if policy.get("network_access") == "none":
-        if re.search(r"(?i)\b(?:fetch|download|curl|wget)\s+https?://", body):
-            findings.append(
-                Finding(
-                    file_path=skill_md,
-                    line=1,
-                    severity="MEDIUM",
-                    category="policy_honesty",
-                    message="Skill claims network_access=none but text contains instructions to fetch URLs",
-                    rule="AGT-POLICY-005",
-                )
+    if policy.get("network_access") == "none" and re.search(
+        r"(?i)\b(?:fetch|download|curl|wget)\s+https?://", body
+    ):
+        findings.append(
+            Finding(
+                file_path=skill_md,
+                line=1,
+                severity="MEDIUM",
+                category="policy_honesty",
+                message="Skill claims network_access=none but text contains instructions to fetch URLs",
+                rule="AGT-POLICY-005",
             )
+        )
 
     return findings
 

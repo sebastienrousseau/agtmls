@@ -21,7 +21,7 @@ def load(spec: str) -> dict[str, object]:
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     if ":" in spec:
-        proc = subprocess.run(["git", "show", spec], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        proc = subprocess.run(["git", "show", spec], cwd=ROOT, text=True, capture_output=True, check=False)
         if proc.returncode != 0:
             raise SystemExit(proc.stderr.strip() or f"cannot read {spec}")
         return json.loads(proc.stdout)

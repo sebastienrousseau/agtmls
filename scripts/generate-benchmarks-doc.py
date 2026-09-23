@@ -95,11 +95,13 @@ def render_latency() -> str:
         "|---|---:|---:|---:|---:|",
         *rows,
         "",
-        f"The {len(interactive)} `cli-*` commands are the interactive surface: P50 between "
-        f"**{fastest:.0f}ms** and **{max(interactive):.0f}ms**, against the {budget:.0f}ms budget of "
-        f"scorecard criterion 3.10. About {calibration:.0f}ms of that is the interpreter itself — the "
-        f"calibration row — so AgtMLS's own share of the fastest command is about "
-        f"{fastest - calibration:.0f}ms.",
+        (
+            f"The {len(interactive)} `cli-*` commands are the interactive surface: P50 between "
+            f"**{fastest:.0f}ms** and **{max(interactive):.0f}ms**, against the {budget:.0f}ms budget of "
+            f"scorecard criterion 3.10. About {calibration:.0f}ms of that is the interpreter itself — the "
+            f"calibration row — so AgtMLS's own share of the fastest command is about "
+            f"{fastest - calibration:.0f}ms."
+        ),
         "",
     ])
 
@@ -135,10 +137,12 @@ def render_scaling() -> str:
         *table,
         f"| **growth for ×{growth['size']:.0f}** | **×{growth['digest']:.2f}** | **×{growth['pairwise']:.2f}** |",
         "",
-        f"`skill_digest` measured ×{growth['digest']:.2f} for ×{growth['size']:.0f} the corpus. Pairwise "
-        f"scoring measured ×{growth['pairwise']:.2f}; at {rows[0]['skills']} skills it costs "
-        f"{rows[0]['pairwise_ms']:.2f}ms, and extrapolating quadratically from {largest['skills']} skills "
-        f"it reaches roughly {extrapolate(1000):.1f}s at 1,000 skills and {extrapolate(3000):.1f}s at 3,000.",
+        (
+            f"`skill_digest` measured ×{growth['digest']:.2f} for ×{growth['size']:.0f} the corpus. Pairwise "
+            f"scoring measured ×{growth['pairwise']:.2f}; at {rows[0]['skills']} skills it costs "
+            f"{rows[0]['pairwise_ms']:.2f}ms, and extrapolating quadratically from {largest['skills']} skills "
+            f"it reaches roughly {extrapolate(1000):.1f}s at 1,000 skills and {extrapolate(3000):.1f}s at 3,000."
+        ),
         "",
     ])
 

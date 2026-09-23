@@ -52,7 +52,7 @@ class RulesComeFromTheSnapshotTests(unittest.TestCase):
 
     def test_the_invisible_code_point_table_is_the_spec_list(self) -> None:
         steg = next(r for r in self.snapshot["rules"] if r["id"] == "AGT-STEG-001")
-        expected = {chr(int(c["cp"][2:], 16)): f"{c['name']} ({c['cp']})" for c in steg["code_points"]}
+        expected = {chr(int(c["cp"].removeprefix("U+"), 16)): f"{c['name']} ({c['cp']})" for c in steg["code_points"]}
         self.assertEqual(self.rules.INVISIBLE_UNICODE, expected)
 
     def test_the_snapshot_records_where_it_came_from(self) -> None:

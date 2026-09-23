@@ -222,7 +222,7 @@ class DoctorTargetTests(ScriptCase):
         self.addCleanup(lambda: shutil.rmtree(sibling, ignore_errors=True))
         skills = self.install(names=SKILLS[1:])
         (skills / SKILLS[0]).symlink_to(sibling / "skills" / SKILLS[0])
-        code, output = self.doctor()
+        _code, output = self.doctor()
         self.assertIn(f"WARN target missing expected AgtMLS skill links: {SKILLS[0]}\n", output)
 
     def test_commands_without_skills_warns_and_checks_no_links(self) -> None:

@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate publication governance rules."""
 from __future__ import annotations
-import json,sys
+
+import json
+import sys
 from pathlib import Path
+
 ROOT=Path(__file__).resolve().parent.parent
 def main():
     idx=json.loads((ROOT/'index.json').read_text()); errors=[]

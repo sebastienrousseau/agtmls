@@ -11,7 +11,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .support import CLI, ROOT, load_script, skill_text  # noqa: F401  (used by the cases below)
+from .support import (  # noqa: F401  (used by the cases below)
+    CLI,
+    ROOT,
+    load_script,
+    skill_text,
+)
 
 
 class BenchmarkTests(unittest.TestCase):
@@ -161,12 +166,13 @@ class OfflineGuaranteeTests(unittest.TestCase):
             log = workspace / "attempts.log"
             env = module.blocked_environment(injected, log)
             proc = subprocess.run(
-                [sys.executable, "-c",
-                 "import urllib.request\n"
-                 "try:\n"
-                 "    urllib.request.urlopen('http://example.invalid', timeout=1)\n"
-                 "except Exception:\n"
-                 "    pass\n"],
+                [sys.executable, "-c", (
+                    "import urllib.request\n"
+                    "try:\n"
+                    "    urllib.request.urlopen('http://example.invalid', timeout=1)\n"
+                    "except Exception:\n"
+                    "    pass\n"
+                )],
                 env=env, capture_output=True, text=True, check=False,
             )
             recorded = module.attempts(log)

@@ -864,7 +864,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "be91f20d7a3cd64cb912a376d3fb2aaf3c87e3b10e6770753663514c278da41e"
+          "content": "1447c25a30676984a47c63bed69d241fb5cb0d1e5d2c53bc3a7796fb8df8fba0"
         }
       ],
       "name": "index.json",
@@ -963,7 +963,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d22f1bf4a96ab326bbd9b86bfe1f6088c8bc96d26535fc9a7416d59e8223281d"
+          "content": "1ae57c6f5a20c39c81c4176b7e8f1ca5c73814b69fb858278bb2b14052688a9b"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -1051,7 +1051,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "929da8af756519c537908e53a0c3e7770088b283744db8d2b2bb5f78fdabec0e"
+          "content": "1c6853bd8d602fd297c70c99a52413a65c7fc91ad8dfc9f9c34b369ad2a2af65"
         }
       ],
       "name": "scripts/_lib/scaling.py",
@@ -1084,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5b9f00a335c40f1f9d38836bca33dd715c8c6b17d2d9c34c86f18901617ae128"
+          "content": "ad4b48ded77fecad5af850ab8c2d60cfe16e30eb552686a094fb605ed8303513"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -1106,7 +1106,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "02b2209874eebc3cb72e8024189c6586506d59e4a33e3bf0b499f733213d8b9c"
+          "content": "ac5d5e0a16049e51fff5e2204aba2adfe555d14d28e76d6b78407c5830af82fa"
         }
       ],
       "name": "scripts/bench.py",
@@ -1117,7 +1117,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1e26e7b983fae387227a1bacb788290a74eea15e74d4aa86fc16f3114c065b54"
+          "content": "7b0339c538018695885999070e026839ee20a00520ea1655dd5227bd636c17af"
         }
       ],
       "name": "scripts/bump-version.py",
@@ -1139,7 +1139,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "44161d025d627a757e2aef2dacd171a1f665a3c9f5b23895022f9d2d43d6d629"
+          "content": "3458d6d63c5e99619dd05f38d20eb3c99c080c1bc901105434033b3e7a5a3e59"
         }
       ],
       "name": "scripts/check-skill-collisions.py",
@@ -1150,7 +1150,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "71d5947b1ced9a6e428fbd88a0da47901000d4691a7dde77de1259fe72c1705c"
+          "content": "e86b2aac3e05fd2d8140379d2588e0c306fcbb1f861b19679a30329353e4948d"
         }
       ],
       "name": "scripts/evolve-session.py",
@@ -1172,7 +1172,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d18f5a8fbef76ae02e8e7efec10d7f2a13150efb85286335e4d741f8f675b614"
+          "content": "3a9e06760c7560149dceacd94fc325468d6d5ca5d71c1988b9be53c5b8eb8ecf"
         }
       ],
       "name": "scripts/generate-benchmarks-doc.py",
@@ -1194,7 +1194,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "02913281792a8c43ba4c7bea8f1431f43e098b4196255f6c1ad91454a616be26"
+          "content": "5e90db0eba44024032feb55d36f45aa9b73245e1fdc217a0fc1145f1f093012c"
         }
       ],
       "name": "scripts/generate-completions.py",
@@ -1238,7 +1238,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "33a569bbbe22d37ce449f1164322001635b091fe3abca6e243a754b08b815afc"
+          "content": "ed7ab531b85966e97e1d5f8c682718364732914ee5768bf1b9a03557f53a9809"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -1249,7 +1249,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8c7fb34fa7b65dba6e83d53adf667e643f0b6e51b393a797a8f1f9384ba7c917"
+          "content": "0a05e5205e36159b6adfb4f9552326bdd3604e9b3453c9310fc08347878fa347"
         }
       ],
       "name": "scripts/generate-provenance.py",
@@ -1260,7 +1260,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7154a9468f7622f8bd64bda7731c72eae16a25ac99da339c46682064c89dd660"
+          "content": "af632b7fe2c61afd46ec68e20bd34b1ee4037fb3a726cddb70b3825383c77af8"
         }
       ],
       "name": "scripts/generate-sbom.py",
@@ -1271,7 +1271,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "da1ba6f2088bf05210bae7d648f24ad515cb45fc5a46bf99c60035807c059814"
+          "content": "e6463783253eda890c4e98807779f06edf82284093a4eb8c54a96fc913f1f199"
         }
       ],
       "name": "scripts/generate-skill-index.py",
@@ -1282,7 +1282,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6e1e6c77476b598b0167d81b5055f39a81f1904c9b8636d3495722e472eb3744"
+          "content": "e1f67c4804876038b19553fa3959766faffb11fd142f161f4478cc28bcd9e666"
         }
       ],
       "name": "scripts/import-skill.py",
@@ -1304,7 +1304,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a19f764c67ab32dda3207a2b45ef25ce4385c7b45c41bfaadbfeb36343f6ccc5"
+          "content": "bcdb4aca38c6584f13cf65fb1ce4c4a7b63c8885ea2a826a497f59e03f2df051"
         }
       ],
       "name": "scripts/propose-skill-from-session.py",
@@ -1326,7 +1326,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aade1c90a677e50f599fba9d6881b70fd40510d5623d51ffc62a7f377a646ab3"
+          "content": "19b442e102eade4cad3f52ce4a3ef0e99a098dfa5ca8364e1b9f618022cafe1f"
         }
       ],
       "name": "scripts/record-evidence.py",
@@ -1337,7 +1337,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "98ca69fc4b1aaed8ffb14d55e188c1f02c7702cbf2335b10b78292ab87e229b0"
+          "content": "196637eb600829d1d56e30459bb9c21bfcb389d16ff6587013816dc0e30d56ea"
         }
       ],
       "name": "scripts/registry-diff.py",
@@ -1359,7 +1359,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "75eb87b9f46f2a1111aa10c46fb79ee9bb30b27e2919bf3940b3b5b48f598205"
+          "content": "453339ca32bf73f2777cea8d9d993468917e7aff2db45a6dbfb3b415d101494a"
         }
       ],
       "name": "scripts/release-dry-run.py",
@@ -1414,7 +1414,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7f1c8e8db09e72f200a2d75ac56f9a974e6824605a9802923371410d3b9b9fe3"
+          "content": "4e01e065bc80f81fa673f24b057d6d477161df59ea1dc4e8a951f7c4f620602d"
         }
       ],
       "name": "scripts/run-security-evals.py",
@@ -1425,7 +1425,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6cb2176e816f8e365ed5d256ac671c2a9c171e80d74d9663a5233f8888025f71"
+          "content": "8d108743b4eaac0eeab2e3df56fbd5bd68746ef22f8444a3f01bc50d92fb4708"
         }
       ],
       "name": "scripts/run-trigger-evals.py",
@@ -1491,7 +1491,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aa7a45b97ac0b755890a1b38fb152a163238117f747e4a0f2b911e4ea64d952e"
+          "content": "9b0ee3eb4c418059d908ba65c1f0f8683a4c10c2a93f75dae31c4ada16fc10a5"
         }
       ],
       "name": "scripts/smoke-evolve-evidence.py",
@@ -1535,7 +1535,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "26c1b2611583653ee9038f78da487318182e46db2080f8f8bd0b7d2a891e03b2"
+          "content": "7791361992df11d147793339cb894eba8c02ee3a169e769fb02e83ca7fb4e8a3"
         }
       ],
       "name": "scripts/smoke-install-safety.py",
@@ -1568,7 +1568,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e2a01d3ffddea77810664285648163ce006df028da36f275e5f41f8f567fe30b"
+          "content": "815bc4cf04e5bfde16eafc3b5a452528ccaff51d1605b2691ee7588dc3af73bf"
         }
       ],
       "name": "scripts/smoke-live-providers.py",
@@ -1601,7 +1601,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "82d3fcb8a6f49a50775ed0b270d65afedea0779cf554b7ec07beb65b239d0aaf"
+          "content": "902bf828a950b0f27882cfc2cd7320fed66497b00fe55ae41193bc3e7bf26931"
         }
       ],
       "name": "scripts/smoke-offline.py",
@@ -1777,7 +1777,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fe3a975e98711ca2abc4dac17e5167a7e442f91e3c1e22e206c78da5a77944a1"
+          "content": "6d38c79518eabb02e159a696ec564eb5c374796f97f36f7de93f05294ec9fa2d"
         }
       ],
       "name": "scripts/validate-governance.py",
@@ -1821,7 +1821,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fec125aa522f5dc457dd2ac28cecec285ecb4229e4b1801c14e5a59e52af67e4"
+          "content": "c58b6ddb64874a278d02d3fca48105992c0a8642e08376461e04a7a8e637b4b6"
         }
       ],
       "name": "scripts/validate-packaging.py",
@@ -2789,7 +2789,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "607ce48456f733775abc0613245013ee149dac740a34d3cfad27c6c5d2e6191b"
+          "content": "f3c49e0711bed62977e74ff7a8b69bdf6eb314a43e52b0ec97a1704c27a64f4a"
         }
       ],
       "name": "skills/cross-language-port/harness/templates/hypothesis_diff.py",

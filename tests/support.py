@@ -12,16 +12,9 @@ this package instead of holding them.
 """
 from __future__ import annotations
 
-import ast
 import importlib.util
-import json
-import os
 import shutil
-import subprocess
 import sys
-import tempfile
-import textwrap
-import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -61,7 +54,6 @@ def registry_fixture(destination: Path) -> Path:
     the scripts behind keeps the copy small and keeps the code under test the
     real code, which is what `retarget` then points at this.
     """
-    import shutil
 
     skip = {".git", "__pycache__", ".agtmls", ".ruff_cache", "dist", "node_modules"}
     destination.mkdir(parents=True, exist_ok=True)

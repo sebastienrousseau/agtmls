@@ -50,13 +50,13 @@ class Workspace(unittest.TestCase):
 
 class DescribeInvisibleTests(unittest.TestCase):
     def test_a_listed_code_point_is_named(self) -> None:
-        self.assertIn("Zero-width space", analyzer.describe_invisible("​"))
+        self.assertIn("Zero-width space", analyzer.describe_invisible("\u200b"))
 
     def test_the_tag_block_is_named_as_a_covert_channel(self) -> None:
         self.assertEqual(analyzer.describe_invisible("\U000e0041"), "Covert tag character (U+E0041)")
 
     def test_a_variation_selector_is_named(self) -> None:
-        self.assertEqual(analyzer.describe_invisible("︁"), "Variation selector (U+FE01)")
+        self.assertEqual(analyzer.describe_invisible("\ufe01"), "Variation selector (U+FE01)")
 
     def test_anything_else_falls_back_to_its_code_point(self) -> None:
         """Reached if the spec adds a range this table has no name for."""

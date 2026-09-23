@@ -163,7 +163,7 @@ class ScaffoldTests(GeneratorBase):
     def test_scaffolding_over_an_existing_skill_is_refused(self) -> None:
         destination = self.out / "root"
         self.drive("scaffold-skill.py", "sample-skill", "--out-root", str(destination))
-        code, output = self.drive(
+        code, _output = self.drive(
             "scaffold-skill.py", "sample-skill", "--out-root", str(destination)
         )
         self.assertNotEqual(code, 0, "scaffolding silently overwrote an existing skill")
@@ -247,7 +247,7 @@ class DoctorTests(GeneratorBase):
     def test_the_doctor_warns_about_a_target_with_nothing_installed(self) -> None:
         empty = self.out / "empty"
         empty.mkdir()
-        code, output = self.drive(
+        _code, output = self.drive(
             "agtmls-doctor.py", "--skip-gate", "--target", str(empty), "--agent", "claude"
         )
         self.assertIn("WARN", output, output)

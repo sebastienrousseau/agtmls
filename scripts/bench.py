@@ -37,11 +37,9 @@ from __future__ import annotations
 import argparse
 import json
 import platform
-import shutil
 import statistics
 import subprocess
 import sys
-import tempfile
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -56,6 +54,7 @@ from _lib.workloads import (  # noqa: E402  (needs the scripts path first)
     INTERACTIVE,
     workloads,
 )
+
 RESULTS = ROOT / "benchmarks" / "results"
 BASELINE = ROOT / "bench-baseline.json"
 HISTORY = ROOT / ".agtmls" / "runs"
@@ -206,8 +205,10 @@ def budget_failures(report: dict[str, object]) -> list[tuple[str, str]]:
         if entry and float(entry["p50_ms"]) > COLD_START_BUDGET_MS:
             failures.append((
                 name,
-                f"{name}: P50 {entry['p50_ms']}ms exceeds the "
-                f"{COLD_START_BUDGET_MS}ms cold-start budget",
+                (
+                    f"{name}: P50 {entry['p50_ms']}ms exceeds the "
+                    f"{COLD_START_BUDGET_MS}ms cold-start budget"
+                ),
             ))
     return failures
 
@@ -236,9 +237,11 @@ def regressions(report: dict[str, object], baseline: dict[str, object]) -> list[
         if after > before * limit:
             found.append((
                 name,
-                f"{name}: {after:.2f}x calibration against a baseline of {before:.2f}x "
-                f"(+{(after / before - 1) * 100:.0f}%, allowed "
-                f"{(limit - 1) * 100:.0f}%)",
+                (
+                    f"{name}: {after:.2f}x calibration against a baseline of {before:.2f}x "
+                    f"(+{(after / before - 1) * 100:.0f}%, allowed "
+                    f"{(limit - 1) * 100:.0f}%)"
+                ),
             ))
     missing = sorted(set(report["workloads"]) - set(recorded) - {"calibration"})
     for name in missing:

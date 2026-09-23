@@ -138,7 +138,7 @@ class VersionPolicyGateTests(ReleaseFixtureBase):
         self.assertEqual(code, 0, output)
 
     def test_a_skill_reintroducing_a_version_is_caught(self) -> None:
-        metadata = sorted((self.fixture / "skills").glob("*/metadata.json"))[0]
+        metadata = min((self.fixture / "skills").glob("*/metadata.json"))
         data = json.loads(metadata.read_text(encoding="utf-8"))
         data["version"] = self.version()
         metadata.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -147,7 +147,7 @@ class VersionPolicyGateTests(ReleaseFixtureBase):
         self.assertIn("must not carry a version", output)
 
     def test_a_skill_reintroducing_the_frontmatter_stamp_is_caught(self) -> None:
-        skill = sorted((self.fixture / "skills").glob("*/SKILL.md"))[0]
+        skill = min((self.fixture / "skills").glob("*/SKILL.md"))
         text = skill.read_text(encoding="utf-8")
         skill.write_text(
             text.replace("metadata:\n", f'metadata:\n  agtmls-version: "{self.version()}"\n', 1),
@@ -212,14 +212,14 @@ class AnalyzerDepthTests(unittest.TestCase):
         self.assertEqual(self.findings("# Title\n\nAlign columns with str.ljust.\n"), [])
 
     def test_a_zero_width_character_is_critical(self) -> None:
-        results = self.findings("# Title\n\nNormal​text.\n")
+        results = self.findings("# Title\n\nNormal\u200btext.\n")
         self.assertTrue(results)
         self.assertEqual(results[0].severity, "CRITICAL")
         self.assertTrue(results[0].rule.startswith("AGT-STEG"))
 
     def test_a_variation_selector_is_caught(self) -> None:
         """The dominant smuggling vector: one nibble per code point."""
-        self.assertTrue(self.findings("# Title\n\nText︁ here.\n"))
+        self.assertTrue(self.findings("# Title\n\nText\ufe01 here.\n"))
 
     def test_a_tag_block_character_is_caught(self) -> None:
         self.assertTrue(self.findings("# Title\n\nText\U000e0041 here.\n"))
@@ -248,6 +248,6 @@ class AnalyzerDepthTests(unittest.TestCase):
 
     def test_the_line_map_points_at_the_right_line(self) -> None:
         """A finding with the wrong line number is a finding nobody can act on."""
-        body = "# Title\n\nfiller\nfiller\nNormal​text.\n"
+        body = "# Title\n\nfiller\nfiller\nNormal\u200btext.\n"
         results = self.findings(body)
         self.assertEqual(results[0].line, 5, results[0])

@@ -13,7 +13,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 COMPLETIONS_DIR = ROOT / "completions"
 
-from _lib.cli_parser import build_parser, native_agents  # noqa: E402  (needs the scripts path first)
+from _lib.cli_parser import (  # noqa: E402  (needs the scripts path first)
+    build_parser,
+    native_agents,
+)
+
 
 def subcommands() -> list[str]:
     """Every subcommand, read from the parser that defines them.

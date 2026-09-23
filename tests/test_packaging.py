@@ -10,7 +10,12 @@ import textwrap
 import unittest
 from pathlib import Path
 
-from .support import CLI, ROOT, load_script, skill_text  # noqa: F401  (used by the cases below)
+from .support import (  # noqa: F401  (used by the cases below)
+    CLI,
+    ROOT,
+    load_script,
+    skill_text,
+)
 
 
 class PackagingTests(unittest.TestCase):

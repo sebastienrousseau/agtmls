@@ -12,8 +12,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .support import CLI, ROOT, load_script, skill_text  # noqa: F401  (used by the cases below)
-
+from .support import (  # noqa: F401  (used by the cases below)
+    CLI,
+    ROOT,
+    load_script,
+    skill_text,
+)
 
 GENERATED_MARKERS = (
     "sbom", "provenance", "index.json", "mcp-resources",
@@ -58,7 +62,7 @@ class VersionPolicyTests(unittest.TestCase):
         try:
             module.release_patches = lambda: [1]
             self.assertEqual(module.next_version(), "0.0.2")
-            module.release_patches = lambda: []
+            module.release_patches = list
             self.assertEqual(module.next_version(), "0.0.1")
         finally:
             module.release_patches = original

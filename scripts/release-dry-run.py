@@ -66,7 +66,7 @@ def main() -> int:
     args = parser.parse_args()
 
     version = args.version or json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["version"]
-    next_proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "next-version.py")], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    next_proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "next-version.py")], cwd=ROOT, text=True, capture_output=True, check=False)
     if next_proc.returncode != 0:
         print(next_proc.stderr or next_proc.stdout, file=sys.stderr)
         return next_proc.returncode

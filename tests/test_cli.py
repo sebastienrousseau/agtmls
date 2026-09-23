@@ -12,8 +12,14 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 
-from .support import CLI, ROOT, load_script, skill_text  # noqa: F401  (used by the cases below)
+from .support import (  # noqa: F401  (used by the cases below)
+    CLI,
+    ROOT,
+    load_script,
+    skill_text,
+)
 
 
 class CliJsonTests(unittest.TestCase):
@@ -166,7 +172,7 @@ class CliDispatchTests(unittest.TestCase):
     # Every subcommand, with arguments sufficient to satisfy its parser.
     # A subcommand added without an entry here fails
     # test_every_declared_subcommand_is_covered, so coverage closes itself.
-    INVOCATIONS: dict[str, list[str]] = {
+    INVOCATIONS: ClassVar[dict[str, list[str]]] = {
         "audit": ["--all"],
         "bench": [],
         "bump-version": ["--check"],
@@ -204,7 +210,7 @@ class CliDispatchTests(unittest.TestCase):
     }
 
     # Handlers that answer from index.json in-process instead of shelling out.
-    LOCAL_HANDLERS = {
+    LOCAL_HANDLERS: ClassVar[set[str]] = {
         "list", "search", "show", "stats", "profiles", "providers", "uninstall",
         "verify",
     }
@@ -250,7 +256,7 @@ class CliDispatchTests(unittest.TestCase):
             if action.nargs == 0:
                 out.append([flag])
             elif action.choices:
-                out.append([flag, str(sorted(action.choices)[0])])
+                out.append([flag, str(min(action.choices))])
             elif "dir" in action.dest or "target" in action.dest:
                 out.append([flag, self.tmp.name])
             else:

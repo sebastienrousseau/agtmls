@@ -29,10 +29,9 @@ TOP_K = 5  # lenient: TF-IDF on a short prompt is noisy; #1 for negatives is the
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 CASES_DIR = ROOT / "evals" / "cases"
-STOP = set(
-    """a an the and or of to in on for with when this that is are be it its as at by from into
-    you your load use uses using skill covers see also not need needs which what how do does my""".split()
-)
+STOP = {
+    "a", "an", "the", "and", "or", "of", "to", "in", "on", "for", "with", "when", "this", "that", "is", "are", "be", "it", "its", "as", "at", "by", "from", "into", "you", "your", "load", "use", "uses", "using", "skill", "covers", "see", "also", "not", "need", "needs", "which", "what", "how", "do", "does", "my"
+}
 TOKEN = re.compile(r"[a-z0-9_]+")
 
 

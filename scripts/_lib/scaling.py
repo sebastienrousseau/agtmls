@@ -52,7 +52,6 @@ def scaling() -> int:
     sys.path.insert(0, str(SCRIPTS))
     from _lib.digest import skill_digest
 
-    import importlib.util
 
     spec = importlib.util.spec_from_file_location(
         "_bench_collisions", SCRIPTS / "check-skill-collisions.py"

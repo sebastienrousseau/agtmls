@@ -237,7 +237,7 @@ class CoveredPathTests(unittest.TestCase):
         # its date follows the skills/ it is generated from.
         basis = set(covered.SOURCE_DIRS) | set(covered.SBOM_FILES)
         for path in shipped:
-            if path.startswith(".") or path.startswith("LICENSE"):
+            if path.startswith((".", "LICENSE")):
                 continue
             self.assertIn(path, basis, f"{path} ships in the wheel but has no provenance")
 

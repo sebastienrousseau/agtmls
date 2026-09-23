@@ -9,7 +9,7 @@ import argparse
 import json
 import subprocess
 import sys
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -101,7 +101,7 @@ def update_changelog(version: str, today: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", help="target version; defaults to scripts/next-version.py")
-    parser.add_argument("--date", default=date.today().isoformat())
+    parser.add_argument("--date", default=datetime.now(timezone.utc).date().isoformat())
     parser.add_argument("--check", action="store_true", help="only validate that the requested version is the next allowed version")
     args = parser.parse_args()
 
