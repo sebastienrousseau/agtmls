@@ -22,6 +22,8 @@ All notable changes to AgtMLS are recorded here.
   sample committed under `benchmarks/results/`, a regression gate, and a
   scaling measurement at ten times the registry.
 - `smoke-offline.py` proves the local tier never opens a network socket.
+- CodeQL scans the Python and the workflows (`codeql.yml`, security-extended
+  queries), on every pull request, on main, and weekly.
 - CI lints `scripts/` and `tests/` with a pinned ruff (`conformance.yml`).
   `pyproject.toml` enables E402 and SLF001, the rules the code already
   carried reasoned `noqa` directives for; without them each directive was
@@ -54,6 +56,13 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- README.md follows the portfolio template: its seventeen sections in the
+  template's order, checked by `validate-readme.py` in the gate. Stale
+  counts are corrected (4 native agents, 6 plugin targets and 13 export
+  targets, not 3, 5 and 8), the provenance description matches what
+  `provenance.json` now pins, and the benchmark table is generated from
+  `benchmarks/results/` like BENCHMARKS.md. `docs/POLICIES.md` states the
+  toolchain floor. VERSIONING.md no longer lists the removed agent card.
 - A skill's digest no longer includes the release version, so a release
   moves no content address unless the skill itself changed.
 - The analyzer's rules are a snapshot of a pinned `agtmls-spec` commit
@@ -75,6 +84,13 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- `docs/checks.md` listed 47 of the gate's checks in another order and one  check-count:historical
+  invocation the gate does not run. It is now generated from `checks.json`
+  (`generate-checks-doc.py`, itself a gate check). The manpage and the pull
+  request template still called the gate "57-gate"; prose throughout now  check-count:historical
+  says "every check in `checks.json`", so adding a check edits no prose,
+  and `validate-check-manifest.py` scans six more files for a number
+  creeping back.
 - Main's CI failed after every squash merge while every pull request check
   passed. The SBOMs and `provenance.json` were stamped with the date of the
   last commit touching the described files, and provenance named that

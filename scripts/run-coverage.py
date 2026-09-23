@@ -36,7 +36,7 @@ everyone is working toward gets negotiated down on a busy week; a floor that
 already holds has to be argued with. When the measurement beats the floor,
 this says so and `--update` records it.
 
-`coverage` is not in the standard library, so this cannot join the 66-check
+`coverage` is not in the standard library, so this cannot join the check
 gate without giving up the gate being stdlib-only and runnable offline. It
 runs in CI, and locally whenever someone installs the tool.
 

@@ -119,7 +119,7 @@ class BenchmarkDocEdgeTests(SubsetCase):
     """The refusals test_benchmark_doc.py does not reach."""
 
     SCRIPT = "generate-benchmarks-doc.py"
-    SUBSET = ("BENCHMARKS.md", "benchmarks", "bench-baseline.json")
+    SUBSET = ("BENCHMARKS.md", "README.md", "benchmarks", "bench-baseline.json")
 
     def test_an_unknown_block_is_reported_rather_than_left_alone(self) -> None:
         """A misspelt marker would otherwise hold hand-typed numbers forever."""

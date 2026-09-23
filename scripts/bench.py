@@ -333,7 +333,7 @@ def redeclare(path: Path | None = None) -> int:
 def smoke() -> int:
     """One iteration of every workload. Proves the harness runs; times nothing.
 
-    This is what belongs in the 66-check gate: a timing assertion inside a
+    This is what belongs in the check gate: a timing assertion inside a
     ten-leg matrix on shared runners is a flake generator, and `--check`
     exists for a dedicated job.
     """

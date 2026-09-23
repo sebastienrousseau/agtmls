@@ -12,6 +12,7 @@
       "validate-profiles.py",
       "validate-templates.py",
       "validate-doc-links.py",
+      "validate-readme.py",
       "validate-json-files.py",
       "validate-python-scripts.py",
       "validate-shell-syntax.py",
@@ -35,6 +36,7 @@
       "generate-docs-site.py --check",
       "generate-mcp-resources.py --check",
       "generate-benchmarks-doc.py --check",
+      "generate-checks-doc.py --check",
       "generate-sbom.py --check",
       "validate-sbom-conformance.py",
       "generate-provenance.py --check",
@@ -89,7 +91,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "sha256": "ac2b96f2790525125aff7970e1885d847be5d1cb8c0b071db650ca5fd7d188fd"
+            "sha256": "5d53a5d163bc4cf20125df695c4bc79b08f3635d07dbee9450a1da0dd3d9d526"
           },
           "name": "SBOM.spdx.json",
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
@@ -101,9 +103,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-23T12:28:38Z",
+        "finishedOn": "2026-09-23T13:44:38Z",
         "invocationId": "local",
-        "startedOn": "2026-09-23T12:28:38Z"
+        "startedOn": "2026-09-23T13:44:38Z"
       }
     }
   },
@@ -111,7 +113,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "0181b6c723aa07bc3aac9eeb43a497b1b0455f03eb32813898505fac39959810"
+        "sha256": "02362048149ab36381787e06606950fd2460b2921fc839f0da7aa7e0f5ed863b"
       },
       "name": "agtmls-0.0.6"
     }

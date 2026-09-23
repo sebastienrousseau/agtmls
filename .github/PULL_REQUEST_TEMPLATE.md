@@ -19,7 +19,7 @@
 
 ## Checklist
 
-- [ ] `make check` (57-gate validation suite) passes cleanly
+- [ ] `make check` (every check in `checks.json`) passes cleanly
 - [ ] `make test` (unit tests) passes
 - [ ] `make bench` (routing and behavioral benchmark) passes 100%
 - [ ] `make doctor` reports 0 warnings and 0 failures

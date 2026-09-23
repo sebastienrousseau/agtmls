@@ -18,7 +18,7 @@ AgtMLS uses a deliberately conservative pre-1.0 patch-line release policy.
 ## Metadata Contract
 
 The same version must appear in the plugin manifest, generated registry index,
-agent card, provenance subject, bundle metadata, and changelog release heading.
+provenance subject, bundle metadata, and changelog release heading.
 Generated artifacts must be regenerated after every version change.
 
 ## Enforcement
