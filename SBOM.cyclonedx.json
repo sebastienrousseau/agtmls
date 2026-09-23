@@ -970,6 +970,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/checksums.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ae3005de979637664e51d15375bcd854f14cbd87aca2e8193fd1c8d9d50f115e"
+        }
+      ],
+      "name": "scripts/_lib/checksums.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/cli_parser.py",
       "hashes": [
         {
@@ -1348,7 +1359,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8a1862b16f55f700d135e591eab056fb2b269d8a03cf891873d990b103177ade"
+          "content": "75eb87b9f46f2a1111aa10c46fb79ee9bb30b27e2919bf3940b3b5b48f598205"
         }
       ],
       "name": "scripts/release-dry-run.py",
@@ -1997,7 +2008,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1f711f0f0c85a627bbf2cb14855f0ecec8613370d33a923264fc4995feee6771"
+          "content": "1a369ecb1f268072c508d0426f13555c8f9c17cc5a80c64c4c6f40884fbc8d0a"
         }
       ],
       "name": "scripts/verify-release-assets.py",
@@ -3914,7 +3925,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:05:57Z",
+    "timestamp": "2026-09-23T07:09:06Z",
     "tools": {
       "components": [
         {
