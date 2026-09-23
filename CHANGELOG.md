@@ -24,6 +24,8 @@ All notable changes to AgtMLS are recorded here.
 - `smoke-offline.py` proves the local tier never opens a network socket.
 - Coverage measurement, with the library core held at 100% of lines and
   branches. The security analyzer now sits inside that floor.
+- Unit-test coverage of every script is held at or above 98% of lines and
+  branches (`run-coverage.py --scope unit`, run in CI); it stands at 100%.
 - SECURITY.md separates boundaries (digests, install verification, the
   lockfile, signed tags) from heuristics (the analyzer, policy checks, evals).
 
@@ -60,6 +62,25 @@ All notable changes to AgtMLS are recorded here.
   to install.
 - SBOM.cyclonedx.json did not validate against CycloneDX 1.6.
 - Error messages name the command that fixes the problem.
+- `install` refused a tampered skill only if the index gave it a digest; an
+  entry without one is now refused too.
+- `agtmls doctor --agent antigravity` was rejected, and the doctor counted a
+  link into a sibling checkout as an AgtMLS skill.
+- `scaffold-skill` crashed and left a half-created skill when an eval case
+  already existed; it now writes every file or none.
+- `validate-skill-metadata` crashed on malformed `metadata.json`.
+- Behavioral evals now enforce `forbids.reference_contains`.
+- `agtmls diff` looked up relative paths from the checkout rather than the
+  caller's directory, and failed outside it without `--to`.
+- A blank or malformed line in `SHA256SUMS` crashed the release checks, and a
+  tampered artifact was reported three times.
+- The SBOM check treated any validator output containing "must" as a
+  rejection, and crashed on a checksum entry without an algorithm.
+- On Python 3.10 the packaging check skipped the name, console-script and
+  no-dependencies checks.
+- `bump-version` left two blank lines between changelog sections.
+- AGT-CAP-001 no longer says every runtime grants the tools in
+  `allowed-tools`; Claude Code does, Apache Maka does not.
 
 ## 0.0.6 - 2026-09-19
 
