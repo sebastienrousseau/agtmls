@@ -5,10 +5,9 @@ name: release
 # One build, published twice. The files attached to the GitHub release and
 # the files uploaded to PyPI are the same bytes: the build job checksums them,
 # attaches them to a draft release, audits what GitHub holds, and hands the
-# identical files to the publish job as an artifact. v0.0.6 exposed both ways
-# this used to go wrong: `gh release create` reported success and attached
-# nothing, and the publish job rebuilt the distributions, so PyPI would have
-# served files no checksum described.
+# identical files to the publish job as an artifact. The publish job used to
+# rebuild the wheel and sdist; those builds happen to be byte-identical here,
+# but nothing guaranteed it and nothing checked it.
 on:
   push:
     branches-ignore:
@@ -24,6 +23,10 @@ on:
         description: "Build and validate without publishing anything"
         type: boolean
         default: true
+      publish_existing:
+        description: "Publish the wheel and sdist already attached to the tag's release, instead of building"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -34,7 +37,7 @@ permissions:
 
 jobs:
   release:
-    if: startsWith(github.ref, 'refs/tags/v0.0.') || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)
     runs-on: ubuntu-latest
     steps:
       # The release content: the tagged commit.
@@ -122,10 +125,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
+          # Assets are counted through the release's own assets endpoint, by
+          # id. The asset list GitHub embeds in a release -- which
+          # `gh release view` reads -- showed none of v0.0.6's 17 assets for
+          # about 40 minutes after they were attached.
+          release_id() {
+            gh api "repos/${{ github.repository }}/releases?per_page=100" \
+              --jq ".[] | select(.tag_name == \"$TAG\") | .id" | head -1
+          }
+          asset_count() {
+            gh api "repos/${{ github.repository }}/releases/$1/assets?per_page=100" --jq 'length'
+          }
           if gh release view "$TAG" >/dev/null 2>&1; then
             # A release that exists already may only be empty: completing a
             # release whose upload failed, never replacing one that shipped.
-            count="$(gh release view "$TAG" --json assets --jq '.assets | length')"
+            count="$(asset_count "$(release_id)")"
             if [ "$count" != "0" ]; then
               echo "::error::$TAG already has $count asset(s); refusing to replace a published release"
               exit 1
@@ -136,10 +150,9 @@ jobs:
             gh release create "$TAG" dist/assets/* --draft --verify-tag \
               --title "AgtMLS $TAG" --notes-file dist/body.md
           fi
-          # `gh release create` once reported success and attached nothing;
-          # count what GitHub actually holds before anyone can see it.
+          # Count what GitHub actually holds before anyone can see it.
           expected="$(ls dist/assets | wc -l | tr -d ' ')"
-          attached="$(gh release view "$TAG" --json assets --jq '.assets | length')"
+          attached="$(asset_count "$(release_id)")"
           if [ "$attached" != "$expected" ]; then
             echo "::error::$TAG has $attached of $expected assets attached; the release stays a draft"
             exit 1
@@ -153,11 +166,58 @@ jobs:
           python3 tooling/scripts/release-audit.py --tag "${{ steps.version.outputs.tag }}" \
             --commit "$(git rev-parse HEAD)" --before-pypi
 
+  # For a release that is already public: its attached files are the release,
+  # so PyPI gets exactly those bytes. Each is checked against the release's
+  # SHA256SUMS and the release is audited before anything is handed on.
+  from-release:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_existing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Download and verify the release's assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          # By asset id: `gh release download` reads the release's embedded
+          # asset list, which for v0.0.6 showed none of its 17 assets.
+          mkdir -p dist/assets
+          id="$(gh api "repos/${{ github.repository }}/releases/tags/$TAG" --jq .id)"
+          gh api "repos/${{ github.repository }}/releases/$id/assets?per_page=100" \
+            --jq '.[] | "\(.id) \(.name)"' | while read -r asset name; do
+            gh api -H "Accept: application/octet-stream" \
+              "repos/${{ github.repository }}/releases/assets/$asset" > "dist/assets/$name"
+          done
+          # SHA256SUMS must name every other asset, and every one must match.
+          listed="$(wc -l < dist/assets/SHA256SUMS | tr -d ' ')"
+          attached="$(ls dist/assets | grep -vc '^SHA256SUMS$')"
+          test "$listed" = "$attached"
+          (cd dist/assets && sha256sum -c SHA256SUMS)
+      - name: Audit the release before handing it on
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/release-audit.py --tag "${{ inputs.tag }}" \
+            --commit "$(git rev-parse "${{ inputs.tag }}^{commit}")" --before-pypi
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-assets
+          path: dist/assets/
+          if-no-files-found: error
+
   # Trusted Publishing: no long-lived PyPI token exists to leak, and PyPI
   # records PEP 740 attestations for the uploaded files. The files are the
-  # release job's, downloaded, never rebuilt.
+  # release's -- from the build job, or from the published release -- and are
+  # never rebuilt here.
   publish-pypi:
-    needs: release
+    needs: [release, from-release]
+    if: ${{ !cancelled() && (needs.release.result == 'success' || needs.from-release.result == 'success') }}
     runs-on: ubuntu-latest
     environment: pypi
     permissions:

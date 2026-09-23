@@ -15,7 +15,6 @@ import json
 import subprocess
 import unittest
 import urllib.error
-from pathlib import Path
 from unittest import mock
 
 from .support import load_script, run_main
@@ -32,9 +31,9 @@ class FakeWorld:
         self.state = {
             "local": TAG_OBJECT, "remote": TAG_OBJECT, "peeled": COMMIT, "expected": COMMIT,
             "release": {"body": BODY, "isDraft": False, "assets": [
-                {"name": name, "digest": f"sha256:{digest}"}
-                for digest, name in (line.split("  ") for line in SUMS.splitlines())
-            ] + [{"name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}, "sums": SUMS,
+                {"id": index, "name": name, "digest": f"sha256:{digest}"}
+                for index, (digest, name) in enumerate(line.split("  ") for line in SUMS.splitlines())
+            ] + [{"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}, "sums": SUMS,
             "pypi": {"urls": [
                 {"filename": WHEEL, "digests": {"sha256": "a" * 64}},
                 {"filename": SDIST, "digests": {"sha256": "b" * 64}},
@@ -60,12 +59,16 @@ class FakeWorld:
         if cmd[:3] == ("gh", "release", "view"):
             if s["release"] is None:
                 return ok(rc=1, err="release not found")
-            return ok(json.dumps(s["release"]))
-        if cmd[:3] == ("gh", "release", "download"):
+            # What v0.0.6 showed for ~40 minutes: the release views listed
+            # no assets while the assets endpoint had all of them.
+            return ok(json.dumps({**s["release"], "assets": [], "databaseId": 42}))
+        if cmd[:2] == ("gh", "api") and cmd[-1].endswith("/releases/42/assets?per_page=100"):
+            assets = s["release"].get("assets", [])
             if s["sums"] is None:
-                return ok(rc=1, err="no assets match")
-            Path(cmd[cmd.index("--dir") + 1], "SHA256SUMS").write_text(s["sums"], encoding="utf-8")
-            return ok()
+                assets = [asset for asset in assets if asset["name"] != "SHA256SUMS"]
+            return ok(json.dumps(assets))
+        if cmd[:2] == ("gh", "api") and cmd[-1].endswith("/releases/assets/99"):
+            return ok(s["sums"])
         raise AssertionError(f"unexpected command {cmd}")
 
     def fetch_json(self, url: str):
@@ -125,16 +128,18 @@ class AuditTests(unittest.TestCase):
     def test_the_workflows_one_line_body_is_refused(self) -> None:
         """What v0.0.1-v0.0.5 shipped with: no summary, no checksums."""
         body = "Automated AgtMLS v0.0.9 release. Versions increment by exactly 0.0.1 on the 0.0.x line."
-        _, failures, _ = self.audit(FakeWorld(release={"body": body, "isDraft": False}))
+        release = {**FakeWorld().state["release"], "body": body}
+        _, failures, _ = self.audit(FakeWorld(release=release))
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Summary` section of user-visible changes, as bullets", failures)
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Checksums` section", failures)
 
     def test_a_release_without_its_assets_is_refused(self) -> None:
-        """v0.0.6's first release: `gh release create` reported success and
-        attached nothing. SHA256SUMS lists what should be there; every entry
-        must be an asset with that digest."""
+        """SHA256SUMS lists what should be there; every entry must be an
+        asset with that digest, and nothing else may be attached. Read from
+        the release's assets endpoint: for ~40 minutes after v0.0.6 was
+        published, the release views listed none of its 17 assets."""
         release = {"body": BODY, "isDraft": False, "assets": [
-            {"name": "SHA256SUMS", "digest": "sha256:" + "f" * 64},
+            {"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64},
             {"name": WHEEL, "digest": "sha256:" + "0" * 64},
             {"name": "extra.bin", "digest": "sha256:" + "1" * 64},
         ]}
