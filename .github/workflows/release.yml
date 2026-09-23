@@ -43,15 +43,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
-      # The release tooling and notes: this workflow's own commit. For a tag
-      # push the two are the same; re-releasing an older tag by dispatch runs
-      # today's checks and notes over that tag's content.
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          fetch-tags: true
-          ref: ${{ github.sha }}
-          path: tooling
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
@@ -110,6 +101,17 @@ jobs:
           name: release-assets
           path: dist/assets/
           if-no-files-found: error
+      # The release tooling and notes: this workflow's own commit. For a tag
+      # push the two are the same; re-releasing an older tag by dispatch runs
+      # today's checks and notes over that tag's content. Checked out only
+      # after the gate and the builds: inside the tree, it would be scanned
+      # and packed as if it were the release.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.sha }}
+          path: tooling
       - name: Write the release body
         run: |
           python3 tooling/scripts/release-body.py --tag "${{ steps.version.outputs.tag }}" \
