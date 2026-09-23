@@ -89,7 +89,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "gitCommit": "42c0f77838d81681f627e7d8a7d1fda4c5a4a2c7"
+            "gitCommit": "0935fda37c9aa135f2a7aa131bc980158984ecbc"
           },
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
         }
@@ -100,9 +100,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-23T07:22:43Z",
+        "finishedOn": "2026-09-23T07:24:03Z",
         "invocationId": "local",
-        "startedOn": "2026-09-23T07:22:43Z"
+        "startedOn": "2026-09-23T07:24:03Z"
       }
     }
   },
@@ -110,7 +110,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "964ead91f86071ab9f9824a595c033de6576e37abc657a163521b304d817cefa"
+        "sha256": "2cecc3a505bf33dafed0ab7a4a4b776023025eb418da7c538c402fe1168cea71"
       },
       "name": "agtmls-0.0.6"
     }
