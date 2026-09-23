@@ -13,6 +13,8 @@ python3 scripts/agtmls.py audit --all --strict
 python3 scripts/agtmls.py audit --all --format sarif > audit.sarif
 python3 scripts/agtmls.py audit --all --write-baseline .agtmls-audit-baseline.json
 python3 scripts/agtmls.py audit --all --strict --baseline .agtmls-audit-baseline.json
+python3 scripts/agtmls.py audit --foreign /path/to/other-repo
+python3 scripts/agtmls.py audit --foreign https://github.com/owner/repo@<40-hex commit> --format json
 python3 scripts/agtmls.py list
 python3 scripts/agtmls.py list commands
 python3 scripts/agtmls.py search yaml
@@ -109,6 +111,26 @@ finding's fingerprint (rule, file and message; not the line), and
 `--baseline FILE` fails the audit only on findings not in it, so a CI gate can
 stop new findings while known ones are worked through. SARIF results carry
 `baselineState` when a baseline is given.
+
+## Auditing a repository that is not this registry
+
+`audit --foreign <path>` reads skills out of a tree that follows any of the
+layouts agents install from: a Claude marketplace (`.claude-plugin/marketplace.json`,
+each listed plugin's skills), a plugin manifest (`.claude-plugin`,
+`.codex-plugin` or `.cursor-plugin` `plugin.json`, its `skills` paths), or a
+skills directory (`.agents/skills`, `.claude/skills`, `skills`). A `SKILL.md`
+at the repository root is refused: one repository read as one skill audits a
+whole project as prose. Point at the skill directory to audit one skill.
+
+A skill without `metadata.json` is audited against a **provisional** policy
+inferred from its `allowed-tools`: any `Bash` grants `executes_commands`,
+`Write` or `Edit` grants `writes_files`, `WebFetch` or `WebSearch` makes
+network access optional. The report prints that policy beside each skill and
+marks it provisional; a skill that ships its own policy is checked against it.
+
+`--foreign <git-url>@<sha>` clones and audits a commit. Network fetch is
+opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
+or tag can move between the audit and the install.
 
 ## Auditing an external skill before importing it
 

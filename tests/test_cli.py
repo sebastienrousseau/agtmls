@@ -354,6 +354,17 @@ class CliDispatchTests(unittest.TestCase):
                         flags.add(arg.value)
         return flags
 
+    def test_audit_forwards_a_foreign_path_resolved_and_a_url_as_given(self) -> None:
+        sys.argv = ["agtmls", "audit", "--foreign", "."]
+        self.calls.clear()
+        self.assertEqual(self.module.main(), 0)
+        self.assertEqual(self.calls[0][self.calls[0].index("--foreign") + 1], str(Path.cwd().resolve()))
+        url = "https://example.test/o/r@" + "b" * 40
+        sys.argv = ["agtmls", "audit", "--foreign", url]
+        self.calls.clear()
+        self.module.main()
+        self.assertEqual(self.calls[0][self.calls[0].index("--foreign") + 1], url)
+
     def test_audit_forwards_its_format_and_baseline_flags(self) -> None:
         sys.argv = ["agtmls", "audit", "--all", "--format", "sarif", "--baseline", "known.json",
                     "--write-baseline", "next.json"]

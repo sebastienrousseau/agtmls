@@ -40,6 +40,12 @@ All notable changes to AgtMLS are recorded here.
   and never lower; a miss within the floor is a warning. A
   `must_not_detect` entry may name a severity, so a quoted attack can
   require "nothing at HIGH" without requiring silence.
+- `audit --foreign <path|git-url@sha>` audits every skill in a repository
+  that is not this registry: a Claude marketplace, a plugin manifest or a
+  skills directory, per plugin and skill, against the skill's own policy
+  or a provisional one inferred from `allowed-tools`. A root `SKILL.md`
+  is refused as a repository, not a skill. Fetching is opt-in by URL and
+  only by exact commit.
 
 ### Fixed
 

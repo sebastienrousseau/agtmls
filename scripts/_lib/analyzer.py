@@ -501,6 +501,152 @@ def audit_file(path: Path) -> list[Finding]:
     return audit_file_content(path, content)
 
 
+class ForeignLayoutError(ValueError):
+    """The tree is not something the foreign audit can read as skills."""
+
+
+# Manifests whose `skills` field names the skill directories, in the order a
+# repository is most likely to be one thing rather than another.
+PLUGIN_MANIFESTS = (".claude-plugin/plugin.json", ".codex-plugin/plugin.json", ".cursor-plugin/plugin.json")
+SKILL_LAYOUTS = (".agents/skills", ".claude/skills", "skills")
+
+
+def _inside(root: Path, rel: str) -> Path | None:
+    """`rel` joined under `root`, or None if it escapes.
+
+    The escape check resolves; the returned path does not, so callers can
+    relate it to the root they gave (macOS resolves /var to /private/var).
+    """
+    candidate = root / rel
+    return candidate if candidate.resolve().is_relative_to(root.resolve()) else None
+
+
+def _skills_under(directory: Path) -> list[Path]:
+    if not directory.is_dir():
+        return []
+    return sorted(p.parent for p in directory.glob("*/SKILL.md"))
+
+
+def _manifest_skills(root: Path, manifest: Path, default_name: str) -> list[tuple[str, Path]]:
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    name = str(data.get("name") or default_name)
+    declared = data.get("skills") or ["./skills"]
+    found: list[tuple[str, Path]] = []
+    for rel in declared if isinstance(declared, list) else [declared]:
+        directory = _inside(root, str(rel)) if isinstance(rel, str) else None
+        if directory is not None:
+            found.extend((name, skill) for skill in _skills_under(directory))
+    return found
+
+
+def foreign_layout(root: Path) -> str | None:
+    """Which layout a tree follows, or None."""
+    if (root / ".claude-plugin" / "marketplace.json").is_file():
+        return "claude-marketplace"
+    for manifest in PLUGIN_MANIFESTS:
+        if (root / manifest).is_file():
+            return manifest.split("/")[0].strip(".").replace("-plugin", "-plugin")
+    for layout in SKILL_LAYOUTS:
+        if _skills_under(root / layout):
+            return layout
+    return None
+
+
+def foreign_skills(root: Path) -> list[tuple[str, Path]]:
+    """(plugin, skill directory) for every skill a foreign tree ships.
+
+    Detects the layout: a Claude marketplace (each listed plugin's skills),
+    a plugin manifest (its `skills` paths), or a skills directory
+    (`.agents/skills`, `.claude/skills`, `skills`). A SKILL.md at the root
+    is refused: one repository read as one skill audits everything in it as
+    prose and calls a whole project a skill, which is what ruflo's root
+    SKILL.md did.
+    """
+    marketplace = root / ".claude-plugin" / "marketplace.json"
+    found: list[tuple[str, Path]] = []
+    if marketplace.is_file():
+        try:
+            plugins = json.loads(marketplace.read_text(encoding="utf-8")).get("plugins", [])
+        except (OSError, ValueError):
+            plugins = []
+        for entry in plugins if isinstance(plugins, list) else []:
+            if not isinstance(entry, dict) or not isinstance(entry.get("source"), str):
+                continue
+            plugin_dir = _inside(root, entry["source"])
+            if plugin_dir is None:
+                continue
+            name = str(entry.get("name") or plugin_dir.name)
+            manifest = plugin_dir / ".claude-plugin" / "plugin.json"
+            if manifest.is_file():
+                found.extend(_manifest_skills(plugin_dir, manifest, name))
+            else:
+                found.extend((name, skill) for skill in _skills_under(plugin_dir / "skills"))
+    if not found:
+        for manifest in PLUGIN_MANIFESTS:
+            if (root / manifest).is_file():
+                found.extend(_manifest_skills(root, root / manifest, root.name))
+                break
+    if not found:
+        for layout in SKILL_LAYOUTS:
+            skills = _skills_under(root / layout)
+            if skills:
+                found.extend((layout, skill) for skill in skills)
+                break
+    if not found:
+        if (root / "SKILL.md").is_file():
+            raise ForeignLayoutError(
+                f"a repository is not a skill: {root} has SKILL.md at its root and no skills directory; "
+                "point at the skill directory itself to audit one skill"
+            )
+        raise ForeignLayoutError(f"no skills found under {root}: expected a marketplace, a plugin manifest, or a skills directory")
+    return found
+
+
+def provisional_policy(skill_dir: Path) -> dict:
+    """A safety policy inferred from allowed-tools, for a skill that declares none.
+
+    Any Bash grants executes_commands; Write or Edit grants writes_files;
+    WebFetch or WebSearch makes network optional. Marked provisional, so a
+    report never presents it as the author's own claim.
+    """
+    capabilities = {TOOL_CAPABILITIES.get(tool.split("(", 1)[0]) for tool in frontmatter_tools(skill_dir / "SKILL.md")}
+    return {
+        "executes_commands": "executes_commands" in capabilities,
+        "writes_files": "writes_files" in capabilities,
+        "network_access": "optional" if "network_access" in capabilities else "none",
+        "handles_secrets": False,
+        "provisional": True,
+    }
+
+
+class ForeignReport(NamedTuple):
+    plugin: str
+    path: Path
+    policy: dict
+    findings: list[Finding]
+
+
+def audit_foreign(root: Path) -> list[ForeignReport]:
+    """Every skill in a foreign tree, each against its own or a provisional policy."""
+    reports: list[ForeignReport] = []
+    for plugin, skill_dir in foreign_skills(root):
+        findings: list[Finding] = []
+        for path in auditable_files(skill_dir):
+            findings.extend(audit_file(path))
+        if (skill_dir / "metadata.json").exists():
+            policy, policy_findings = load_policy(skill_dir)
+            findings.extend(policy_findings)
+            findings.extend(check_skill_honesty(skill_dir))
+        else:
+            policy = provisional_policy(skill_dir)
+            findings.extend(check_capability_escalation(skill_dir, policy))
+        reports.append(ForeignReport(plugin, skill_dir, policy, findings))
+    return reports
+
+
 def audit_skill_target(target: Path) -> list[Finding]:
     findings: list[Finding] = []
     for path in auditable_files(target):

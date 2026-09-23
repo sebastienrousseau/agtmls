@@ -180,6 +180,7 @@ def build_parser() -> argparse.ArgumentParser:
     audit_cmd = sub.add_parser("audit", help="statically audit skills for prompt injection, steganography, and security risks")
     audit_cmd.add_argument("path", nargs="?", type=Path, help="path to skill directory or markdown file")
     audit_cmd.add_argument("--all", action="store_true", help="audit all skills in registry")
+    audit_cmd.add_argument("--foreign", metavar="PATH|GIT-URL@SHA", help="audit every skill in a repository that is not this registry")
     audit_cmd.add_argument("--strict", action="store_true", help="fail on warnings")
     audit_cmd.add_argument("--json", action="store_true", help="output JSON (the same as --format json)")
     audit_cmd.add_argument("--format", choices=["text", "json", "sarif"], default=None, help="output format")
