@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-23T13:32:33Z",
+    "created": "2026-09-23T13:44:36Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "cb0b76aa0072c4de5403f49f5985e0902678cf50"
+          "checksumValue": "3b1caaf623c06e7b3dfeeee15bf1b0e6a2c31cf1"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8009bea5b29134f2a4a572aa39d0170ff4c8348bbb23b9373d6b68a583e0f585"
+          "checksumValue": "64910306fb5e73b57e0a3e4a4559a985be06b155759414c4700be5ae392735b1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1745,11 +1745,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0608e0149594be572178d3fc60a322175cfa4e58"
+          "checksumValue": "a67f8a71fabcb4e8193ccc029ff2b51d7103ec82"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3a9e06760c7560149dceacd94fc325468d6d5ca5d71c1988b9be53c5b8eb8ecf"
+          "checksumValue": "fbb485b01e4d9cbe4586494392c0e1a27f287e0c9555ca5c9cc31484f9a7fec0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2826,6 +2826,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/validate-python-scripts.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-validate-readme.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3e6c3cba930dcf407ef0f6232eda6e4d0d56c0d0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ad399cc1e1aa6141fdee9ecaccf4bd235bba02aa2319b57561775fdf2bda455e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/validate-readme.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5980,6 +5996,7 @@
         "SPDXRef-File-scripts-validate-profiles.py",
         "SPDXRef-File-scripts-validate-providers.py",
         "SPDXRef-File-scripts-validate-python-scripts.py",
+        "SPDXRef-File-scripts-validate-readme.py",
         "SPDXRef-File-scripts-validate-release.py",
         "SPDXRef-File-scripts-validate-sbom-conformance.py",
         "SPDXRef-File-scripts-validate-secrets.py",

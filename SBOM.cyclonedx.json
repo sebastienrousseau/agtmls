@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8009bea5b29134f2a4a572aa39d0170ff4c8348bbb23b9373d6b68a583e0f585"
+          "content": "64910306fb5e73b57e0a3e4a4559a985be06b155759414c4700be5ae392735b1"
         }
       ],
       "name": "checks.json",
@@ -1194,7 +1194,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3a9e06760c7560149dceacd94fc325468d6d5ca5d71c1988b9be53c5b8eb8ecf"
+          "content": "fbb485b01e4d9cbe4586494392c0e1a27f287e0c9555ca5c9cc31484f9a7fec0"
         }
       ],
       "name": "scripts/generate-benchmarks-doc.py",
@@ -1935,6 +1935,17 @@
         }
       ],
       "name": "scripts/validate-python-scripts.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/validate-readme.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ad399cc1e1aa6141fdee9ecaccf4bd235bba02aa2319b57561775fdf2bda455e"
+        }
+      ],
+      "name": "scripts/validate-readme.py",
       "type": "file"
     },
     {
@@ -3991,7 +4002,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T13:32:33Z",
+    "timestamp": "2026-09-23T13:44:37Z",
     "tools": {
       "components": [
         {

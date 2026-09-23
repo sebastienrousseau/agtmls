@@ -27,6 +27,7 @@ python3 scripts/validate-providers.py
 python3 scripts/validate-profiles.py
 python3 scripts/validate-templates.py
 python3 scripts/validate-doc-links.py
+python3 scripts/validate-readme.py
 python3 scripts/validate-json-files.py
 python3 scripts/validate-python-scripts.py
 python3 scripts/validate-shell-syntax.py

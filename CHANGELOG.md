@@ -56,6 +56,13 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- README.md follows the portfolio template: its seventeen sections in the
+  template's order, checked by `validate-readme.py` in the gate. Stale
+  counts are corrected (4 native agents, 6 plugin targets and 13 export
+  targets, not 3, 5 and 8), the provenance description matches what
+  `provenance.json` now pins, and the benchmark table is generated from
+  `benchmarks/results/` like BENCHMARKS.md. `docs/POLICIES.md` states the
+  toolchain floor. VERSIONING.md no longer lists the removed agent card.
 - A skill's digest no longer includes the release version, so a release
   moves no content address unless the skill itself changed.
 - The analyzer's rules are a snapshot of a pinned `agtmls-spec` commit

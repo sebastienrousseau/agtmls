@@ -38,7 +38,10 @@ class BenchmarkDocTests(unittest.TestCase):
     def setUp(self) -> None:
         self.saved = {
             name: (self.fixture / name).read_bytes()
-            for name in ("BENCHMARKS.md", "benchmarks/results/scaling.json", "benchmarks/results/latency.json")
+            for name in (
+                "BENCHMARKS.md", "README.md",
+                "benchmarks/results/scaling.json", "benchmarks/results/latency.json",
+            )
         }
         self.addCleanup(self.restore)
 
@@ -84,6 +87,35 @@ class BenchmarkDocTests(unittest.TestCase):
         code, output = self.drive("--check")
         self.assertEqual(code, 0, output)
         self.assertIn("999.00", (self.fixture / "BENCHMARKS.md").read_text(encoding="utf-8"))
+
+    def test_a_hand_edited_readme_number_is_caught(self) -> None:
+        """The front page is where a stale number does the most damage."""
+        path = self.fixture / "README.md"
+        text = path.read_text(encoding="utf-8")
+        latency = json.loads((self.fixture / "benchmarks/results/latency.json").read_text(encoding="utf-8"))
+        p50 = f"| {latency['workloads']['cli-list']['p50_ms']:.0f} ms P50 |"
+        self.assertIn(p50, text)
+        path.write_text(text.replace(p50, "| 1 ms P50 |", 1), encoding="utf-8")
+        code, output = self.drive("--check")
+        self.assertEqual(code, 1, output)
+        self.assertIn("README.md block headline", output)
+        self.assertEqual(self.drive("--write")[0], 0)
+        self.assertIn(p50, path.read_text(encoding="utf-8"))
+
+    def test_a_readme_without_its_block_cannot_be_written(self) -> None:
+        path = self.fixture / "README.md"
+        path.write_text("# AgtMLS\n", encoding="utf-8")
+        code, output = self.drive("--write")
+        self.assertEqual(code, 1, output)
+        self.assertIn("headline: no generated block in README.md; add its markers first", output)
+        self.assertEqual(path.read_text(encoding="utf-8"), "# AgtMLS\n")
+
+    def test_a_block_in_the_wrong_document_is_unknown(self) -> None:
+        path = self.fixture / "BENCHMARKS.md"
+        path.write_text(path.read_text(encoding="utf-8") + '\n<!-- generated:headline sources="" -->\n<!-- /generated:headline -->\n', encoding="utf-8")
+        code, output = self.drive("--check")
+        self.assertEqual(code, 1, output)
+        self.assertIn("BENCHMARKS.md block headline: unknown generated block", output)
 
     def test_a_document_with_no_generated_blocks_is_refused(self) -> None:
         (self.fixture / "BENCHMARKS.md").write_text("# Benchmarks\n\nhand-written\n", encoding="utf-8")

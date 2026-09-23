@@ -15,6 +15,9 @@ Each measured passage now lives between markers:
     ...
     <!-- /generated:scaling -->
 
+README.md carries one such block too, the headline table, so the front page
+cannot quote a number the results no longer hold.
+
 `--write` re-renders every block from its sources and stamps their hashes.
 `--check` fails if a block's text or a source file moved without the other,
 so a re-measurement cannot silently leave the prose behind, and a number
@@ -35,6 +38,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOC = ROOT / "BENCHMARKS.md"
+README = ROOT / "README.md"
 LATENCY = ROOT / "benchmarks" / "results" / "latency.json"
 SCALING = ROOT / "benchmarks" / "results" / "scaling.json"
 BASELINE = ROOT / "bench-baseline.json"
@@ -147,24 +151,53 @@ def render_scaling() -> str:
     ])
 
 
+# The README's headline rows: what a reader runs first, and the two
+# whole-registry operations.
+HEADLINE = [
+    ("cli-list", "`agtmls list`, cold start"),
+    ("cli-search", "`agtmls search`, cold start"),
+    ("digest-registry", "Digest every skill"),
+    ("audit-all", "`agtmls audit --all --strict`"),
+]
+
+
+def render_headline() -> str:
+    latency = load(LATENCY)
+    where = environment(latency["environment"])
+    rows = [
+        f"| {label} | {latency['workloads'][name]['p50_ms']:.0f} ms P50 | {where} |"
+        for name, label in HEADLINE
+        if name in latency["workloads"]
+    ]
+    return "\n".join(["| Scenario | Result | Environment |", "| :--- | ---: | :--- |", *rows, ""])
+
+
 BLOCKS = {
     "latency": ((LATENCY, BASELINE), render_latency),
     "thresholds": ((BASELINE,), render_thresholds),
     "scaling": ((SCALING,), render_scaling),
+    "headline": ((LATENCY,), render_headline),
 }
+# The blocks each document must carry. Pairs, not a dict keyed by path: the
+# test harness retargets paths inside values, and a key it missed would send
+# a test's writes to the real README.
+DOCS = (
+    (DOC, ("latency", "thresholds", "scaling")),
+    (README, ("headline",)),
+)
 
 
 def stamp(paths: tuple[Path, ...]) -> str:
     return ",".join(f"{path.relative_to(ROOT).as_posix()}:{digest(path)}" for path in paths)
 
 
-def rendered(text: str) -> tuple[str, list[str]]:
+def rendered(text: str, doc: Path = DOC, expected: tuple[str, ...] = DOCS[0][1]) -> tuple[str, list[str]]:
     """The document with every block re-rendered, and the blocks that differed."""
     stale: list[str] = []
 
     def replace(match: re.Match[str]) -> str:
         name = match.group("name")
-        if name not in BLOCKS:
+        if name not in expected:
             stale.append(f"{name}: unknown generated block")
             return match.group(0)
         sources, render = BLOCKS[name]
@@ -174,8 +207,8 @@ def rendered(text: str) -> tuple[str, list[str]]:
         return fresh
 
     out = BLOCK.sub(replace, text)
-    missing = sorted(set(BLOCKS) - {m.group("name") for m in BLOCK.finditer(text)})
-    stale.extend(f"{name}: no generated block in {DOC.name}" for name in missing)
+    missing = sorted(set(expected) - {m.group("name") for m in BLOCK.finditer(text)})
+    stale.extend(f"{name}: no generated block in {doc.name}" for name in missing)
     return out, stale
 
 
@@ -184,25 +217,27 @@ def main() -> int:
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    text = DOC.read_text(encoding="utf-8")
-    out, stale = rendered(text)
+    results = {doc: rendered(doc.read_text(encoding="utf-8"), doc, names) for doc, names in DOCS}
 
     if args.write:
-        missing = [item for item in stale if "no generated block" in item]
+        missing = [item for _, stale in results.values() for item in stale if "no generated block" in item]
         if missing:
             for item in missing:
                 print(f"FAIL: {item}; add its markers first")
             return 1
-        DOC.write_text(out, encoding="utf-8")
-        print(f"wrote {DOC.relative_to(ROOT)} ({len(BLOCKS)} generated block(s))")
+        for doc, (out, _) in results.items():
+            doc.write_text(out, encoding="utf-8")
+            print(f"wrote {doc.relative_to(ROOT)} ({len(dict(DOCS)[doc])} generated block(s))")
         return 0
     if args.check:
-        if stale:
-            for item in stale:
-                print(f"FAIL: {DOC.name} block {item} does not match its results; "
-                      "run generate-benchmarks-doc.py --write")
+        failures = [(doc, item) for doc, (_, stale) in results.items() for item in stale]
+        for doc, item in failures:
+            print(f"FAIL: {doc.name} block {item} does not match its results; "
+                  "run generate-benchmarks-doc.py --write")
+        if failures:
             return 1
-        print(f"OK: {len(BLOCKS)} measured block(s) in {DOC.name} match benchmarks/results/")
+        names = ", ".join(doc.name for doc, _ in DOCS)
+        print(f"OK: {len(BLOCKS)} measured block(s) in {names} match benchmarks/results/")
         return 0
     parser.print_help()
     return 2
