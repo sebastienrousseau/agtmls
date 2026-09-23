@@ -340,6 +340,23 @@ class CliDispatchTests(unittest.TestCase):
                     f"{name} forwards flags agtmls-doctor.py does not accept",
                 )
 
+    def test_diff_resolves_the_callers_paths_and_defaults_to_the_registry(self) -> None:
+        """registry-diff runs with the checkout as its working directory, so a
+        relative path the caller typed was looked up in the wrong place. Paths
+        that exist from the caller's directory are made absolute; a revision
+        spec such as v0.0.5:index.json passes through untouched; and --to is
+        left to registry-diff, whose default is this registry's index.json."""
+        cwd = os.getcwd()
+        os.chdir(self.tmp.name)
+        self.addCleanup(os.chdir, cwd)
+        Path("old.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(self.dispatch("diff", ["--from", "old.json"]), 0)
+        self.assertEqual(self.calls[0][2:], ["--from", str(Path(self.tmp.name, "old.json").resolve())])
+        self.dispatch("diff", ["--from", "v0.0.5:index.json", "--to", "old.json", "--json"])
+        self.assertEqual(self.calls[0][2:], [
+            "--from", "v0.0.5:index.json", "--to", str(Path(self.tmp.name, "old.json").resolve()), "--json",
+        ])
+
     def test_evidence_forwards_its_repeatable_command_flag(self) -> None:
         """The dest collision made --command unreachable; prove it arrives."""
         self.dispatch("evidence", ["--skill", "probe", "--command", "make test"])

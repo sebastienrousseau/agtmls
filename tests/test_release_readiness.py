@@ -13,6 +13,7 @@ a bad token.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -154,6 +155,21 @@ class RegistryDiffTests(unittest.TestCase):
         self.assertEqual(code, 0, output)
         self.assertEqual(json.loads(output),
                          {"added": ["alpha", "fresh"], "removed": ["dropped"], "changed": ["edited"]})
+
+    def test_the_default_target_is_the_registry_index_wherever_it_runs(self) -> None:
+        """--to defaulted to "index.json" relative to the working directory, so
+        `agtmls diff --from v0.0.5:index.json` run anywhere but the checkout
+        root failed with "index not found"."""
+        (self.base / "index.json").write_text(self.new.read_text(encoding="utf-8"), encoding="utf-8")
+        self.addCleanup((self.base / "index.json").unlink)
+        elsewhere = Path(tempfile.mkdtemp(prefix="agtmls-cwd-"))
+        self.addCleanup(lambda: shutil.rmtree(elsewhere, ignore_errors=True))
+        cwd = os.getcwd()
+        os.chdir(elsewhere)
+        self.addCleanup(os.chdir, cwd)
+        code, output = run_main(self.mod, "--from", str(self.old), "--json")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(json.loads(output)["added"], ["alpha", "fresh"])
 
     def test_an_index_compared_with_itself_has_no_changes(self) -> None:
         code, output = run_main(self.mod, "--from", str(self.old), "--to", str(self.old))

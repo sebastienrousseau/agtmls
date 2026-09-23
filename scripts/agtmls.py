@@ -373,7 +373,14 @@ def main() -> int:
     if args.subcommand == "bench":
         return run([sys.executable, str(ROOT / "scripts" / "bench.py")])
     if args.subcommand == "diff":
-        cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", args.old, "--to", args.new]
+        # registry-diff runs from the checkout, so a relative path the caller
+        # typed would be looked up there. Revision specs pass through as-is.
+        def callers(spec: str) -> str:
+            return str(Path(spec).resolve()) if Path(spec).exists() else spec
+
+        cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", callers(args.old)]
+        if args.new:
+            cmd.extend(["--to", callers(args.new)])
         if args.json:
             cmd.append("--json")
         return run(cmd)

@@ -145,7 +145,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     diff_cmd = sub.add_parser("diff")
     diff_cmd.add_argument("--from", dest="old", required=True)
-    diff_cmd.add_argument("--to", dest="new", default="index.json")
+    diff_cmd.add_argument("--to", dest="new", help="defaults to this registry's index.json")
     diff_cmd.add_argument("--json", action="store_true")
 
     sub.add_parser("release-check")

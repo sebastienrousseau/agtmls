@@ -11,6 +11,9 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# Anchored to the registry, not the working directory: a relative default
+# failed with "index not found" anywhere but the checkout root.
+INDEX = ROOT / "index.json"
 
 
 def load(spec: str) -> dict[str, object]:
@@ -32,11 +35,11 @@ def skill_map(index: dict[str, object]) -> dict[str, dict[str, object]]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--from", dest="old", required=True)
-    parser.add_argument("--to", dest="new", default="index.json")
+    parser.add_argument("--to", dest="new", default=None, help="defaults to this registry's index.json")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     old = skill_map(load(args.old))
-    new = skill_map(load(args.new))
+    new = skill_map(load(args.new or str(INDEX)))
     added = sorted(set(new) - set(old))
     removed = sorted(set(old) - set(new))
     changed = sorted(name for name in set(old) & set(new) if old[name] != new[name])
