@@ -43,6 +43,10 @@ All notable changes to AgtMLS are recorded here.
   profiles no longer pull in the `noyalib` project bundle.
 - The gate audits the shipped registry with `--strict` and runs in parallel;
   it is now 66 checks.
+- `export` selects skills the way `install` does: without a profile it
+  exports the general skills, and `--bundle NAME` adds that bundle to them.
+  It used to export every bundle when unfiltered, and only the named bundle
+  with `--bundle`.
 
 ### Fixed
 

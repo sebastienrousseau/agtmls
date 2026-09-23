@@ -19,7 +19,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .mini_registry import mini_registry
+from .mini_registry import GENERAL, mini_registry
 from .support import load_script, retarget, run_main
 
 _WORKSPACE: str = ""
@@ -227,20 +227,24 @@ class ExportTests(ScriptCase):
         self.assertIn("Bundled skills: `1`", adapter)
         self.assertIn("adapter files are under `adapters/`", members["agtmls/ADAPTERS.md"].decode())
 
-    def test_an_unfiltered_export_carries_every_skill_and_the_licences(self) -> None:
+    def test_an_unfiltered_export_carries_the_general_skills_and_the_licences(self) -> None:
+        """Like install: a project bundle is included only when asked for.
+        An unfiltered export used to carry every bundle too."""
         code, output, members = self.export("--provider", "generic")
         self.assertEqual(code, 0, output)
-        index = json.loads((self.fixture / "index.json").read_text(encoding="utf-8"))
-        self.assertEqual(self.skills_in(members), {s["name"] for s in index["skills"]})
+        self.assertEqual(self.skills_in(members), set(GENERAL))
         for name in ("index.json", "LICENSE-MIT", "LICENSE-APACHE", "commands/agtmls-audit.md"):
             self.assertIn(f"agtmls/{name}", members)
         self.assertEqual(json.loads(members["agtmls/export-manifest.json"])["adapter_files"], ["ADAPTERS.md"])
         self.assertNotIn("adapter files are under", members["agtmls/ADAPTERS.md"].decode())
 
-    def test_a_bundle_filter_exports_that_bundle(self) -> None:
+    def test_a_bundle_is_added_to_the_general_skills(self) -> None:
+        """`install --bundle noyalib` links the general skills plus noyalib;
+        `export --bundle noyalib` exported noyalib alone. Same flag, opposite
+        meaning -- export now follows install."""
         code, output, members = self.export("--provider", "generic", "--bundle", "noyalib")
         self.assertEqual(code, 0, output)
-        self.assertEqual(self.skills_in(members), {"noyalib-config-and-flags"})
+        self.assertEqual(self.skills_in(members), {*GENERAL, "noyalib-config-and-flags"})
         self.assertEqual(json.loads(members["agtmls/export-manifest.json"])["bundles"], ["noyalib"])
 
     def test_an_unknown_profile_is_refused(self) -> None:
