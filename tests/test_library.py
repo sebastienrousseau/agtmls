@@ -26,7 +26,7 @@ from .support import ROOT
 
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from _lib import covered, digest, lockfile  # noqa: E402  (needs the scripts path first)
+from _lib import covered, digest, lockfile  # needs the scripts path first
 
 
 class DigestTests(unittest.TestCase):
@@ -296,11 +296,11 @@ class PackagedWheelLayoutTests(unittest.TestCase):
         import agtmls.cli as module
 
         self.module = module
-        self.original = (module.__file__, module._PACKAGED)
+        self.original = (module.__file__, module._PACKAGED)  # noqa: SLF001  (the packaged-registry seam)
         self.addCleanup(self.restore)
 
     def restore(self) -> None:
-        self.module.__file__, self.module._PACKAGED = self.original
+        self.module.__file__, self.module._PACKAGED = self.original  # noqa: SLF001  (the packaged-registry seam)
 
     def fixture(self, with_registry: bool) -> Path:
         """A package tree with `_registry/` beside `cli.py`."""
@@ -318,7 +318,7 @@ class PackagedWheelLayoutTests(unittest.TestCase):
                 "import json, sys\nprint(json.dumps(sys.argv[1:]))\n", encoding="utf-8"
             )
         self.module.__file__ = str(package / "cli.py")
-        self.module._PACKAGED = registry
+        self.module._PACKAGED = registry  # noqa: SLF001  (the packaged-registry seam)
         return registry
 
     def call(self, *args: str) -> tuple[int, str]:

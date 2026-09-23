@@ -25,7 +25,7 @@ from unittest import mock
 from .support import ROOT
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import analyzer  # noqa: E402  (needs the scripts path first)
+from _lib import analyzer  # needs the scripts path first
 
 
 class Workspace(unittest.TestCase):

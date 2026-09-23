@@ -109,3 +109,10 @@ exclude_also = [
   "raise NotImplementedError",
   "if TYPE_CHECKING:",
 ]
+
+[tool.ruff.lint]
+# Ruff's defaults plus the two rules the code already carries reasoned
+# `noqa` directives for. Without them every one of those directives was
+# itself a finding (RUF100), so a clean run was impossible. CI pins the
+# ruff version, because the default rule set grows between releases.
+extend-select = ["E402", "SLF001"]

@@ -17,7 +17,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
+from _lib.checksums import parse_sums  # needs the scripts path first
 
 REPO = "sebastienrousseau/agtmls"
 BASE_ASSETS = ["release-manifest.json", "SHA256SUMS"]

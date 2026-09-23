@@ -93,7 +93,7 @@ class TreeCase(unittest.TestCase):
         """Loaded once per class; cases patch attributes, never assign them."""
         cache = self.__class__.__dict__.get("_loaded")
         if cache is None:
-            cache = self.__class__._loaded = {}
+            cache = self.__class__._loaded = {}  # noqa: SLF001  (this class's own cache)
         if name not in cache:
             module = load_script(name)
             retarget(module, self.tree)

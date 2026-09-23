@@ -16,7 +16,7 @@ import unittest
 from .support import ROOT
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
+from _lib.checksums import parse_sums  # needs the scripts path first
 
 DIGEST = "a" * 64
 
