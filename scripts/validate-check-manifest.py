@@ -44,12 +44,16 @@ COUNTED = [
     "docs/ECOSYSTEM.md",
     "scripts/run-unit-tests.py",
 ]
+# Any number of digits: limited to two or three, a gate of fewer than ten
+# checks had every stated count go unread.
 COUNT_CLAIM = re.compile(
-    r"\b(\d{2,3})[- ](?:check|gate)(?:s)?\b"
-    r"|\ball (\d{2,3}) CI validation gates\b"
-    r"|\brepository has (\d{2,3}) validation gates\b"
-    r"|\bGate: \*\*(\d{2,3}) checks\*\*"
+    r"\b(\d+)[- ](?:check|gate)(?:s)?\b"
+    r"|\ball (\d+) CI validation gates\b"
+    r"|\brepository has (\d+) validation gates\b"
+    r"|\bGate: \*\*(\d+) checks\*\*"
 )
+# A workflow step that runs a check: `run: python3 scripts/<script> <args>`.
+RUN_STEP = re.compile(r"^\s*(?:-\s*)?run:\s*python3\s+scripts/(\S.*?)\s*$", re.MULTILINE)
 # Prose that cites a past count on purpose -- a changelog line, or a comment
 # explaining why this check exists -- marks the line. An exemption has to be
 # visible and greppable; the alternative is writers contorting sentences to
@@ -71,13 +75,26 @@ def count_claims(text: str) -> list[tuple[int, int]]:
 def redeclared_lists(runner: Path) -> list[str]:
     """Module-level names in the runner that would shadow the manifest."""
     tree = ast.parse(runner.read_text(encoding="utf-8"))
+    targets = []
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            targets.extend(node.targets)
+        elif isinstance(node, ast.AnnAssign):  # `CHECKS: list[str] = [...]`
+            targets.append(node.target)
     return sorted(
         target.id
-        for node in tree.body
-        if isinstance(node, ast.Assign)
-        for target in node.targets
+        for target in targets
         if isinstance(target, ast.Name) and target.id in {"CHECKS", "COMPILE"}
     )
+
+
+def workflow_commands(workflow: str) -> set[str]:
+    """Each `run: python3 scripts/...` step, as `<script> <args>`.
+
+    Searching the file for `scripts/<name>` counted a comment, or a step
+    running the script with other arguments, as CI running the check.
+    """
+    return {" ".join(match.group(1).split()) for match in RUN_STEP.finditer(workflow)}
 
 
 def main() -> int:
@@ -110,13 +127,14 @@ def main() -> int:
     workflow = WORKFLOW.read_text(encoding="utf-8") if WORKFLOW.exists() else ""
     if not workflow:
         errors.append(f"CI workflow missing: {WORKFLOW.relative_to(ROOT)}")
+    commands = workflow_commands(workflow)
     for check in manifest:
         script = check.split()[0]
         if not (ROOT / "scripts" / script).exists():
             errors.append(f"manifest check script missing: {script}")
         # Local-only checks are not a gate. Every manifest entry must also be
         # a step in the workflow, or CI is weaker than `agtmls check`.
-        if workflow and f"scripts/{script}" not in workflow:
+        if workflow and " ".join(check.split()) not in commands:
             errors.append(f"check not run by validate.yml: {check}")
 
     if errors:

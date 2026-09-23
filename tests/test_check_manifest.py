@@ -30,9 +30,7 @@ RUNNER_SOURCE = (
 class CheckManifestValidatorTests(unittest.TestCase):
     """Manifest, runner, workflow and prose must describe one gate."""
 
-    # Ten, because the count pattern only matches two- and three-digit
-    # numbers: with fewer, every prose claim below would be invisible to it
-    # and "the counts agree" would pass without a count being read.
+    # Ten checks: enough that a tree with one removed is still a valid gate.
     CHECKS: ClassVar[list[str]] = ["alpha.py", "beta.py --strict", *(f"c{i}.py" for i in range(8))]
 
     def setUp(self) -> None:
@@ -137,6 +135,36 @@ class CheckManifestValidatorTests(unittest.TestCase):
             "FAIL: 1 check manifest issue(s)",
         ])
 
+    def test_an_annotated_redeclaration_is_refused(self) -> None:
+        """`CHECKS: list[str] = [...]` is the same second copy of the gate;
+        only plain assignments were looked at."""
+        self.write("scripts/run-all-checks.py", RUNNER_SOURCE + "CHECKS: list[str] = ['alpha.py']\n")
+        _, failures, _ = self.failures()
+        self.assertIn(
+            "FAIL: run-all-checks.py re-declares the gate as CHECKS; it must read checks.json", failures
+        )
+
+    def test_a_check_ci_only_mentions_is_refused(self) -> None:
+        """A comment naming the script, or a step running it with different
+        arguments, is not CI running that check."""
+        workflow = self.root / ".github/workflows/validate.yml"
+        text = workflow.read_text(encoding="utf-8")
+        text = text.replace("  - run: python3 scripts/beta.py --strict\n", "  # scripts/beta.py --strict runs locally\n")
+        text = text.replace("  - run: python3 scripts/c0.py\n", "  - run: python3 scripts/c0.py --lenient\n")
+        workflow.write_text(text, encoding="utf-8")
+        _, failures, _ = self.failures()
+        self.assertIn("FAIL: check not run by validate.yml: beta.py --strict", failures)
+        self.assertIn("FAIL: check not run by validate.yml: c0.py", failures)
+
+    def test_a_single_digit_count_is_still_a_claim(self) -> None:
+        """The pattern matched only two- and three-digit counts, so a gate of
+        fewer than ten checks had every stated count unchecked."""
+        self.write("checks.json", json.dumps({"schema_version": 1, "checks": self.CHECKS[:9]}))
+        for relative in self.mod.COUNTED:
+            self.write(relative, "Run the 8-check gate before pushing.\n")
+        _, failures, _ = self.failures()
+        self.assertIn("FAIL: AGENTS.md:1: claims 8 checks; checks.json has 9", failures)
+
     def test_every_problem_is_reported_in_one_pass(self) -> None:
         self.write("checks.json", json.dumps({"checks": self.CHECKS}))
         self.write("Makefile", "all: 99-check gate\n")
@@ -157,10 +185,10 @@ class CountClaimTests(unittest.TestCase):
             "nothing here\n"
             "Detailed reference of all 12 CI validation gates, and 64 gates\n"
             "old 57-check gate check-count:historical\n"
-            "one 7-check claim is too short to be a count\n"
+            "a 7-check claim counts too, however few the checks\n"
         )
         self.assertEqual(
-            self.mod.count_claims(text), [(64, 1), (12, 3), (64, 3)]
+            self.mod.count_claims(text), [(64, 1), (12, 3), (64, 3), (7, 5)]
         )
 
     def test_only_module_level_list_names_count_as_redeclarations(self) -> None:
