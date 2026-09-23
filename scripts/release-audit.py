@@ -26,7 +26,6 @@ import argparse
 import json
 import subprocess
 import sys
-import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -72,31 +71,36 @@ def audit_tag(tag: str, commit: str) -> list[str]:
 
 
 def audit_release(tag: str, repo: str) -> tuple[list[str], str | None]:
-    """(problems, SHA256SUMS text) for the GitHub release."""
-    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft,assets")
+    """(problems, SHA256SUMS text) for the GitHub release.
+
+    Assets are listed and downloaded by id. For v0.0.6, the asset list GitHub
+    embeds in the release -- which `gh release view`, `gh release download`
+    and the tag and list endpoints all read -- showed none of its 17 assets,
+    while the release's assets endpoint showed every one.
+    """
+    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft,databaseId")
     if view.returncode != 0:
         return [f"no GitHub release for {tag}: {view.stderr.strip()}"], None
     release = json.loads(view.stdout)
     errors = []
     if release.get("isDraft"):
         errors.append(f"the {tag} release is still a draft")
-    with tempfile.TemporaryDirectory(prefix="agtmls-audit-") as raw:
-        got = run("gh", "release", "download", tag, "--repo", repo, "--pattern", "SHA256SUMS", "--dir", raw)
-        sums_path = Path(raw) / "SHA256SUMS"
-        if got.returncode != 0 or not sums_path.exists():
-            return [*errors, f"the {tag} release has no SHA256SUMS asset"], None
-        sums = sums_path.read_text(encoding="utf-8")
+    listed = run("gh", "api", f"repos/{repo}/releases/{release['databaseId']}/assets?per_page=100")
+    assets = json.loads(listed.stdout or "[]") if listed.returncode == 0 else []
+    sums_asset = next((asset for asset in assets if asset["name"] == "SHA256SUMS"), None)
+    if sums_asset is None:
+        return [*errors, f"the {tag} release has no SHA256SUMS asset"], None
+    sums = run(
+        "gh", "api", "-H", "Accept: application/octet-stream",
+        f"repos/{repo}/releases/assets/{sums_asset['id']}",
+    ).stdout
     errors += notes_problems(f"{tag} release body", release.get("body") or "", sums)
-    errors += audit_assets(release.get("assets") or [], sums)
+    errors += audit_assets(assets, sums)
     return errors, sums
 
 
 def audit_assets(assets: list[dict], sums: str) -> list[str]:
-    """Every file SHA256SUMS lists is attached, byte for byte, and nothing else.
-
-    v0.0.6's first release reported success from `gh release create` and
-    attached nothing; only the asset list shows that.
-    """
+    """Every file SHA256SUMS lists is attached, byte for byte, and nothing else."""
     listed, _ = parse_sums(sums)
     attached = {
         asset["name"]: str(asset.get("digest") or "").removeprefix("sha256:")

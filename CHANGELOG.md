@@ -38,8 +38,15 @@ All notable changes to AgtMLS are recorded here.
   GitHub release and PyPI. It attaches assets to a draft, publishes only when
   GitHub holds all of them, writes the release body from the prepared notes
   plus the real checksums, and audits the result before PyPI is approved.
-  v0.0.6's first run attached no assets while reporting success, and its
-  publish job rebuilt the distributions; that deployment was rejected.
+  It can also publish the wheel and sdist already attached to a public
+  release (`publish_existing`), which is how v0.0.6 reached PyPI.
+- Release assets are counted, listed and downloaded through each release's
+  assets endpoint. For about 40 minutes after v0.0.6 was published, the asset
+  list GitHub embeds in a release -- read by `gh release view`,
+  `gh release download` and the tag and list endpoints -- showed none of its 17
+  assets. That was misread at the time as a failed upload, and v0.0.6's first
+  PyPI deployment was rejected on that basis; the assets had been attached,
+  and the rebuilt wheel and sdist would have been byte-identical.
 
 ### Changed
 
