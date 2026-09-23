@@ -146,7 +146,7 @@ class BumpRefusalTests(FixtureCase):
 
         self.patch(module, "run", run)
         self.preserve(".claude-plugin/plugin.json", "pyproject.toml", "src/agtmls/__init__.py",
-                      ".claude-plugin/marketplace.json", "CHANGELOG.md")
+                      ".claude-plugin/marketplace.json", "CITATION.cff", "CHANGELOG.md")
         return module
 
     def test_next_version_comes_from_the_next_version_script(self) -> None:
@@ -176,9 +176,28 @@ class BumpRefusalTests(FixtureCase):
             text = (FIXTURE / rel).read_text(encoding="utf-8")
             self.assertIn('"9.9.9"', text, f"{rel} did not move")
             self.assertNotIn(f'"{old}"', text, f"{rel} kept the old version")
+        # CITATION.cff carries the version unquoted, so the quoted-string
+        # replacement above cannot reach it; v0.0.7 shipped with it at 0.0.6.
+        citation = (FIXTURE / "CITATION.cff").read_text(encoding="utf-8")
+        self.assertIn("version: 9.9.9\n", citation, "CITATION.cff did not move")
+        self.assertNotIn(f"version: {old}", citation, "CITATION.cff kept the old version")
         generators = [item[0] for item in module.GENERATORS]
         self.assertEqual(self.ran, ["next-version.py", "next-version.py", *generators])
+        # The manpage stamps the version too, and was left at 0.0.6 by the
+        # v0.0.7 bump because nothing regenerated or checked it.
+        self.assertIn("generate-manpage.py", generators)
         self.assertIn("ran generate-provenance.py", output)
+
+    def test_a_citation_without_its_version_line_is_refused(self) -> None:
+        """A silent no-op here is how the citation drifted in the first place."""
+        old = self.version()
+        module = self.bumper()
+        path = FIXTURE / "CITATION.cff"
+        path.write_text("cff-version: 1.2.0\ntitle: agtmls\n", encoding="utf-8")
+        code, output = run_main(module)
+        self.assertEqual(code, 1, output)
+        self.assertIn(f"FAIL: CITATION.cff does not say `version: {old}`", output)
+        self.assertNotIn("OK:", output)
 
     def test_a_failing_generator_stops_the_bump_with_its_exit_code(self) -> None:
         module = self.bumper(failing="generate-catalog.py")

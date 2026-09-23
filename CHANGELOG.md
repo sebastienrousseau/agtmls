@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.7 - 2026-09-23
+
 ### Breaking
 
 - `agtmls agent-card` and `agent-card.json` are removed. The file declared
@@ -128,6 +130,9 @@ All notable changes to AgtMLS are recorded here.
 - On Python 3.10 the packaging check skipped the name, console-script and
   no-dependencies checks.
 - `bump-version` left two blank lines between changelog sections.
+- `bump-version` did not move `CITATION.cff` or regenerate the manpage,
+  so both still said 0.0.6 after the bump to 0.0.7. It does now, and
+  `generate-manpage.py --check` joins the gate.
 - AGT-CAP-001 no longer says every runtime grants the tools in
   `allowed-tools`; Claude Code does, Apache Maka does not.
 
