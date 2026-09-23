@@ -34,6 +34,21 @@ class RunOneTests(unittest.TestCase):
     def setUp(self) -> None:
         self.mod = load_script("run-all-checks.py")
 
+    def test_the_scripts_directory_is_read_when_called_not_when_defined(self) -> None:
+        """`scripts_dir: Path = SCRIPTS` froze the path at import, so pointing
+        the module at another tree changed nothing for a caller that relied
+        on the default."""
+        calls = []
+        fake = types.SimpleNamespace(
+            run=lambda cmd, **kw: calls.append(cmd) or types.SimpleNamespace(returncode=0, stdout=""),
+            PIPE=-1, STDOUT=-2,
+        )
+        with mock.patch.object(self.mod, "SCRIPTS", Path("/elsewhere/scripts")), \
+                mock.patch.object(self.mod, "subprocess", fake), \
+                mock.patch.object(self.mod.time, "perf_counter", fake_clock(0.0, 1.0)):
+            self.mod.run_one("probe.py")
+        self.assertEqual(calls[0][1], "/elsewhere/scripts/probe.py")
+
     def test_the_command_is_the_interpreter_the_script_and_its_arguments(self) -> None:
         """A manifest entry carries arguments; losing or re-splitting them
         would run a different check than the one the manifest names."""
@@ -293,8 +308,10 @@ class RunnerMainTests(unittest.TestCase):
         self.assertEqual(recorded["checks"], 2)
         self.assertEqual(recorded["wall_s"], 3.0)
         self.assertEqual(recorded["serial_s"], 1.75)
-        # A mapping, and written with sorted keys, so rank is in the values.
-        self.assertEqual(recorded["slowest"], {"b.py --x": 1.5, "a.py": 0.25})
+        # Slowest first, in the file as well as in the values: sort_keys used
+        # to write this mapping alphabetically.
+        self.assertEqual(list(recorded["slowest"].items()), [("b.py --x", 1.5), ("a.py", 0.25)])
+        self.assertEqual(list(recorded), sorted(recorded), "the rest of the record stays sorted")
         self.assertEqual(recorded["generated_by"], "scripts/run-all-checks.py --record")
 
         code, _ = self.drive("--record")

@@ -95,7 +95,9 @@ def manifest_checks() -> list[str]:
     return json.loads(MANIFEST.read_text(encoding="utf-8"))["checks"]
 
 
-def run_one(check: str, scripts_dir: Path = SCRIPTS) -> CheckResult:
+def run_one(check: str, scripts_dir: Path | None = None) -> CheckResult:
+    # Read at call time: a default of SCRIPTS froze the path at import.
+    scripts_dir = scripts_dir or SCRIPTS
     parts = shlex.split(check)
     cmd = [sys.executable, str(scripts_dir / parts[0]), *parts[1:]]
     started = time.perf_counter()
@@ -115,7 +117,7 @@ def default_jobs() -> int:
 
 
 def run_checks(
-    checks: list[str], jobs: int | None = None, scripts_dir: Path = SCRIPTS
+    checks: list[str], jobs: int | None = None, scripts_dir: Path | None = None
 ) -> list[CheckResult]:
     """Run every check and return every result, in manifest order.
 
@@ -217,26 +219,31 @@ def main() -> int:
         RECORD.parent.mkdir(parents=True, exist_ok=True)
         RECORD.write_text(
             json.dumps(
-                {
-                    "schema_version": 1,
-                    "generated_by": "scripts/run-all-checks.py --record",
-                    "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "environment": {"python": sys.version.split()[0]},
-                    "jobs": args.jobs,
-                    "checks": len(results),
-                    "wall_s": round(wall, 3),
-                    "serial_s": round(sum(r.duration_s for r in results), 3),
-                    # A duration from a run that failed is still a duration,
-                    # but it is not "the gate passes in N seconds". Record
-                    # which it was rather than letting the reader assume.
-                    "passed": all(r.returncode == 0 for r in results),
-                    "failed": [r.check for r in results if r.returncode != 0],
-                    "slowest": {
-                        r.check: round(r.duration_s, 3)
-                        for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
-                    },
-                },
-                indent=2, sort_keys=True,
+                # Top-level keys sorted by hand rather than with sort_keys,
+                # which also re-sorted `slowest` alphabetically and lost
+                # the one thing its order says.
+                dict(sorted(
+                    {
+                        "schema_version": 1,
+                        "generated_by": "scripts/run-all-checks.py --record",
+                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "environment": {"python": sys.version.split()[0]},
+                        "jobs": args.jobs,
+                        "checks": len(results),
+                        "wall_s": round(wall, 3),
+                        "serial_s": round(sum(r.duration_s for r in results), 3),
+                        # A duration from a run that failed is still a duration,
+                        # but it is not "the gate passes in N seconds". Record
+                        # which it was rather than letting the reader assume.
+                        "passed": all(r.returncode == 0 for r in results),
+                        "failed": [r.check for r in results if r.returncode != 0],
+                        "slowest": {
+                            r.check: round(r.duration_s, 3)
+                            for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
+                        },
+                    }.items()
+                )),
+                indent=2,
             ) + "\n",
             encoding="utf-8",
         )
