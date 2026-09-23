@@ -113,9 +113,10 @@ Release workflows exist for crates.io (`agtmls-core`), npm (`agtmls-wasm`) and
 PyPI (`agtmls`), all via Trusted Publishing, so no long-lived token exists to
 leak. **None has run yet**: PyPI carries 0.0.3–0.0.5, uploaded by hand before
 the workflow existed, and neither `agtmls-core` on crates.io nor
-`@agtmls/wasm` on npm is published (checked 2026-09-22). Each needs a
-one-time trusted publisher registered on the registry and a matching GitHub
-environment, which cannot be done from a checkout.
+`@agtmls/wasm` on npm is published (checked 2026-09-22). `agtmls` has its
+trusted publisher registered on PyPI and a `pypi` environment with a required
+reviewer (set up 2026-09-23); `agtmls-core` and `@agtmls/wasm` still need
+theirs, which cannot be done from a checkout.
 
 ### What the second implementation proved
 
