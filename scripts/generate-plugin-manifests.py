@@ -87,7 +87,6 @@ def render(plugin: dict[str, object]) -> dict[str, str]:
         "commands": "./commands",
         "keywords": keywords,
         "repository": repo,
-        "agents": agent_paths(),
         "skills": skill_paths(),
         "interface": {
             "displayName": "AgtMLS",
