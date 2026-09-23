@@ -1,0 +1,98 @@
+{
+  "cold_start_budget_ms": 100.0,
+  "generated_at": "2026-09-23T08:42:10Z",
+  "generated_by": "scripts/bench.py --write-baseline",
+  "noise_sigmas": 3.0,
+  "recorded_on": {
+    "machine": "x86_64",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python": "3.12.14"
+  },
+  "regression_threshold_floor": 1.2,
+  "schema_version": 1,
+  "suite_runs": 5,
+  "workloads": {
+    "audit-all": {
+      "allowed_regression": 0.2,
+      "interactive": false,
+      "min_ms": 301.684,
+      "p50_ms": 305.702,
+      "p95_ms": 309.368,
+      "ratio_to_calibration": 27.0933,
+      "spread_cv": 0.0191
+    },
+    "calibration": {
+      "allowed_regression": 0.2,
+      "interactive": false,
+      "min_ms": 11.135,
+      "p50_ms": 11.563,
+      "p95_ms": 12.2,
+      "ratio_to_calibration": 1.0,
+      "spread_cv": 0.0
+    },
+    "cli-list": {
+      "allowed_regression": 0.2,
+      "interactive": true,
+      "min_ms": 52.571,
+      "p50_ms": 53.575,
+      "p95_ms": 55.482,
+      "ratio_to_calibration": 4.7212,
+      "spread_cv": 0.0125
+    },
+    "cli-search": {
+      "allowed_regression": 0.2,
+      "interactive": true,
+      "min_ms": 53.015,
+      "p50_ms": 55.3,
+      "p95_ms": 63.858,
+      "ratio_to_calibration": 4.7611,
+      "spread_cv": 0.0226
+    },
+    "cli-show": {
+      "allowed_regression": 0.2,
+      "interactive": true,
+      "min_ms": 52.781,
+      "p50_ms": 54.836,
+      "p95_ms": 57.458,
+      "ratio_to_calibration": 4.7401,
+      "spread_cv": 0.0147
+    },
+    "cli-stats": {
+      "allowed_regression": 0.2,
+      "interactive": true,
+      "min_ms": 52.463,
+      "p50_ms": 53.871,
+      "p95_ms": 55.664,
+      "ratio_to_calibration": 4.7115,
+      "spread_cv": 0.0138
+    },
+    "digest-registry": {
+      "allowed_regression": 0.2,
+      "interactive": false,
+      "min_ms": 53.27,
+      "p50_ms": 54.515,
+      "p95_ms": 56.384,
+      "ratio_to_calibration": 4.7839,
+      "spread_cv": 0.0129
+    },
+    "index-check": {
+      "allowed_regression": 0.2,
+      "interactive": false,
+      "min_ms": 85.988,
+      "p50_ms": 87.296,
+      "p95_ms": 91.115,
+      "ratio_to_calibration": 7.7146,
+      "spread_cv": 0.0193
+    },
+    "route-rank": {
+      "allowed_regression": 0.2,
+      "interactive": false,
+      "min_ms": 30.171,
+      "p50_ms": 30.701,
+      "p95_ms": 32.574,
+      "ratio_to_calibration": 2.7048,
+      "spread_cv": 0.0195
+    }
+  }
+}
