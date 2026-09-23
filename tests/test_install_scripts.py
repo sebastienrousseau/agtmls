@@ -14,12 +14,13 @@ from __future__ import annotations
 
 import json
 import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-from .mini_registry import SKILLS, mini_registry, replace_file
-from .support import load_script, retarget, run_main
+from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
+from .support import ROOT, load_script, retarget, run_main
 
 _WORKSPACE: str = ""
 FIXTURE = Path()
@@ -122,6 +123,24 @@ class DoctorRegistryTests(ScriptCase):
         self.assertIn(f"WARN behavioral eval coverage incomplete: {count - 1}/{count}", output)
         self.assertIn("OK: doctor passed with 2 warning(s)", output)
 
+    def test_an_installed_registry_is_not_asked_for_checkout_files(self) -> None:
+        """`uvx agtmls doctor` runs from a wheel that ships the registry and
+        not the repository; v0.0.7 reported 30 failures there, every one a
+        governance file, workflow or gate the wheel never contained."""
+        for name in ("README.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md"):
+            replace_file(self, self.fixture / name, None)
+        checks = {"checks": ["probe_fail.py"]}
+        replace_file(self, self.fixture / "scripts" / "probe_fail.py", "raise SystemExit(1)\n")
+        replace_file(self, self.fixture / "checks.json", json.dumps(checks))
+        code, output = self.drive("--installed")
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   installed registry: checkout inspections and the gate are skipped", output)
+        self.assertIn("OK   plugin manifest has version", output)
+        self.assertNotIn("README.md", output)
+        self.assertNotIn("probe_fail.py", output)
+        self.assertNotIn("eval coverage", output)
+        self.assertIn("OK: doctor passed with 0 warning(s)", output)
+
     def test_without_skip_gate_every_check_runs_and_a_failing_one_fails_the_doctor(self) -> None:
         """The doctor re-runs checks.json; a failing check must surface with its output."""
         scripts = self.fixture / "scripts"
@@ -164,6 +183,36 @@ class DoctorTargetTests(ScriptCase):
         self.assertIn("OK   target expected AgtMLS skill links are present", output)
         self.assertIn("OK   target generated CLAUDE.md exists", output)
         self.assertIn("OK: doctor passed with 0 warning(s)", output)
+
+    def test_copied_skills_recorded_in_the_lockfile_are_present(self) -> None:
+        """A wheel install copies; the doctor used to warn that every copied
+        skill was a missing link."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        self.addCleanup(lambda: sys.path.remove(str(ROOT / "scripts")))
+        from _lib import lockfile
+
+        skills = self.target / ".claude" / "skills"
+        skills.mkdir(parents=True)
+        (self.target / ".claude" / "commands").mkdir()
+        (self.target / "CLAUDE.md").write_text(GENERATED, encoding="utf-8")
+        for name in SKILLS:
+            shutil.copytree(self.fixture / "skills" / name, skills / name)
+        lockfile.write(self.target, lockfile.build(self.target, self.fixture, list(SKILLS), "copy", "0.0.0"))
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   target expected AgtMLS skills are present (copied, per the lockfile)", output)
+        self.assertIn("OK: doctor passed with 0 warning(s)", output)
+
+    def test_only_general_skills_are_expected_unless_their_bundle_is_named(self) -> None:
+        """A plain install lands the general skills; the doctor asked for every
+        bundled one too and called eighteen of them missing."""
+        self.install(names=GENERAL)
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   target expected AgtMLS skill links are present", output)
+        self.assertIn("OK: doctor passed with 0 warning(s)", output)
+        code, output = self.doctor("--bundle", "noyalib")
+        self.assertIn("WARN target missing expected AgtMLS skill links: noyalib-config-and-flags\n", output)
 
     def test_a_missing_link_and_a_foreign_prompt_are_named(self) -> None:
         skills = self.install(names=SKILLS[1:], prompt="# My rules\n")

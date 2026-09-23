@@ -35,6 +35,32 @@ class CliJsonTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout)
         return proc.stdout
 
+    def test_version_prints_the_registry_version(self) -> None:
+        """`agtmls --version` was a usage error in 0.0.7."""
+        plugin = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        self.assertEqual(self.run_cli("--version"), f"agtmls {plugin['version']}\n")
+
+    def test_version_falls_back_to_the_index_where_plugin_json_is_not_shipped(self) -> None:
+        """`make install` ships index.json but not .claude-plugin/plugin.json."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        self.addCleanup(lambda: sys.path.remove(str(ROOT / "scripts")))
+        from _lib import cli_parser
+
+        saved = (cli_parser.PLUGIN, cli_parser.INDEX)
+        self.addCleanup(lambda: setattr(cli_parser, "PLUGIN", saved[0]))
+        self.addCleanup(lambda: setattr(cli_parser, "INDEX", saved[1]))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cli_parser.PLUGIN = root / "plugin.json"
+            cli_parser.INDEX = root / "index.json"
+            self.assertEqual(cli_parser.registry_version(), "unknown")
+            (root / "index.json").write_text('{}', encoding="utf-8")
+            self.assertEqual(cli_parser.registry_version(), "unknown", "an index without a version")
+            (root / "index.json").write_text('{"registry_version": "9.9.8"}', encoding="utf-8")
+            self.assertEqual(cli_parser.registry_version(), "9.9.8")
+            (root / "plugin.json").write_text('{"version": "9.9.9"}', encoding="utf-8")
+            self.assertEqual(cli_parser.registry_version(), "9.9.9")
+
     def test_stats_json_has_full_coverage(self) -> None:
         payload = json.loads(self.run_cli("stats", "--json"))
         count = payload["skills"]
@@ -327,6 +353,18 @@ class CliDispatchTests(unittest.TestCase):
                     if isinstance(arg, ast.Constant) and str(arg.value).startswith("-"):
                         flags.add(arg.value)
         return flags
+
+    def test_a_relative_doctor_target_is_resolved_against_the_callers_directory(self) -> None:
+        """The doctor runs with the registry as its cwd; `doctor --target .`
+        from a wheel inspected the registry and called the user's repo missing."""
+        for name in ("doctor", "status"):
+            with self.subTest(subcommand=name):
+                sys.argv = ["agtmls", name, "--target", "."]
+                self.calls.clear()
+                self.assertEqual(self.module.main(), 0)
+                forwarded = self.calls[0]
+                self.assertIn("--target", forwarded)
+                self.assertEqual(forwarded[forwarded.index("--target") + 1], str(Path.cwd().resolve()))
 
     def test_forwarded_flags_are_accepted_by_the_target_script(self) -> None:
         """A dispatcher may only forward flags the receiving script declares.

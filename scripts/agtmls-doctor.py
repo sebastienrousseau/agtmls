@@ -15,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 PROVIDERS = ROOT / "providers.json"
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import lockfile  # noqa: E402  (needs ROOT on the path first)
 
 
 def native_agents() -> dict[str, tuple[str, str]]:
@@ -31,12 +33,24 @@ def native_agents() -> dict[str, tuple[str, str]]:
 
 
 def expected_skill_names(bundles: list[str]) -> list[str]:
+    """The skills an install with these bundles puts in a target.
+
+    The same rule as the installer: a skill whose metadata names a bundle
+    lands only when that bundle is asked for. Counting every skill made the
+    doctor report eighteen bundled skills missing from a plain install.
+    """
     names: list[str] = []
     for entry in sorted(SKILLS_DIR.iterdir()):
         if not entry.is_dir():
             continue
         if (entry / "SKILL.md").exists():
-            names.append(entry.name)
+            metadata = entry / "metadata.json"
+            bundle = (
+                json.loads(metadata.read_text(encoding="utf-8")).get("bundle")
+                if metadata.exists() else None
+            )
+            if not bundle or bundle in bundles:
+                names.append(entry.name)
             continue
         if entry.name in bundles:
             for leaf in sorted(entry.iterdir()):
@@ -90,11 +104,24 @@ def main() -> int:
         action="store_true",
         help="skip re-running checks.json; use inside the gate, which has already run them",
     )
+    parser.add_argument(
+        "--installed",
+        action="store_true",
+        help="the registry is an installed package, not a checkout: inspect the registry "
+             "and the target, not the repository's documents, evals or gate",
+    )
     args = parser.parse_args()
 
     r = Reporter()
 
-    for path in ["README.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md", "commands"]:
+    # The wheel ships the registry, not the repository. Run from it, the
+    # previous release's doctor reported 30 failures, every one a governance file, workflow or
+    # check the package never contained.
+    if args.installed:
+        r.ok("installed registry: checkout inspections and the gate are skipped")
+    for path in [] if args.installed else [
+        "README.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md", "commands",
+    ]:
         item = ROOT / path
         if item.exists():
             r.ok(f"{path} exists")
@@ -131,11 +158,15 @@ def main() -> int:
     skill_files = sorted((ROOT / "skills").glob("**/SKILL.md"))
     route_cases = sorted((ROOT / "evals" / "cases").glob("*.json"))
     behavioral_cases = sorted((ROOT / "evals" / "behavioral" / "cases").glob("*.json"))
-    if len(route_cases) == len(skill_files):
+    if args.installed:
+        pass  # the evals are the checkout's measure of itself, not the package's
+    elif len(route_cases) == len(skill_files):
         r.ok(f"routing eval coverage is complete: {len(route_cases)}/{len(skill_files)}")
     else:
         r.warn(f"routing eval coverage incomplete: {len(route_cases)}/{len(skill_files)}")
-    if len(behavioral_cases) == len(skill_files):
+    if args.installed:
+        pass
+    elif len(behavioral_cases) == len(skill_files):
         r.ok(f"behavioral eval coverage is complete: {len(behavioral_cases)}/{len(skill_files)}")
     else:
         r.warn(f"behavioral eval coverage incomplete: {len(behavioral_cases)}/{len(skill_files)}")
@@ -143,7 +174,7 @@ def main() -> int:
     # For a human, `agtmls doctor` running the whole gate is the point. Inside
     # run-all-checks.py it meant every check ran twice -- the duplication was
     # roughly half the gate's wall time.
-    checks = [] if args.skip_gate else json.loads(
+    checks = [] if args.skip_gate or args.installed else json.loads(
         (ROOT / "checks.json").read_text(encoding="utf-8")
     )["checks"]
     for check in checks:
@@ -171,15 +202,27 @@ def main() -> int:
                 else:
                     r.warn(f"target {dot}/commands is missing; run setup-workspace.sh")
                 if skills_dir.exists():
+                    # A wheel install copies; the lockfile says which
+                    # directories are ours, so they are not "missing links".
+                    lock = lockfile.read(target)
+                    copied = (
+                        {entry["name"] for entry in lock.get("skills", [])}
+                        if lock is not None and lock.get("mode") == "copy" else set()
+                    )
                     missing = []
                     for name in expected_skill_names(args.bundle):
                         link = skills_dir / name
                         # is_relative_to, not a string prefix: a sibling
                         # checkout `<root>-experiments` shares the prefix.
-                        if not link.is_symlink() or not link.resolve().is_relative_to(ROOT):
-                            missing.append(name)
+                        if link.is_symlink() and link.resolve().is_relative_to(ROOT):
+                            continue
+                        if name in copied and link.is_dir() and not link.is_symlink():
+                            continue
+                        missing.append(name)
                     if missing:
                         r.warn(f"target missing expected AgtMLS skill links: {', '.join(missing)}")
+                    elif copied:
+                        r.ok("target expected AgtMLS skills are present (copied, per the lockfile)")
                     else:
                         r.ok("target expected AgtMLS skill links are present")
                 prompt_path = target / prompt

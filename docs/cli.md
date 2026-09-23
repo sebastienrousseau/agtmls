@@ -36,8 +36,10 @@ python3 scripts/agtmls.py diff --from index.json --to index.json
 python3 scripts/agtmls.py release-check
 python3 scripts/agtmls.py import-skill /path/to/external/skill --name candidate-skill
 python3 scripts/agtmls.py index --check
+python3 scripts/agtmls.py --version
 python3 scripts/agtmls.py status
 python3 scripts/agtmls.py status --target /path/to/repo --agent codex --skills-only
+python3 scripts/agtmls.py doctor --installed   # what `uvx agtmls doctor` runs: the registry and the target, not the checkout
 python3 scripts/agtmls.py install rust claude --target /path/to/repo --dry-run
 python3 scripts/agtmls.py install rust claude --target /path/to/repo --skills-only --bundle noyalib
 python3 scripts/agtmls.py install rust claude --target /path/to/repo --force
@@ -102,6 +104,13 @@ OK: 13 skill(s) match the lockfile in /path/to/repo
 
 Exit `3` is `INTEGRITY_FAILURE`, distinct from `1` (error) and `2` (usage), so
 a calling script can branch on it.
+
+`uninstall` reads the same lockfile. An install from a checkout links, and
+uninstall removes links into that checkout; an install from the wheel
+(`uvx agtmls install`) copies, and uninstall removes the copied skills the
+lockfile records, plus copied commands and agents that still equal the
+registry's. A skill edited since install is `MODIFIED` to verify and is left in
+place by uninstall. The lockfile goes once nothing it records remains.
 
 `install` also verifies the **source** registry against `index.json` before
 copying anything, and refuses with exit `3` if they disagree — checking after
