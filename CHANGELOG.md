@@ -9,6 +9,23 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- The analyzer runs every rule but steganography on the text an agent
+  reads: hidden code points are stripped and compatibility forms folded
+  (NFKC) before matching. A keyword split by a zero-width space or a tag
+  character, or spelt in fullwidth letters, matched no rule; the hidden
+  bytes were reported and the instruction went unnamed, and the
+  fullwidth spelling escaped both. Five corpus cases pin this.
+- An injection quoted in a fenced block or blockquote under a heading
+  that says "example", "attack" or "do not" is reported at MEDIUM rather
+  than HIGH: a skill that quotes an attack to teach against it is not
+  attacking. It still appears and still fails `--strict`.
+- In-source suppressions: `<!-- agtmls-ignore AGT-INJ-001: reason -->`
+  covers the next line only, needs a reason, and never covers
+  steganography. Suppressed findings are listed, not counted, and
+  emitted in SARIF under `suppressions`.
+- `audit --format sarif` (SARIF 2.1.0), `--write-baseline FILE` and
+  `--baseline FILE`, so a CI gate fails on new findings only. Findings
+  carry a fingerprint over rule, file and message, not the line.
 - `agtmls --version` prints the registry version. It was a usage error.
 
 ### Fixed

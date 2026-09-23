@@ -18,6 +18,8 @@ from pathlib import Path
 
 SNAPSHOT = Path(__file__).with_name("rules.json")
 _RULES = json.loads(SNAPSHOT.read_text(encoding="utf-8"))["rules"]
+# The whole table, for reporters that describe every rule (SARIF).
+RULES = _RULES
 
 
 # Tools that grant a capability the safety policy may be denying. Kept in step

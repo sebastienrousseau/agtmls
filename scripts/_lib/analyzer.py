@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import re
 import stat
+import unicodedata
 from pathlib import Path
 from typing import NamedTuple
 
@@ -47,6 +48,7 @@ class Finding(NamedTuple):
     category: str
     message: str
     rule: str = "AGT-UNKNOWN"  # stable id, e.g. AGT-EXEC-001
+    suppressed: str | None = None  # the justification of an in-source suppression
 
 
 def describe_invisible(char: str) -> str:
@@ -92,6 +94,20 @@ def check_steganography(path: Path, content: str) -> list[Finding]:
 WHITESPACE_RUN = re.compile(r"\s+")
 
 
+def normalize(content: str) -> str:
+    """The text as an agent reads it, for every rule but steganography.
+
+    Pipeline: raw -> record invisibles (check_steganography, on the raw text)
+    -> strip them -> NFKC -> flatten() -> rules. A keyword split by a
+    zero-width space or a tag character, or spelt in fullwidth letters,
+    matched no rule while reading as the keyword to a model; the hidden
+    bytes were reported as steganography and the instruction went unnamed.
+    Newlines survive both steps, so line numbers computed on the result
+    still point into the source.
+    """
+    return unicodedata.normalize("NFKC", INVISIBLE_RE.sub("", content))
+
+
 def flatten(content: str) -> str:
     """Collapse whitespace runs to a single space.
 
@@ -132,14 +148,15 @@ def scan(
     severity: str,
     category: str,
 ) -> list[Finding]:
-    flat = flatten(content)
+    text = normalize(content)
+    flat = flatten(text)
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()
     line_of: list[int] | None = None
     for pattern, rule, desc in patterns:
         for match in pattern.finditer(flat):
             if line_of is None:
-                line_of = line_map(content)
+                line_of = line_map(text)
             line = line_of[match.start()] if match.start() < len(line_of) else 1
             if (line, desc) in seen:
                 continue
@@ -157,8 +174,42 @@ def scan(
     return findings
 
 
+# A heading under which quoting an attack is teaching, not attacking.
+QUOTING_HEADING = re.compile(r"(?i)\b(?:examples?|attacks?|do\s+not|don't)\b")
+FENCE = re.compile(r"^\s{0,3}(?:```|~~~)")
+
+
+def quoted_lines(text: str) -> set[int]:
+    """Line numbers inside a fenced block or blockquote under a quoting heading.
+
+    An injection there is the skill showing what it defends against. It is
+    still reported, and still fails --strict; it is no longer HIGH.
+    """
+    quoted: set[int] = set()
+    heading_quotes = False
+    in_fence = False
+    for number, line in enumerate(text.splitlines(), start=1):
+        if FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if not in_fence and line.startswith("#"):
+            heading_quotes = bool(QUOTING_HEADING.search(line))
+            continue
+        if heading_quotes and (in_fence or line.lstrip().startswith(">")):
+            quoted.add(number)
+    return quoted
+
+
 def check_prompt_injection(path: Path, content: str) -> list[Finding]:
-    return scan(path, content, PROMPT_INJECTION_PATTERNS, "HIGH", "prompt_injection")
+    findings = scan(path, content, PROMPT_INJECTION_PATTERNS, "HIGH", "prompt_injection")
+    if not findings:
+        return findings
+    quoted = quoted_lines(normalize(content))
+    return [
+        f._replace(severity="MEDIUM", message=f"{f.message} (quoted under a heading that marks it as an example)")
+        if f.line in quoted else f
+        for f in findings
+    ]
 
 
 def check_dangerous_shell(path: Path, content: str) -> list[Finding]:
@@ -359,6 +410,46 @@ def auditable_files(root: Path):
             yield path
 
 
+SUPPRESSION = re.compile(r"<!--\s*agtmls-ignore\s+(AGT-[A-Z]+-\d{3})\s*:\s*(\S[^>]*?)\s*-->")
+# Hidden bytes and packed payloads are never a matter of judgement.
+UNSUPPRESSABLE = ("AGT-STEG-", "AGT-PACK-")
+
+
+def suppressions(content: str) -> dict[int, dict[str, str]]:
+    """Justified suppressions, keyed by the one line each one covers.
+
+    `<!-- agtmls-ignore AGT-INJ-001: quotes the attack for training -->`
+    covers the next line only. The reason is required: a comment without
+    one is not a suppression, so the finding it meant to hide still fires.
+    """
+    found: dict[int, dict[str, str]] = {}
+    for number, line in enumerate(content.splitlines(), start=1):
+        for rule, reason in SUPPRESSION.findall(line):
+            found.setdefault(number + 1, {})[rule] = reason
+    return found
+
+
+def apply_suppressions(findings: list[Finding], content: str) -> list[Finding]:
+    covered = suppressions(content)
+    if not covered:
+        return findings
+    return [
+        f._replace(suppressed=covered[f.line][f.rule])
+        if f.rule in covered.get(f.line, {}) and not f.rule.startswith(UNSUPPRESSABLE) else f
+        for f in findings
+    ]
+
+
+def audit_file_content(path: Path, content: str) -> list[Finding]:
+    """Every detector over one file's text, with in-source suppressions applied."""
+    findings: list[Finding] = []
+    findings.extend(check_steganography(path, content))
+    findings.extend(check_prompt_injection(path, content))
+    findings.extend(check_dangerous_shell(path, content))
+    findings.extend(check_data_exfiltration(path, content))
+    return apply_suppressions(findings, content)
+
+
 def audit_file(path: Path) -> list[Finding]:
     content = read_capped(path)
     if content is None:
@@ -372,12 +463,7 @@ def audit_file(path: Path) -> list[Finding]:
                 rule="AGT-SCAN-001",
             )
         ]
-    findings = []
-    findings.extend(check_steganography(path, content))
-    findings.extend(check_prompt_injection(path, content))
-    findings.extend(check_dangerous_shell(path, content))
-    findings.extend(check_data_exfiltration(path, content))
-    return findings
+    return audit_file_content(path, content)
 
 
 def audit_skill_target(target: Path) -> list[Finding]:
