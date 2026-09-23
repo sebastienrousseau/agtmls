@@ -165,6 +165,16 @@ class CapabilityEscalationTests(Workspace):
     def test_bash_under_a_policy_that_allows_commands_does_not(self) -> None:
         self.assertEqual(self.escalations("Bash", {"executes_commands": True}), [])
 
+    def test_the_message_does_not_claim_every_runtime_grants_the_tool(self) -> None:
+        """Claude Code pre-approves allowed-tools; Apache Maka treats the field
+        as informational. "The runtime honours the frontmatter" was true of
+        one and presented as true of all."""
+        (finding,) = analyzer.check_capability_escalation(
+            self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
+        )
+        self.assertNotIn("the runtime honours", finding.message)
+        self.assertIn("runtimes that pre-approve allowed-tools", finding.message)
+
     def test_web_fetch_needs_network_access_declared(self) -> None:
         self.assertEqual(self.escalations("WebFetch", {"network_access": "none"}), ["AGT-CAP-001"])
         self.assertEqual(self.escalations("WebFetch", {"network_access": "optional"}), [])

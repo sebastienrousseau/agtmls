@@ -284,7 +284,8 @@ def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
                     category="capability_escalation",
                     message=(
                         f"Frontmatter grants '{tool}' but safety_policy denies "
-                        f"{capability}; the runtime honours the frontmatter"
+                        f"{capability}; runtimes that pre-approve allowed-tools, "
+                        "such as Claude Code, will grant it"
                     ),
                     rule="AGT-CAP-001",
                 )
