@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -12,6 +13,42 @@ import unittest
 from pathlib import Path
 
 from .support import CLI, ROOT, load_script, skill_text  # noqa: F401  (used by the cases below)
+
+
+GENERATED_MARKERS = (
+    "sbom", "provenance", "index.json", "mcp-resources",
+    "catalog", "lock", "changelog", "site", "bench-baseline",
+)
+
+
+def version_carriers(root: Path, version: str, owned: set[str]) -> list[str]:
+    """Hand-authored files that state `version`, as whole-token matches.
+
+    Registry *content* is not registry *packaging*: the noyalib skills
+    discuss noyalib's own v0.0.6, which has nothing to do with this
+    registry's version. Tests are skipped too, because they write versions
+    as inputs. Generated artifacts legitimately restate it.
+    """
+    token = re.compile(rf"(?<![\d.]){re.escape(version)}(?![\d])")
+    carriers = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.is_symlink():
+            continue
+        relative = path.relative_to(root)
+        if {".git", "__pycache__", ".agtmls", "benchmarks", "share", "completions", "tests"} & set(relative.parts):
+            continue
+        if {"skills", "references", "system-prompts", "agents", "commands",
+            "evals", "templates"} & set(relative.parts):
+            continue
+        if any(marker in path.name.lower() for marker in GENERATED_MARKERS):
+            continue
+        if str(relative) in owned:
+            continue
+        if path.suffix.lower() not in {".json", ".toml", ".py", ".md", ".yml", ".yaml"}:
+            continue
+        if token.search(path.read_text(encoding="utf-8", errors="replace")):
+            carriers.append(str(relative))
+    return carriers
 
 
 class VersionPolicyTests(unittest.TestCase):
@@ -115,10 +152,6 @@ class DigestStabilityTests(unittest.TestCase):
         current = json.loads(
             (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
         )["version"]
-        generated = (
-            "sbom", "provenance", "index.json", "mcp-resources",
-            "catalog", "lock", "changelog", "site", "bench-baseline",
-        )
         # The per-provider manifests restate the version by construction. The
         # generator is asked which files it owns, rather than this test
         # carrying a second copy of that list to drift from.
@@ -126,29 +159,27 @@ class DigestStabilityTests(unittest.TestCase):
         owned = set(manifests.render(
             json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
         )) if hasattr(manifests, "render") else set()
-        carriers = []
-        for path in sorted(ROOT.rglob("*")):
-            if not path.is_file() or path.is_symlink():
-                continue
-            relative = path.relative_to(ROOT)
-            if {".git", "__pycache__", ".agtmls", "benchmarks", "share", "completions"} & set(relative.parts):
-                continue
-            # Registry *content* is not registry *packaging*. The noyalib
-            # skills discuss noyalib's own v0.0.6, which has nothing to do
-            # with this registry's version and must not be counted as a
-            # place it can drift.
-            if {"skills", "references", "system-prompts", "agents", "commands",
-                "evals", "templates"} & set(relative.parts):
-                continue
-            if any(marker in path.name.lower() for marker in generated):
-                continue
-            if str(relative) in owned:
-                continue
-            if path.suffix.lower() not in {".json", ".toml", ".py", ".md", ".yml", ".yaml"}:
-                continue
-            if current in path.read_text(encoding="utf-8", errors="replace"):
-                carriers.append(str(relative))
+        carriers = version_carriers(ROOT, current, owned)
         self.assertLessEqual(
             len(carriers), 8,
             f"{current} is authored in {len(carriers)} files: {carriers[:10]}",
         )
+
+    def test_a_longer_version_is_not_a_carrier_of_a_shorter_one(self) -> None:
+        """A substring match counted `0.0.999` as carrying `0.0.9`, and `0.0.60`
+        as carrying `0.0.6`: the count would jump on the day the registry
+        reached a version that prefixes a literal written somewhere else."""
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "README.md").write_text("cap: 0.0.999, next: 0.0.90\n", encoding="utf-8")
+            (root / "pyproject.toml").write_text('version = "0.0.9"\n', encoding="utf-8")
+            self.assertEqual(version_carriers(root, "0.0.9", set()), ["pyproject.toml"])
+
+    def test_the_tests_do_not_count_as_carriers(self) -> None:
+        """Tests write versions as inputs -- boundary values, past releases --
+        not as places the release is declared."""
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "tests").mkdir()
+            (root / "tests" / "test_x.py").write_text('BUMP = "0.0.9"\n', encoding="utf-8")
+            self.assertEqual(version_carriers(root, "0.0.9", set()), [])
