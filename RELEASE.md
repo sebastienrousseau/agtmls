@@ -56,26 +56,37 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
 
    ```sh
    python3 scripts/release-preflight.py --tag v<version> --commit <commit> \
-       --notes docs/release-notes/v<version>.md --sums <SHA256SUMS>
+       --notes docs/release-notes/v<version>.md --pending-checksums
    ```
 
-   The artifacts are built by `release.yml` after the tag is pushed. Until the
-   workflow creates a draft release before building, the notes' Checksums
-   section says `pending` and the preflight runs with `--pending-checksums`;
-   the checksums are added from the release's `SHA256SUMS` before the next
-   step.
-4. Push the tag. `release.yml` builds, creates the GitHub release, and stops
-   at the `pypi` environment, which needs a maintainer's approval.
-5. Replace the release body with the finished notes
-   (`gh release edit v<version> --notes-file docs/release-notes/v<version>.md`)
-   and check what was published so far:
+   The artifacts are built by `release.yml` after the tag is pushed, and the
+   build is not byte-reproducible, so their checksums cannot exist before the
+   push. The notes' Checksums section says `pending` and the preflight runs
+   with `--pending-checksums`. This is a standing deviation from the
+   "checksums before push" rule in AGENTS.md, closed in step 4 instead:
+   nothing is visible or publishable until the real checksums are checked.
+   Reproducible builds would remove it.
+4. Push the tag. `release.yml` then, in order:
+   - builds once, and writes one `SHA256SUMS` over every asset, wheel and
+     sdist included;
+   - writes the release body with `scripts/release-body.py`: the prepared
+     notes, their Checksums section replaced by that `SHA256SUMS`;
+   - attaches the assets to a **draft** release, and refuses to publish it
+     unless GitHub holds every one;
+   - publishes the release and runs `scripts/release-audit.py --before-pypi`;
+   - stops at the `pypi` environment, which needs a maintainer's approval.
+     The publish job uploads the build job's files, never a rebuild.
+5. Approve the `pypi` deployment, then run the audit in full:
 
    ```sh
-   python3 scripts/release-audit.py --tag v<version> --commit <commit> --before-pypi
+   python3 scripts/release-audit.py --tag v<version> --commit <commit>
    ```
 
-6. Approve the `pypi` deployment in the Actions run, then run the audit again
-   without `--before-pypi`. The release is done when it passes.
+   The release is done when it passes.
+
+To re-release an existing tag whose release was left incomplete, dispatch the
+workflow with that tag and `dry_run: false`. It reuses the release only if it
+has no assets; it never replaces a release that shipped.
 
 ## Tag protection
 

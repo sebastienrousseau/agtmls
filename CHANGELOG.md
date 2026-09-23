@@ -32,8 +32,14 @@ All notable changes to AgtMLS are recorded here.
   it is signed by a key in `KEYS.asc`, titled `AgtMLS v<version>`, on the
   intended commit, matched by every packaged version, and accompanied by notes
   with a summary and checksums. `scripts/release-audit.py` reads a published
-  release back from the tag, the GitHub release and PyPI. RELEASE.md describes
-  the flow.
+  release back from the tag, the GitHub release and PyPI -- including every
+  asset's digest. RELEASE.md describes the flow.
+- The release workflow builds once and publishes those exact files to both the
+  GitHub release and PyPI. It attaches assets to a draft, publishes only when
+  GitHub holds all of them, writes the release body from the prepared notes
+  plus the real checksums, and audits the result before PyPI is approved.
+  v0.0.6's first run attached no assets while reporting success, and its
+  publish job rebuilt the distributions; that deployment was rejected.
 
 ### Changed
 

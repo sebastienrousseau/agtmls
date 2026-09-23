@@ -2,6 +2,13 @@
 # SPDX-License-Identifier: MIT
 name: release
 
+# One build, published twice. The files attached to the GitHub release and
+# the files uploaded to PyPI are the same bytes: the build job checksums them,
+# attaches them to a draft release, audits what GitHub holds, and hands the
+# identical files to the publish job as an artifact. v0.0.6 exposed both ways
+# this used to go wrong: `gh release create` reported success and attached
+# nothing, and the publish job rebuilt the distributions, so PyPI would have
+# served files no checksum described.
 on:
   push:
     branches-ignore:
@@ -14,7 +21,7 @@ on:
         description: "Existing tag to release, for example v0.0.2"
         required: true
       dry_run:
-        description: "Build and validate without publishing to PyPI"
+        description: "Build and validate without publishing anything"
         type: boolean
         default: true
 
@@ -30,11 +37,21 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v0.0.') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
+      # The release content: the tagged commit.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      # The release tooling and notes: this workflow's own commit. For a tag
+      # push the two are the same; re-releasing an older tag by dispatch runs
+      # today's checks and notes over that tag's content.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.sha }}
+          path: tooling
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
@@ -69,26 +86,74 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check build
           python3 -m build --outdir dist/python
+      - name: Collect and checksum every asset
+        # One directory, one SHA256SUMS over everything published, wheel and
+        # sdist included -- release-pack's own list covers the exports only.
+        run: |
+          mkdir -p dist/assets
+          cp dist/release/*.tar.gz dist/release/release-manifest.json dist/python/* dist/assets/
+          (cd dist/assets && sha256sum -- * > ../SHA256SUMS && mv ../SHA256SUMS SHA256SUMS)
+          cat dist/assets/SHA256SUMS
       - name: Attest release assets
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
-          subject-path: "dist/release/*, dist/python/*"
+          subject-path: "dist/assets/*"
       - name: Verify the wheel installs and runs
         run: |
           python3 -m venv /tmp/verify
-          /tmp/verify/bin/pip install --disable-pip-version-check dist/python/*.whl
+          /tmp/verify/bin/pip install --disable-pip-version-check dist/assets/*.whl
           test "$(/tmp/verify/bin/agtmls stats --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["registry_version"])')" \
             = "${{ steps.version.outputs.version }}"
-      - name: Create GitHub release
+      - name: Keep the exact files for the publish job
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-assets
+          path: dist/assets/
+          if-no-files-found: error
+      - name: Write the release body
+        run: |
+          python3 tooling/scripts/release-body.py --tag "${{ steps.version.outputs.tag }}" \
+            --notes-dir tooling/docs/release-notes --sums dist/assets/SHA256SUMS --out dist/body.md
+      - name: Attach assets to the GitHub release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # A release that exists already may only be empty: completing a
+            # release whose upload failed, never replacing one that shipped.
+            count="$(gh release view "$TAG" --json assets --jq '.assets | length')"
+            if [ "$count" != "0" ]; then
+              echo "::error::$TAG already has $count asset(s); refusing to replace a published release"
+              exit 1
+            fi
+            gh release edit "$TAG" --draft --title "AgtMLS $TAG" --notes-file dist/body.md
+            gh release upload "$TAG" dist/assets/*
+          else
+            gh release create "$TAG" dist/assets/* --draft --verify-tag \
+              --title "AgtMLS $TAG" --notes-file dist/body.md
+          fi
+          # `gh release create` once reported success and attached nothing;
+          # count what GitHub actually holds before anyone can see it.
+          expected="$(ls dist/assets | wc -l | tr -d ' ')"
+          attached="$(gh release view "$TAG" --json assets --jq '.assets | length')"
+          if [ "$attached" != "$expected" ]; then
+            echo "::error::$TAG has $attached of $expected assets attached; the release stays a draft"
+            exit 1
+          fi
+          gh release edit "$TAG" --draft=false
+      - name: Audit the published release
+        if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ steps.version.outputs.tag }}" dist/release/* dist/python/* \
-            --title "AgtMLS ${{ steps.version.outputs.tag }}" \
-            --notes "Automated AgtMLS ${{ steps.version.outputs.tag }} release. Versions increment by exactly 0.0.1 on the 0.0.x line."
+          python3 tooling/scripts/release-audit.py --tag "${{ steps.version.outputs.tag }}" \
+            --commit "$(git rev-parse HEAD)" --before-pypi
 
   # Trusted Publishing: no long-lived PyPI token exists to leak, and PyPI
-  # records PEP 740 attestations for the uploaded files.
+  # records PEP 740 attestations for the uploaded files. The files are the
+  # release job's, downloaded, never rebuilt.
   publish-pypi:
     needs: release
     runs-on: ubuntu-latest
@@ -96,25 +161,33 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - name: Build distributions
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-assets
+          path: dist/assets
+      - name: Select the Python distributions
+        env:
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
         run: |
-          python3 -m pip install --disable-pip-version-check build
-          python3 -m build --outdir dist/
+          VERSION="${TAG#v}"
+          mkdir -p dist/pypi
+          cp "dist/assets/agtmls-${VERSION}-py3-none-any.whl" "dist/assets/agtmls-${VERSION}.tar.gz" dist/pypi/
+          # The bytes to upload are the bytes the release lists.
+          (cd dist/assets && grep -E "  agtmls-${VERSION}(-py3-none-any\.whl|\.tar\.gz)$" SHA256SUMS | sha256sum -c -)
+          ls -l dist/pypi
       # A rehearsal that stops before the registry. Without one, the first
       # time this path runs for real is also the first time it runs at all.
       - name: Publish (dry run)
         if: inputs.dry_run
         run: |
           python3 -m pip install --disable-pip-version-check twine
-          python3 -m twine check dist/*
-          echo "dry run: built and validated $(ls dist | wc -l) file(s); nothing uploaded"
+          python3 -m twine check dist/pypi/*
+          echo "dry run: validated $(ls dist/pypi | wc -l) file(s); nothing uploaded"
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         if: ${{ !inputs.dry_run }}
         with:
+          packages-dir: dist/pypi/
           attestations: true

@@ -73,7 +73,7 @@ def audit_tag(tag: str, commit: str) -> list[str]:
 
 def audit_release(tag: str, repo: str) -> tuple[list[str], str | None]:
     """(problems, SHA256SUMS text) for the GitHub release."""
-    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft")
+    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft,assets")
     if view.returncode != 0:
         return [f"no GitHub release for {tag}: {view.stderr.strip()}"], None
     release = json.loads(view.stdout)
@@ -87,7 +87,32 @@ def audit_release(tag: str, repo: str) -> tuple[list[str], str | None]:
             return [*errors, f"the {tag} release has no SHA256SUMS asset"], None
         sums = sums_path.read_text(encoding="utf-8")
     errors += notes_problems(f"{tag} release body", release.get("body") or "", sums)
+    errors += audit_assets(release.get("assets") or [], sums)
     return errors, sums
+
+
+def audit_assets(assets: list[dict], sums: str) -> list[str]:
+    """Every file SHA256SUMS lists is attached, byte for byte, and nothing else.
+
+    v0.0.6's first release reported success from `gh release create` and
+    attached nothing; only the asset list shows that.
+    """
+    listed, _ = parse_sums(sums)
+    attached = {
+        asset["name"]: str(asset.get("digest") or "").removeprefix("sha256:")
+        for asset in assets if asset["name"] != "SHA256SUMS"
+    }
+    errors = []
+    for name, digest in sorted(attached.items()):
+        if name not in listed:
+            errors.append(f"release asset {name} is not listed in SHA256SUMS")
+        elif digest != listed[name]:
+            errors.append(f"release asset {name} has sha256 {digest[:12]}, not the one SHA256SUMS lists")
+    errors += [
+        f"{name} is in SHA256SUMS but not attached to the release"
+        for name in sorted(set(listed) - set(attached))
+    ]
+    return errors
 
 
 def audit_pypi(version: str, sums: str) -> list[str]:

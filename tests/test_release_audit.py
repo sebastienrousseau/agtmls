@@ -31,7 +31,10 @@ class FakeWorld:
     def __init__(self, **overrides) -> None:
         self.state = {
             "local": TAG_OBJECT, "remote": TAG_OBJECT, "peeled": COMMIT, "expected": COMMIT,
-            "release": {"body": BODY, "isDraft": False}, "sums": SUMS,
+            "release": {"body": BODY, "isDraft": False, "assets": [
+                {"name": name, "digest": f"sha256:{digest}"}
+                for digest, name in (line.split("  ") for line in SUMS.splitlines())
+            ] + [{"name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}, "sums": SUMS,
             "pypi": {"urls": [
                 {"filename": WHEEL, "digests": {"sha256": "a" * 64}},
                 {"filename": SDIST, "digests": {"sha256": "b" * 64}},
@@ -125,6 +128,20 @@ class AuditTests(unittest.TestCase):
         _, failures, _ = self.audit(FakeWorld(release={"body": body, "isDraft": False}))
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Summary` section of user-visible changes, as bullets", failures)
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Checksums` section", failures)
+
+    def test_a_release_without_its_assets_is_refused(self) -> None:
+        """v0.0.6's first release: `gh release create` reported success and
+        attached nothing. SHA256SUMS lists what should be there; every entry
+        must be an asset with that digest."""
+        release = {"body": BODY, "isDraft": False, "assets": [
+            {"name": "SHA256SUMS", "digest": "sha256:" + "f" * 64},
+            {"name": WHEEL, "digest": "sha256:" + "0" * 64},
+            {"name": "extra.bin", "digest": "sha256:" + "1" * 64},
+        ]}
+        _, failures, _ = self.audit(FakeWorld(release=release))
+        self.assertIn(f"FAIL: release asset {WHEEL} has sha256 000000000000, not the one SHA256SUMS lists", failures)
+        self.assertIn(f"FAIL: {SDIST} is in SHA256SUMS but not attached to the release", failures)
+        self.assertIn("FAIL: release asset extra.bin is not listed in SHA256SUMS", failures)
 
     def test_body_checksums_that_differ_from_the_asset_are_refused(self) -> None:
         _, failures, _ = self.audit(FakeWorld(sums=SUMS.replace("a" * 64, "d" * 64)))
