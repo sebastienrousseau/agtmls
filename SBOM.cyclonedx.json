@@ -996,7 +996,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3cfb2f16efcbb4b40ad8bc6fcc3941b9b66d1efb56faa0ef09cf8b6f11a8f101"
+          "content": "2e03e87f3fdf7ad137f8e381913b33682b2ec284327b3e49b4f83e0ebb190859"
         }
       ],
       "name": "scripts/_lib/covered.py",
@@ -1260,7 +1260,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a847751997fb97d28762d3d424f503c31a0789b5ccb895a0d45bcb8130c85e4"
+          "content": "7154a9468f7622f8bd64bda7731c72eae16a25ac99da339c46682064c89dd660"
         }
       ],
       "name": "scripts/generate-sbom.py",
@@ -3925,7 +3925,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:21:00Z",
+    "timestamp": "2026-09-23T07:22:43Z",
     "tools": {
       "components": [
         {
