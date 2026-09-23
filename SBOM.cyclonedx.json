@@ -1920,7 +1920,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8e5b4f32bec5476df0ae1ced2861150d8a33815b03a59eef965e9c9cbf39a9f4"
+          "content": "602bfb0d257b1e6ce9886ef6b4c058323ef9657b504e719e53e0d8c583d7da05"
         }
       ],
       "name": "scripts/validate-shell-syntax.py",
@@ -3925,7 +3925,7 @@
       "type": "application",
       "version": "0.0.6"
     },
-    "timestamp": "2026-09-23T07:18:33Z",
+    "timestamp": "2026-09-23T07:19:43Z",
     "tools": {
       "components": [
         {
