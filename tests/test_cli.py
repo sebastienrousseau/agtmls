@@ -354,6 +354,20 @@ class CliDispatchTests(unittest.TestCase):
                         flags.add(arg.value)
         return flags
 
+    def test_audit_forwards_its_format_and_baseline_flags(self) -> None:
+        sys.argv = ["agtmls", "audit", "--all", "--format", "sarif", "--baseline", "known.json",
+                    "--write-baseline", "next.json"]
+        self.calls.clear()
+        self.assertEqual(self.module.main(), 0)
+        forwarded = self.calls[0]
+        self.assertEqual(forwarded[forwarded.index("--format") + 1], "sarif")
+        self.assertEqual(forwarded[forwarded.index("--baseline") + 1], str(Path("known.json").resolve()))
+        self.assertEqual(forwarded[forwarded.index("--write-baseline") + 1], str(Path("next.json").resolve()))
+        sys.argv = ["agtmls", "audit", "--all", "--json"]
+        self.calls.clear()
+        self.module.main()
+        self.assertEqual(self.calls[0][-2:], ["--format", "json"])
+
     def test_a_relative_doctor_target_is_resolved_against_the_callers_directory(self) -> None:
         """The doctor runs with the registry as its cwd; `doctor --target .`
         from a wheel inspected the registry and called the user's repo missing."""

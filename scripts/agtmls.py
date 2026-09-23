@@ -443,8 +443,12 @@ def main() -> int:
             cmd.append("--all")
         if args.strict:
             cmd.append("--strict")
-        if args.json:
-            cmd.extend(["--format", "json"])
+        if args.format or args.json:
+            cmd.extend(["--format", args.format or "json"])
+        if args.baseline:
+            cmd.extend(["--baseline", str(args.baseline.resolve())])
+        if args.write_baseline:
+            cmd.extend(["--write-baseline", str(args.write_baseline.resolve())])
         return run(cmd)
     if args.subcommand == "import-skill":
         cmd = [sys.executable, str(ROOT / "scripts" / "import-skill.py"), str(args.source)]

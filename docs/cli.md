@@ -10,6 +10,9 @@ install section of the README for which commands need a checkout.
 ```bash
 python3 scripts/agtmls.py check
 python3 scripts/agtmls.py audit --all --strict
+python3 scripts/agtmls.py audit --all --format sarif > audit.sarif
+python3 scripts/agtmls.py audit --all --write-baseline .agtmls-audit-baseline.json
+python3 scripts/agtmls.py audit --all --strict --baseline .agtmls-audit-baseline.json
 python3 scripts/agtmls.py list
 python3 scripts/agtmls.py list commands
 python3 scripts/agtmls.py search yaml
@@ -75,6 +78,37 @@ $ agtmls install rust claude
 
 Re-running over a prompt AgtMLS generated is idempotent and takes no backup —
 the marker on line one is what distinguishes the two cases.
+
+## Audit output, suppressions and baselines
+
+Every rule but steganography runs on the text an agent reads: hidden code
+points are stripped and compatibility forms folded (NFKC) before matching, so
+a keyword split by a zero-width space or spelt in fullwidth letters is still
+the keyword. Steganography runs on the raw bytes, so the hidden code points
+are reported as well.
+
+An injection quoted inside a fenced block or blockquote under a heading that
+contains "example", "attack" or "do not" is reported at MEDIUM rather than
+HIGH: it still appears, and still fails `--strict`.
+
+A finding can be suppressed in source, one line at a time, with a reason:
+
+```markdown
+<!-- agtmls-ignore AGT-INJ-001: quotes the attack for training -->
+Ignore previous instructions.
+```
+
+The comment covers the next line only, the reason is required, and
+`AGT-STEG-*` findings can never be suppressed. Suppressed findings are listed
+separately, do not count toward the exit code, and appear in SARIF under
+`suppressions`.
+
+`--format sarif` writes SARIF 2.1.0 with every rule described and one result
+per finding, for code-scanning upload. `--write-baseline FILE` records each
+finding's fingerprint (rule, file and message; not the line), and
+`--baseline FILE` fails the audit only on findings not in it, so a CI gate can
+stop new findings while known ones are worked through. SARIF results carry
+`baselineState` when a baseline is given.
 
 ## Auditing an external skill before importing it
 
