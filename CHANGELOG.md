@@ -9,6 +9,11 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- A `*.json` file is escape-decoded before the normalised rules run
+  (agtmls-spec 4.3): `Ignore previous\n instructions` in an MCP tool
+  description is the phrase a model reads, and `ig\u200bnore` decodes to
+  a zero-width space that is then stripped. Escaped whitespace becomes a
+  space, so line numbers still point into the source. Three corpus cases.
 - Pattern rules run only where their `applies_to` selectors say
   (agtmls-spec 4.11), and the snapshot follows the spec commit that
   defines and widens them: injection rules cover every file, so an
