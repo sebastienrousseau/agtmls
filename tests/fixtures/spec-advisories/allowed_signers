@@ -1,0 +1,2 @@
+# Test vectors only. The private half was discarded after signing.
+agtmls-release namespaces="agtmls-advisory@v1",valid-after="20260101" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCcf3n5SS6trhw0IhEl+F/+rU2HyPgZaJdtTlIwC3uR

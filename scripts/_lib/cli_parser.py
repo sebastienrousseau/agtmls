@@ -230,6 +230,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     verify.add_argument("agent", choices=agents)
     verify.add_argument("--target", type=Path, default=Path.cwd())
+    verify.add_argument("--signatures", action="store_true",
+                        help="require index.json and any advisory feed to be signed (spec 9.5)")
     verify.add_argument("--json", action="store_true")
 
     remove = sub.add_parser("uninstall")

@@ -33,6 +33,10 @@ EXIT_OK = 0
 EXIT_ERROR = 1
 EXIT_USAGE = 2
 EXIT_INTEGRITY_FAILURE = 3
+# agtmls-spec 9.5 and 11.4.
+EXIT_UNSIGNED = 4
+EXIT_BAD_SIGNATURE = 5
+EXIT_REVOKED = 6
 
 
 def lockfile_path(target: Path) -> Path:

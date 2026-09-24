@@ -173,6 +173,16 @@ OK: 13 skill(s) match the lockfile in /path/to/repo
 | `MODIFIED` | Content changed since install — a local edit, or tampering | `3` |
 | `MISSING` | Recorded in the lockfile but no longer present | `3` |
 | `UNMANAGED` | Present but not installed by AgtMLS. Reported, never deleted | `0` |
+| `UNSIGNED` | `--signatures` was given and `index.json` or the advisory feed has no signature (or there is no `ALLOWED_SIGNERS`) | `4` |
+| `BAD_SIGNATURE` | A signature exists and does not verify: tampered bytes, unknown signer, wrong namespace, or a key outside its window | `5` |
+| `REVOKED` | A signed advisory lists an installed skill's digest; the advisory ids are printed | `6` |
+
+When several apply, the exit code is the first of `5`, `3`, `6`, `4` (agtmls-spec
+11.4): nothing is concluded from a source that does not verify. Signatures are
+checked with `ssh-keygen -Y verify` against `ALLOWED_SIGNERS`; an advisory feed
+(`advisories.json`) that is not signed is never consulted. The registry is not
+signed yet, so `verify --signatures` reports `UNSIGNED` until releases carry
+`index.json.sig`.
 
 Exit `3` is `INTEGRITY_FAILURE`, distinct from `1` (error) and `2` (usage), so
 a calling script can branch on it.
