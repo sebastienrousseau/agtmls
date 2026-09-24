@@ -853,7 +853,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "06c22aaadb1573bf2bf659ff5573c18b25306f34b15521f91e63d603258814a1"
+          "content": "b0e94d5af537e941df8b7e71e90caf299c6bc94b6e11e0624e89425cba4ef943"
         }
       ],
       "name": "evals/security/corpus.json",
@@ -1051,7 +1051,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6bac0ab5effd046f96f2c8a674129c31c479af41c6761d23812f7b3adf486d40"
+          "content": "116b914fc2e9349cc6231836562ebf30386a3ce08cda4acac3692493c92d9b88"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -4013,7 +4013,7 @@
       "type": "application",
       "version": "0.0.8"
     },
-    "timestamp": "2026-09-24T11:01:16Z",
+    "timestamp": "2026-09-24T12:32:17Z",
     "tools": {
       "components": [
         {
