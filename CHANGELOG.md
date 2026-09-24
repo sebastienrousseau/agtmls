@@ -7,6 +7,17 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Emoji context for steganography (agtmls-spec 4.10): a variation
+  selector directly after an emoji base, and a well-formed subdivision
+  flag, are `AGT-STEG-002` at LOW rather than `AGT-STEG-001` at
+  CRITICAL. The selector is reported only with the new `audit
+  --pedantic`; the flag always. Everything else, including a run of two
+  selectors, a selector after a letter and the variation selectors
+  supplement, stays CRITICAL. The line is data on the spec's rule, and
+  the analyzer behaves as before until the snapshot carries it.
+
 ## 0.0.8 - 2026-09-24
 
 ### Added

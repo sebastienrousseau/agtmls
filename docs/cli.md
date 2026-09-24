@@ -10,6 +10,7 @@ install section of the README for which commands need a checkout.
 ```bash
 python3 scripts/agtmls.py check
 python3 scripts/agtmls.py audit --all --strict
+python3 scripts/agtmls.py audit --all --strict --pedantic   # also report emoji-presentation selectors at LOW
 python3 scripts/agtmls.py audit --all --format sarif > audit.sarif
 python3 scripts/agtmls.py audit --all --write-baseline .agtmls-audit-baseline.json
 python3 scripts/agtmls.py audit --all --strict --baseline .agtmls-audit-baseline.json
@@ -88,6 +89,14 @@ points are stripped and compatibility forms folded (NFKC) before matching, so
 a keyword split by a zero-width space or spelt in fullwidth letters is still
 the keyword. Steganography runs on the raw bytes, so the hidden code points
 are reported as well.
+
+A variation selector directly after an emoji base (a coloured check mark, a
+keycap) is an emoji as written, not a hidden channel: it is `AGT-STEG-002` at
+LOW and reported only with `--pedantic`. A well-formed subdivision flag is
+`AGT-STEG-002` at LOW, always. A selector after any other character, a run of
+two or more, the variation selectors supplement and any other tag character
+stay `AGT-STEG-001` at CRITICAL. The line is data on the spec's `AGT-STEG-001`
+rule, so both implementations draw it in the same place.
 
 An injection quoted inside a fenced block or blockquote under a heading that
 contains "example", "attack" or "do not" is reported at MEDIUM rather than

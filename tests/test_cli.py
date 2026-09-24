@@ -354,6 +354,12 @@ class CliDispatchTests(unittest.TestCase):
                         flags.add(arg.value)
         return flags
 
+    def test_audit_forwards_pedantic(self) -> None:
+        sys.argv = ["agtmls", "audit", "--all", "--pedantic"]
+        self.calls.clear()
+        self.assertEqual(self.module.main(), 0)
+        self.assertIn("--pedantic", self.calls[0])
+
     def test_audit_forwards_a_foreign_path_resolved_and_a_url_as_given(self) -> None:
         sys.argv = ["agtmls", "audit", "--foreign", "."]
         self.calls.clear()

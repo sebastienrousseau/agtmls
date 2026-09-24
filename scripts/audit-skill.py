@@ -21,6 +21,7 @@ SKILLS_DIR = ROOT / "skills"
 # The analyzer itself lives in _lib/analyzer.py, under the core coverage
 # floor. Finding and audit_skill_target are what main() needs; the rest are
 # re-exported because the unit tests load this script and call them.
+from _lib import analyzer  # noqa: E402, F401  (the module, for tests that patch it)
 from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; re-exported)
     MAX_AUDIT_BYTES,
     Finding,
@@ -65,14 +66,14 @@ def fetch_foreign(target: str, workspace: Path) -> Path | str:
     return clone
 
 
-def foreign_audit(target: str, fmt: str, strict: bool) -> int:
+def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -> int:
     with tempfile.TemporaryDirectory(prefix="agtmls-foreign-") as raw:
         root = fetch_foreign(target, Path(raw))
         if isinstance(root, str):
             print(f"error: {root}", file=sys.stderr)
             return 2
         try:
-            reports = audit_foreign(root)
+            reports = audit_foreign(root, pedantic)
         except ForeignLayoutError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
@@ -184,13 +185,14 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="Audit all skills in the registry")
     parser.add_argument("--foreign", metavar="PATH|GIT-URL@SHA", help="Audit every skill in a repository that is not this registry")
     parser.add_argument("--strict", action="store_true", help="Fail on warnings (MEDIUM/LOW) as well as HIGH/CRITICAL")
+    parser.add_argument("--pedantic", action="store_true", help="Also report emoji-presentation selectors (AGT-STEG-002, LOW)")
     parser.add_argument("--format", choices=["text", "json", "sarif"], default="text", help="Output format")
     parser.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail the audit")
     parser.add_argument("--write-baseline", type=Path, help="record the fingerprints of this audit's findings")
     args = parser.parse_args()
 
     if args.foreign:
-        return foreign_audit(args.foreign, "json" if args.format == "json" else "text", args.strict)
+        return foreign_audit(args.foreign, "json" if args.format == "json" else "text", args.strict, args.pedantic)
     if not args.path and not args.all:
         parser.print_help(sys.stderr)
         return 2
@@ -215,7 +217,7 @@ def main() -> int:
     scanned_count = 0
     for target in targets:
         scanned_count += 1
-        every.extend(audit_skill_target(target))
+        every.extend(audit_skill_target(target, args.pedantic))
     # Suppressed in source: shown, never counted. In the baseline: counted,
     # never failed. Only a new, unsuppressed finding decides the exit code.
     suppressed = [f for f in every if f.suppressed is not None]
