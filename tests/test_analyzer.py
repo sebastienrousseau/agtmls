@@ -63,6 +63,88 @@ class DescribeInvisibleTests(unittest.TestCase):
         self.assertEqual(analyzer.describe_invisible(" "), "Invisible or format character (U+2028)")
 
 
+EMOJI_CONTEXT = {
+    "selectors": {"from": "U+FE0E", "to": "U+FE0F"},
+    "keycap": "U+20E3",
+    "base_points": ["U+0023", "U+002A"] + [f"U+003{d}" for d in range(10)],
+    "base_ranges": [
+        {"from": "U+2190", "to": "U+21FF", "name": "Arrows"},
+        {"from": "U+2600", "to": "U+27BF", "name": "Miscellaneous symbols and dingbats"},
+        {"from": "U+1F000", "to": "U+1FAFF", "name": "Emoji blocks"},
+    ],
+    "subdivision_flag": {"base": "U+1F3F4", "tags_from": "U+E0061", "tags_to": "U+E007A", "terminator": "U+E007F"},
+}
+FLAG = "\U0001F3F4\U000E0067\U000E0062\U000E0065\U000E006E\U000E0067\U000E007F"
+
+
+class EmojiContextTests(unittest.TestCase):
+    """AGT-STEG-001 draws its line from `emoji_context` data (spec 4.10):
+    a selector after an emoji base and a well-formed subdivision flag are
+    an emoji as written, reported as AGT-STEG-002 at LOW, the selector only
+    when pedantic. Everything else stays CRITICAL."""
+
+    PATH = Path("SKILL.md")
+
+    def setUp(self) -> None:
+        patcher = mock.patch.object(analyzer, "EMOJI_CONTEXT", analyzer.emoji_context(EMOJI_CONTEXT))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def steg(self, text: str, pedantic: bool = False) -> list[tuple[str, str]]:
+        return [(f.rule, f.severity) for f in analyzer.check_steganography(self.PATH, text, pedantic=pedantic)]
+
+    def test_a_selector_after_an_emoji_base_is_silent_by_default(self) -> None:
+        self.assertEqual(self.steg("Done \u2705\ufe0f and \U0001F680\ufe0f.\n"), [])
+
+    def test_a_selector_after_an_emoji_base_is_low_when_pedantic(self) -> None:
+        findings = analyzer.check_steganography(self.PATH, "Done \u2705\ufe0f.\n", pedantic=True)
+        self.assertEqual([(f.rule, f.severity) for f in findings], [("AGT-STEG-002", "LOW")])
+        self.assertIn("emoji presentation", findings[0].message)
+
+    def test_a_keycap_is_an_emoji_base(self) -> None:
+        self.assertEqual(self.steg("Press 1\ufe0f\u20e3 and #\ufe0f\u20e3.\n"), [])
+
+    def test_a_run_of_selectors_after_an_emoji_base_is_critical(self) -> None:
+        self.assertEqual(self.steg("Done \u2705\ufe0f\ufe0f.\n"), [("AGT-STEG-001", "CRITICAL")] * 2)
+
+    def test_a_selector_after_a_letter_is_critical(self) -> None:
+        self.assertEqual(self.steg("Plain a\ufe0f text.\n"), [("AGT-STEG-001", "CRITICAL")])
+
+    def test_a_selector_at_the_start_of_a_line_is_critical(self) -> None:
+        self.assertEqual(self.steg("\ufe0f text.\n"), [("AGT-STEG-001", "CRITICAL")])
+
+    def test_the_supplement_is_always_critical(self) -> None:
+        """The supplement joins the rule's ranges in the spec; until the
+        snapshot carries it, the table is widened here."""
+        widened = re.compile(analyzer.INVISIBLE_RE.pattern[:-1] + "\U000E0100-\U000E01EF]")
+        with mock.patch.object(analyzer, "INVISIBLE_RE", widened):
+            self.assertEqual(self.steg("Done \u2705\U000E0100.\n"), [("AGT-STEG-001", "CRITICAL")])
+
+    def test_a_well_formed_subdivision_flag_is_low_and_always_reported(self) -> None:
+        findings = analyzer.check_steganography(self.PATH, f"England: {FLAG}\n")
+        self.assertEqual([(f.rule, f.severity) for f in findings], [("AGT-STEG-002", "LOW")])
+        self.assertIn("subdivision flag", findings[0].message)
+        self.assertIn("5 tag", findings[0].message)
+
+    def test_tags_without_the_flag_base_or_terminator_are_critical(self) -> None:
+        self.assertEqual(self.steg("Notes\U000E0067\U000E0062\U000E007F here.\n"), [("AGT-STEG-001", "CRITICAL")] * 3)
+        self.assertEqual(self.steg("\U0001F3F4\U000E0067\U000E0062 here.\n"), [("AGT-STEG-001", "CRITICAL")] * 2)
+        self.assertEqual(self.steg("\U0001F3F4\U000E0067\U000E0041\U000E007F.\n"), [("AGT-STEG-001", "CRITICAL")] * 3)
+
+    def test_without_the_context_every_selector_and_tag_is_critical(self) -> None:
+        with mock.patch.object(analyzer, "EMOJI_CONTEXT", None):
+            self.assertEqual(self.steg("Done \u2705\ufe0f.\n"), [("AGT-STEG-001", "CRITICAL")])
+            self.assertEqual(len(self.steg(f"{FLAG}\n")), 6)
+
+    def test_the_context_is_read_from_the_snapshot_when_present(self) -> None:
+        self.assertIsNone(analyzer.emoji_context({}))
+        context = analyzer.emoji_context(EMOJI_CONTEXT)
+        self.assertEqual(context.keycap, "\u20e3")
+        self.assertTrue(context.is_base("\u2705"))
+        self.assertTrue(context.is_base("1"))
+        self.assertFalse(context.is_base("a"))
+
+
 class ScanTests(unittest.TestCase):
     def test_two_rules_with_one_message_on_one_line_report_once(self) -> None:
         pattern = re.compile("payload")

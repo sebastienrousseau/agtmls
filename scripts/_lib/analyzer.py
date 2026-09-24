@@ -63,18 +63,122 @@ def describe_invisible(char: str) -> str:
     return f"Invisible or format character (U+{code_pt:04X})"
 
 
-def check_steganography(path: Path, content: str) -> list[Finding]:
+class EmojiContext(NamedTuple):
+    """What makes a selector or a tag sequence an emoji rather than a channel.
+
+    Read from AGT-STEG-001's `emoji_context` table (spec 4.10), so both
+    implementations draw the line in the same place.
+    """
+
+    selectors: tuple[str, str]
+    keycap: str
+    base_points: frozenset[str]
+    base_ranges: tuple[tuple[str, str], ...]
+    flag_base: str
+    tags: tuple[str, str]
+    terminator: str
+
+    def is_selector(self, char: str) -> bool:
+        return self.selectors[0] <= char <= self.selectors[1]
+
+    def is_base(self, char: str) -> bool:
+        return char in self.base_points or any(low <= char <= high for low, high in self.base_ranges)
+
+    def is_tag(self, char: str) -> bool:
+        return self.tags[0] <= char <= self.tags[1]
+
+
+def _cp(spelling: str) -> str:
+    return chr(int(spelling.removeprefix("U+"), 16))
+
+
+def emoji_context(table: dict) -> EmojiContext | None:
+    """The context a rule declares, or None when it declares none.
+
+    Without it every selector and tag character is a channel, which is what
+    the rule meant before the table existed.
+    """
+    try:
+        flag = table["subdivision_flag"]
+        return EmojiContext(
+            selectors=(_cp(table["selectors"]["from"]), _cp(table["selectors"]["to"])),
+            keycap=_cp(table["keycap"]),
+            base_points=frozenset(_cp(point) for point in table.get("base_points", [])),
+            base_ranges=tuple((_cp(r["from"]), _cp(r["to"])) for r in table.get("base_ranges", [])),
+            flag_base=_cp(flag["base"]),
+            tags=(_cp(flag["tags_from"]), _cp(flag["tags_to"])),
+            terminator=_cp(flag["terminator"]),
+        )
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+_STEG_RULE = next((rule for rule in RULES if rule.get("id") == "AGT-STEG-001"), {})
+EMOJI_CONTEXT = emoji_context(_STEG_RULE.get("emoji_context", {}))
+
+
+def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
+    """Column of each well-formed flag's first tag, mapped to its tag count.
+
+    A flag is exactly the base, one or more tags, then the terminator. Every
+    tag character inside one is accounted for by that one finding.
+    """
+    flags: dict[int, int] = {}
+    i = 0
+    while i < len(line):
+        if line[i] == context.flag_base:
+            j = i + 1
+            while j < len(line) and context.is_tag(line[j]):
+                j += 1
+            if j > i + 1 and j < len(line) and line[j] == context.terminator:
+                flags[i + 1] = j - i  # tags plus the terminator
+                i = j
+        i += 1
+    return flags
+
+
+def check_steganography(path: Path, content: str, pedantic: bool = False) -> list[Finding]:
     """Flag code points that render as nothing but survive into the prompt.
 
     One compiled character class replaces a per-character Python loop: the old
     form cost a dict lookup and an ord() per character of every file, and its
     14-entry table omitted the channels actually in use -- variation selectors
     above all, plus the soft hyphen and the invisible operators.
+
+    With an emoji context (spec 4.10), a selector directly after an emoji
+    base is an emoji as written: AGT-STEG-002 at LOW, and only when
+    `pedantic`. A well-formed subdivision flag is AGT-STEG-002 at LOW,
+    always, once per flag. Everything else stays AGT-STEG-001.
     """
     findings: list[Finding] = []
+    context = EMOJI_CONTEXT
     for line_idx, line in enumerate(content.splitlines(), start=1):
+        flags = subdivision_flags(line, context) if context else {}
+        covered: set[int] = {start + k for start, count in flags.items() for k in range(count)}
         for match in INVISIBLE_RE.finditer(line):
             char = match.group(0)
+            column = match.start()
+            if context and context.is_selector(char):
+                previous = line[column - 1] if column else ""
+                following = line[column + 1] if column + 1 < len(line) else ""
+                if previous and context.is_base(previous) and not (following and context.is_selector(following)):
+                    if pedantic:
+                        findings.append(Finding(
+                            path, line_idx, "LOW", "steganography",
+                            f"{describe_invisible(char)} after an emoji base at column {column + 1}: "
+                            "emoji presentation, not a channel",
+                            "AGT-STEG-002",
+                        ))
+                    continue
+            if context and column in covered:
+                if column in flags:
+                    findings.append(Finding(
+                        path, line_idx, "LOW", "steganography",
+                        f"Tag sequence forming a subdivision flag at column {column + 1} "
+                        f"({flags[column] - 1} tag character(s), terminated)",
+                        "AGT-STEG-002",
+                    ))
+                continue
             findings.append(
                 Finding(
                     file_path=path,
@@ -83,7 +187,7 @@ def check_steganography(path: Path, content: str) -> list[Finding]:
                     category="steganography",
                     message=(
                         f"Invisible unicode character detected: "
-                        f"{describe_invisible(char)} at column {match.start() + 1}"
+                        f"{describe_invisible(char)} at column {column + 1}"
                     ),
                     rule="AGT-STEG-001",
                 )
@@ -546,15 +650,15 @@ def apply_suppressions(findings: list[Finding], content: str) -> list[Finding]:
     ]
 
 
-def audit_file_content(path: Path, content: str) -> list[Finding]:
+def audit_file_content(path: Path, content: str, pedantic: bool = False) -> list[Finding]:
     """Every detector over one file's text, with in-source suppressions applied."""
     findings: list[Finding] = []
-    findings.extend(check_steganography(path, content))
+    findings.extend(check_steganography(path, content, pedantic))
     findings.extend(pattern_findings(path, content))
     return apply_suppressions(findings, content)
 
 
-def audit_file(path: Path) -> list[Finding]:
+def audit_file(path: Path, pedantic: bool = False) -> list[Finding]:
     content = read_capped(path)
     if content is None:
         return [
@@ -567,7 +671,7 @@ def audit_file(path: Path) -> list[Finding]:
                 rule="AGT-SCAN-001",
             )
         ]
-    return audit_file_content(path, content)
+    return audit_file_content(path, content, pedantic)
 
 
 class ForeignLayoutError(ValueError):
@@ -698,13 +802,13 @@ class ForeignReport(NamedTuple):
     findings: list[Finding]
 
 
-def audit_foreign(root: Path) -> list[ForeignReport]:
+def audit_foreign(root: Path, pedantic: bool = False) -> list[ForeignReport]:
     """Every skill in a foreign tree, each against its own or a provisional policy."""
     reports: list[ForeignReport] = []
     for plugin, skill_dir in foreign_skills(root):
         findings: list[Finding] = []
         for path in auditable_files(skill_dir):
-            findings.extend(audit_file(path))
+            findings.extend(audit_file(path, pedantic))
         if (skill_dir / "metadata.json").exists():
             policy, policy_findings = load_policy(skill_dir)
             findings.extend(policy_findings)
@@ -716,10 +820,10 @@ def audit_foreign(root: Path) -> list[ForeignReport]:
     return reports
 
 
-def audit_skill_target(target: Path) -> list[Finding]:
+def audit_skill_target(target: Path, pedantic: bool = False) -> list[Finding]:
     findings: list[Finding] = []
     for path in auditable_files(target):
-        findings.extend(audit_file(path))
+        findings.extend(audit_file(path, pedantic))
     if target.is_dir():
         findings.extend(check_skill_honesty(target))
     return findings

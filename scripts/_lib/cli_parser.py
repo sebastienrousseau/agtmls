@@ -182,6 +182,7 @@ def build_parser() -> argparse.ArgumentParser:
     audit_cmd.add_argument("--all", action="store_true", help="audit all skills in registry")
     audit_cmd.add_argument("--foreign", metavar="PATH|GIT-URL@SHA", help="audit every skill in a repository that is not this registry")
     audit_cmd.add_argument("--strict", action="store_true", help="fail on warnings")
+    audit_cmd.add_argument("--pedantic", action="store_true", help="also report emoji-presentation selectors at LOW")
     audit_cmd.add_argument("--json", action="store_true", help="output JSON (the same as --format json)")
     audit_cmd.add_argument("--format", choices=["text", "json", "sarif"], default=None, help="output format")
     audit_cmd.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail")

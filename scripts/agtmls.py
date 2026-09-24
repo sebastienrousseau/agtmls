@@ -449,6 +449,8 @@ def main() -> int:
             cmd.extend(["--foreign", target])
         if args.strict:
             cmd.append("--strict")
+        if args.pedantic:
+            cmd.append("--pedantic")
         if args.format or args.json:
             cmd.extend(["--format", args.format or "json"])
         if args.baseline:

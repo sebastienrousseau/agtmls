@@ -517,6 +517,29 @@ class AuditCliTests(unittest.TestCase):
         self.assertIn("1 skill(s), 0 finding(s)", output)
         self.assertNotIn("AGT-INJ-001", output)
 
+    def test_pedantic_reports_emoji_presentation_selectors_at_low(self) -> None:
+        skill = self._workspace / "emoji"
+        skill.mkdir(exist_ok=True)
+        (skill / "SKILL.md").write_text("# Emoji\n\nDone \u2705\ufe0f.\n", encoding="utf-8")
+        (skill / "metadata.json").write_text(
+            (FIXTURE / "skills" / "using-agtmls" / "metadata.json").read_text(encoding="utf-8"), encoding="utf-8",
+        )
+        context = self.module.analyzer.emoji_context({
+            "selectors": {"from": "U+FE0E", "to": "U+FE0F"}, "keycap": "U+20E3",
+            "base_ranges": [{"from": "U+2600", "to": "U+27BF", "name": "x"}],
+            "subdivision_flag": {"base": "U+1F3F4", "tags_from": "U+E0061", "tags_to": "U+E007A", "terminator": "U+E007F"},
+        })
+        with mock.patch.object(self.module.analyzer, "EMOJI_CONTEXT", context):
+            code, output = self.audit(str(skill))
+            self.assertEqual(code, 0, output)
+            self.assertNotIn("AGT-STEG", output)
+            code, output = self.audit(str(skill), "--pedantic")
+            self.assertEqual(code, 0, "a LOW finding must not fail without --strict")
+            self.assertIn("[LOW] ", output)
+            self.assertIn("AGT-STEG-002", output)
+            code, output = self.audit(str(skill), "--pedantic", "--strict")
+            self.assertEqual(code, 1, "--strict fails on LOW")
+
     def test_a_baseline_that_cannot_be_read_is_an_error(self) -> None:
         code, output = self.audit("--all", "--baseline", str(self._workspace / "missing.json"))
         self.assertEqual(code, 2, output)
