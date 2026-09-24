@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-24T19:01:07Z",
+    "created": "2026-09-24T19:20:19Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -12,6 +12,22 @@
   "dataLicense": "CC0-1.0",
   "documentNamespace": "https://github.com/sebastienrousseau/agtmls/spdx/0.0.8/6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88",
   "files": [
+    {
+      "SPDXID": "SPDXRef-File-ALLOWED-SIGNERS",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "eba5d5a591a4532b5f6e42131f2a6a348c456ee7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b6d4a6cdbf09f55d186a3768a775b852a3d32f2bedd0ba6197c0eba6a9234365"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./ALLOWED_SIGNERS",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
     {
       "SPDXID": "SPDXRef-File-CATALOG.md",
       "checksums": [
@@ -1505,11 +1521,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "dfa22921c26a125edbca494cd26509011d77c0c3"
+          "checksumValue": "802241ffa008b3389ac19cb1eec82ff1d0356ec5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "73ea543b4580e8e19226b14c7778aa8ac2d447156c72979c879584a4ae1493be"
+          "checksumValue": "bed564e9f6730df7dc775797862d54b86011058b5ab746d2ac07642a50b2e206"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5900,6 +5916,7 @@
       ],
       "filesAnalyzed": true,
       "hasFiles": [
+        "SPDXRef-File-ALLOWED-SIGNERS",
         "SPDXRef-File-CATALOG.md",
         "SPDXRef-File-LICENSE-APACHE",
         "SPDXRef-File-LICENSE-MIT",

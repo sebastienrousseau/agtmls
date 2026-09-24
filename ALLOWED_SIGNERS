@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# Keys trusted to sign AgtMLS releases (agtmls-spec chapter 9), in the
+# ssh-keygen ALLOWED SIGNERS format. Rotate by adding valid-before to a
+# retired line and a new line with valid-after; never delete a line, or
+# indexes it signed stop verifying.
+# Fingerprint: SHA256:X7cJ/chcMsrENFv4eeiCKLFEsFjqShHh042HgKLlcl0
+agtmls-release namespaces="agtmls-index@v1,agtmls-attestation@v1,agtmls-advisory@v1",valid-after="20260924" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEF0VQFQ6VWFkNN9UMeVuY3oPWVwJYT0KjEj6neNdEFe
