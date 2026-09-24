@@ -1,6 +1,6 @@
 {
   "cold_start_budget_ms": 100.0,
-  "generated_at": "2026-09-24T07:40:28Z",
+  "generated_at": "2026-09-24T12:45:05Z",
   "generated_by": "scripts/bench.py --write-baseline",
   "noise_sigmas": 3.0,
   "recorded_on": {
@@ -14,85 +14,85 @@
   "suite_runs": 5,
   "workloads": {
     "audit-all": {
-      "allowed_regression": 0.2148,
+      "allowed_regression": 0.2,
       "interactive": false,
-      "min_ms": 358.339,
-      "p50_ms": 382.848,
-      "p95_ms": 507.115,
-      "ratio_to_calibration": 21.8836,
-      "spread_cv": 0.0716
+      "min_ms": 422.895,
+      "p50_ms": 430.835,
+      "p95_ms": 469.238,
+      "ratio_to_calibration": 26.2105,
+      "spread_cv": 0.0634
     },
     "calibration": {
       "allowed_regression": 0.2,
       "interactive": false,
-      "min_ms": 13.875,
-      "p50_ms": 15.16,
-      "p95_ms": 18.104,
+      "min_ms": 14.565,
+      "p50_ms": 15.445,
+      "p95_ms": 16.627,
       "ratio_to_calibration": 1.0,
       "spread_cv": 0.0
     },
     "cli-list": {
       "allowed_regression": 0.2,
       "interactive": true,
-      "min_ms": 41.977,
-      "p50_ms": 44.744,
-      "p95_ms": 46.041,
-      "ratio_to_calibration": 2.7295,
-      "spread_cv": 0.054
+      "min_ms": 44.744,
+      "p50_ms": 46.86,
+      "p95_ms": 54.248,
+      "ratio_to_calibration": 2.8927,
+      "spread_cv": 0.036
     },
     "cli-search": {
       "allowed_regression": 0.2,
       "interactive": true,
-      "min_ms": 42.428,
-      "p50_ms": 44.335,
-      "p95_ms": 46.978,
-      "ratio_to_calibration": 2.749,
-      "spread_cv": 0.0522
+      "min_ms": 44.735,
+      "p50_ms": 46.75,
+      "p95_ms": 47.82,
+      "ratio_to_calibration": 2.88,
+      "spread_cv": 0.0485
     },
     "cli-show": {
       "allowed_regression": 0.2,
       "interactive": true,
-      "min_ms": 42.339,
-      "p50_ms": 45.651,
-      "p95_ms": 88.282,
-      "ratio_to_calibration": 2.8126,
-      "spread_cv": 0.0488
+      "min_ms": 44.168,
+      "p50_ms": 46.76,
+      "p95_ms": 48.907,
+      "ratio_to_calibration": 2.802,
+      "spread_cv": 0.0582
     },
     "cli-stats": {
-      "allowed_regression": 0.2475,
+      "allowed_regression": 0.2,
       "interactive": true,
-      "min_ms": 43.257,
-      "p50_ms": 46.069,
-      "p95_ms": 55.398,
-      "ratio_to_calibration": 2.6087,
-      "spread_cv": 0.0825
+      "min_ms": 45.029,
+      "p50_ms": 45.882,
+      "p95_ms": 48.264,
+      "ratio_to_calibration": 2.864,
+      "spread_cv": 0.0634
     },
     "digest-registry": {
-      "allowed_regression": 0.3501,
+      "allowed_regression": 0.3891,
       "interactive": false,
-      "min_ms": 61.359,
-      "p50_ms": 68.199,
-      "p95_ms": 76.546,
-      "ratio_to_calibration": 3.4643,
-      "spread_cv": 0.1167
+      "min_ms": 61.018,
+      "p50_ms": 71.094,
+      "p95_ms": 73.216,
+      "ratio_to_calibration": 3.6945,
+      "spread_cv": 0.1297
     },
     "index-check": {
-      "allowed_regression": 0.4215,
+      "allowed_regression": 0.3231,
       "interactive": false,
-      "min_ms": 83.16,
-      "p50_ms": 105.359,
-      "p95_ms": 171.868,
-      "ratio_to_calibration": 5.2083,
-      "spread_cv": 0.1405
+      "min_ms": 108.857,
+      "p50_ms": 117.389,
+      "p95_ms": 152.264,
+      "ratio_to_calibration": 5.6775,
+      "spread_cv": 0.1077
     },
     "route-rank": {
-      "allowed_regression": 0.3546,
+      "allowed_regression": 0.2,
       "interactive": false,
-      "min_ms": 43.541,
-      "p50_ms": 44.774,
-      "p95_ms": 50.727,
-      "ratio_to_calibration": 2.3187,
-      "spread_cv": 0.1182
+      "min_ms": 38.396,
+      "p50_ms": 46.014,
+      "p95_ms": 49.262,
+      "ratio_to_calibration": 2.5488,
+      "spread_cv": 0.0643
     }
   }
 }

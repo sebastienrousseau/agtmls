@@ -32,23 +32,23 @@ python3 scripts/bench.py --scaling --record  # ...and publish it to benchmarks/r
 
 ## Results
 
-<!-- generated:latency sources="benchmarks/results/latency.json:3b9160518cdaa8c5b1c7dfc661b26339d81d012597f92e531feb67c67e3abaf3,bench-baseline.json:fef0199f5aec186e3c4c40d1ede0fe7d3f699c0bef5a6a2864c0c35dc8cb3ae0" -->
+<!-- generated:latency sources="benchmarks/results/latency.json:d6496a9c70f0b6b13f428503b5f593d55768f6bc940c285e2de7b85e40f7e9c2,bench-baseline.json:f4416810a822b0f91041bd0768944d44e22ed2966187054dbb5421a367bcd2a4" -->
 Recorded on the machine named in `bench-baseline.json`: macOS 26.7, arm64, Python 3.12.14.
 One machine, 5 suite runs. No claim is made about any other machine.
 
 | Workload | min ms | P50 ms | P95 ms | × calibration |
 |---|---:|---:|---:|---:|
-| `calibration` (bare interpreter) | 13.88 | 15.16 | 18.10 | 1.00 |
-| `cli-list` | 41.98 | 44.74 | 46.04 | 3.03 |
-| `cli-search` | 42.43 | 44.34 | 46.98 | 3.06 |
-| `cli-show` | 42.34 | 45.65 | 88.28 | 3.05 |
-| `cli-stats` | 43.26 | 46.07 | 55.40 | 3.12 |
-| `digest-registry` (every skill) | 61.36 | 68.20 | 76.55 | 4.42 |
-| `route-rank` (TF-IDF over every description) | 43.54 | 44.77 | 50.73 | 3.14 |
-| `audit-all` (`--all --strict`) | 358.34 | 382.85 | 507.12 | 25.83 |
-| `index-check` | 83.16 | 105.36 | 171.87 | 5.99 |
+| `calibration` (bare interpreter) | 14.56 | 15.45 | 16.63 | 1.00 |
+| `cli-list` | 44.74 | 46.86 | 54.25 | 3.07 |
+| `cli-search` | 44.73 | 46.75 | 47.82 | 3.07 |
+| `cli-show` | 44.17 | 46.76 | 48.91 | 3.03 |
+| `cli-stats` | 45.03 | 45.88 | 48.26 | 3.09 |
+| `digest-registry` (every skill) | 61.02 | 71.09 | 73.22 | 4.19 |
+| `route-rank` (TF-IDF over every description) | 38.40 | 46.01 | 49.26 | 2.64 |
+| `audit-all` (`--all --strict`) | 422.89 | 430.83 | 469.24 | 29.04 |
+| `index-check` | 108.86 | 117.39 | 152.26 | 7.47 |
 
-The 4 `cli-*` commands are the interactive surface: P50 between **44ms** and **46ms**, against the 100ms budget of scorecard criterion 3.10. About 15ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 29ms.
+The 4 `cli-*` commands are the interactive surface: P50 between **46ms** and **47ms**, against the 100ms budget of scorecard criterion 3.10. About 15ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 30ms.
 <!-- /generated:latency -->
 
 ## Regression detection, and its limits
@@ -62,8 +62,8 @@ The threshold is **not** a round number picked in advance.
 `--write-baseline` runs the whole suite five times, records each workload's
 spread across those runs, and `--check` allows `max(20%, 3 × spread)`.
 
-<!-- generated:thresholds sources="bench-baseline.json:fef0199f5aec186e3c4c40d1ede0fe7d3f699c0bef5a6a2864c0c35dc8cb3ae0" -->
-On the recorded machine the spreads are 4.9% to 14.1%, so 4 of 9 workloads are gated at the full 20% of criterion 3.2 and `audit-all` at 21% and `cli-stats` at 25% and `digest-registry` at 35% and `index-check` at 42% and `route-rank` at 35%.
+<!-- generated:thresholds sources="bench-baseline.json:f4416810a822b0f91041bd0768944d44e22ed2966187054dbb5421a367bcd2a4" -->
+On the recorded machine the spreads are 3.6% to 13.0%, so 7 of 9 workloads are gated at the full 20% of criterion 3.2 and `digest-registry` at 39% and `index-check` at 32%.
 <!-- /generated:thresholds -->
 
 `--check` measures **the same way the baseline was recorded**: three full
@@ -88,7 +88,8 @@ fails with exactly one finding (`+37%`) and no false positives.
 the regex engine over every auditable file, about 7 ms per rule over the
 registry's 145 files on the laptop, and case-insensitive matching is about
 a third of that. Moving from 19 to 30 rules (agtmls-spec `6afdcd0`) took
-`audit --all --strict` from 264 ms to 383 ms P50, and both baselines were
+`audit --all --strict` from 264 ms to 383 ms P50; 33 rules, after
+agtmls-spec `2db3a5a`, re-recorded again for the same reason. Both baselines were
 re-recorded rather than the budget widened: the 20% allowance is for the
 same work getting slower, not for more work. A combined alternation of
 every pattern was measured and costs the same as separate passes, so the
