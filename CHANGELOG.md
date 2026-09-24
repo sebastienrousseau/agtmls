@@ -17,6 +17,10 @@ All notable changes to AgtMLS are recorded here.
   selectors, a selector after a letter and the variation selectors
   supplement, stays CRITICAL. The line is data on the spec's rule, and
   the analyzer behaves as before until the snapshot carries it.
+- The rule snapshot follows agtmls-spec `eb99f7a`, which carries that
+  table, `AGT-STEG-002` and the variation selectors supplement
+  (U+E0100 to U+E01EF) in `AGT-STEG-001`'s ranges. The corpus mirrors
+  the spec's seven new cases, 93 in all, and the registry audits clean.
 
 ## 0.0.8 - 2026-09-24
 

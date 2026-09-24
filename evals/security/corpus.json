@@ -1320,6 +1320,115 @@
           "in_file": "clean.sh"
         }
       ]
+    },
+    {
+      "name": "emoji-presentation-selector",
+      "description": "A coloured check mark is U+2705 U+FE0F. The selector follows an emoji base, so it is an emoji as written, not a channel; silent by default.",
+      "files": {
+        "SKILL.md": "---\nname: done\ndescription: Use when reporting status.\n---\n\n# Status\n\nDone \u2705\ufe0f and shipped \ud83d\ude80\ufe0f.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [],
+      "must_not_detect": [
+        "steganography",
+        "prompt_injection",
+        "unsafe_execution",
+        "data_exfiltration",
+        "policy_honesty",
+        "capability_escalation"
+      ]
+    },
+    {
+      "name": "keycap-sequence",
+      "description": "A keycap is a digit, U+FE0F and U+20E3; the selector follows a keycap base.",
+      "files": {
+        "SKILL.md": "---\nname: keys\ndescription: Use when explaining a menu.\n---\n\n# Menu\n\nPress 1\ufe0f\u20e3 to continue.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [],
+      "must_not_detect": [
+        "steganography",
+        "prompt_injection",
+        "unsafe_execution",
+        "data_exfiltration",
+        "policy_honesty",
+        "capability_escalation"
+      ]
+    },
+    {
+      "name": "subdivision-flag",
+      "description": "A regional flag is U+1F3F4, tag letters, U+E007F: a tag sequence by design, reported at LOW rather than CRITICAL.",
+      "files": {
+        "SKILL.md": "---\nname: flag\ndescription: Use when localising output.\n---\n\n# Flag\n\nEngland: \ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [
+        {
+          "category": "steganography",
+          "min_severity": "LOW",
+          "in_file": "SKILL.md"
+        }
+      ]
+    },
+    {
+      "name": "selector-run-after-emoji",
+      "description": "Two selectors after an emoji base is a run, and a run is a channel: one nibble per code point.",
+      "files": {
+        "SKILL.md": "---\nname: run\ndescription: Use when reporting status.\n---\n\n# Status\n\nDone \u2705\ufe0f\ufe0f now.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [
+        {
+          "category": "steganography",
+          "min_severity": "CRITICAL",
+          "in_file": "SKILL.md"
+        }
+      ]
+    },
+    {
+      "name": "selector-after-a-letter",
+      "description": "A selector after a letter has no presentation to select; it is a channel.",
+      "files": {
+        "SKILL.md": "---\nname: letter\ndescription: Use when formatting output.\n---\n\n# Format\n\nPlain a\ufe0f text.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [
+        {
+          "category": "steganography",
+          "min_severity": "CRITICAL",
+          "in_file": "SKILL.md"
+        }
+      ]
+    },
+    {
+      "name": "supplement-selector",
+      "description": "The variation selectors supplement (U+E0100 to U+E01EF) never selects an emoji presentation.",
+      "files": {
+        "SKILL.md": "---\nname: supplement\ndescription: Use when formatting output.\n---\n\n# Format\n\nPlain \u2705\udb40\udd00 text.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [
+        {
+          "category": "steganography",
+          "min_severity": "CRITICAL",
+          "in_file": "SKILL.md"
+        }
+      ]
+    },
+    {
+      "name": "tags-without-a-flag-base",
+      "description": "Tag letters not opened by U+1F3F4 are not a flag; they are the covert channel.",
+      "files": {
+        "SKILL.md": "---\nname: tags\ndescription: Use when formatting output.\n---\n\n# Format\n\nNotes\udb40\udc67\udb40\udc62\udb40\udc7f here.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}"
+      },
+      "must_detect": [
+        {
+          "category": "steganography",
+          "min_severity": "CRITICAL",
+          "in_file": "SKILL.md"
+        }
+      ]
     }
   ],
   "schema_version": 1
