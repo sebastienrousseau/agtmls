@@ -731,6 +731,12 @@
           "name": "Unicode tag block",
           "note": "Deprecated tag characters, revived as a covert channel.",
           "to": "U+E007F"
+        },
+        {
+          "from": "U+E0100",
+          "name": "Variation selectors supplement",
+          "note": "Never an emoji presentation; always a channel.",
+          "to": "U+E01EF"
         }
       ],
       "code_points": [
@@ -856,11 +862,78 @@
         }
       ],
       "description": "A code point that renders as nothing but survives into the prompt. The\nauthor cannot see it; the model can.",
+      "emoji_context": {
+        "base_points": [
+          "U+0023",
+          "U+002A",
+          "U+0030",
+          "U+0031",
+          "U+0032",
+          "U+0033",
+          "U+0034",
+          "U+0035",
+          "U+0036",
+          "U+0037",
+          "U+0038",
+          "U+0039"
+        ],
+        "base_ranges": [
+          {
+            "from": "U+2190",
+            "name": "Arrows",
+            "to": "U+21FF"
+          },
+          {
+            "from": "U+2300",
+            "name": "Miscellaneous technical",
+            "to": "U+23FF"
+          },
+          {
+            "from": "U+2600",
+            "name": "Miscellaneous symbols and dingbats",
+            "to": "U+27BF"
+          },
+          {
+            "from": "U+2B00",
+            "name": "Miscellaneous symbols and arrows",
+            "to": "U+2BFF"
+          },
+          {
+            "from": "U+1F000",
+            "name": "Emoji blocks",
+            "to": "U+1FAFF"
+          }
+        ],
+        "keycap": "U+20E3",
+        "selectors": {
+          "from": "U+FE0E",
+          "to": "U+FE0F"
+        },
+        "subdivision_flag": {
+          "base": "U+1F3F4",
+          "tags_from": "U+E0061",
+          "tags_to": "U+E007A",
+          "terminator": "U+E007F"
+        }
+      },
       "id": "AGT-STEG-001",
       "kind": "structural",
       "scope": "raw",
       "severity": "critical",
       "title": "Invisible code point"
+    },
+    {
+      "applies_to": [
+        "*"
+      ],
+      "category": "steganography",
+      "description": "A variation selector directly after an emoji-presentation base, or a well-formed subdivision flag: an emoji as written, not a channel",
+      "id": "AGT-STEG-002",
+      "kind": "structural",
+      "rationale": "Every coloured check mark and every keycap carries U+FE0F, and a regional\nflag is a tag sequence by design. Reporting them as CRITICAL made the rule\nthat catches the dominant smuggling channel the rule everyone switched off.\nThe line between the two is data on AGT-STEG-001 (`emoji_context`), so both\nimplementations draw it in the same place. A selector after an emoji base is\nreported only in a pedantic mode; a subdivision flag is reported at LOW\nalways, because a flag is still a tag sequence a reviewer should know is\nthere.",
+      "scope": "raw",
+      "severity": "low",
+      "title": "Selector or tag sequence in an emoji context"
     },
     {
       "applies_to": [
@@ -915,7 +988,7 @@
     }
   ],
   "source": {
-    "commit": "3e8ae5fc8eb1c85ba0ed6e8bae75aaa656258f7c",
+    "commit": "eb99f7aa4118bd2cc52f175f99a181e37246a749",
     "files": {
       "AGT-CAP-001.toml": "fd07a901587f8abc939b2af8ea77dab20c7f9ddebc0a76b46d047b42e5b0c6d2",
       "AGT-CAP-002.toml": "ebdb6706f8d0ab4e202e9c6961acda93d04c4893a34be3d01313da59f6c0ed6b",
@@ -945,7 +1018,8 @@
       "AGT-SCAN-001.toml": "d8957c5b7efc9b5f16c1a25949ddd182e42001e6ba4b94d2c3bd1f27bbd0cf4f",
       "AGT-SEL-001.toml": "844a2a1c65f7eb9a49f00ec5cad5a085b61b682fc75862390271679b73b0a2a5",
       "AGT-SOCIAL-001.toml": "34f7a1f3f99e47f57fd4bfc4ca8965a5ae6d299d48bc11f87d9026291a5f5a64",
-      "AGT-STEG-001.toml": "34475de74281a1037f8d83a37a66138b16437739016a0840cf99a43a52613b1b",
+      "AGT-STEG-001.toml": "f803cddbb9b375a273ee5dbbd179f44570ab8643dfad2321e53a81d994bbe71f",
+      "AGT-STEG-002.toml": "d4cb0afd05cfbc3b440a557660e2f54b9f625a7763801e18414713a5a774001b",
       "AGT-SUPPLY-001.toml": "bd429331703bfa86fddad44595466de77230ce9750a822af93bc1e21275f3ec9"
     },
     "repository": "sebastienrousseau/agtmls-spec"
