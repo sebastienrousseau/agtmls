@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.8 - 2026-09-24
+
 ### Added
 
 - The analyzer runs every rule but steganography on the text an agent
