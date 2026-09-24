@@ -13,7 +13,8 @@
         "*.md",
         "*.json",
         "*.yaml",
-        "*.yml"
+        "*.yml",
+        "*.toml"
       ],
       "category": "capability_escalation",
       "description": "Wildcard tool grant (mcp__*__*, Bash(*), or allowed-tools: *)",
@@ -47,8 +48,17 @@
         "*.md",
         "*.sh",
         "*.bash",
+        "*.zsh",
         "*.py",
         "*.js",
+        "*.mjs",
+        "*.cjs",
+        "*.ts",
+        "*.rb",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "unsafe_execution",
@@ -89,8 +99,17 @@
         "*.md",
         "*.sh",
         "*.bash",
+        "*.zsh",
         "*.py",
         "*.js",
+        "*.mjs",
+        "*.cjs",
+        "*.ts",
+        "*.rb",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "unsafe_execution",
@@ -121,8 +140,17 @@
         "*.md",
         "*.sh",
         "*.bash",
+        "*.zsh",
         "*.py",
         "*.js",
+        "*.mjs",
+        "*.cjs",
+        "*.ts",
+        "*.rb",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "unsafe_execution",
@@ -150,8 +178,17 @@
         "*.md",
         "*.sh",
         "*.bash",
+        "*.zsh",
         "*.py",
         "*.js",
+        "*.mjs",
+        "*.cjs",
+        "*.ts",
+        "*.rb",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "unsafe_execution",
@@ -299,7 +336,12 @@
     },
     {
       "applies_to": [
-        "*.md"
+        "*.md",
+        "*.txt",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml"
       ],
       "category": "data_exfiltration",
       "description": "Potential markdown image data exfiltration pingback",
@@ -441,9 +483,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "Instruction override pattern ('ignore previous instructions')",
@@ -462,9 +502,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "Instruction override pattern ('disregard prior rules')",
@@ -483,9 +521,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "Persona jailbreak ('developer mode')",
@@ -504,9 +540,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "System override / DAN jailbreak attempt",
@@ -525,9 +559,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "Safety guardrail bypass attempt",
@@ -546,9 +578,7 @@
     },
     {
       "applies_to": [
-        "*.md",
-        "*.txt",
-        "executable"
+        "*"
       ],
       "category": "prompt_injection",
       "description": "DAN exploit pattern ('do anything now')",
@@ -605,11 +635,17 @@
         "*.md",
         "*.sh",
         "*.bash",
+        "*.zsh",
         "*.py",
         "*.js",
         "*.mjs",
+        "*.cjs",
         "*.ts",
         "*.rb",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "packed_payload",
@@ -730,7 +766,10 @@
     {
       "applies_to": [
         "*.md",
-        "*.json"
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml"
       ],
       "category": "selection_gaming",
       "description": "Skill description that games selection: 'always use this skill first', 'official', keyword stuffing",
@@ -764,7 +803,10 @@
         "*.md",
         "*.txt",
         "*.rst",
-        "*.json"
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.toml"
       ],
       "category": "social_engineering",
       "description": "Instruction to paste a command into the terminal, or a fake verification step",
@@ -1022,6 +1064,7 @@
         "*.json",
         "*.yaml",
         "*.yml",
+        "*.toml",
         "executable"
       ],
       "category": "supply_chain",
@@ -1067,29 +1110,29 @@
     }
   ],
   "source": {
-    "commit": "2db3a5abc2f6cb0ab6e4547a1e00bfb41863172c",
+    "commit": "f4cfc6ca95c8cc9c041173b498c3cbc54081cfde",
     "files": {
       "AGT-CAP-001.toml": "fd07a901587f8abc939b2af8ea77dab20c7f9ddebc0a76b46d047b42e5b0c6d2",
-      "AGT-CAP-002.toml": "ebdb6706f8d0ab4e202e9c6961acda93d04c4893a34be3d01313da59f6c0ed6b",
-      "AGT-EXEC-001.toml": "10150423c7a8234ee1da7bbc3269f2e117368ae9362bdd55e37b476c3abdce15",
-      "AGT-EXEC-002.toml": "27554d77737ab374c9b6e4074a525c30e265cddd07ee7f465d9e10815c9b30e1",
-      "AGT-EXEC-003.toml": "afb1cd5dc834094ed24b94d9437fbe74f2334b8e1fa937a443824780a16a9887",
-      "AGT-EXEC-004.toml": "0060c5b7877aee20b9de3970e39c15b18b8168740ac6cf979ceb9a6ca33d364f",
+      "AGT-CAP-002.toml": "fe1b3f974c61e08d99140dde955bcf670f811b0b1a6a1da7d55acc9091104540",
+      "AGT-EXEC-001.toml": "a13d9277309eff8de8ee85775588e12256a16f8bd3fa506817d1957752784543",
+      "AGT-EXEC-002.toml": "b031a230cdea658abbcd9d3cfb3b361b8ab26d7cfb6f3f2fb9bf314082266da2",
+      "AGT-EXEC-003.toml": "5a0cd22f4c17a0c40bc17742c2607f39d0b1569ab299c24b658ddd8ae7a0becc",
+      "AGT-EXEC-004.toml": "bcb74ec210663f3a61e11253f2a7d759c25f12c3fb291ab1f3bf1ffbd823ca9c",
       "AGT-EXEC-005.toml": "7caa6df4ed80032432803383e144dbf44d2e48e7e529d951b7196adc0e3b2578",
       "AGT-EXEC-006.toml": "c8b99eda4d7767727dc22995d9dcb2ced1c62978008d8bf383a85fa73f134a3a",
       "AGT-EXEC-007.toml": "3e3f8a9f6fbcae676a99fcf4e365648da802ac9212be45ff8a3bef13e8af26a7",
-      "AGT-EXFIL-001.toml": "342db3e7e74104cecf4de3f3969acee070f5e77c6dd4bc637c0b67cb3b339e01",
+      "AGT-EXFIL-001.toml": "52eb7700d34757d85ab154ea134f986c7eb20d3d79b90e68ef9f6daa83207774",
       "AGT-HOOK-001.toml": "e61edf5e2cfe63f3918f871aec06fdcdfb93d1bba692cc002b3b2568caf31190",
       "AGT-HOOK-002.toml": "826445ad628a6539bcc8369301342829ed9cc908dd5e9286a8fc44d7ddfd889a",
       "AGT-HOOK-003.toml": "e07b7e7313fb2797b7fc1aa7a69dbff519d9cbe83121d8d95096f7690dfd987e",
-      "AGT-INJ-001.toml": "ca26f22cb00f713224ab68efc3de1f2a479e3f0b6cd2812768f842d61cee5938",
-      "AGT-INJ-002.toml": "15c6b43b9884a029b6c7bd2c7ddecd91ff3f8368a378c3daad750291ce51bed0",
-      "AGT-INJ-003.toml": "5a2672f2127d29fad07c51d0574d16725f39dfcac3796e0dd9c6725094626893",
-      "AGT-INJ-004.toml": "cfa88576cec3ad41a46c927d3a71e4cdfff525996f6d4fe4d8d6d5b05d96bc6f",
-      "AGT-INJ-005.toml": "0c8e5fff25db46fe7eeee34a35a35a1b601c7b0f92af359c1adc12c15852d22f",
-      "AGT-INJ-006.toml": "997d234735fef0bf86d9e8ea6628e51cb77f687e422ffcd062f6165f9ec33945",
+      "AGT-INJ-001.toml": "602d171fca520e0b8c09bbc33c0d1bf48b5830d10fc6e05bf8918dba7c1ea463",
+      "AGT-INJ-002.toml": "a8ed4fa5caed9ddf8497db34da72e24be88f5a9f7051d360aa3cbc92079a767f",
+      "AGT-INJ-003.toml": "0392ac2cf67d7f352e56729297cd3ea45f8c35d9875ccec1910493ea8b521ebb",
+      "AGT-INJ-004.toml": "9906daa6b5dce0661ae3494dbda04cf1178e95e3e515dc3632e779eeceb0b37c",
+      "AGT-INJ-005.toml": "3fe0b1e894d95696ee01d458f171aecdfad94b157997d984dce31c5b54c44165",
+      "AGT-INJ-006.toml": "2f74192eb320b2a25d0e4973861254c7113f354a9756c417e949d975effd0788",
       "AGT-MCP-001.toml": "e556af7c450a9e04e327d481a0d6e6263cae8dca566b5ff7fa691f545a0f8294",
-      "AGT-PACK-001.toml": "e68e55aa4344d769554a98729cdfbcd422df211c175afe7412708793695c3978",
+      "AGT-PACK-001.toml": "309fef43e56c191127c144412fa3f7fa21b72df74bc0bb7382e4fe699b1b84e3",
       "AGT-POLICY-001.toml": "e85e1d7720686967a3045041ad4bd80b701ea407ae15a0fe5e29c65f172afee9",
       "AGT-POLICY-002.toml": "502e4483118ada2de9bb353319b62ca059d12ab574074ee82226803681e2fd76",
       "AGT-POLICY-003.toml": "2fbc4d68529c49247ac517f3551310aa81831ffa248e6669b263bb7fe0494e79",
@@ -1097,11 +1140,11 @@
       "AGT-POLICY-005.toml": "19e31cff2e7eb0270df55b5fdd064240f16e9a649e7a5de0037532009208ddac",
       "AGT-POLICY-006.toml": "721f7a01e9c5f3a2567fa16221bf7d97bd922dc65925905acbe08abfe0323a8f",
       "AGT-SCAN-001.toml": "d8957c5b7efc9b5f16c1a25949ddd182e42001e6ba4b94d2c3bd1f27bbd0cf4f",
-      "AGT-SEL-001.toml": "844a2a1c65f7eb9a49f00ec5cad5a085b61b682fc75862390271679b73b0a2a5",
-      "AGT-SOCIAL-001.toml": "34f7a1f3f99e47f57fd4bfc4ca8965a5ae6d299d48bc11f87d9026291a5f5a64",
+      "AGT-SEL-001.toml": "65ee5fcaafc701267710f58be84e6ade1c76fabe6d21f5b7a8c1e8de545a2968",
+      "AGT-SOCIAL-001.toml": "cf99424d17c4fc0685361df7daf4999a1827075594abdce0d76b79991b727e86",
       "AGT-STEG-001.toml": "f803cddbb9b375a273ee5dbbd179f44570ab8643dfad2321e53a81d994bbe71f",
       "AGT-STEG-002.toml": "d4cb0afd05cfbc3b440a557660e2f54b9f625a7763801e18414713a5a774001b",
-      "AGT-SUPPLY-001.toml": "bd429331703bfa86fddad44595466de77230ce9750a822af93bc1e21275f3ec9"
+      "AGT-SUPPLY-001.toml": "d3745352cc5b4d1651e6ab1617b218addd1d3e952e7e11611cc237714ab053c7"
     },
     "repository": "sebastienrousseau/agtmls-spec"
   }

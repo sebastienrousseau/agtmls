@@ -90,6 +90,13 @@ a keyword split by a zero-width space or spelt in fullwidth letters is still
 the keyword. Steganography runs on the raw bytes, so the hidden code points
 are reported as well.
 
+Each pattern rule runs only on the files its `applies_to` selectors name
+(agtmls-spec 4.11): `*`, `*.<ext>`, or `executable` for a file beginning with
+`#!`. Injection rules apply to every file, because an agent reads every file;
+execution and payload rules cover scripts and JSON, YAML and TOML, where hook
+and CI commands live. Any file beginning with `#!` is audited, whatever its
+name or mode.
+
 A variation selector directly after an emoji base (a coloured check mark, a
 keycap) is an emoji as written, not a hidden channel: it is `AGT-STEG-002` at
 LOW and reported only with `--pedantic`. A well-formed subdivision flag is
