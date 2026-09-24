@@ -193,13 +193,13 @@ No comparison matrix is published yet. A matrix is only worth reading if every c
 
 Cold-start latency of the commands a reader runs first, and of the two operations over the whole registry, measured in fresh processes. Every number below is rendered from [`benchmarks/results/`](benchmarks/results/) by `generate-benchmarks-doc.py`, and the gate fails if the table and the results diverge.
 
-<!-- generated:headline sources="benchmarks/results/latency.json:242aed18de0eedae2c2cdf5ba07788a02a17a820ca6fdb09e1b812ad84be1050" -->
+<!-- generated:headline sources="benchmarks/results/latency.json:3b9160518cdaa8c5b1c7dfc661b26339d81d012597f92e531feb67c67e3abaf3" -->
 | Scenario | Result | Environment |
 | :--- | ---: | :--- |
-| `agtmls list`, cold start | 38 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
-| `agtmls search`, cold start | 37 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
-| Digest every skill | 48 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
-| `agtmls audit --all --strict` | 264 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
+| `agtmls list`, cold start | 45 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
+| `agtmls search`, cold start | 44 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
+| Digest every skill | 68 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
+| `agtmls audit --all --strict` | 383 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
 <!-- /generated:headline -->
 
 See [`BENCHMARKS.md`](BENCHMARKS.md) for the methodology, every workload, the regression thresholds and the scaling measurement.

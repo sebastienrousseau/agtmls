@@ -34,15 +34,11 @@ class RulesComeFromTheSnapshotTests(unittest.TestCase):
         self.snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
 
     def test_every_pattern_rule_in_the_snapshot_is_loaded(self) -> None:
-        loaded = {
-            rule_id: (regex.pattern, message)
-            for table in (
-                self.rules.PROMPT_INJECTION_PATTERNS,
-                self.rules.DANGEROUS_SHELL_PATTERNS,
-                self.rules.DATA_EXFILTRATION_PATTERNS,
-            )
-            for regex, rule_id, message in table
-        }
+        """The analyzer's table, not the three per-category ones: those
+        cover three categories, and the snapshot now declares ten."""
+        from _lib import analyzer
+
+        loaded = {rule.id: (rule.regex.pattern, rule.message) for rule in analyzer.PATTERN_RULES}
         expected = {
             rule["id"]: (rule["pattern"], rule["description"])
             for rule in self.snapshot["rules"]

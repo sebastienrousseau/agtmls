@@ -163,10 +163,13 @@ class DataDrivenRulesTests(unittest.TestCase):
         compiled = analyzer.compile_rules([self.rule(), {"id": "AGT-X-001", "category": "x", "severity": "high", "kind": "structural"}])
         self.assertEqual([rule.id for rule in compiled], ["AGT-TEST-001"])
 
-    def test_the_snapshot_yields_the_three_shipped_categories_and_nothing_else_today(self) -> None:
-        self.assertEqual({rule.category for rule in analyzer.PATTERN_RULES},
-                         {"prompt_injection", "unsafe_execution", "data_exfiltration"})
-        self.assertEqual({rule.severity for rule in analyzer.PATTERN_RULES}, {"HIGH"})
+    def test_the_snapshot_yields_every_pattern_category_the_spec_declares(self) -> None:
+        self.assertEqual({rule.category for rule in analyzer.PATTERN_RULES}, {
+            "prompt_injection", "unsafe_execution", "data_exfiltration", "hook_safety",
+            "capability_escalation", "supply_chain", "mcp_tools", "packed_payload",
+            "social_engineering", "selection_gaming",
+        })
+        self.assertEqual({rule.severity for rule in analyzer.PATTERN_RULES}, {"CRITICAL", "HIGH", "MEDIUM"})
 
 
 class QuotedContextTests(unittest.TestCase):
