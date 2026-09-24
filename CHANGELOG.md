@@ -9,6 +9,14 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- Pattern rules run only where their `applies_to` selectors say
+  (agtmls-spec 4.11), and the snapshot follows the spec commit that
+  defines and widens them: injection rules cover every file, so an
+  instruction override in a JSON MCP tool description is caught, and
+  execution rules cover JSON, YAML and TOML. A Python test naming an MCP
+  tool is no longer flagged as one. Any file beginning with `#!` is
+  audited even with no extension or execute bit. The corpus mirrors four
+  new cases, 101 in all.
 - The rule snapshot follows agtmls-spec `5741d6d`: `AGT-HOOK-003`
   (MEDIUM, repository hooks run on a lifecycle event without a trust
   gate) and `AGT-POLICY-006` (HIGH, an unscoped tool family in

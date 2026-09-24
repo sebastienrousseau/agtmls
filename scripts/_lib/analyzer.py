@@ -311,6 +311,7 @@ class PatternRule(NamedTuple):
     message: str
     scope: str  # "normalised", "line" or "raw"
     regex: re.Pattern[str]
+    applies_to: tuple[str, ...] = ("*",)
 
 
 def compile_rules(rules: list[dict]) -> list[PatternRule]:
@@ -333,8 +334,29 @@ def compile_rules(rules: list[dict]) -> list[PatternRule]:
             message=rule.get("description") or rule.get("title") or rule["id"],
             scope=rule.get("scope") or "normalised",
             regex=re.compile(pattern),
+            applies_to=tuple(rule.get("applies_to") or ("*",)),
         ))
     return compiled
+
+
+def selector_matches(selector: str, path: Path, content: str) -> bool:
+    """One `applies_to` selector against one file (spec 4.11).
+
+    `*`, `*.<ext>` compared case-insensitively, or `executable`: a file whose
+    content begins with `#!`. Content, not a mode bit, so in-memory analysis
+    decides the same way as a filesystem walk. Any other form matches nothing.
+    """
+    if selector == "*":
+        return True
+    if selector == "executable":
+        return content.startswith("#!")
+    if selector.startswith("*.") and "*" not in selector[1:]:
+        return path.name.lower().endswith(selector[1:].lower())
+    return False
+
+
+def applies(rule: PatternRule, path: Path, content: str) -> bool:
+    return any(selector_matches(selector, path, content) for selector in rule.applies_to)
 
 
 PATTERN_RULES = compile_rules(RULES)
@@ -347,6 +369,8 @@ def scan_rules(path: Path, content: str, rules: list[PatternRule]) -> list[Findi
     text = flat = None
     line_of: list[int] | None = None
     for rule in rules:
+        if not applies(rule, path, content):
+            continue
         if rule.scope == "normalised":
             if flat is None:
                 text = normalize(content)
@@ -594,6 +618,15 @@ def check_skill_honesty(skill_dir: Path) -> list[Finding]:
     return findings
 
 
+def has_shebang(path: Path) -> bool:
+    """A script with no extension and no execute bit is still a script (spec 4.11)."""
+    try:
+        with path.open("rb") as handle:
+            return handle.read(2) == b"#!"
+    except OSError:
+        return False
+
+
 def auditable_files(root: Path):
     """Every file an agent could read or a user could execute.
 
@@ -616,7 +649,7 @@ def auditable_files(root: Path):
             continue
         if not stat.S_ISREG(mode):
             continue
-        if path.suffix.lower() in AUDITABLE_SUFFIXES or mode & 0o111:
+        if path.suffix.lower() in AUDITABLE_SUFFIXES or mode & 0o111 or has_shebang(path):
             yield path
 
 

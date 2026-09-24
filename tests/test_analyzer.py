@@ -241,6 +241,30 @@ class DataDrivenRulesTests(unittest.TestCase):
             findings = analyzer.audit_file_content(self.PATH, "\n\nnpx foo@latest\n")
         self.assertEqual([f.line for f in findings], [1])
 
+    def test_a_rule_runs_only_where_its_selectors_match(self) -> None:
+        """spec 4.11: `*`, `*.<ext>` case-insensitively, or `executable` (#!)."""
+        scoped = analyzer.compile_rules([self.rule(applies_to=["*.json", "executable"])])
+        body = "npx foo@latest\n"
+        with mock.patch.object(analyzer, "PATTERN_RULES", scoped):
+            self.assertEqual(len(analyzer.audit_file_content(Path("hooks.json"), body)), 1)
+            self.assertEqual(len(analyzer.audit_file_content(Path("HOOKS.JSON"), body)), 1)
+            self.assertEqual(len(analyzer.audit_file_content(Path("notes.md"), body)), 0)
+            self.assertEqual(len(analyzer.audit_file_content(Path("bin/run"), "#!/bin/sh\n" + body)), 1)
+            self.assertEqual(len(analyzer.audit_file_content(Path("bin/run"), body)), 0)
+        everywhere = analyzer.compile_rules([self.rule(applies_to=["*"])])
+        with mock.patch.object(analyzer, "PATTERN_RULES", everywhere):
+            self.assertEqual(len(analyzer.audit_file_content(Path("anything.xyz"), body)), 1)
+
+    def test_a_rule_that_declares_no_selectors_applies_everywhere(self) -> None:
+        self.assertTrue(analyzer.applies(analyzer.compile_rules([self.rule()])[0], Path("x.lua"), ""))
+
+    def test_the_selector_matcher_follows_the_grammar(self) -> None:
+        self.assertTrue(analyzer.selector_matches("*.md", Path("a/B.MD"), ""))
+        self.assertFalse(analyzer.selector_matches("*.md", Path("a.mdx"), ""))
+        self.assertTrue(analyzer.selector_matches("executable", Path("run"), "#!/usr/bin/env python3\n"))
+        self.assertFalse(analyzer.selector_matches("executable", Path("run.sh"), "echo\n"))
+        self.assertFalse(analyzer.selector_matches("README.md", Path("README.md"), ""), "not a valid selector")
+
     def test_a_structural_rule_without_a_pattern_is_not_a_pattern_rule(self) -> None:
         compiled = analyzer.compile_rules([self.rule(), {"id": "AGT-X-001", "category": "x", "severity": "high", "kind": "structural"}])
         self.assertEqual([rule.id for rule in compiled], ["AGT-TEST-001"])
@@ -609,6 +633,16 @@ class AuditableFilesTests(Workspace):
         (self.tmp / "__pycache__" / "cached.py").write_text("x", encoding="utf-8")
         os.symlink(self.tmp / "notes.md", self.tmp / "link.md")
         self.assertEqual(self.names(self.tmp), ["notes.md", "run"])
+
+    def test_a_script_with_only_a_shebang_is_selected(self) -> None:
+        skill = self.skill()
+        (skill / "bin").mkdir()
+        (skill / "bin" / "bootstrap").write_text("#!/bin/sh\nrm -rf /\n", encoding="utf-8")
+        (skill / "bin" / "data").write_text("plain\n", encoding="utf-8")
+        names = {p.name for p in analyzer.auditable_files(skill)}
+        self.assertIn("bootstrap", names)
+        self.assertNotIn("data", names)
+        self.assertFalse(analyzer.has_shebang(skill / "missing"))
 
     def test_a_file_that_vanishes_mid_walk_is_skipped(self) -> None:
         (self.tmp / "gone.md").write_text("x", encoding="utf-8")
