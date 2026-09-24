@@ -441,6 +441,12 @@ def main() -> int:
             cmd.append(str(args.path))
         if args.all:
             cmd.append("--all")
+        if args.foreign:
+            target = args.foreign
+            # A path is the caller's; a URL@sha is passed through as given.
+            if "@" not in target or Path(target).exists():
+                target = str(Path(target).resolve())
+            cmd.extend(["--foreign", target])
         if args.strict:
             cmd.append("--strict")
         if args.format or args.json:

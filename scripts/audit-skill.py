@@ -8,7 +8,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -21,7 +24,9 @@ SKILLS_DIR = ROOT / "skills"
 from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; re-exported)
     MAX_AUDIT_BYTES,
     Finding,
+    ForeignLayoutError,
     audit_file,
+    audit_foreign,
     audit_skill_target,
     check_dangerous_shell,
     check_prompt_injection,
@@ -33,6 +38,78 @@ from _lib.cli_parser import registry_version  # noqa: E402  (same path insertion
 from _lib.rules import RULES  # noqa: E402  (same path insertion)
 
 SARIF_SCHEMA = "https://json.schemastore.org/sarif-2.1.0.json"
+GIT_TARGET = re.compile(r"^(?P<url>(?:https?|ssh|git)://\S+?|git@\S+?)@(?P<ref>[^@]+)$")
+COMMIT_SHA = re.compile(r"^[0-9a-f]{40}$")
+
+
+def fetch_foreign(target: str, workspace: Path) -> Path | str:
+    """A local path as given, or a clone of `<git-url>@<sha>`; a str is the refusal.
+
+    Network fetch is opt-in by giving a URL, and only by exact commit: a
+    branch or tag can move between the audit and the install.
+    """
+    match = GIT_TARGET.match(target)
+    if match is None:
+        return Path(target).resolve()
+    url, ref = match.group("url"), match.group("ref")
+    if not COMMIT_SHA.match(ref):
+        return f"refusing to fetch {url}@{ref}: give an exact 40-hex commit, not a branch or tag"
+    clone = workspace / "foreign"
+    for argv in (
+        ["git", "clone", "--quiet", url, str(clone)],
+        ["git", "-C", str(clone), "checkout", "--quiet", ref],
+    ):
+        proc = subprocess.run(argv, text=True, capture_output=True, check=False)
+        if proc.returncode != 0:
+            return f"{' '.join(argv[:2])} failed: {proc.stderr.strip() or proc.stdout.strip()}"
+    return clone
+
+
+def foreign_audit(target: str, fmt: str, strict: bool) -> int:
+    with tempfile.TemporaryDirectory(prefix="agtmls-foreign-") as raw:
+        root = fetch_foreign(target, Path(raw))
+        if isinstance(root, str):
+            print(f"error: {root}", file=sys.stderr)
+            return 2
+        try:
+            reports = audit_foreign(root)
+        except ForeignLayoutError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+        from _lib.analyzer import foreign_layout
+
+        layout = foreign_layout(root)
+        every = [f for report in reports for f in report.findings if f.suppressed is None]
+        if fmt == "json":
+            print(json.dumps({
+                "target": target,
+                "layout": layout,
+                "skills": [{
+                    "plugin": r.plugin,
+                    "path": r.path.relative_to(root).as_posix(),
+                    "policy": r.policy,
+                    "findings": [{
+                        "file": f.file_path.relative_to(root).as_posix(),
+                        "line": f.line, "severity": f.severity, "category": f.category,
+                        "rule": f.rule, "message": f.message,
+                    } for f in r.findings if f.suppressed is None],
+                } for r in reports],
+            }, indent=2))
+        else:
+            print(f"Foreign audit of {target} ({layout}): {len(reports)} skill(s), {len(every)} finding(s)\n")
+            for r in reports:
+                policy = ", ".join(
+                    f"{k}={str(v).lower()}" for k, v in r.policy.items() if k != "provisional"
+                )
+                kind = "provisional policy" if r.policy.get("provisional") else "declared policy"
+                print(f"plugin {r.plugin}: {r.path.relative_to(root).as_posix()} ({kind}: {policy})")
+                for f in r.findings:
+                    if f.suppressed is None:
+                        print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
+        failed = any(f.severity in {"CRITICAL", "HIGH"} for f in every) or (
+            strict and any(f.severity in {"MEDIUM", "LOW"} for f in every)
+        )
+        return 1 if failed else 0
 SARIF_LEVEL = {"CRITICAL": "error", "HIGH": "error", "MEDIUM": "warning", "LOW": "note"}
 BASELINE_SCHEMA_VERSION = 1
 
@@ -105,12 +182,15 @@ def main() -> int:
     )
     parser.add_argument("path", nargs="?", type=Path, help="Path to a skill directory or Markdown file")
     parser.add_argument("--all", action="store_true", help="Audit all skills in the registry")
+    parser.add_argument("--foreign", metavar="PATH|GIT-URL@SHA", help="Audit every skill in a repository that is not this registry")
     parser.add_argument("--strict", action="store_true", help="Fail on warnings (MEDIUM/LOW) as well as HIGH/CRITICAL")
     parser.add_argument("--format", choices=["text", "json", "sarif"], default="text", help="Output format")
     parser.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail the audit")
     parser.add_argument("--write-baseline", type=Path, help="record the fingerprints of this audit's findings")
     args = parser.parse_args()
 
+    if args.foreign:
+        return foreign_audit(args.foreign, "json" if args.format == "json" else "text", args.strict)
     if not args.path and not args.all:
         parser.print_help(sys.stderr)
         return 2
