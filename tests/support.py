@@ -62,15 +62,21 @@ def registry_fixture(destination: Path) -> Path:
     # look like it escapes the repository.
     destination = destination.resolve()
     for path in ROOT.iterdir():
-        if path.name in skip:
+        # The coverage gate runs checks in parallel and writes `.coverage.*`
+        # data files beside the tree; one vanished between this listing and
+        # its copy and took a whole test module down with it.
+        if path.name in skip or path.name.startswith(".coverage"):
             continue
-        if path.is_dir():
-            shutil.copytree(
-                path, destination / path.name, symlinks=True,
-                ignore=shutil.ignore_patterns(*skip),
-            )
-        else:
-            shutil.copy2(path, destination / path.name)
+        try:
+            if path.is_dir():
+                shutil.copytree(
+                    path, destination / path.name, symlinks=True,
+                    ignore=shutil.ignore_patterns(*skip),
+                )
+            else:
+                shutil.copy2(path, destination / path.name)
+        except FileNotFoundError:
+            continue  # gone since the listing: not part of the registry
     return destination
 
 

@@ -18,11 +18,9 @@ from pathlib import Path
 from typing import NamedTuple
 
 from .rules import (
-    DANGEROUS_SHELL_PATTERNS,
-    DATA_EXFILTRATION_PATTERNS,
     INVISIBLE_RE,
     INVISIBLE_UNICODE,
-    PROMPT_INJECTION_PATTERNS,
+    RULES,
     TOOL_CAPABILITIES,
 )
 
@@ -202,24 +200,97 @@ def quoted_lines(text: str) -> set[int]:
     return quoted
 
 
-def check_prompt_injection(path: Path, content: str) -> list[Finding]:
-    findings = scan(path, content, PROMPT_INJECTION_PATTERNS, "HIGH", "prompt_injection")
-    if not findings:
+class PatternRule(NamedTuple):
+    id: str
+    category: str
+    severity: str
+    message: str
+    scope: str  # "normalised", "line" or "raw"
+    regex: re.Pattern[str]
+
+
+def compile_rules(rules: list[dict]) -> list[PatternRule]:
+    """Every pattern rule in a snapshot, with what it declares.
+
+    Category, severity and scope come from the rule, not from the code that
+    runs it, so a rule of a category this module never named still fires --
+    which is what the Rust implementation already does, and what the
+    differential conformance run compares.
+    """
+    compiled: list[PatternRule] = []
+    for rule in rules:
+        pattern = rule.get("pattern")
+        if not isinstance(pattern, str):
+            continue  # structural: implemented in code, declared in data
+        compiled.append(PatternRule(
+            id=rule["id"],
+            category=rule["category"],
+            severity=str(rule.get("severity", "high")).upper(),
+            message=rule.get("description") or rule.get("title") or rule["id"],
+            scope=rule.get("scope") or "normalised",
+            regex=re.compile(pattern),
+        ))
+    return compiled
+
+
+PATTERN_RULES = compile_rules(RULES)
+
+
+def scan_rules(path: Path, content: str, rules: list[PatternRule]) -> list[Finding]:
+    """Run pattern rules over one file, each in the scope it declares."""
+    findings: list[Finding] = []
+    seen: set[tuple[int, str]] = set()
+    text = flat = None
+    line_of: list[int] | None = None
+    for rule in rules:
+        if rule.scope == "normalised":
+            if flat is None:
+                text = normalize(content)
+                flat = flatten(text)
+            haystack = flat
+        else:
+            haystack = content
+        for match in rule.regex.finditer(haystack):
+            if rule.scope == "normalised":
+                if line_of is None:
+                    line_of = line_map(text or "")
+                line = line_of[match.start()] if match.start() < len(line_of) else 1
+            else:
+                line = content.count("\n", 0, match.start()) + 1
+            if (line, rule.message) in seen:
+                continue
+            seen.add((line, rule.message))
+            findings.append(Finding(path, line, rule.severity, rule.category, rule.message, rule.id))
+    return findings
+
+
+def pattern_findings(path: Path, content: str, rules: list[PatternRule] | None = None) -> list[Finding]:
+    """Every pattern rule's findings, with quoted injections softened."""
+    findings = scan_rules(path, content, PATTERN_RULES if rules is None else rules)
+    if not any(f.category == "prompt_injection" for f in findings):
         return findings
     quoted = quoted_lines(normalize(content))
     return [
         f._replace(severity="MEDIUM", message=f"{f.message} (quoted under a heading that marks it as an example)")
-        if f.line in quoted else f
+        if f.category == "prompt_injection" and f.line in quoted else f
         for f in findings
     ]
 
 
+def _category(name: str) -> list[PatternRule]:
+    return [rule for rule in PATTERN_RULES if rule.category == name]
+
+
+def check_prompt_injection(path: Path, content: str) -> list[Finding]:
+    return pattern_findings(path, content, _category("prompt_injection"))
+
+
 def check_dangerous_shell(path: Path, content: str) -> list[Finding]:
-    return scan(path, content, DANGEROUS_SHELL_PATTERNS, "HIGH", "unsafe_execution")
+    return pattern_findings(path, content, _category("unsafe_execution"))
 
 
 def check_data_exfiltration(path: Path, content: str) -> list[Finding]:
-    return scan(path, content, DATA_EXFILTRATION_PATTERNS, "HIGH", "data_exfiltration")
+    return pattern_findings(path, content, _category("data_exfiltration"))
 
 
 def read_capped(path: Path) -> str | None:
@@ -479,9 +550,7 @@ def audit_file_content(path: Path, content: str) -> list[Finding]:
     """Every detector over one file's text, with in-source suppressions applied."""
     findings: list[Finding] = []
     findings.extend(check_steganography(path, content))
-    findings.extend(check_prompt_injection(path, content))
-    findings.extend(check_dangerous_shell(path, content))
-    findings.extend(check_data_exfiltration(path, content))
+    findings.extend(pattern_findings(path, content))
     return apply_suppressions(findings, content)
 
 
