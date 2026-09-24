@@ -46,7 +46,7 @@ and can be evaded. Knowing which is which is the point of this section.
 | `install` verifying the source before copying (exit `3`) | Boundary | A tampered registry is refused before anything reaches your repository |
 | `verify` against `.agtmls/manifest.json` | Boundary | Drift after install — modified, missing or unmanaged files — is reported |
 | Signed commits and tags (`KEYS.asc`) | Boundary | Which maintainer key produced a given revision |
-| `agtmls audit` rules (`AGT-STEG`, `AGT-INJ`, `AGT-EXEC`, `AGT-EXFIL`) | Heuristic | Known patterns are flagged on the text an agent reads (hidden code points stripped, NFKC-folded); packed or obfuscated payloads can evade static scanning. In-source suppressions need a reason and never cover `AGT-STEG` |
+| `agtmls audit` rules (`AGT-STEG`, `AGT-INJ`, `AGT-EXEC`, `AGT-EXFIL`, `AGT-HOOK`, `AGT-SUPPLY`, `AGT-MCP`, `AGT-PACK`, `AGT-SOCIAL`, `AGT-SEL`) | Heuristic | Known patterns are flagged on the text an agent reads (hidden code points stripped, NFKC-folded); packed or obfuscated payloads can evade static scanning. In-source suppressions need a reason and never cover `AGT-STEG` |
 | Capability and policy honesty (`AGT-CAP`, `AGT-POLICY`) | Heuristic | Frontmatter and `metadata.json` agree with each other and with the skill's prose; it cannot see what a script does at run time |
 | Collision, routing and behavioral evals | Heuristic | Skills stay distinguishable and keep their documented shape; they do not measure whether a skill helps |
 

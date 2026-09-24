@@ -32,23 +32,23 @@ python3 scripts/bench.py --scaling --record  # ...and publish it to benchmarks/r
 
 ## Results
 
-<!-- generated:latency sources="benchmarks/results/latency.json:242aed18de0eedae2c2cdf5ba07788a02a17a820ca6fdb09e1b812ad84be1050,bench-baseline.json:85c6d792e846854288665de208f9ca1029f7c769b01dcbae06ce2545fc4dcc35" -->
+<!-- generated:latency sources="benchmarks/results/latency.json:3b9160518cdaa8c5b1c7dfc661b26339d81d012597f92e531feb67c67e3abaf3,bench-baseline.json:fef0199f5aec186e3c4c40d1ede0fe7d3f699c0bef5a6a2864c0c35dc8cb3ae0" -->
 Recorded on the machine named in `bench-baseline.json`: macOS 26.7, arm64, Python 3.12.14.
 One machine, 5 suite runs. No claim is made about any other machine.
 
 | Workload | min ms | P50 ms | P95 ms | × calibration |
 |---|---:|---:|---:|---:|
-| `calibration` (bare interpreter) | 11.75 | 12.55 | 14.67 | 1.00 |
-| `cli-list` | 36.05 | 37.52 | 45.42 | 3.07 |
-| `cli-search` | 36.05 | 37.41 | 43.04 | 3.07 |
-| `cli-show` | 37.99 | 47.28 | 64.55 | 3.23 |
-| `cli-stats` | 34.51 | 48.40 | 65.65 | 2.94 |
-| `digest-registry` (every skill) | 44.15 | 47.73 | 59.47 | 3.76 |
-| `route-rank` (TF-IDF over every description) | 33.41 | 37.98 | 41.68 | 2.84 |
-| `audit-all` (`--all --strict`) | 206.70 | 263.98 | 392.56 | 17.59 |
-| `index-check` | 64.08 | 82.78 | 120.88 | 5.45 |
+| `calibration` (bare interpreter) | 13.88 | 15.16 | 18.10 | 1.00 |
+| `cli-list` | 41.98 | 44.74 | 46.04 | 3.03 |
+| `cli-search` | 42.43 | 44.34 | 46.98 | 3.06 |
+| `cli-show` | 42.34 | 45.65 | 88.28 | 3.05 |
+| `cli-stats` | 43.26 | 46.07 | 55.40 | 3.12 |
+| `digest-registry` (every skill) | 61.36 | 68.20 | 76.55 | 4.42 |
+| `route-rank` (TF-IDF over every description) | 43.54 | 44.77 | 50.73 | 3.14 |
+| `audit-all` (`--all --strict`) | 358.34 | 382.85 | 507.12 | 25.83 |
+| `index-check` | 83.16 | 105.36 | 171.87 | 5.99 |
 
-The 4 `cli-*` commands are the interactive surface: P50 between **37ms** and **48ms**, against the 100ms budget of scorecard criterion 3.10. About 13ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 25ms.
+The 4 `cli-*` commands are the interactive surface: P50 between **44ms** and **46ms**, against the 100ms budget of scorecard criterion 3.10. About 15ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 29ms.
 <!-- /generated:latency -->
 
 ## Regression detection, and its limits
@@ -62,8 +62,8 @@ The threshold is **not** a round number picked in advance.
 `--write-baseline` runs the whole suite five times, records each workload's
 spread across those runs, and `--check` allows `max(20%, 3 × spread)`.
 
-<!-- generated:thresholds sources="bench-baseline.json:85c6d792e846854288665de208f9ca1029f7c769b01dcbae06ce2545fc4dcc35" -->
-On the recorded machine the spreads are 1.2% to 7.5%, so 8 of 9 workloads are gated at the full 20% of criterion 3.2 and `cli-search` at 23%.
+<!-- generated:thresholds sources="bench-baseline.json:fef0199f5aec186e3c4c40d1ede0fe7d3f699c0bef5a6a2864c0c35dc8cb3ae0" -->
+On the recorded machine the spreads are 4.9% to 14.1%, so 4 of 9 workloads are gated at the full 20% of criterion 3.2 and `audit-all` at 21% and `cli-stats` at 25% and `digest-registry` at 35% and `index-check` at 42% and `route-rank` at 35%.
 <!-- /generated:thresholds -->
 
 `--check` measures **the same way the baseline was recorded**: three full
@@ -83,6 +83,16 @@ Five designs were discarded, each on measurement rather than argument:
 Verified in both directions on the recorded machine: a clean tree passes with
 all eight workloads inside 20%, and a 10ms sleep injected into `cli-list`
 fails with exactly one finding (`+37%`) and no false positives.
+
+**The audit's cost is the rule count.** Every pattern rule is one pass of
+the regex engine over every auditable file, about 7 ms per rule over the
+registry's 145 files on the laptop, and case-insensitive matching is about
+a third of that. Moving from 19 to 30 rules (agtmls-spec `6afdcd0`) took
+`audit --all --strict` from 264 ms to 383 ms P50, and both baselines were
+re-recorded rather than the budget widened: the 20% allowance is for the
+same work getting slower, not for more work. A combined alternation of
+every pattern was measured and costs the same as separate passes, so the
+next step down is a prefilter or parallel files, not regex tuning.
 
 **Ratios do not transfer between machines.** The ratio to calibration was
 meant to make a baseline portable; it does not travel from a laptop to a CI

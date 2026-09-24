@@ -46,6 +46,20 @@ All notable changes to AgtMLS are recorded here.
   a rule of a category Python never named fired there and not here,
   which the differential conformance run would have caught only after
   the rule shipped. With today's nineteen rules nothing changes.
+- The rule snapshot follows agtmls-spec `f298cc6`: eleven new pattern
+  rules over the surfaces an agent actually runs, in six new classes.
+  `AGT-HOOK-001` and `-002` (hooks that auto-approve or fetch),
+  `AGT-CAP-002` (wildcard tool grants), `AGT-SUPPLY-001` (unpinned
+  runners), `AGT-EXEC-005` to `-007` (self-install, permission-bypass
+  flags, model output interpolated into a shell string), `AGT-MCP-001`
+  (command-running MCP tools), `AGT-PACK-001` (decode-and-execute
+  payloads), `AGT-SOCIAL-001` (paste-this-command prose) and
+  `AGT-SEL-001` (selection gaming). `AGT-EXEC-002` now matches `rm -fr /`.
+  The corpus mirrors the spec's thirteen new cases, 86 in all. Eleven
+  more rules are eleven more passes over every file: `audit --all
+  --strict` moves from 264 ms to 383 ms P50 on the laptop, and both
+  bench baselines are re-recorded for the new rule count rather than
+  the regression budget widened.
 - `audit --foreign <path|git-url@sha>` audits every skill in a repository
   that is not this registry: a Claude marketplace, a plugin manifest or a
   skills directory, per plugin and skill, against the skill's own policy
