@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "c9ca2175061968cee739109a718a42cc81aec04534d8da97de8a145ae2ed0983"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "82ed47f2057b2f941a9c57e2a75266caef1b8af538941cb9d89577c03707c4a1"
+      },
+      "name": "noyalib-failure-archaeology"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": true,
+      "risk_level": "low",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e25a2fd213836da9ee8efe9c713a13f83b66bd2f1da55445ade508eb61ee92ff"
+      },
+      "name": "writing-plans"
+    }
+  ]
+}

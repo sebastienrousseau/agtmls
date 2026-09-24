@@ -22,19 +22,23 @@ _RULES = json.loads(SNAPSHOT.read_text(encoding="utf-8"))["rules"]
 RULES = _RULES
 
 
-# Tools that grant a capability the safety policy may be denying. Kept in step
-# with derive_allowed_tools() in sync-skill-frontmatter.py, which is what the
-# published frontmatter is generated from.
-TOOL_CAPABILITIES = {
-    "Bash": "executes_commands",
-    "BashOutput": "executes_commands",
-    "KillShell": "executes_commands",
-    "Write": "writes_files",
-    "Edit": "writes_files",
-    "NotebookEdit": "writes_files",
-    "WebFetch": "network_access",
-    "WebSearch": "network_access",
-}
+def tool_capabilities(rules: list[dict]) -> dict[str, str]:
+    """The capability each tool grants, from AGT-CAP-001's data (spec 10.5).
+
+    This module used to carry its own copy, kept in step by hand with the
+    Rust implementation's. The spec holds the one table now; a snapshot
+    without it is refused rather than guessed at.
+    """
+    cap = next((rule for rule in rules if rule.get("id") == "AGT-CAP-001"), {})
+    table = cap.get("tool_capabilities")
+    if not isinstance(table, dict) or not table:
+        raise SystemExit("FAIL: the rule snapshot's AGT-CAP-001 has no tool_capabilities table; re-sync from agtmls-spec")
+    return dict(table)
+
+
+TOOL_CAPABILITIES = tool_capabilities(_RULES)
+
+
 
 
 def _by_category(category: str) -> list[tuple[re.Pattern[str], str, str]]:

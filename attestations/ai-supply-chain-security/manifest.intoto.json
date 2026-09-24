@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "8b26c1c563a7d769d7cc08b5b5a1cebe4ecd44685854ae17a52fced368abb385"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "84937ce02cb35a67efe7c61c5446248f801dfa62eb7a0b1c8943d9b21dbc858c"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "bc6b1477ca3cd5cf21a9e7d9ffddc529020a77032ae34bf3a25102269906cdb3"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "667559db2062f1355d5f0331c0bba64abbe79b0fba2863885384c887acdf2231"
+      },
+      "name": "ai-supply-chain-security"
+    }
+  ]
+}

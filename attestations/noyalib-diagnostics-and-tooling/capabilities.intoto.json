@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit",
+      "Bash",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "declared_policy": {
+      "executes_commands": true,
+      "handles_secrets": false,
+      "network_access": "optional",
+      "requires_human_review": true,
+      "risk_level": "medium",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c98216382972cbb57ea56495dfdf68c1c1763a3e7d3157be17dc3eeb7f9f1305"
+      },
+      "name": "noyalib-diagnostics-and-tooling"
+    }
+  ]
+}

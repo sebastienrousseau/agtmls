@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "ad26b617b9fe5903b176e2c74c250ea7fa9d7b5010bbe4ccb74f074bb7d012a8"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "8aa3999e81c6e3d1a4962eb5b2642be87b323db35a6c154554b88b263852910b"
+      },
+      "name": "noyalib-change-control"
+    }
+  ]
+}

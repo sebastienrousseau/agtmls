@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "6bc66a827fe86925af680be5e00da2b7a7f22947c8c0209b22563890258462f6"
+        },
+        "path": "a.md"
+      },
+      {
+        "digest": {
+          "sha256": "370a8c04b8a65bb4494275eec227f1b694db04c76da6b0b8ae88ed1ab19790a3"
+        },
+        "path": "a/b.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "b61b9b5fc8fd378fa788a79653ecafe3c6b3e1b3ef0a2782cbd64e5a6a48624d"
+      },
+      "name": "ordering-nested-vs-flat"
+    }
+  ]
+}

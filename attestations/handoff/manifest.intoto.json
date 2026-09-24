@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "939620d3bd2851dc9b88cd50d49ee4d3fd60fa9da38df2ad53b6d4e66cf9f990"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "65a3dde09f8da9082f86bac4f0c25fa746680d9ea416176badd19dccc626edc5"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "492069fd453591bb2659f7675e7d256d789b9fe6edb18363082371772badcaba"
+      },
+      "name": "handoff"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "b1a514b379d1a4aca0e2b48c72f5d972325026953439c8b466acc1804c073832"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "8551c9e493cec9e71b7e6223b1f648afdfd4389f956bd6d9bf1643beef2aca3a"
+      },
+      "name": "yaml-domain-reference"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "manifests": [
+    {
+      "vector": "manifest-single-file.intoto.json",
+      "skill": "single-file",
+      "digest_case": "single-file"
+    },
+    {
+      "vector": "manifest-nested.intoto.json",
+      "skill": "ordering-nested-vs-flat",
+      "digest_case": "ordering-nested-vs-flat"
+    }
+  ],
+  "capabilities": [
+    {
+      "vector": "capabilities-escalating.intoto.json",
+      "skill": "linter",
+      "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "files": {
+        "SKILL.md": "---\nname: linter\ndescription: Use when linting.\nallowed-tools: \"Read Grep Bash(git log:*) WebFetch\"\n---\n\n# Lint\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false\n  }\n}"
+      }
+    },
+    {
+      "vector": "capabilities-consistent.intoto.json",
+      "skill": "fetcher",
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "files": {
+        "SKILL.md": "---\nname: fetcher\ndescription: Use when fetching.\nallowed-tools: \"Read WebFetch\"\n---\n\n# Fetch\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"optional\",\n    \"writes_files\": false,\n    \"executes_commands\": false\n  }\n}"
+      }
+    }
+  ]
+}

@@ -83,7 +83,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "49e49820561edb4f676a9f2addabd9085946f0354bde4e1004ff5076f700b972"
+          "content": "7bec4f5eecb32f1d5017bfaca9602c37f0b4e2716aca2d8bde8f6643702c6e90"
         }
       ],
       "name": "checks.json",
@@ -981,6 +981,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/attestations.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ee4f56e5de673c848262200ec2fa5342e895215c7f0903238ffd3deb74b263ec"
+        }
+      ],
+      "name": "scripts/_lib/attestations.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/checksums.py",
       "hashes": [
         {
@@ -1051,7 +1062,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a45f63a5b1aaa74ac0804c5698cbf338ef861e02fd0e4d5a48d28bc5998e86d7"
+          "content": "96237441cdb87d6da01d4e6b9da845b66b8d74f7fb85f4c2aaf0d91934c2d0bf"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -1062,7 +1073,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "110216502b1821ada789e91fcdd5ca18e6038dfaa7a097dd3a43a63ebfe96f8a"
+          "content": "553398c3a878cbe1eb6bd43f66ed2d8b1dbd9ea233438298d4169531c6fabc36"
         }
       ],
       "name": "scripts/_lib/rules.py",
@@ -1319,6 +1330,17 @@
         }
       ],
       "name": "scripts/generate-skill-index.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/generate-skill-manifests.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1c9413830c5a0015706b65387ef74104964c3c3c1e59bebfa4b7d3cc6aa1d311"
+        }
+      ],
+      "name": "scripts/generate-skill-manifests.py",
       "type": "file"
     },
     {
@@ -4013,7 +4035,7 @@
       "type": "application",
       "version": "0.0.8"
     },
-    "timestamp": "2026-09-24T15:10:45Z",
+    "timestamp": "2026-09-24T18:42:56Z",
     "tools": {
       "components": [
         {

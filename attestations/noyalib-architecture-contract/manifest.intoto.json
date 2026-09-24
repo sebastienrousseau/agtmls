@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "ab9194cb8de7bbbc482b7b9048762b5d362af27f47ae0fa9f3a384a87493a589"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2419d86c092da0bac84db62979cd5eae51428845a89585ff92bf977993bcd335"
+      },
+      "name": "noyalib-architecture-contract"
+    }
+  ]
+}

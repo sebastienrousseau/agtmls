@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-24T15:10:45Z",
+    "created": "2026-09-24T18:42:55Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -129,11 +129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2d4440298f34e703173d9ce85283a845117b573f"
+          "checksumValue": "f8d1f8b2c301eeee8f049892915035eb0280d1dc"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "49e49820561edb4f676a9f2addabd9085946f0354bde4e1004ff5076f700b972"
+          "checksumValue": "7bec4f5eecb32f1d5017bfaca9602c37f0b4e2716aca2d8bde8f6643702c6e90"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1437,6 +1437,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-attestations.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8e2541b5ef5b59afd70bcf21f2975199bf086cec"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ee4f56e5de673c848262200ec2fa5342e895215c7f0903238ffd3deb74b263ec"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/attestations.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-checksums.py",
       "checksums": [
         {
@@ -1537,11 +1553,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "cd3efb7afb69b47caa81e7a5e488b96f30a6d18b"
+          "checksumValue": "91a6953102ee8a9125f2fc2420a9ac07b99572ca"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a45f63a5b1aaa74ac0804c5698cbf338ef861e02fd0e4d5a48d28bc5998e86d7"
+          "checksumValue": "96237441cdb87d6da01d4e6b9da845b66b8d74f7fb85f4c2aaf0d91934c2d0bf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1553,11 +1569,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "472a1bd3957cd774c64f1a79cc82c5b929109f90"
+          "checksumValue": "84f6557e7c09238ecb78cbc2c57d6fa0fdb4a2fe"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "110216502b1821ada789e91fcdd5ca18e6038dfaa7a097dd3a43a63ebfe96f8a"
+          "checksumValue": "553398c3a878cbe1eb6bd43f66ed2d8b1dbd9ea233438298d4169531c6fabc36"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1930,6 +1946,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/generate-skill-index.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-generate-skill-manifests.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "847f9eea0830d3acc37a1986943f9bb8cb07a879"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1c9413830c5a0015706b65387ef74104964c3c3c1e59bebfa4b7d3cc6aa1d311"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/generate-skill-manifests.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5925,6 +5957,7 @@
         "SPDXRef-File-references-registry-schema.md",
         "SPDXRef-File-scripts--lib---init--.py",
         "SPDXRef-File-scripts--lib-analyzer.py",
+        "SPDXRef-File-scripts--lib-attestations.py",
         "SPDXRef-File-scripts--lib-checksums.py",
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-covered.py",
@@ -5956,6 +5989,7 @@
         "SPDXRef-File-scripts-generate-provenance.py",
         "SPDXRef-File-scripts-generate-sbom.py",
         "SPDXRef-File-scripts-generate-skill-index.py",
+        "SPDXRef-File-scripts-generate-skill-manifests.py",
         "SPDXRef-File-scripts-import-skill.py",
         "SPDXRef-File-scripts-next-version.py",
         "SPDXRef-File-scripts-propose-skill-from-session.py",

@@ -1,0 +1,28 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": false,
+      "risk_level": "low",
+      "writes_files": false
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2f58b86ed07a19afb90339abb9c270fe3e32d89dc6440a5b7d05f13c0226be96"
+      },
+      "name": "using-agtmls"
+    }
+  ]
+}

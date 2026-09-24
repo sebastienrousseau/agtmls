@@ -1,0 +1,30 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "handles_secrets": false,
+      "network_access": "optional",
+      "requires_human_review": true,
+      "risk_level": "low",
+      "writes_files": false
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "403d6ed475099784c1dcc8bb352e68e1be7383cd071637a83852d6a0bd35b640"
+      },
+      "name": "web-research-and-source-triage"
+    }
+  ]
+}

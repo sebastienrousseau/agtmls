@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "f3efe34e331b12893f3e2ef0fe91e69fc0413e574f3dd1497a7bdd6c5fbb4923"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "c56733bb8ddcdacc3afaf8b9911ce4fbf442b57690a536f0a47757fb1607a141"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "4a54b6f05b9f71a975302a17812d22c93b6eb5960d4d5ac3a2c4e83e7d20ff62"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "79516d2c4f5a5cd74e71fead3341b83e5fb040c89a35d3bba96e2b0d24a75e38"
+      },
+      "name": "test-driven-development"
+    }
+  ]
+}

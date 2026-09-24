@@ -1,0 +1,395 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "c87c73c113c2e9a4c84fbbcee6842a343a6ead3831ad7b3c3e180c553e7bb306"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "c084a9ce9d36d7c7bad3c7e9948bcd071289888cc2a68fc5388f80cb8a9cf8ce"
+        },
+        "path": "examples/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "496fad78d5345faa5a186e24807557064178e532b00af606066d0e9824a41579"
+        },
+        "path": "examples/bash-to-python-pathdedupe/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "9548dd1096c4bf25640cba8957cb7bed87cf0603d39fe9832f706e1c2e3268d8"
+        },
+        "path": "examples/bash-to-python-pathdedupe/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "d3fc37209615db1216cc8dd3047cff6f6654f322a94595bdaf42d62bf1f45001"
+        },
+        "path": "examples/bash-to-python-pathdedupe/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "ab803aa4a7c2dfc36b66b7c2d4a4e22493c7cb4f56c25dbecca680df2e358045"
+        },
+        "path": "examples/bash-to-python-pathdedupe/port.py"
+      },
+      {
+        "digest": {
+          "sha256": "bb5384c0c0cba6d10a0196580e177c8d04c6f18dcd3a43952eb0a16c1d7f6428"
+        },
+        "path": "examples/bash-to-python-pathdedupe/reference.sh"
+      },
+      {
+        "digest": {
+          "sha256": "1d39f4a026264af634aafc3b9682b3db044951d409af8323d3b7b40fc95a9b5c"
+        },
+        "path": "examples/bash-to-python-pathdedupe/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "569820b2f8e7738f3af7a9c46a77510b4af43058a290fd8258ae849fd8c68031"
+        },
+        "path": "examples/boundary-traps/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "9a9c9e20f68bd8ef289c91fe48a775759e5c87fab43fe12f7f493289e62abd26"
+        },
+        "path": "examples/boundary-traps/integer-width/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "4e3225f59652d4bfc34a4b517c6433370bacc7312ffff004c63091f53cea7113"
+        },
+        "path": "examples/go-to-rust-fraction/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "45a6e93d0b6b9432a0872bc630f6ebda52fd041916e4258b810f96c81793a6a6"
+        },
+        "path": "examples/go-to-rust-fraction/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "eff9d5aba99557d96678e6aa8034a0c5268cc879043cc5db22ecf78fde7ba5b0"
+        },
+        "path": "examples/go-to-rust-fraction/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "bc5505e57f6186cbbcd2a79a52123768eacb7057168cd998dfee57b9a71d21d8"
+        },
+        "path": "examples/go-to-rust-fraction/port.rs"
+      },
+      {
+        "digest": {
+          "sha256": "8072b6058c0532c15dc63108a42e9b7c1409b8b2afe613553147fd7a70c0b612"
+        },
+        "path": "examples/go-to-rust-fraction/reference.go"
+      },
+      {
+        "digest": {
+          "sha256": "e8db123feaf2b00e4c6ab7d52e9a324120096e70dfe00f142d78e5c9af4e277b"
+        },
+        "path": "examples/go-to-rust-fraction/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "887a1a0e4eba73ebfd4351d874727a47dce70b7df81a5e2cc6eedc457f0f5fc3"
+        },
+        "path": "examples/js-to-ts-configvalidate/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "569b5a9bf1e3998590cdac5422d3901a199eb56fff99ca380b8658895cea0822"
+        },
+        "path": "examples/js-to-ts-configvalidate/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "d94f419f066beb709902f3e79e7148ad7347de4c3ed0f6f7b797f964b61bdcb0"
+        },
+        "path": "examples/js-to-ts-configvalidate/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "f69ed17eea98f49ee075f676bae79df9cb779e54d5887b94d94313d34511170c"
+        },
+        "path": "examples/js-to-ts-configvalidate/package.json"
+      },
+      {
+        "digest": {
+          "sha256": "e00538fc6434f5c7de0cd00a8c3410e997107f575c7083ea90aecedae7c182e0"
+        },
+        "path": "examples/js-to-ts-configvalidate/port.ts"
+      },
+      {
+        "digest": {
+          "sha256": "afaae92023b2dbbd807b8385a2c58c9c2a950bfa8b1fc132f14cb4e3c7627dbe"
+        },
+        "path": "examples/js-to-ts-configvalidate/reference.js"
+      },
+      {
+        "digest": {
+          "sha256": "eb388d7864473c534eb90ec7fb30ca244ad646f948e4126a9da4e65e477043b1"
+        },
+        "path": "examples/js-to-ts-configvalidate/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "ad8c630e925117ef5661e70f334d89d185a5b359834eb1341cbd1a37b237edca"
+        },
+        "path": "examples/py-to-cpp-hexcolor/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "51102ce3636393db1e736cd5eb1bc8e3b26f6a959e366ac47c68d98c07f00fdb"
+        },
+        "path": "examples/py-to-cpp-hexcolor/compile_flags.txt"
+      },
+      {
+        "digest": {
+          "sha256": "4a68bf9647262a8b8f6a2241317d12179a543e85b993fb3f45f1c63669dd420e"
+        },
+        "path": "examples/py-to-cpp-hexcolor/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "d5cf87ce760145a1b71e5cb2148ec47226583c38894b0804c4a9efa7b81768e6"
+        },
+        "path": "examples/py-to-cpp-hexcolor/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "b0b92f96fc90e1cacc87bc91c616e30b4866039ef5fb66151284b48aeef4d2f8"
+        },
+        "path": "examples/py-to-cpp-hexcolor/port.cpp"
+      },
+      {
+        "digest": {
+          "sha256": "e02e0df7099d9ac0711ccb4993941e4baaa1ac8a688832d0729d4c49e6a3d951"
+        },
+        "path": "examples/py-to-cpp-hexcolor/reference.py"
+      },
+      {
+        "digest": {
+          "sha256": "e516071a269b0b6e6740264e374895558efff8c7bbdfdce816cfeffc4066a643"
+        },
+        "path": "examples/py-to-cpp-hexcolor/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "2edc93f2802a795bdc7c5a9d26d84f3a907ec9fc6f6e6e53466d009058c4b1ad"
+        },
+        "path": "examples/py-to-go-duration/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "4ee5e036e87d32c9cf06ae6e7b8cc8dcf77c39e2f53f5b2bd05cb40f5354381d"
+        },
+        "path": "examples/py-to-go-duration/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "94cb0a7e3bb1d01aad035d1531d89137797af3fbee41d516fd8c2b1207f139b7"
+        },
+        "path": "examples/py-to-go-duration/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "75faf8b873858ee98cc055509e7bb00d6b1749b4b91a58faf0510633d2e4ef9b"
+        },
+        "path": "examples/py-to-go-duration/port.go"
+      },
+      {
+        "digest": {
+          "sha256": "caae7925ca8f98893ef9621253db23571911b943cbf471992e2e2f1146da30cf"
+        },
+        "path": "examples/py-to-go-duration/reference.py"
+      },
+      {
+        "digest": {
+          "sha256": "710e09bc99b1651ce41fd2bc2f2d3ea4b54d8cedd1be544868d0dd43193835a2"
+        },
+        "path": "examples/py-to-go-duration/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "c3fdafbc718cb279e5f97ac7d204e9d6cc8375efb3498f5f28b2372133f7c3a6"
+        },
+        "path": "examples/py-to-rust-iban/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "a16c39dd38c3ba28f5f5366fa1c7dc61ae56616c89ff85c737a0fa84d368205a"
+        },
+        "path": "examples/py-to-rust-iban/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "7faeeb23d32c752ea094e4641ee52fd16e2883c9ae7f5aa477faa6c52ec5fddb"
+        },
+        "path": "examples/py-to-rust-iban/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "e9c0b9dab64f0058c1ffab8338dcb2ea720a10c7119ae5dad366f916bbc0fd66"
+        },
+        "path": "examples/py-to-rust-iban/port.rs"
+      },
+      {
+        "digest": {
+          "sha256": "d1edab6305e9e6967a6eccf97da7a7cca25f49cf6efc711702d41689aef88fe5"
+        },
+        "path": "examples/py-to-rust-iban/reference.py"
+      },
+      {
+        "digest": {
+          "sha256": "b8df3136b9c663eaedee535669be4a1bf65d864366e7de20115bded7fe7c84fe"
+        },
+        "path": "examples/py-to-rust-iban/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "54c705d86feea1c9883d0e5a2d7780a4923e8c124ec00d3ce1bc8d602b600b7e"
+        },
+        "path": "examples/ruby-to-python-histogram/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "f98dc876b89484c401078960dc0765bf64fc140a49b0333db7cf060ed75455b4"
+        },
+        "path": "examples/ruby-to-python-histogram/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "99a9c4bd101217763e76f8cdd795fb58077356e30d5021289a0b5f199dc8aefa"
+        },
+        "path": "examples/ruby-to-python-histogram/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "21db3e3d7850bc46bc4a982180734b2fa32d68e7a59acaf310f8cebec9956e80"
+        },
+        "path": "examples/ruby-to-python-histogram/port.py"
+      },
+      {
+        "digest": {
+          "sha256": "04b12c949c92d94fcdd36f8d5ee0d8c6c0507541850b4f718416b3200082f789"
+        },
+        "path": "examples/ruby-to-python-histogram/reference.rb"
+      },
+      {
+        "digest": {
+          "sha256": "c85f9b940f72e7df59c96ff65bd5a78d8d5c873642a04fb5b33fa1e8a60198a2"
+        },
+        "path": "examples/ruby-to-python-histogram/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "f5abca2127046f9798bc01bccf95009e5079bd2004b41db79dff784a4ce8e276"
+        },
+        "path": "examples/rust-to-swift-op/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "91af0f37dd75e0967bb84f51d72eff7c99caacc68ab5cf23136bc9baac958016"
+        },
+        "path": "examples/rust-to-swift-op/corpus/expected.txt"
+      },
+      {
+        "digest": {
+          "sha256": "f5d330a7f420f74428eaffccc73c807f0fda627d460d0a51002635afc45debe1"
+        },
+        "path": "examples/rust-to-swift-op/corpus/input.txt"
+      },
+      {
+        "digest": {
+          "sha256": "bc0aa26e5b77439fe5d473639ebd3db9afeabf7b4df9065eb5a9c82e6982168b"
+        },
+        "path": "examples/rust-to-swift-op/port.swift"
+      },
+      {
+        "digest": {
+          "sha256": "7c60b152bca67a5019fadddbc6aeb951a6d2523543320bc7e038eaa14b8cc5bb"
+        },
+        "path": "examples/rust-to-swift-op/reference.rs"
+      },
+      {
+        "digest": {
+          "sha256": "1947a5d18e54c298b415c8051ec56297c67cf642c04612115444b532841d8ed5"
+        },
+        "path": "examples/rust-to-swift-op/verify.sh"
+      },
+      {
+        "digest": {
+          "sha256": "1fe917880ed1143759f69d7186a0f8c279d5762f633ddc2a771d6bba4f4ac60b"
+        },
+        "path": "harness/README.md"
+      },
+      {
+        "digest": {
+          "sha256": "bb3ed18ff934c64bee4e84731029b797d9b757155bef27fb2180e1ee569fc405"
+        },
+        "path": "harness/golden-diff.sh"
+      },
+      {
+        "digest": {
+          "sha256": "54a903b6845ac0ce259fec8596b1ef227c466e49112dd4e0a4a0cba09d514403"
+        },
+        "path": "harness/port-check.sh"
+      },
+      {
+        "digest": {
+          "sha256": "9221ba5df0b16db55321bc08a8461cb0dae832df4e8e8fbefef113fb72e3b131"
+        },
+        "path": "harness/templates/fast-check_diff.mjs"
+      },
+      {
+        "digest": {
+          "sha256": "f3c49e0711bed62977e74ff7a8b69bdf6eb314a43e52b0ec97a1704c27a64f4a"
+        },
+        "path": "harness/templates/hypothesis_diff.py"
+      },
+      {
+        "digest": {
+          "sha256": "d7a3934f3a3e8a479b77aa3e6ddcce17cb4dfad6e7c8c3c2feb75a673db8937c"
+        },
+        "path": "harness/templates/proptest_diff.rs"
+      },
+      {
+        "digest": {
+          "sha256": "0d05cc0654535afc2758aff6253d4daaa3dcf9280938317ee344a02883a2601f"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "b7606a2bdff360cc5cb30a80171c63a03a32707c867726ed42e7e916c639dab1"
+        },
+        "path": "reference.md"
+      },
+      {
+        "digest": {
+          "sha256": "e4ad4a5df256e07c777edaa0677de16cb3949048d49c348bb6ed72a2b2a321bd"
+        },
+        "path": "triggers.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d621fe3bfb6557d3729f185ecded769378e6d4cf99e71c3800cac6f557c98245"
+      },
+      "name": "cross-language-port"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e050ab2f4d116d848906d818552a63d0a5a7ee6ebf1d93e815d3905326f9d447"
+      },
+      "name": "noyalib-validation-and-qa"
+    }
+  ]
+}

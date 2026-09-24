@@ -1,0 +1,43 @@
+{
+  "cases": [
+    {
+      "directories": [],
+      "expected_digest": "sha256:1896a0b068d85a52a7df03ba44247bb2ea0fda38ba43c27644f815e9cc19e9eb",
+      "expected_manifest": [
+        {
+          "path": "SKILL.md",
+          "sha256": "71fd25deffa58ddf2e18ac6f693f042c16d7feb0eb57931f94b51685176b5a5b"
+        }
+      ],
+      "expected_reported_symlinks": [],
+      "files": {
+        "SKILL.md": "# S\n"
+      },
+      "name": "single-file",
+      "symlinks": {},
+      "why": "The minimal skill."
+    },
+    {
+      "directories": [],
+      "expected_digest": "sha256:b61b9b5fc8fd378fa788a79653ecafe3c6b3e1b3ef0a2782cbd64e5a6a48624d",
+      "expected_manifest": [
+        {
+          "path": "a.md",
+          "sha256": "6bc66a827fe86925af680be5e00da2b7a7f22947c8c0209b22563890258462f6"
+        },
+        {
+          "path": "a/b.md",
+          "sha256": "370a8c04b8a65bb4494275eec227f1b694db04c76da6b0b8ae88ed1ab19790a3"
+        }
+      ],
+      "expected_reported_symlinks": [],
+      "files": {
+        "a.md": "flat\n",
+        "a/b.md": "nested\n"
+      },
+      "name": "ordering-nested-vs-flat",
+      "symlinks": {},
+      "why": "spec 3.7: '/' (0x2F) sorts before '.' is false \u2014 '.' is 0x2E, so 'a.md' precedes 'a/b.md'."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "e3cf3a095b12d37fac254afb1ff63e28b278baa196c2e58c251a881f0226e8d5"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "1735eb9ac0be4b1a9c6d8988102d2e8a3888b384009ca65705835d727bb72aae"
+      },
+      "name": "noyalib-external-positioning"
+    }
+  ]
+}

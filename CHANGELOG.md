@@ -9,6 +9,16 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- Per-skill attestations (agtmls-spec chapter 10), the first
+  implementation of it: `generate-skill-manifests.py` writes
+  `attestations/<skill>/manifest.intoto.json` (the skill digest's own
+  file list) and `capabilities.intoto.json` (declared policy, granted
+  tools, escalations) for every skill, canonically rendered and outside
+  the skill directory; `--check` joins the gate. The spec's four vectors
+  are reproduced byte for byte in the unit suite.
+- The tool-to-capability table is read from the spec snapshot's
+  `AGT-CAP-001` instead of a copy kept here; a snapshot without it is
+  refused. The snapshot follows agtmls-spec `295d699`.
 - A `*.json` file is escape-decoded before the normalised rules run
   (agtmls-spec 4.3): `Ignore previous\n instructions` in an MCP tool
   description is the phrase a model reads, and `ig\u200bnore` decodes to

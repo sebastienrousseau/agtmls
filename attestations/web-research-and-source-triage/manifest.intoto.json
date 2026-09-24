@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "4b34af64cae0572c78441125dd924b022a591873a0ffead584fca7a9eeea4715"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "5a32f1a9ca6b0e9f97c5d4b41377f55809e8b2c2544e3e620b2b622460e5966e"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "8d9a39acf403839d730dc1bbed0145f5eae1312100dece2f332ad092b4a1294b"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "403d6ed475099784c1dcc8bb352e68e1be7383cd071637a83852d6a0bd35b640"
+      },
+      "name": "web-research-and-source-triage"
+    }
+  ]
+}
