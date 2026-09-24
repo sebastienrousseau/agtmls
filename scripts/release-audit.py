@@ -26,12 +26,14 @@ import argparse
 import json
 import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import signatures  # noqa: E402  (same)
 from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
 from _lib.release_notes import notes_problems  # noqa: E402  (same)
 
@@ -41,6 +43,13 @@ PACKAGE = "agtmls"
 
 def run(*cmd: str) -> subprocess.CompletedProcess:
     return subprocess.run(list(cmd), cwd=ROOT, text=True, capture_output=True, check=False)
+
+
+def fetch_bytes(*cmd: str) -> bytes | None:
+    """A command's exact output bytes, or None if it failed: git show and
+    asset downloads, where a text round-trip could change what is verified."""
+    proc = subprocess.run(list(cmd), cwd=ROOT, capture_output=True, check=False)
+    return proc.stdout if proc.returncode == 0 else None
 
 
 def fetch_json(url: str) -> dict | None:
@@ -70,7 +79,7 @@ def audit_tag(tag: str, commit: str) -> list[str]:
     return errors
 
 
-def audit_release(tag: str, repo: str) -> tuple[list[str], str | None]:
+def audit_release(tag: str, repo: str, commit: str) -> tuple[list[str], str | None]:
     """(problems, SHA256SUMS text) for the GitHub release.
 
     Assets are listed and downloaded by id. For v0.0.6, the asset list GitHub
@@ -96,7 +105,38 @@ def audit_release(tag: str, repo: str) -> tuple[list[str], str | None]:
     ).stdout
     errors += notes_problems(f"{tag} release body", release.get("body") or "", sums)
     errors += audit_assets(assets, sums)
+    errors += audit_signature(commit, repo, assets)
     return errors, sums
+
+
+def audit_signature(commit: str, repo: str, assets: list[dict]) -> list[str]:
+    """index.json.sig on the release verifies against the release commit's
+    ALLOWED_SIGNERS (agtmls-spec chapter 9).
+
+    Only a commit that trusts a key is asked for a signature, so the releases
+    published before signing began still audit clean. The keys and the index
+    come from the commit, never from the release that is being checked.
+    """
+    signers = fetch_bytes("git", "show", f"{commit}:ALLOWED_SIGNERS")
+    if signers is None:
+        return []
+    asset = next((a for a in assets if a["name"] == "index.json.sig"), None)
+    if asset is None:
+        return ["the release commit trusts ALLOWED_SIGNERS but the release has no index.json.sig"]
+    index = fetch_bytes("git", "show", f"{commit}:index.json")
+    sig = fetch_bytes("gh", "api", "-H", "Accept: application/octet-stream", f"repos/{repo}/releases/assets/{asset['id']}")
+    if index is None or sig is None:
+        return ["index.json or index.json.sig could not be read back to verify"]
+    with tempfile.TemporaryDirectory(prefix="agtmls-audit-") as raw:
+        work = Path(raw)
+        for name, data in (("ALLOWED_SIGNERS", signers), ("index.json", index), ("index.json.sig", sig)):
+            (work / name).write_bytes(data)
+        status = signatures.verify(work / "index.json", work / "index.json.sig", work / "ALLOWED_SIGNERS",
+                                   signatures.INDEX_NAMESPACE)
+    if status != "verified":
+        return [f"index.json.sig does not verify against the release commit's ALLOWED_SIGNERS ({status})"]
+    print("OK: index.json.sig verifies against the release commit's ALLOWED_SIGNERS")
+    return []
 
 
 def audit_assets(assets: list[dict], sums: str) -> list[str]:
@@ -143,7 +183,7 @@ def main() -> int:
     args = parser.parse_args()
 
     errors = audit_tag(args.tag, args.commit)
-    release_errors, sums = audit_release(args.tag, args.repo)
+    release_errors, sums = audit_release(args.tag, args.repo, args.commit)
     errors += release_errors
     if not args.before_pypi:
         if sums is None:

@@ -9,6 +9,23 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- Releases sign `index.json` (agtmls-spec chapter 9). A `sign-index` job
+  in `release.yml` runs in the protected `release` environment, signs the
+  exact bytes with the release key, and verifies the signature against
+  the tag's `ALLOWED_SIGNERS`; the wheel carries `index.json.sig` beside
+  `index.json` through a build hook, the signature is a checksummed
+  release asset, and the installed wheel's copy is verified before
+  anything is published. `release-audit.py` requires a verifying
+  `index.json.sig` for every tag whose commit trusts `ALLOWED_SIGNERS`,
+  so releases before signing still audit clean.
+
+### Fixed
+
+- The test fixture copied everything at the repository root, so with a
+  release signature present its signing tests waited forever for
+  `ssh-keygen` to be told it may overwrite `index.json.sig`: the release
+  job's gate would have hung. The fixture leaves the signature out, and
+  test signing never reads stdin and times out.
 - `ALLOWED_SIGNERS` holds the release signing key (`agtmls-release`,
   Ed25519, valid from 2026-09-24) for the index, attestation and
   advisory namespaces, and ships in the wheel. The private half lives

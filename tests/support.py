@@ -65,7 +65,10 @@ def registry_fixture(destination: Path) -> Path:
         # The coverage gate runs checks in parallel and writes `.coverage.*`
         # data files beside the tree; one vanished between this listing and
         # its copy and took a whole test module down with it.
-        if path.name in skip or path.name.startswith(".coverage"):
+        # index.json.sig is made by the release workflow after the tag; a copy
+        # in a fixture would make its tests' own signing prompt to overwrite
+        # it, and that prompt hung the gate.
+        if path.name in skip or path.name.startswith(".coverage") or path.name == "index.json.sig":
             continue
         try:
             if path.is_dir():

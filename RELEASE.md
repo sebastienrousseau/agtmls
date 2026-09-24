@@ -67,8 +67,15 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
    nothing is visible or publishable until the real checksums are checked.
    Reproducible builds would remove it.
 4. Push the tag. `release.yml` then, in order:
-   - builds once, and writes one `SHA256SUMS` over every asset, wheel and
-     sdist included;
+   - waits for your approval of the `release` environment, then signs the
+     exact bytes of `index.json` with the release key (agtmls-spec chapter
+     9) and verifies the signature against the tag's `ALLOWED_SIGNERS`. The
+     environment deploys only from `v0.0.*` tags, so a manual re-release
+     dispatched from a branch cannot sign, and publishes unsigned;
+   - builds once, with `index.json.sig` beside `index.json` in the wheel,
+     and writes one `SHA256SUMS` over every asset, wheel, sdist and
+     `index.json.sig` included; the installed wheel's signature is verified
+     before anything is attached;
    - writes the release body with `scripts/release-body.py`: the prepared
      notes, their Checksums section replaced by that `SHA256SUMS`;
    - attaches the assets to a **draft** release, and refuses to publish it
@@ -76,7 +83,9 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
    - publishes the release and runs `scripts/release-audit.py --before-pypi`;
    - stops at the `pypi` environment, which needs a maintainer's approval.
      The publish job uploads the build job's files, never a rebuild.
-5. Approve the `pypi` deployment, then run the audit in full:
+5. Approve the `pypi` deployment, then run the audit in full. For any tag
+   whose commit has `ALLOWED_SIGNERS`, the audit also requires an
+   `index.json.sig` asset that verifies against it:
 
    ```sh
    python3 scripts/release-audit.py --tag v<version> --commit <commit>

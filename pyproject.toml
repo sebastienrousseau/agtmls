@@ -43,6 +43,9 @@ packages = ["src/agtmls"]
 # resolve correctly inside the wheel with no code change. Keep this list in
 # sync with scripts/validate-packaging.py, which fails the build gate if the
 # wheel would omit something the CLI needs.
+# hatch_build.py adds index.json.sig beside index.json when CI has signed it.
+[tool.hatch.build.targets.wheel.hooks.custom]
+
 [tool.hatch.build.targets.wheel.force-include]
 "scripts" = "agtmls/_registry/scripts"
 "skills" = "agtmls/_registry/skills"
