@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.9 - 2026-09-24
+
 ### Added
 
 - Releases sign `index.json` (agtmls-spec chapter 9). A `sign-index` job
@@ -18,14 +20,6 @@ All notable changes to AgtMLS are recorded here.
   anything is published. `release-audit.py` requires a verifying
   `index.json.sig` for every tag whose commit trusts `ALLOWED_SIGNERS`,
   so releases before signing still audit clean.
-
-### Fixed
-
-- The test fixture copied everything at the repository root, so with a
-  release signature present its signing tests waited forever for
-  `ssh-keygen` to be told it may overwrite `index.json.sig`: the release
-  job's gate would have hung. The fixture leaves the signature out, and
-  test signing never reads stdin and times out.
 - `ALLOWED_SIGNERS` holds the release signing key (`agtmls-release`,
   Ed25519, valid from 2026-09-24) for the index, attestation and
   advisory namespaces, and ships in the wheel. The private half lives
@@ -79,6 +73,14 @@ All notable changes to AgtMLS are recorded here.
   table, `AGT-STEG-002` and the variation selectors supplement
   (U+E0100 to U+E01EF) in `AGT-STEG-001`'s ranges. The corpus mirrors
   the spec's seven new cases, 93 in all, and the registry audits clean.
+
+### Fixed
+
+- The test fixture copied everything at the repository root, so with a
+  release signature present its signing tests waited forever for
+  `ssh-keygen` to be told it may overwrite `index.json.sig`: the release
+  job's gate would have hung. The fixture leaves the signature out, and
+  test signing never reads stdin and times out.
 
 ## 0.0.8 - 2026-09-24
 
