@@ -9,6 +9,15 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- `verify --signatures` requires `index.json` to carry an OpenSSH
+  signature under `agtmls-index@v1` that verifies against
+  `ALLOWED_SIGNERS` (agtmls-spec chapter 9), and `verify` consults a
+  signed advisory feed (chapter 11): an installed digest a live advisory
+  lists exits `6` and names the advisory; a feed that does not verify is
+  never consulted. New exit codes `4` unsigned, `5` bad signature, `6`
+  revoked, with the spec's precedence `5`, `3`, `6`, `4`. The spec's
+  signature and advisory vectors are reproduced in the unit suite. The
+  registry itself is not signed yet.
 - Per-skill attestations (agtmls-spec chapter 10), the first
   implementation of it: `generate-skill-manifests.py` writes
   `attestations/<skill>/manifest.intoto.json` (the skill digest's own

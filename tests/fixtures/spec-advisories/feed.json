@@ -1,0 +1,49 @@
+{
+  "advisories": [
+    {
+      "affected": [
+        {
+          "ecosystem_specific": {
+            "digests": [
+              "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+            ]
+          },
+          "package": {
+            "ecosystem": "AgtMLS",
+            "name": "compromised-skill"
+          }
+        }
+      ],
+      "details": "Revoked: the published content of this skill contains an AGT-HOOK-001 finding introduced after review.",
+      "id": "AGT-ADV-2026-001",
+      "modified": "2026-09-24T00:00:00Z",
+      "published": "2026-09-24T00:00:00Z",
+      "schema_version": "1.6.0",
+      "summary": "Skill ships a hook that auto-approves permission prompts"
+    },
+    {
+      "affected": [
+        {
+          "ecosystem_specific": {
+            "digests": [
+              "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+            ]
+          },
+          "package": {
+            "ecosystem": "AgtMLS",
+            "name": "fine-skill"
+          }
+        }
+      ],
+      "details": "Raised against a digest that turned out to be a local edit, not a published release.",
+      "id": "AGT-ADV-2026-002",
+      "modified": "2026-09-24T00:00:00Z",
+      "published": "2026-09-20T00:00:00Z",
+      "schema_version": "1.6.0",
+      "summary": "False alarm, withdrawn",
+      "withdrawn": "2026-09-22T00:00:00Z"
+    }
+  ],
+  "schema_version": 1
+}

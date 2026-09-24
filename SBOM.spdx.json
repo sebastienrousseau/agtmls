@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-24T18:42:55Z",
+    "created": "2026-09-24T19:01:07Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1421,6 +1421,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-advisories.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "27e018ee0418b5bc81076ff160718392b4e2ceac"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9343bd68cf593b4970bc22899c1bf76a2d2b438f216a33f8f95545ef48a5ea9a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/advisories.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-analyzer.py",
       "checksums": [
         {
@@ -1473,11 +1489,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bff6420384789f0506f28d98f98b01c514bba4c7"
+          "checksumValue": "0711c06becb8e10bbf9e4ab9625bfd4aca9a967b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a8549cfd9b5db5cde1118940bac0a23f789cb664955e2f235cf84788cdda8fe1"
+          "checksumValue": "e35950adcca45f73653b25def538fc270f041a8999f0b2574845b1d29d6a14ef"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1521,11 +1537,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b46be6bb8516fd0bc2dccf512dc3de07bbf9ace0"
+          "checksumValue": "1a88802d98ce62c3dfc5501a68853567405974ee"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f998a80d385ae43ae58b4cf6ff4296021b4b48a291bb66a727ed0df5ce40f4e3"
+          "checksumValue": "b31a616476e80e7cceb9ed55dca1b70ae469610c4386976cd275e9199c207ce9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1597,6 +1613,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-signatures.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c698cfa193fe4c0b4f5e7aa797576a48bad95476"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ea2ee6ba548330bd8625f27abae58d900f7352af7d51c92a43c2ff4d979032dd"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/signatures.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-stamp.py",
       "checksums": [
         {
@@ -1649,11 +1681,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "7cc61341a9b34883e02c025d12a1404c39cec6b1"
+          "checksumValue": "994de05ff2329c47d998f456237041e1c20bceab"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "49a1294d68a3e233e63cf198967f7bcfd44934abef429613f2059839643109ba"
+          "checksumValue": "ac2cb3d6ee0a7fd9ac9ff199c74ee12f3da748623d3236c69e049d118953c1b0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5956,6 +5988,7 @@
         "SPDXRef-File-references-noyalib-bundle.md",
         "SPDXRef-File-references-registry-schema.md",
         "SPDXRef-File-scripts--lib---init--.py",
+        "SPDXRef-File-scripts--lib-advisories.py",
         "SPDXRef-File-scripts--lib-analyzer.py",
         "SPDXRef-File-scripts--lib-attestations.py",
         "SPDXRef-File-scripts--lib-checksums.py",
@@ -5967,6 +6000,7 @@
         "SPDXRef-File-scripts--lib-rules.json",
         "SPDXRef-File-scripts--lib-rules.py",
         "SPDXRef-File-scripts--lib-scaling.py",
+        "SPDXRef-File-scripts--lib-signatures.py",
         "SPDXRef-File-scripts--lib-stamp.py",
         "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "namespace": "agtmls-advisory@v1",
+  "principal": "agtmls-release",
+  "allowed_signers": "allowed_signers",
+  "feed": "feed.json",
+  "verify_time": "20260924",
+  "cases": [
+    {
+      "name": "installed-digest-is-revoked",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "compromised-skill",
+            "integrity": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          {
+            "name": "other",
+            "integrity": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+          }
+        ]
+      },
+      "signature": "feed.json.sig",
+      "expected": "revoked",
+      "advisories": [
+        "AGT-ADV-2026-001"
+      ],
+      "why": "An installed digest listed by an advisory: exit 6, naming the advisory."
+    },
+    {
+      "name": "withdrawn-advisory-revokes-nothing",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "fine-skill",
+            "integrity": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        ]
+      },
+      "signature": "feed.json.sig",
+      "expected": "clean",
+      "advisories": [],
+      "why": "OSV's withdrawn timestamp cancels an advisory."
+    },
+    {
+      "name": "same-name-other-digest-is-not-revoked",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "compromised-skill",
+            "integrity": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ]
+      },
+      "signature": "feed.json.sig",
+      "expected": "clean",
+      "advisories": [],
+      "why": "Advisories match on digest, never on name or version: a later, fixed release of the same skill is not revoked."
+    },
+    {
+      "name": "nothing-listed",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "other",
+            "integrity": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+          }
+        ]
+      },
+      "signature": "feed.json.sig",
+      "expected": "clean",
+      "advisories": [],
+      "why": "No installed digest appears in the feed."
+    },
+    {
+      "name": "feed-signed-under-the-wrong-namespace",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "compromised-skill",
+            "integrity": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ]
+      },
+      "signature": "feed-wrong-namespace.sig",
+      "expected": "bad_signature",
+      "advisories": [],
+      "why": "A feed that does not verify is not trusted at all: exit 5 outranks the revocation it contains."
+    },
+    {
+      "name": "unsigned-feed",
+      "lockfile": {
+        "schema_version": 1,
+        "skills": [
+          {
+            "name": "compromised-skill",
+            "integrity": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ]
+      },
+      "signature": null,
+      "expected": "unsigned",
+      "advisories": [],
+      "why": "No feed signature: exit 4 when signatures are required; the feed is not consulted."
+    }
+  ]
+}

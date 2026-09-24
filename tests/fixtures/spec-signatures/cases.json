@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "namespace": "agtmls-index@v1",
+  "principal": "agtmls-release",
+  "allowed_signers": "allowed_signers",
+  "cases": [
+    {
+      "name": "current-key-valid",
+      "index": "index.json",
+      "signature": "current.sig",
+      "verify_time": "20260924",
+      "expected": "verified",
+      "why": "The current release key, inside its validity window."
+    },
+    {
+      "name": "previous-key-before-rotation",
+      "index": "index.json",
+      "signature": "previous.sig",
+      "verify_time": "20251215",
+      "expected": "verified",
+      "why": "The retired key verifies an index it signed while it was valid: history stays checkable after rotation."
+    },
+    {
+      "name": "previous-key-after-rotation",
+      "index": "index.json",
+      "signature": "previous.sig",
+      "verify_time": "20260924",
+      "expected": "bad_signature",
+      "why": "A retired key outside its window. Rotation is expressed in allowed_signers, not by deleting the line."
+    },
+    {
+      "name": "current-key-before-its-window",
+      "index": "index.json",
+      "signature": "current.sig",
+      "verify_time": "20251215",
+      "expected": "bad_signature",
+      "why": "valid-after is enforced as strictly as valid-before."
+    },
+    {
+      "name": "tampered-index",
+      "index": "index-tampered.json",
+      "signature": "current.sig",
+      "verify_time": "20260924",
+      "expected": "bad_signature",
+      "why": "One changed byte in the index; the signature no longer covers it."
+    },
+    {
+      "name": "unknown-signer",
+      "index": "index.json",
+      "signature": "stranger.sig",
+      "verify_time": "20260924",
+      "expected": "bad_signature",
+      "why": "A well-formed signature by a key allowed_signers does not list."
+    },
+    {
+      "name": "wrong-namespace",
+      "index": "index.json",
+      "signature": "wrong-namespace.sig",
+      "verify_time": "20260924",
+      "expected": "bad_signature",
+      "why": "A signature made for another purpose by the right key must not be replayed as an index signature."
+    },
+    {
+      "name": "no-signature",
+      "index": "index.json",
+      "signature": null,
+      "verify_time": "20260924",
+      "expected": "unsigned",
+      "why": "No index.json.sig at all: unsigned, distinct from a signature that fails."
+    }
+  ]
+}

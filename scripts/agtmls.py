@@ -274,32 +274,84 @@ def installed_skill_names(target: Path, agent: str) -> list[str]:
     return sorted(entry.name for entry in directory.iterdir() if entry.is_dir() or entry.is_symlink())
 
 
-def verify_install(target: Path, agent: str, json_output: bool) -> int:
-    """Check an installed tree against its lockfile."""
+def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False) -> int:
+    """Check an installed tree against its lockfile, the index signature and
+    the advisory feed (agtmls-spec 6, 9 and 11).
+
+    Exit precedence (11.4): 5, then 3, then 6, then 4. Nothing can be
+    concluded from a source that does not verify, so a bad signature
+    outranks the revocation an unverifiable feed claims.
+    """
+    from _lib import advisories, signatures
+
     target = target.resolve()
     dot, _ = agent_paths(agent)
     problems = lockfile.verify(target, target / dot / "skills")
+    notes: list[str] = []
+    try:
+        index_status = (
+            signatures.verify(ROOT / "index.json", ROOT / "index.json.sig", ROOT / "ALLOWED_SIGNERS",
+                              signatures.INDEX_NAMESPACE)
+            if require_signed else "not checked"
+        )
+        feed_path = ROOT / "advisories.json"
+        feed_status = (
+            signatures.verify(feed_path, ROOT / "advisories.json.sig", ROOT / "ALLOWED_SIGNERS",
+                              signatures.ADVISORY_NAMESPACE)
+            if feed_path.exists() else "absent"
+        )
+    except signatures.ToolMissing as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return lockfile.EXIT_ERROR
+    hits: list[tuple[str, str, list[str]]] = []
+    if feed_status == "verified":
+        lock = lockfile.read(target) or {}
+        hits = advisories.revoked(json.loads(feed_path.read_text(encoding="utf-8")), lock)
+    elif feed_status == "unsigned":
+        notes.append("advisories.json is not signed; not consulted")
+
+    integrity = [p for p in problems if p[1] != "unmanaged"]
+    if "bad_signature" in (index_status, feed_status):
+        code = lockfile.EXIT_BAD_SIGNATURE
+    elif integrity:
+        code = lockfile.EXIT_INTEGRITY_FAILURE
+    elif hits:
+        code = lockfile.EXIT_REVOKED
+    elif require_signed and "unsigned" in (index_status, feed_status):
+        code = lockfile.EXIT_UNSIGNED
+    else:
+        code = lockfile.EXIT_OK
 
     if json_output:
         print(json.dumps(
-            {"target": str(target), "ok": not problems,
-             "problems": [{"skill": n, "status": s, "detail": d} for n, s, d in problems]},
+            {"target": str(target), "ok": code == lockfile.EXIT_OK,
+             "problems": [{"skill": n, "status": s, "detail": d} for n, s, d in problems],
+             "index_signature": index_status, "advisory_feed": feed_status,
+             "revoked": [{"skill": n, "digest": d, "advisories": ids} for n, d, ids in hits],
+             "notes": notes},
             indent=2, sort_keys=True,
         ))
-    elif not problems:
+        return code
+    for name, status, detail in problems:
+        print(f"{status.upper():<12} {name or '-'}  {detail}", file=sys.stderr)
+    for name, digest, ids in hits:
+        print(f"{'REVOKED':<12} {name}  {digest} by {', '.join(ids)}", file=sys.stderr)
+    for note in notes:
+        print(f"note: {note}", file=sys.stderr)
+    if index_status == "verified":
+        print("OK: index.json signature verified")
+    elif index_status == "bad_signature":
+        print("BAD_SIGNATURE index.json.sig does not verify against ALLOWED_SIGNERS", file=sys.stderr)
+    elif index_status == "unsigned":
+        print("UNSIGNED     index.json has no signature, or there is no ALLOWED_SIGNERS", file=sys.stderr)
+    if feed_status == "bad_signature":
+        print("BAD_SIGNATURE advisories.json.sig does not verify; the feed is not consulted", file=sys.stderr)
+    if code == lockfile.EXIT_OK and not integrity:
         lock = lockfile.read(target) or {}
         print(f"OK: {len(lock.get('skills', []))} skill(s) match the lockfile in {target}")
-    else:
-        for name, status, detail in problems:
-            print(f"{status.upper():<12} {name or '-'}  {detail}", file=sys.stderr)
-        print(f"\nFAIL: {len(problems)} integrity problem(s)", file=sys.stderr)
-
-    if not problems:
-        return lockfile.EXIT_OK
-    # "unmanaged" is informational; only a real mismatch is an integrity failure.
-    if all(status == "unmanaged" for _, status, _ in problems):
-        return lockfile.EXIT_OK
-    return lockfile.EXIT_INTEGRITY_FAILURE
+    elif integrity:
+        print(f"\nFAIL: {len(integrity)} integrity problem(s)", file=sys.stderr)
+    return code
 
 
 def main() -> int:
@@ -522,7 +574,7 @@ def main() -> int:
         print(f"recorded {len(payload['skills'])} skill(s) in {path.relative_to(target)}")
         return 0
     if args.subcommand == "verify":
-        return verify_install(args.target, args.agent, args.json)
+        return verify_install(args.target, args.agent, args.json, args.signatures)
     if args.subcommand == "uninstall":
         return uninstall(args.target, args.agent, args.remove_prompt)
     if args.subcommand == "propose-skill":
