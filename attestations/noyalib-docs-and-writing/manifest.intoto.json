@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5ebafa2d39665818557186087bf2c5c7c956e70828231b6b38b03fd9f21b9f6d"
+      },
+      "name": "noyalib-docs-and-writing"
+    }
+  ]
+}

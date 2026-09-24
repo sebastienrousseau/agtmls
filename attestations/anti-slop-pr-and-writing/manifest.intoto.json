@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "bc64a38eb03dae45742f8add235685669395294314922c72e44a2f5d3bcfe7bc"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "d76c7b705e364ec9514f2d5301cbdf781e367d243f765eadfb5015992244d5cf"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4442aee0348548d53916e9c4a17391664f3fe0c087ec6df40c0d73f3546a43bb"
+      },
+      "name": "anti-slop-pr-and-writing"
+    }
+  ]
+}

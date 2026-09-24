@@ -1,0 +1,31 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit",
+      "Bash"
+    ],
+    "declared_policy": {
+      "executes_commands": true,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": true,
+      "risk_level": "medium",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2298f158338ee0b18a1320872b1c24ee7823a75d8a9ffe88f74c893f60554123"
+      },
+      "name": "pr-review-and-release"
+    }
+  ]
+}

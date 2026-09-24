@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "ff86182020a5d587eec03e9a9bda61cad70e2c3f5a3d83ca70415554ae29e32b"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "04b2fb128fd56fc4a3707a22c3c588154f777fa1d2adaa2c1228376f30a6615e"
+      },
+      "name": "noyalib-ci-and-release"
+    }
+  ]
+}

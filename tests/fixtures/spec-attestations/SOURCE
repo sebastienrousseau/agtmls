@@ -1,0 +1,2 @@
+Vendored from sebastienrousseau/agtmls-spec corpus/attestations at 295d699.
+Re-copy with the spec pin; test_attestations.py reproduces every vector byte for byte.

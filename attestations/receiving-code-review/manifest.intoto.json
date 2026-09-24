@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "c1edd156b87ec8d6ba9485714c46297433e51929a6c08eeea979085b93dfaabc"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "9e8f1496c28821cf29f2ee992659914b0cb11d9728da4ea78855cd41389cb837"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "e1eb07e4315970a34a91d5c35817be7efeab3acf71d4986db73d29dc5945c8c7"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7a1b6e69f9a787dd7a9113e7036f87f2c5b2c4d65cd5e81431d5bd113f94b6ba"
+      },
+      "name": "receiving-code-review"
+    }
+  ]
+}

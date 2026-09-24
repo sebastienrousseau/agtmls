@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit",
+      "Bash",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "declared_policy": {
+      "executes_commands": true,
+      "handles_secrets": false,
+      "network_access": "optional",
+      "requires_human_review": true,
+      "risk_level": "medium",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bcc5d36ac1a4fd43e1bffd902beb986fe62348b8e9bc4c871a4e1a78be18b33d"
+      },
+      "name": "noyalib-build-and-env"
+    }
+  ]
+}

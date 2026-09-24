@@ -1,0 +1,30 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": true,
+      "risk_level": "low",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bfce0ad704c8ce7c3c068b5c262a720395126119f3fd74aeb2fba5d0caee3921"
+      },
+      "name": "agent-loop-design"
+    }
+  ]
+}

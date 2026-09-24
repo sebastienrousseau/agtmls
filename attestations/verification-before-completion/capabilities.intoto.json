@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash"
+    ],
+    "declared_policy": {
+      "executes_commands": true,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": true,
+      "risk_level": "low",
+      "writes_files": false
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "21cdf9977673765d4566ce5aefab27ea51370f704e7cdc5a25e272f2f2b7e4be"
+      },
+      "name": "verification-before-completion"
+    }
+  ]
+}

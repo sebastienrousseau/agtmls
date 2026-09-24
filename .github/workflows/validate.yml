@@ -138,6 +138,8 @@ jobs:
         run: python3 scripts/generate-checks-doc.py --check
       - name: Generate Manpage Check
         run: python3 scripts/generate-manpage.py --check
+      - name: Generate Skill Manifests Check
+        run: python3 scripts/generate-skill-manifests.py --check
       - name: Generate Sbom Check
         run: python3 scripts/generate-sbom.py --check
       - name: Validate Sbom Conformance

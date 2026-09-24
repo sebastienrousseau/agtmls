@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "2a3515a1a201cd3e346050c0c050821b4cb1e8708ca55d4d859a99601442688f"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "fd04e90b1a1e5395a42334edc58c93a820ff252bb4a20c3165e4380859eb1500"
+      },
+      "name": "noyalib-config-and-flags"
+    }
+  ]
+}

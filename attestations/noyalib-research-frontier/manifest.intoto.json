@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "1f8fced0eff741441bf228b9b02f34350bacccaada7def9ae3eabc8ead2dba27"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "28cd4b69ce5f60c7b3de21b88f58e4114cd1d56c1268e31b5646f2f2bd2a6179"
+      },
+      "name": "noyalib-research-frontier"
+    }
+  ]
+}

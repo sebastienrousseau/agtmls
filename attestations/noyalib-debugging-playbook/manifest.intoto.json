@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "1b4fb6c0e78e3fb5ce433040b9c382cbf064b7256ec6ad86501933c97709dde0"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c92cd14b9164d3c0077f4cdc4c54f52f00739d93e8986a72657db49f40362fde"
+      },
+      "name": "noyalib-debugging-playbook"
+    }
+  ]
+}

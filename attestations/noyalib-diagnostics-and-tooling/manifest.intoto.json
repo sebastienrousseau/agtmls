@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "b10ca9031d1536596ec12b1327e762b2d54d5518c623c101dc82b22f43dfb470"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c98216382972cbb57ea56495dfdf68c1c1763a3e7d3157be17dc3eeb7f9f1305"
+      },
+      "name": "noyalib-diagnostics-and-tooling"
+    }
+  ]
+}

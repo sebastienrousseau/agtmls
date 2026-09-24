@@ -1,0 +1,24 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "WebFetch"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "network_access": "optional",
+      "writes_files": false
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "name": "fetcher"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "ab75dcbeb8718c162adab26ec5f9e723e3bc489910ba9e53c3826b87088a602c"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "b42710318ac9029221125fe228063a240ae14c82b3520b83a0b9521fdf72ed13"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "f4fb3d683e133f75c3aff0cb83ccf5d2a55f06cffb731f4497f9453c399e6b18"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5fcd619d2bdb070157f3b2b05c523a855f49af5233ac29abe72bb2793bdfef85"
+      },
+      "name": "brainstorming"
+    }
+  ]
+}

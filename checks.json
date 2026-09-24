@@ -37,6 +37,7 @@
     "generate-benchmarks-doc.py --check",
     "generate-checks-doc.py --check",
     "generate-manpage.py --check",
+    "generate-skill-manifests.py --check",
     "generate-sbom.py --check",
     "validate-sbom-conformance.py",
     "generate-provenance.py --check",

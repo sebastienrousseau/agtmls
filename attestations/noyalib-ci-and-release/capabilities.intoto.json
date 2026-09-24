@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit",
+      "Bash",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "declared_policy": {
+      "executes_commands": true,
+      "handles_secrets": false,
+      "network_access": "optional",
+      "requires_human_review": true,
+      "risk_level": "medium",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "04b2fb128fd56fc4a3707a22c3c588154f777fa1d2adaa2c1228376f30a6615e"
+      },
+      "name": "noyalib-ci-and-release"
+    }
+  ]
+}

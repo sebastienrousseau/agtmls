@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "9d6a96810ab6b3d76392842d92ab2df5fc5aa1a38c6cc614bc0a94365b38b2ec"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0ad444de898031368c5552aae7e2344cab8dd6ce488a6ce78440a81d4e7be1a6"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "fa6889f30af9118ec6ae2fa5d8f0a2236b943a0550276850668725405c9f64ad"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2298f158338ee0b18a1320872b1c24ee7823a75d8a9ffe88f74c893f60554123"
+      },
+      "name": "pr-review-and-release"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c577909c0cde086c36fcfc81dc89628606a16c17ab5de76cc40ef6edc22eda31"
+      },
+      "name": "noyalib-coverage-campaign"
+    }
+  ]
+}

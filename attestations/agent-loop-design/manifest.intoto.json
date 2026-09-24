@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "c829bc054c4eb6a6c8448f722b293bd3ceb53870f17b3d4b83c05d02e274b2b7"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "3c05182318116f5c265894084c95b445b775f20a56d6be64131bf7626a3063b3"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "d259e9dcaac43d9c0b13ea4e5b735b96a7c9c82efe46df1c569cb3df96252059"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bfce0ad704c8ce7c3c068b5c262a720395126119f3fd74aeb2fba5d0caee3921"
+      },
+      "name": "agent-loop-design"
+    }
+  ]
+}

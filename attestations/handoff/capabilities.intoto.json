@@ -1,0 +1,30 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "allowed_tools": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Write",
+      "Edit"
+    ],
+    "declared_policy": {
+      "executes_commands": false,
+      "handles_secrets": false,
+      "network_access": "none",
+      "requires_human_review": true,
+      "risk_level": "low",
+      "writes_files": true
+    },
+    "escalations": []
+  },
+  "predicateType": "https://agtmls.dev/capabilities/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "492069fd453591bb2659f7675e7d256d789b9fe6edb18363082371772badcaba"
+      },
+      "name": "handoff"
+    }
+  ]
+}

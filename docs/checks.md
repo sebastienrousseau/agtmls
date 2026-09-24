@@ -53,6 +53,7 @@ python3 scripts/generate-mcp-resources.py --check
 python3 scripts/generate-benchmarks-doc.py --check
 python3 scripts/generate-checks-doc.py --check
 python3 scripts/generate-manpage.py --check
+python3 scripts/generate-skill-manifests.py --check
 python3 scripts/generate-sbom.py --check
 python3 scripts/validate-sbom-conformance.py
 python3 scripts/generate-provenance.py --check

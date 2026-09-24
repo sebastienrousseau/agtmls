@@ -6,7 +6,17 @@
       "id": "AGT-CAP-001",
       "kind": "structural",
       "severity": "high",
-      "title": "Frontmatter grants a denied capability"
+      "title": "Frontmatter grants a denied capability",
+      "tool_capabilities": {
+        "Bash": "executes_commands",
+        "BashOutput": "executes_commands",
+        "Edit": "writes_files",
+        "KillShell": "executes_commands",
+        "NotebookEdit": "writes_files",
+        "WebFetch": "network_access",
+        "WebSearch": "network_access",
+        "Write": "writes_files"
+      }
     },
     {
       "applies_to": [
@@ -1110,9 +1120,9 @@
     }
   ],
   "source": {
-    "commit": "5b37e2a9c04cf7b74effb28882de0a516dc09939",
+    "commit": "295d699f47831f6d4c5b62b4c8a468fa35ce3a0f",
     "files": {
-      "AGT-CAP-001.toml": "fd07a901587f8abc939b2af8ea77dab20c7f9ddebc0a76b46d047b42e5b0c6d2",
+      "AGT-CAP-001.toml": "3be5c757be71e30833b056cfa03f415a05da470f56c680e5c9f15bfa786a25e3",
       "AGT-CAP-002.toml": "fe1b3f974c61e08d99140dde955bcf670f811b0b1a6a1da7d55acc9091104540",
       "AGT-EXEC-001.toml": "a13d9277309eff8de8ee85775588e12256a16f8bd3fa506817d1957752784543",
       "AGT-EXEC-002.toml": "b031a230cdea658abbcd9d3cfb3b361b8ab26d7cfb6f3f2fb9bf314082266da2",

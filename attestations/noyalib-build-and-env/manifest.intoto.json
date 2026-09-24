@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "242ad0761ffc6ad363723b87a1ac2af04e9f65902b29926b4728dc13b4ca0592"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bcc5d36ac1a4fd43e1bffd902beb986fe62348b8e9bc4c871a4e1a78be18b33d"
+      },
+      "name": "noyalib-build-and-env"
+    }
+  ]
+}
