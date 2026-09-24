@@ -400,6 +400,48 @@
     {
       "applies_to": [
         "*.md",
+        "*.sh",
+        "*.bash",
+        "*.json",
+        "*.yaml",
+        "*.yml",
+        "*.js",
+        "*.ts",
+        "executable"
+      ],
+      "category": "hook_safety",
+      "description": "Hook scripts that run from the checked-out repository on a lifecycle event (core.hooksPath into the tree, .dmux-hooks, worktree_created)",
+      "false_positive": [
+        {
+          "note": "Another git setting.",
+          "text": "git config --global core.editor vim"
+        },
+        {
+          "note": "An explicit, reviewed step.",
+          "text": "Run ./scripts/setup.sh after reading it."
+        }
+      ],
+      "id": "AGT-HOOK-003",
+      "pattern": "(?i)\\bcore\\.hooksPath\\s*=?\\s*[\"']?\\.{0,2}/?[\\w./-]*hooks\\b|\\.dmux-hooks\\b|[\"']?worktree_created[\"']?\\s*[:=]",
+      "rationale": "A tool that runs scripts found in the repository on clone, checkout or worktree creation runs whatever the last commit put there, before anyone reads it. Seen in a published harness that executed .dmux-hooks on worktree creation.",
+      "scope": "normalised",
+      "severity": "medium",
+      "title": "Repository hooks run without a trust gate",
+      "true_positive": [
+        {
+          "text": "git config core.hooksPath .githooks"
+        },
+        {
+          "text": "Hooks live in .dmux-hooks/ and run automatically."
+        },
+        {
+          "text": "\"worktree_created\": \"./.dmux-hooks/setup.sh\""
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.md",
         "*.txt",
         "executable"
       ],
@@ -639,6 +681,43 @@
       "kind": "structural",
       "severity": "medium",
       "title": "Declares network_access=none but instructs fetching"
+    },
+    {
+      "applies_to": [
+        "*.json",
+        "*.md",
+        "*.sh",
+        "*.js",
+        "*.ts",
+        "*.py",
+        "executable"
+      ],
+      "category": "capability_escalation",
+      "description": "A permissions.allow list that grants a whole tool family unscoped (Bash, Write, Edit, WebFetch) instead of a specifier",
+      "false_positive": [
+        {
+          "note": "Scoped grants are declarations.",
+          "text": "\"allow\": [\"Bash(npm test)\", \"Read\"]"
+        },
+        {
+          "note": "A deny list narrows.",
+          "text": "\"deny\": [\"Bash\"]"
+        }
+      ],
+      "id": "AGT-POLICY-006",
+      "pattern": "(?i)\"allow\"\\s*:\\s*\\[[^\\]]*\"(?:Bash|Write|Edit|MultiEdit|WebFetch|NotebookEdit)\"\\s*[,\\]]",
+      "rationale": "An installer or init step that writes `\"allow\": [\"Bash\"]` into settings pre-approves every shell command for every future session. Seen in a published CLI's init. Grant `Bash(npm test)`, not `Bash`.",
+      "scope": "normalised",
+      "severity": "high",
+      "title": "Unscoped tool in permissions.allow",
+      "true_positive": [
+        {
+          "text": "{\"permissions\": {\"allow\": [\"Read\", \"Bash\"]}}"
+        },
+        {
+          "text": "\"allow\": [\"Write\", \"Read(./src/**)\"]"
+        }
+      ]
     },
     {
       "category": "scan_limit",
@@ -988,7 +1067,7 @@
     }
   ],
   "source": {
-    "commit": "cbd17d3a07a707c0182b752e39faca6541247d66",
+    "commit": "5741d6dbc9644f99749d92a2a875238bd43c72ff",
     "files": {
       "AGT-CAP-001.toml": "fd07a901587f8abc939b2af8ea77dab20c7f9ddebc0a76b46d047b42e5b0c6d2",
       "AGT-CAP-002.toml": "ebdb6706f8d0ab4e202e9c6961acda93d04c4893a34be3d01313da59f6c0ed6b",
@@ -1002,6 +1081,7 @@
       "AGT-EXFIL-001.toml": "342db3e7e74104cecf4de3f3969acee070f5e77c6dd4bc637c0b67cb3b339e01",
       "AGT-HOOK-001.toml": "e61edf5e2cfe63f3918f871aec06fdcdfb93d1bba692cc002b3b2568caf31190",
       "AGT-HOOK-002.toml": "826445ad628a6539bcc8369301342829ed9cc908dd5e9286a8fc44d7ddfd889a",
+      "AGT-HOOK-003.toml": "e07b7e7313fb2797b7fc1aa7a69dbff519d9cbe83121d8d95096f7690dfd987e",
       "AGT-INJ-001.toml": "ca26f22cb00f713224ab68efc3de1f2a479e3f0b6cd2812768f842d61cee5938",
       "AGT-INJ-002.toml": "15c6b43b9884a029b6c7bd2c7ddecd91ff3f8368a378c3daad750291ce51bed0",
       "AGT-INJ-003.toml": "5a2672f2127d29fad07c51d0574d16725f39dfcac3796e0dd9c6725094626893",
@@ -1015,6 +1095,7 @@
       "AGT-POLICY-003.toml": "2fbc4d68529c49247ac517f3551310aa81831ffa248e6669b263bb7fe0494e79",
       "AGT-POLICY-004.toml": "87e5fec6cad482f2302188a947a586f1a24168dd153d9e87ded78598f3866abe",
       "AGT-POLICY-005.toml": "19e31cff2e7eb0270df55b5fdd064240f16e9a649e7a5de0037532009208ddac",
+      "AGT-POLICY-006.toml": "721f7a01e9c5f3a2567fa16221bf7d97bd922dc65925905acbe08abfe0323a8f",
       "AGT-SCAN-001.toml": "d8957c5b7efc9b5f16c1a25949ddd182e42001e6ba4b94d2c3bd1f27bbd0cf4f",
       "AGT-SEL-001.toml": "844a2a1c65f7eb9a49f00ec5cad5a085b61b682fc75862390271679b73b0a2a5",
       "AGT-SOCIAL-001.toml": "34f7a1f3f99e47f57fd4bfc4ca8965a5ae6d299d48bc11f87d9026291a5f5a64",

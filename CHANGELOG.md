@@ -9,6 +9,10 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- The rule snapshot follows agtmls-spec `5741d6d`: `AGT-HOOK-003`
+  (MEDIUM, repository hooks run on a lifecycle event without a trust
+  gate) and `AGT-POLICY-006` (HIGH, an unscoped tool family in
+  `permissions.allow`). 33 rules; the corpus mirrors four new cases.
 - Emoji context for steganography (agtmls-spec 4.10): a variation
   selector directly after an emoji base, and a well-formed subdivision
   flag, are `AGT-STEG-002` at LOW rather than `AGT-STEG-001` at
