@@ -36,8 +36,48 @@ permissions:
   id-token: write
 
 jobs:
+  # agtmls-spec chapter 9: sign the exact bytes of index.json with the release
+  # key. The key exists only in the `release` environment, which needs the
+  # maintainer's approval and deploys only from v0.0.* tags -- so a manual
+  # re-release dispatched from a branch cannot reach it, and publishes
+  # unsigned, which release-audit.py then refuses for any commit that trusts
+  # ALLOWED_SIGNERS. The key is written to a private temporary file, used
+  # once, verified against, and destroyed.
+  sign-index:
+    if: startsWith(github.ref, 'refs/tags/v0.0.')
+    runs-on: ubuntu-latest
+    environment: release
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Sign index.json
+        env:
+          SIGNING_KEY: ${{ secrets.AGTMLS_RELEASE_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$SIGNING_KEY" || { echo "::error::AGTMLS_RELEASE_SIGNING_KEY is not set in the release environment"; exit 1; }
+          umask 077
+          key="$RUNNER_TEMP/release-key"
+          trap 'shred -u "$key" 2>/dev/null || rm -f "$key"' EXIT
+          printf '%s\n' "$SIGNING_KEY" > "$key"
+          ssh-keygen -q -Y sign -f "$key" -n agtmls-index@v1 index.json
+      - name: The signature verifies against this commit's ALLOWED_SIGNERS
+        run: |
+          ssh-keygen -Y verify -f ALLOWED_SIGNERS -I agtmls-release \
+            -n agtmls-index@v1 -s index.json.sig < index.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: index-signature
+          path: index.json.sig
+          if-no-files-found: error
+
   release:
-    if: startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)
+    needs: sign-index
+    if: >-
+      ${{ !cancelled() && (needs.sign-index.result == 'success' || needs.sign-index.result == 'skipped')
+      && (startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)) }}
     runs-on: ubuntu-latest
     steps:
       # The release content: the tagged commit.
@@ -70,6 +110,17 @@ jobs:
           test "$VERSION" = "${{ steps.version.outputs.version }}"
           python3 scripts/validate-version-policy.py
           python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
+      - name: Take the index signature
+        if: needs.sign-index.result == 'success'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: index-signature
+          path: .
+      - name: The signature still verifies here
+        if: needs.sign-index.result == 'success'
+        run: |
+          ssh-keygen -Y verify -f ALLOWED_SIGNERS -I agtmls-release \
+            -n agtmls-index@v1 -s index.json.sig < index.json
       - name: Install reference validator
         run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
       - name: Full release gate
@@ -86,6 +137,7 @@ jobs:
         run: |
           mkdir -p dist/assets
           cp dist/release/*.tar.gz dist/release/release-manifest.json dist/python/* dist/assets/
+          if [ -f index.json.sig ]; then cp index.json.sig dist/assets/; fi
           (cd dist/assets && sha256sum -- * > ../SHA256SUMS && mv ../SHA256SUMS SHA256SUMS)
           cat dist/assets/SHA256SUMS
       - name: Attest release assets
@@ -98,6 +150,12 @@ jobs:
           /tmp/verify/bin/pip install --disable-pip-version-check dist/assets/*.whl
           test "$(/tmp/verify/bin/agtmls stats --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["registry_version"])')" \
             = "${{ steps.version.outputs.version }}"
+      - name: The installed wheel carries a verifying signature
+        if: needs.sign-index.result == 'success'
+        run: |
+          registry="$(/tmp/verify/bin/python -c 'import agtmls, pathlib; print(pathlib.Path(agtmls.__file__).parent / "_registry")')"
+          ssh-keygen -Y verify -f "$registry/ALLOWED_SIGNERS" -I agtmls-release \
+            -n agtmls-index@v1 -s "$registry/index.json.sig" < "$registry/index.json"
       - name: Keep the exact files for the publish job
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

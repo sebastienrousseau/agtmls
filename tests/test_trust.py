@@ -99,8 +99,10 @@ class VerifyCommandTests(unittest.TestCase):
             self.addCleanup((self.fixture / name).unlink, True)
 
     def sign(self, name: str, namespace: str) -> None:
+        # ssh-keygen asks before overwriting a .sig and waits on stdin forever.
+        (self.fixture / f"{name}.sig").unlink(missing_ok=True)
         subprocess.run(["ssh-keygen", "-q", "-Y", "sign", "-f", str(self.key), "-n", namespace, str(self.fixture / name)],
-                       check=True, capture_output=True)
+                       check=True, capture_output=True, stdin=subprocess.DEVNULL, timeout=30)
 
     def feed(self, digest: str, withdrawn: bool = False) -> None:
         advisory = {"id": "AGT-ADV-2026-001", "modified": "2026-09-24T00:00:00Z",

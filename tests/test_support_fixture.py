@@ -32,6 +32,18 @@ class RegistryFixtureTests(unittest.TestCase):
             self.assertFalse((fixture / "README.md").exists())
         self.assertEqual(vanished, ["README.md"])
 
+    def test_a_release_signature_in_the_tree_is_never_copied(self) -> None:
+        """The release job runs the gate with index.json.sig present."""
+        sig = support.ROOT / "index.json.sig"
+        created = not sig.exists()
+        if created:
+            sig.write_text("signature\n", encoding="utf-8")
+            self.addCleanup(lambda: sig.unlink(missing_ok=True))
+        with tempfile.TemporaryDirectory() as raw:
+            fixture = support.registry_fixture(Path(raw) / "tree")
+            self.assertFalse((fixture / "index.json.sig").exists())
+            self.assertTrue((fixture / "index.json").exists())
+
     def test_coverage_data_files_are_never_copied(self) -> None:
         stray = support.ROOT / ".coverage.test-host.pid1.abc"
         stray.write_text("", encoding="utf-8")

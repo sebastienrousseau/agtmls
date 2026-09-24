@@ -75,6 +75,15 @@ class FakeWorld:
         assert url == "https://pypi.org/pypi/agtmls/0.0.9/json", url
         return self.state["pypi"]
 
+    def fetch_bytes(self, *cmd: str) -> bytes | None:
+        """git show at the release commit, and asset downloads, as bytes."""
+        files = self.state.get("signed", {})
+        if cmd[:2] == ("git", "show"):
+            return files.get(cmd[2].split(":", 1)[1])
+        if cmd[:2] == ("gh", "api") and cmd[-1].endswith("/releases/assets/77"):
+            return files.get("index.json.sig")
+        raise AssertionError(f"unexpected command {cmd}")
+
 
 class AuditTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -82,7 +91,7 @@ class AuditTests(unittest.TestCase):
 
     def audit(self, world: FakeWorld | None = None, *extra: str) -> tuple[int, list[str], str]:
         world = world or FakeWorld()
-        self.mod.run, self.mod.fetch_json = world.run, world.fetch_json
+        self.mod.run, self.mod.fetch_json, self.mod.fetch_bytes = world.run, world.fetch_json, world.fetch_bytes
         code, output = run_main(self.mod, "--tag", "v0.0.9", "--commit", COMMIT[:12], *extra)
         return code, [line for line in output.splitlines() if line.startswith("FAIL: ")], output
 
@@ -195,3 +204,73 @@ class FetchTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SignatureAuditTests(unittest.TestCase):
+    """A release whose commit trusts a key must carry an index.json.sig that
+    verifies against it (agtmls-spec chapter 9)."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import shutil
+        import tempfile
+        from pathlib import Path
+
+        cls._tmp = Path(tempfile.mkdtemp(prefix="agtmls-audit-sig-"))
+        cls.addClassCleanup(shutil.rmtree, cls._tmp, True)
+        key = cls._tmp / "key"
+        subprocess.run(["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-C", "t", "-f", str(key)], check=True)
+        cls.signers = ("agtmls-release namespaces=\"agtmls-index@v1\" " + " ".join(key.with_suffix(".pub").read_text().split()[:2]) + "\n").encode()
+        cls.index = b'{"skills": []}\n'
+        (cls._tmp / "index.json").write_bytes(cls.index)
+        subprocess.run(["ssh-keygen", "-q", "-Y", "sign", "-f", str(key), "-n", "agtmls-index@v1", str(cls._tmp / "index.json")],
+                       check=True, capture_output=True, stdin=subprocess.DEVNULL, timeout=30)
+        cls.sig = (cls._tmp / "index.json.sig").read_bytes()
+
+    def setUp(self) -> None:
+        self.mod = load_script("release-audit.py")
+
+    def world(self, **signed) -> FakeWorld:
+        files = {"ALLOWED_SIGNERS": self.signers, "index.json": self.index, "index.json.sig": self.sig, **signed}
+        sums = SUMS + f"{'d' * 64}  index.json.sig\n"
+        world = FakeWorld(sums=sums, signed={k: v for k, v in files.items() if v is not None})
+        world.state["release"]["body"] = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{sums}```\n"
+        if files["index.json.sig"] is not None:
+            world.state["release"]["assets"].append({"id": 77, "name": "index.json.sig", "digest": "sha256:" + "d" * 64})
+        return world
+
+    def audit(self, world: FakeWorld) -> tuple[int, str]:
+        self.mod.run, self.mod.fetch_json, self.mod.fetch_bytes = world.run, world.fetch_json, world.fetch_bytes
+        return run_main(self.mod, "--tag", "v0.0.9", "--commit", COMMIT[:12])
+
+    def test_a_signed_release_passes_and_says_so(self) -> None:
+        code, output = self.audit(self.world())
+        self.assertEqual(code, 0, output)
+        self.assertIn("index.json.sig verifies against the release commit's ALLOWED_SIGNERS", output)
+
+    def test_a_release_before_signing_began_is_not_asked_for_one(self) -> None:
+        code, output = self.audit(FakeWorld())
+        self.assertEqual(code, 0, output)
+        self.assertNotIn("index.json.sig", output)
+
+    def test_a_trusting_commit_without_a_signature_asset_fails(self) -> None:
+        code, output = self.audit(self.world(**{"index.json.sig": None}))
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL: the release commit trusts ALLOWED_SIGNERS but the release has no index.json.sig", output)
+
+    def test_a_signature_over_other_bytes_fails(self) -> None:
+        code, output = self.audit(self.world(**{"index.json": b'{"skills": ["x"]}\n'}))
+        self.assertEqual(code, 1, output)
+        self.assertIn("index.json.sig does not verify", output)
+
+    def test_an_unreadable_index_or_signature_is_named(self) -> None:
+        world = self.world()
+        del world.state["signed"]["index.json"]
+        code, output = self.audit(world)
+        self.assertEqual(code, 1, output)
+        self.assertIn("index.json or index.json.sig could not be read back to verify", output)
+
+    def test_the_real_byte_fetch_returns_output_or_none(self) -> None:
+        mod = load_script("release-audit.py")
+        self.assertEqual(mod.fetch_bytes("git", "--version")[:12], b"git version ")
+        self.assertIsNone(mod.fetch_bytes("git", "show", "no-such-rev-000:none"))
