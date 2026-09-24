@@ -9,6 +9,11 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- `ALLOWED_SIGNERS` holds the release signing key (`agtmls-release`,
+  Ed25519, valid from 2026-09-24) for the index, attestation and
+  advisory namespaces, and ships in the wheel. The private half lives
+  only in the protected `release` environment, deployable from `v0.0.*`
+  tags with the maintainer's approval.
 - `verify --signatures` requires `index.json` to carry an OpenSSH
   signature under `agtmls-index@v1` that verifies against
   `ALLOWED_SIGNERS` (agtmls-spec chapter 9), and `verify` consults a

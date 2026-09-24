@@ -53,6 +53,7 @@ packages = ["src/agtmls"]
 "templates" = "agtmls/_registry/templates"
 "evals" = "agtmls/_registry/evals"
 "index.json" = "agtmls/_registry/index.json"
+"ALLOWED_SIGNERS" = "agtmls/_registry/ALLOWED_SIGNERS"
 "profiles.json" = "agtmls/_registry/profiles.json"
 "providers.json" = "agtmls/_registry/providers.json"
 "lifecycle.json" = "agtmls/_registry/lifecycle.json"

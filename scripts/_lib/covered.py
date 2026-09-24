@@ -22,7 +22,7 @@ SOURCE_DIRS = [
 ]
 SOURCE_FILES = [
     "profiles.json", "providers.json", "lifecycle.json", "checks.json",
-    "LICENSE-APACHE", "LICENSE-MIT",
+    "LICENSE-APACHE", "LICENSE-MIT", "ALLOWED_SIGNERS",
 ]
 
 # What the SBOM lists: everything shipped, generated or not. The wheel ships

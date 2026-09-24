@@ -2,6 +2,17 @@
   "bomFormat": "CycloneDX",
   "components": [
     {
+      "bom-ref": "ALLOWED_SIGNERS",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b6d4a6cdbf09f55d186a3768a775b852a3d32f2bedd0ba6197c0eba6a9234365"
+        }
+      ],
+      "name": "ALLOWED_SIGNERS",
+      "type": "file"
+    },
+    {
       "bom-ref": "CATALOG.md",
       "hashes": [
         {
@@ -1029,7 +1040,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "73ea543b4580e8e19226b14c7778aa8ac2d447156c72979c879584a4ae1493be"
+          "content": "bed564e9f6730df7dc775797862d54b86011058b5ab746d2ac07642a50b2e206"
         }
       ],
       "name": "scripts/_lib/covered.py",
@@ -4057,7 +4068,7 @@
       "type": "application",
       "version": "0.0.8"
     },
-    "timestamp": "2026-09-24T19:01:07Z",
+    "timestamp": "2026-09-24T19:20:19Z",
     "tools": {
       "components": [
         {
