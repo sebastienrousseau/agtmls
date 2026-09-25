@@ -60,6 +60,68 @@ class PackagingTests(unittest.TestCase):
         parsed = self.mod.parse_force_include(self.text)
         self.assertEqual(parsed["scripts"], f"{self.mod.PREFIX}/scripts")
 
+    def test_the_sdist_carries_what_the_wheel_build_reads(self) -> None:
+        # The release builds its wheel from the sdist. v0.0.9's sdist lacked
+        # ALLOWED_SIGNERS and hatch_build.py, so that build failed after the
+        # tag was pushed, and nothing the gate ran could have noticed.
+        self.assertEqual(self.mod.sdist_gaps(self.text), [])
+
+    def test_sdist_gaps_names_each_missing_input(self) -> None:
+        text = textwrap.dedent(
+            """
+            [tool.hatch.build.targets.wheel.hooks.custom]
+
+            [tool.hatch.build.targets.wheel.force-include]
+            "skills" = "agtmls/_registry/skills"
+            "index.json" = "agtmls/_registry/index.json"
+            "ALLOWED_SIGNERS" = "agtmls/_registry/ALLOWED_SIGNERS"
+
+            [tool.hatch.build.targets.sdist]
+            include = [
+              "skills",
+              "*.json",
+              "index.json.sig",
+            ]
+            """
+        )
+        self.assertEqual(
+            self.mod.sdist_gaps(text),
+            [
+                "the sdist omits ALLOWED_SIGNERS, which the wheel force-includes",
+                "the sdist omits hatch_build.py, the wheel's build hook",
+                "the sdist must list index.json.sig under artifacts: it is gitignored",
+            ],
+        )
+
+    def test_sdist_gaps_an_artifact_the_sdist_never_includes(self) -> None:
+        # Listing the signature as an artifact is not enough: an sdist with
+        # an include list takes only what that list names.
+        text = textwrap.dedent(
+            """
+            [tool.hatch.build.targets.wheel.hooks.custom]
+
+            [tool.hatch.build.targets.sdist]
+            include = ["hatch_build.py"]
+            artifacts = ["index.json.sig"]
+            """
+        )
+        self.assertEqual(
+            self.mod.sdist_gaps(text),
+            ["the sdist omits index.json.sig, which the build hook ships"],
+        )
+
+    def test_sdist_gaps_without_a_build_hook(self) -> None:
+        text = textwrap.dedent(
+            """
+            [tool.hatch.build.targets.wheel.force-include]
+            "skills/x" = "agtmls/_registry/skills/x"
+
+            [tool.hatch.build.targets.sdist]
+            include = ["skills"]
+            """
+        )
+        self.assertEqual(self.mod.sdist_gaps(text), [])
+
 
 class PluginManifestTests(unittest.TestCase):
     """Manifest generation and the flat-tree invariant it depends on."""

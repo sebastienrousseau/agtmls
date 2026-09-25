@@ -140,10 +140,13 @@ jobs:
         # little over 1.7x that, which absorbs ordinary growth and still
         # catches something large arriving by accident -- a vendored binary,
         # a committed model, a directory nobody meant to force-include.
+        # Built as the release builds it, sdist first and the wheel from the
+        # sdist: v0.0.9's sdist lacked files the wheel needed, and a wheel
+        # built straight from the tree could not show it.
         env:
           MAX_WHEEL_BYTES: "1048576"
         run: |
-          python3 -m build --wheel --outdir dist .
+          python3 -m build --outdir dist .
           python3 - <<'PY'
           import os, pathlib, sys
 
