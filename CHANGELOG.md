@@ -17,6 +17,17 @@ All notable changes to AgtMLS are recorded here.
   `signatures.verify` now refuses a verification time that is not
   `YYYYMMDD` before it reaches `ssh-keygen`.
 
+### Changed
+
+- The rule snapshot follows agtmls-spec `9c5a7ec`, where chapters 9, 10
+  and 11 are normative and conformance level L5 compares both
+  implementations on their vectors, and where §4.3 now requires the
+  invisible-stripping and NFKC agtmls already did. The rule data is
+  unchanged. The security corpus mirrors four new spec cases (a keyword
+  split by tag characters; `allowed-tools` space-separated, narrowed by a
+  specifier, and within its policy): 108 cases at precision and recall
+  1.0.
+
 ### Fixed
 
 - The vendored agtmls-spec vectors are checked out as exact bytes
