@@ -1821,7 +1821,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "09305e8bc184ec3beb29b06459914eef4b44d72d743927aec32d307aa8063c6f"
+          "content": "18fe6dfc96b94a72df27749211f91a0dd4bfd7a9d7d4a3b9f024115dc02c2553"
         }
       ],
       "name": "scripts/trust-check.py",
@@ -4079,7 +4079,7 @@
       "type": "application",
       "version": "0.0.10"
     },
-    "timestamp": "2026-09-25T08:02:59Z",
+    "timestamp": "2026-09-25T08:15:23Z",
     "tools": {
       "components": [
         {

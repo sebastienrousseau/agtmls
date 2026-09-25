@@ -267,3 +267,41 @@ class TrustCheckTests(unittest.TestCase):
                 "advisories", str(ADV / "feed.json"), "--allowed-signers", str(ADV / "allowed_signers"),
                 "--lockfile", str(bad))
         self.assertEqual(code, 1)
+
+
+class TrustCheckAttestTests(unittest.TestCase):
+    """trust-check.py attest: the chapter 10 vectors, through the script."""
+
+    VECTORS = ROOT / "tests" / "fixtures" / "spec-attestations"
+
+    def setUp(self) -> None:
+        self.mod = load_script("trust-check.py")
+        self.tmp = Path(tempfile.mkdtemp(prefix="agtmls-trust-attest-"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.inputs = json.loads((self.VECTORS / "inputs.json").read_text(encoding="utf-8"))
+
+    def materialise(self, name: str, files: dict[str, str]) -> Path:
+        skill = self.tmp / name
+        skill.mkdir(parents=True, exist_ok=True)
+        for rel, text in files.items():
+            (skill / rel).parent.mkdir(parents=True, exist_ok=True)
+            (skill / rel).write_text(text, encoding="utf-8")
+        return skill
+
+    def test_every_vector_is_printed_byte_for_byte(self) -> None:
+        cases = {c["name"]: c for c in json.loads((self.VECTORS / "digest-cases.json").read_text(encoding="utf-8"))["cases"]}
+        runs = [("manifest", item["vector"], cases[item["digest_case"]]["files"], item["skill"], None)
+                for item in self.inputs["manifests"]]
+        runs += [("capabilities", item["vector"], item["files"], item["skill"], item["digest"])
+                 for item in self.inputs["capabilities"]]
+        for kind, vector, files, name, digest in runs:
+            with self.subTest(vector=vector):
+                skill = self.materialise(vector, files)
+                args = ["attest", kind, str(skill), "--name", name] + (["--digest", digest] if digest else [])
+                code, out = run_main(self.mod, *args)
+                self.assertEqual((code, out), (0, (self.VECTORS / vector).read_text(encoding="utf-8")))
+
+    def test_a_directory_without_a_skill_is_an_error(self) -> None:
+        code, out = run_main(self.mod, "attest", "capabilities", str(self.tmp / "absent"), "--name", "x")
+        self.assertEqual(code, 1)
+        self.assertIn("is not a directory", out)

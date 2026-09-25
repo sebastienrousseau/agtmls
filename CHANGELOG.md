@@ -9,10 +9,11 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
-- `scripts/trust-check.py`: one signature or advisory judgement per call,
-  with the flags, JSON and exit codes of agtmls-rs's `signature` and
-  `advisories` subcommands, so the agtmls-spec conformance runner can
-  compare the two implementations on the chapter 9 and 11 vectors.
+- `scripts/trust-check.py`: one signature, advisory or attestation per
+  call, with the flags, JSON and exit codes of agtmls-rs's `signature`,
+  `advisories` and `attest` subcommands, so the agtmls-spec conformance
+  runner can compare the two implementations on the chapter 9, 10 and
+  11 vectors.
   `signatures.verify` now refuses a verification time that is not
   `YYYYMMDD` before it reaches `ssh-keygen`.
 
