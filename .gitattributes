@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# The vendored agtmls-spec vectors are signed or compared byte for byte, so a
+# checkout must never rewrite them. Git for Windows converts text files to
+# CRLF by default, which turns every signature vector into bad_signature.
+tests/fixtures/spec-signatures/** -text
+tests/fixtures/spec-advisories/** -text
+tests/fixtures/spec-attestations/** -text

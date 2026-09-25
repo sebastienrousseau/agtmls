@@ -1117,7 +1117,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ea2ee6ba548330bd8625f27abae58d900f7352af7d51c92a43c2ff4d979032dd"
+          "content": "7314258aa2c32d8cd4448a3d6efb56d29c16674b6a271f83a7e904b4c0e6e52b"
         }
       ],
       "name": "scripts/_lib/signatures.py",
@@ -1814,6 +1814,17 @@
         }
       ],
       "name": "scripts/sync-spec-rules.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/trust-check.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "18fe6dfc96b94a72df27749211f91a0dd4bfd7a9d7d4a3b9f024115dc02c2553"
+        }
+      ],
+      "name": "scripts/trust-check.py",
       "type": "file"
     },
     {
@@ -4068,7 +4079,7 @@
       "type": "application",
       "version": "0.0.10"
     },
-    "timestamp": "2026-09-25T00:15:24Z",
+    "timestamp": "2026-09-25T08:15:23Z",
     "tools": {
       "components": [
         {
