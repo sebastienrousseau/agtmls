@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-25T00:15:24Z",
+    "created": "2026-09-25T08:02:59Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1633,11 +1633,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c698cfa193fe4c0b4f5e7aa797576a48bad95476"
+          "checksumValue": "07c662e61ac5f8ff1e4548647e6d32acd1c3557b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ea2ee6ba548330bd8625f27abae58d900f7352af7d51c92a43c2ff4d979032dd"
+          "checksumValue": "7314258aa2c32d8cd4448a3d6efb56d29c16674b6a271f83a7e904b4c0e6e52b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2650,6 +2650,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/sync-spec-rules.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-trust-check.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6135d1f34a4c7cbd942ccacc8ab67b4a046f30e9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "09305e8bc184ec3beb29b06459914eef4b44d72d743927aec32d307aa8063c6f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/trust-check.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -6081,6 +6097,7 @@
         "SPDXRef-File-scripts-smoke-scaffold.py",
         "SPDXRef-File-scripts-sync-skill-frontmatter.py",
         "SPDXRef-File-scripts-sync-spec-rules.py",
+        "SPDXRef-File-scripts-trust-check.py",
         "SPDXRef-File-scripts-validate-check-manifest.py",
         "SPDXRef-File-scripts-validate-cli-surface.py",
         "SPDXRef-File-scripts-validate-commands.py",

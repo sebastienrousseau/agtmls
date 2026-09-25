@@ -7,6 +7,21 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `scripts/trust-check.py`: one signature or advisory judgement per call,
+  with the flags, JSON and exit codes of agtmls-rs's `signature` and
+  `advisories` subcommands, so the agtmls-spec conformance runner can
+  compare the two implementations on the chapter 9 and 11 vectors.
+  `signatures.verify` now refuses a verification time that is not
+  `YYYYMMDD` before it reaches `ssh-keygen`.
+
+### Fixed
+
+- The vendored agtmls-spec vectors are checked out as exact bytes
+  (`.gitattributes`); Git for Windows rewrote them with CRLF, which fails
+  every signature vector.
+
 ## 0.0.10 - 2026-09-25
 
 ### Fixed

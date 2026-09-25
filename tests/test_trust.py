@@ -184,3 +184,86 @@ class VerifyCommandTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TrustCheckTests(unittest.TestCase):
+    """trust-check.py: one judgement per call, for the spec's conformance runner."""
+
+    def setUp(self) -> None:
+        self.mod = load_script("trust-check.py")
+
+    def run_check(self, *args: str) -> tuple[int, str]:
+        return run_main(self.mod, *args)
+
+    def test_every_signature_vector_exits_as_the_spec_says(self) -> None:
+        spec = json.loads((SIG / "cases.json").read_text(encoding="utf-8"))
+        exits = {"verified": 0, "bad_signature": 5, "unsigned": 4}
+        for case in spec["cases"]:
+            with self.subTest(case=case["name"]):
+                sig = SIG / case["signature"] if case["signature"] else SIG / "absent.sig"
+                code, out = self.run_check(
+                    "signature", str(SIG / case["index"]), "--sig", str(sig),
+                    "--allowed-signers", str(SIG / spec["allowed_signers"]),
+                    "--namespace", spec["namespace"], "--verify-time", case["verify_time"], "--json")
+                self.assertEqual((code, json.loads(out)), (exits[case["expected"]], {"status": case["expected"]}))
+
+    def test_every_advisory_vector_exits_as_the_spec_says(self) -> None:
+        spec = json.loads((ADV / "cases.json").read_text(encoding="utf-8"))
+        exits = {"clean": 0, "revoked": 6, "bad_signature": 5, "unsigned": 4}
+        with tempfile.TemporaryDirectory() as raw:
+            for case in spec["cases"]:
+                with self.subTest(case=case["name"]):
+                    lock = Path(raw) / f"{case['name']}.json"
+                    lock.write_text(json.dumps(case["lockfile"]), encoding="utf-8")
+                    sig = ADV / case["signature"] if case["signature"] else ADV / "absent.sig"
+                    code, out = self.run_check(
+                        "advisories", str(ADV / spec["feed"]), "--sig", str(sig),
+                        "--allowed-signers", str(ADV / spec["allowed_signers"]),
+                        "--lockfile", str(lock), "--verify-time", spec["verify_time"], "--json")
+                    got = json.loads(out)
+                    ids = sorted({i for hit in got["revoked"] for i in hit["advisories"]})
+                    self.assertEqual((code, ids), (exits[case["expected"]], case["advisories"]))
+
+    def test_the_feed_signature_defaults_to_its_sibling(self) -> None:
+        spec = json.loads((ADV / "cases.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as raw:
+            lock = Path(raw) / "lock.json"
+            lock.write_text(json.dumps(spec["cases"][0]["lockfile"]), encoding="utf-8")
+            code, out = self.run_check(
+                "advisories", str(ADV / spec["feed"]), "--allowed-signers", str(ADV / spec["allowed_signers"]),
+                "--lockfile", str(lock), "--verify-time", spec["verify_time"])
+        self.assertEqual(code, 6)
+        self.assertIn("REVOKED compromised-skill", out)
+        self.assertTrue(out.startswith("verified"))
+
+    def test_text_output_of_a_signature(self) -> None:
+        code, out = self.run_check(
+            "signature", str(SIG / "index.json"), "--sig", str(SIG / "absent.sig"),
+            "--allowed-signers", str(SIG / "allowed_signers"), "--namespace", "agtmls-index@v1")
+        self.assertEqual((code, out.strip()), (4, "unsigned"))
+
+    def test_a_verify_time_that_is_not_a_date_is_a_usage_error(self) -> None:
+        code, out = self.run_check(
+            "signature", str(SIG / "index.json"), "--sig", str(SIG / "current.sig"),
+            "--allowed-signers", str(SIG / "allowed_signers"), "--namespace", "n", "--verify-time=-Oprint")
+        self.assertEqual(code, 2)
+        self.assertIn("is not YYYYMMDD", out)
+
+    def test_the_library_refuses_a_malformed_verify_time(self) -> None:
+        with self.assertRaises(ValueError):
+            signatures.verify(SIG / "index.json", SIG / "current.sig", SIG / "allowed_signers", "n", verify_time="2026")
+
+    def test_nothing_concluded_exits_1(self) -> None:
+        with mock.patch.object(signatures.shutil, "which", return_value=None):
+            code, out = self.run_check(
+                "signature", str(SIG / "index.json"), "--sig", str(SIG / "current.sig"),
+                "--allowed-signers", str(SIG / "allowed_signers"), "--namespace", "agtmls-index@v1")
+        self.assertEqual(code, 1)
+        self.assertIn("ssh-keygen", out)
+        with tempfile.TemporaryDirectory() as raw:
+            bad = Path(raw) / "lock.json"
+            bad.write_text("{not json", encoding="utf-8")
+            code, out = self.run_check(
+                "advisories", str(ADV / "feed.json"), "--allowed-signers", str(ADV / "allowed_signers"),
+                "--lockfile", str(bad))
+        self.assertEqual(code, 1)

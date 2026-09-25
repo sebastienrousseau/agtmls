@@ -18,6 +18,12 @@ INDEX_NAMESPACE = "agtmls-index@v1"
 ADVISORY_NAMESPACE = "agtmls-advisory@v1"
 
 
+def is_verify_time(value: str) -> bool:
+    """Whether `value` is a YYYYMMDD verification time. Checked before it
+    reaches ssh-keygen, which would otherwise read it as an option."""
+    return len(value) == 8 and value.isascii() and value.isdigit()
+
+
 class ToolMissing(RuntimeError):
     """ssh-keygen is not installed, so nothing can be concluded."""
 
@@ -30,6 +36,8 @@ def verify(data: Path, signature: Path, allowed_signers: Path, namespace: str,
     there is nothing to verify, which is not the same as a signature that
     fails. A missing ssh-keygen is an error, never a verdict.
     """
+    if verify_time is not None and not is_verify_time(verify_time):
+        raise ValueError(f"verify time {verify_time!r} is not YYYYMMDD")
     if not signature.exists() or not allowed_signers.exists():
         return "unsigned"
     if shutil.which("ssh-keygen") is None:
