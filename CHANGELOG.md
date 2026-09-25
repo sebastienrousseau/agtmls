@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.11 - 2026-09-25
+
 ### Added
 
 - `scripts/trust-check.py`: one signature, advisory or attestation per
