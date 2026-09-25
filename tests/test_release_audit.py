@@ -15,6 +15,7 @@ import json
 import subprocess
 import unittest
 import urllib.error
+from pathlib import Path
 from unittest import mock
 
 from .support import load_script, run_main
@@ -69,6 +70,13 @@ class FakeWorld:
             return ok(json.dumps(assets))
         if cmd[:2] == ("gh", "api") and cmd[-1].endswith("/releases/assets/99"):
             return ok(s["sums"])
+        if cmd[:3] == ("gh", "attestation", "verify"):
+            assert "--signer-workflow" in cmd and "--deny-self-hosted-runners" in cmd, cmd
+            assert cmd[cmd.index("--source-ref") + 1] == "refs/tags/v0.0.9", cmd
+            name = Path(cmd[3]).name
+            if name in s.get("unattested", ()):
+                return ok(rc=1, err="Error: HTTP 404: Not Found")
+            return ok("[]")
         raise AssertionError(f"unexpected command {cmd}")
 
     def fetch_json(self, url: str):
@@ -82,6 +90,9 @@ class FakeWorld:
             return files.get(cmd[2].split(":", 1)[1])
         if cmd[:2] == ("gh", "api") and cmd[-1].endswith("/releases/assets/77"):
             return files.get("index.json.sig")
+        if cmd[:2] == ("gh", "api") and "/releases/assets/" in cmd[-1]:
+            asset_id = int(cmd[-1].rsplit("/", 1)[1])
+            return None if asset_id in self.state.get("undownloadable", ()) else b"bytes"
         raise AssertionError(f"unexpected command {cmd}")
 
 
@@ -274,3 +285,39 @@ class SignatureAuditTests(unittest.TestCase):
         mod = load_script("release-audit.py")
         self.assertEqual(mod.fetch_bytes("git", "--version")[:12], b"git version ")
         self.assertIsNone(mod.fetch_bytes("git", "show", "no-such-rev-000:none"))
+
+
+ATTESTING = {".github/workflows/release.yml": b"uses: actions/attest-build-provenance@x"}
+
+
+class ProvenanceTests(unittest.TestCase):
+    """Keyless build provenance on every asset, when the release attests."""
+
+    def setUp(self) -> None:
+        self.mod = load_script("release-audit.py")
+
+    def audit(self, **overrides) -> tuple[int, list[str], str]:
+        world = FakeWorld(**overrides)
+        self.mod.run, self.mod.fetch_json, self.mod.fetch_bytes = world.run, world.fetch_json, world.fetch_bytes
+        code, output = run_main(self.mod, "--tag", "v0.0.9", "--commit", COMMIT[:12])
+        return code, [line for line in output.splitlines() if line.startswith("FAIL: ")], output
+
+    def test_every_asset_with_provenance_passes(self) -> None:
+        code, failures, output = self.audit(signed=ATTESTING)
+        self.assertEqual((code, failures), (0, []), output)
+        self.assertIn("OK: 4 release asset(s) carry build provenance from .github/workflows/release.yml at v0.0.9", output)
+
+    def test_an_asset_without_provenance_is_named_with_the_reason(self) -> None:
+        code, failures, _ = self.audit(signed=ATTESTING, unattested={SDIST})
+        self.assertEqual(code, 1)
+        self.assertIn(f"FAIL: release asset {SDIST} has no build provenance from .github/workflows/release.yml "
+                      "at v0.0.9: Error: HTTP 404: Not Found", failures)
+
+    def test_an_asset_that_cannot_be_downloaded_is_named(self) -> None:
+        _, failures, _ = self.audit(signed=ATTESTING, undownloadable={0})
+        self.assertIn(f"FAIL: release asset {WHEEL} could not be downloaded to check its provenance", failures)
+
+    def test_a_release_whose_workflow_does_not_attest_is_not_asked(self) -> None:
+        code, failures, output = self.audit(signed={".github/workflows/release.yml": b"no attestation here"})
+        self.assertEqual((code, failures), (0, []), output)
+        self.assertNotIn("build provenance", output)

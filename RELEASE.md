@@ -85,7 +85,11 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
      The publish job uploads the build job's files, never a rebuild.
 5. Approve the `pypi` deployment, then run the audit in full. For any tag
    whose commit has `ALLOWED_SIGNERS`, the audit also requires an
-   `index.json.sig` asset that verifies against it:
+   `index.json.sig` asset that verifies against it; for any tag whose
+   `release.yml` attests, it downloads every asset and requires
+   `gh attestation verify` to find SLSA build provenance signed by this
+   repository's `release.yml` at that tag on a GitHub-hosted runner (about
+   two minutes for 18 assets):
 
    ```sh
    python3 scripts/release-audit.py --tag v<version> --commit <commit>
