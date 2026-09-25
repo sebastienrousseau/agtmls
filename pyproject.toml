@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agtmls"
-version = "0.0.9"
+version = "0.0.10"
 description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
@@ -81,7 +81,14 @@ include = [
   "*.md",
   "LICENSE-APACHE",
   "LICENSE-MIT",
+  "ALLOWED_SIGNERS",
+  "hatch_build.py",
+  "index.json.sig",
 ]
+# The release signature is gitignored, and hatch leaves gitignored files out
+# of an sdist unless they are artifacts. The release builds its wheel from
+# the sdist, so without this the wheel would ship unsigned.
+artifacts = ["index.json.sig"]
 
 # Coverage of the tooling, not of the registry data it validates. Subprocess
 # tracing is on because most of this repository's work happens in child

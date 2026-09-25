@@ -14,12 +14,15 @@ Checks, without importing a TOML parser on older Pythons:
   - every runtime-required path is force-included, and mapped under
     agtmls/_registry/ with its name preserved;
   - no force-included source path is missing from the working tree;
+  - the sdist carries every file the wheel build reads, because the release
+    builds its wheel from the sdist, never from the tree;
   - the pyproject version matches plugin.json and src/agtmls/__init__.py;
   - the console script points at the real entry point.
 """
 
 from __future__ import annotations
 
+import fnmatch
 import json
 import re
 import sys
@@ -105,6 +108,48 @@ def parse_project(text: str) -> dict:
     }
 
 
+# The build hook, and the file it adds to the wheel when CI has made one.
+HOOK = "hatch_build.py"
+SIGNATURE = "index.json.sig"
+
+
+def _string_array(section: str, key: str) -> list[str]:
+    match = re.search(rf"^{key}\s*=\s*\[(.*?)\]", section, re.MULTILINE | re.DOTALL)
+    return re.findall(r'"([^"]*)"', match.group(1)) if match else []
+
+
+def _in_sdist(path: str, include: list[str]) -> bool:
+    return any(
+        path == pattern or path.startswith(f"{pattern}/") or fnmatch.fnmatchcase(path, pattern)
+        for pattern in include
+    )
+
+
+def sdist_gaps(text: str) -> list[str]:
+    """Files the wheel build reads that a wheel built from the sdist would lack.
+
+    `python -m build` builds the sdist, unpacks it and builds the wheel from
+    that, so a force-include source, the build hook or the signature the hook
+    adds must each be in the sdist. The signature is gitignored, and hatch
+    leaves gitignored files out of an sdist unless they are artifacts.
+    """
+    sdist = _section(text, "tool.hatch.build.targets.sdist")
+    include = _string_array(sdist, "include")
+    gaps = [
+        f"the sdist omits {source}, which the wheel force-includes"
+        for source in parse_force_include(text)
+        if not _in_sdist(source, include)
+    ]
+    if re.search(r"^\[tool\.hatch\.build\.targets\.wheel\.hooks\.custom\]", text, re.MULTILINE):
+        if not _in_sdist(HOOK, include):
+            gaps.append(f"the sdist omits {HOOK}, the wheel's build hook")
+        if not _in_sdist(SIGNATURE, include):
+            gaps.append(f"the sdist omits {SIGNATURE}, which the build hook ships")
+        if SIGNATURE not in _string_array(sdist, "artifacts"):
+            gaps.append(f"the sdist must list {SIGNATURE} under artifacts: it is gitignored")
+    return gaps
+
+
 def main() -> int:
     errors: list[str] = []
     if not PYPROJECT.exists():
@@ -148,6 +193,8 @@ def main() -> int:
             errors.append(f"force-include source does not exist: {source}")
         if not target.startswith(f"{PREFIX}/"):
             errors.append(f"force-include target must live under {PREFIX}/: {target}")
+
+    errors += sdist_gaps(text)
 
     plugin_version = str(json.loads(PLUGIN.read_text(encoding="utf-8")).get("version", ""))
     if version != plugin_version:

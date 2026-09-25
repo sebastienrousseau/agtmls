@@ -7,7 +7,22 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.10 - 2026-09-25
+
+### Fixed
+
+- The sdist carries `ALLOWED_SIGNERS`, the `hatch_build.py` build hook
+  and, as an artifact because it is gitignored, `index.json.sig`. The
+  release builds its wheel from the sdist, and v0.0.9's build failed
+  there after the tag was pushed. `validate-packaging.py` now fails when
+  the sdist would lack anything the wheel build reads, and CI builds the
+  wheel through the sdist as the release does.
+
 ## 0.0.9 - 2026-09-24
+
+The `v0.0.9` tag was pushed but never published: the release build
+failed, so nothing reached GitHub Releases or PyPI. Everything below
+first ships in 0.0.10.
 
 ### Added
 

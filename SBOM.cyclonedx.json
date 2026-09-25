@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "09ae2f0bd605dc84c409257d23605caea557a1c1c2f2c3626d7260a5a8e1dced"
+          "content": "9861c6d6454ec2faedd608b4a0ecfe03149cbcda308a3285283c6435ae3785d7"
         }
       ],
       "name": "CATALOG.md",
@@ -886,7 +886,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d17f592c2f03b559d90682c768e2bb29e446aa7689b12f2cd03a4ee746fe049e"
+          "content": "c1c6df45c9ba4655c0f46827a6e548807e6d8e5e291c93e672af5bcd877f2b7d"
         }
       ],
       "name": "index.json",
@@ -1953,7 +1953,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c58b6ddb64874a278d02d3fca48105992c0a8642e08376461e04a7a8e637b4b6"
+          "content": "67a5aeb6ac2401d94504fb0b7e3bc28b98c1267af3d98abad28e18334dea856b"
         }
       ],
       "name": "scripts/validate-packaging.py",
@@ -3845,7 +3845,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c284a72f36e52691ad0d90177b32f758e423733243c03710adc8fd1c140faef8"
+          "content": "93d7183321895665747be664e24950598fa8c327bb73db66983711f5ade6a0f6"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -4057,24 +4057,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.9",
+      "bom-ref": "pkg:pypi/agtmls@0.0.10",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.9",
+      "purl": "pkg:pypi/agtmls@0.0.10",
       "type": "application",
-      "version": "0.0.9"
+      "version": "0.0.10"
     },
-    "timestamp": "2026-09-24T23:14:22Z",
+    "timestamp": "2026-09-25T00:15:24Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.9"
+          "version": "0.0.10"
         }
       ]
     }
