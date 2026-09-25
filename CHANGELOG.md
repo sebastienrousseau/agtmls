@@ -7,6 +7,22 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `release-audit.py` verifies the keyless build provenance of every
+  release asset: `gh attestation verify` must find an SLSA v1 statement,
+  signed through Sigstore, from this repository's `release.yml` at the
+  release tag on a GitHub-hosted runner. Required when the release
+  commit's workflow attests, so older releases audit as before. v0.0.11
+  passes for all 18 assets.
+
+### Fixed
+
+- `SECURITY.md` still listed a signature over `index.json` as not
+  provided, although v0.0.10 and later ship one. The boundaries table now
+  names the index signature, the signed advisory feed and build
+  provenance, with the command to check an asset.
+
 ## 0.0.11 - 2026-09-25
 
 ### Added

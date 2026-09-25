@@ -11,7 +11,10 @@ disagreement:
     tag is the signed one, and it points at the intended commit;
   * the GitHub release body has a user-visible summary, and its Checksums
     section equals the SHA256SUMS asset published beside it;
-  * every file PyPI serves for the version has the digest SHA256SUMS lists.
+  * every file PyPI serves for the version has the digest SHA256SUMS lists;
+  * every release asset carries keyless build provenance (SLSA v1, signed
+    through Sigstore) from this repository's release.yml at the tag, on a
+    GitHub-hosted runner, when the release commit's workflow attests.
 
     python3 scripts/release-audit.py --tag v0.0.6 --commit <sha>
     python3 scripts/release-audit.py --tag v0.0.6 --commit <sha> --before-pypi
@@ -106,6 +109,7 @@ def audit_release(tag: str, repo: str, commit: str) -> tuple[list[str], str | No
     errors += notes_problems(f"{tag} release body", release.get("body") or "", sums)
     errors += audit_assets(assets, sums)
     errors += audit_signature(commit, repo, assets)
+    errors += audit_provenance(commit, repo, tag, assets)
     return errors, sums
 
 
@@ -137,6 +141,44 @@ def audit_signature(commit: str, repo: str, assets: list[dict]) -> list[str]:
         return [f"index.json.sig does not verify against the release commit's ALLOWED_SIGNERS ({status})"]
     print("OK: index.json.sig verifies against the release commit's ALLOWED_SIGNERS")
     return []
+
+
+WORKFLOW = ".github/workflows/release.yml"
+
+
+def audit_provenance(commit: str, repo: str, tag: str, assets: list[dict]) -> list[str]:
+    """Every asset's keyless build provenance verifies (Elevation Plan P2.6).
+
+    release.yml attests dist/assets/* with actions/attest-build-provenance:
+    an SLSA v1 statement signed through Sigstore with the workflow's OIDC
+    identity. `gh attestation verify` checks that signature against the
+    public-good transparency log and pins who made it: this repository's
+    release.yml, at this tag, on a GitHub-hosted runner. Required only when
+    the release commit's workflow attests, so older releases audit as before.
+    """
+    workflow = fetch_bytes("git", "show", f"{commit}:{WORKFLOW}")
+    if workflow is None or b"attest-build-provenance" not in workflow:
+        return []
+    errors = []
+    with tempfile.TemporaryDirectory(prefix="agtmls-provenance-") as raw:
+        for asset in sorted(assets, key=lambda a: a["name"]):
+            data = fetch_bytes("gh", "api", "-H", "Accept: application/octet-stream",
+                               f"repos/{repo}/releases/assets/{asset['id']}")
+            if data is None:
+                errors.append(f"release asset {asset['name']} could not be downloaded to check its provenance")
+                continue
+            path = Path(raw) / Path(asset["name"]).name
+            path.write_bytes(data)
+            proc = run("gh", "attestation", "verify", str(path), "--repo", repo,
+                       "--signer-workflow", f"{repo}/{WORKFLOW}", "--source-ref", f"refs/tags/{tag}",
+                       "--deny-self-hosted-runners", "--format", "json")
+            if proc.returncode != 0:
+                reason = (proc.stderr or proc.stdout).strip().splitlines()
+                errors.append(f"release asset {asset['name']} has no build provenance from {WORKFLOW} at {tag}"
+                              + (f": {reason[-1]}" if reason else ""))
+    if not errors:
+        print(f"OK: {len(assets)} release asset(s) carry build provenance from {WORKFLOW} at {tag}")
+    return errors
 
 
 def audit_assets(assets: list[dict], sums: str) -> list[str]:
