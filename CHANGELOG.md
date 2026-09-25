@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.12 - 2026-09-25
+
 ### Added
 
 - `release-audit.py` verifies the keyless build provenance of every
