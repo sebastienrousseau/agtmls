@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sebastienrousseau/agtmls/actions"><img src="https://github.com/sebastienrousseau/agtmls/workflows/validate/badge.svg?style=for-the-badge&logo=github" alt="Build" /></a>
+  <a href="https://github.com/sebastienrousseau/agtmls/actions/workflows/validate.yml"><img src="https://img.shields.io/github/actions/workflow/status/sebastienrousseau/agtmls/validate.yml?branch=main&style=for-the-badge&logo=github&label=build" alt="Build" /></a>
   <a href="https://pypi.org/project/agtmls/"><img src="https://img.shields.io/pypi/v/agtmls.svg?style=for-the-badge&color=fc8d62&logo=python" alt="Registry" /></a>
   <a href="https://github.com/sebastienrousseau/agtmls/tree/main/docs"><img src="https://img.shields.io/badge/docs-docs%2F-blue.svg?style=for-the-badge&labelColor=555555&logo=markdown" alt="Docs" /></a>
   <a href="https://scorecard.dev/viewer/?uri=github.com/sebastienrousseau/agtmls"><img src="https://img.shields.io/ossf-scorecard/github.com/sebastienrousseau/agtmls?style=for-the-badge&label=OpenSSF%20Scorecard&logo=openssf" alt="OpenSSF Scorecard" /></a>
