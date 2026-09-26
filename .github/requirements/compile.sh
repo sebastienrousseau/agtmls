@@ -15,13 +15,23 @@ cd "$(dirname "$0")"
 floor() {
   case "$1" in
     skills-ref|coverage) echo 3.11 ;;
+    fuzz) echo 3.12 ;;
     *) echo 3.10 ;;
+  esac
+}
+
+# Where a file must resolve: everywhere, or only where its package has wheels.
+platform() {
+  case "$1" in
+    fuzz) echo "--python-platform x86_64-manylinux_2_17" ;;
+    *) echo "--universal" ;;
   esac
 }
 
 for input in *.in; do
   name="${input%.in}"
-  body="$(uv pip compile --universal --python-version "$(floor "$name")" \
+  # shellcheck disable=SC2046  # platform prints one or two words on purpose
+  body="$(uv pip compile $(platform "$name") --python-version "$(floor "$name")" \
     --generate-hashes --no-header -q "$input")"
   {
     echo "# SPDX-FileCopyrightText: 2026 Sebastien Rousseau"

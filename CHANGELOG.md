@@ -7,6 +7,28 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Security
+
+- Code scanning: the spec-rules job in `conformance.yml` checked out
+  `agtmls-spec` at a ref read from `rules.json`, a file a pull request
+  can change (CodeQL `actions/untrusted-checkout`,
+  `actions/cache-poisoning`). The pin is now validated as a 40-hex commit
+  before use, and that one commit is fetched as data with `git fetch`;
+  nothing from it runs.
+- Fuzzing (OpenSSF Scorecard Fuzzing): Atheris targets for JSON escape
+  decoding, normalisation, the rule set over hostile text, the advisory
+  feed and `SHA256SUMS`, each asserting a property (`fuzz/`, run weekly
+  and on parser changes by `fuzz.yml`, and replayed without Atheris by
+  `tests/test_fuzz_targets.py`).
+
+### Fixed
+
+- `advisories.feed_problems` raised on a feed whose digests were not
+  strings, and `revoked` on several other wrong shapes; found by the
+  first fuzz replay. Every shape is now judged or skipped, never raised
+  on. Feeds are signature-checked before use, so this was a robustness
+  defect, not a bypass.
+
 ### Added
 
 - Five rules from agtmls-spec (snapshot pinned to agtmls-spec

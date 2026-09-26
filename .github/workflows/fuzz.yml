@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: MIT
+name: fuzz
+
+# Atheris (libFuzzer) over every parser that reads untrusted input: JSON
+# escape decoding, normalisation, the rule set over hostile text, the
+# advisory feed and SHA256SUMS. Each target asserts a property, not only
+# that it survives. The first local replay found the advisory feed parser
+# raising on a digest that was not a string. tests/test_fuzz_targets.py
+# replays the same targets on every platform; this job fuzzes on Linux,
+# the only platform Atheris ships wheels for.
+on:
+  pull_request:
+    paths:
+      - "scripts/_lib/**"
+      - "fuzz/**"
+      - ".github/workflows/fuzz.yml"
+      - ".github/requirements/fuzz.*"
+  schedule:
+    - cron: "41 3 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    name: fuzz ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [json_escapes, normalize, audit_content, advisory_feed, checksums]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/fuzz.txt
+      - name: Fuzz for 60 seconds from the seed corpus
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          mkdir -p "crashes/$TARGET" "work/$TARGET"
+          cp fuzz/corpus/"$TARGET"/* "work/$TARGET/"
+          python3 fuzz/fuzz.py "$TARGET" -max_total_time=60 -timeout=10 \
+            -artifact_prefix="crashes/$TARGET/" "work/$TARGET"
+      - name: Keep any crashing input
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: fuzz-crash-${{ matrix.target }}
+          path: crashes/
+          retention-days: 14

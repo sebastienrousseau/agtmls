@@ -35,18 +35,36 @@ jobs:
         with:
           python-version: "3.12"
       - name: Read the pinned spec commit
+        # The pin comes from a file a pull request can change, so it is
+        # validated before it is used anywhere: exactly 40 lowercase hex
+        # characters, which also means it cannot add a line to GITHUB_OUTPUT.
         id: pin
         run: |
-          echo "commit=$(python3 -c 'import json; print(json.load(open("scripts/_lib/rules.json"))["source"]["commit"])')" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: sebastienrousseau/agtmls-spec
-          ref: ${{ steps.pin.outputs.commit }}
-          path: agtmls-spec
+          commit="$(python3 -c 'import json; print(json.load(open("scripts/_lib/rules.json"))["source"]["commit"])')"
+          if [[ ! "$commit" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::rules.json pins '$commit', which is not a 40-hex commit"
+            exit 1
+          fi
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - name: Fetch the pinned spec commit as data
+        # A plain fetch of one commit from the fixed spec repository, rather
+        # than a checkout action driven by a pull-request-controlled ref
+        # (CodeQL actions/untrusted-checkout, actions/cache-poisoning).
+        # Nothing from it is executed: the check below is this repository's
+        # own script, reading the spec's rule files.
+        env:
+          COMMIT: ${{ steps.pin.outputs.commit }}
+        run: |
+          git init -q agtmls-spec
+          git -C agtmls-spec fetch -q --depth 1 https://github.com/sebastienrousseau/agtmls-spec.git "$COMMIT"
+          git -C agtmls-spec checkout -q FETCH_HEAD
+          test "$(git -C agtmls-spec rev-parse HEAD)" = "$COMMIT"
       - name: Snapshot equals the spec it names
         # rules.json is the only copy of the rule set in this repository.
         # This is what proves it is a copy and not a fork.
-        run: python3 scripts/sync-spec-rules.py --check --from agtmls-spec --commit "${{ steps.pin.outputs.commit }}"
+        env:
+          COMMIT: ${{ steps.pin.outputs.commit }}
+        run: python3 scripts/sync-spec-rules.py --check --from agtmls-spec --commit "$COMMIT"
 
   sbom:
     name: SBOMs validate against their own schemas

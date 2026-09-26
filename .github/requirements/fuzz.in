@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+# Linux x86_64 only: Atheris ships no other wheels and no sdist.
+atheris==3.1.0
