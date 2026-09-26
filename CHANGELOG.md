@@ -7,6 +7,14 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- The README's OpenSSF Scorecard badge rendered "invalid repo path":
+  nothing published Scorecard results for this repository.
+  `scorecard.yml` runs the pinned `ossf/scorecard-action` on pushes to
+  main and weekly, publishes to the public Scorecard API the badge reads,
+  and uploads the SARIF to code scanning.
+
 ## 0.0.12 - 2026-09-25
 
 ### Added
