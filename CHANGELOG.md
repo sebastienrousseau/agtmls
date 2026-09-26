@@ -23,6 +23,11 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- The README's build badge was GitHub's own workflow badge, which ignores
+  `style=for-the-badge`, so it rendered small and flat beside five
+  shields.io badges. It is now shields.io's workflow-status badge for
+  `validate.yml` on main, in the same style, with the same GitHub logo and
+  grey label, at the same 28 px height.
 - `advisories.feed_problems` raised on a feed whose digests were not
   strings, and `revoked` on several other wrong shapes; found by the
   first fuzz replay. Every shape is now judged or skipped, never raised
