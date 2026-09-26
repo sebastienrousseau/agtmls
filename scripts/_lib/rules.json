@@ -1299,10 +1299,53 @@
           "text": "wget -q -O bin/tool https://example.test/tool; chmod 755 bin/tool"
         }
       ]
+    },
+    {
+      "applies_to": [
+        "*.sh",
+        "*.bash",
+        "*.zsh",
+        "*.ps1",
+        "*.py",
+        "*.js",
+        "*.mjs",
+        "*.ts",
+        "*.md",
+        "executable"
+      ],
+      "category": "supply_chain",
+      "description": "A download verified only against a checksum fetched from the same place: the artifact URL with a .sha256 or .sha512 suffix, or a checksums file from the same release",
+      "false_positive": [
+        {
+          "note": "A digest pinned in the script is the fix this rule asks for.",
+          "text": "echo \"3f7a0c2e9b...  tool.tgz\" | sha256sum -c -"
+        },
+        {
+          "note": "Verifying a signature from a key the script holds is provenance.",
+          "text": "curl -fsSL -o tool.tgz \"$url\" && minisign -Vm tool.tgz -P \"$PUBKEY\""
+        }
+      ],
+      "id": "AGT-SUPPLY-003",
+      "pattern": "(?i)\\b(?:curl|wget|Invoke-WebRequest|iwr|urlretrieve|urlopen|fetch)\\b[^;&|]{0,200}?\\$\\{?\\w+\\}?\\.sha(?:256|512)(?:sum)?\\b|/releases/download/[^\\s\"'<>]*/(?:checksums\\.txt|sha256sums(?:\\.txt)?|sha512sums(?:\\.txt)?)\\b",
+      "rationale": "Whoever can replace the artifact at that URL can replace the checksum beside it, so the check proves only that the bytes were not corrupted in transit. It is not provenance. Pin the digest in the script, or verify a signature from a key the script already holds. Seen in a published skill launcher that verified a downloaded engine against \"$url.sha256\", and in an installer that checked its binary against checksums.txt from the same GitHub release.",
+      "scope": "normalised",
+      "severity": "medium",
+      "title": "Checksum fetched from the same place as its artifact",
+      "true_positive": [
+        {
+          "text": "curl -fsSL --retry 2 -o \"$tmp.sha256\" \"$url.sha256\" && expected=$(cut -d' ' -f1 < \"$tmp.sha256\")"
+        },
+        {
+          "text": "checksums_url=\"https://github.com/${OWNER}/${REPO}/releases/download/${VERSION}/checksums.txt\""
+        },
+        {
+          "text": "wget -q -O tool.sha512 \"${BASE}.sha512\""
+        }
+      ]
     }
   ],
   "source": {
-    "commit": "c38e7dcfc161ae805b91e7d70ff4caae9ea30d40",
+    "commit": "50a995306c8641f99a36dcf1c11e1792700b2725",
     "files": {
       "AGT-CAP-001.toml": "3be5c757be71e30833b056cfa03f415a05da470f56c680e5c9f15bfa786a25e3",
       "AGT-CAP-002.toml": "fe1b3f974c61e08d99140dde955bcf670f811b0b1a6a1da7d55acc9091104540",
@@ -1341,7 +1384,8 @@
       "AGT-STEG-001.toml": "f803cddbb9b375a273ee5dbbd179f44570ab8643dfad2321e53a81d994bbe71f",
       "AGT-STEG-002.toml": "d4cb0afd05cfbc3b440a557660e2f54b9f625a7763801e18414713a5a774001b",
       "AGT-SUPPLY-001.toml": "d3745352cc5b4d1651e6ab1617b218addd1d3e952e7e11611cc237714ab053c7",
-      "AGT-SUPPLY-002.toml": "63f49ff34b3514bae7c80d7453430195197a4593689e55040a0a7e8752267796"
+      "AGT-SUPPLY-002.toml": "63f49ff34b3514bae7c80d7453430195197a4593689e55040a0a7e8752267796",
+      "AGT-SUPPLY-003.toml": "c627186f0db6ad324db79f1d4f4c772ebd7646d38d41dfe393e5f8bdee870ae9"
     },
     "repository": "sebastienrousseau/agtmls-spec"
   }

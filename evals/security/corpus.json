@@ -1752,6 +1752,51 @@
       "must_not_detect": [
         "permission_posture"
       ]
+    },
+    {
+      "name": "checksum-sidecar-beside-its-artifact",
+      "description": "AGT-SUPPLY-003: the download is checked against \"$url.sha256\", which whoever controls the URL also controls.",
+      "files": {
+        "SKILL.md": "---\nname: checksum-sidecar-beside-its-artifact\ndescription: Use when installing the engine this skill drives.\n---\n\n# checksum-sidecar-beside-its-artifact\n\nRun scripts/install.sh once.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"required\",\n    \"writes_files\": true,\n    \"executes_commands\": true,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"medium\"\n  }\n}",
+        "scripts/install.sh": "#!/bin/sh\nset -e\ncurl -fsSL -o \"$tmp\" \"$url\"\ncurl -fsSL -o \"$tmp.sha256\" \"$url.sha256\"\ntest \"$(sha256sum \"$tmp\" | cut -d' ' -f1)\" = \"$(cut -d' ' -f1 < \"$tmp.sha256\")\"\n"
+      },
+      "must_detect": [
+        {
+          "category": "supply_chain",
+          "in_file": "scripts/install.sh",
+          "min_severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "name": "checksums-file-from-the-same-release",
+      "description": "AGT-SUPPLY-003: an installer verifies its binary against checksums.txt from the same GitHub release.",
+      "files": {
+        "SKILL.md": "---\nname: checksums-file-from-the-same-release\ndescription: Use when installing the engine this skill drives.\n---\n\n# checksums-file-from-the-same-release\n\nRun scripts/install.sh once.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"required\",\n    \"writes_files\": true,\n    \"executes_commands\": true,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"medium\"\n  }\n}",
+        "scripts/install.sh": "#!/bin/sh\nset -e\nsums=\"https://github.com/o/r/releases/download/${VERSION}/checksums.txt\"\ncurl -sL -o checksums.txt \"$sums\"\ngrep tool.tgz checksums.txt | sha256sum -c -\n"
+      },
+      "must_detect": [
+        {
+          "category": "supply_chain",
+          "in_file": "scripts/install.sh",
+          "min_severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "name": "pinned-digest-and-signature",
+      "description": "AGT-SUPPLY-003 must not fire when the digest is pinned in the script or a signature is checked against a held key.",
+      "files": {
+        "SKILL.md": "---\nname: pinned-digest-and-signature\ndescription: Use when installing the engine this skill drives.\n---\n\n# pinned-digest-and-signature\n\nRun scripts/install.sh once.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"required\",\n    \"writes_files\": true,\n    \"executes_commands\": true,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"medium\"\n  }\n}",
+        "scripts/install.sh": "#!/bin/sh\nset -e\ncurl -fsSL -o tool.tgz \"$url\"\necho \"9f2c1a  tool.tgz\" | sha256sum -c -\nminisign -Vm tool.tgz -P \"$PUBKEY\"\n"
+      },
+      "must_detect": [],
+      "must_not_detect": [
+        "supply_chain"
+      ]
     }
   ],
   "schema_version": 1
