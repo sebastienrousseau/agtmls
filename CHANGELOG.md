@@ -7,6 +7,19 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `verify <agent> --live` asks the agent which skills it actually loads in
+  the target and fails naming any installed skill it does not list: Claude
+  Code through its headless `system/init` event, Codex through
+  `codex debug prompt-input`, which calls no model. The lockfile proves
+  the bytes; only the agent can say it reads them.
+- `doctor` checks each agent's user-level skill directories
+  (`~/.claude/skills`, `~/.codex/skills`) and names every link that no
+  longer resolves, which the agent skips silently and no lockfile covers.
+  On one machine 18 of 20 such links had broken when the registry went
+  flat, and Claude Code loaded 2 of the 20 skills.
+
 ## 0.0.14 - 2026-09-26
 
 ### Added

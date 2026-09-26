@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-26T15:32:33Z",
+    "created": "2026-09-26T16:32:02Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1345,11 +1345,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1dc7ab1d5a2e20f80878fbfef4acb85b9287332e"
+          "checksumValue": "cb2be64ecca6be234ced4fabd7d15d5e664d31f6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1be1bcbe6e0eecd16f31c88111fc2e4e4f76786b708afc43b219b5ef6b439366"
+          "checksumValue": "950700658d0f14b45fb34f9ba5bc3440eb2c06175ffb83919d20ccddcc71f72a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1505,11 +1505,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0711c06becb8e10bbf9e4ab9625bfd4aca9a967b"
+          "checksumValue": "b0a27dc970c66def369853025be81cfeaaff61ae"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e35950adcca45f73653b25def538fc270f041a8999f0b2574845b1d29d6a14ef"
+          "checksumValue": "a51af8b1d1a6598de0755805b2589e46e74cb2c77184eaa4398457744c2f559b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1546,6 +1546,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/digest.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-liveness.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "740236eea903a152d77ba983280ced7d079e9e20"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b5cac8685c85fbf8427b2d346cf650d89cfdc4c14a7ff861559ed92dbeb8b0c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/liveness.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1697,11 +1713,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "de0d176fb5ca3ebcc85f11a55a79b6fcc94be32c"
+          "checksumValue": "8bf2f6c843d96af2b98bd80ec92d782b12503e9c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f3ccc26a7482bc9dd2f8f6685edd662f17327d7c073fa40aa27799936aefed7f"
+          "checksumValue": "1e15d6dbdd993f397e7a74fa79596ff4bdbfae7fead40dd1b14ac7a71db5b405"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1713,11 +1729,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5a0d7b57605c1139ef5fa64249f1c33182bd6f22"
+          "checksumValue": "bd2085f26e274f6fa439a82c987a28fdf5cc4b4c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "32dbd0eb110615ebb5845b8b7ba7802d8c82248903968b5e621e3815079f7e9a"
+          "checksumValue": "a6401c621273fd64f8f84a78dac43cf9e2592b184b3f7c80b142dec9d6ff191c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2929,11 +2945,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "df51f71a4b7587d10d397c5ebb04594fc56beb92"
+          "checksumValue": "e87b92ac4538222794d7161a07909bc207ce4855"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3411ce36514b0e35b0e39e66771ad9cdcc9b7c8d84c490198fa5d6ad6b9dfaca"
+          "checksumValue": "8ea2dcd4fb5321bc2f37e2db8a869796c0dbe627efdcb87576e2c001e76cf5ac"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6044,6 +6060,7 @@
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
+        "SPDXRef-File-scripts--lib-liveness.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
         "SPDXRef-File-scripts--lib-posture.py",
         "SPDXRef-File-scripts--lib-release-notes.py",

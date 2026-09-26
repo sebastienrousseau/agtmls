@@ -70,6 +70,13 @@ def main() -> int:
                 errors.append(f"{where} needs the unattended values it recognises")
             if not isinstance(entry.get("classified", []), list):
                 errors.append(f"{where} classified must be a list")
+        # Where the agent loads user-level skills, and how to ask it which it
+        # loads: doctor and verify --live read these.
+        dirs = item.get("user_skills_dirs")
+        if not isinstance(dirs, list) or not all(isinstance(d, str) and d for d in dirs):
+            errors.append(f"native agent {name} user_skills_dirs must be a list of paths")
+        if "live_probe" in item and item["live_probe"] not in {"claude-init", "codex-prompt-input"}:
+            errors.append(f"native agent {name} live_probe must be claude-init or codex-prompt-input")
     plugins = data.get("plugin_targets", {})
     if not isinstance(plugins, dict):
         errors.append("plugin_targets must be an object")

@@ -21,6 +21,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
 from .support import load_script, retarget, run_main
@@ -213,6 +214,39 @@ class InstallLifecycleTests(CliFixture):
 
     def verify(self, json_output: bool = False) -> tuple[int, str]:
         return capture(self.cli.verify_install, self.target, "claude", json_output)
+
+    def verify_live(self, loaded=None, error=None, json_output: bool = False) -> tuple[int, str]:
+        from _lib import liveness
+
+        def fake(item, cwd):
+            if error:
+                raise liveness.ProbeError(error)
+            return set(loaded)
+
+        with mock.patch.object(liveness, "loaded_skills", fake):
+            return capture(self.cli.verify_install, self.target, "claude", json_output, False, True)
+
+    def test_live_verify_passes_when_the_agent_lists_every_installed_skill(self) -> None:
+        self.install("--copy")
+        code, output = self.verify_live(loaded=set(GENERAL) | {"other"})
+        self.assertEqual(code, 0, output)
+        self.assertIn(f"OK: claude loads all {len(GENERAL)} installed skill(s)", output)
+
+    def test_a_skill_the_agent_does_not_list_fails_live_verify(self) -> None:
+        """The bytes match; the agent never reads it. 18 skills sat like this."""
+        self.install("--copy")
+        code, output = self.verify_live(loaded=set(GENERAL[1:]))
+        self.assertEqual(code, 1, output)
+        self.assertIn(f"NOT LOADED   {GENERAL[0]}  installed, but claude does not list it", output)
+        code, output = self.verify_live(loaded=set(GENERAL[1:]), json_output=True)
+        self.assertEqual(json.loads(output)["live"], {"expected": len(GENERAL), "loaded": len(GENERAL) - 1,
+                                                       "missing": [GENERAL[0]]})
+
+    def test_an_agent_that_cannot_be_asked_fails_live_verify_and_says_why(self) -> None:
+        self.install("--copy")
+        code, output = self.verify_live(error="claude is not installed")
+        self.assertEqual(code, 1, output)
+        self.assertIn("LIVE         claude could not be asked which skills it loads: claude is not installed", output)
 
     def test_verify_accepts_an_untouched_install(self) -> None:
         self.install("--copy")

@@ -106,7 +106,8 @@
             true
           ]
         }
-      ]
+      ],
+      "user_skills_dirs": []
     },
     "antigravity": {
       "agents_dir": ".agents/agents",
@@ -115,7 +116,8 @@
       "install_mode": "symlink",
       "prompt_file": "AGENTS.md",
       "skills_dir": ".agents/skills",
-      "approval_settings": []
+      "approval_settings": [],
+      "user_skills_dirs": []
     },
     "claude": {
       "agents_dir": ".claude/agents",
@@ -164,7 +166,11 @@
             "auto"
           ]
         }
-      ]
+      ],
+      "user_skills_dirs": [
+        "~/.claude/skills"
+      ],
+      "live_probe": "claude-init"
     },
     "codex": {
       "agents_dir": ".codex/agents",
@@ -210,7 +216,11 @@
             "danger-full-access"
           ]
         }
-      ]
+      ],
+      "user_skills_dirs": [
+        "~/.codex/skills"
+      ],
+      "live_probe": "codex-prompt-input"
     }
   },
   "plugin_targets": {
