@@ -1095,7 +1095,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "18f738046ee32fc51e723510af3f832da5645e568a7dd03e7d9822960f58d2ff"
+          "content": "826ff80a61344616eb825d6a2f44d52432301baacb583f3e1662505cf3363d94"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -4090,7 +4090,7 @@
       "type": "application",
       "version": "0.0.13"
     },
-    "timestamp": "2026-09-26T15:13:19Z",
+    "timestamp": "2026-09-26T15:22:54Z",
     "tools": {
       "components": [
         {
