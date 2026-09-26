@@ -38,6 +38,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 
 ALLOWED_TOOLS_MODE = "capability"  # "capability" | "readonly"
@@ -162,7 +165,7 @@ def main() -> int:
     group.add_argument("--write", action="store_true", help="regenerate frontmatter in place")
     args = parser.parse_args()
 
-    skill_files = sorted(SKILLS_DIR.glob("*/SKILL.md"))
+    skill_files = skill_roots.skill_files(ROOT)
     if not skill_files:
         print(f"no SKILL.md files found under {SKILLS_DIR}", file=sys.stderr)
         return 1

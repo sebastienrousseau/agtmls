@@ -92,7 +92,9 @@ class FrontmatterSyncTests(SubsetCase):
 
     def test_an_empty_skill_tree_is_an_error_not_a_pass(self) -> None:
         module = self.script()
-        module.SKILLS_DIR = self.fixture / "no-skills-here"
+        empty = self.fixture / "no-skills-here"
+        empty.mkdir(exist_ok=True)
+        module.ROOT = empty
         code, output = self.drive("--check", module=module)
         self.assertEqual(code, 1, output)
         self.assertIn("no SKILL.md files found", output)

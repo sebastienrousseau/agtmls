@@ -12,6 +12,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 TAG = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 METADATA_FILES = [
@@ -21,7 +24,7 @@ METADATA_FILES = [
 #: registry's on every release, and these are inside each skill's content
 #: address -- so restoring one would make every release move every digest
 #: again, and `verify` could not tell a bump from tampering.
-VERSION_FREE = sorted((ROOT / "skills").glob("*/metadata.json")) + [
+VERSION_FREE = sorted(p / "metadata.json" for p in skill_roots.skill_dirs(ROOT) if (p / "metadata.json").exists()) + [
     ROOT / "templates" / "skill" / "metadata.json",
 ]
 
@@ -98,7 +101,7 @@ def main() -> int:
                 f"{path.relative_to(ROOT)} must not carry a version: it would put "
                 "the release back inside the skill's content address"
             )
-    for skill_md in sorted((ROOT / "skills").glob("*/SKILL.md")):
+    for skill_md in skill_roots.skill_files(ROOT):
         if "agtmls-version" in skill_md.read_text(encoding="utf-8"):
             errors.append(f"{skill_md.relative_to(ROOT)} must not carry agtmls-version")
 

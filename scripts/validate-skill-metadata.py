@@ -11,6 +11,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -23,7 +26,7 @@ SAFETY_BOOLEANS = ["writes_files", "executes_commands", "handles_secrets", "requ
 
 def main() -> int:
     errors: list[str] = []
-    metadata_files = sorted(SKILLS_DIR.glob("*/metadata.json"))
+    metadata_files = sorted(p / "metadata.json" for p in skill_roots.skill_dirs(ROOT) if (p / "metadata.json").exists())
     for mf in metadata_files:
         try:
             data = json.loads(mf.read_text(encoding="utf-8"))
@@ -71,7 +74,7 @@ def main() -> int:
     # Every skill owns its metadata.json: the tree is flat, so there is no
     # bundle directory to inherit one from. Its contents were judged above;
     # parsing it again here crashed on the malformed file just reported.
-    for skill_md in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+    for skill_md in skill_roots.skill_files(ROOT):
         if not (skill_md.parent / "metadata.json").is_file():
             errors.append(f"{skill_md.parent.relative_to(ROOT)}: no metadata.json")
 

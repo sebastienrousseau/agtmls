@@ -20,19 +20,19 @@ Commands: `4`
 | `giving-code-review` | `general` | ci, review | `skills/giving-code-review` |
 | `handoff` | `general` | continuity, validation | `skills/handoff` |
 | `incident-response` | `general` | ci, debugging, incident | `skills/incident-response` |
-| `noyalib-architecture-contract` | `noyalib` | architecture, ci, incident, noyalib | `skills/noyalib-architecture-contract` |
-| `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `skills/noyalib-build-and-env` |
-| `noyalib-change-control` | `noyalib` | ci, noyalib, release, security | `skills/noyalib-change-control` |
-| `noyalib-ci-and-release` | `noyalib` | ci, noyalib, release | `skills/noyalib-ci-and-release` |
-| `noyalib-config-and-flags` | `noyalib` | config, noyalib | `skills/noyalib-config-and-flags` |
-| `noyalib-coverage-campaign` | `noyalib` | coverage, debugging, noyalib | `skills/noyalib-coverage-campaign` |
-| `noyalib-debugging-playbook` | `noyalib` | ci, debugging, noyalib, qa | `skills/noyalib-debugging-playbook` |
-| `noyalib-diagnostics-and-tooling` | `noyalib` | coverage, diagnostics, noyalib, validation | `skills/noyalib-diagnostics-and-tooling` |
-| `noyalib-docs-and-writing` | `noyalib` | architecture, ci, docs, noyalib, qa, release | `skills/noyalib-docs-and-writing` |
-| `noyalib-external-positioning` | `noyalib` | docs, noyalib, release, review, yaml | `skills/noyalib-external-positioning` |
-| `noyalib-failure-archaeology` | `noyalib` | ci, incident, noyalib, refactoring, validation | `skills/noyalib-failure-archaeology` |
-| `noyalib-research-frontier` | `noyalib` | noyalib, research, validation | `skills/noyalib-research-frontier` |
-| `noyalib-validation-and-qa` | `noyalib` | diagnostics, noyalib, qa, validation | `skills/noyalib-validation-and-qa` |
+| `noyalib-architecture-contract` | `noyalib` | architecture, ci, incident, noyalib | `packs/noyalib/skills/noyalib-architecture-contract` |
+| `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `packs/noyalib/skills/noyalib-build-and-env` |
+| `noyalib-change-control` | `noyalib` | ci, noyalib, release, security | `packs/noyalib/skills/noyalib-change-control` |
+| `noyalib-ci-and-release` | `noyalib` | ci, noyalib, release | `packs/noyalib/skills/noyalib-ci-and-release` |
+| `noyalib-config-and-flags` | `noyalib` | config, noyalib | `packs/noyalib/skills/noyalib-config-and-flags` |
+| `noyalib-coverage-campaign` | `noyalib` | coverage, debugging, noyalib | `packs/noyalib/skills/noyalib-coverage-campaign` |
+| `noyalib-debugging-playbook` | `noyalib` | ci, debugging, noyalib, qa | `packs/noyalib/skills/noyalib-debugging-playbook` |
+| `noyalib-diagnostics-and-tooling` | `noyalib` | coverage, diagnostics, noyalib, validation | `packs/noyalib/skills/noyalib-diagnostics-and-tooling` |
+| `noyalib-docs-and-writing` | `noyalib` | architecture, ci, docs, noyalib, qa, release | `packs/noyalib/skills/noyalib-docs-and-writing` |
+| `noyalib-external-positioning` | `noyalib` | docs, noyalib, release, review, yaml | `packs/noyalib/skills/noyalib-external-positioning` |
+| `noyalib-failure-archaeology` | `noyalib` | ci, incident, noyalib, refactoring, validation | `packs/noyalib/skills/noyalib-failure-archaeology` |
+| `noyalib-research-frontier` | `noyalib` | noyalib, research, validation | `packs/noyalib/skills/noyalib-research-frontier` |
+| `noyalib-validation-and-qa` | `noyalib` | diagnostics, noyalib, qa, validation | `packs/noyalib/skills/noyalib-validation-and-qa` |
 | `pr-review-and-release` | `engineering` | ci, docs, engineering, release, review | `skills/pr-review-and-release` |
 | `receiving-code-review` | `general` | ci, review | `skills/receiving-code-review` |
 | `refactoring-safely` | `general` | refactoring | `skills/refactoring-safely` |
@@ -42,7 +42,7 @@ Commands: `4`
 | `verification-before-completion` | `general` | porting, qa, validation | `skills/verification-before-completion` |
 | `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-research-and-source-triage` |
 | `writing-plans` | `general` | continuity, docs, planning, review | `skills/writing-plans` |
-| `yaml-domain-reference` | `noyalib` | config, noyalib, yaml | `skills/yaml-domain-reference` |
+| `yaml-domain-reference` | `noyalib` | config, noyalib, yaml | `packs/noyalib/skills/yaml-domain-reference` |
 
 ## Commands
 

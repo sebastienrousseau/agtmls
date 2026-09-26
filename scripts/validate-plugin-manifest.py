@@ -24,6 +24,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 MANIFEST = ROOT / ".claude-plugin" / "plugin.json"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
 SKILLS_DIR = ROOT / "skills"
@@ -52,10 +55,10 @@ RESERVED_MARKETPLACES = {
 }
 
 
-def rel_path(value: object) -> Path | None:
+def rel_path(value: object, base: Path | None = None) -> Path | None:
     if not isinstance(value, str) or not value.startswith("./") or ".." in Path(value).parts:
         return None
-    return ROOT / value
+    return (base or ROOT) / value
 
 
 def required_skill_paths() -> set[str]:
@@ -69,6 +72,15 @@ def required_skill_paths() -> set[str]:
     return {"./skills", *nested}
 
 
+def pack_of_source(source: object) -> str | None:
+    """The pack a marketplace entry installs, from its `./packs/<name>` source."""
+    if isinstance(source, str):
+        parts = Path(source).parts
+        if len(parts) == 2 and parts[0] == skill_roots.PACKS:
+            return parts[1]
+    return None
+
+
 def check_agent_paths(label: str, value: object, errors: list[str]) -> None:
     """`agents` is an array of file paths. A directory string is rejected by
     `claude plugin validate`, and a stale list silently drops an agent."""
@@ -80,18 +92,22 @@ def check_agent_paths(label: str, value: object, errors: list[str]) -> None:
         errors.append(f"{label} does not match agents/ on disk: {sorted(set(on_disk) ^ set(value))}")
 
 
-def check_skill_paths(label: str, value: object, errors: list[str]) -> None:
+def check_skill_paths(label: str, value: object, errors: list[str], base: Path | None = None,
+                      required: set[str] | None = None) -> None:
+    """`value` resolves against the plugin's source directory `base`; the
+    result must cover `required` (repository-relative), by default the
+    general skills root."""
     entries = value if isinstance(value, list) else [value]
     resolved: set[str] = set()
     for entry in entries:
-        target = rel_path(entry)
+        target = rel_path(entry, base)
         if target is None:
             errors.append(f"{label} must contain safe ./ relative paths: {entry!r}")
         elif not target.is_dir():
             errors.append(f"{label} path is not a directory: {entry}")
         else:
             resolved.add("./" + target.relative_to(ROOT).as_posix())
-    missing = sorted(required_skill_paths() - resolved)
+    missing = sorted((required_skill_paths() if required is None else required) - resolved)
     if missing:
         errors.append(
             f"{label} omits bundle path(s) whose skills would not load: {', '.join(missing)}"
@@ -162,6 +178,7 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
     if plugin.get("name") not in listed:
         errors.append(f"marketplace does not list the plugin {plugin.get('name')!r}")
 
+    packed: set[str] = set()
     for entry in entries:
         if not isinstance(entry, dict):
             errors.append("marketplace plugin entry must be an object")
@@ -175,8 +192,15 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
                 errors.append(f"{label} source must be a safe ./ relative path or a source object")
         elif not isinstance(source, dict):
             errors.append(f"{label} source is required")
+        pack = pack_of_source(source)
         if "skills" in entry:
-            check_skill_paths(f"{label} skills", entry["skills"], errors)
+            check_skill_paths(
+                f"{label} skills", entry["skills"], errors,
+                base=ROOT / source if isinstance(source, str) else None,
+                required={f"./{skill_roots.PACKS}/{pack}/skills"} if pack else None,
+            )
+        if pack is not None:
+            packed.add(pack)
         if "agents" in entry:
             check_agent_paths(f"{label} agents", entry["agents"], errors)
         # Version pinning drives updates for installed users; an entry that
@@ -188,6 +212,12 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
                         f"{label} {field} ({entry.get(field)!r}) "
                         f"!= plugin.json ({plugin.get(field)!r})"
                     )
+        elif pack is not None and entry.get("version") != plugin.get("version"):
+            errors.append(f"{label} version ({entry.get('version')!r}) != plugin.json ({plugin.get('version')!r})")
+    # A pack is left out of the default plugin, so the marketplace is the only
+    # way its skills load as a plugin at all.
+    for pack in sorted(set(skill_roots.packs(ROOT)) - packed):
+        errors.append(f"marketplace lists no plugin for pack {pack!r} (source ./{skill_roots.PACKS}/{pack})")
 
 
 def main() -> int:

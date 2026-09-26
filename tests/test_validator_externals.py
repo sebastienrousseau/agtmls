@@ -136,7 +136,7 @@ class SpecConformanceRunnerTests(SliceFixture):
     def test_an_empty_registry_is_a_failure_not_a_pass(self) -> None:
         """Zero skills validated is not zero skills invalid."""
         module = self.module()
-        module.SKILLS_DIR = self.fixture / "nowhere"
+        module.ROOT = self.fixture / "nowhere"
         with mock.patch.object(module, "runner", return_value=self.CMD):
             code, output = run_main(module)
         self.assertEqual(code, 1, output)

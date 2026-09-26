@@ -49,13 +49,15 @@ def mini_registry(destination: Path) -> Path:
         shutil.copytree(ROOT / name, destination / name, ignore=ignore)
     # import-skill.py audits through this script as a subprocess.
     shutil.copy2(ROOT / "scripts" / "audit-skill.py", destination / "scripts" / "audit-skill.py")
+    index = json.loads((ROOT / "index.json").read_text(encoding="utf-8"))
+    # A skill lands at its index path: `skills/<name>` or a pack's skills dir.
+    paths = {skill["name"]: skill["path"] for skill in index["skills"]}
     for name in SKILLS:
-        shutil.copytree(ROOT / "skills" / name, destination / "skills" / name, ignore=ignore)
+        shutil.copytree(ROOT / paths[name], destination / paths[name], ignore=ignore)
         for cases in ("evals/cases", "evals/behavioral/cases"):
             (destination / cases).mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / cases / f"{name}.json", destination / cases / f"{name}.json")
 
-    index = json.loads((ROOT / "index.json").read_text(encoding="utf-8"))
     index["skills"] = [skill for skill in index["skills"] if skill["name"] in SKILLS]
     index["skill_count"] = len(index["skills"])
     bundles: dict[str, int] = {}

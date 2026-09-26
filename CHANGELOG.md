@@ -7,6 +7,19 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- The 14 noyalib skills moved to a pack, `packs/noyalib/skills/`. Every
+  AgtMLS plugin install used to carry them, filling Codex's skill budget
+  for people who never work on noyalib; the default plugin now carries the
+  17 general and single-skill-bundle skills. The pack installs as its own
+  Claude Code plugin, `/plugin install agtmls-noyalib@agtmls`, and
+  `install --bundle noyalib` works as before. Every script finds skills
+  through `scripts/_lib/skill_roots.py`, and `validate-skills.py` fails a
+  pack holding another bundle's skill or a skill name used twice.
+  A user-level link to a moved skill no longer resolves; `doctor` names
+  each one.
+
 ### Added
 
 - Portability rules, so a skill works the same in every agent that reads

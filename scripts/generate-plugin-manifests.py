@@ -25,7 +25,9 @@ context file of @-includes; OpenCode has no manifest and consumes an
 
 Because the skill tree is flat, every manifest points at a single
 `./skills` path. That sidesteps the array-vs-string question entirely:
-no runtime needs to support array-valued `skills` to see all 20 skills.
+no runtime needs to support array-valued `skills` to see every general
+skill. Packs (`packs/<bundle>/skills/`) are deliberately outside that path;
+the marketplace lists each as a plugin of its own.
 """
 
 from __future__ import annotations

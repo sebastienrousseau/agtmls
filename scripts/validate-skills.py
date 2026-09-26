@@ -34,6 +34,7 @@ addyosmani/agent-skills (MIT); this implementation is original.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -45,7 +46,7 @@ MAX_BODY_LINES = 500  # Spec guidance: keep SKILL.md under 500 lines.
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import portability  # noqa: E402  (scripts path first)
+from _lib import portability, skill_roots  # noqa: E402  (scripts path first)
 
 SKILLS_DIR = ROOT / "skills"
 
@@ -162,12 +163,19 @@ def check(skill_md: Path) -> list[str]:
 
 
 def main() -> int:
-    skill_files = sorted(SKILLS_DIR.glob("**/SKILL.md"))
+    skill_files = skill_roots.skill_files(ROOT)
     if not skill_files:
         print(f"no SKILL.md files found under {SKILLS_DIR}", file=sys.stderr)
         return 1
 
     problems = 0
+    bundles = {}
+    for sm in skill_files:
+        meta = sm.parent / "metadata.json"
+        bundles[sm.parent.name] = json.loads(meta.read_text(encoding="utf-8")).get("bundle") if meta.exists() else None
+    for error in skill_roots.problems(ROOT, bundles):
+        problems += 1
+        print(f"✗ layout: {error}")
     for sm in skill_files:
         rel = sm.parent.relative_to(ROOT)
         errs = check(sm)

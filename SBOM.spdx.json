@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-26T20:21:36Z",
+    "created": "2026-09-26T21:42:00Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -33,11 +33,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c2f68342778b262603b1387b370219d9e5d948d1"
+          "checksumValue": "6adba90497ab50b2328ee99025cea966bb5fda15"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "184e3203d936d7982f3446c1e406cc365f3a5382003c6f4b1003c4cf937159d2"
+          "checksumValue": "aa8dc0231e6529eb630ac6610ca23bd16e898956d65cc299f42efe3bc321e5b3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1297,11 +1297,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b2c1db4658a6f02cfd96561c67238f8630446be1"
+          "checksumValue": "f72374f880a495ea01aefe6de55baab39aaceeda"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b9f250789ca5589c1c4580aa60ba4525071c559b3b7c2daea5984a7c7fe9a137"
+          "checksumValue": "42d628a5fd42f624da1d48350e0eb29c883b1bb455cb73c44b495cd24548bf1d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1322,6 +1322,678 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./lifecycle.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "13b0318bb8c79c3b608d14e2fc844e5abceb25d4"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-architecture-contract/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-architecture-contract/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dbb166f5ff87b541fe51fc111d51ed359551d848"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ab9194cb8de7bbbc482b7b9048762b5d362af27f47ae0fa9f3a384a87493a589"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-architecture-contract/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "990d747096432f47be90117104e016bf89f87040"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-build-and-env/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-build-and-env/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e21f8ee8460be4459517402ca2ed8f84c80e8cb1"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "242ad0761ffc6ad363723b87a1ac2af04e9f65902b29926b4728dc13b4ca0592"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-build-and-env/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4b301529f0e82d49bfa837188f0f63039c6b19b7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-change-control/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-change-control/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b230cf4a70561daa4f8dc6f3612540ddaf4635d9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ad26b617b9fe5903b176e2c74c250ea7fa9d7b5010bbe4ccb74f074bb7d012a8"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-change-control/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4cde7dee9057e52112ff94435e03201797793616"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-ci-and-release/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-ci-and-release/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "88bfc2c80076d00dd5cc44b7fc28c0a5854bf794"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff86182020a5d587eec03e9a9bda61cad70e2c3f5a3d83ca70415554ae29e32b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-ci-and-release/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "48b65441525d37fa9e666bbbbc770f0de3f4c800"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-config-and-flags/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-config-and-flags/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6a27db80f0278a6e833b8ed76847e8b612fbc53d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2a3515a1a201cd3e346050c0c050821b4cb1e8708ca55d4d859a99601442688f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-config-and-flags/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c2ef755bf1ac7d61d340a3ee4f166fc2c36d2929"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-coverage-campaign/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-coverage-campaign/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e64954adaa636e3732e80fe1bd2741abd0c6bb7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-coverage-campaign/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cf8b26d7f4cb80f89e8569d723dffcd488f4aafe"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-debugging-playbook/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-debugging-playbook/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "61dd4be0d4919a658eb716e24215bb3794107ed9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1b4fb6c0e78e3fb5ce433040b9c382cbf064b7256ec6ad86501933c97709dde0"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-debugging-playbook/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "d43c373ce5850e8d8e1093a5c44b679523344894"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-diagnostics-and-tooling/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-diagnostics-and-tooling/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b2b852eac46a6f0cdba5083149a76327c7c7db42"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b10ca9031d1536596ec12b1327e762b2d54d5518c623c101dc82b22f43dfb470"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-diagnostics-and-tooling/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "85eb0c6fe531ec773586ea7244ba776be76f8659"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-docs-and-writing/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-docs-and-writing/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "18d3a509dc21b7716a03600d8ea4e321ec663b6a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-docs-and-writing/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dd7b3842680825af099b6ecfa08501bb14ecc9e9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-external-positioning/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-external-positioning/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e9853bf2946714b79bb7a8285cadfc64a6fd6e34"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e3cf3a095b12d37fac254afb1ff63e28b278baa196c2e58c251a881f0226e8d5"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-external-positioning/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "169b04033a3b5554de9057b0ac14361b8b8b9076"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-failure-archaeology/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-failure-archaeology/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "893fee805b532cb9ddb6dc42a04ca55552886c47"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c9ca2175061968cee739109a718a42cc81aec04534d8da97de8a145ae2ed0983"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-failure-archaeology/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3d5710428f124ca59badf5291e93901365366cfb"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-research-frontier/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-research-frontier/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "0d2c631dcd65b829e001c99165af8a9214bf3a93"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1f8fced0eff741441bf228b9b02f34350bacccaada7def9ae3eabc8ead2dba27"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-research-frontier/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "d4948e0a7a92ba3d1364e5680a3e1c2f1f69ec0a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-validation-and-qa/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-validation-and-qa/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2824e38b4272c5bcc81c38084a1123a3852fa8fa"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/noyalib-validation-and-qa/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3a71dc00dfd336153be289013e068f89a040132a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/yaml-domain-reference/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/yaml-domain-reference/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9443f7469230f8365708357117e2e0e07ac1ab3a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b1a514b379d1a4aca0e2b48c72f5d972325026953439c8b466acc1804c073832"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./packs/noyalib/skills/yaml-domain-reference/reference.md",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1537,11 +2209,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "802241ffa008b3389ac19cb1eec82ff1d0356ec5"
+          "checksumValue": "a06e22dd86f58996e66f2676cb9aeeecd4aed070"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bed564e9f6730df7dc775797862d54b86011058b5ab746d2ac07642a50b2e206"
+          "checksumValue": "f2700f0cfd1b1778043949b1db8b7a931be0ed927c109aac3fa29b303f111fcc"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1585,11 +2257,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1a88802d98ce62c3dfc5501a68853567405974ee"
+          "checksumValue": "b864b0652fe0ef57ca936cd570b1b9579df97549"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b31a616476e80e7cceb9ed55dca1b70ae469610c4386976cd275e9199c207ce9"
+          "checksumValue": "cb6588371f3729b84c001cce4471af4efad80a9a0a7c8af11c4612eeafa681d0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1681,11 +2353,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "16fdc5f099d4732ef80ccf506b4ea3a53f2bbc24"
+          "checksumValue": "645cde90368808a52ce928bc740bf53f7f49e15b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "40b496096bd62520856ea739261d1c427ed9ec6484e0f32664f76d69b90b30e9"
+          "checksumValue": "e62cab22cd76d4ce79da5b1febdd70b9a1e7156c719f1fd56d000748997c95dc"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1706,6 +2378,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/signatures.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-skill-roots.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7836389ea6b099fd5f6802b0761cfdabcb3b9cbf"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f448d67292c15c2a0158e12a763121cbc89f8d1b49bd6c2557b75df591c2c489"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/skill_roots.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1745,11 +2433,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8bf2f6c843d96af2b98bd80ec92d782b12503e9c"
+          "checksumValue": "78b1026e64fd6aa9b849eee6fcb186a29556280c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1e15d6dbdd993f397e7a74fa79596ff4bdbfae7fead40dd1b14ac7a71db5b405"
+          "checksumValue": "a9332d70785bc1203d919c89964eafd1a559766da448147874b8633607a02ff3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1777,11 +2465,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "834e474b5964e0dd1ecc46d1f40bd12ad72bf0f5"
+          "checksumValue": "1e0fe117cad46249d8e410bd9eb17dfd2e9765a2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "64b51fc5afa0410cedae483cda3c9c431c0ef2bd9381ae6615d17e18e21ae7b7"
+          "checksumValue": "c5d4861a0e47c629b156c794109437dbdcb17ca311365459276b712db7364225"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1841,11 +2529,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "eaa1cb62874e89613d59d9fca49771af315fac10"
+          "checksumValue": "661afabcae6af4058862bba6805a484dc9c0be08"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3458d6d63c5e99619dd05f38d20eb3c99c080c1bc901105434033b3e7a5a3e59"
+          "checksumValue": "fec3795fa25b684cfe128089350dd6caf9f4a931a8933b0f4b3722e649d991ef"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2001,11 +2689,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5dedecb28b4f32e0aa68c523bed08dd7c5d735e2"
+          "checksumValue": "459b3bce49bc425c36b0c4b50d968d8a80194a13"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ed7ab531b85966e97e1d5f8c682718364732914ee5768bf1b9a03557f53a9809"
+          "checksumValue": "d31bc16c58a70056bc426ce057274dd8349be9f1146b779e660e2e0e31f8d771"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2049,11 +2737,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d1fc63b43bfc37671b5cfef6d97b9164731d1c76"
+          "checksumValue": "d6fcd78af0bf89cc26ecfc99a3cd53cbd002962e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e6463783253eda890c4e98807779f06edf82284093a4eb8c54a96fc913f1f199"
+          "checksumValue": "5e5c5a065444c852328337cbb18eefb64fd49c2e4978ee1d93f8779086171345"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2065,11 +2753,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "847f9eea0830d3acc37a1986943f9bb8cb07a879"
+          "checksumValue": "e1f84fe303a1b4ce6b98161a9f5da74b3b97eb0c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1c9413830c5a0015706b65387ef74104964c3c3c1e59bebfa4b7d3cc6aa1d311"
+          "checksumValue": "8edd5dab3f0f67dc187d2642202a8d9acc661acc1b8196b8ab44ccd2f2f38105"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2289,11 +2977,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a9ee037178a06e5b5e497fbb0136dd878da09a4a"
+          "checksumValue": "aa7a1cb17aeed6928183a9f629e2e76fe2a51279"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ac4060a745db361583b10d9970645fac0491469a492afedc7ef9dfa5c815d8c9"
+          "checksumValue": "32d13ba2e6b0a82d9557bac36c6865b91627da0fe9e3d114c982b0ed00b032fe"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2337,11 +3025,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "df723474a665d4425e37a1f3e23f4a6ffac3793c"
+          "checksumValue": "f5a6291da4dd708033f74eb3e85245f20d8c21ba"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8d108743b4eaac0eeab2e3df56fbd5bd68746ef22f8444a3f01bc50d92fb4708"
+          "checksumValue": "3ca97b71a03fd1122a86242d1f0508f9a4bdc3e5656fa93dafaf79feafb3e5d7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2385,11 +3073,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "e094e7e19b05dd3a630077472bfffe6bca011263"
+          "checksumValue": "422cc51f07f83e787566541711564b27734ce844"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "03324bf71423290dfc8eb58e2342c1932884e29a5cf992af7ed8b0c30a89e1b6"
+          "checksumValue": "bde41a72dd4f3d4c6d0ae1763609515fa4003ca4a9801f8f1409a9cc3d97ae18"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2689,11 +3377,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1efe67c8c48d8de48065bef5095ef1692af0be1f"
+          "checksumValue": "ba337a51610dcc521bb95e6188600bc0f3d49ebf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "32f0f5bc79d43831521beea2c743bcbbff41a9618b61208d2710b70fcfd60dc2"
+          "checksumValue": "4d856e3ddb01b37e64010e87bc412170d01a88bd08bae99b7878a58d5641726a"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2817,11 +3505,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "50c231f4ba996cf2d7437942a716c46da16610a8"
+          "checksumValue": "cef83aff7a0add8a5d24c04f4a2ca45f2987d6ad"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cef2e9d22264d9b2d38846d598ae8e644cb326cfbe95cbde8515e04e7cb96327"
+          "checksumValue": "8fedd6bbcb3dae8336973d3983238ecbe9201636620776065c0e9532ec7a043f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2945,11 +3633,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "44b06814abfd63447063139157566156339b336f"
+          "checksumValue": "1ece4172353f05fbe4f980d241696b6000d56e24"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "29a8289fc22831156f1f8afa7b14674c310de6278c27b13b5b30b56efa4fb85a"
+          "checksumValue": "213257390c983a47c88b7e4d2464327e2278c141cab7df2a99a25f8223a5775f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3121,11 +3809,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "28f2d2b35aaba04d1182f745feeaa47dd7092521"
+          "checksumValue": "eacfb9e244d31b29596a4737c28838dd92977502"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3da32c06d5d26cf60063ac5da6e9390ba493d64d73477224eea91c4f04f1130c"
+          "checksumValue": "888d7767ffea9259f53afe4700cd71e901a7097480da2763e2e56ccbd3619380"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3137,11 +3825,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c1883f004baff2669017d6d5b8ec17ddd7931363"
+          "checksumValue": "5e8c5f8db1a95d97077480caeebb0c3795f2632a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "56476a6eebab640e8ff7a284f957e4dc4881e7229af61d3a8b71ce831df1f597"
+          "checksumValue": "c0a9ea98f6d0f1edc2eedc7b7b383b6d0964502119dee6b39b19edb14f06d0d8"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3153,11 +3841,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d17a0656da54421d3ce867ec1944a798a5517778"
+          "checksumValue": "bce4c320ff21de5db61917307e0a73ce2d79af11"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4b84c0bf04ac16e967b816f20270ba2b7dc7977812212b122aa8fde0b752332b"
+          "checksumValue": "1ec745b5e5a62e632dd387d1cc5fc76dbf17be0de11c1184e5a05593fe69c80b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3201,11 +3889,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "88b4fa383a8cf8c53e82d37a680dd9ec923cf366"
+          "checksumValue": "65b072182fa291d0edcf0843535db9c0b5781d0a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7bb8cc428822d1993252866a592ccfeef60e07520cee05f85a9761997fb34d5e"
+          "checksumValue": "ad33b1fa7d1381ca1d718fafe8cc09c6f058397c943a797fd67409fa0196eb33"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4573,630 +5261,6 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-skills-noyalib-architecture-contract-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "13b0318bb8c79c3b608d14e2fc844e5abceb25d4"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-architecture-contract/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-architecture-contract-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-architecture-contract/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-architecture-contract-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "dbb166f5ff87b541fe51fc111d51ed359551d848"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "ab9194cb8de7bbbc482b7b9048762b5d362af27f47ae0fa9f3a384a87493a589"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-architecture-contract/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-build-and-env-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "990d747096432f47be90117104e016bf89f87040"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-build-and-env/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-build-and-env-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-build-and-env/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-build-and-env-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "e21f8ee8460be4459517402ca2ed8f84c80e8cb1"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "242ad0761ffc6ad363723b87a1ac2af04e9f65902b29926b4728dc13b4ca0592"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-build-and-env/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-change-control-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "4b301529f0e82d49bfa837188f0f63039c6b19b7"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-change-control/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-change-control-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-change-control/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-change-control-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "b230cf4a70561daa4f8dc6f3612540ddaf4635d9"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "ad26b617b9fe5903b176e2c74c250ea7fa9d7b5010bbe4ccb74f074bb7d012a8"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-change-control/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-ci-and-release-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "4cde7dee9057e52112ff94435e03201797793616"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "74037b9632dc1e9552170ca02e49ad3b4dfd1f53cf4da0e08a3c8389a4446831"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-ci-and-release/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-ci-and-release-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-ci-and-release/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-ci-and-release-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "88bfc2c80076d00dd5cc44b7fc28c0a5854bf794"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "ff86182020a5d587eec03e9a9bda61cad70e2c3f5a3d83ca70415554ae29e32b"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-ci-and-release/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-config-and-flags-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "48b65441525d37fa9e666bbbbc770f0de3f4c800"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "1419e7aad232e0e2ee6e50d056a036b368655dc5b9e51ffb9bc4ad5bf0d90366"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-config-and-flags/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-config-and-flags-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-config-and-flags/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-config-and-flags-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "6a27db80f0278a6e833b8ed76847e8b612fbc53d"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "2a3515a1a201cd3e346050c0c050821b4cb1e8708ca55d4d859a99601442688f"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-config-and-flags/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-coverage-campaign-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "c2ef755bf1ac7d61d340a3ee4f166fc2c36d2929"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-coverage-campaign/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-coverage-campaign-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-coverage-campaign/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-coverage-campaign-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e64954adaa636e3732e80fe1bd2741abd0c6bb7"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-coverage-campaign/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-debugging-playbook-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "cf8b26d7f4cb80f89e8569d723dffcd488f4aafe"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-debugging-playbook/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-debugging-playbook-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-debugging-playbook/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-debugging-playbook-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "61dd4be0d4919a658eb716e24215bb3794107ed9"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "1b4fb6c0e78e3fb5ce433040b9c382cbf064b7256ec6ad86501933c97709dde0"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-debugging-playbook/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "d43c373ce5850e8d8e1093a5c44b679523344894"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-diagnostics-and-tooling/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-diagnostics-and-tooling/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "b2b852eac46a6f0cdba5083149a76327c7c7db42"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "b10ca9031d1536596ec12b1327e762b2d54d5518c623c101dc82b22f43dfb470"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-diagnostics-and-tooling/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-docs-and-writing-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "85eb0c6fe531ec773586ea7244ba776be76f8659"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-docs-and-writing/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-docs-and-writing-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-docs-and-writing/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-docs-and-writing-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "18d3a509dc21b7716a03600d8ea4e321ec663b6a"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-docs-and-writing/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-external-positioning-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "dd7b3842680825af099b6ecfa08501bb14ecc9e9"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "db0e3b05627bc278bd0db9f78c293cc44d4d3d6610ecf4f583016b0f18523792"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-external-positioning/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-external-positioning-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-external-positioning/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-external-positioning-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "e9853bf2946714b79bb7a8285cadfc64a6fd6e34"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "e3cf3a095b12d37fac254afb1ff63e28b278baa196c2e58c251a881f0226e8d5"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-external-positioning/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-failure-archaeology-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "169b04033a3b5554de9057b0ac14361b8b8b9076"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "8b416262ba981aa91d33264a51e28d65f6fca2465ffd0507477aebee6c9ec52d"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-failure-archaeology/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-failure-archaeology-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-failure-archaeology/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-failure-archaeology-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "893fee805b532cb9ddb6dc42a04ca55552886c47"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "c9ca2175061968cee739109a718a42cc81aec04534d8da97de8a145ae2ed0983"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-failure-archaeology/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-research-frontier-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "3d5710428f124ca59badf5291e93901365366cfb"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-research-frontier/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-research-frontier-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-research-frontier/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-research-frontier-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "0d2c631dcd65b829e001c99165af8a9214bf3a93"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "1f8fced0eff741441bf228b9b02f34350bacccaada7def9ae3eabc8ead2dba27"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-research-frontier/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-validation-and-qa-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "d4948e0a7a92ba3d1364e5680a3e1c2f1f69ec0a"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-validation-and-qa/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-validation-and-qa-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-validation-and-qa/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-noyalib-validation-and-qa-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "2824e38b4272c5bcc81c38084a1123a3852fa8fa"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/noyalib-validation-and-qa/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-skills-pr-review-and-release-SKILL.md",
       "checksums": [
         {
@@ -5629,54 +5693,6 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-skills-yaml-domain-reference-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "3a71dc00dfd336153be289013e068f89a040132a"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "6ae2e8b2df82353a9b7f5369f60fa7d7b5a7503b2c9095816774cf5d83f92b94"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/yaml-domain-reference/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-yaml-domain-reference-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9e469ae77fedd9eb9363f3b99ef282a5c2e78b78"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "0c5a028d97dd8ffb0e06dce0ac26ed21f37bf507d16f74686ef28000a269a060"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/yaml-domain-reference/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-yaml-domain-reference-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "9443f7469230f8365708357117e2e0e07ac1ab3a"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "b1a514b379d1a4aca0e2b48c72f5d972325026953439c8b466acc1804c073832"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/yaml-domain-reference/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-src-agtmls---init--.py",
       "checksums": [
         {
@@ -6078,6 +6094,48 @@
         "SPDXRef-File-evals-security-floor.json",
         "SPDXRef-File-index.json",
         "SPDXRef-File-lifecycle.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-build-and-env-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-change-control-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-ci-and-release-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-config-and-flags-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-coverage-campaign-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-debugging-playbook-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-diagnostics-and-tooling-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-docs-and-writing-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-external-positioning-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-failure-archaeology-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-research-frontier-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-noyalib-validation-and-qa-reference.md",
+        "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-SKILL.md",
+        "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-metadata.json",
+        "SPDXRef-File-packs-noyalib-skills-yaml-domain-reference-reference.md",
         "SPDXRef-File-profiles.json",
         "SPDXRef-File-providers.json",
         "SPDXRef-File-references-README.md",
@@ -6102,6 +6160,7 @@
         "SPDXRef-File-scripts--lib-rules.py",
         "SPDXRef-File-scripts--lib-scaling.py",
         "SPDXRef-File-scripts--lib-signatures.py",
+        "SPDXRef-File-scripts--lib-skill-roots.py",
         "SPDXRef-File-scripts--lib-stamp.py",
         "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",
@@ -6281,45 +6340,6 @@
         "SPDXRef-File-skills-incident-response-SKILL.md",
         "SPDXRef-File-skills-incident-response-metadata.json",
         "SPDXRef-File-skills-incident-response-reference.md",
-        "SPDXRef-File-skills-noyalib-architecture-contract-SKILL.md",
-        "SPDXRef-File-skills-noyalib-architecture-contract-metadata.json",
-        "SPDXRef-File-skills-noyalib-architecture-contract-reference.md",
-        "SPDXRef-File-skills-noyalib-build-and-env-SKILL.md",
-        "SPDXRef-File-skills-noyalib-build-and-env-metadata.json",
-        "SPDXRef-File-skills-noyalib-build-and-env-reference.md",
-        "SPDXRef-File-skills-noyalib-change-control-SKILL.md",
-        "SPDXRef-File-skills-noyalib-change-control-metadata.json",
-        "SPDXRef-File-skills-noyalib-change-control-reference.md",
-        "SPDXRef-File-skills-noyalib-ci-and-release-SKILL.md",
-        "SPDXRef-File-skills-noyalib-ci-and-release-metadata.json",
-        "SPDXRef-File-skills-noyalib-ci-and-release-reference.md",
-        "SPDXRef-File-skills-noyalib-config-and-flags-SKILL.md",
-        "SPDXRef-File-skills-noyalib-config-and-flags-metadata.json",
-        "SPDXRef-File-skills-noyalib-config-and-flags-reference.md",
-        "SPDXRef-File-skills-noyalib-coverage-campaign-SKILL.md",
-        "SPDXRef-File-skills-noyalib-coverage-campaign-metadata.json",
-        "SPDXRef-File-skills-noyalib-coverage-campaign-reference.md",
-        "SPDXRef-File-skills-noyalib-debugging-playbook-SKILL.md",
-        "SPDXRef-File-skills-noyalib-debugging-playbook-metadata.json",
-        "SPDXRef-File-skills-noyalib-debugging-playbook-reference.md",
-        "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-SKILL.md",
-        "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-metadata.json",
-        "SPDXRef-File-skills-noyalib-diagnostics-and-tooling-reference.md",
-        "SPDXRef-File-skills-noyalib-docs-and-writing-SKILL.md",
-        "SPDXRef-File-skills-noyalib-docs-and-writing-metadata.json",
-        "SPDXRef-File-skills-noyalib-docs-and-writing-reference.md",
-        "SPDXRef-File-skills-noyalib-external-positioning-SKILL.md",
-        "SPDXRef-File-skills-noyalib-external-positioning-metadata.json",
-        "SPDXRef-File-skills-noyalib-external-positioning-reference.md",
-        "SPDXRef-File-skills-noyalib-failure-archaeology-SKILL.md",
-        "SPDXRef-File-skills-noyalib-failure-archaeology-metadata.json",
-        "SPDXRef-File-skills-noyalib-failure-archaeology-reference.md",
-        "SPDXRef-File-skills-noyalib-research-frontier-SKILL.md",
-        "SPDXRef-File-skills-noyalib-research-frontier-metadata.json",
-        "SPDXRef-File-skills-noyalib-research-frontier-reference.md",
-        "SPDXRef-File-skills-noyalib-validation-and-qa-SKILL.md",
-        "SPDXRef-File-skills-noyalib-validation-and-qa-metadata.json",
-        "SPDXRef-File-skills-noyalib-validation-and-qa-reference.md",
         "SPDXRef-File-skills-pr-review-and-release-SKILL.md",
         "SPDXRef-File-skills-pr-review-and-release-metadata.json",
         "SPDXRef-File-skills-pr-review-and-release-reference.md",
@@ -6347,9 +6367,6 @@
         "SPDXRef-File-skills-writing-plans-SKILL.md",
         "SPDXRef-File-skills-writing-plans-metadata.json",
         "SPDXRef-File-skills-writing-plans-reference.md",
-        "SPDXRef-File-skills-yaml-domain-reference-SKILL.md",
-        "SPDXRef-File-skills-yaml-domain-reference-metadata.json",
-        "SPDXRef-File-skills-yaml-domain-reference-reference.md",
         "SPDXRef-File-src-agtmls---init--.py",
         "SPDXRef-File-src-agtmls---main--.py",
         "SPDXRef-File-src-agtmls-cli.py",

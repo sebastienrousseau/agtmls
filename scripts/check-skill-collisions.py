@@ -25,6 +25,9 @@ WARN_AT = 0.50
 FAIL_AT = 0.75
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 
 # Terms shared by every skill in a single-project family carry no signal and
@@ -84,7 +87,7 @@ def cosine(a: dict[str, float], b: dict[str, float]) -> float:
 
 
 def main() -> int:
-    skills = sorted(SKILLS_DIR.glob("**/SKILL.md"))
+    skills = skill_roots.skill_files(ROOT)
     names = [s.parent.name for s in skills]
     descs = [frontmatter_description(s.read_text(encoding="utf-8")) for s in skills]
     vecs = tfidf([vector(d) for d in descs])

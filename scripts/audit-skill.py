@@ -16,6 +16,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 
 # The analyzer itself lives in _lib/analyzer.py, under the core coverage
@@ -239,8 +241,7 @@ def main() -> int:
 
     targets: list[Path] = []
     if args.all:
-        if SKILLS_DIR.exists():
-            targets.extend(sorted(d for d in SKILLS_DIR.iterdir() if d.is_dir()))
+        targets.extend(skill_roots.skill_dirs(ROOT))
         agents_dir = ROOT / "agents"
         if agents_dir.exists():
             targets.extend(sorted(p for p in agents_dir.glob("*.md")))

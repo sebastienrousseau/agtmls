@@ -10,12 +10,15 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 CASES_DIR = ROOT / "evals" / "behavioral" / "cases"
 
 
 def skill_dir(name: str) -> Path | None:
-    matches = [p.parent for p in SKILLS_DIR.glob("**/SKILL.md") if p.parent.name == name]
+    matches = [p for p in skill_roots.skill_dirs(ROOT) if p.name == name]
     return matches[0] if matches else None
 
 

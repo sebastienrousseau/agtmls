@@ -83,7 +83,7 @@ pip install agtmls
 
 | Runtime | Installation command / action | Manifest location |
 | :--- | :--- | :--- |
-| **Claude Code** | `/plugin marketplace add sebastienrousseau/agtmls`<br/>`/plugin install agtmls@agtmls` | `.claude-plugin/plugin.json` |
+| **Claude Code** | `/plugin marketplace add sebastienrousseau/agtmls`<br/>`/plugin install agtmls@agtmls`<br/>noyalib pack: `/plugin install agtmls-noyalib@agtmls` | `.claude-plugin/plugin.json`<br/>`.claude-plugin/marketplace.json` |
 | **Google Antigravity** | `agy plugin install https://github.com/sebastienrousseau/agtmls` | `plugin.json` |
 | **OpenAI Codex** | `/plugins` → Search `agtmls` → **Install Plugin** | `.agents/plugins/marketplace.json`<br/>`.codex-plugin/plugin.json` |
 | **Gemini CLI** | `gemini extensions install https://github.com/sebastienrousseau/agtmls` | `gemini-extension.json`<br/>`GEMINI.md` |
@@ -310,6 +310,7 @@ The skill tree is flat, `skills/<name>/SKILL.md`, because agent runtimes scan th
 
 - **General skills** (`"bundle": null`), such as `writing-plans` and `systematic-debugging`, are linked into every consumer repository.
 - **Project bundles** (`"bundle": "noyalib"`) are linked only when requested with `--bundle <name>`.
+- **Packs**: a bundle that is one project's knowledge lives in `packs/<bundle>/skills/`, outside the default plugin. The noyalib pack installs as its own plugin, `/plugin install agtmls-noyalib@agtmls`, so a plain plugin install carries only the general skills.
 
 ```bash
 agtmls install python claude --skills-only                    # general skills only
@@ -389,6 +390,7 @@ agtmls/
 ├── references/            # Registry schema and bundle specifications
 ├── scripts/               # CLI, generators and validators (stdlib only)
 ├── share/man/man1/        # Generated manpage
+├── packs/                 # Project packs: packs/<bundle>/skills/<name>, installed on request
 ├── skills/                # One flat directory per skill
 ├── system-prompts/        # _base.md and language profiles
 ├── src/                   # The installable package

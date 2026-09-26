@@ -27,6 +27,9 @@ from pathlib import Path
 TOP_K = 5  # lenient: TF-IDF on a short prompt is noisy; #1 for negatives is the sharp test
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 CASES_DIR = ROOT / "evals" / "cases"
 STOP = {
@@ -56,7 +59,7 @@ def toks(s: str) -> list[str]:
 
 
 def main() -> int:
-    skills = sorted(SKILLS_DIR.glob("**/SKILL.md"))
+    skills = skill_roots.skill_files(ROOT)
     names = [s.parent.name for s in skills]
     docs = [Counter(toks(description_of(s))) for s in skills]
     n = len(docs)

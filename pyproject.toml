@@ -49,6 +49,7 @@ packages = ["src/agtmls"]
 [tool.hatch.build.targets.wheel.force-include]
 "scripts" = "agtmls/_registry/scripts"
 "skills" = "agtmls/_registry/skills"
+"packs" = "agtmls/_registry/packs"
 "commands" = "agtmls/_registry/commands"
 "agents" = "agtmls/_registry/agents"
 "system-prompts" = "agtmls/_registry/system-prompts"
@@ -71,6 +72,7 @@ include = [
   "src/agtmls",
   "scripts",
   "skills",
+  "packs",
   "commands",
   "agents",
   "system-prompts",

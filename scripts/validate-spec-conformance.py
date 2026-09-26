@@ -27,6 +27,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 # skills-ref declares requires-python >= 3.11.
 REFERENCE_FLOOR = (3, 11)
@@ -58,7 +61,7 @@ def main() -> int:
         print(f"SKIP: skills-ref is not available ({reason}); spec check not run")
         return 0
 
-    skills = sorted(p.parent for p in SKILLS_DIR.glob("*/SKILL.md"))
+    skills = skill_roots.skill_dirs(ROOT)
     if not skills:
         print(f"FAIL: no skills found under {SKILLS_DIR}")
         return 1
