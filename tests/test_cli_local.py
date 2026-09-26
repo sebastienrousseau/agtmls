@@ -107,9 +107,9 @@ class InstallLifecycleTests(CliFixture):
                     (skills / skill["name"]).symlink_to(source)
         return 0
 
-    def install(self, *extra: str) -> tuple[int, str]:
+    def install(self, *extra: str, agent: str = "claude") -> tuple[int, str]:
         self.cli.run = self.fake_installer
-        return run_main(self.cli, "install", "rust", "claude", "--target", str(self.target), *extra)
+        return run_main(self.cli, "install", "rust", agent, "--target", str(self.target), *extra)
 
     def lock(self) -> dict:
         return json.loads((self.target / ".agtmls" / "manifest.json").read_text(encoding="utf-8"))
@@ -212,8 +212,8 @@ class InstallLifecycleTests(CliFixture):
         self.assertEqual(code, 0, output)
         self.assertEqual(self.lock()["skills"], [])
 
-    def verify(self, json_output: bool = False) -> tuple[int, str]:
-        return capture(self.cli.verify_install, self.target, "claude", json_output)
+    def verify(self, json_output: bool = False, agent: str = "claude") -> tuple[int, str]:
+        return capture(self.cli.verify_install, self.target, agent, json_output)
 
     def verify_live(self, loaded=None, error=None, json_output: bool = False) -> tuple[int, str]:
         from _lib import liveness
@@ -286,6 +286,71 @@ class InstallLifecycleTests(CliFixture):
         self.assertEqual(code, 0, output)
         self.assertIn("UNMANAGED", output)
         self.assertIn("my-own-skill", output)
+
+    def test_two_agents_with_different_skills_each_verify_against_their_own(self) -> None:
+        """One lockfile serves every agent in a target, and each install used
+        to rewrite it whole: installing codex with a bundle after claude
+        without one left `verify claude` reporting the bundle missing."""
+        self.install("--copy")
+        self.install("--copy", "--bundle", "noyalib", agent="codex")
+        code, output = self.verify()
+        self.assertEqual(code, 0, output)
+        self.assertIn(f"OK: {len(GENERAL)} skill(s) match the lockfile", output)
+        code, output = self.verify(agent="codex")
+        self.assertEqual(code, 0, output)
+        self.assertIn(f"OK: {len(GENERAL) + 1} skill(s) match the lockfile", output)
+        agents = {e["name"]: e["agents"] for e in self.lock()["skills"]}
+        self.assertEqual(agents["noyalib-config-and-flags"], ["codex"])
+        self.assertEqual({tuple(agents[name]) for name in GENERAL}, {("claude", "codex")})
+
+    def test_reinstalling_one_agent_replaces_only_its_own_record(self) -> None:
+        self.install("--copy", "--bundle", "noyalib")
+        self.install("--copy", "--bundle", "noyalib", agent="codex")
+        shutil.rmtree(self.target / ".codex")
+        self.install("--copy", agent="codex")
+        agents = {e["name"]: e["agents"] for e in self.lock()["skills"]}
+        self.assertEqual(agents["noyalib-config-and-flags"], ["claude"])
+        self.assertEqual(self.verify()[0], 0)
+        self.assertEqual(self.verify(agent="codex")[0], 0)
+
+    def test_agents_holding_different_versions_of_a_skill_are_recorded_apart(self) -> None:
+        """A second agent installed after the registry moved holds new bytes;
+        one entry per name would make verify fail one of the two."""
+        self.install("--copy")
+        replace_file(self, self.fixture / "skills" / "using-agtmls" / "SKILL.md",
+                     (self.fixture / "skills" / "using-agtmls" / "SKILL.md").read_text(encoding="utf-8") + "\nNew line.\n")
+        self.install("--copy", "--no-verify", agent="codex")
+        entries = [e for e in self.lock()["skills"] if e["name"] == "using-agtmls"]
+        self.assertEqual(sorted(e["agents"] for e in entries), [["claude"], ["codex"]])
+        self.assertEqual(self.verify()[0], 0)
+        self.assertEqual(self.verify(agent="codex")[0], 0)
+
+    def test_a_lockfile_from_before_agents_were_recorded_is_resolved_by_presence(self) -> None:
+        """Entries without `agents` count for every agent when verifying, and
+        the next install records the agents that actually hold them."""
+        self.install("--copy")
+        lock = self.lock()
+        for entry in lock["skills"]:
+            del entry["agents"]
+        (self.target / ".agtmls" / "manifest.json").write_text(json.dumps(lock), encoding="utf-8")
+        self.assertEqual(self.verify()[0], 0)
+        self.install("--copy", "--bundle", "noyalib", agent="codex")
+        agents = {e["name"]: e["agents"] for e in self.lock()["skills"]}
+        self.assertEqual({tuple(agents[name]) for name in GENERAL}, {("claude", "codex")})
+        self.assertEqual(self.verify()[0], 0)
+
+    def test_uninstalling_one_agent_removes_only_its_record_and_copies(self) -> None:
+        """Mode is per install, and the last install rewrote it: a copied
+        agent uninstalled after a symlinked one used to keep its copies."""
+        self.install("--copy", "--bundle", "noyalib", agent="codex")
+        self.install()
+        code, output = capture(self.cli.uninstall, self.target, "codex", False)
+        self.assertEqual(code, 0, output)
+        self.assertFalse((self.target / ".codex").exists(), "codex's copies survived its uninstall")
+        self.assertEqual({tuple(e["agents"]) for e in self.lock()["skills"]}, {("claude",)})
+        self.assertEqual(self.verify()[0], 0)
+        capture(self.cli.uninstall, self.target, "claude", False)
+        self.assertFalse((self.target / ".agtmls").exists(), "the lockfile outlived the last agent")
 
     def test_verify_without_a_lockfile_is_an_integrity_failure(self) -> None:
         code, output = self.verify()

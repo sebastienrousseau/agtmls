@@ -58,20 +58,33 @@ def executable_files(skill_dir: Path) -> list[str]:
     return found
 
 
+def _entry(registry_root: Path, name: str, agents: list[str]) -> dict[str, object] | None:
+    source = skill_roots.find(registry_root, name)
+    if source is None:
+        return None
+    return {
+        "name": name,
+        "integrity": skill_digest(source),
+        "path": name,
+        "executable_files": executable_files(source),
+        "agents": agents,
+    }
+
+
 def build(target: Path, registry_root: Path, skills: list[str], mode: str,
-          registry_version: str) -> dict[str, object]:
-    """Describe an install that has just happened."""
-    entries = []
-    for name in sorted(skills):
-        source = skill_roots.find(registry_root, name)
-        if source is None:
-            continue
-        entries.append({
-            "name": name,
-            "integrity": skill_digest(source),
-            "path": name,
-            "executable_files": executable_files(source),
-        })
+          registry_version: str, agent: str | None = None) -> dict[str, object]:
+    """Describe an install that has just happened.
+
+    With `agent`, each entry records it in `agents` (agtmls-spec 6.2); `record`
+    merges that into a lockfile other agents already share.
+    """
+    entries = [
+        entry for name in sorted(skills)
+        if (entry := _entry(registry_root, name, [agent] if agent else [])) is not None
+    ]
+    if agent is None:
+        for entry in entries:
+            del entry["agents"]
     return {
         "schema_version": SCHEMA_VERSION,
         "spec_version": SPEC_VERSION,
@@ -83,6 +96,75 @@ def build(target: Path, registry_root: Path, skills: list[str], mode: str,
         "mode": mode,
         "skills": entries,
     }
+
+
+def resolve_agents(lock: dict[str, object], skills_dirs: dict[str, Path]) -> dict[str, object]:
+    """Give every entry an `agents` list.
+
+    An entry written before `agents` existed counts for every agent; once the
+    lockfile is rewritten it names the agents whose skills directory holds
+    that skill now, so the record stops claiming skills an agent never had.
+    `skills_dirs` maps each native agent to its skills directory in the target.
+    """
+    for entry in lock.get("skills", []):
+        if "agents" not in entry:
+            entry["agents"] = sorted(
+                agent for agent, directory in skills_dirs.items()
+                if (directory / entry.get("path", entry["name"])).exists()
+            )
+    return lock
+
+
+def record(target: Path, registry_root: Path, skills: list[str], mode: str,
+           registry_version: str, agent: str, skills_dirs: dict[str, Path]) -> dict[str, object]:
+    """The lockfile after installing `skills` for `agent`.
+
+    One lockfile serves every agent in a target. Only `agent`'s record is
+    replaced: it leaves every entry, joins the entries for what it installed
+    now (an entry is one name at one digest, so two agents holding different
+    versions keep one entry each), and entries no agent holds are dropped.
+    """
+    payload = build(target, registry_root, skills, mode, registry_version, agent)
+    previous = read(target)
+    entries = resolve_agents(previous, skills_dirs).get("skills", []) if previous else []
+    for entry in entries:
+        entry["agents"] = [a for a in entry["agents"] if a != agent]
+    for fresh in payload["skills"]:
+        same = next((e for e in entries if e["name"] == fresh["name"] and e["integrity"] == fresh["integrity"]), None)
+        if same is None:
+            entries.append(fresh)
+        else:
+            same["agents"] = sorted({*same["agents"], agent})
+            same["executable_files"] = fresh["executable_files"]
+    payload["skills"] = sorted(
+        (e for e in entries if e["agents"]), key=lambda e: (e["name"], e["integrity"]),
+    )
+    return payload
+
+
+def forget(lock: dict[str, object], agent: str, skills_dirs: dict[str, Path],
+           kept: frozenset[str] = frozenset()) -> dict[str, object]:
+    """The lockfile after uninstalling `agent`: every other agent's record
+    kept, and `agent`'s own for the skills in `kept`, which uninstall left in
+    place (a local edit) so verify can still report them."""
+    resolve_agents(lock, skills_dirs)
+    for entry in lock.get("skills", []):
+        if entry["name"] not in kept:
+            entry["agents"] = [a for a in entry["agents"] if a != agent]
+    lock["skills"] = [e for e in lock.get("skills", []) if e["agents"]]
+    return lock
+
+
+def entries_for(lock: dict[str, object], agent: str | None) -> list[dict[str, object]]:
+    """The entries that describe `agent`'s skills directory.
+
+    An entry without `agents` predates the field and counts for every agent.
+    `None` means every entry.
+    """
+    return [
+        entry for entry in lock.get("skills", [])
+        if agent is None or "agents" not in entry or agent in entry["agents"]
+    ]
 
 
 def write(target: Path, payload: dict[str, object]) -> Path:
@@ -99,7 +181,7 @@ def read(target: Path) -> dict[str, object] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def verify(target: Path, skills_dir: Path) -> list[tuple[str, str, str]]:
+def verify(target: Path, skills_dir: Path, agent: str | None = None) -> list[tuple[str, str, str]]:
     """Compare an installed tree against its lockfile.
 
     Returns (name, status, detail) for everything that is not `ok`. An empty
@@ -116,7 +198,7 @@ def verify(target: Path, skills_dir: Path) -> list[tuple[str, str, str]]:
     problems: list[tuple[str, str, str]] = []
     recorded: set[str] = set()
 
-    for entry in lock.get("skills", []):
+    for entry in entries_for(lock, agent):
         name = entry["name"]
         recorded.add(name)
         installed = skills_dir / entry.get("path", name)

@@ -209,6 +209,14 @@ so. Which files and values count is data in `providers.json`
 `install` records what it installed, and what each skill hashed to, in
 `<target>/.agtmls/manifest.json`. `verify` re-computes those digests.
 
+One lockfile serves every agent installed in a target, and each entry names
+the agents it was installed for (`agents`, agtmls-spec 6.2). Installing for
+one agent replaces only that agent's record, so `claude` with the general
+skills and `codex` with `--bundle noyalib` each verify against their own.
+Two agents holding different versions of a skill keep one entry each. An
+entry written before `agents` existed counts for every agent, and the next
+`install` or `uninstall` records the agents that actually hold it.
+
 ```
 $ agtmls verify claude --target /path/to/repo
 OK: 13 skill(s) match the lockfile in /path/to/repo
@@ -239,8 +247,9 @@ uninstall removes links into that checkout; an install from the wheel
 (`uvx agtmls install`) copies, and uninstall removes the copied skills the
 lockfile records, plus copied commands and agents that still equal the
 registry's. A skill edited since install is `MODIFIED` to verify and is left in
-place by uninstall. One lockfile serves every agent installed in a target, so
-it goes only once nothing it records remains in any agent's skills directory.
+place by uninstall. Uninstall removes only this agent's record from the
+lockfile, keeping it for a skill it left in place, and the file goes once no
+agent holds anything it records.
 So does any skills, commands or agents directory uninstall emptied, and the
 agent directory (`.claude`, ...) if that leaves it empty. A directory holding
 anything else is never removed. The generated prompt file (`CLAUDE.md`, ...)

@@ -249,10 +249,12 @@ def main() -> int:
                 if skills_dir.exists():
                     # A wheel install copies; the lockfile says which
                     # directories are ours, so they are not "missing links".
+                    # This agent's entries, whatever `mode` the last install
+                    # of any agent wrote.
                     lock = lockfile.read(target)
                     copied = (
-                        {entry["name"] for entry in lock.get("skills", [])}
-                        if lock is not None and lock.get("mode") == "copy" else set()
+                        {entry["name"] for entry in lockfile.entries_for(lock, args.agent)}
+                        if lock is not None else set()
                     )
                     missing = []
                     for name in expected_skill_names(args.bundle):
