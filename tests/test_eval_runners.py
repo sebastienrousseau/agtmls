@@ -27,7 +27,7 @@ from .support import load_script, retarget, run_main
 
 # Five skills chosen to reach every branch of the description extractor both
 # runners share: a folded multi-line value followed by another key, a value
-# that is the last key in the block, a nested bundle directory, a file with no
+# that is the last key in the block, a skill in a pack, a file with no
 # frontmatter and a frontmatter with no description.
 SKILLS = {
     "skills/yaml-anchors/SKILL.md": (
@@ -36,7 +36,7 @@ SKILLS = {
         "license: MIT\n---\n\n# YAML anchors\n\nResolve every alias.\n"
     ),
     "skills/yaml-anchors/reference.md": "# Reference\n\nThe anchor table lists each alias.\n",
-    "skills/bundle/rust-port/SKILL.md": (
+    "packs/bundle/skills/rust-port/SKILL.md": (
         "---\nname: rust-port\ndescription: >-\n  Use when porting rust code\n"
         "  to python with a golden harness.\nlicense: MIT\n---\n\n# Port\n\nbody\n"
     ),
@@ -263,7 +263,7 @@ class TriggerEvalTests(RegistryBase):
     def test_a_folded_description_is_read_across_its_continuation_lines(self) -> None:
         """The second line of a `>-` value carries half the routing vocabulary."""
         module = self.module()
-        text = module.description_of(self.fixture / "skills/bundle/rust-port/SKILL.md")
+        text = module.description_of(self.fixture / "packs/bundle/skills/rust-port/SKILL.md")
         self.assertIn("golden harness", text)
         self.assertNotIn("MIT", text)
 
@@ -423,7 +423,7 @@ class CollisionRunnerTests(RegistryBase):
             return module.frontmatter_description(text)
 
         self.assertEqual(
-            read("skills/bundle/rust-port/SKILL.md"),
+            read("packs/bundle/skills/rust-port/SKILL.md"),
             "Use when porting rust code to python with a golden harness.",
         )
         self.assertEqual(read("skills/no-frontmatter/SKILL.md"), "")

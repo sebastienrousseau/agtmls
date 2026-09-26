@@ -268,14 +268,14 @@ class DoctorTargetTests(ScriptCase):
         skill was a missing link."""
         sys.path.insert(0, str(ROOT / "scripts"))
         self.addCleanup(lambda: sys.path.remove(str(ROOT / "scripts")))
-        from _lib import lockfile
+        from _lib import lockfile, skill_roots
 
         skills = self.target / ".claude" / "skills"
         skills.mkdir(parents=True)
         (self.target / ".claude" / "commands").mkdir()
         (self.target / "CLAUDE.md").write_text(GENERATED, encoding="utf-8")
         for name in SKILLS:
-            shutil.copytree(self.fixture / "skills" / name, skills / name)
+            shutil.copytree(skill_roots.find(self.fixture, name), skills / name)
         lockfile.write(self.target, lockfile.build(self.target, self.fixture, list(SKILLS), "copy", "0.0.0"))
         code, output = self.doctor()
         self.assertEqual(code, 0, output)
@@ -373,14 +373,16 @@ class DoctorTargetTests(ScriptCase):
         self.assertIn(f"OK   target repo exists: {self.target}", output)
         self.assertNotIn("skills", output.split("target repo exists", 1)[1])
 
-    def test_a_nested_bundle_directory_is_expanded_when_asked_for(self) -> None:
-        """The pre-flat layout kept bundles as skills/<bundle>/<leaf>/."""
-        leaf = self.fixture / "skills" / "legacy" / "legacy-leaf"
+    def test_a_pack_skill_is_expected_only_when_its_bundle_is_asked_for(self) -> None:
+        """A pack (packs/<bundle>/skills/) is out of the default install; the
+        doctor must not report its skills missing from a plain one."""
+        leaf = self.fixture / "packs" / "legacy" / "skills" / "legacy-leaf"
         leaf.mkdir(parents=True)
-        self.addCleanup(lambda: shutil.rmtree(self.fixture / "skills" / "legacy"))
+        self.addCleanup(lambda: shutil.rmtree(self.fixture / "packs" / "legacy"))
         (leaf / "SKILL.md").write_text("# Legacy\n", encoding="utf-8")
-        # Neither a stray file beside the skills nor a leaf without SKILL.md is a skill.
-        (self.fixture / "skills" / "legacy" / "assets").mkdir()
+        (leaf / "metadata.json").write_text('{"bundle": "legacy"}\n', encoding="utf-8")
+        # Neither a directory without SKILL.md nor a stray file is a skill.
+        (self.fixture / "packs" / "legacy" / "skills" / "assets").mkdir()
         replace_file(self, self.fixture / "skills" / "README.txt", "not a skill\n")
         self.install()
         names = self.module.expected_skill_names(["legacy"])

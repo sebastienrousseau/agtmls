@@ -589,10 +589,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-architecture-contract/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-architecture-contract/metadata.json",
       "name": "noyalib-architecture-contract",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-architecture-contract",
+      "path": "packs/noyalib/skills/noyalib-architecture-contract",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -660,10 +660,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-build-and-env/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-build-and-env/metadata.json",
       "name": "noyalib-build-and-env",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-build-and-env",
+      "path": "packs/noyalib/skills/noyalib-build-and-env",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -731,10 +731,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-change-control/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-change-control/metadata.json",
       "name": "noyalib-change-control",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-change-control",
+      "path": "packs/noyalib/skills/noyalib-change-control",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -802,10 +802,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-ci-and-release/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-ci-and-release/metadata.json",
       "name": "noyalib-ci-and-release",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-ci-and-release",
+      "path": "packs/noyalib/skills/noyalib-ci-and-release",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -872,10 +872,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-config-and-flags/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-config-and-flags/metadata.json",
       "name": "noyalib-config-and-flags",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-config-and-flags",
+      "path": "packs/noyalib/skills/noyalib-config-and-flags",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -941,10 +941,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-coverage-campaign/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-coverage-campaign/metadata.json",
       "name": "noyalib-coverage-campaign",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-coverage-campaign",
+      "path": "packs/noyalib/skills/noyalib-coverage-campaign",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1011,10 +1011,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-debugging-playbook/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-debugging-playbook/metadata.json",
       "name": "noyalib-debugging-playbook",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-debugging-playbook",
+      "path": "packs/noyalib/skills/noyalib-debugging-playbook",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1082,10 +1082,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-diagnostics-and-tooling/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-diagnostics-and-tooling/metadata.json",
       "name": "noyalib-diagnostics-and-tooling",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-diagnostics-and-tooling",
+      "path": "packs/noyalib/skills/noyalib-diagnostics-and-tooling",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1153,10 +1153,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-docs-and-writing/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-docs-and-writing/metadata.json",
       "name": "noyalib-docs-and-writing",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-docs-and-writing",
+      "path": "packs/noyalib/skills/noyalib-docs-and-writing",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1226,10 +1226,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-external-positioning/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-external-positioning/metadata.json",
       "name": "noyalib-external-positioning",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-external-positioning",
+      "path": "packs/noyalib/skills/noyalib-external-positioning",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1298,10 +1298,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-failure-archaeology/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-failure-archaeology/metadata.json",
       "name": "noyalib-failure-archaeology",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-failure-archaeology",
+      "path": "packs/noyalib/skills/noyalib-failure-archaeology",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1370,10 +1370,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-research-frontier/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-research-frontier/metadata.json",
       "name": "noyalib-research-frontier",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-research-frontier",
+      "path": "packs/noyalib/skills/noyalib-research-frontier",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -1440,10 +1440,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/noyalib-validation-and-qa/metadata.json",
+      "metadata_path": "packs/noyalib/skills/noyalib-validation-and-qa/metadata.json",
       "name": "noyalib-validation-and-qa",
       "owner": "Sebastien Rousseau",
-      "path": "skills/noyalib-validation-and-qa",
+      "path": "packs/noyalib/skills/noyalib-validation-and-qa",
       "quality": {
         "checks": {
           "behavioral_eval": true,
@@ -2094,10 +2094,10 @@
       "last_changed_version": "0.0.6",
       "license": "MIT",
       "maturity": "project",
-      "metadata_path": "skills/yaml-domain-reference/metadata.json",
+      "metadata_path": "packs/noyalib/skills/yaml-domain-reference/metadata.json",
       "name": "yaml-domain-reference",
       "owner": "Sebastien Rousseau",
-      "path": "skills/yaml-domain-reference",
+      "path": "packs/noyalib/skills/yaml-domain-reference",
       "quality": {
         "checks": {
           "behavioral_eval": true,

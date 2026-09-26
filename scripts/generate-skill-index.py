@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-
+from _lib import skill_roots  # noqa: E402  (scripts path first)
 from _lib.digest import skill_digest  # noqa: E402  (needs ROOT on the path first)
 
 SKILLS_DIR = ROOT / "skills"
@@ -156,7 +156,7 @@ def collect() -> dict[str, object]:
     plugin = json.loads(PLUGIN.read_text(encoding="utf-8")) if PLUGIN.exists() else {}
     commands = collect_commands()
     skills = []
-    for skill_md in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+    for skill_md in skill_roots.skill_files(ROOT):
         text = skill_md.read_text(encoding="utf-8")
         fields = parse_frontmatter(text)
         metadata_path, metadata = load_skill_metadata(skill_md.parent)

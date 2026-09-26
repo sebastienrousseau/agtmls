@@ -13,7 +13,11 @@ export targets) read the files it installs.
 
 1. **Flat skill tree.** Every skill is a leaf directory, `skills/<name>/`,
    holding `SKILL.md` and `metadata.json` (ADR 0001). Runtimes scan skill
-   directories non-recursively, so nesting would hide skills.
+   directories non-recursively, so nesting would hide skills. A bundle that is
+   one project's knowledge rather than a general skill lives in a pack,
+   `packs/<bundle>/skills/<name>/`: a flat skills directory of its own, left
+   out of the default plugin and installed as a plugin of its own. Every
+   script finds skills through `scripts/_lib/skill_roots.py`.
 2. **Zero runtime dependencies.** `scripts/` and `src/` use the standard
    library only, so `uvx agtmls` has nothing to resolve. Tools that need a
    package (coverage, SBOM validators, `skills-ref`) run in CI, outside the
@@ -45,7 +49,7 @@ export targets) read the files it installs.
 ## Data flow
 
 ```
-skills/<name>/{SKILL.md, metadata.json, reference.md}      authored
+skills/<name>/ and packs/<bundle>/skills/<name>/{SKILL.md, metadata.json, reference.md}   authored
    │
    ├─ sync-skill-frontmatter.py   metadata.json → portable frontmatter (ADR 0002)
    ├─ generate-skill-index.py     index.json: per-skill integrity = sha256 digest,

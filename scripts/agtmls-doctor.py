@@ -20,6 +20,7 @@ from _lib import (  # noqa: E402  (needs ROOT on the path first)
     liveness,
     lockfile,
     posture,
+    skill_roots,
 )
 
 
@@ -90,22 +91,14 @@ def expected_skill_names(bundles: list[str]) -> list[str]:
     doctor report eighteen bundled skills missing from a plain install.
     """
     names: list[str] = []
-    for entry in sorted(SKILLS_DIR.iterdir()):
-        if not entry.is_dir():
-            continue
-        if (entry / "SKILL.md").exists():
-            metadata = entry / "metadata.json"
-            bundle = (
-                json.loads(metadata.read_text(encoding="utf-8")).get("bundle")
-                if metadata.exists() else None
-            )
-            if not bundle or bundle in bundles:
-                names.append(entry.name)
-            continue
-        if entry.name in bundles:
-            for leaf in sorted(entry.iterdir()):
-                if (leaf / "SKILL.md").exists():
-                    names.append(leaf.name)
+    for entry in skill_roots.skill_dirs(ROOT):
+        metadata = entry / "metadata.json"
+        bundle = (
+            json.loads(metadata.read_text(encoding="utf-8")).get("bundle")
+            if metadata.exists() else None
+        )
+        if not bundle or bundle in bundles:
+            names.append(entry.name)
     return names
 
 
@@ -205,7 +198,7 @@ def main() -> int:
     else:
         r.fail(".claude-plugin/plugin.json is missing")
 
-    skill_files = sorted((ROOT / "skills").glob("**/SKILL.md"))
+    skill_files = skill_roots.skill_files(ROOT)
     route_cases = sorted((ROOT / "evals" / "cases").glob("*.json"))
     behavioral_cases = sorted((ROOT / "evals" / "behavioral" / "cases").glob("*.json"))
     if args.installed:

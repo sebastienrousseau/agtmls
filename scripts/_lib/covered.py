@@ -17,7 +17,7 @@ from __future__ import annotations
 # authored JSON at the repository root. Keep in step with
 # validate-packaging.py and validate-sbom-conformance.py.
 SOURCE_DIRS = [
-    "agents", "commands", "evals", "references", "scripts",
+    "agents", "commands", "evals", "packs", "references", "scripts",
     "skills", "src", "system-prompts", "templates",
 ]
 SOURCE_FILES = [

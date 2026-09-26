@@ -35,6 +35,27 @@
       "skills": "./skills",
       "source": "./",
       "version": "0.0.15"
+    },
+    {
+      "author": {
+        "name": "Sebastien Rousseau"
+      },
+      "category": "engineering",
+      "description": "Project knowledge for the noyalib YAML library: its architecture contract, build, CI and release, debugging and validation. Install it only if you work on noyalib.",
+      "displayName": "AgtMLS noyalib pack",
+      "homepage": "https://github.com/sebastienrousseau/agtmls",
+      "keywords": [
+        "noyalib",
+        "yaml",
+        "rust"
+      ],
+      "license": "MIT",
+      "name": "agtmls-noyalib",
+      "repository": "https://github.com/sebastienrousseau/agtmls",
+      "skills": "./skills",
+      "source": "./packs/noyalib",
+      "strict": false,
+      "version": "0.0.15"
     }
   ],
   "version": "0.0.15"

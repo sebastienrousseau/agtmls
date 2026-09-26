@@ -20,6 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
 from _lib.attestations import (  # noqa: E402  (needs the scripts path first)
     capabilities_statement,
     manifest_statement,
@@ -32,7 +33,7 @@ OUT = ROOT / "attestations"
 
 def expected() -> dict[Path, str]:
     rendered: dict[Path, str] = {}
-    for skill in sorted(p for p in SKILLS_DIR.iterdir() if (p / "SKILL.md").exists()):
+    for skill in skill_roots.skill_dirs(ROOT):
         rendered[OUT / skill.name / "manifest.intoto.json"] = render(manifest_statement(skill.name, skill))
         rendered[OUT / skill.name / "capabilities.intoto.json"] = render(capabilities_statement(skill.name, skill))
     return rendered

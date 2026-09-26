@@ -31,6 +31,15 @@ class PluginManifestBranchTests(BrokenTreeCase):
     def entry(self, data: dict) -> dict:
         return data["plugins"][0]
 
+    def test_a_pack_must_be_listed_and_kept_at_the_release_version(self) -> None:
+        """A pack is outside the default plugin, so its marketplace entry is
+        the only way it installs as a plugin; a stale version ships stale."""
+        pack = lambda data: next(e for e in data["plugins"] if e.get("source") == "./packs/noyalib")
+        self.edit_json(MARKETPLACE, lambda data: pack(data).__setitem__("version", "0.0.1"))
+        self.assert_fails(self.SCRIPT, "FAIL: marketplace plugin 'agtmls-noyalib' version ('0.0.1') != plugin.json (")
+        self.edit_json(MARKETPLACE, lambda data: data["plugins"].remove(pack(data)))
+        self.assert_fails(self.SCRIPT, "FAIL: marketplace lists no plugin for pack 'noyalib' (source ./packs/noyalib)")
+
     def test_a_missing_manifest_names_the_generator_that_restores_it(self) -> None:
         """The fix for a missing generated file is to run its generator."""
         self.remove(PLUGIN)

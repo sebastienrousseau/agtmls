@@ -20,6 +20,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from _lib import skill_roots
 from _lib.digest import skill_digest
 
 SCHEMA_VERSION = 1
@@ -62,8 +63,8 @@ def build(target: Path, registry_root: Path, skills: list[str], mode: str,
     """Describe an install that has just happened."""
     entries = []
     for name in sorted(skills):
-        source = registry_root / "skills" / name
-        if not source.is_dir():
+        source = skill_roots.find(registry_root, name)
+        if source is None:
             continue
         entries.append({
             "name": name,

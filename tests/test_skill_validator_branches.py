@@ -49,6 +49,15 @@ class SkillContractBranchTests(BrokenTreeCase):
             "SKILL.md:8: `${CLAUDE_SKILL_DIR}` is set only by Claude Code",
         )
 
+    def test_a_pack_holds_only_its_own_bundle_and_names_stay_unique(self) -> None:
+        """A pack is installed as its own plugin; a skill of another bundle in
+        it, or a second skill of the same name, would install the wrong set."""
+        self.create_dir(f"packs/other/skills/{self.name}")
+        self.overwrite(f"packs/other/skills/{self.name}/SKILL.md", self.skill.read_text(encoding="utf-8"))
+        output = self.assert_fails(self.SCRIPT)
+        self.assertIn(f"✗ layout: skill {self.name} is in both ", output)
+        self.assertIn(f"✗ layout: packs/other/skills/{self.name} is in pack other but declares bundle ", output)
+
     def test_an_unterminated_frontmatter_block_is_refused(self) -> None:
         self.overwrite(
             str(self.skill.relative_to(self.fixture)), f"---\nname: {self.name}\n\n# Title\n"
@@ -111,6 +120,7 @@ class SkillContractBranchTests(BrokenTreeCase):
     def test_an_empty_skill_tree_is_refused(self) -> None:
         """No skills is a broken checkout, not a vacuous pass."""
         self.move_aside("skills")
+        self.move_aside("packs")
         self.assert_fails(self.SCRIPT, "no SKILL.md files found under")
 
 

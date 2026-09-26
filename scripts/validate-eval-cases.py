@@ -10,13 +10,16 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import skill_roots  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 ROUTING_DIR = ROOT / "evals" / "cases"
 BEHAVIORAL_DIR = ROOT / "evals" / "behavioral" / "cases"
 
 
 def skill_names() -> set[str]:
-    return {p.parent.name for p in SKILLS_DIR.glob("**/SKILL.md")}
+    return {p.name for p in skill_roots.skill_dirs(ROOT)}
 
 
 def string_list(value: object) -> bool:

@@ -19,6 +19,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from . import skill_roots
+
 ROOT = Path(__file__).resolve().parent.parent.parent
 SCRIPTS = ROOT / "scripts"
 RESULTS = ROOT / "benchmarks" / "results"
@@ -37,8 +39,7 @@ def environment() -> dict[str, str]:
 
 def synthetic_registry(target: Path, factor: int) -> int:
     """`factor` copies of every shipped skill, for a scaling measurement."""
-    source = ROOT / "skills"
-    originals = sorted(p for p in source.iterdir() if p.is_dir())
+    originals = skill_roots.skill_dirs(ROOT)
     count = 0
     for index in range(factor):
         for skill in originals:

@@ -261,9 +261,9 @@ fi
 linked=0
 # python3 is already required by the rest of the toolchain (doctor, index,
 # every check); reading one JSON field is not a new dependency.
-while IFS=$'\t' read -r name bundle; do
+while IFS=$'\t' read -r name rel bundle; do
   [[ -n "$name" ]] || continue
-  entry="$AGTMLS_DIR/skills/$name"
+  entry="$AGTMLS_DIR/$rel"
   if [[ -z "$bundle" ]]; then
     want=true
   else
@@ -276,11 +276,14 @@ while IFS=$'\t' read -r name bundle; do
   fi
 done < <(python3 - "$AGTMLS_DIR" <<'PY'
 import json, pathlib, sys
-skills = pathlib.Path(sys.argv[1]) / "skills"
-for skill_md in sorted(skills.glob("*/SKILL.md")):
-    meta_path = skill_md.parent / "metadata.json"
+root = pathlib.Path(sys.argv[1])
+sys.path.insert(0, str(root / "scripts"))
+from _lib import skill_roots  # skills/ and every packs/<bundle>/skills/
+for skill in skill_roots.skill_dirs(root):
+    meta_path = skill / "metadata.json"
     meta = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
-    print(f"{skill_md.parent.name}\t{meta.get('bundle') or ''}")
+    # The bundle goes last: it may be empty, and `read` collapses adjacent tabs.
+    print(f"{skill.name}\t{skill.relative_to(root).as_posix()}\t{meta.get('bundle') or ''}")
 PY
 )
 for b in "${BUNDLES[@]:-}"; do [[ -n "$b" ]] && echo "   + bundle: $b"; done
