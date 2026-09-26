@@ -7,6 +7,21 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- OpenSSF Scorecard hardening:
+  - `release.yml` is read-only by default. Only the job that creates the
+    release and signs provenance asks for `contents`, `attestations` and
+    `id-token` writes (Token-Permissions).
+  - Every CI `pip install` uses `--require-hashes` with a pinned file in
+    `.github/requirements/`, generated from its `.in` by `compile.sh`
+    (Pinned-Dependencies).
+  - Each release attaches its Sigstore provenance bundle as
+    `agtmls-<version>.intoto.jsonl`, listed in `SHA256SUMS` (Signed-Releases).
+    `release-audit.py` verifies the wheel against it offline and requires it
+    when the release workflow ships one. `SHA256SUMS`, now written after the
+    attestation, is no longer asked for provenance of its own.
+
 ### Fixed
 
 - The README's OpenSSF Scorecard badge rendered "invalid repo path":

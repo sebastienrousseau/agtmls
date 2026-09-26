@@ -72,10 +72,12 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
      9) and verifies the signature against the tag's `ALLOWED_SIGNERS`. The
      environment deploys only from `v0.0.*` tags, so a manual re-release
      dispatched from a branch cannot sign, and publishes unsigned;
-   - builds once, with `index.json.sig` beside `index.json` in the wheel,
-     and writes one `SHA256SUMS` over every asset, wheel, sdist and
-     `index.json.sig` included; the installed wheel's signature is verified
-     before anything is attached;
+   - builds once, with `index.json.sig` beside `index.json` in the wheel;
+     attests every asset with SLSA build provenance, signed keylessly
+     through Sigstore, and attaches that bundle as
+     `agtmls-<version>.intoto.jsonl`; then writes one `SHA256SUMS` over
+     every asset, wheel, sdist, `index.json.sig` and bundle included. The
+     installed wheel's signature is verified before anything is attached;
    - writes the release body with `scripts/release-body.py`: the prepared
      notes, their Checksums section replaced by that `SHA256SUMS`;
    - attaches the assets to a **draft** release, and refuses to publish it

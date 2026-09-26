@@ -61,8 +61,7 @@ jobs:
         # Pinned: an unpinned validator can start passing or failing for
         # reasons that have nothing to do with this repository.
         run: |
-          python3 -m pip install --disable-pip-version-check \
-            'spdx-tools==0.8.3' 'cyclonedx-python-lib[json-validation]==8.5.0'
+          python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/sbom-validators.txt
       - name: SPDX 2.3
         run: pyspdxtools -i SBOM.spdx.json
       - name: CycloneDX 1.6
@@ -121,7 +120,7 @@ jobs:
       # Pinned: ruff's default rule set grows between releases, and the
       # policy is pyproject.toml's, not whichever ruff a runner resolves.
       # A linter only; the scripts it reads stay stdlib-only.
-      - run: python3 -m pip install --disable-pip-version-check 'ruff==0.16.7'
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/ruff.txt
       - run: ruff check --output-format github .
 
   wheel-size:
@@ -133,7 +132,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - run: python3 -m pip install --disable-pip-version-check build
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
       - name: Build and measure
         # The registry ships inside the wheel, so the wheel grows with every
         # skill. Measured at 614,750 bytes for 31 skills; the ceiling is a
@@ -176,7 +175,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - run: python3 -m pip install --disable-pip-version-check 'griffe==2.3.0'
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/griffe.txt
       - name: Compare against the newest release tag
         run: |
           python3 - <<'PY'
@@ -226,7 +225,7 @@ jobs:
           python-version: "3.12"
       # skills-ref too: the `all` scope runs the whole gate, and in CI the
       # spec check fails rather than skips when its validator is missing.
-      - run: python3 -m pip install --disable-pip-version-check 'coverage==7.16.1' 'skills-ref==0.1.0'
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/coverage.txt
       - name: The library core
         # Measured from the unit suite alone, in-process, so the number
         # reflects tests rather than incidental execution by the gate.

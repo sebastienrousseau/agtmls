@@ -38,7 +38,7 @@ jobs:
         # a failed install must fail the run: validate-spec-conformance.py
         # treats a missing validator in CI as FAIL, not SKIP.
         if: matrix.python-version != '3.10'
-        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/skills-ref.txt
       - name: Verify commit signatures
         # README states signing is required. Until this step, that was an
         # honour-system policy rather than a control.

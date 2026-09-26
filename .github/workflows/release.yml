@@ -28,12 +28,10 @@ on:
         type: boolean
         default: false
 
+# Read-only by default (OpenSSF Scorecard Token-Permissions); the one job
+# that creates the release and signs provenance asks for its writes itself.
 permissions:
-  contents: write
-  # Build provenance is signed via Sigstore against the workflow identity;
-  # id-token is what proves the artifacts came from this repo and ref.
-  attestations: write
-  id-token: write
+  contents: read
 
 jobs:
   # agtmls-spec chapter 9: sign the exact bytes of index.json with the release
@@ -79,6 +77,12 @@ jobs:
       ${{ !cancelled() && (needs.sign-index.result == 'success' || needs.sign-index.result == 'skipped')
       && (startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)) }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # Build provenance is signed via Sigstore against the workflow identity;
+      # id-token is what proves the artifacts came from this repo and ref.
+      attestations: write
+      id-token: write
     steps:
       # The release content: the tagged commit.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -122,28 +126,39 @@ jobs:
           ssh-keygen -Y verify -f ALLOWED_SIGNERS -I agtmls-release \
             -n agtmls-index@v1 -s index.json.sig < index.json
       - name: Install reference validator
-        run: python3 -m pip install --disable-pip-version-check 'skills-ref==0.1.0'
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/skills-ref.txt
       - name: Full release gate
         run: python3 scripts/agtmls.py check
       - name: Build release assets
         run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
       - name: Build Python distributions
         run: |
-          python3 -m pip install --disable-pip-version-check build
+          python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
           python3 -m build --outdir dist/python
-      - name: Collect and checksum every asset
-        # One directory, one SHA256SUMS over everything published, wheel and
-        # sdist included -- release-pack's own list covers the exports only.
+      - name: Collect every asset
+        # One directory for everything published, wheel and sdist included --
+        # release-pack's own list covers the exports only.
         run: |
           mkdir -p dist/assets
           cp dist/release/*.tar.gz dist/release/release-manifest.json dist/python/* dist/assets/
           if [ -f index.json.sig ]; then cp index.json.sig dist/assets/; fi
-          (cd dist/assets && sha256sum -- * > ../SHA256SUMS && mv ../SHA256SUMS SHA256SUMS)
-          cat dist/assets/SHA256SUMS
       - name: Attest release assets
+        id: provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: "dist/assets/*"
+      - name: Attach the provenance bundle and checksum every asset
+        # The Sigstore bundle ships beside the assets as <name>.intoto.jsonl,
+        # the name OpenSSF Scorecard's Signed-Releases check reads, so it can
+        # be verified offline (`gh attestation verify --bundle`). SHA256SUMS
+        # is written last, over every asset including the bundle.
+        env:
+          BUNDLE: ${{ steps.provenance.outputs.bundle-path }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          cp "$BUNDLE" "dist/assets/agtmls-${VERSION}.intoto.jsonl"
+          (cd dist/assets && sha256sum -- * > ../SHA256SUMS && mv ../SHA256SUMS SHA256SUMS)
+          cat dist/assets/SHA256SUMS
       - name: Verify the wheel installs and runs
         run: |
           python3 -m venv /tmp/verify
@@ -230,6 +245,8 @@ jobs:
   from-release:
     if: github.event_name == 'workflow_dispatch' && inputs.publish_existing
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -279,8 +296,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
+      contents: read
       id-token: write
     steps:
+      # Only the pinned requirements, for the dry run's twine.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/requirements
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
@@ -303,7 +326,7 @@ jobs:
       - name: Publish (dry run)
         if: inputs.dry_run
         run: |
-          python3 -m pip install --disable-pip-version-check twine
+          python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/twine.txt
           python3 -m twine check dist/pypi/*
           echo "dry run: validated $(ls dist/pypi | wc -l) file(s); nothing uploaded"
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
