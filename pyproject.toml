@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agtmls"
-version = "0.0.14"
+version = "0.0.15"
 description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
 readme = "README.md"
 license = "Apache-2.0 OR MIT"

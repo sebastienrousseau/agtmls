@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.15 - 2026-09-26
+
 ### Added
 
 - `verify <agent> --live` asks the agent which skills it actually loads in
