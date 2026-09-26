@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 PROVIDERS = ROOT / "providers.json"
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import lockfile  # noqa: E402  (needs ROOT on the path first)
+from _lib import lockfile, posture  # noqa: E402  (needs ROOT on the path first)
 
 
 def native_agents() -> dict[str, tuple[str, str]]:
@@ -30,6 +30,36 @@ def native_agents() -> dict[str, tuple[str, str]]:
         name: (str(Path(item["skills_dir"]).parent), item["prompt_file"])
         for name, item in data["native_agents"].items()
     }
+
+
+def approval_posture(agent: str, target: Path, reporter: Reporter, home: Path | None = None) -> None:
+    """Report whether the agent asks before a tool runs, from its own settings.
+
+    A skill's safety_policy is enforced by the user answering the prompt; an
+    agent set to run unattended (bypassPermissions, approval_policy = "never",
+    yes-always) makes every such policy advisory, which a clean install
+    report would otherwise hide.
+    """
+    item = json.loads(PROVIDERS.read_text(encoding="utf-8"))["native_agents"][agent]
+    if not item.get("approval_settings"):
+        reporter.ok(f"{agent}: approval settings are not known to AgtMLS; check the agent's own documentation")
+        return
+    found = posture.settings(item, target, home)
+    unattended = [s for s in found if s.unattended]
+    for s in unattended:
+        reporter.warn(
+            f"{agent} runs tools without asking: {s.path} ({s.scope}) sets {s.key} = {s.value}; "
+            "every skill's safety_policy is advisory while it does"
+        )
+    classified = [s for s in found if s.classified]
+    for s in classified:
+        reporter.ok(
+            f"{agent} approves tools by classifier: {s.path} ({s.scope}) sets {s.key} = {s.value}; "
+            "calls are judged by a safety classifier rather than asked of you"
+        )
+    if not unattended and not classified:
+        checked = ", ".join(dict.fromkeys(entry["file"] for entry in item["approval_settings"]))
+        reporter.ok(f"{agent} asks before tools run: no approval setting switches it off (checked {checked})")
 
 
 def expected_skill_names(bundles: list[str]) -> list[str]:
@@ -243,6 +273,7 @@ def main() -> int:
                         r.warn(f"target {prompt} exists but is not AgtMLS-generated")
                 else:
                     r.warn(f"target generated {prompt} is missing")
+                approval_posture(args.agent, target, r)
 
     print()
     if r.failures:
