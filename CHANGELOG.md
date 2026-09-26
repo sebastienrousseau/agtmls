@@ -7,6 +7,17 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- Uninstalling one agent from a target that also had others deleted the
+  lockfile they all share, leaving the other agents' skills unrecorded:
+  `verify` then failed, and their `uninstall` removed nothing. The lockfile
+  now stays while any agent's skills directory still holds a skill it
+  records.
+- `uninstall aider --remove-prompt` removed `CONVENTIONS.md` but left the
+  `read:` entry install had added to `.aider.conf.yml`. That exact block
+  now goes too, and the file if nothing else is in it.
+
 ## 0.0.15 - 2026-09-26
 
 ### Added
