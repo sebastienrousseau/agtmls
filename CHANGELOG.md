@@ -23,6 +23,10 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- `uninstall` left empty `.claude/skills`, `commands` and `agents`
+  directories behind. Directories it emptied are now removed, and the
+  agent directory too if that leaves it empty; one holding anything else is
+  never touched. `CLAUDE.md` still stays unless `--remove-prompt` is given.
 - The README's build badge was GitHub's own workflow badge, which ignores
   `style=for-the-badge`, so it rendered small and flat beside five
   shields.io badges. It is now shields.io's workflow-status badge for
