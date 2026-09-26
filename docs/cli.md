@@ -176,6 +176,27 @@ finding. Imported skills are recorded as unattested: `maturity: draft`,
 stored under `provenance.audit_findings`. `--force-unsafe` imports anyway and
 records the findings rather than discarding them.
 
+## Whether the agent asks before a tool runs
+
+`doctor --target <repo> --agent <agent>` also reports the agent's approval
+posture, read from the agent's own settings files. A skill's `safety_policy`
+is enforced by the user answering the agent's prompt, so an agent set to run
+unattended makes every such policy advisory, and a clean install report
+would otherwise hide that.
+
+| Agent | Files read, most specific first | Reported as unattended |
+| :--- | :--- | :--- |
+| `claude` | `.claude/settings.local.json`, `.claude/settings.json`, `~/.claude/settings.json` | `permissions.defaultMode` = `bypassPermissions` or `dontAsk` |
+| `codex` | `.codex/config.toml`, `~/.codex/config.toml` | `approval_policy` = `never`; `sandbox_mode` = `danger-full-access` |
+| `aider` | `.aider.conf.yml`, `~/.aider.conf.yml` | `yes-always: true` |
+
+An unattended setting is a `WARN` naming the file, its scope and the value.
+Claude Code's `auto` mode, where a safety classifier approves each call
+instead of the user, is reported on its own line as neither asking nor
+unattended. An agent whose settings AgtMLS does not know (`antigravity`) says
+so. Which files and values count is data in `providers.json`
+(`approval_settings`), checked by `validate-providers.py`.
+
 ## Verifying an installed tree
 
 `install` records what it installed, and what each skill hashed to, in

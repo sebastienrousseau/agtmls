@@ -919,7 +919,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "df293e985e2af9e3aee0aee92b3967d9e02c086e00c491f20f79ea3e08a114bc"
+          "content": "1be1bcbe6e0eecd16f31c88111fc2e4e4f76786b708afc43b219b5ef6b439366"
         }
       ],
       "name": "providers.json",
@@ -1069,6 +1069,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/posture.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2467061c628e990a87fe49588c98900dde2c02fd65a04edfc7d5b1ed8f4eff2b"
+        }
+      ],
+      "name": "scripts/_lib/posture.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/release_notes.py",
       "hashes": [
         {
@@ -1150,7 +1161,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "727294fa2487d93cd64d4b5bc92ff2d9e55a160321b3af80897fe7bad742ceb5"
+          "content": "f3ccc26a7482bc9dd2f8f6685edd662f17327d7c073fa40aa27799936aefed7f"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1997,7 +2008,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5a3a2f95ac146fcd2c7650ef016720ca5715c2969b4b89c99891147edc1ba6e4"
+          "content": "3411ce36514b0e35b0e39e66771ad9cdcc9b7c8d84c490198fa5d6ad6b9dfaca"
         }
       ],
       "name": "scripts/validate-providers.py",
@@ -4079,7 +4090,7 @@
       "type": "application",
       "version": "0.0.13"
     },
-    "timestamp": "2026-09-26T13:15:41Z",
+    "timestamp": "2026-09-26T14:00:30Z",
     "tools": {
       "components": [
         {

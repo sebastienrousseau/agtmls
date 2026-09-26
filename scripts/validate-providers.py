@@ -50,6 +50,26 @@ def main() -> int:
             errors.append(
                 f"native agent {name} allowed_tools_semantics must be grant, declaration or ignored"
             )
+        # Where the agent keeps "ask before running a tool", read by doctor
+        # to report when a skill's safety_policy can only be advisory.
+        approvals = item.get("approval_settings")
+        if not isinstance(approvals, list):
+            errors.append(f"native agent {name} approval_settings must be a list")
+            approvals = []
+        for index, entry in enumerate(approvals):
+            where = f"native agent {name} approval_settings[{index}]"
+            if not isinstance(entry, dict):
+                errors.append(f"{where} must be an object")
+                continue
+            for key in ["file", "scope", "key"]:
+                if not isinstance(entry.get(key), str) or not entry.get(key):
+                    errors.append(f"{where} missing {key}")
+            if entry.get("format") not in {"json", "toml", "yaml"}:
+                errors.append(f"{where} format must be json, toml or yaml")
+            if not isinstance(entry.get("unattended"), list) or not entry.get("unattended"):
+                errors.append(f"{where} needs the unattended values it recognises")
+            if not isinstance(entry.get("classified", []), list):
+                errors.append(f"{where} classified must be a list")
     plugins = data.get("plugin_targets", {})
     if not isinstance(plugins, dict):
         errors.append("plugin_targets must be an object")

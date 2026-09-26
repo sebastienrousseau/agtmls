@@ -40,6 +40,14 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- `doctor --target --agent` reports whether the agent asks before a tool
+  runs, read from its own settings: Claude Code's `bypassPermissions` or
+  `dontAsk` (project, local or user settings), Codex's
+  `approval_policy = "never"` or `sandbox_mode = "danger-full-access"`,
+  and Aider's `yes-always`, each a `WARN` naming the file, scope and value,
+  since every skill's `safety_policy` is advisory while it holds. Claude
+  Code's classifier-based `auto` mode is reported on its own. Which files
+  and values count is data in `providers.json` (`approval_settings`).
 - Five rules from agtmls-spec (snapshot pinned to agtmls-spec
   `c38e7dc`): `AGT-HOOK-004` hook output that injects context the user
   never sees; `AGT-HOOK-005` hook code that reads the session transcript;

@@ -86,7 +86,27 @@
       "commands_dir": ".aider/commands",
       "install_mode": "symlink",
       "prompt_file": "CONVENTIONS.md",
-      "skills_dir": ".aider/skills"
+      "skills_dir": ".aider/skills",
+      "approval_settings": [
+        {
+          "file": ".aider.conf.yml",
+          "scope": "project",
+          "format": "yaml",
+          "key": "yes-always",
+          "unattended": [
+            true
+          ]
+        },
+        {
+          "file": "~/.aider.conf.yml",
+          "scope": "user",
+          "format": "yaml",
+          "key": "yes-always",
+          "unattended": [
+            true
+          ]
+        }
+      ]
     },
     "antigravity": {
       "agents_dir": ".agents/agents",
@@ -94,7 +114,8 @@
       "commands_dir": ".agents/commands",
       "install_mode": "symlink",
       "prompt_file": "AGENTS.md",
-      "skills_dir": ".agents/skills"
+      "skills_dir": ".agents/skills",
+      "approval_settings": []
     },
     "claude": {
       "agents_dir": ".claude/agents",
@@ -102,7 +123,48 @@
       "commands_dir": ".claude/commands",
       "install_mode": "symlink",
       "prompt_file": "CLAUDE.md",
-      "skills_dir": ".claude/skills"
+      "skills_dir": ".claude/skills",
+      "approval_settings": [
+        {
+          "file": ".claude/settings.local.json",
+          "scope": "project (local)",
+          "format": "json",
+          "key": "permissions.defaultMode",
+          "unattended": [
+            "bypassPermissions",
+            "dontAsk"
+          ],
+          "classified": [
+            "auto"
+          ]
+        },
+        {
+          "file": ".claude/settings.json",
+          "scope": "project",
+          "format": "json",
+          "key": "permissions.defaultMode",
+          "unattended": [
+            "bypassPermissions",
+            "dontAsk"
+          ],
+          "classified": [
+            "auto"
+          ]
+        },
+        {
+          "file": "~/.claude/settings.json",
+          "scope": "user",
+          "format": "json",
+          "key": "permissions.defaultMode",
+          "unattended": [
+            "bypassPermissions",
+            "dontAsk"
+          ],
+          "classified": [
+            "auto"
+          ]
+        }
+      ]
     },
     "codex": {
       "agents_dir": ".codex/agents",
@@ -110,7 +172,45 @@
       "commands_dir": ".codex/commands",
       "install_mode": "symlink",
       "prompt_file": "AGENTS.md",
-      "skills_dir": ".codex/skills"
+      "skills_dir": ".codex/skills",
+      "approval_settings": [
+        {
+          "file": ".codex/config.toml",
+          "scope": "project",
+          "format": "toml",
+          "key": "approval_policy",
+          "unattended": [
+            "never"
+          ]
+        },
+        {
+          "file": ".codex/config.toml",
+          "scope": "project",
+          "format": "toml",
+          "key": "sandbox_mode",
+          "unattended": [
+            "danger-full-access"
+          ]
+        },
+        {
+          "file": "~/.codex/config.toml",
+          "scope": "user",
+          "format": "toml",
+          "key": "approval_policy",
+          "unattended": [
+            "never"
+          ]
+        },
+        {
+          "file": "~/.codex/config.toml",
+          "scope": "user",
+          "format": "toml",
+          "key": "sandbox_mode",
+          "unattended": [
+            "danger-full-access"
+          ]
+        }
+      ]
     }
   },
   "plugin_targets": {

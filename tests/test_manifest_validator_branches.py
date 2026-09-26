@@ -207,6 +207,19 @@ class ProviderBranchTests(BrokenTreeCase):
             "FAIL: native agent claude allowed_tools_semantics must be grant, declaration or ignored",
         )
 
+    def test_approval_settings_are_checked_for_shape(self) -> None:
+        """doctor reads these to say when a skill's safety_policy is advisory."""
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].__setitem__("approval_settings", "x"))
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings must be a list")
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].__setitem__("approval_settings", [
+            7, {"file": "", "scope": "user", "key": "k", "format": "ini", "unattended": [], "classified": "auto"},
+        ]))
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[0] must be an object")
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] missing file")
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] format must be json, toml or yaml")
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] needs the unattended values it recognises")
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] classified must be a list")
+
     def test_plugin_targets_that_are_not_an_object_are_refused(self) -> None:
         """Treated as empty afterwards, so every required target is then missing."""
         self.edit_json(self.FILE, lambda data: data.__setitem__("plugin_targets", []))

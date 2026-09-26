@@ -13,11 +13,13 @@ every state an install can leave it in.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
 from .support import ROOT, load_script, retarget, run_main
@@ -160,6 +162,66 @@ class DoctorTargetTests(ScriptCase):
     """What the doctor says about a consumer repository."""
 
     script_name = "agtmls-doctor.py"
+
+    def setUp(self) -> None:
+        super().setUp()
+        # doctor reads the agent's user-level settings too; a developer's own
+        # ~/.claude must not decide whether these tests pass.
+        self.home = Path(tempfile.mkdtemp(prefix="agtmls-home-")).resolve()
+        self.addCleanup(lambda: shutil.rmtree(self.home, ignore_errors=True))
+        patcher = mock.patch.dict(os.environ, {"HOME": str(self.home)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def write(self, root: Path, relative: str, text: str) -> None:
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+
+    def test_an_agent_that_asks_is_reported_as_asking(self) -> None:
+        self.install()
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   claude asks before tools run: no approval setting switches it off "
+                      "(checked .claude/settings.local.json, .claude/settings.json, ~/.claude/settings.json)", output)
+
+    def test_bypass_permissions_in_any_scope_is_a_warning_naming_the_file(self) -> None:
+        self.install()
+        self.write(self.target, ".claude/settings.json", json.dumps({"permissions": {"defaultMode": "bypassPermissions"}}))
+        self.write(self.home, ".claude/settings.json", json.dumps({"permissions": {"defaultMode": "dontAsk"}}))
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn("WARN claude runs tools without asking: .claude/settings.json (project) sets "
+                      "permissions.defaultMode = bypassPermissions; every skill's safety_policy is advisory while it does", output)
+        self.assertIn("WARN claude runs tools without asking: ~/.claude/settings.json (user) sets "
+                      "permissions.defaultMode = dontAsk", output)
+        self.assertIn("OK: doctor passed with 2 warning(s)", output)
+
+    def test_a_classifier_mode_is_reported_on_its_own(self) -> None:
+        self.install()
+        self.write(self.home, ".claude/settings.json", json.dumps({"permissions": {"defaultMode": "auto"}}))
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn("OK   claude approves tools by classifier: ~/.claude/settings.json (user) sets "
+                      "permissions.defaultMode = auto", output)
+        self.assertNotIn("asks before tools run", output)
+        self.assertIn("OK: doctor passed with 0 warning(s)", output)
+
+    def test_codex_and_aider_settings_are_read_from_their_own_files(self) -> None:
+        (self.target / ".codex" / "skills").mkdir(parents=True)
+        self.write(self.home, ".codex/config.toml", 'approval_policy = "never"\nsandbox_mode = "danger-full-access"\n')
+        _code, output = self.drive("--skip-gate", "--target", str(self.target), "--agent", "codex")
+        self.assertIn("WARN codex runs tools without asking: ~/.codex/config.toml (user) sets approval_policy = never", output)
+        self.assertIn("sandbox_mode = danger-full-access", output)
+        (self.target / ".aider" / "skills").mkdir(parents=True)
+        self.write(self.target, ".aider.conf.yml", "model: sonnet\nyes-always: true\n")
+        _code, output = self.drive("--skip-gate", "--target", str(self.target), "--agent", "aider")
+        self.assertIn("WARN aider runs tools without asking: .aider.conf.yml (project) sets yes-always = True", output)
+
+    def test_an_agent_with_no_known_settings_says_so(self) -> None:
+        (self.target / ".agents" / "skills").mkdir(parents=True)
+        _code, output = self.drive("--skip-gate", "--target", str(self.target), "--agent", "antigravity")
+        self.assertIn("OK   antigravity: approval settings are not known to AgtMLS", output)
 
     def install(self, names=SKILLS, prompt: str | None = GENERATED) -> Path:
         skills = self.target / ".claude" / "skills"
