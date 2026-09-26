@@ -479,7 +479,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0dc75f750ac20ea9a32371071a7939ab7498dda5843940c77c3262f82ed02e6f"
+          "content": "1dd990db4ece37e386b998aeb9bb46b36265de91aebb29663e30c17a158bbeaf"
         }
       ],
       "name": "evals/behavioral/cases/verification-before-completion.json",
@@ -886,7 +886,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "42d628a5fd42f624da1d48350e0eb29c883b1bb455cb73c44b495cd24548bf1d"
+          "content": "241c1294992f0581a05e50bb1a05c001f49277cc7a0b498bbab01399e1880393"
         }
       ],
       "name": "index.json",
@@ -3812,7 +3812,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "163a96ff7a646346c8e8b4050584aa2eccf3fef2789cd40456bd0f9202893c0c"
+          "content": "d4fa4f02ddc67c599b681af06e2b3d8d404cfe84c75fd415d68decbab6ae1765"
         }
       ],
       "name": "skills/verification-before-completion/SKILL.md",
@@ -3834,7 +3834,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5eca86c3672b4c54995786a467c0ffd586616407371cd22279a5d92f4d9ab5b6"
+          "content": "56083b86def253a0ce8e84e5902e4b9b33b65a17ed4a0fb1cb76fd28595d5b1a"
         }
       ],
       "name": "skills/verification-before-completion/reference.md",
@@ -4134,7 +4134,7 @@
       "type": "application",
       "version": "0.0.15"
     },
-    "timestamp": "2026-09-26T21:42:00Z",
+    "timestamp": "2026-09-26T22:15:56Z",
     "tools": {
       "components": [
         {
