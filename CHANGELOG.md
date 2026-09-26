@@ -9,8 +9,8 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
-- Five rules from agtmls-spec (snapshot pinned to the rule branch
-  `3d4ede1`): `AGT-HOOK-004` hook output that injects context the user
+- Five rules from agtmls-spec (snapshot pinned to agtmls-spec
+  `c38e7dc`): `AGT-HOOK-004` hook output that injects context the user
   never sees; `AGT-HOOK-005` hook code that reads the session transcript;
   `AGT-INJ-007` content presented as if a tool had just returned it;
   `AGT-SUPPLY-002` a script that downloads a file and makes it executable;
