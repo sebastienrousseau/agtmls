@@ -466,6 +466,19 @@ class AuditCliTests(unittest.TestCase):
         self.assertTrue(data["skills"][0]["policy"]["provisional"])
         self.assertEqual([f["rule"] for f in data["skills"][0]["findings"]], ["AGT-INJ-001"])
 
+    def test_foreign_reports_portability_as_notes_that_do_not_fail(self) -> None:
+        tree = self._workspace / "foreign-portability"
+        (tree / "skills" / "one").mkdir(parents=True)
+        (tree / "skills" / "one" / "SKILL.md").write_text(
+            "---\nname: one\ndescription: Use when testing.\n---\n\n# One\n\nRun !`git status`.\n", encoding="utf-8",
+        )
+        code, output = self.audit("--foreign", str(tree))
+        self.assertEqual(code, 0, output)
+        self.assertIn("  portability: SKILL.md:8: `!`git status`` runs a command only in Claude Code", output)
+        code, output = self.audit("--foreign", str(tree), "--format", "json")
+        self.assertEqual(json.loads(output)["skills"][0]["portability"],
+                         ["SKILL.md:8: `!`git status`` runs a command only in Claude Code"])
+
     def coverage_tree(self) -> Path:
         tree = self._workspace / "foreign-coverage"
         if not tree.exists():

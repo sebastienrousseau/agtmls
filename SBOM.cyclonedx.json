@@ -1091,6 +1091,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/portability.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1ae762f842f687a058dbc2fa5371fa9428f7865ad581a3b7698b03e6a486979f"
+        }
+      ],
+      "name": "scripts/_lib/portability.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/posture.py",
       "hashes": [
         {
@@ -1205,7 +1216,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7a671befe9e9e116025cd5dea0cffceb45afb817f0323e69719821666f517f9b"
+          "content": "64b51fc5afa0410cedae483cda3c9c431c0ef2bd9381ae6615d17e18e21ae7b7"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -2140,7 +2151,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "19450369920ac01004c043a0ed77bc48b219d36d017af88299372fdd46577bf2"
+          "content": "56476a6eebab640e8ff7a284f957e4dc4881e7229af61d3a8b71ce831df1f597"
         }
       ],
       "name": "scripts/validate-skills.py",
@@ -4112,7 +4123,7 @@
       "type": "application",
       "version": "0.0.15"
     },
-    "timestamp": "2026-09-26T19:11:37Z",
+    "timestamp": "2026-09-26T20:21:36Z",
     "tools": {
       "components": [
         {

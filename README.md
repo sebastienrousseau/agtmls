@@ -271,7 +271,8 @@ metadata:
 2. **Name**: kebab-case, at most 64 characters, equal to the directory name.
 3. **Trigger cue**: a description of at most 1024 characters that says when to load the skill (`"load when"`, `"use for"`, `"trigger"`).
 4. **Progressive disclosure**: `SKILL.md` is capped at 500 lines; catalogues and references live in `reference.md`, loaded on demand.
-5. **Evaluations**: positive and negative trigger cases in [`evals/cases/`](evals/cases/) and behavioural assertions in [`evals/behavioral/cases/`](evals/behavioral/cases/).
+5. **Portability**: the body stays under about 5,000 tokens, references are one level deep from `SKILL.md`, and no Claude Code-only construct (`` !`command` `` injection, `${CLAUDE_SKILL_DIR}`) appears, since every other agent reads the same file.
+6. **Evaluations**: positive and negative trigger cases in [`evals/cases/`](evals/cases/) and behavioural assertions in [`evals/behavioral/cases/`](evals/behavioral/cases/).
 
 ### Command line
 
