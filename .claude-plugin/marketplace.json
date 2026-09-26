@@ -34,8 +34,8 @@
       "repository": "https://github.com/sebastienrousseau/agtmls",
       "skills": "./skills",
       "source": "./",
-      "version": "0.0.12"
+      "version": "0.0.13"
     }
   ],
-  "version": "0.0.12"
+  "version": "0.0.13"
 }

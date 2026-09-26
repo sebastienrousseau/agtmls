@@ -7,16 +7,7 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
-### Fixed
-
-- `audit --foreign` stopped at the first layout it recognised, so most of a
-  repository could go unscanned and read as clean: it audited 1 of 24
-  skills in impeccable, 1 of 13 in hindsight and 11 of 26 in gentle-ai. It
-  now keeps every declared layout and sweeps the tree for every other
-  `SKILL.md` (per-harness copies, embedded asset trees), without following
-  symlinks or entering dependency directories. All seven repositories
-  sampled now audit every skill; hindsight goes from 0 findings to 64,
-  including its instructions to pipe `curl` into `bash`.
+## 0.0.13 - 2026-09-26
 
 ### Added
 
@@ -44,6 +35,14 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- `audit --foreign` stopped at the first layout it recognised, so most of a
+  repository could go unscanned and read as clean: it audited 1 of 24
+  skills in impeccable, 1 of 13 in hindsight and 11 of 26 in gentle-ai. It
+  now keeps every declared layout and sweeps the tree for every other
+  `SKILL.md` (per-harness copies, embedded asset trees), without following
+  symlinks or entering dependency directories. All seven repositories
+  sampled now audit every skill; hindsight goes from 0 findings to 64,
+  including its instructions to pipe `curl` into `bash`.
 - The README's OpenSSF Scorecard badge rendered "invalid repo path":
   nothing published Scorecard results for this repository.
   `scorecard.yml` runs the pinned `ossf/scorecard-action` on pushes to
