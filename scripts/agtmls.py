@@ -38,19 +38,21 @@ def skills_dirs(target: Path) -> list[Path]:
 
 
 def unregister_aider_prompt(target: Path, prompt: str) -> int:
-    """Take out the `read:` block install appended to .aider.conf.yml
-    (setup-workspace.sh) so Aider is not left reading a prompt that is gone.
-    Only that exact block, at the end where install put it, is removed."""
+    """Take the prompt out of .aider.conf.yml's `read:` list, where install
+    registered it, so Aider is not left reading a file that is gone. The
+    file goes too when nothing else is in it."""
+    from _lib import aider_conf
+
     conf = target / ".aider.conf.yml"
-    block = f"read:\n  - {prompt}\n"
-    text = conf.read_text(encoding="utf-8") if conf.is_file() else ""
-    if not text.endswith(block):
+    if not conf.is_file():
         return 0
-    rest = text[: -len(block)]
-    if rest:
-        conf.write_text(rest, encoding="utf-8")
-    else:
+    text, changed = aider_conf.unregister(conf.read_text(encoding="utf-8"), prompt)
+    if not changed:
+        return 0
+    if text is None:
         conf.unlink()
+    else:
+        conf.write_text(text, encoding="utf-8")
     return 1
 
 

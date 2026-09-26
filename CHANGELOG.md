@@ -17,6 +17,12 @@ All notable changes to AgtMLS are recorded here.
 - `uninstall aider --remove-prompt` removed `CONVENTIONS.md` but left the
   `read:` entry install had added to `.aider.conf.yml`. That exact block
   now goes too, and the file if nothing else is in it.
+- Installing for Aider into a repository whose `.aider.conf.yml` already
+  had a `read:` list appended a second `read:` key: invalid YAML, or the
+  user's list replaced, depending on the parser. `CONVENTIONS.md` now joins
+  the existing list (block, flow or single value) and every other line is
+  kept; a shape it cannot edit safely, such as two `read:` keys, is left
+  alone and named. Uninstall takes the entry out the same way.
 
 ## 0.0.15 - 2026-09-26
 

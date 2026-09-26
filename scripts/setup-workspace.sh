@@ -177,15 +177,14 @@ else
   fi
 
   # 2a. Aider does not auto-read CONVENTIONS.md — register it so it loads.
+  #     Added to an existing `read:` list rather than appending a second
+  #     `read:` key, which is invalid YAML or replaces the user's list.
   if [[ "$AGENT_CLI" == "aider" ]]; then
     CONF="$TARGET_DIR/.aider.conf.yml"
-    if [[ ! -f "$CONF" ]] || ! grep -q 'CONVENTIONS.md' "$CONF" 2>/dev/null; then
-      echo "🔧 Registering CONVENTIONS.md in .aider.conf.yml"
-      if $DRY_RUN; then
-        printf '   [dry-run] append read: CONVENTIONS.md to .aider.conf.yml\n'
-      else
-        printf 'read:\n  - CONVENTIONS.md\n' >> "$CONF"
-      fi
+    if $DRY_RUN; then
+      printf '   [dry-run] register CONVENTIONS.md under read: in .aider.conf.yml\n'
+    else
+      echo "🔧 .aider.conf.yml: $(python3 "$AGTMLS_DIR/scripts/_lib/aider_conf.py" register "$CONF" CONVENTIONS.md)"
     fi
   fi
 fi
