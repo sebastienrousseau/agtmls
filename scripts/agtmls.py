@@ -286,7 +286,28 @@ def installed_skill_names(target: Path, agent: str) -> list[str]:
     return sorted(entry.name for entry in directory.iterdir() if entry.is_dir() or entry.is_symlink())
 
 
-def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False) -> int:
+def live_check(target: Path, agent: str) -> dict:
+    """Ask the agent which skills it loads in `target` (verify --live).
+
+    The lockfile proves the bytes; only the agent can say it reads them. A
+    skill on disk that the agent does not list is reported, since it will
+    never be used. Returns {"loaded": n, "missing": [...]} or {"error": ...}.
+    """
+    from _lib import liveness
+
+    item = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))["native_agents"][agent]
+    lock = lockfile.read(target) or {}
+    expected = sorted(entry["name"] for entry in lock.get("skills", []))
+    try:
+        loaded = liveness.loaded_skills(item, target)
+    except liveness.ProbeError as exc:
+        return {"error": str(exc)}
+    return {"loaded": len(set(expected) & loaded), "expected": len(expected),
+            "missing": [name for name in expected if name not in loaded]}
+
+
+def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False,
+                   live: bool = False) -> int:
     """Check an installed tree against its lockfile, the index signature and
     the advisory feed (agtmls-spec 6, 9 and 11).
 
@@ -334,13 +355,19 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
     else:
         code = lockfile.EXIT_OK
 
+    # A skill the agent does not load is never used, but it is not an
+    # integrity failure: it keeps every spec exit code and fails as an error.
+    live_result = live_check(target, agent) if live else None
+    if live_result is not None and code == lockfile.EXIT_OK and (live_result.get("error") or live_result["missing"]):
+        code = lockfile.EXIT_ERROR
+
     if json_output:
         print(json.dumps(
             {"target": str(target), "ok": code == lockfile.EXIT_OK,
              "problems": [{"skill": n, "status": s, "detail": d} for n, s, d in problems],
              "index_signature": index_status, "advisory_feed": feed_status,
              "revoked": [{"skill": n, "digest": d, "advisories": ids} for n, d, ids in hits],
-             "notes": notes},
+             "notes": notes, **({"live": live_result} if live_result is not None else {})},
             indent=2, sort_keys=True,
         ))
         return code
@@ -358,6 +385,14 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
         print("UNSIGNED     index.json has no signature, or there is no ALLOWED_SIGNERS", file=sys.stderr)
     if feed_status == "bad_signature":
         print("BAD_SIGNATURE advisories.json.sig does not verify; the feed is not consulted", file=sys.stderr)
+    if live_result is not None:
+        if live_result.get("error"):
+            print(f"LIVE         {agent} could not be asked which skills it loads: {live_result['error']}", file=sys.stderr)
+        else:
+            for name in live_result["missing"]:
+                print(f"{'NOT LOADED':<12} {name}  installed, but {agent} does not list it", file=sys.stderr)
+            if not live_result["missing"]:
+                print(f"OK: {agent} loads all {live_result['expected']} installed skill(s)")
     if code == lockfile.EXIT_OK and not integrity:
         lock = lockfile.read(target) or {}
         print(f"OK: {len(lock.get('skills', []))} skill(s) match the lockfile in {target}")
@@ -586,7 +621,7 @@ def main() -> int:
         print(f"recorded {len(payload['skills'])} skill(s) in {path.relative_to(target)}")
         return 0
     if args.subcommand == "verify":
-        return verify_install(args.target, args.agent, args.json, args.signatures)
+        return verify_install(args.target, args.agent, args.json, args.signatures, args.live)
     if args.subcommand == "uninstall":
         return uninstall(args.target, args.agent, args.remove_prompt)
     if args.subcommand == "propose-skill":

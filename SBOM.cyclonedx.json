@@ -919,7 +919,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1be1bcbe6e0eecd16f31c88111fc2e4e4f76786b708afc43b219b5ef6b439366"
+          "content": "950700658d0f14b45fb34f9ba5bc3440eb2c06175ffb83919d20ccddcc71f72a"
         }
       ],
       "name": "providers.json",
@@ -1029,7 +1029,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e35950adcca45f73653b25def538fc270f041a8999f0b2574845b1d29d6a14ef"
+          "content": "a51af8b1d1a6598de0755805b2589e46e74cb2c77184eaa4398457744c2f559b"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -1055,6 +1055,17 @@
         }
       ],
       "name": "scripts/_lib/digest.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/liveness.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8b5cac8685c85fbf8427b2d346cf650d89cfdc4c14a7ff861559ed92dbeb8b0c"
+        }
+      ],
+      "name": "scripts/_lib/liveness.py",
       "type": "file"
     },
     {
@@ -1161,7 +1172,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f3ccc26a7482bc9dd2f8f6685edd662f17327d7c073fa40aa27799936aefed7f"
+          "content": "1e15d6dbdd993f397e7a74fa79596ff4bdbfae7fead40dd1b14ac7a71db5b405"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1172,7 +1183,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "32dbd0eb110615ebb5845b8b7ba7802d8c82248903968b5e621e3815079f7e9a"
+          "content": "a6401c621273fd64f8f84a78dac43cf9e2592b184b3f7c80b142dec9d6ff191c"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -2008,7 +2019,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3411ce36514b0e35b0e39e66771ad9cdcc9b7c8d84c490198fa5d6ad6b9dfaca"
+          "content": "8ea2dcd4fb5321bc2f37e2db8a869796c0dbe627efdcb87576e2c001e76cf5ac"
         }
       ],
       "name": "scripts/validate-providers.py",
@@ -4090,7 +4101,7 @@
       "type": "application",
       "version": "0.0.14"
     },
-    "timestamp": "2026-09-26T15:32:34Z",
+    "timestamp": "2026-09-26T16:32:02Z",
     "tools": {
       "components": [
         {

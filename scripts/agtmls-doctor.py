@@ -16,7 +16,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 PROVIDERS = ROOT / "providers.json"
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import lockfile, posture  # noqa: E402  (needs ROOT on the path first)
+from _lib import (  # noqa: E402  (needs ROOT on the path first)
+    liveness,
+    lockfile,
+    posture,
+)
 
 
 def native_agents() -> dict[str, tuple[str, str]]:
@@ -60,6 +64,22 @@ def approval_posture(agent: str, target: Path, reporter: Reporter, home: Path | 
     if not unattended and not classified:
         checked = ", ".join(dict.fromkeys(entry["file"] for entry in item["approval_settings"]))
         reporter.ok(f"{agent} asks before tools run: no approval setting switches it off (checked {checked})")
+
+
+def user_skill_links(reporter: Reporter, home: Path | None = None) -> None:
+    """Broken links in each agent's user-level skill directories.
+
+    A lockfile describes one repository's install; a link in ~/.claude/skills
+    or ~/.codex/skills is outside every lockfile, and an agent skips a broken
+    one without a word. 18 of 20 such links broke when the registry went flat.
+    """
+    for agent, item in json.loads(PROVIDERS.read_text(encoding="utf-8"))["native_agents"].items():
+        links = liveness.user_skill_links(item, home)
+        broken = [link for link in links if not link.loadable]
+        for link in broken:
+            reporter.warn(f"{agent}: {link.directory}/{link.name} is a broken link to {link.target}; the agent skips it")
+        if links and not broken:
+            reporter.ok(f"{agent}: all {len(links)} linked skill(s) in {', '.join(item['user_skills_dirs'])} resolve")
 
 
 def expected_skill_names(bundles: list[str]) -> list[str]:
@@ -212,6 +232,8 @@ def main() -> int:
         if not parts or parts[0] == "agtmls-doctor.py":
             continue
         run_check(parts[0], parts[1:], r)
+
+    user_skill_links(r)
 
     if args.target:
         target = args.target.resolve()

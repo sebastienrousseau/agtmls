@@ -220,6 +220,13 @@ class ProviderBranchTests(BrokenTreeCase):
         self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] needs the unattended values it recognises")
         self.assert_fails(self.SCRIPT, "FAIL: native agent claude approval_settings[1] classified must be a list")
 
+    def test_user_skill_dirs_and_the_live_probe_are_checked(self) -> None:
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].__setitem__("user_skills_dirs", ["", 3]))
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude user_skills_dirs must be a list of paths")
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].__setitem__("user_skills_dirs", []))
+        self.edit_json(self.FILE, lambda data: data["native_agents"]["claude"].__setitem__("live_probe", "guess"))
+        self.assert_fails(self.SCRIPT, "FAIL: native agent claude live_probe must be claude-init or codex-prompt-input")
+
     def test_plugin_targets_that_are_not_an_object_are_refused(self) -> None:
         """Treated as empty afterwards, so every required target is then missing."""
         self.edit_json(self.FILE, lambda data: data.__setitem__("plugin_targets", []))

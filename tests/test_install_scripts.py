@@ -52,6 +52,13 @@ class ScriptCase(unittest.TestCase):
     def setUp(self) -> None:
         self.target = Path(tempfile.mkdtemp(prefix="agtmls-target-")).resolve()
         self.addCleanup(lambda: shutil.rmtree(self.target, ignore_errors=True))
+        # doctor reads user-level agent settings and skill links; a
+        # developer's own home directory must not decide these tests.
+        self.home = Path(tempfile.mkdtemp(prefix="agtmls-home-")).resolve()
+        self.addCleanup(lambda: shutil.rmtree(self.home, ignore_errors=True))
+        patcher = mock.patch.dict(os.environ, {"HOME": str(self.home)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
 
     def drive(self, *args: str) -> tuple[int, str]:
         return run_main(self.module, *args)
@@ -163,20 +170,30 @@ class DoctorTargetTests(ScriptCase):
 
     script_name = "agtmls-doctor.py"
 
-    def setUp(self) -> None:
-        super().setUp()
-        # doctor reads the agent's user-level settings too; a developer's own
-        # ~/.claude must not decide whether these tests pass.
-        self.home = Path(tempfile.mkdtemp(prefix="agtmls-home-")).resolve()
-        self.addCleanup(lambda: shutil.rmtree(self.home, ignore_errors=True))
-        patcher = mock.patch.dict(os.environ, {"HOME": str(self.home)})
-        patcher.start()
-        self.addCleanup(patcher.stop)
-
     def write(self, root: Path, relative: str, text: str) -> None:
         path = root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
+
+    def test_broken_user_level_skill_links_are_named(self) -> None:
+        """A link in ~/.claude/skills is outside every lockfile, and the agent
+        skips a broken one silently: 18 of 20 broke when the registry went flat."""
+        self.install()
+        skills = self.home / ".claude" / "skills"
+        skills.mkdir(parents=True)
+        (skills / "good").symlink_to(self.fixture / "skills" / SKILLS[0])
+        (skills / "gone").symlink_to(self.fixture / "skills" / "nested" / "gone")
+        (skills / "mine").mkdir()
+        (skills / ".hidden").symlink_to(self.home / "nowhere")
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertIn(f"WARN claude: ~/.claude/skills/gone is a broken link to {self.fixture / 'skills' / 'nested' / 'gone'}; "
+                      "the agent skips it", output)
+        self.assertNotIn("mine", output)
+        self.assertNotIn(".hidden", output)
+        (skills / "gone").unlink()
+        code, output = self.doctor()
+        self.assertIn("OK   claude: all 1 linked skill(s) in ~/.claude/skills resolve", output)
 
     def test_an_agent_that_asks_is_reported_as_asking(self) -> None:
         self.install()
