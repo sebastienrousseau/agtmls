@@ -273,7 +273,7 @@ class DataDrivenRulesTests(unittest.TestCase):
         self.assertEqual({rule.category for rule in analyzer.PATTERN_RULES}, {
             "prompt_injection", "unsafe_execution", "data_exfiltration", "hook_safety",
             "capability_escalation", "supply_chain", "mcp_tools", "packed_payload",
-            "social_engineering", "selection_gaming",
+            "social_engineering", "selection_gaming", "permission_posture",
         })
         self.assertEqual({rule.severity for rule in analyzer.PATTERN_RULES}, {"CRITICAL", "HIGH", "MEDIUM"})
 
