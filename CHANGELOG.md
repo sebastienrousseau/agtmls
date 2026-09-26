@@ -7,6 +7,16 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Portability rules, so a skill works the same in every agent that reads
+  it. `validate-skills.py` now fails a skill that uses Claude Code-only
+  command injection (`` !`command` `` or a ```` ```! ```` block) or a
+  `CLAUDE_*` variable, whose references send the agent on to further
+  references, or whose body passes about 5,000 tokens. `audit --foreign`
+  reports the same problems as notes that do not change its exit code.
+  Every skill in the registry already passes.
+
 ### Fixed
 
 - Uninstalling one agent from a target that also had others deleted the

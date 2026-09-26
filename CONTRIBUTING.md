@@ -43,7 +43,11 @@ That writes `skills/my-skill/` with `SKILL.md`, `reference.md`,
    does *and when to load it*, using words a user would actually type.
 2. **Write the body.** Keep `SKILL.md` under 500 lines and put depth in
    `reference.md`. The body is loaded in full on activation; the reference is
-   loaded only when the skill asks for it.
+   loaded only when the skill asks for it. Keep it portable: a body under
+   about 5,000 tokens, references that do not send the agent on to further
+   references, and nothing only Claude Code understands (`` !`command` ``
+   injection, `${CLAUDE_SKILL_DIR}`); Codex, Antigravity and the rest read the
+   same file. `validate-skills.py` fails on each.
 3. **Fill in `metadata.json`**, especially `safety_policy`. It is generated
    into portable frontmatter, so it is what a Cursor or Gemini user sees.
    Never hand-edit `license`, `compatibility`, `allowed-tools`, or `metadata`

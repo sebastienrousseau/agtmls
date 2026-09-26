@@ -23,7 +23,10 @@ AgtMLS router contract:
   AgtMLS additions
   - `description` contains a trigger cue (a "when"/"use for"/"trigger"
     phrase that tells the router when to load the skill);
-  - a top-level `# ` heading in the body.
+  - a top-level `# ` heading in the body;
+  - portability (_lib/portability.py): no Claude Code-only command
+    injection or CLAUDE_* variables, references one level deep, and a body
+    under about 5,000 tokens.
 
 The idea (a validator guarding the skill catalog) is adopted from
 addyosmani/agent-skills (MIT); this implementation is original.
@@ -41,6 +44,9 @@ MAX_COMPAT = 500  # Spec cap on `compatibility`.
 MAX_BODY_LINES = 500  # Spec guidance: keep SKILL.md under 500 lines.
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import portability  # noqa: E402  (scripts path first)
+
 SKILLS_DIR = ROOT / "skills"
 
 # The spec's closed key set. A key outside this set fails validation in
@@ -151,6 +157,7 @@ def check(skill_md: Path) -> list[str]:
             "(move detail into reference.md)"
         )
 
+    errors += portability.problems(skill_md.parent)
     return errors
 
 

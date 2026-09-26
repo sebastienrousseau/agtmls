@@ -40,6 +40,15 @@ class SkillContractBranchTests(BrokenTreeCase):
     def valid(self, extra: str = "") -> str:
         return f"name: {self.name}\ndescription: {self.GOOD_DESCRIPTION}\n{extra}".rstrip("\n")
 
+    def test_a_skill_that_works_only_in_claude_code_is_refused(self) -> None:
+        """Command injection and CLAUDE_* paths do nothing, or break, in the
+        other agents that read the same SKILL.md."""
+        self.write_skill(self.valid(), "# Title\n\nRun !`git status`, then ${CLAUDE_SKILL_DIR}/x.\n")
+        self.assert_skill_fails(
+            "SKILL.md:8: `!`git status`` runs a command only in Claude Code",
+            "SKILL.md:8: `${CLAUDE_SKILL_DIR}` is set only by Claude Code",
+        )
+
     def test_an_unterminated_frontmatter_block_is_refused(self) -> None:
         self.overwrite(
             str(self.skill.relative_to(self.fixture)), f"---\nname: {self.name}\n\n# Title\n"

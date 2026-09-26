@@ -163,6 +163,13 @@ inferred from its `allowed-tools`: any `Bash` grants `executes_commands`,
 network access optional. The report prints that policy beside each skill and
 marks it provisional; a skill that ships its own policy is checked against it.
 
+Each skill is also checked for portability, the same rules `validate-skills.py`
+applies to this registry: Claude Code-only command injection or `CLAUDE_*`
+variables, references more than one level deep, and a body over about 5,000
+tokens. These print as `portability:` notes, grouped by rule with a count and
+a few examples, and in full as a `portability` list in JSON. They are not
+security findings and never change the exit code.
+
 `--foreign <git-url>@<sha>` clones and audits a commit. Network fetch is
 opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
 or tag can move between the audit and the install.

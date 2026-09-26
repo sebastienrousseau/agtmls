@@ -95,11 +95,15 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -
         except ForeignLayoutError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
+        from _lib import portability
         from _lib.analyzer import foreign_coverage, foreign_layout
 
         layout = foreign_layout(root)
         coverage = foreign_coverage(root, reports)
         every = [f for report in reports for f in report.findings if f.suppressed is None]
+        # Notes, not findings: a skill that works in one agent only is not a
+        # security risk, so portability never changes the exit code.
+        notes = {r.path: portability.problems(r.path) for r in reports}
         if fmt == "json":
             print(json.dumps({
                 "target": target,
@@ -116,6 +120,7 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -
                         "line": f.line, "severity": f.severity, "category": f.category,
                         "rule": f.rule, "message": f.message,
                     } for f in r.findings if f.suppressed is None],
+                    "portability": notes[r.path],
                 } for r in reports],
             }, indent=2))
         else:
@@ -133,6 +138,8 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -
                 for f in r.findings:
                     if f.suppressed is None:
                         print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
+                for note in portability.summarize(notes[r.path]):
+                    print(f"  portability: {note}")
             print_coverage(coverage)
         failed = any(f.severity in {"CRITICAL", "HIGH"} for f in every) or (
             strict and any(f.severity in {"MEDIUM", "LOW"} for f in every)
