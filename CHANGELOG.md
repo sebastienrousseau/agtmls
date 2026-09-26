@@ -7,6 +7,20 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Five rules from agtmls-spec (snapshot pinned to agtmls-spec
+  `c38e7dc`): `AGT-HOOK-004` hook output that injects context the user
+  never sees; `AGT-HOOK-005` hook code that reads the session transcript;
+  `AGT-INJ-007` content presented as if a tool had just returned it;
+  `AGT-SUPPLY-002` a script that downloads a file and makes it executable;
+  `AGT-PERM-001` configuration or instructions that switch approval
+  prompts off (new category `permission_posture`). Each flags behaviour a
+  seven-repository review found unflagged in public plugins and
+  installers. The security corpus mirrors the six new spec cases: 114
+  cases at precision and recall 1.0. The registry's own skills stay clean
+  under `audit --all --strict`.
+
 ## 0.0.13 - 2026-09-26
 
 ### Added
