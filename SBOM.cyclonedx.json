@@ -1447,7 +1447,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3a9fc3dde093575063e49da84b89a5ded5fdffd4982cac0e7e3045dbde72b329"
+          "content": "3b96f7d975fdc2588dbfa20228a21f4230d9d67fe61febcfc28ff19758a5997e"
         }
       ],
       "name": "scripts/release-audit.py",
@@ -4079,7 +4079,7 @@
       "type": "application",
       "version": "0.0.12"
     },
-    "timestamp": "2026-09-25T12:54:35Z",
+    "timestamp": "2026-09-26T09:06:07Z",
     "tools": {
       "components": [
         {

@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+spdx-tools==0.8.3
+cyclonedx-python-lib[json-validation]==8.5.0

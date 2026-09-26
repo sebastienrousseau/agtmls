@@ -74,6 +74,11 @@ class FakeWorld:
             assert "--signer-workflow" in cmd and "--deny-self-hosted-runners" in cmd, cmd
             assert cmd[cmd.index("--source-ref") + 1] == "refs/tags/v0.0.9", cmd
             name = Path(cmd[3]).name
+            if "--bundle" in cmd:
+                assert name == WHEEL, cmd
+                if s.get("bad_bundle"):
+                    return ok(rc=1, err="Error: failed to verify bundle")
+                return ok("[]")
             if name in s.get("unattested", ()):
                 return ok(rc=1, err="Error: HTTP 404: Not Found")
             return ok("[]")
@@ -290,8 +295,8 @@ class SignatureAuditTests(unittest.TestCase):
 ATTESTING = {".github/workflows/release.yml": b"uses: actions/attest-build-provenance@x"}
 
 
-class ProvenanceTests(unittest.TestCase):
-    """Keyless build provenance on every asset, when the release attests."""
+class _Audits:
+    """Run the audit against a FakeWorld built from keyword overrides."""
 
     def setUp(self) -> None:
         self.mod = load_script("release-audit.py")
@@ -302,10 +307,15 @@ class ProvenanceTests(unittest.TestCase):
         code, output = run_main(self.mod, "--tag", "v0.0.9", "--commit", COMMIT[:12])
         return code, [line for line in output.splitlines() if line.startswith("FAIL: ")], output
 
+
+class ProvenanceTests(_Audits, unittest.TestCase):
+    """Keyless build provenance on every asset, when the release attests."""
+
     def test_every_asset_with_provenance_passes(self) -> None:
+        # SHA256SUMS is written after the attestation and is not asked.
         code, failures, output = self.audit(signed=ATTESTING)
         self.assertEqual((code, failures), (0, []), output)
-        self.assertIn("OK: 4 release asset(s) carry build provenance from .github/workflows/release.yml at v0.0.9", output)
+        self.assertIn("OK: 3 release asset(s) carry build provenance from .github/workflows/release.yml at v0.0.9", output)
 
     def test_an_asset_without_provenance_is_named_with_the_reason(self) -> None:
         code, failures, _ = self.audit(signed=ATTESTING, unattested={SDIST})
@@ -321,3 +331,48 @@ class ProvenanceTests(unittest.TestCase):
         code, failures, output = self.audit(signed={".github/workflows/release.yml": b"no attestation here"})
         self.assertEqual((code, failures), (0, []), output)
         self.assertNotIn("build provenance", output)
+
+
+BUNDLE = "agtmls-0.0.9.intoto.jsonl"
+SHIPPING = {".github/workflows/release.yml": b"uses: actions/attest-build-provenance@x\n cp b x.intoto.jsonl"}
+
+
+def with_bundle(**overrides) -> dict:
+    """A release whose SHA256SUMS and assets include a provenance bundle."""
+    sums = SUMS + f"{'d' * 64}  {BUNDLE}\n"
+    body = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{sums}```\n"
+    assets = [{"id": index, "name": name, "digest": f"sha256:{digest}"}
+              for index, (digest, name) in enumerate(line.split("  ") for line in sums.splitlines())]
+    release = {"body": body, "isDraft": False,
+               "assets": [*assets, {"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}
+    return {"release": release, "sums": sums, "signed": SHIPPING, **overrides}
+
+
+class BundleTests(_Audits, unittest.TestCase):
+    """The attached Sigstore bundle (*.intoto.jsonl) verifies offline."""
+
+    def test_a_bundle_that_verifies_the_wheel_passes(self) -> None:
+        code, failures, output = self.audit(**with_bundle())
+        self.assertEqual((code, failures), (0, []), output)
+        self.assertIn(f"OK: 3 release asset(s) carry build provenance from .github/workflows/release.yml "
+                      f"at v0.0.9; {BUNDLE} verifies offline", output)
+
+    def test_a_bundle_that_does_not_verify_is_named(self) -> None:
+        code, failures, _ = self.audit(**with_bundle(bad_bundle=True))
+        self.assertEqual(code, 1)
+        self.assertIn(f"FAIL: {BUNDLE} does not verify {WHEEL} offline: Error: failed to verify bundle", failures)
+
+    def test_a_workflow_that_ships_a_bundle_requires_one(self) -> None:
+        code, failures, _ = self.audit(signed=SHIPPING)
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: the release commit's workflow ships a provenance bundle, but the v0.0.9 release "
+                      "has no *.intoto.jsonl", failures)
+
+    def test_a_bundle_without_a_wheel_cannot_be_checked(self) -> None:
+        code, failures, _ = self.audit(**with_bundle(undownloadable={0}))
+        self.assertEqual(code, 1)
+        self.assertIn(f"FAIL: {BUNDLE} cannot be checked: the release has no wheel to verify against it", failures)
+
+    def test_an_undownloadable_bundle_is_named(self) -> None:
+        _, failures, _ = self.audit(**with_bundle(undownloadable={3}))
+        self.assertIn(f"FAIL: release asset {BUNDLE} could not be downloaded to check its provenance", failures)

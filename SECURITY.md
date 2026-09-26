@@ -65,6 +65,10 @@ gh attestation verify <file> --repo sebastienrousseau/agtmls \
     --signer-workflow sebastienrousseau/agtmls/.github/workflows/release.yml
 ```
 
+From v0.0.13 each release also attaches the provenance bundle,
+`agtmls-<version>.intoto.jsonl`; add `--bundle <that file>` to verify
+without asking GitHub for the attestation.
+
 ## Security rules for skills
 
 - Do not hardcode API keys, tokens, passwords, cookies, or private endpoints.

@@ -14,7 +14,8 @@ disagreement:
   * every file PyPI serves for the version has the digest SHA256SUMS lists;
   * every release asset carries keyless build provenance (SLSA v1, signed
     through Sigstore) from this repository's release.yml at the tag, on a
-    GitHub-hosted runner, when the release commit's workflow attests.
+    GitHub-hosted runner, when the release commit's workflow attests; and
+    the attached provenance bundle, when there is one, verifies offline.
 
     python3 scripts/release-audit.py --tag v0.0.6 --commit <sha>
     python3 scripts/release-audit.py --tag v0.0.6 --commit <sha> --before-pypi
@@ -144,40 +145,75 @@ def audit_signature(commit: str, repo: str, assets: list[dict]) -> list[str]:
 
 
 WORKFLOW = ".github/workflows/release.yml"
+BUNDLE_SUFFIX = ".intoto.jsonl"
+
+
+def _verify_provenance(path: Path, repo: str, tag: str, bundle: Path | None = None) -> str | None:
+    """None if `path` has provenance from release.yml at `tag`, else gh's reason."""
+    cmd = ["gh", "attestation", "verify", str(path), "--repo", repo,
+           "--signer-workflow", f"{repo}/{WORKFLOW}", "--source-ref", f"refs/tags/{tag}",
+           "--deny-self-hosted-runners", "--format", "json"]
+    if bundle is not None:
+        cmd += ["--bundle", str(bundle)]
+    proc = run(*cmd)
+    if proc.returncode == 0:
+        return None
+    reason = (proc.stderr or proc.stdout).strip().splitlines()
+    return reason[-1] if reason else "verification failed"
 
 
 def audit_provenance(commit: str, repo: str, tag: str, assets: list[dict]) -> list[str]:
     """Every asset's keyless build provenance verifies (Elevation Plan P2.6).
 
-    release.yml attests dist/assets/* with actions/attest-build-provenance:
+    release.yml attests the release's files with actions/attest-build-provenance:
     an SLSA v1 statement signed through Sigstore with the workflow's OIDC
     identity. `gh attestation verify` checks that signature against the
     public-good transparency log and pins who made it: this repository's
     release.yml, at this tag, on a GitHub-hosted runner. Required only when
     the release commit's workflow attests, so older releases audit as before.
+
+    Two files are not themselves attested: SHA256SUMS, written after the
+    attestation and checked against the notes and the release body instead,
+    and the provenance bundle (`*.intoto.jsonl`), which a workflow that ships
+    one must attach, and which must verify the wheel offline.
     """
     workflow = fetch_bytes("git", "show", f"{commit}:{WORKFLOW}")
     if workflow is None or b"attest-build-provenance" not in workflow:
         return []
     errors = []
+    attested = [a for a in assets if a["name"] != "SHA256SUMS" and not a["name"].endswith(BUNDLE_SUFFIX)]
+    bundles = [a for a in assets if a["name"].endswith(BUNDLE_SUFFIX)]
     with tempfile.TemporaryDirectory(prefix="agtmls-provenance-") as raw:
-        for asset in sorted(assets, key=lambda a: a["name"]):
+        local: dict[str, Path] = {}
+        for asset in sorted(attested + bundles, key=lambda a: a["name"]):
             data = fetch_bytes("gh", "api", "-H", "Accept: application/octet-stream",
                                f"repos/{repo}/releases/assets/{asset['id']}")
             if data is None:
                 errors.append(f"release asset {asset['name']} could not be downloaded to check its provenance")
                 continue
-            path = Path(raw) / Path(asset["name"]).name
-            path.write_bytes(data)
-            proc = run("gh", "attestation", "verify", str(path), "--repo", repo,
-                       "--signer-workflow", f"{repo}/{WORKFLOW}", "--source-ref", f"refs/tags/{tag}",
-                       "--deny-self-hosted-runners", "--format", "json")
-            if proc.returncode != 0:
-                reason = (proc.stderr or proc.stdout).strip().splitlines()
-                errors.append(f"release asset {asset['name']} has no build provenance from {WORKFLOW} at {tag}"
-                              + (f": {reason[-1]}" if reason else ""))
+            local[asset["name"]] = Path(raw) / Path(asset["name"]).name
+            local[asset["name"]].write_bytes(data)
+        for asset in sorted(attested, key=lambda a: a["name"]):
+            if asset["name"] not in local:
+                continue
+            reason = _verify_provenance(local[asset["name"]], repo, tag)
+            if reason is not None:
+                errors.append(f"release asset {asset['name']} has no build provenance from {WORKFLOW} at {tag}: {reason}")
+        if BUNDLE_SUFFIX.encode() in workflow and not bundles:
+            errors.append(f"the release commit's workflow ships a provenance bundle, but the {tag} release has no *{BUNDLE_SUFFIX}")
+        wheel = next((a["name"] for a in attested if a["name"].endswith(".whl") and a["name"] in local), None)
+        for bundle in bundles:
+            if bundle["name"] not in local:
+                continue
+            if wheel is None:
+                errors.append(f"{bundle['name']} cannot be checked: the release has no wheel to verify against it")
+                continue
+            reason = _verify_provenance(local[wheel], repo, tag, local[bundle["name"]])
+            if reason is not None:
+                errors.append(f"{bundle['name']} does not verify {wheel} offline: {reason}")
     if not errors:
-        print(f"OK: {len(assets)} release asset(s) carry build provenance from {WORKFLOW} at {tag}")
+        print(f"OK: {len(attested)} release asset(s) carry build provenance from {WORKFLOW} at {tag}"
+              + (f"; {', '.join(b['name'] for b in bundles)} verifies offline" if bundles else ""))
     return errors
 
 
