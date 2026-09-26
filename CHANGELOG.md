@@ -7,36 +7,7 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
-### Security
-
-- Code scanning: the spec-rules job in `conformance.yml` checked out
-  `agtmls-spec` at a ref read from `rules.json`, a file a pull request
-  can change (CodeQL `actions/untrusted-checkout`,
-  `actions/cache-poisoning`). The pin is now validated as a 40-hex commit
-  before use, and that one commit is fetched as data with `git fetch`;
-  nothing from it runs.
-- Fuzzing (OpenSSF Scorecard Fuzzing): Atheris targets for JSON escape
-  decoding, normalisation, the rule set over hostile text, the advisory
-  feed and `SHA256SUMS`, each asserting a property (`fuzz/`, run weekly
-  and on parser changes by `fuzz.yml`, and replayed without Atheris by
-  `tests/test_fuzz_targets.py`).
-
-### Fixed
-
-- `uninstall` left empty `.claude/skills`, `commands` and `agents`
-  directories behind. Directories it emptied are now removed, and the
-  agent directory too if that leaves it empty; one holding anything else is
-  never touched. `CLAUDE.md` still stays unless `--remove-prompt` is given.
-- The README's build badge was GitHub's own workflow badge, which ignores
-  `style=for-the-badge`, so it rendered small and flat beside five
-  shields.io badges. It is now shields.io's workflow-status badge for
-  `validate.yml` on main, in the same style, with the same GitHub logo and
-  grey label, at the same 28 px height.
-- `advisories.feed_problems` raised on a feed whose digests were not
-  strings, and `revoked` on several other wrong shapes; found by the
-  first fuzz replay. Every shape is now judged or skipped, never raised
-  on. Feeds are signature-checked before use, so this was a robustness
-  defect, not a bypass.
+## 0.0.14 - 2026-09-26
 
 ### Added
 
@@ -64,6 +35,37 @@ All notable changes to AgtMLS are recorded here.
   installers. The security corpus mirrors the six new spec cases: 114
   cases at precision and recall 1.0. The registry's own skills stay clean
   under `audit --all --strict`.
+
+### Fixed
+
+- `uninstall` left empty `.claude/skills`, `commands` and `agents`
+  directories behind. Directories it emptied are now removed, and the
+  agent directory too if that leaves it empty; one holding anything else is
+  never touched. `CLAUDE.md` still stays unless `--remove-prompt` is given.
+- The README's build badge was GitHub's own workflow badge, which ignores
+  `style=for-the-badge`, so it rendered small and flat beside five
+  shields.io badges. It is now shields.io's workflow-status badge for
+  `validate.yml` on main, in the same style, with the same GitHub logo and
+  grey label, at the same 28 px height.
+- `advisories.feed_problems` raised on a feed whose digests were not
+  strings, and `revoked` on several other wrong shapes; found by the
+  first fuzz replay. Every shape is now judged or skipped, never raised
+  on. Feeds are signature-checked before use, so this was a robustness
+  defect, not a bypass.
+
+### Security
+
+- Code scanning: the spec-rules job in `conformance.yml` checked out
+  `agtmls-spec` at a ref read from `rules.json`, a file a pull request
+  can change (CodeQL `actions/untrusted-checkout`,
+  `actions/cache-poisoning`). The pin is now validated as a 40-hex commit
+  before use, and that one commit is fetched as data with `git fetch`;
+  nothing from it runs.
+- Fuzzing (OpenSSF Scorecard Fuzzing): Atheris targets for JSON escape
+  decoding, normalisation, the rule set over hostile text, the advisory
+  feed and `SHA256SUMS`, each asserting a property (`fuzz/`, run weekly
+  and on parser changes by `fuzz.yml`, and replayed without Atheris by
+  `tests/test_fuzz_targets.py`).
 
 ## 0.0.13 - 2026-09-26
 
