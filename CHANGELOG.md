@@ -7,6 +7,17 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- Installing a second agent into a target rewrote the lockfile they share,
+  so `claude` installed with the general skills and `codex` with
+  `--bundle noyalib` left `verify claude` reporting the bundle missing.
+  Each entry now names the agents it was installed for (`agents`,
+  agtmls-spec 6.2): an install replaces only its own agent's record, verify
+  and `--live` check only that agent's entries, and uninstall forgets only
+  that agent, removing its copies whatever mode the last install recorded.
+  Lockfiles written before resolve their agents from what is on disk.
+
 ## 0.0.16 - 2026-09-26
 
 ### Changed

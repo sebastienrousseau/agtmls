@@ -1546,7 +1546,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cb6588371f3729b84c001cce4471af4efad80a9a0a7c8af11c4612eeafa681d0"
+          "content": "06cc52996c5b356ad890b78c8cdb0e38fe3bc81b4b0175b2f4f2046807e21310"
         }
       ],
       "name": "scripts/_lib/lockfile.py",
@@ -1667,7 +1667,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a9332d70785bc1203d919c89964eafd1a559766da448147874b8633607a02ff3"
+          "content": "ff24a2e078cbf7e66fb2994462893253f7a8216f29fc25def5a8e7137871d57a"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1678,7 +1678,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dc22fe62a958880ba8d766a699162c2715cf1489034c1c5bf718b5de053911d6"
+          "content": "415a7ebebf8085687861b430144b26901c9d38c808cec31e815348541699d6f0"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -4134,7 +4134,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-26T22:35:16Z",
+    "timestamp": "2026-09-26T23:19:27Z",
     "tools": {
       "components": [
         {

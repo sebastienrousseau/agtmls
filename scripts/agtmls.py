@@ -31,10 +31,10 @@ def agent_paths(agent: str) -> tuple[str, str]:
     return str(Path(item["skills_dir"]).parent), item["prompt_file"]
 
 
-def skills_dirs(target: Path) -> list[Path]:
-    """Every native agent's skills directory in `target`, from providers.json."""
+def skills_dirs(target: Path) -> dict[str, Path]:
+    """Each native agent's skills directory in `target`, from providers.json."""
     data = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))
-    return sorted({target / item["skills_dir"] for item in data["native_agents"].values()})
+    return {agent: target / item["skills_dir"] for agent, item in data["native_agents"].items()}
 
 
 def unregister_aider_prompt(target: Path, prompt: str) -> int:
@@ -60,6 +60,13 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
     target = target.resolve()
     dot, prompt = agent_paths(agent)
     removed = 0
+    # Read before anything is removed: an entry from before `agents` was
+    # recorded is resolved by which agents hold the skill now.
+    lock = lockfile.read(target)
+    agent_dirs = skills_dirs(target)
+    if lock is not None:
+        lockfile.resolve_agents(lock, agent_dirs)
+    kept: set[str] = set()
     # The directories something was removed from: once empty, they are
     # removed too, so an uninstall leaves no empty .claude/skills behind.
     # A directory holding anything else is never touched.
@@ -86,17 +93,20 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
     # after `uvx agtmls install`. The lockfile records what was copied. A skill
     # whose digest moved is a local edit, and is left where verify would
     # report it rather than deleted.
-    lock = lockfile.read(target)
+    # Copies are this agent's recorded entries, whatever mode the lockfile
+    # names: that field is the last install's, and another agent's symlink
+    # install used to leave this agent's copies behind.
     skills_dir = target / dot / "skills"
-    if lock is not None and lock.get("mode") == "copy":
+    if lock is not None:
         from _lib.digest import skill_digest
 
-        for entry in lock.get("skills", []):
+        for entry in lockfile.entries_for(lock, agent):
             installed = skills_dir / entry.get("path", entry["name"])
             if installed.is_symlink() or not installed.is_dir():
                 continue
             if skill_digest(installed) != entry["integrity"]:
                 print(f"   {entry['name']}: modified since install; left in place")
+                kept.add(entry["name"])
                 continue
             shutil.rmtree(installed)
             removed += 1
@@ -121,22 +131,23 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
             removed += 1
             removed += unregister_aider_prompt(target, prompt) if agent == "aider" else 0
 
-    # A lockfile describing nothing that is still installed would make the
-    # next `verify` report every skill missing. It serves every agent in the
-    # target, so it stays while any agent's skills directory still holds a
-    # skill it records: removing it with one agent's uninstall left the
-    # others' skills unrecorded, failing verify and every later uninstall.
-    if lock is not None and not any(
-        (directory / entry.get("path", entry["name"])).exists()
-        for directory in skills_dirs(target) for entry in lock.get("skills", [])
-    ):
+    # One lockfile serves every agent in the target: only this agent's record
+    # goes. Deleting the file with one agent's uninstall left the others'
+    # skills unrecorded, failing verify and every later uninstall. Once no
+    # agent holds anything it records, it goes too, so the next `verify`
+    # does not report every skill missing.
+    if lock is not None:
+        lockfile.forget(lock, agent, agent_dirs, frozenset(kept))
         path = lockfile.lockfile_path(target)
-        path.unlink()
-        removed += 1
-        try:
-            path.parent.rmdir()
-        except OSError:
-            pass  # other files live there; not ours
+        if lock["skills"]:
+            lockfile.write(target, lock)
+        else:
+            path.unlink()
+            removed += 1
+            try:
+                path.parent.rmdir()
+            except OSError:
+                pass  # other files live there; not ours
     for directory in [target / dot / sub for sub in sorted(touched)] + ([target / dot] if touched else []):
         try:
             directory.rmdir()
@@ -327,7 +338,7 @@ def live_check(target: Path, agent: str) -> dict:
 
     item = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))["native_agents"][agent]
     lock = lockfile.read(target) or {}
-    expected = sorted(entry["name"] for entry in lock.get("skills", []))
+    expected = sorted(entry["name"] for entry in lockfile.entries_for(lock, agent))
     try:
         loaded = liveness.loaded_skills(item, target)
     except liveness.ProbeError as exc:
@@ -349,7 +360,7 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
 
     target = target.resolve()
     dot, _ = agent_paths(agent)
-    problems = lockfile.verify(target, target / dot / "skills")
+    problems = lockfile.verify(target, target / dot / "skills", agent)
     notes: list[str] = []
     try:
         index_status = (
@@ -425,7 +436,7 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
                 print(f"OK: {agent} loads all {live_result['expected']} installed skill(s)")
     if code == lockfile.EXIT_OK and not integrity:
         lock = lockfile.read(target) or {}
-        print(f"OK: {len(lock.get('skills', []))} skill(s) match the lockfile in {target}")
+        print(f"OK: {len(lockfile.entries_for(lock, agent))} skill(s) match the lockfile in {target}")
     elif integrity:
         print(f"\nFAIL: {len(integrity)} integrity problem(s)", file=sys.stderr)
     return code
@@ -642,13 +653,14 @@ def main() -> int:
         # Record what landed, so `agtmls verify` has something to check against.
         index = load_index()
         installed = installed_skill_names(target, args.agent)
-        payload = lockfile.build(
+        payload = lockfile.record(
             target, ROOT, installed,
             "copy" if args.copy else "symlink",
             str(index.get("registry_version", "")),
+            args.agent, skills_dirs(target),
         )
         path = lockfile.write(target, payload)
-        print(f"recorded {len(payload['skills'])} skill(s) in {path.relative_to(target)}")
+        print(f"recorded {len(lockfile.entries_for(payload, args.agent))} skill(s) in {path.relative_to(target)}")
         return 0
     if args.subcommand == "verify":
         return verify_install(args.target, args.agent, args.json, args.signatures, args.live)
