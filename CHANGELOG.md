@@ -40,8 +40,8 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
-- `AGT-SUPPLY-003` from agtmls-spec (pinned to the rule branch
-  `50a9953`): a download checked only against a checksum from the same
+- `AGT-SUPPLY-003` from agtmls-spec (pinned to agtmls-spec
+  main): a download checked only against a checksum from the same
   place, the artifact URL plus `.sha256` or `.sha512`, or a checksums file
   from the same release. It proves transit integrity, not provenance. The
   security corpus mirrors the three new spec cases.
