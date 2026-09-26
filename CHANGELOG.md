@@ -20,6 +20,17 @@ All notable changes to AgtMLS are recorded here.
   On one machine 18 of 20 such links had broken when the registry went
   flat, and Claude Code loaded 2 of the 20 skills.
 
+### Changed
+
+- Release pages follow the portfolio's Release Page Format: titled
+  `AgtMLS <version>` without the `v`; the notes' hand-written
+  `## Highlights ⭐️` (two to four `* **<Feature>**: <sentence>` bullets),
+  then GitHub's generated `## What's Changed` and `## New Contributors`,
+  then `## Checksums`, then the `**Full Changelog**` link.
+  `release-preflight.py` refuses notes without the Highlights, and
+  `release-audit.py` refuses a page with the wrong title, sections or
+  order.
+
 ## 0.0.14 - 2026-09-26
 
 ### Added

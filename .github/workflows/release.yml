@@ -188,10 +188,27 @@ jobs:
           fetch-tags: true
           ref: ${{ github.sha }}
           path: tooling
+      # The Release Page Format: the notes' Highlights, then GitHub's own
+      # generated PR list, then the checksums. A range without pull requests
+      # lists its commits instead, from the compare (or first-tag) API.
       - name: Write the release body
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          REPO: ${{ github.repository }}
         run: |
-          python3 tooling/scripts/release-body.py --tag "${{ steps.version.outputs.tag }}" \
-            --notes-dir tooling/docs/release-notes --sums dist/assets/SHA256SUMS --out dist/body.md
+          prev="$(git -C tooling describe --tags --abbrev=0 --match 'v0.0.*' "$TAG^" 2>/dev/null || true)"
+          if [ -n "$prev" ]; then
+            gh api "repos/$REPO/releases/generate-notes" -f tag_name="$TAG" -f previous_tag_name="$prev" \
+              --jq .body > dist/generated.md
+            gh api "repos/$REPO/compare/$prev...$TAG" --jq .commits > dist/commits.json
+          else
+            gh api "repos/$REPO/releases/generate-notes" -f tag_name="$TAG" --jq .body > dist/generated.md
+            gh api "repos/$REPO/commits?sha=$TAG&per_page=100" > dist/commits.json
+          fi
+          python3 tooling/scripts/release-body.py --tag "$TAG" \
+            --notes-dir tooling/docs/release-notes --sums dist/assets/SHA256SUMS \
+            --generated dist/generated.md --commits dist/commits.json --out dist/body.md
       - name: Attach assets to the GitHub release
         if: ${{ !inputs.dry_run }}
         env:
@@ -217,11 +234,11 @@ jobs:
               echo "::error::$TAG already has $count asset(s); refusing to replace a published release"
               exit 1
             fi
-            gh release edit "$TAG" --draft --title "AgtMLS $TAG" --notes-file dist/body.md
+            gh release edit "$TAG" --draft --title "AgtMLS ${TAG#v}" --notes-file dist/body.md
             gh release upload "$TAG" dist/assets/*
           else
             gh release create "$TAG" dist/assets/* --draft --verify-tag \
-              --title "AgtMLS $TAG" --notes-file dist/body.md
+              --title "AgtMLS ${TAG#v}" --notes-file dist/body.md
           fi
           # Count what GitHub actually holds before anyone can see it.
           expected="$(ls dist/assets | wc -l | tr -d ' ')"

@@ -39,7 +39,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 from _lib import signatures  # noqa: E402  (same)
 from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
-from _lib.release_notes import notes_problems  # noqa: E402  (same)
+from _lib.release_notes import notes_problems, title  # noqa: E402  (same)
 
 REPO = "sebastienrousseau/agtmls"
 PACKAGE = "agtmls"
@@ -91,7 +91,7 @@ def audit_release(tag: str, repo: str, commit: str) -> tuple[list[str], str | No
     and the tag and list endpoints all read -- showed none of its 17 assets,
     while the release's assets endpoint showed every one.
     """
-    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft,databaseId")
+    view = run("gh", "release", "view", tag, "--repo", repo, "--json", "body,isDraft,databaseId,name")
     if view.returncode != 0:
         return [f"no GitHub release for {tag}: {view.stderr.strip()}"], None
     release = json.loads(view.stdout)
@@ -107,7 +107,9 @@ def audit_release(tag: str, repo: str, commit: str) -> tuple[list[str], str | No
         "gh", "api", "-H", "Accept: application/octet-stream",
         f"repos/{repo}/releases/assets/{sums_asset['id']}",
     ).stdout
-    errors += notes_problems(f"{tag} release body", release.get("body") or "", sums)
+    errors += notes_problems(f"{tag} release body", release.get("body") or "", sums, published=True)
+    if release.get("name") != title(tag.removeprefix("v")):
+        errors.append(f"the {tag} release is titled {release.get('name')!r}, not {title(tag.removeprefix('v'))!r}")
     errors += audit_assets(assets, sums)
     errors += audit_signature(commit, repo, assets)
     errors += audit_provenance(commit, repo, tag, assets)

@@ -24,14 +24,26 @@ TAG_OBJECT = "1" * 40
 COMMIT = "2" * 40
 WHEEL, SDIST = "agtmls-0.0.9-py3-none-any.whl", "agtmls-0.0.9.tar.gz"
 SUMS = f"{'a' * 64}  {WHEEL}\n{'b' * 64}  {SDIST}\n{'c' * 64}  agtmls-generic-polyglot.tar.gz\n"
-BODY = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{SUMS}```\n"
+
+
+def page(sums: str) -> str:
+    """A release page in the Release Page Format, checksumming `sums`."""
+    return (
+        "## Highlights ⭐️\n\n* **A change**: people notice it.\n* **Another change**: also noticed.\n\n"
+        "## What's Changed\n\n* feat: a change by @someone in https://github.com/o/r/pull/1\n\n"
+        f"## Checksums\n\n```\n{sums}```\n\n"
+        "**Full Changelog**: https://github.com/o/r/compare/v0.0.8...v0.0.9\n"
+    )
+
+
+BODY = page(SUMS)
 
 
 class FakeWorld:
     def __init__(self, **overrides) -> None:
         self.state = {
             "local": TAG_OBJECT, "remote": TAG_OBJECT, "peeled": COMMIT, "expected": COMMIT,
-            "release": {"body": BODY, "isDraft": False, "assets": [
+            "release": {"name": "AgtMLS 0.0.9", "body": BODY, "isDraft": False, "assets": [
                 {"id": index, "name": name, "digest": f"sha256:{digest}"}
                 for index, (digest, name) in enumerate(line.split("  ") for line in SUMS.splitlines())
             ] + [{"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}, "sums": SUMS,
@@ -155,15 +167,34 @@ class AuditTests(unittest.TestCase):
         body = "Automated AgtMLS v0.0.9 release. Versions increment by exactly 0.0.1 on the 0.0.x line."
         release = {**FakeWorld().state["release"], "body": body}
         _, failures, _ = self.audit(FakeWorld(release=release))
-        self.assertIn("FAIL: v0.0.9 release body: needs a `## Summary` section of user-visible changes, as bullets", failures)
+        self.assertIn("FAIL: v0.0.9 release body: needs a `## Highlights ⭐️` section of user-visible changes", failures)
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Checksums` section", failures)
+
+    def test_a_page_out_of_the_release_page_format_is_refused(self) -> None:
+        """The old v0.0.10-v0.0.14 layout: a Summary, no generated PR list,
+        no Full Changelog, and a title with the `v`."""
+        old = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{SUMS}```\n"
+        release = {**FakeWorld().state["release"], "body": old, "name": "AgtMLS v0.0.9"}
+        _, failures, _ = self.audit(FakeWorld(release=release))
+        prefix = "FAIL: v0.0.9 release body"
+        self.assertIn(f"{prefix}: needs a `## Highlights ⭐️` section of user-visible changes", failures)
+        self.assertIn(f"{prefix}: needs a generated `## What's Changed` list, `* <title> by @<author> in <url>`", failures)
+        self.assertIn(f"{prefix}: sections are ['Summary', 'Checksums'], not ['Highlights ⭐️', \"What's Changed\", 'Checksums']", failures)
+        self.assertIn(f"{prefix}: last line must be `**Full Changelog**: <compare URL>`", failures)
+        self.assertIn("FAIL: the v0.0.9 release is titled 'AgtMLS v0.0.9', not 'AgtMLS 0.0.9'", failures)
+
+    def test_new_contributors_may_sit_between_the_changes_and_the_checksums(self) -> None:
+        body = BODY.replace("## Checksums", "## New Contributors\n\n* @someone made their first contribution\n\n## Checksums")
+        release = {**FakeWorld().state["release"], "body": body}
+        _, failures, _ = self.audit(FakeWorld(release=release))
+        self.assertFalse([f for f in failures if "release body" in f], failures)
 
     def test_a_release_without_its_assets_is_refused(self) -> None:
         """SHA256SUMS lists what should be there; every entry must be an
         asset with that digest, and nothing else may be attached. Read from
         the release's assets endpoint: for ~40 minutes after v0.0.6 was
         published, the release views listed none of its 17 assets."""
-        release = {"body": BODY, "isDraft": False, "assets": [
+        release = {"name": "AgtMLS 0.0.9", "body": BODY, "isDraft": False, "assets": [
             {"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64},
             {"name": WHEEL, "digest": "sha256:" + "0" * 64},
             {"name": "extra.bin", "digest": "sha256:" + "1" * 64},
@@ -250,7 +281,7 @@ class SignatureAuditTests(unittest.TestCase):
         files = {"ALLOWED_SIGNERS": self.signers, "index.json": self.index, "index.json.sig": self.sig, **signed}
         sums = SUMS + f"{'d' * 64}  index.json.sig\n"
         world = FakeWorld(sums=sums, signed={k: v for k, v in files.items() if v is not None})
-        world.state["release"]["body"] = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{sums}```\n"
+        world.state["release"]["body"] = page(sums)
         if files["index.json.sig"] is not None:
             world.state["release"]["assets"].append({"id": 77, "name": "index.json.sig", "digest": "sha256:" + "d" * 64})
         return world
@@ -340,10 +371,10 @@ SHIPPING = {".github/workflows/release.yml": b"uses: actions/attest-build-proven
 def with_bundle(**overrides) -> dict:
     """A release whose SHA256SUMS and assets include a provenance bundle."""
     sums = SUMS + f"{'d' * 64}  {BUNDLE}\n"
-    body = f"## Summary\n\n- A change people notice.\n\n## Checksums\n\n```\n{sums}```\n"
+    body = page(sums)
     assets = [{"id": index, "name": name, "digest": f"sha256:{digest}"}
               for index, (digest, name) in enumerate(line.split("  ") for line in sums.splitlines())]
-    release = {"body": body, "isDraft": False,
+    release = {"name": "AgtMLS 0.0.9", "body": body, "isDraft": False,
                "assets": [*assets, {"id": 99, "name": "SHA256SUMS", "digest": "sha256:" + "f" * 64}]}
     return {"release": release, "sums": sums, "signed": SHIPPING, **overrides}
 

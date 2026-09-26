@@ -42,8 +42,11 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
 `scripts/release-audit.py` reads it back from every place it was published.
 
 1. Write the release notes in `docs/release-notes/v<version>.md`: a
-   `## Summary` of user-visible changes as bullets, and a `## Checksums`
-   section. A commit list is not a summary.
+   `## Highlights ⭐️` section of two to four bullets, each
+   `* **<Feature>**: <one or two plain sentences on what changed for the
+   user>`, and a `## Checksums` section. A commit list is not a summary.
+   These are the only hand-written parts of the release page; the rest is
+   composed in step 4, in the portfolio's Release Page Format.
 2. Create the signed, annotated tag on the release commit:
 
    ```sh
@@ -78,8 +81,12 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
      `agtmls-<version>.intoto.jsonl`; then writes one `SHA256SUMS` over
      every asset, wheel, sdist, `index.json.sig` and bundle included. The
      installed wheel's signature is verified before anything is attached;
-   - writes the release body with `scripts/release-body.py`: the prepared
-     notes, their Checksums section replaced by that `SHA256SUMS`;
+   - writes the release page with `scripts/release-body.py`, titled
+     `AgtMLS <version>` (no `v`): the notes' Highlights, then GitHub's
+     generated `## What's Changed` (and `## New Contributors`, when there
+     are any), then `## Checksums` from that `SHA256SUMS`, then the
+     `**Full Changelog**` link. A range without pull requests lists its
+     commits in the same `* <subject> by @<author> in <url>` shape;
    - attaches the assets to a **draft** release, and refuses to publish it
      unless GitHub holds every one;
    - publishes the release and runs `scripts/release-audit.py --before-pypi`;
