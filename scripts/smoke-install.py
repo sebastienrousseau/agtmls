@@ -65,6 +65,23 @@ def smoke_antigravity(tmp: Path, errors: list[str]) -> None:
     expect((target / ".agents" / "skills" / "using-agtmls").is_symlink(), "missing .agents skill link", errors)
 
 
+def smoke_aider(tmp: Path, errors: list[str]) -> None:
+    """CONVENTIONS.md joins the user's own `read:` list. It used to be
+    appended as a second `read:` key: invalid YAML, or the user's list lost."""
+    target = tmp / "aider"
+    target.mkdir()
+    conf = target / ".aider.conf.yml"
+    conf.write_text("model: sonnet\nread:\n  - NOTES.md\n", encoding="utf-8")
+    proc = run([str(SETUP), "python", "aider"], target)
+    expect(proc.returncode == 0, f"aider setup failed:\n{proc.stdout}", errors)
+    wanted = "model: sonnet\nread:\n  - NOTES.md\n  - CONVENTIONS.md\n"
+    first = conf.read_text(encoding="utf-8")
+    expect(first == wanted, f".aider.conf.yml after install is {first!r}, not {wanted!r}", errors)
+    run([str(SETUP), "python", "aider"], target)
+    again = conf.read_text(encoding="utf-8")
+    expect(again == wanted, f"a second install changed .aider.conf.yml to {again!r}", errors)
+
+
 def main() -> int:
     errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="agtmls-smoke-") as td:
@@ -72,6 +89,7 @@ def main() -> int:
         smoke_skills_only(tmp, errors)
         smoke_prompt(tmp, errors)
         smoke_antigravity(tmp, errors)
+        smoke_aider(tmp, errors)
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
