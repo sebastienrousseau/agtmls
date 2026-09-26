@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "48eec6179210d100c36ca62874e89aa046eb262cd63e92a2137fc44b4dbe4d61"
+          "content": "fe27cad82f321775b5a6e1f2aa321974c27058860953a747103ef8b15e7b2b4c"
         }
       ],
       "name": "CATALOG.md",
@@ -886,7 +886,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9320f2828e0a7231536b01aba6135b8bd815aac3bdc13fe648347c235f627636"
+          "content": "4025bcad8cdbc0b8d218f682739a121cd07584964e41b7ee2f1d3b3796227439"
         }
       ],
       "name": "index.json",
@@ -3867,7 +3867,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "68d99d7cbee06ddb4b4ff5d381853683448345e5ec3650fc6ee2df1929ef5ac2"
+          "content": "908a5e0eb7aef6904d9f71099b2f640e02b8cd6af80c1634193f7249e1804c34"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -4079,24 +4079,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.13",
+      "bom-ref": "pkg:pypi/agtmls@0.0.14",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.13",
+      "purl": "pkg:pypi/agtmls@0.0.14",
       "type": "application",
-      "version": "0.0.13"
+      "version": "0.0.14"
     },
-    "timestamp": "2026-09-26T15:22:54Z",
+    "timestamp": "2026-09-26T15:32:34Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.13"
+          "version": "0.0.14"
         }
       ]
     }
