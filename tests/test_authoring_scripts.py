@@ -466,6 +466,50 @@ class AuditCliTests(unittest.TestCase):
         self.assertTrue(data["skills"][0]["policy"]["provisional"])
         self.assertEqual([f["rule"] for f in data["skills"][0]["findings"]], ["AGT-INJ-001"])
 
+    def coverage_tree(self) -> Path:
+        tree = self._workspace / "foreign-coverage"
+        if not tree.exists():
+            body = "---\nname: tool\ndescription: Use when testing.\n---\n\n# Tool\n"
+            for root, text in ((".claude/skills", body), (".cursor/skills", body), (".gemini/skills", body.replace("# Tool", "# Tool, Gemini"))):
+                (tree / root / "tool").mkdir(parents=True)
+                (tree / root / "tool" / "SKILL.md").write_text(text, encoding="utf-8")
+            (tree / "plugin" / "hooks").mkdir(parents=True)
+            (tree / "plugin" / "hooks" / "hooks.json").write_text("{}", encoding="utf-8")
+            (tree / "node_modules" / "x").mkdir(parents=True)
+        return tree
+
+    def test_foreign_prints_what_it_covered_and_what_it_did_not(self) -> None:
+        code, output = self.audit("--foreign", str(self.coverage_tree()))
+        self.assertEqual(code, 0, output)
+        self.assertIn("(.claude/skills): 2 distinct skill(s) in 3 location(s), 0 finding(s)", output)
+        self.assertIn("  identical copies: .cursor/skills/tool", output)
+        self.assertIn("  2 distinct skill(s) audited from 3 location(s) (1 identical copies), 2 file(s) read", output)
+        self.assertIn("  DIVERGENT tool: copies differ at .claude/skills/tool, .cursor/skills/tool, .gemini/skills/tool", output)
+        self.assertIn("  NOT AUDITED: 1 auditable file(s) outside any skill: plugin/hooks/ (1)", output)
+        self.assertIn("  NOT AUDITED agent config: plugin/hooks/hooks.json", output)
+        self.assertIn("  skipped directories: node_modules (1)", output)
+        code, output = self.audit("--foreign", str(self.coverage_tree()), "--format", "json")
+        data = json.loads(output)
+        self.assertEqual(data["layout"], ".claude/skills")
+        self.assertEqual(data["coverage"]["agent_configs_not_audited"], ["plugin/hooks/hooks.json"])
+        self.assertEqual(data["skills"][0]["copies"], [".cursor/skills/tool"])
+        self.assertTrue(data["skills"][0]["digest"].startswith("sha256:"))
+
+    def test_foreign_coverage_is_quiet_when_everything_was_read(self) -> None:
+        tree = self._workspace / "foreign-complete"
+        (tree / "skills" / "one").mkdir(parents=True)
+        (tree / "skills" / "one" / "SKILL.md").write_text("---\nname: one\ndescription: Use when testing.\n---\n\n# One\n", encoding="utf-8")
+        code, output = self.audit("--foreign", str(tree))
+        coverage = output.split("Coverage:", 1)[1]
+        self.assertNotIn("NOT AUDITED", coverage)
+        self.assertNotIn("DIVERGENT", coverage)
+        self.assertNotIn("skipped directories", coverage)
+        self.assertEqual(code, 0, output)
+
+    def test_foreign_names_a_manifest_it_read_but_did_not_audit(self) -> None:
+        _, output = self.audit("--foreign", str(self.foreign_tree()))
+        self.assertIn("NOT AUDITED agent config: .claude-plugin/marketplace.json", output)
+
     def test_foreign_refuses_a_repository_root_skill(self) -> None:
         tree = self._workspace / "rootskill"
         tree.mkdir(exist_ok=True)
@@ -514,7 +558,7 @@ class AuditCliTests(unittest.TestCase):
         )
         code, output = self.audit("--foreign", str(tree))
         self.assertEqual(code, 0, output)
-        self.assertIn("1 skill(s), 0 finding(s)", output)
+        self.assertIn("1 distinct skill(s) in 1 location(s), 0 finding(s)", output)
         self.assertNotIn("AGT-INJ-001", output)
 
     def test_pedantic_reports_emoji_presentation_selectors_at_low(self) -> None:

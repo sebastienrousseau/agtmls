@@ -130,13 +130,32 @@ stop new findings while known ones are worked through. SARIF results carry
 
 ## Auditing a repository that is not this registry
 
-`audit --foreign <path>` reads skills out of a tree that follows any of the
-layouts agents install from: a Claude marketplace (`.claude-plugin/marketplace.json`,
-each listed plugin's skills), a plugin manifest (`.claude-plugin`,
-`.codex-plugin` or `.cursor-plugin` `plugin.json`, its `skills` paths), or a
-skills directory (`.agents/skills`, `.claude/skills`, `skills`). A `SKILL.md`
-at the repository root is refused: one repository read as one skill audits a
+`audit --foreign <path>` reads every skill out of a tree. It starts with the
+layouts the tree declares: a Claude marketplace (`.claude-plugin/marketplace.json`,
+each listed plugin's skills), plugin manifests (`.claude-plugin`,
+`.codex-plugin` or `.cursor-plugin` `plugin.json`, their `skills` paths), and
+the conventional skills directories (`.agents/skills`, `.claude/skills`,
+`skills`). It then sweeps the whole tree for every other `SKILL.md`, such as
+per-harness copies (`.cursor/skills`, `.gemini/skills`, ...) and embedded
+asset trees, without following symlinks or entering `.git`, `node_modules`,
+`.venv`, `target` or `__pycache__`. A `SKILL.md` at the repository root is
+refused when it is the only one: one repository read as one skill audits a
 whole project as prose. Point at the skill directory to audit one skill.
+
+Byte-identical copies of a skill share a digest and are audited once; the
+report lists the other copies. Every report ends with a coverage statement,
+because an unscanned file is not a clean one:
+
+- how many distinct skills were audited, from how many locations, and how
+  many files were read;
+- `DIVERGENT`: copies with the same skill name whose contents differ;
+- `NOT AUDITED`: auditable files outside any skill, grouped by directory,
+  with agent configurations (`hooks.json`, `settings.json`, `plugin.json`,
+  `.mcp.json`, `CLAUDE.md`, `AGENTS.md`, ...) named one by one;
+- the dependency and cache directories that were skipped.
+
+`--format json` carries the same statement under `coverage`, and each skill's
+`digest` and `copies`.
 
 A skill without `metadata.json` is audited against a **provisional** policy
 inferred from its `allowed-tools`: any `Bash` grants `executes_commands`,

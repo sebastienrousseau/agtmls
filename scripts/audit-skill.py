@@ -66,6 +66,24 @@ def fetch_foreign(target: str, workspace: Path) -> Path | str:
     return clone
 
 
+def print_coverage(coverage: dict) -> None:
+    """What the foreign audit read and what it did not: an unscanned file is
+    not a clean one."""
+    print("\nCoverage:")
+    print(f"  {coverage['skills_audited']} distinct skill(s) audited from {coverage['skills_found']} location(s) "
+          f"({coverage['duplicate_copies']} identical copies), {coverage['files_audited']} file(s) read")
+    for name, paths in coverage["divergent_copies"].items():
+        print(f"  DIVERGENT {name}: copies differ at {', '.join(paths)}")
+    if coverage["files_not_audited"]:
+        areas = ", ".join(f"{area} ({count})" for area, count in list(coverage["not_audited_by_area"].items())[:6])
+        print(f"  NOT AUDITED: {coverage['files_not_audited']} auditable file(s) outside any skill: {areas}")
+    for rel in coverage["agent_configs_not_audited"]:
+        print(f"  NOT AUDITED agent config: {rel}")
+    if coverage["skipped_directories"]:
+        skipped = ", ".join(f"{name} ({count})" for name, count in coverage["skipped_directories"].items())
+        print(f"  skipped directories: {skipped}")
+
+
 def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -> int:
     with tempfile.TemporaryDirectory(prefix="agtmls-foreign-") as raw:
         root = fetch_foreign(target, Path(raw))
@@ -77,17 +95,21 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -
         except ForeignLayoutError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
-        from _lib.analyzer import foreign_layout
+        from _lib.analyzer import foreign_coverage, foreign_layout
 
         layout = foreign_layout(root)
+        coverage = foreign_coverage(root, reports)
         every = [f for report in reports for f in report.findings if f.suppressed is None]
         if fmt == "json":
             print(json.dumps({
                 "target": target,
                 "layout": layout,
+                "coverage": coverage,
                 "skills": [{
                     "plugin": r.plugin,
                     "path": r.path.relative_to(root).as_posix(),
+                    "digest": r.digest,
+                    "copies": [c.relative_to(root).as_posix() for c in r.copies],
                     "policy": r.policy,
                     "findings": [{
                         "file": f.file_path.relative_to(root).as_posix(),
@@ -97,16 +119,21 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -
                 } for r in reports],
             }, indent=2))
         else:
-            print(f"Foreign audit of {target} ({layout}): {len(reports)} skill(s), {len(every)} finding(s)\n")
+            print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
+                  f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
+                  f"{len(every)} finding(s)\n")
             for r in reports:
                 policy = ", ".join(
                     f"{k}={str(v).lower()}" for k, v in r.policy.items() if k != "provisional"
                 )
                 kind = "provisional policy" if r.policy.get("provisional") else "declared policy"
                 print(f"plugin {r.plugin}: {r.path.relative_to(root).as_posix()} ({kind}: {policy})")
+                if r.copies:
+                    print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in r.copies)}")
                 for f in r.findings:
                     if f.suppressed is None:
                         print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
+            print_coverage(coverage)
         failed = any(f.severity in {"CRITICAL", "HIGH"} for f in every) or (
             strict and any(f.severity in {"MEDIUM", "LOW"} for f in every)
         )
