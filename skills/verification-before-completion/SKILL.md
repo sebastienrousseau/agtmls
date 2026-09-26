@@ -38,7 +38,8 @@ reported as verified when nobody looked**.
 
 ## The loop
 
-Run this before every completion claim. It is four questions, in order.
+Run this before every completion claim. It is four questions, not four
+commands: often the answer to step 2 is one observation you already have.
 
 ### 1. What exactly am I claiming?
 
@@ -84,6 +85,32 @@ something like it earlier", the answer is no.
 Name it explicitly in the report. An honest gap is information; a silent gap
 is a defect you handed to someone else. See **Reporting** below.
 
+## Size the check to the risk
+
+Checking more than the claim needs is its own failure. It burns time and
+tokens, and a heavy verification ritual on every step is a documented way
+skills make agents worse. The rule governs what you *claim*, not how much
+you run:
+
+- **Claim what the risk calls for.** A typo or comment fix needs "the text
+  now reads X": one look, not "nothing else broke". A change inside one
+  function needs its targeted test, failing first if it fixes a bug. Claim
+  "nothing else broke", and run the full suite for it, when the change
+  reaches shared code, or before a merge or release; that is usually the
+  project's own gate.
+- **Irreversible or outward-facing work gets the most.** Releases,
+  migrations, deletions and security fixes: the full gate, then read the
+  result back from where it landed.
+- **One observation per claim.** Once you have it for this tree, stop. Do
+  not re-run an unchanged check to feel sure.
+- **Do not loop.** If a check fails twice for reasons outside the change
+  (no network, a missing service, a flaky harness), report the claim
+  unverified with the command to run, instead of retrying.
+- **Never act just to verify.** Do not deploy, push, send or delete to prove
+  a claim. Ask, or report it unverified.
+- **Downgrade instead of over-running.** When the evidence would cost more
+  than the claim is worth, make the narrower claim and name the gap.
+
 ## Red flags — none of these is verification
 
 Each of these has been mistaken for evidence. None of them is:
@@ -112,7 +139,7 @@ the full catalogue with worked examples is in `reference.md`.
 | --- | --- |
 | "This edge case won't happen" | Test it, or write down why it cannot occur |
 | "I'll verify in a follow-up" | Same turn, or it did not happen |
-| "It's a trivial change" | Trivial changes are cheap to verify — so verify |
+| "It's a trivial change" | Then its check is small too: one direct look at the result, not the full gate. But still one |
 | "The user is waiting" | A wrong answer costs them more than 30 seconds |
 | "It worked last time" | Different tree, different answer |
 | "Close enough" | Prove the equivalence or state the difference |

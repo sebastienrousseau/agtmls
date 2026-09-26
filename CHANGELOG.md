@@ -9,6 +9,15 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- `verification-before-completion` sizes the check to the risk. It kept
+  the rule that an unobserved claim is reported as unverified, but asked
+  for the same heavy loop on every change, and excessive verification is
+  the most common way skills were found to make agents worse. It now asks
+  for the claim the risk calls for (one look for a typo fix, the targeted
+  test for a local change, the full gate for shared code, merges and
+  releases), one observation per claim, no retry loops when the
+  environment is the problem, and no deploy, push, send or delete just to
+  prove a claim.
 - The 14 noyalib skills moved to a pack, `packs/noyalib/skills/`. Every
   AgtMLS plugin install used to carry them, filling Codex's skill budget
   for people who never work on noyalib; the default plugin now carries the

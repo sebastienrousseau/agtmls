@@ -10,7 +10,10 @@ with counter-moves, or a worked transcript to compare against.
 ## Claim → evidence, in full
 
 Each row is a claim you might make and the observation that justifies it.
-"Insufficient" lists what people offer instead.
+"Insufficient" lists what people offer instead. The right-hand columns are
+the price of a claim, not a toll on every change: make the narrowest claim
+the work needs (SKILL.md, "Size the check to the risk"), and pay for that
+one.
 
 | Claim | Sufficient evidence | Insufficient |
 | --- | --- | --- |
