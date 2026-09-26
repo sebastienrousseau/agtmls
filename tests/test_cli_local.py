@@ -299,6 +299,29 @@ class UninstallTests(CliFixture):
         self.assertTrue(theirs.exists(), "the user's own command was removed")
         self.assertFalse(lock.exists(), "the lockfile outlived everything it recorded")
         self.assertIn(f"removed {len(GENERAL) + 2} AgtMLS-managed item(s) from {self.target}", output)
+        self.assertTrue(self.skills.is_dir() and commands.is_dir(), "a directory holding the user's files was removed")
+
+    def test_directories_the_uninstall_emptied_are_removed(self) -> None:
+        """uninstall left empty .claude/skills, commands and agents behind."""
+        for name in GENERAL:
+            shutil.copytree(self.fixture / "skills" / name, self.skills / name)
+        commands = self.target / ".claude" / "commands"
+        shutil.copy2(self.fixture / "commands" / "agtmls-audit.md", commands / "agtmls-audit.md")
+        untouched = self.target / ".claude" / "agents"
+        untouched.mkdir()
+        self.record(GENERAL, "copy")
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        self.assertFalse(self.skills.exists(), "an emptied skills directory was left")
+        self.assertFalse(commands.exists(), "an emptied commands directory was left")
+        self.assertTrue(untouched.is_dir(), "a directory uninstall removed nothing from was deleted")
+        self.assertTrue((self.target / ".claude").is_dir(), "a non-empty .claude was removed")
+        shutil.rmtree(untouched)
+        self.record(GENERAL[:1], "copy")
+        shutil.copytree(self.fixture / "skills" / GENERAL[0], self.target / ".claude" / "skills" / GENERAL[0])
+        code, output = self.uninstall()
+        self.assertEqual(code, 0, output)
+        self.assertFalse((self.target / ".claude").exists(), "an emptied .claude was left")
 
     def test_a_copied_skill_edited_since_install_is_left_in_place(self) -> None:
         """verify reports a local edit rather than repairing it; uninstall must

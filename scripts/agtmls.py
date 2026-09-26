@@ -35,6 +35,10 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
     target = target.resolve()
     dot, prompt = agent_paths(agent)
     removed = 0
+    # The directories something was removed from: once empty, they are
+    # removed too, so an uninstall leaves no empty .claude/skills behind.
+    # A directory holding anything else is never touched.
+    touched: set[str] = set()
     for sub in ["skills", "commands", "agents"]:
         directory = target / dot / sub
         if not directory.exists():
@@ -50,6 +54,7 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
                 if resolved != Path("") and resolved.is_relative_to(ROOT):
                     entry.unlink()
                     removed += 1
+                    touched.add(sub)
 
     # A wheel install copies rather than links (the uvx cache is ephemeral),
     # so none of the above is ours there: the previous release removed nothing
@@ -70,6 +75,7 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
                 continue
             shutil.rmtree(installed)
             removed += 1
+            touched.add("skills")
         for sub in ["commands", "agents"]:
             directory = target / dot / sub
             if not directory.is_dir():
@@ -80,6 +86,7 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
                         and entry.read_bytes() == source.read_bytes()):
                     entry.unlink()
                     removed += 1
+                    touched.add(sub)
 
     prompt_path = target / prompt
     if remove_prompt and prompt_path.exists():
@@ -100,6 +107,11 @@ def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
             path.parent.rmdir()
         except OSError:
             pass  # other files live there; not ours
+    for directory in [target / dot / sub for sub in sorted(touched)] + ([target / dot] if touched else []):
+        try:
+            directory.rmdir()
+        except OSError:
+            pass  # not empty: something in it is not ours
     print(f"removed {removed} AgtMLS-managed item(s) from {target}")
     return 0
 
