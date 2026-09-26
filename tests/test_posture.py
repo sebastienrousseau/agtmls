@@ -69,7 +69,12 @@ class PostureTests(unittest.TestCase):
         )
         with mock.patch.object(posture, "tomllib", None):
             self.assertEqual([s.value for s in self.read()], ["never"])
-        self.assertEqual(posture.flat_top_level("flag = false\nname: 'x'\nnot a pair\n"), {"flag": False, "name": "x"})
+        self.assertEqual(posture.flat_top_level("flag = false\nname: 'x'\nnot a pair\nlist = [1, 2]\nmap = {a = 1}\n"),
+                         {"flag": False, "name": "x"})
+        # What 3.10 reads must not differ from tomllib on a malformed value.
+        (self.home / "user.toml").write_text("approval_policy = [unclosed\n", encoding="utf-8")
+        with mock.patch.object(posture, "tomllib", None):
+            self.assertEqual(self.read(), [])
 
     def test_default_home_is_the_users(self) -> None:
         with mock.patch.object(posture.Path, "home", return_value=self.home):

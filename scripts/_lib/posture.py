@@ -65,6 +65,8 @@ def flat_top_level(text: str) -> dict[str, object]:
         if not match:
             continue
         raw = match.group(2).strip()
+        if raw[:1] in {"[", "{"}:
+            continue  # an array or table: no approval setting takes one
         if raw.lower() in {"true", "false"}:
             values[match.group(1)] = raw.lower() == "true"
         else:
