@@ -1095,7 +1095,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "120934cd1b417b83661642a587686000b80da7760c5944001b1f68e27d05875e"
+          "content": "ea5f15caa4a8ba2906fc97e4ffa33e28681af17ce87d8af68be5824f74161954"
         }
       ],
       "name": "scripts/_lib/release_notes.py",
@@ -1469,7 +1469,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3b96f7d975fdc2588dbfa20228a21f4230d9d67fe61febcfc28ff19758a5997e"
+          "content": "e57228a1ba9d332362d32fab5f536f51ab1c8e26ae57a2fbe703a3302d6f88a8"
         }
       ],
       "name": "scripts/release-audit.py",
@@ -1480,7 +1480,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9436ac0b7ca1c9e9122c170c6c7c95cb8ced2cc26d5917ab7004f76e77939bff"
+          "content": "23fb3c67ab8bf9c4c098d00fe9a776ed4d26882951f1858f5c4dc036d63b13d4"
         }
       ],
       "name": "scripts/release-body.py",
@@ -4101,7 +4101,7 @@
       "type": "application",
       "version": "0.0.14"
     },
-    "timestamp": "2026-09-26T16:32:02Z",
+    "timestamp": "2026-09-26T17:06:00Z",
     "tools": {
       "components": [
         {

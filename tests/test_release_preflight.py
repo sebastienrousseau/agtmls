@@ -23,7 +23,7 @@ SHA = "a" * 40
 DIGEST = "b" * 64
 NOTES = (
     "<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->\n\n# AgtMLS v0.0.9\n\n"
-    "## Summary\n\n- Something a user will notice.\n\n## Checksums\n\n```\n{sums}```\n"
+    "## Highlights ⭐️\n\n* **A change**: people notice it.\n* **Another change**: also noticed.\n\n## Checksums\n\n```\n{sums}```\n"
 )
 
 
@@ -157,16 +157,32 @@ class PreflightTests(unittest.TestCase):
         self.assertIn("FAIL: .claude-plugin/plugin.json at the release commit says nothing, not 0.0.9", output)
         self.assertIn("FAIL: pyproject.toml at the release commit says nothing, not 0.0.9", output)
 
-    def test_notes_without_a_summary_are_refused(self) -> None:
-        """A commit list or an empty section is not a summary of what changed."""
-        for body in ("## Summary\n\nsee commits\n", "## Changes\n\n- x\n"):
+    def test_notes_without_highlights_are_refused(self) -> None:
+        """A commit list, an empty section or the old Summary is not a Highlights section."""
+        cases = {
+            "## Highlights ⭐️\n\nsee commits\n": "v0.0.9.md: `## Highlights ⭐️` needs two to four bullets, not 0",
+            "## Summary\n\n- x\n": "v0.0.9.md: needs a `## Highlights ⭐️` section of user-visible changes",
+        }
+        for body, complaint in cases.items():
             with self.subTest(body=body):
                 self.notes.write_text(f"# v\n\n{body}\n## Checksums\n\npending\n", encoding="utf-8")
                 _, output = self.preflight(FakeGit(), "--pending-checksums")
-                self.assertIn("needs a `## Summary` section of user-visible changes, as bullets", output)
+                self.assertIn(complaint, output)
+
+    def test_highlights_are_two_to_four_bolded_bullets(self) -> None:
+        cases = {
+            "* **One**: only one.\n": "needs two to four bullets, not 1",
+            "* **A**: a.\n* **B**: b.\n* **C**: c.\n* **D**: d.\n* **E**: e.\n": "needs two to four bullets, not 5",
+            "* **A**: a.\n- plain words\n": "highlight '- plain words' is not `* **<Feature>**: <sentence>`",
+        }
+        for bullets, complaint in cases.items():
+            with self.subTest(bullets=bullets):
+                self.notes.write_text(f"## Highlights ⭐️\n\n{bullets}\n## Checksums\n\npending\n", encoding="utf-8")
+                _, output = self.preflight(FakeGit(), "--pending-checksums")
+                self.assertIn(complaint, output)
 
     def test_notes_without_checksums_are_refused(self) -> None:
-        self.notes.write_text("# v\n\n## Summary\n\n- x\n", encoding="utf-8")
+        self.notes.write_text("# v\n\n## Highlights ⭐️\n\n* **A**: a.\n* **B**: b.\n", encoding="utf-8")
         _, output = self.preflight(FakeGit(), "--sums", str(self.sums))
         self.assertIn("FAIL: v0.0.9.md: needs a `## Checksums` section", output)
 
@@ -185,11 +201,11 @@ class PreflightTests(unittest.TestCase):
         self.assertIn("FAIL: v0.0.9.md: no SHA256SUMS to check the Checksums section against", output)
 
     def test_pending_checksums_pass_with_a_warning_only_if_the_notes_say_so(self) -> None:
-        self.notes.write_text("# v\n\n## Summary\n\n- x\n\n## Checksums\n\nPending CI build.\n", encoding="utf-8")
+        self.notes.write_text("# v\n\n## Highlights ⭐️\n\n* **A**: a.\n* **B**: b.\n\n## Checksums\n\nPending CI build.\n", encoding="utf-8")
         code, output = self.preflight(FakeGit(), "--pending-checksums")
         self.assertEqual(code, 0, output)
         self.assertIn("WARN: checksums are pending", output)
-        self.notes.write_text("# v\n\n## Summary\n\n- x\n\n## Checksums\n\nTBD\n", encoding="utf-8")
+        self.notes.write_text("# v\n\n## Highlights ⭐️\n\n* **A**: a.\n* **B**: b.\n\n## Checksums\n\nTBD\n", encoding="utf-8")
         _, output = self.preflight(FakeGit(), "--pending-checksums")
         self.assertIn("pending checksums must be marked `pending` in the Checksums section", output)
 
