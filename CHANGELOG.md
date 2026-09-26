@@ -7,6 +7,26 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- `audit --foreign` stopped at the first layout it recognised, so most of a
+  repository could go unscanned and read as clean: it audited 1 of 24
+  skills in impeccable, 1 of 13 in hindsight and 11 of 26 in gentle-ai. It
+  now keeps every declared layout and sweeps the tree for every other
+  `SKILL.md` (per-harness copies, embedded asset trees), without following
+  symlinks or entering dependency directories. All seven repositories
+  sampled now audit every skill; hindsight goes from 0 findings to 64,
+  including its instructions to pipe `curl` into `bash`.
+
+### Added
+
+- `audit --foreign` audits byte-identical copies once and names them, and
+  ends with a coverage statement: skills and files read, copies whose
+  contents diverge, auditable files outside any skill with agent
+  configurations such as `hooks.json` named, and directories skipped. JSON
+  output carries it under `coverage`, with each skill's `digest` and
+  `copies`.
+
 ### Changed
 
 - OpenSSF Scorecard hardening:

@@ -11,12 +11,14 @@ the floor. The rule data it applies lives in rules.py.
 from __future__ import annotations
 
 import json
+import os
 import re
 import stat
 import unicodedata
 from pathlib import Path
 from typing import NamedTuple
 
+from .digest import skill_digest
 from .rules import (
     INVISIBLE_RE,
     INVISIBLE_UNICODE,
@@ -813,18 +815,10 @@ def foreign_layout(root: Path) -> str | None:
     return None
 
 
-def foreign_skills(root: Path) -> list[tuple[str, Path]]:
-    """(plugin, skill directory) for every skill a foreign tree ships.
-
-    Detects the layout: a Claude marketplace (each listed plugin's skills),
-    a plugin manifest (its `skills` paths), or a skills directory
-    (`.agents/skills`, `.claude/skills`, `skills`). A SKILL.md at the root
-    is refused: one repository read as one skill audits everything in it as
-    prose and calls a whole project a skill, which is what ruflo's root
-    SKILL.md did.
-    """
-    marketplace = root / ".claude-plugin" / "marketplace.json"
+def _declared_skills(root: Path) -> list[tuple[str, Path]]:
+    """Skills the tree's own manifests and conventional directories declare."""
     found: list[tuple[str, Path]] = []
+    marketplace = root / ".claude-plugin" / "marketplace.json"
     if marketplace.is_file():
         try:
             plugins = json.loads(marketplace.read_text(encoding="utf-8")).get("plugins", [])
@@ -842,17 +836,64 @@ def foreign_skills(root: Path) -> list[tuple[str, Path]]:
                 found.extend(_manifest_skills(plugin_dir, manifest, name))
             else:
                 found.extend((name, skill) for skill in _skills_under(plugin_dir / "skills"))
-    if not found:
-        for manifest in PLUGIN_MANIFESTS:
-            if (root / manifest).is_file():
-                found.extend(_manifest_skills(root, root / manifest, root.name))
-                break
-    if not found:
-        for layout in SKILL_LAYOUTS:
-            skills = _skills_under(root / layout)
-            if skills:
-                found.extend((layout, skill) for skill in skills)
-                break
+    for manifest in PLUGIN_MANIFESTS:
+        if (root / manifest).is_file():
+            found.extend(_manifest_skills(root, root / manifest, root.name))
+    for layout in SKILL_LAYOUTS:
+        found.extend((layout, skill) for skill in _skills_under(root / layout))
+    return found
+
+
+def _walk(root: Path):
+    """(directory, subdirectories, files) under `root`, never following a
+    symlink and never entering a dependency, cache or VCS directory."""
+    for current, dirs, files in os.walk(root, followlinks=False):
+        dirs[:] = sorted(d for d in dirs if d not in SKIP_PARTS)
+        yield Path(current), dirs, sorted(files)
+
+
+def _discovered_skills(root: Path) -> list[Path]:
+    """Every directory under `root` holding a SKILL.md, the root excepted.
+
+    A skill's own subdirectories are part of it and are not searched again,
+    so a nested example SKILL.md is audited once, with its skill.
+    """
+    found: list[Path] = []
+    for current, dirs, files in _walk(root):
+        if current != root and "SKILL.md" in files:
+            found.append(current)
+            dirs[:] = []
+    return found
+
+
+def foreign_skills(root: Path) -> list[tuple[str, Path]]:
+    """(source, skill directory) for every skill a foreign tree ships.
+
+    First every layout the tree declares: a Claude marketplace (each listed
+    plugin's skills), plugin manifests (their `skills` paths) and the
+    conventional directories (`.agents/skills`, `.claude/skills`,
+    `skills`). Then a sweep of the whole tree finds every other SKILL.md, as
+    per-harness copies (`.cursor/skills`, `.gemini/skills`, ...) and
+    embedded asset trees that no manifest names; those are labelled by the
+    directory that holds them. Stopping at the first layout audited 1 of 24
+    skills in one real repository and reported the rest as clean.
+
+    A SKILL.md at the root with nothing else is refused: one repository read
+    as one skill audits everything in it as prose and calls a whole project
+    a skill, which is what ruflo's root SKILL.md did.
+    """
+    found: list[tuple[str, Path]] = []
+    seen: set[Path] = set()
+    for source, skill in _declared_skills(root):
+        key = skill.resolve()
+        if key not in seen:
+            seen.add(key)
+            found.append((source, skill))
+    for skill in _discovered_skills(root):
+        key = skill.resolve()
+        if key not in seen:
+            seen.add(key)
+            found.append((skill.parent.relative_to(root).as_posix(), skill))
     if not found:
         if (root / "SKILL.md").is_file():
             raise ForeignLayoutError(
@@ -885,12 +926,32 @@ class ForeignReport(NamedTuple):
     path: Path
     policy: dict
     findings: list[Finding]
+    digest: str | None = None
+    copies: tuple[Path, ...] = ()
+
+
+def _skill_digest(skill_dir: Path) -> str | None:
+    try:
+        return skill_digest(skill_dir)
+    except OSError:
+        return None
 
 
 def audit_foreign(root: Path, pedantic: bool = False) -> list[ForeignReport]:
-    """Every skill in a foreign tree, each against its own or a provisional policy."""
-    reports: list[ForeignReport] = []
+    """Every distinct skill in a foreign tree, each against its own or a
+    provisional policy.
+
+    Byte-identical copies (one skill shipped once per harness) share a
+    digest and are audited once; the report names every copy. A copy whose
+    bytes differ is a different skill and is audited on its own.
+    """
+    groups: dict[object, list[tuple[str, Path]]] = {}
     for plugin, skill_dir in foreign_skills(root):
+        digest = _skill_digest(skill_dir)
+        groups.setdefault(digest if digest is not None else skill_dir, []).append((plugin, skill_dir))
+    reports: list[ForeignReport] = []
+    for key, members in groups.items():
+        plugin, skill_dir = members[0]
         findings: list[Finding] = []
         for path in auditable_files(skill_dir):
             findings.extend(audit_file(path, pedantic))
@@ -901,8 +962,81 @@ def audit_foreign(root: Path, pedantic: bool = False) -> list[ForeignReport]:
         else:
             policy = provisional_policy(skill_dir)
             findings.extend(check_capability_escalation(skill_dir, policy))
-        reports.append(ForeignReport(plugin, skill_dir, policy, findings))
+        reports.append(ForeignReport(plugin, skill_dir, policy, findings,
+                                     key if isinstance(key, str) else None,
+                                     tuple(path for _, path in members[1:])))
     return reports
+
+
+# Files that change what an agent does without being a skill: hook wiring,
+# harness settings, plugin and MCP manifests. The coverage statement names
+# any it did not audit, so a clean result is never read as covering them.
+AGENT_CONFIG_NAMES = {
+    "hooks.json", "settings.json", "settings.local.json", "plugin.json", "marketplace.json",
+    ".mcp.json", "mcp.json", "config.toml", "AGENTS.md", "CLAUDE.md", "GEMINI.md",
+}
+
+
+def _skill_name(skill_dir: Path) -> str:
+    text = read_capped(skill_dir / "SKILL.md") or ""
+    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
+    field = re.search(r"^name:[ \t]*[\"']?([^\"'\n]+?)[\"']?[ \t]*$", match.group(1), re.MULTILINE) if match else None
+    return field.group(1).strip() if field else skill_dir.name
+
+
+def foreign_coverage(root: Path, reports: list[ForeignReport]) -> dict:
+    """What a foreign audit read, what it did not, and why.
+
+    An unscanned file is not a clean one: the statement counts the skills
+    found and audited, the files audited, every auditable file outside any
+    skill (with agent configs such as hooks.json named), the dependency and
+    cache directories skipped, and skills whose copies disagree.
+    """
+    skill_dirs = [r.path for r in reports] + [c for r in reports for c in r.copies]
+    inside = {d.resolve() for d in skill_dirs}
+    audited = {p for r in reports for p in auditable_files(r.path)}
+    outside: list[str] = []
+    skipped: dict[str, int] = {}
+    for current, dirs, files in _walk(root):
+        resolved = current.resolve()
+        if resolved in inside or any(parent in inside for parent in resolved.parents):
+            dirs[:] = []
+            continue
+        with os.scandir(current) as entries:
+            for entry in entries:
+                if entry.is_dir(follow_symlinks=False) and entry.name in SKIP_PARTS:
+                    skipped[entry.name] = skipped.get(entry.name, 0) + 1
+        for name in files:
+            path = current / name
+            try:
+                mode = path.lstat().st_mode
+            except OSError:
+                continue
+            if stat.S_ISREG(mode) and (path.suffix.lower() in AUDITABLE_SUFFIXES or mode & 0o111):
+                outside.append(path.relative_to(root).as_posix())
+    by_area: dict[str, int] = {}
+    for rel in outside:
+        parts = rel.split("/")
+        area = "/".join(parts[:2]) + "/" if len(parts) > 2 else (parts[0] + "/" if len(parts) > 1 else ".")
+        by_area[area] = by_area.get(area, 0) + 1
+    names: dict[str, set[str | None]] = {}
+    where: dict[str, list[str]] = {}
+    for r in reports:
+        for path in (r.path, *r.copies):
+            name = _skill_name(path)
+            names.setdefault(name, set()).add(r.digest)
+            where.setdefault(name, []).append(path.relative_to(root).as_posix())
+    return {
+        "skills_found": len(skill_dirs),
+        "skills_audited": len(reports),
+        "duplicate_copies": sum(len(r.copies) for r in reports),
+        "files_audited": len(audited),
+        "files_not_audited": len(outside),
+        "not_audited_by_area": dict(sorted(by_area.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "agent_configs_not_audited": sorted(rel for rel in outside if rel.rsplit("/", 1)[-1] in AGENT_CONFIG_NAMES),
+        "skipped_directories": dict(sorted(skipped.items())),
+        "divergent_copies": {name: sorted(where[name]) for name, digests in sorted(names.items()) if len(digests) > 1},
+    }
 
 
 def audit_skill_target(target: Path, pedantic: bool = False) -> list[Finding]:
