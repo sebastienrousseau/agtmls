@@ -34,7 +34,7 @@
       "repository": "https://github.com/sebastienrousseau/agtmls",
       "skills": "./skills",
       "source": "./",
-      "version": "0.0.15"
+      "version": "0.0.16"
     },
     {
       "author": {
@@ -55,8 +55,8 @@
       "skills": "./skills",
       "source": "./packs/noyalib",
       "strict": false,
-      "version": "0.0.15"
+      "version": "0.0.16"
     }
   ],
-  "version": "0.0.15"
+  "version": "0.0.16"
 }

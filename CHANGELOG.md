@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.16 - 2026-09-26
+
 ### Changed
 
 - `verification-before-completion` sizes the check to the risk. It kept
