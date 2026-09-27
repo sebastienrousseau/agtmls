@@ -52,12 +52,6 @@
       "cyclomatic": 13,
       "lines": 68
     },
-    "scripts/agtmls-doctor.py::main": {
-      "cognitive": 129,
-      "cyclomatic": 49,
-      "halstead": 33.3,
-      "lines": 141
-    },
     "scripts/audit-skill.py::foreign_audit": {
       "cognitive": 47,
       "cyclomatic": 27

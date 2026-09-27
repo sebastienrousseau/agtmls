@@ -134,10 +134,9 @@ def run_check(script: str, args: list[str], reporter: Reporter) -> None:
         print(proc.stdout.rstrip())
 
 
-def main() -> int:
+def parse_args(agents: dict) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", type=Path, help="optional consumer repo to inspect")
-    agents = native_agents()
     parser.add_argument("--agent", choices=sorted(agents), help="consumer agent layout")
     parser.add_argument("--bundle", action="append", default=[], help="expected project bundle in target")
     parser.add_argument("--skills-only", action="store_true", help="target should not have an AgtMLS prompt")
@@ -152,145 +151,158 @@ def main() -> int:
         help="the registry is an installed package, not a checkout: inspect the registry "
              "and the target, not the repository's documents, evals or gate",
     )
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    r = Reporter()
 
+def check_documents(r: Reporter, installed: bool) -> None:
     # The wheel ships the registry, not the repository. Run from it, the
     # previous release's doctor reported 30 failures, every one a governance file, workflow or
     # check the package never contained.
-    if args.installed:
+    if installed:
         r.ok("installed registry: checkout inspections and the gate are skipped")
-    for path in [] if args.installed else [
+    for path in [] if installed else [
         "README.md", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "RELEASE.md", "commands",
     ]:
-        item = ROOT / path
-        if item.exists():
+        if (ROOT / path).exists():
             r.ok(f"{path} exists")
         else:
             r.fail(f"{path} is missing")
-    if (ROOT / "LICENSE").exists():
-        r.ok("LICENSE exists")
-    elif (ROOT / "LICENSE-MIT").exists():
-        r.ok("LICENSE-MIT exists")
+    licence = next((name for name in ("LICENSE", "LICENSE-MIT") if (ROOT / name).exists()), None)
+    if licence:
+        r.ok(f"{licence} exists")
     else:
         r.fail("LICENSE is missing")
 
+
+def check_plugin_manifest(r: Reporter) -> None:
     manifest_path = ROOT / ".claude-plugin" / "plugin.json"
-    if manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        r.ok(".claude-plugin/plugin.json exists")
-        for key in ["name", "version", "description", "license", "skills"]:
-            if manifest.get(key):
-                r.ok(f"plugin manifest has {key}")
-            else:
-                r.fail(f"plugin manifest missing {key}")
-        for key in ["skills", "commands"]:
-            value = manifest.get(key)
-            # `skills` and `commands` accept a string or an array of paths;
-            # bundles need the array form to be discovered at all.
-            for rel in value if isinstance(value, list) else [value]:
-                if rel and (ROOT / rel).exists():
-                    r.ok(f"plugin {key} path exists: {rel}")
-                elif rel:
-                    r.fail(f"plugin {key} path missing: {rel}")
-    else:
+    if not manifest_path.exists():
         r.fail(".claude-plugin/plugin.json is missing")
+        return
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    r.ok(".claude-plugin/plugin.json exists")
+    for key in ["name", "version", "description", "license", "skills"]:
+        if manifest.get(key):
+            r.ok(f"plugin manifest has {key}")
+        else:
+            r.fail(f"plugin manifest missing {key}")
+    for key in ["skills", "commands"]:
+        value = manifest.get(key)
+        # `skills` and `commands` accept a string or an array of paths;
+        # bundles need the array form to be discovered at all.
+        for rel in value if isinstance(value, list) else [value]:
+            if rel and (ROOT / rel).exists():
+                r.ok(f"plugin {key} path exists: {rel}")
+            elif rel:
+                r.fail(f"plugin {key} path missing: {rel}")
 
-    skill_files = skill_roots.skill_files(ROOT)
-    route_cases = sorted((ROOT / "evals" / "cases").glob("*.json"))
-    behavioral_cases = sorted((ROOT / "evals" / "behavioral" / "cases").glob("*.json"))
-    if args.installed:
-        pass  # the evals are the checkout's measure of itself, not the package's
-    elif len(route_cases) == len(skill_files):
-        r.ok(f"routing eval coverage is complete: {len(route_cases)}/{len(skill_files)}")
-    else:
-        r.warn(f"routing eval coverage incomplete: {len(route_cases)}/{len(skill_files)}")
-    if args.installed:
-        pass
-    elif len(behavioral_cases) == len(skill_files):
-        r.ok(f"behavioral eval coverage is complete: {len(behavioral_cases)}/{len(skill_files)}")
-    else:
-        r.warn(f"behavioral eval coverage incomplete: {len(behavioral_cases)}/{len(skill_files)}")
 
+def check_eval_coverage(r: Reporter, installed: bool) -> None:
+    if installed:
+        return  # the evals are the checkout's measure of itself, not the package's
+    skills = len(skill_roots.skill_files(ROOT))
+    for label, cases in (("routing", ROOT / "evals" / "cases"), ("behavioral", ROOT / "evals" / "behavioral" / "cases")):
+        count = len(sorted(cases.glob("*.json")))
+        if count == skills:
+            r.ok(f"{label} eval coverage is complete: {count}/{skills}")
+        else:
+            r.warn(f"{label} eval coverage incomplete: {count}/{skills}")
+
+
+def run_gate(r: Reporter, skip: bool) -> None:
     # For a human, `agtmls doctor` running the whole gate is the point. Inside
     # run-all-checks.py it meant every check ran twice -- the duplication was
     # roughly half the gate's wall time.
-    checks = [] if args.skip_gate or args.installed else json.loads(
-        (ROOT / "checks.json").read_text(encoding="utf-8")
-    )["checks"]
+    checks = [] if skip else json.loads((ROOT / "checks.json").read_text(encoding="utf-8"))["checks"]
     for check in checks:
         parts = shlex.split(check)
-        if not parts or parts[0] == "agtmls-doctor.py":
-            continue
-        run_check(parts[0], parts[1:], r)
+        if parts and parts[0] != "agtmls-doctor.py":
+            run_check(parts[0], parts[1:], r)
 
-    user_skill_links(r)
 
-    if args.target:
-        target = args.target.resolve()
-        if not target.exists():
-            r.fail(f"target repo does not exist: {target}")
+def check_agent_dirs(r: Reporter, target: Path, dot: str) -> None:
+    for sub in ("skills", "commands"):
+        if (target / dot / sub).exists():
+            r.ok(f"target {dot}/{sub} exists")
         else:
-            r.ok(f"target repo exists: {target}")
-            if args.agent:
-                dot, prompt = agents[args.agent]
-                skills_dir = target / dot / "skills"
-                commands_dir = target / dot / "commands"
-                if skills_dir.exists():
-                    r.ok(f"target {dot}/skills exists")
-                else:
-                    r.warn(f"target {dot}/skills is missing; run setup-workspace.sh")
-                if commands_dir.exists():
-                    r.ok(f"target {dot}/commands exists")
-                else:
-                    r.warn(f"target {dot}/commands is missing; run setup-workspace.sh")
-                if skills_dir.exists():
-                    # A wheel install copies; the lockfile says which
-                    # directories are ours, so they are not "missing links".
-                    # This agent's entries, whatever `mode` the last install
-                    # of any agent wrote.
-                    lock = lockfile.read(target)
-                    copied = (
-                        {entry["name"] for entry in lockfile.entries_for(lock, args.agent)}
-                        if lock is not None else set()
-                    )
-                    missing = []
-                    for name in expected_skill_names(args.bundle):
-                        link = skills_dir / name
-                        # is_relative_to, not a string prefix: a sibling
-                        # checkout `<root>-experiments` shares the prefix.
-                        if link.is_symlink() and link.resolve().is_relative_to(ROOT):
-                            continue
-                        if name in copied and link.is_dir() and not link.is_symlink():
-                            continue
-                        missing.append(name)
-                    if missing:
-                        r.warn(f"target missing expected AgtMLS skill links: {', '.join(missing)}")
-                    elif copied:
-                        r.ok("target expected AgtMLS skills are present (copied, per the lockfile)")
-                    else:
-                        r.ok("target expected AgtMLS skill links are present")
-                prompt_path = target / prompt
-                if args.skills_only:
-                    if prompt_path.exists():
-                        first = prompt_path.read_text(encoding="utf-8", errors="replace").splitlines()[:1]
-                        if first and "Generated by AgtMLS" in first[0]:
-                            r.warn(f"target has generated {prompt} despite --skills-only")
-                        else:
-                            r.ok(f"target {prompt} is hand-authored or absent from AgtMLS")
-                    else:
-                        r.ok(f"target has no generated {prompt}")
-                elif prompt_path.exists():
-                    first = prompt_path.read_text(encoding="utf-8", errors="replace").splitlines()[:1]
-                    if first and "Generated by AgtMLS" in first[0]:
-                        r.ok(f"target generated {prompt} exists")
-                    else:
-                        r.warn(f"target {prompt} exists but is not AgtMLS-generated")
-                else:
-                    r.warn(f"target generated {prompt} is missing")
-                approval_posture(args.agent, target, r)
+            r.warn(f"target {dot}/{sub} is missing; run setup-workspace.sh")
 
+
+def installed_here(link: Path, copied: set[str]) -> bool:
+    """A link into this registry, or a copy the lockfile records."""
+    # is_relative_to, not a string prefix: a sibling
+    # checkout `<root>-experiments` shares the prefix.
+    if link.is_symlink():
+        return link.resolve().is_relative_to(ROOT)
+    return link.name in copied and link.is_dir()
+
+
+def check_skill_links(r: Reporter, target: Path, skills_dir: Path, agent: str, bundles: list[str]) -> None:
+    # A wheel install copies; the lockfile says which
+    # directories are ours, so they are not "missing links".
+    # This agent's entries, whatever `mode` the last install
+    # of any agent wrote.
+    lock = lockfile.read(target)
+    copied = {entry["name"] for entry in lockfile.entries_for(lock, agent)} if lock is not None else set()
+    missing = [name for name in expected_skill_names(bundles) if not installed_here(skills_dir / name, copied)]
+    if missing:
+        r.warn(f"target missing expected AgtMLS skill links: {', '.join(missing)}")
+    elif copied:
+        r.ok("target expected AgtMLS skills are present (copied, per the lockfile)")
+    else:
+        r.ok("target expected AgtMLS skill links are present")
+
+
+def generated(path: Path) -> bool:
+    """Whether a prompt file begins with the AgtMLS generated header."""
+    first = path.read_text(encoding="utf-8", errors="replace").splitlines()[:1]
+    return bool(first and "Generated by AgtMLS" in first[0])
+
+
+def check_prompt(r: Reporter, target: Path, prompt: str, skills_only: bool) -> None:
+    prompt_path = target / prompt
+    exists = prompt_path.exists()
+    if skills_only and not exists:
+        r.ok(f"target has no generated {prompt}")
+    elif skills_only and generated(prompt_path):
+        r.warn(f"target has generated {prompt} despite --skills-only")
+    elif skills_only:
+        r.ok(f"target {prompt} is hand-authored or absent from AgtMLS")
+    elif not exists:
+        r.warn(f"target generated {prompt} is missing")
+    elif generated(prompt_path):
+        r.ok(f"target generated {prompt} exists")
+    else:
+        r.warn(f"target {prompt} exists but is not AgtMLS-generated")
+
+
+def check_target(r: Reporter, args: argparse.Namespace, agents: dict) -> None:
+    target = args.target.resolve()
+    if not target.exists():
+        r.fail(f"target repo does not exist: {target}")
+        return
+    r.ok(f"target repo exists: {target}")
+    if not args.agent:
+        return
+    dot, prompt = agents[args.agent]
+    check_agent_dirs(r, target, dot)
+    if (target / dot / "skills").exists():
+        check_skill_links(r, target, target / dot / "skills", args.agent, args.bundle)
+    check_prompt(r, target, prompt, args.skills_only)
+    approval_posture(args.agent, target, r)
+
+
+def main() -> int:
+    agents = native_agents()
+    args = parse_args(agents)
+    r = Reporter()
+    check_documents(r, args.installed)
+    check_plugin_manifest(r)
+    check_eval_coverage(r, args.installed)
+    run_gate(r, args.skip_gate or args.installed)
+    user_skill_links(r)
+    if args.target:
+        check_target(r, args, agents)
     print()
     if r.failures:
         print(f"FAIL: {r.failures} failure(s), {r.warnings} warning(s)")
