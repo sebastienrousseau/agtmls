@@ -17,7 +17,10 @@ from _lib import skill_roots  # noqa: E402  (scripts path first)
 SKILLS_DIR = ROOT / "skills"
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 KEBAB = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-AGENTS = {"claude", "codex", "aider"}
+# Every native agent AgtMLS installs into (providers.json): a skill may say
+# it supports any of them. A hand-kept copy here stopped at claude, codex
+# and aider after Antigravity became an install target.
+AGENTS = set(json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))["native_agents"])
 MATURITY = {"draft", "hardened", "project", "deprecated"}
 NETWORK_ACCESS = {"none", "optional", "required"}
 RISK_LEVELS = {"low", "medium", "high"}

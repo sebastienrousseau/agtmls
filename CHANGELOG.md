@@ -9,6 +9,11 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- A skill's `metadata.json` may list `antigravity` in `supported_agents`.
+  The validator kept its own list of claude, codex and aider after
+  Antigravity became an install target; it now reads the native agents
+  from `providers.json`. No skill claims Antigravity yet: installs into
+  `.agents/skills` verify, but no live check shows Antigravity loads them.
 - Three general skills, the trust layer only a registry that audits can
   offer, shipped as `draft` until a with/without run shows they help:
   `vetting-a-skill-before-install` (pin a third-party skill to a commit,

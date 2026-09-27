@@ -171,6 +171,13 @@ class SkillMetadataBranchTests(BrokenTreeCase):
         self.edit(lambda data: data.__setitem__("supported_agents", ["gpt"]))
         self.fails_with("supported_agents must be subset of")
 
+    def test_every_native_agent_may_be_listed(self) -> None:
+        """Antigravity is a native install target (providers.json), so a skill
+        may say it supports it; the list stopped at claude, codex and aider."""
+        self.edit(lambda data: data.__setitem__("supported_agents", ["claude", "codex", "antigravity", "aider"]))
+        code, output = self.run_validator(self.SCRIPT)
+        self.assertEqual(code, 0, output)
+
     def test_required_tools_that_are_not_strings_are_refused(self) -> None:
         self.edit(lambda data: data.__setitem__("required_tools", [1]))
         self.fails_with("required_tools must be a string list")

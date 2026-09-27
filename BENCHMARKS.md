@@ -104,6 +104,12 @@ recorded on the runner itself by dispatching the `bench` workflow with
 `record: true`. The laptop baseline, and everything in this document, stays
 the published measurement.
 
+The CI baseline follows the same rule as the rule count: more work is
+re-recorded, not absorbed by the allowance. v0.0.17's three new skills took
+`audit-all` on the runner from 51.9x to 57.0x calibration, about 10% more
+files to audit, and a noisy run then crossed 20%; the CI baseline was
+re-recorded on the runner (bench run 36303734572).
+
 **What this still does not survive: a thermally saturated machine.** Running
 `--check` immediately after several back-to-back suite runs reported every
 workload 47–106% slower, with nothing changed. Under sustained throttling the
