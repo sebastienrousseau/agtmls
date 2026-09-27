@@ -1729,6 +1729,28 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/uninstall_steps.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "32242004c74f531ca6449b4b60f94fcc0e855ae5f6f55f7a55ef2a475fd07076"
+        }
+      ],
+      "name": "scripts/_lib/uninstall_steps.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/verify_report.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6fc82d2f21e4c2ed446fee4639e9c501b2ac82eb7fcb82216daf155725afa2f4"
+        }
+      ],
+      "name": "scripts/_lib/verify_report.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/workloads.py",
       "hashes": [
         {
@@ -1755,7 +1777,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f55c8575eb93af7fa1f45d3d4445717288fbc83af114b54add1e032d0a14b79a"
+          "content": "ee44c0a94d4eec09c854c8471eaedb49e3d1b74e65e22719f9ade186f3d308df"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -4321,7 +4343,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T13:14:56Z",
+    "timestamp": "2026-09-27T14:16:24Z",
     "tools": {
       "components": [
         {

@@ -11,7 +11,7 @@
       "lines": 888
     },
     "scripts/agtmls.py": {
-      "lines": 606
+      "lines": 543
     }
   },
   "functions": {
@@ -66,18 +66,6 @@
     },
     "scripts/agtmls.py::search_entries": {
       "cyclomatic": 11
-    },
-    "scripts/agtmls.py::uninstall": {
-      "cognitive": 61,
-      "cyclomatic": 33,
-      "halstead": 43.9,
-      "lines": 75
-    },
-    "scripts/agtmls.py::verify_install": {
-      "cognitive": 47,
-      "cyclomatic": 39,
-      "halstead": 42.4,
-      "lines": 80
     },
     "scripts/audit-skill.py::foreign_audit": {
       "cognitive": 47,
