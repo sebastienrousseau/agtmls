@@ -11,7 +11,7 @@
       "lines": 888
     },
     "scripts/agtmls.py": {
-      "lines": 629
+      "lines": 606
     }
   },
   "functions": {
@@ -63,12 +63,6 @@
     },
     "scripts/agtmls.py::list_entries": {
       "cyclomatic": 11
-    },
-    "scripts/agtmls.py::main": {
-      "cognitive": 181,
-      "cyclomatic": 104,
-      "halstead": 52.9,
-      "lines": 228
     },
     "scripts/agtmls.py::search_entries": {
       "cyclomatic": 11
