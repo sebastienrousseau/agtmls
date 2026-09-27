@@ -2635,7 +2635,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8ea2dcd4fb5321bc2f37e2db8a869796c0dbe627efdcb87576e2c001e76cf5ac"
+          "content": "41dec7b2de6e60cef503493a59cb67548e25a37e5fadda982b9ced5599c77c6f"
         }
       ],
       "name": "scripts/validate-providers.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T14:39:20Z",
+    "timestamp": "2026-09-27T15:43:55Z",
     "tools": {
       "components": [
         {

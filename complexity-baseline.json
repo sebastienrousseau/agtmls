@@ -220,12 +220,6 @@
       "cyclomatic": 31,
       "halstead": 35.7
     },
-    "scripts/validate-providers.py::main": {
-      "cognitive": 98,
-      "cyclomatic": 59,
-      "halstead": 41.6,
-      "lines": 100
-    },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },

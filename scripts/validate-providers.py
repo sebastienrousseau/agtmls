@@ -18,104 +18,152 @@ REQUIRED_EXPORTS = {"generic", "openai", "anthropic", "google-gemini", "mistral"
 REQUIRED_PLUGIN_TARGETS = {"antigravity", "codex", "cursor", "gemini-cli", "kimi", "opencode"}
 
 
+def blank(value: object) -> bool:
+    """Not a non-empty string."""
+    return not isinstance(value, str) or not value
+
+
+def unsafe(rel: object) -> bool:
+    """Not a relative path that stays inside the repository."""
+    return not isinstance(rel, str) or rel.startswith("/") or ".." in Path(rel).parts
+
+
+def one_of(value: object, allowed: set[str]) -> bool:
+    """`value` is one of `allowed`; a list or object is not, and is not an
+    error to test (it is unhashable, so `in` a set would raise)."""
+    return isinstance(value, str) and value in allowed
+
+
+def approval_entry_problems(where: str, entry: dict) -> list[str]:
+    errors = [f"{where} missing {key}" for key in ["file", "scope", "key"] if blank(entry.get(key))]
+    if not one_of(entry.get("format"), {"json", "toml", "yaml"}):
+        errors.append(f"{where} format must be json, toml or yaml")
+    if not isinstance(entry.get("unattended"), list) or not entry.get("unattended"):
+        errors.append(f"{where} needs the unattended values it recognises")
+    if not isinstance(entry.get("classified", []), list):
+        errors.append(f"{where} classified must be a list")
+    return errors
+
+
+def approval_problems(name: str, approvals: object) -> list[str]:
+    """One native agent's `approval_settings`."""
+    if not isinstance(approvals, list):
+        return [f"native agent {name} approval_settings must be a list"]
+    errors = []
+    for index, entry in enumerate(approvals):
+        where = f"native agent {name} approval_settings[{index}]"
+        errors += approval_entry_problems(where, entry) if isinstance(entry, dict) else [f"{where} must be an object"]
+    return errors
+
+
+def semantics_problems(name: str, semantics: object) -> list[str]:
+    # What the runtime does with a skill's allowed-tools: Claude Code
+    # pre-approves them (grant); the Agent Skills spec makes the field a
+    # declaration; a runtime that never reads it ignores it. AGT-CAP-001
+    # reports escalation per target from this.
+    if semantics is None:
+        return [f"native agent {name} missing allowed_tools_semantics"]
+    if not one_of(semantics, {"grant", "declaration", "ignored"}):
+        return [f"native agent {name} allowed_tools_semantics must be grant, declaration or ignored"]
+    return []
+
+
+def discovery_problems(name: str, item: dict) -> list[str]:
+    # Where the agent loads user-level skills, and how to ask it which it
+    # loads: doctor and verify --live read these.
+    errors = []
+    dirs = item.get("user_skills_dirs")
+    if not isinstance(dirs, list) or not all(isinstance(d, str) and d for d in dirs):
+        errors.append(f"native agent {name} user_skills_dirs must be a list of paths")
+    if "live_probe" in item and not one_of(item["live_probe"], {"claude-init", "codex-prompt-input"}):
+        errors.append(f"native agent {name} live_probe must be claude-init or codex-prompt-input")
+    return errors
+
+
+def native_agent_problems(name: str, item: object) -> list[str]:
+    if not isinstance(item, dict):
+        return [f"native agent {name} must be an object"]
+    errors = [f"native agent {name} missing {key}"
+              for key in ["prompt_file", "skills_dir", "commands_dir", "install_mode"] if blank(item.get(key))]
+    if item.get("install_mode") != "symlink":
+        errors.append(f"native agent {name} install_mode must be symlink")
+    errors += semantics_problems(name, item.get("allowed_tools_semantics"))
+    # Where the agent keeps "ask before running a tool", read by doctor
+    # to report when a skill's safety_policy can only be advisory.
+    errors += approval_problems(name, item.get("approval_settings"))
+    return errors + discovery_problems(name, item)
+
+
+def native_problems(native: object) -> list[str]:
+    if not isinstance(native, dict):
+        return ["native_agents must be an object"]
+    errors = [] if set(native) == NATIVE else [f"native_agents must be exactly {sorted(NATIVE)}"]
+    return errors + [e for name, item in native.items() for e in native_agent_problems(name, item)]
+
+
+def manifest_problems(name: str, manifests: list) -> list[str]:
+    errors = []
+    for rel in manifests:
+        if unsafe(rel):
+            errors.append(f"plugin target {name} manifest_files must be safe relative paths")
+        elif not (ROOT / rel).exists():
+            errors.append(f"plugin target {name} manifest missing: {rel}")
+    return errors
+
+
+def plugin_target_problems(name: str, item: object) -> list[str]:
+    if not isinstance(item, dict):
+        return [f"plugin target {name} must be an object"]
+    errors = [f"plugin target {name} must have {key}" for key in ["description", "install"]
+              if not isinstance(item.get(key), str) or not item[key].strip()]
+    manifests = item.get("manifest_files")
+    if not isinstance(manifests, list) or not manifests:
+        return [*errors, f"plugin target {name} must have manifest_files"]
+    return errors + manifest_problems(name, manifests)
+
+
+def plugin_problems(plugins: dict) -> list[str]:
+    errors = [f"missing plugin target: {name}" for name in sorted(REQUIRED_PLUGIN_TARGETS - set(plugins))]
+    return errors + [e for name, item in plugins.items() for e in plugin_target_problems(name, item)]
+
+
+def export_target_problems(name: str, item: object) -> list[str]:
+    if not isinstance(item, dict) or not isinstance(item.get("description"), str) or not item["description"].strip():
+        return [f"export target {name} must have description"]
+    adapters = item.get("adapter_files")
+    if not isinstance(adapters, list) or not adapters or any(blank(path) for path in adapters):
+        return [f"export target {name} must have adapter_files"]
+    if any(unsafe(path) for path in adapters):
+        return [f"export target {name} adapter_files must be safe relative paths"]
+    return []
+
+
+def export_problems(exports: object) -> list[str]:
+    if not isinstance(exports, dict):
+        return [f"missing export target: {name}" for name in sorted(REQUIRED_EXPORTS)] + ["export_targets must be an object"]
+    errors = [f"missing export target: {name}" for name in sorted(REQUIRED_EXPORTS - set(exports))]
+    return errors + [e for name, item in exports.items() for e in export_target_problems(name, item)]
+
+
 def main() -> int:
-    errors: list[str] = []
     try:
         data = json.loads(PROVIDERS.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError) as exc:
         print(f"FAIL: providers.json invalid or missing: {exc}")
         return 1
-    if data.get("schema_version") != 1:
-        errors.append("providers.json schema_version must be 1")
+    if not isinstance(data, dict):
+        print("FAIL: providers.json must be an object")
+        return 1
+    errors = [] if data.get("schema_version") == 1 else ["providers.json schema_version must be 1"]
     native = data.get("native_agents", {})
-    if set(native) != NATIVE:
-        errors.append(f"native_agents must be exactly {sorted(NATIVE)}")
-    for name, item in native.items():
-        if not isinstance(item, dict):
-            errors.append(f"native agent {name} must be an object")
-            continue
-        for key in ["prompt_file", "skills_dir", "commands_dir", "install_mode"]:
-            if not isinstance(item.get(key), str) or not item.get(key):
-                errors.append(f"native agent {name} missing {key}")
-        if item.get("install_mode") != "symlink":
-            errors.append(f"native agent {name} install_mode must be symlink")
-        # What the runtime does with a skill's allowed-tools: Claude Code
-        # pre-approves them (grant); the Agent Skills spec makes the field a
-        # declaration; a runtime that never reads it ignores it. AGT-CAP-001
-        # reports escalation per target from this.
-        semantics = item.get("allowed_tools_semantics")
-        if semantics is None:
-            errors.append(f"native agent {name} missing allowed_tools_semantics")
-        elif semantics not in {"grant", "declaration", "ignored"}:
-            errors.append(
-                f"native agent {name} allowed_tools_semantics must be grant, declaration or ignored"
-            )
-        # Where the agent keeps "ask before running a tool", read by doctor
-        # to report when a skill's safety_policy can only be advisory.
-        approvals = item.get("approval_settings")
-        if not isinstance(approvals, list):
-            errors.append(f"native agent {name} approval_settings must be a list")
-            approvals = []
-        for index, entry in enumerate(approvals):
-            where = f"native agent {name} approval_settings[{index}]"
-            if not isinstance(entry, dict):
-                errors.append(f"{where} must be an object")
-                continue
-            for key in ["file", "scope", "key"]:
-                if not isinstance(entry.get(key), str) or not entry.get(key):
-                    errors.append(f"{where} missing {key}")
-            if entry.get("format") not in {"json", "toml", "yaml"}:
-                errors.append(f"{where} format must be json, toml or yaml")
-            if not isinstance(entry.get("unattended"), list) or not entry.get("unattended"):
-                errors.append(f"{where} needs the unattended values it recognises")
-            if not isinstance(entry.get("classified", []), list):
-                errors.append(f"{where} classified must be a list")
-        # Where the agent loads user-level skills, and how to ask it which it
-        # loads: doctor and verify --live read these.
-        dirs = item.get("user_skills_dirs")
-        if not isinstance(dirs, list) or not all(isinstance(d, str) and d for d in dirs):
-            errors.append(f"native agent {name} user_skills_dirs must be a list of paths")
-        if "live_probe" in item and item["live_probe"] not in {"claude-init", "codex-prompt-input"}:
-            errors.append(f"native agent {name} live_probe must be claude-init or codex-prompt-input")
+    errors += native_problems(native)
     plugins = data.get("plugin_targets", {})
     if not isinstance(plugins, dict):
         errors.append("plugin_targets must be an object")
         plugins = {}
-    for name in sorted(REQUIRED_PLUGIN_TARGETS - set(plugins)):
-        errors.append(f"missing plugin target: {name}")
-    for name, item in plugins.items():
-        if not isinstance(item, dict):
-            errors.append(f"plugin target {name} must be an object")
-            continue
-        for key in ["description", "install"]:
-            if not isinstance(item.get(key), str) or not item[key].strip():
-                errors.append(f"plugin target {name} must have {key}")
-        manifests = item.get("manifest_files")
-        if not isinstance(manifests, list) or not manifests:
-            errors.append(f"plugin target {name} must have manifest_files")
-            continue
-        for rel in manifests:
-            if not isinstance(rel, str) or rel.startswith("/") or ".." in Path(rel).parts:
-                errors.append(f"plugin target {name} manifest_files must be safe relative paths")
-            elif not (ROOT / rel).exists():
-                errors.append(f"plugin target {name} manifest missing: {rel}")
-
+    errors += plugin_problems(plugins)
     exports = data.get("export_targets", {})
-    missing = sorted(REQUIRED_EXPORTS - set(exports)) if isinstance(exports, dict) else sorted(REQUIRED_EXPORTS)
-    for name in missing:
-        errors.append(f"missing export target: {name}")
-    if isinstance(exports, dict):
-        for name, item in exports.items():
-            if not isinstance(item, dict) or not isinstance(item.get("description"), str) or not item["description"].strip():
-                errors.append(f"export target {name} must have description")
-                continue
-            adapters = item.get("adapter_files")
-            if not isinstance(adapters, list) or not adapters or not all(isinstance(path, str) and path for path in adapters):
-                errors.append(f"export target {name} must have adapter_files")
-            elif any(path.startswith("/") or ".." in Path(path).parts for path in adapters):
-                errors.append(f"export target {name} adapter_files must be safe relative paths")
-    else:
-        errors.append("export_targets must be an object")
+    errors += export_problems(exports)
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
