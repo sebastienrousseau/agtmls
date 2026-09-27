@@ -9,9 +9,6 @@
   "files": {
     "scripts/_lib/analyzer.py": {
       "lines": 888
-    },
-    "scripts/agtmls.py": {
-      "lines": 543
     }
   },
   "functions": {
@@ -60,12 +57,6 @@
       "cyclomatic": 49,
       "halstead": 33.3,
       "lines": 141
-    },
-    "scripts/agtmls.py::list_entries": {
-      "cyclomatic": 11
-    },
-    "scripts/agtmls.py::search_entries": {
-      "cyclomatic": 11
     },
     "scripts/audit-skill.py::foreign_audit": {
       "cognitive": 47,
