@@ -442,248 +442,272 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
     return code
 
 
+# --- dispatch -------------------------------------------------------------
+# One small handler per subcommand, looked up in HANDLERS. Each builds the
+# command line of the script it forwards to, or answers in-process. They call
+# run() and the other handlers by name at call time, so a test that stubs one
+# sees every subcommand go through the stub.
+
+
+def script(name: str, *argv: str) -> list[str]:
+    """`python3 scripts/<name> argv...`."""
+    return [sys.executable, str(ROOT / "scripts" / name), *argv]
+
+
+def option(cmd: list[str], flag: str, value: object) -> None:
+    """Forward `flag value` when a value was given."""
+    if value:
+        cmd.extend([flag, str(value)])
+
+
+def repeated(cmd: list[str], flag: str, values: list) -> None:
+    """Forward `flag value` once per value."""
+    for value in values:
+        cmd.extend([flag, str(value)])
+
+
+def switch(cmd: list[str], flag: str, on: bool) -> None:
+    """Forward a flag that takes no value."""
+    if on:
+        cmd.append(flag)
+
+
+def write_or_check(name: str):
+    """A generator subcommand: `--write`, `--check`, or neither."""
+    def handler(args) -> int:
+        flags = ["--write"] if args.write else ["--check"] if args.check else []
+        return run(script(name, *flags))
+    return handler
+
+
+def doctor_command(args) -> int:
+    cmd = script("agtmls-doctor.py")
+    # The doctor runs with the registry as its working directory, so a
+    # relative target must be resolved here, against the caller's:
+    # `doctor --target .` from a wheel inspected the registry itself.
+    option(cmd, "--target", args.target and args.target.resolve())
+    option(cmd, "--agent", args.agent)
+    switch(cmd, "--skills-only", args.skills_only)
+    switch(cmd, "--installed", args.installed)
+    repeated(cmd, "--bundle", args.bundle)
+    return run(cmd)
+
+
+def export_command(args) -> int:
+    cmd = script("export-registry.py", "--provider", args.provider)
+    option(cmd, "--profile", args.profile)
+    repeated(cmd, "--bundle", args.bundle)
+    option(cmd, "--out-dir", args.out_dir)
+    return run(cmd)
+
+
+def release_pack_command(args) -> int:
+    cmd = script("release-pack.py")
+    option(cmd, "--out-dir", args.out_dir)
+    option(cmd, "--profile", args.profile)
+    repeated(cmd, "--provider", args.provider)
+    return run(cmd)
+
+
+def next_version_command(args) -> int:
+    cmd = script("next-version.py")
+    switch(cmd, "--tag", args.tag)
+    switch(cmd, "--json", args.json)
+    return run(cmd)
+
+
+def bump_version_command(args) -> int:
+    cmd = script("bump-version.py")
+    option(cmd, "--version", args.version)
+    option(cmd, "--date", args.date)
+    switch(cmd, "--check", args.check)
+    return run(cmd)
+
+
+def release_dry_run_command(args) -> int:
+    cmd = script("release-dry-run.py")
+    option(cmd, "--version", args.version)
+    switch(cmd, "--skip-check", args.skip_check)
+    option(cmd, "--profile", args.profile)
+    repeated(cmd, "--provider", args.provider)
+    return run(cmd)
+
+
+def verify_release_assets_command(args) -> int:
+    cmd = script("verify-release-assets.py", "--tag", args.tag)
+    option(cmd, "--repo", args.repo)
+    option(cmd, "--out-dir", args.out_dir)
+    return run(cmd)
+
+
+def evidence_command(args) -> int:
+    cmd = script("record-evidence.py", "--skill", args.skill, "--outcome", args.outcome)
+    repeated(cmd, "--command", args.evidence_commands)
+    repeated(cmd, "--file", args.file)
+    return run(cmd)
+
+
+def provider_install_command(args) -> int:
+    cmd = script("provider-install.py", "--provider", args.provider, "--target", str(args.target))
+    option(cmd, "--profile", args.profile)
+    switch(cmd, "--check", args.check)
+    return run(cmd)
+
+
+def callers_path(spec: str) -> str:
+    """A path the caller typed, made absolute; anything else as given."""
+    return str(Path(spec).resolve()) if Path(spec).exists() else spec
+
+
+def diff_command(args) -> int:
+    # registry-diff runs from the checkout, so a relative path the caller
+    # typed would be looked up there. Revision specs pass through as-is.
+    cmd = script("registry-diff.py", "--from", callers_path(args.old))
+    option(cmd, "--to", args.new and callers_path(args.new))
+    switch(cmd, "--json", args.json)
+    return run(cmd)
+
+
+def foreign_target(target: str) -> str:
+    """A path is the caller's; a URL@sha is passed through as given."""
+    if "@" not in target or Path(target).exists():
+        return str(Path(target).resolve())
+    return target
+
+
+def audit_command(args) -> int:
+    cmd = script("audit-skill.py")
+    if args.path:
+        cmd.append(str(args.path))
+    switch(cmd, "--all", args.all)
+    option(cmd, "--foreign", args.foreign and foreign_target(args.foreign))
+    switch(cmd, "--strict", args.strict)
+    switch(cmd, "--pedantic", args.pedantic)
+    option(cmd, "--format", (args.format or args.json) and (args.format or "json"))
+    option(cmd, "--baseline", args.baseline and args.baseline.resolve())
+    option(cmd, "--write-baseline", args.write_baseline and args.write_baseline.resolve())
+    return run(cmd)
+
+
+def import_skill_command(args) -> int:
+    cmd = script("import-skill.py", str(args.source))
+    option(cmd, "--name", args.name)
+    option(cmd, "--bundle", args.bundle)
+    return run(cmd)
+
+
+def install_bundles(args) -> list[str] | None:
+    """The bundles to install: the named ones plus a profile's, or None for
+    an unknown profile."""
+    bundles = list(args.bundle)
+    if args.profile:
+        profile = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"].get(args.profile)
+        if profile is None:
+            print(f"unknown profile: {args.profile}", file=sys.stderr)
+            return None
+        bundles.extend(profile.get("bundles", []))
+    return sorted(set(bundles))
+
+
+def refuse_drift() -> int | None:
+    """Exit 3 before copying anything when the registry no longer matches
+    index.json; None when it does."""
+    drift = verify_registry()
+    if not drift:
+        return None
+    print(f"refusing to install: {len(drift)} skill(s) do not match index.json", file=sys.stderr)
+    for name, expected, actual in drift:
+        print(f"  {name}\n    index    {expected}\n    on disk  {actual}", file=sys.stderr)
+    print(
+        "\nThe registry has been modified since index.json was generated. Run "
+        "`agtmls index --write` if the change is yours, or re-clone if it is not.",
+        file=sys.stderr,
+    )
+    return lockfile.EXIT_INTEGRITY_FAILURE
+
+
+def record_install(args, target: Path) -> int:
+    """Record what landed, so `agtmls verify` has something to check against."""
+    installed = installed_skill_names(target, args.agent)
+    payload = lockfile.record(
+        target, ROOT, installed,
+        "copy" if args.copy else "symlink",
+        str(load_index().get("registry_version", "")),
+        args.agent, skills_dirs(target),
+    )
+    path = lockfile.write(target, payload)
+    print(f"recorded {len(lockfile.entries_for(payload, args.agent))} skill(s) in {path.relative_to(target)}")
+    return 0
+
+
+def install_command(args) -> int:
+    cmd = [str(ROOT / "scripts" / "setup-workspace.sh"), args.language, args.agent]
+    for flag, on in (("--skills-only", args.skills_only), ("--copy", args.copy),
+                     ("--force", args.force), ("--dry-run", args.dry_run)):
+        switch(cmd, flag, on)
+    bundles = install_bundles(args)
+    if bundles is None:
+        return 1
+    repeated(cmd, "--bundle", bundles)
+    target = args.target.resolve()
+    refused = None if args.no_verify or args.dry_run else refuse_drift()
+    if refused is not None:
+        return refused
+    rc = run(cmd, cwd=target)
+    if rc != 0 or args.dry_run:
+        return rc
+    return record_install(args, target)
+
+
+def scaffold_skill_command(args) -> int:
+    cmd = script("scaffold-skill.py", args.name)
+    option(cmd, "--bundle", args.bundle)
+    option(cmd, "--title", args.title)
+    return run(cmd)
+
+
+HANDLERS = {
+    "doctor": doctor_command,
+    "status": doctor_command,
+    "check": lambda args: run(script("run-all-checks.py")),
+    "list": lambda args: list_entries(args.kind, args.bundle, args.json),
+    "search": lambda args: search_entries(args.query, args.json),
+    "show": lambda args: show_entry(args.name, args.json),
+    "stats": lambda args: stats(args.json),
+    "profiles": lambda args: profiles(args.json),
+    "providers": lambda args: providers(args.json),
+    "export": export_command,
+    "docs-site": write_or_check("generate-docs-site.py"),
+    "release-pack": release_pack_command,
+    "next-version": next_version_command,
+    "bump-version": bump_version_command,
+    "release-dry-run": release_dry_run_command,
+    "verify-release-assets": verify_release_assets_command,
+    "evolve": lambda args: run(script("evolve-session.py", str(args.transcript), "--skill-name", args.skill_name)),
+    "evidence": evidence_command,
+    "mcp-resources": write_or_check("generate-mcp-resources.py"),
+    "plugin-manifests": write_or_check("generate-plugin-manifests.py"),
+    "sbom": write_or_check("generate-sbom.py"),
+    "provenance": write_or_check("generate-provenance.py"),
+    "provider-install": provider_install_command,
+    "bench": lambda args: run(script("bench.py")),
+    "diff": diff_command,
+    "release-check": lambda args: run(script("release-check.py")),
+    "audit": audit_command,
+    "import-skill": import_skill_command,
+    "index": write_or_check("generate-skill-index.py"),
+    "install": install_command,
+    "verify": lambda args: verify_install(args.target, args.agent, args.json, args.signatures, args.live),
+    "uninstall": lambda args: uninstall(args.target, args.agent, args.remove_prompt),
+    "propose-skill": lambda args: run(script("propose-skill-from-session.py", str(args.transcript), "--skill-name", args.skill_name)),
+    "scaffold-skill": scaffold_skill_command,
+}
+
+
 def main() -> int:
-    parser = build_parser()
-    args = parser.parse_args()
-
-    if args.subcommand in {"doctor", "status"}:
-        cmd = [sys.executable, str(ROOT / "scripts" / "agtmls-doctor.py")]
-        if args.target:
-            # The doctor runs with the registry as its working directory, so
-            # a relative target must be resolved here, against the caller's:
-            # `doctor --target .` from a wheel inspected the registry itself.
-            cmd.extend(["--target", str(args.target.resolve())])
-        if args.agent:
-            cmd.extend(["--agent", args.agent])
-        if args.skills_only:
-            cmd.append("--skills-only")
-        if args.installed:
-            cmd.append("--installed")
-        for bundle in args.bundle:
-            cmd.extend(["--bundle", bundle])
-        return run(cmd)
-    if args.subcommand == "check":
-        return run([sys.executable, str(ROOT / "scripts" / "run-all-checks.py")])
-    if args.subcommand == "list":
-        return list_entries(args.kind, args.bundle, args.json)
-    if args.subcommand == "search":
-        return search_entries(args.query, args.json)
-    if args.subcommand == "show":
-        return show_entry(args.name, args.json)
-    if args.subcommand == "stats":
-        return stats(args.json)
-    if args.subcommand == "profiles":
-        return profiles(args.json)
-    if args.subcommand == "providers":
-        return providers(args.json)
-    if args.subcommand == "export":
-        cmd = [sys.executable, str(ROOT / "scripts" / "export-registry.py"), "--provider", args.provider]
-        if args.profile:
-            cmd.extend(["--profile", args.profile])
-        for bundle in args.bundle:
-            cmd.extend(["--bundle", bundle])
-        if args.out_dir:
-            cmd.extend(["--out-dir", str(args.out_dir)])
-        return run(cmd)
-    if args.subcommand == "docs-site":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-docs-site.py"), *flags])
-    if args.subcommand == "release-pack":
-        cmd = [sys.executable, str(ROOT / "scripts" / "release-pack.py")]
-        if args.out_dir:
-            cmd.extend(["--out-dir", str(args.out_dir)])
-        if args.profile:
-            cmd.extend(["--profile", args.profile])
-        for provider in args.provider:
-            cmd.extend(["--provider", provider])
-        return run(cmd)
-    if args.subcommand == "next-version":
-        cmd = [sys.executable, str(ROOT / "scripts" / "next-version.py")]
-        if args.tag:
-            cmd.append("--tag")
-        if args.json:
-            cmd.append("--json")
-        return run(cmd)
-    if args.subcommand == "bump-version":
-        cmd = [sys.executable, str(ROOT / "scripts" / "bump-version.py")]
-        if args.version:
-            cmd.extend(["--version", args.version])
-        if args.date:
-            cmd.extend(["--date", args.date])
-        if args.check:
-            cmd.append("--check")
-        return run(cmd)
-    if args.subcommand == "release-dry-run":
-        cmd = [sys.executable, str(ROOT / "scripts" / "release-dry-run.py")]
-        if args.version:
-            cmd.extend(["--version", args.version])
-        if args.skip_check:
-            cmd.append("--skip-check")
-        if args.profile:
-            cmd.extend(["--profile", args.profile])
-        for provider in args.provider:
-            cmd.extend(["--provider", provider])
-        return run(cmd)
-    if args.subcommand == "verify-release-assets":
-        cmd = [sys.executable, str(ROOT / "scripts" / "verify-release-assets.py"), "--tag", args.tag]
-        if args.repo:
-            cmd.extend(["--repo", args.repo])
-        if args.out_dir:
-            cmd.extend(["--out-dir", str(args.out_dir)])
-        return run(cmd)
-    if args.subcommand == "evolve":
-        return run([sys.executable, str(ROOT / "scripts" / "evolve-session.py"), str(args.transcript), "--skill-name", args.skill_name])
-    if args.subcommand == "evidence":
-        cmd = [sys.executable, str(ROOT / "scripts" / "record-evidence.py"), "--skill", args.skill, "--outcome", args.outcome]
-        for item in args.evidence_commands:
-            cmd.extend(["--command", item])
-        for item in args.file:
-            cmd.extend(["--file", item])
-        return run(cmd)
-    if args.subcommand == "mcp-resources":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-mcp-resources.py"), *flags])
-    if args.subcommand == "plugin-manifests":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-plugin-manifests.py"), *flags])
-    if args.subcommand == "sbom":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-sbom.py"), *flags])
-    if args.subcommand == "provenance":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-provenance.py"), *flags])
-    if args.subcommand == "provider-install":
-        cmd = [sys.executable, str(ROOT / "scripts" / "provider-install.py"), "--provider", args.provider, "--target", str(args.target)]
-        if args.profile:
-            cmd.extend(["--profile", args.profile])
-        if args.check:
-            cmd.append("--check")
-        return run(cmd)
-    if args.subcommand == "bench":
-        return run([sys.executable, str(ROOT / "scripts" / "bench.py")])
-    if args.subcommand == "diff":
-        # registry-diff runs from the checkout, so a relative path the caller
-        # typed would be looked up there. Revision specs pass through as-is.
-        def callers(spec: str) -> str:
-            return str(Path(spec).resolve()) if Path(spec).exists() else spec
-
-        cmd = [sys.executable, str(ROOT / "scripts" / "registry-diff.py"), "--from", callers(args.old)]
-        if args.new:
-            cmd.extend(["--to", callers(args.new)])
-        if args.json:
-            cmd.append("--json")
-        return run(cmd)
-    if args.subcommand == "release-check":
-        return run([sys.executable, str(ROOT / "scripts" / "release-check.py")])
-    if args.subcommand == "audit":
-        cmd = [sys.executable, str(ROOT / "scripts" / "audit-skill.py")]
-        if args.path:
-            cmd.append(str(args.path))
-        if args.all:
-            cmd.append("--all")
-        if args.foreign:
-            target = args.foreign
-            # A path is the caller's; a URL@sha is passed through as given.
-            if "@" not in target or Path(target).exists():
-                target = str(Path(target).resolve())
-            cmd.extend(["--foreign", target])
-        if args.strict:
-            cmd.append("--strict")
-        if args.pedantic:
-            cmd.append("--pedantic")
-        if args.format or args.json:
-            cmd.extend(["--format", args.format or "json"])
-        if args.baseline:
-            cmd.extend(["--baseline", str(args.baseline.resolve())])
-        if args.write_baseline:
-            cmd.extend(["--write-baseline", str(args.write_baseline.resolve())])
-        return run(cmd)
-    if args.subcommand == "import-skill":
-        cmd = [sys.executable, str(ROOT / "scripts" / "import-skill.py"), str(args.source)]
-        if args.name:
-            cmd.extend(["--name", args.name])
-        if args.bundle:
-            cmd.extend(["--bundle", args.bundle])
-        return run(cmd)
-    if args.subcommand == "index":
-        flags = ["--write"] if args.write else ["--check"] if args.check else []
-        return run([sys.executable, str(ROOT / "scripts" / "generate-skill-index.py"), *flags])
-    if args.subcommand == "install":
-        cmd = [str(ROOT / "scripts" / "setup-workspace.sh"), args.language, args.agent]
-        if args.skills_only:
-            cmd.append("--skills-only")
-        if args.copy:
-            cmd.append("--copy")
-        if args.force:
-            cmd.append("--force")
-        if args.dry_run:
-            cmd.append("--dry-run")
-        bundles = list(args.bundle)
-        if args.profile:
-            data = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"]
-            profile = data.get(args.profile)
-            if profile is None:
-                print(f"unknown profile: {args.profile}", file=sys.stderr)
-                return 1
-            bundles.extend(profile.get("bundles", []))
-        for bundle in sorted(set(bundles)):
-            cmd.extend(["--bundle", bundle])
-
-        target = args.target.resolve()
-        if not args.no_verify and not args.dry_run:
-            drift = verify_registry()
-            if drift:
-                print(
-                    f"refusing to install: {len(drift)} skill(s) do not match index.json",
-                    file=sys.stderr,
-                )
-                for name, expected, actual in drift:
-                    print(f"  {name}\n    index    {expected}\n    on disk  {actual}", file=sys.stderr)
-                print(
-                    "\nThe registry has been modified since index.json was generated. Run "
-                    "`agtmls index --write` if the change is yours, or re-clone if it is not.",
-                    file=sys.stderr,
-                )
-                return lockfile.EXIT_INTEGRITY_FAILURE
-
-        rc = run(cmd, cwd=target)
-        if rc != 0 or args.dry_run:
-            return rc
-
-        # Record what landed, so `agtmls verify` has something to check against.
-        index = load_index()
-        installed = installed_skill_names(target, args.agent)
-        payload = lockfile.record(
-            target, ROOT, installed,
-            "copy" if args.copy else "symlink",
-            str(index.get("registry_version", "")),
-            args.agent, skills_dirs(target),
-        )
-        path = lockfile.write(target, payload)
-        print(f"recorded {len(lockfile.entries_for(payload, args.agent))} skill(s) in {path.relative_to(target)}")
-        return 0
-    if args.subcommand == "verify":
-        return verify_install(args.target, args.agent, args.json, args.signatures, args.live)
-    if args.subcommand == "uninstall":
-        return uninstall(args.target, args.agent, args.remove_prompt)
-    if args.subcommand == "propose-skill":
-        return run(
-            [
-                sys.executable,
-                str(ROOT / "scripts" / "propose-skill-from-session.py"),
-                str(args.transcript),
-                "--skill-name",
-                args.skill_name,
-            ]
-        )
-    if args.subcommand == "scaffold-skill":
-        cmd = [sys.executable, str(ROOT / "scripts" / "scaffold-skill.py"), args.name]
-        if args.bundle:
-            cmd.extend(["--bundle", args.bundle])
-        if args.title:
-            cmd.extend(["--title", args.title])
-        return run(cmd)
-    return 2
+    args = build_parser().parse_args()
+    handler = HANDLERS.get(args.subcommand)
+    return handler(args) if handler else 2
 
 
 if __name__ == "__main__":
