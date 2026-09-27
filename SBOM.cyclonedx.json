@@ -1579,7 +1579,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8714fb2600c0e44581928832603e107210fed5516e51368fb5c1e2c30a3fed51"
+          "content": "c3be987e7b5c60b8d26de2ed2188d50931f3a6e017670662fc43fb0264924628"
         }
       ],
       "name": "scripts/_lib/complexity.py",
@@ -1799,7 +1799,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "452947209836ff1e4078e9cdfbadbe0f1f555b6f3a1720b6d208a26f5c3fc1a7"
+          "content": "f63c68ef5c85f38532b6be6f4e7c9052d9dc0b4f6f6c1a4ace2062fbe02f3cef"
         }
       ],
       "name": "scripts/check-complexity.py",
@@ -4321,7 +4321,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T07:55:51Z",
+    "timestamp": "2026-09-27T08:50:41Z",
     "tools": {
       "components": [
         {

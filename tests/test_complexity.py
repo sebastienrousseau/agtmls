@@ -199,6 +199,20 @@ class CheckTests(unittest.TestCase):
         self.assertIn("cyclomatic (13) is now within its ceiling or gone", output)
         self.assertIn("FAIL: 0 regression(s), 1 unrecorded improvement(s)", output)
 
+    def test_another_repository_is_measured_against_its_own_baseline(self) -> None:
+        other = self.tmp / "other"
+        (other / "conformance").mkdir(parents=True)
+        (other / "conformance" / "run.py").write_text(self.BIG, encoding="utf-8")
+        baseline = other / "complexity-baseline.json"
+        args = ("--root", str(other), "--paths", "conformance", "--baseline", str(baseline))
+        code, output = self.run_check(*args)
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: no complexity-baseline.json", output)
+        self.assertEqual(self.run_check(*args, "--write")[0], 0)
+        self.assertIn("conformance/run.py::big", json.loads(baseline.read_text(encoding="utf-8"))["functions"])
+        self.assertEqual(self.run_check(*args)[0], 0)
+        self.assertFalse(self.mod.BASELINE.exists(), "this repository's baseline was written")
+
     def test_a_long_file_and_a_repeated_name_are_recorded_once(self) -> None:
         body = "\n".join(f"v{i} = {i}" for i in range(501)) + "\n" + self.BIG + self.BIG.replace("12", "13")
         self.code.write_text(body, encoding="utf-8")

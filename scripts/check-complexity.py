@@ -11,9 +11,14 @@ when a recorded function improves, the check fails until `--write` records
 the lower number, so a refactor cannot be quietly undone later.
 
 Production code only (`scripts/`, `src/`, `fuzz/`); tests are exempt.
+Another repository can hold its code to the same ceilings with `--root`,
+`--paths` and `--baseline` (agtmls-spec does, from its CI checkout of
+this one).
 
     python3 scripts/check-complexity.py            # check
     python3 scripts/check-complexity.py --write    # record improvements
+    python3 scripts/check-complexity.py --root ../agtmls-spec --paths conformance \\
+        --baseline ../agtmls-spec/complexity-baseline.json
 """
 
 from __future__ import annotations
@@ -31,16 +36,16 @@ BASELINE = ROOT / "complexity-baseline.json"
 SCOPE = ("scripts", "src", "fuzz")
 
 
-def sources(root: Path) -> list[Path]:
-    return sorted(p for top in SCOPE for p in (root / top).rglob("*.py") if "__pycache__" not in p.parts)
+def sources(root: Path, scope: tuple[str, ...] = SCOPE) -> list[Path]:
+    return sorted(p for top in scope for p in (root / top).rglob("*.py") if "__pycache__" not in p.parts)
 
 
-def measure(root: Path) -> dict[str, dict[str, dict[str, float]]]:
+def measure(root: Path, scope: tuple[str, ...] = SCOPE) -> dict[str, dict[str, dict[str, float]]]:
     """{"functions": {"path::name": {metric: value}}, "files": {"path": {"lines": n}}},
     holding only what is over a ceiling."""
     functions: dict[str, dict[str, float]] = {}
     files: dict[str, dict[str, float]] = {}
-    for path in sources(root):
+    for path in sources(root, scope):
         rel = path.relative_to(root).as_posix()
         for fn in complexity.measure_file(path):
             over = fn.over()
@@ -98,18 +103,23 @@ def payload(current: dict) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--write", action="store_true", help="record the current offenders as the baseline")
+    parser.add_argument("--root", type=Path, help="the repository to measure (default: this one)")
+    parser.add_argument("--paths", nargs="+", help=f"directories under the root (default: {' '.join(SCOPE)})")
+    parser.add_argument("--baseline", type=Path, help=f"the baseline file (default: {BASELINE.name} in this one)")
     args = parser.parse_args()
+    root = (args.root or ROOT).resolve()
+    baseline_path = args.baseline or BASELINE
 
-    current = measure(ROOT)
+    current = measure(root, tuple(args.paths or SCOPE))
     if args.write:
-        BASELINE.write_text(json.dumps(payload(current), indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        print(f"wrote {BASELINE.name}: {len(current['functions'])} function(s), "
+        baseline_path.write_text(json.dumps(payload(current), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        print(f"wrote {baseline_path.name}: {len(current['functions'])} function(s), "
               f"{len(current['files'])} file(s) over a ceiling")
         return 0
-    if not BASELINE.exists():
-        print(f"FAIL: no {BASELINE.name}; run check-complexity.py --write")
+    if not baseline_path.exists():
+        print(f"FAIL: no {baseline_path.name}; run check-complexity.py --write")
         return 1
-    baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     regressions, improvements = compare(current, baseline)
     for line in regressions:
         print(f"FAIL: {line}")
