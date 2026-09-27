@@ -175,6 +175,29 @@ class ProviderBranchTests(BrokenTreeCase):
         self.overwrite(self.FILE, "{ not json")
         self.assert_fails(self.SCRIPT, "FAIL: providers.json invalid or missing")
 
+    def test_a_table_of_the_wrong_shape_is_reported_rather_than_raised(self) -> None:
+        """Valid JSON of the wrong shape crashed the validator: a top level
+        that is not an object, native_agents that is not one, and a list
+        where a string is expected (an unhashable value tested against a set)."""
+        self.overwrite(self.FILE, "[]")
+        self.assert_fails(self.SCRIPT, "FAIL: providers.json must be an object")
+        self.overwrite(self.FILE, json.dumps({"schema_version": 1, "native_agents": ["claude"]}))
+        self.assert_fails(self.SCRIPT, "FAIL: native_agents must be an object")
+
+    def test_a_list_where_a_string_belongs_is_reported_rather_than_raised(self) -> None:
+        def damage(data: dict) -> None:
+            claude = data["native_agents"]["claude"]
+            claude["allowed_tools_semantics"] = ["grant"]
+            claude["live_probe"] = {"probe": "claude-init"}
+            claude["approval_settings"][0]["format"] = ["json"]
+        self.edit_json(self.FILE, damage)
+        self.assert_fails(
+            self.SCRIPT,
+            "FAIL: native agent claude allowed_tools_semantics must be grant, declaration or ignored",
+            "FAIL: native agent claude live_probe must be claude-init or codex-prompt-input",
+            "FAIL: native agent claude approval_settings[0] format must be json, toml or yaml",
+        )
+
     def test_an_unknown_schema_version_is_refused(self) -> None:
         self.edit_json(self.FILE, lambda data: data.__setitem__("schema_version", 2))
         self.assert_fails(self.SCRIPT, "FAIL: providers.json schema_version must be 1")

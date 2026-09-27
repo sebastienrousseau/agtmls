@@ -7,6 +7,24 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- `validate-providers.py` crashed, instead of reporting the problem, on a
+  `providers.json` that is valid JSON of the wrong shape: a top level or
+  `native_agents` that is not an object, or a list or object where
+  `allowed_tools_semantics`, `live_probe` or an approval setting's `format`
+  expects a string. Found by running it over every single-field mutation of
+  the real file: 78 of 2,212 crashed; none do now, and no other result
+  changed.
+- Installing a second agent into a target rewrote the lockfile they share,
+  so `claude` installed with the general skills and `codex` with
+  `--bundle noyalib` left `verify claude` reporting the bundle missing.
+  Each entry now names the agents it was installed for (`agents`,
+  agtmls-spec 6.2): an install replaces only its own agent's record, verify
+  and `--live` check only that agent's entries, and uninstall forgets only
+  that agent, removing its copies whatever mode the last install recorded.
+  Lockfiles written before resolve their agents from what is on disk.
+
 ### Added
 
 - A complexity gate, `scripts/check-complexity.py`, holding every function
@@ -34,17 +52,6 @@ All notable changes to AgtMLS are recorded here.
   it, and draft until measured) and `hardening-agent-config` (approval
   modes, scoped permissions, hooks and MCP servers for Claude Code, Codex
   and Aider, checked with `doctor`).
-
-### Fixed
-
-- Installing a second agent into a target rewrote the lockfile they share,
-  so `claude` installed with the general skills and `codex` with
-  `--bundle noyalib` left `verify claude` reporting the bundle missing.
-  Each entry now names the agents it was installed for (`agents`,
-  agtmls-spec 6.2): an install replaces only its own agent's record, verify
-  and `--live` check only that agent's entries, and uninstall forgets only
-  that agent, removing its copies whatever mode the last install recorded.
-  Lockfiles written before resolve their agents from what is on disk.
 
 ## 0.0.16 - 2026-09-26
 

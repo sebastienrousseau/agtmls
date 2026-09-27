@@ -28,9 +28,15 @@ def unsafe(rel: object) -> bool:
     return not isinstance(rel, str) or rel.startswith("/") or ".." in Path(rel).parts
 
 
+def one_of(value: object, allowed: set[str]) -> bool:
+    """`value` is one of `allowed`; a list or object is not, and is not an
+    error to test (it is unhashable, so `in` a set would raise)."""
+    return isinstance(value, str) and value in allowed
+
+
 def approval_entry_problems(where: str, entry: dict) -> list[str]:
     errors = [f"{where} missing {key}" for key in ["file", "scope", "key"] if blank(entry.get(key))]
-    if entry.get("format") not in {"json", "toml", "yaml"}:
+    if not one_of(entry.get("format"), {"json", "toml", "yaml"}):
         errors.append(f"{where} format must be json, toml or yaml")
     if not isinstance(entry.get("unattended"), list) or not entry.get("unattended"):
         errors.append(f"{where} needs the unattended values it recognises")
@@ -57,7 +63,7 @@ def semantics_problems(name: str, semantics: object) -> list[str]:
     # reports escalation per target from this.
     if semantics is None:
         return [f"native agent {name} missing allowed_tools_semantics"]
-    if semantics not in {"grant", "declaration", "ignored"}:
+    if not one_of(semantics, {"grant", "declaration", "ignored"}):
         return [f"native agent {name} allowed_tools_semantics must be grant, declaration or ignored"]
     return []
 
@@ -69,7 +75,7 @@ def discovery_problems(name: str, item: dict) -> list[str]:
     dirs = item.get("user_skills_dirs")
     if not isinstance(dirs, list) or not all(isinstance(d, str) and d for d in dirs):
         errors.append(f"native agent {name} user_skills_dirs must be a list of paths")
-    if "live_probe" in item and item["live_probe"] not in {"claude-init", "codex-prompt-input"}:
+    if "live_probe" in item and not one_of(item["live_probe"], {"claude-init", "codex-prompt-input"}):
         errors.append(f"native agent {name} live_probe must be claude-init or codex-prompt-input")
     return errors
 
@@ -88,7 +94,9 @@ def native_agent_problems(name: str, item: object) -> list[str]:
     return errors + discovery_problems(name, item)
 
 
-def native_problems(native: dict) -> list[str]:
+def native_problems(native: object) -> list[str]:
+    if not isinstance(native, dict):
+        return ["native_agents must be an object"]
     errors = [] if set(native) == NATIVE else [f"native_agents must be exactly {sorted(NATIVE)}"]
     return errors + [e for name, item in native.items() for e in native_agent_problems(name, item)]
 
@@ -142,6 +150,9 @@ def main() -> int:
         data = json.loads(PROVIDERS.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError) as exc:
         print(f"FAIL: providers.json invalid or missing: {exc}")
+        return 1
+    if not isinstance(data, dict):
+        print("FAIL: providers.json must be an object")
         return 1
     errors = [] if data.get("schema_version") == 1 else ["providers.json schema_version must be 1"]
     native = data.get("native_agents", {})
