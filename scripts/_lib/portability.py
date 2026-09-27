@@ -64,33 +64,39 @@ def claude_only(text: str) -> list[tuple[int, str]]:
     return sorted(found)
 
 
+def _body_problem(text: str) -> list[str]:
+    tokens = len(body(text)) // CHARS_PER_TOKEN
+    if tokens <= MAX_BODY_TOKENS:
+        return []
+    return [(f"SKILL.md body is about {tokens} tokens; keep it under {MAX_BODY_TOKENS} "
+             "and move detail into a reference file")]
+
+
+def _chains(path: Path, content: str, root: Path, rel: str) -> list[str]:
+    """Links from a reference file to another reference inside the skill."""
+    found = []
+    for target in LINK.findall(content):
+        if SCHEME.match(target):
+            continue  # a URL, not a file in the skill
+        linked = (path.parent / target).resolve()
+        if linked.suffix == ".md" and linked.name != "SKILL.md" and linked.is_relative_to(root):
+            found.append(f"{rel} links to {linked.relative_to(root).as_posix()}: "
+                         "keep references one level deep from SKILL.md")
+    return found
+
+
 def problems(skill_dir: Path) -> list[str]:
     """Every portability problem in one skill directory, as messages."""
-    errors: list[str] = []
     skill_md = skill_dir / "SKILL.md"
     text = skill_md.read_text(encoding="utf-8", errors="replace")
-    tokens = len(body(text)) // CHARS_PER_TOKEN
-    if tokens > MAX_BODY_TOKENS:
-        errors.append(
-            f"SKILL.md body is about {tokens} tokens; keep it under {MAX_BODY_TOKENS} "
-            "and move detail into a reference file"
-        )
+    errors = _body_problem(text)
     root = skill_dir.resolve()
     for path in sorted(p for p in skill_dir.rglob("*.md") if p.is_file()):
         rel = path.relative_to(skill_dir).as_posix()
         content = text if path == skill_md else path.read_text(encoding="utf-8", errors="replace")
         errors += [f"{rel}:{line}: {what}" for line, what in claude_only(content)]
-        if path == skill_md:
-            continue
-        for target in LINK.findall(content):
-            if SCHEME.match(target):
-                continue  # a URL, not a file in the skill
-            linked = (path.parent / target).resolve()
-            if linked.suffix == ".md" and linked.name != "SKILL.md" and linked.is_relative_to(root):
-                errors.append(
-                    f"{rel} links to {linked.relative_to(root).as_posix()}: "
-                    "keep references one level deep from SKILL.md"
-                )
+        if path != skill_md:
+            errors += _chains(path, content, root, rel)
     return list(dict.fromkeys(errors))  # a construct repeated on one line is one problem
 
 

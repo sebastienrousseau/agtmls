@@ -34,20 +34,9 @@ def _unquote(value: str) -> str:
     return value
 
 
-def _find(lines: list[str]) -> tuple[int, str, list[int]] | str | None:
-    """(key line, kind, item lines) for the top-level `read:`, None when
-    there is none, or a reason string when it cannot be edited safely."""
-    keys = [number for number, line in enumerate(lines) if KEY.match(line)]
-    if not keys:
-        return None
-    if len(keys) > 1:
-        return "it has more than one top-level `read:` key"
-    start = keys[0]
-    value = KEY.match(lines[start]).group("value")
-    if value.startswith("["):
-        return (start, "flow", []) if value.endswith("]") else "its `read:` flow list spans lines"
-    if value:
-        return start, "scalar", []
+def _block_items(lines: list[str], start: int) -> list[int] | str:
+    """The `- <file>` item lines under a block `read:` at `start`, or why
+    they cannot be edited safely."""
     items = []
     for number in range(start + 1, len(lines)):
         line = lines[number]
@@ -55,11 +44,27 @@ def _find(lines: list[str]) -> tuple[int, str, list[int]] | str | None:
             continue
         if ITEM.match(line):
             items.append(number)
-            continue
-        if line[0] in " \t":
+        elif line[0] in " \t":
             return "its `read:` list holds something other than `- <file>` items"
-        break
-    return start, "block", items
+        else:
+            break
+    return items
+
+
+def _find(lines: list[str]) -> tuple[int, str, list[int]] | str | None:
+    """(key line, kind, item lines) for the top-level `read:`, None when
+    there is none, or a reason string when it cannot be edited safely."""
+    keys = [number for number, line in enumerate(lines) if KEY.match(line)]
+    if len(keys) != 1:
+        return "it has more than one top-level `read:` key" if keys else None
+    start = keys[0]
+    value = KEY.match(lines[start]).group("value")
+    if value.startswith("["):
+        return (start, "flow", []) if value.endswith("]") else "its `read:` flow list spans lines"
+    if value:
+        return start, "scalar", []
+    items = _block_items(lines, start)
+    return items if isinstance(items, str) else (start, "block", items)
 
 
 def _flow_items(value: str) -> list[str]:
@@ -106,24 +111,27 @@ def register(text: str, name: str) -> tuple[str | None, str]:
     return "\n".join(lines) + "\n", f"added {name} to read:"
 
 
+def _drop_block_items(lines: list[str], start: int, items: list[int], name: str) -> None:
+    ours = [number for number in items if _unquote(ITEM.match(lines[number]).group("value")) == name]
+    for number in reversed(ours):
+        del lines[number]
+    if len(ours) == len(items):
+        del lines[start]
+
+
 def unregister(text: str, name: str) -> tuple[str | None, bool]:
     """(new text, or None when the file should go; whether anything changed)."""
     if not listed(text, name):
         return text, False
     lines = text.splitlines()
     start, kind, items = _find(lines)
-    value = KEY.match(lines[start]).group("value")
     if kind == "flow":
-        rest = [entry for entry in _flow_items(value) if entry != name]
+        rest = [entry for entry in _flow_items(KEY.match(lines[start]).group("value")) if entry != name]
         lines[start : start + 1] = [f"read: [{', '.join(rest)}]"] if rest else []
     elif kind == "scalar":
         del lines[start]
     else:
-        ours = [number for number in items if _unquote(ITEM.match(lines[number]).group("value")) == name]
-        for number in reversed(ours):
-            del lines[number]
-        if len(ours) == len(items):
-            del lines[start]
+        _drop_block_items(lines, start, items, name)
     remaining = "\n".join(lines).strip()
     return (remaining + "\n" if remaining else None), True
 

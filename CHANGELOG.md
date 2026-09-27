@@ -9,6 +9,17 @@ All notable changes to AgtMLS are recorded here.
 
 ### Added
 
+- A complexity gate, `scripts/check-complexity.py`, holding every function
+  in `scripts/`, `src/` and `fuzz/` to cyclomatic 10, cognitive 15,
+  Halstead difficulty 30 and 60 lines, and every file to 500 lines. The
+  metrics are measured with the standard library (`scripts/_lib/complexity.py`):
+  cyclomatic agrees with radon on all 502 functions it was compared on,
+  cognitive with complexipy on 87% (it also counts a `lambda`'s body), and
+  Halstead counts every token, so Python 3.10, 3.12 and 3.14 measure the
+  same. The 66 functions and 2 files already over a ceiling are recorded
+  in `complexity-baseline.json`; none may get worse, nothing may join
+  them, and an improvement must be recorded. Seven functions written in
+  recent releases were brought under every ceiling.
 - A skill's `metadata.json` may list `antigravity` in `supported_agents`.
   The validator kept its own list of claude, codex and aider after
   Antigravity became an install target; it now reads the native agents

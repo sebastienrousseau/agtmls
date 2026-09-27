@@ -20,6 +20,7 @@
     "validate-cli-surface.py",
     "validate-system-prompts.py",
     "check-skill-collisions.py",
+    "check-complexity.py",
     "validate-eval-cases.py",
     "sync-spec-rules.py --check",
     "validate-security-claims.py",

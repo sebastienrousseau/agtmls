@@ -37,6 +37,15 @@ def native_agents() -> dict[str, tuple[str, str]]:
     }
 
 
+def _report_setting(agent: str, s, reporter: Reporter) -> None:
+    """One setting that changes whether the agent asks before a tool runs."""
+    where = f"{s.path} ({s.scope}) sets {s.key} = {s.value}"
+    if s.unattended:
+        reporter.warn(f"{agent} runs tools without asking: {where}; every skill's safety_policy is advisory while it does")
+    elif s.classified:
+        reporter.ok(f"{agent} approves tools by classifier: {where}; calls are judged by a safety classifier rather than asked of you")
+
+
 def approval_posture(agent: str, target: Path, reporter: Reporter, home: Path | None = None) -> None:
     """Report whether the agent asks before a tool runs, from its own settings.
 
@@ -50,19 +59,9 @@ def approval_posture(agent: str, target: Path, reporter: Reporter, home: Path | 
         reporter.ok(f"{agent}: approval settings are not known to AgtMLS; check the agent's own documentation")
         return
     found = posture.settings(item, target, home)
-    unattended = [s for s in found if s.unattended]
-    for s in unattended:
-        reporter.warn(
-            f"{agent} runs tools without asking: {s.path} ({s.scope}) sets {s.key} = {s.value}; "
-            "every skill's safety_policy is advisory while it does"
-        )
-    classified = [s for s in found if s.classified]
-    for s in classified:
-        reporter.ok(
-            f"{agent} approves tools by classifier: {s.path} ({s.scope}) sets {s.key} = {s.value}; "
-            "calls are judged by a safety classifier rather than asked of you"
-        )
-    if not unattended and not classified:
+    for s in found:
+        _report_setting(agent, s, reporter)
+    if not any(s.unattended or s.classified for s in found):
         checked = ", ".join(dict.fromkeys(entry["file"] for entry in item["approval_settings"]))
         reporter.ok(f"{agent} asks before tools run: no approval setting switches it off (checked {checked})")
 

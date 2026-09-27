@@ -12,6 +12,8 @@ every state an install can leave it in.
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import os
 import shutil
@@ -201,6 +203,16 @@ class DoctorTargetTests(ScriptCase):
         self.assertEqual(code, 0, output)
         self.assertIn("OK   claude asks before tools run: no approval setting switches it off "
                       "(checked .claude/settings.local.json, .claude/settings.json, ~/.claude/settings.json)", output)
+
+    def test_a_setting_that_still_asks_is_neither_a_warning_nor_a_classifier(self) -> None:
+        """acceptEdits auto-approves file edits but still asks before a command."""
+        self.write(self.target, ".claude/settings.json", '{"permissions": {"defaultMode": "acceptEdits"}}')
+        r = self.module.Reporter()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.module.approval_posture("claude", self.target, r, self.home)
+        self.assertEqual(r.warnings, 0, out.getvalue())
+        self.assertIn("claude asks before tools run: no approval setting switches it off", out.getvalue())
+        self.assertNotIn("classifier", out.getvalue())
 
     def test_bypass_permissions_in_any_scope_is_a_warning_naming_the_file(self) -> None:
         self.install()
