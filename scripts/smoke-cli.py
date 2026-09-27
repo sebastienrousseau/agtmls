@@ -25,84 +25,66 @@ def run(args: list[str]) -> subprocess.CompletedProcess[str]:
     )
 
 
+def text_check(label: str, args: list[str], *needles: str):
+    """Exit 0, with every needle in the output."""
+    def check() -> list[str]:
+        out = run(args)
+        if out.returncode == 0 and all(needle in out.stdout for needle in needles):
+            return []
+        return [f"{label} failed:\n{out.stdout}"]
+    return check
+
+
+def json_check(label: str, args: list[str], accept, wrong: str):
+    """Output that parses as JSON and that `accept` takes; `wrong` names
+    what was expected, with the payload in place of `{payload}`."""
+    def check() -> list[str]:
+        out = run(args)
+        try:
+            payload = json.loads(out.stdout)
+        except json.JSONDecodeError as exc:
+            return [f"{label} invalid: {exc}\n{out.stdout}"]
+        return [] if accept(payload) else [wrong.format(payload=payload)]
+    return check
+
+
+def must_fail(label: str, args: list[str]):
+    def check() -> list[str]:
+        return [label] if run(args).returncode == 0 else []
+    return check
+
+
+def checks(skill_count: int) -> list:
+    """Every smoke check, in the order it runs and reports."""
+    n = skill_count
+    return [
+        text_check("list skills", ["list"], "general/cross-language-port"),
+        text_check("list commands", ["list", "commands"], "command/agtmls"),
+        text_check("search yaml", ["search", "yaml"], "yaml-domain-reference"),
+        text_check("show skill", ["show", "cross-language-port"], "skill: cross-language-port"),
+        json_check("show command JSON", ["show", "agtmls", "--json"],
+                   lambda p: p.get("entry_type") == "command" and p.get("name") == "agtmls",
+                   "show command JSON wrong payload: {payload}"),
+        text_check("stats", ["stats"], f"skills: {n}", f"routing coverage: {n}/{n}"),
+        json_check("stats JSON", ["stats", "--json"],
+                   lambda p: p.get("skills") == n and p.get("coverage", {}).get("behavioral", {}).get("covered") == n,
+                   "stats JSON wrong payload: {payload}"),
+        text_check("profiles", ["profiles"], "noyalib", "polyglot"),
+        text_check("providers", ["providers"], "native/codex", "export/openai"),
+        text_check("audit", ["audit", "--all", "--strict"], "Zero security or steganography findings detected"),
+        json_check("diff JSON", ["diff", "--from", "index.json", "--to", "index.json", "--json"],
+                   lambda p: p == {"added": [], "changed": [], "removed": []},
+                   "diff against self should be empty: {payload}"),
+        must_fail("show missing entry should fail", ["show", "does-not-exist"]),
+        json_check("search JSON", ["search", "yaml", "--json"],
+                   lambda p: any(item.get("name") == "yaml-domain-reference" for item in p),
+                   "search JSON missing yaml-domain-reference: {payload}"),
+    ]
+
+
 def main() -> int:
-    errors: list[str] = []
     index = json.loads((ROOT / "index.json").read_text(encoding="utf-8"))
-    skill_count = index["skill_count"]
-
-    list_skills = run(["list"])
-    if list_skills.returncode != 0 or "general/cross-language-port" not in list_skills.stdout:
-        errors.append(f"list skills failed:\n{list_skills.stdout}")
-
-    list_commands = run(["list", "commands"])
-    if list_commands.returncode != 0 or "command/agtmls" not in list_commands.stdout:
-        errors.append(f"list commands failed:\n{list_commands.stdout}")
-
-    search = run(["search", "yaml"])
-    if search.returncode != 0 or "yaml-domain-reference" not in search.stdout:
-        errors.append(f"search yaml failed:\n{search.stdout}")
-
-    show = run(["show", "cross-language-port"])
-    if show.returncode != 0 or "skill: cross-language-port" not in show.stdout:
-        errors.append(f"show skill failed:\n{show.stdout}")
-
-    show_json = run(["show", "agtmls", "--json"])
-    try:
-        payload = json.loads(show_json.stdout)
-    except json.JSONDecodeError as exc:
-        errors.append(f"show command JSON invalid: {exc}\n{show_json.stdout}")
-    else:
-        if payload.get("entry_type") != "command" or payload.get("name") != "agtmls":
-            errors.append(f"show command JSON wrong payload: {payload}")
-
-    stats = run(["stats"])
-    if stats.returncode != 0 or f"skills: {skill_count}" not in stats.stdout or f"routing coverage: {skill_count}/{skill_count}" not in stats.stdout:
-        errors.append(f"stats failed:\n{stats.stdout}")
-
-    stats_json = run(["stats", "--json"])
-    try:
-        payload = json.loads(stats_json.stdout)
-    except json.JSONDecodeError as exc:
-        errors.append(f"stats JSON invalid: {exc}\n{stats_json.stdout}")
-    else:
-        if payload.get("skills") != skill_count or payload.get("coverage", {}).get("behavioral", {}).get("covered") != skill_count:
-            errors.append(f"stats JSON wrong payload: {payload}")
-
-
-    profiles = run(["profiles"])
-    if profiles.returncode != 0 or "noyalib" not in profiles.stdout or "polyglot" not in profiles.stdout:
-        errors.append(f"profiles failed:\n{profiles.stdout}")
-
-    providers = run(["providers"])
-    if providers.returncode != 0 or "native/codex" not in providers.stdout or "export/openai" not in providers.stdout:
-        errors.append(f"providers failed:\n{providers.stdout}")
-
-    audit = run(["audit", "--all", "--strict"])
-    if audit.returncode != 0 or "Zero security or steganography findings detected" not in audit.stdout:
-        errors.append(f"audit failed:\n{audit.stdout}")
-
-    diff = run(["diff", "--from", "index.json", "--to", "index.json", "--json"])
-    try:
-        payload = json.loads(diff.stdout)
-    except json.JSONDecodeError as exc:
-        errors.append(f"diff JSON invalid: {exc}\n{diff.stdout}")
-    else:
-        if payload != {"added": [], "changed": [], "removed": []}:
-            errors.append(f"diff against self should be empty: {payload}")
-
-    missing = run(["show", "does-not-exist"])
-    if missing.returncode == 0:
-        errors.append("show missing entry should fail")
-
-    search_json = run(["search", "yaml", "--json"])
-    try:
-        payload = json.loads(search_json.stdout)
-    except json.JSONDecodeError as exc:
-        errors.append(f"search JSON invalid: {exc}\n{search_json.stdout}")
-    else:
-        if not any(item.get("name") == "yaml-domain-reference" for item in payload):
-            errors.append(f"search JSON missing yaml-domain-reference: {payload}")
-
+    errors = [error for check in checks(index["skill_count"]) for error in check()]
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
