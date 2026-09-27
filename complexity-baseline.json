@@ -123,12 +123,6 @@
       "cognitive": 29,
       "cyclomatic": 14
     },
-    "scripts/smoke-cli.py::main": {
-      "cognitive": 40,
-      "cyclomatic": 38,
-      "halstead": 31.8,
-      "lines": 71
-    },
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
     },

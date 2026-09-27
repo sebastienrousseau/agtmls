@@ -2250,7 +2250,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c4a23faed54079305c3a46b39cf47114bb720092ce06ed1ebb61996ae2d94412"
+          "content": "0b5456dbb171e84ae95f961fb05882a1fa73e33b28da84c1c8558390d5caaaee"
         }
       ],
       "name": "scripts/smoke-cli.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T18:28:12Z",
+    "timestamp": "2026-09-27T19:21:56Z",
     "tools": {
       "components": [
         {
