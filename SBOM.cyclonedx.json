@@ -1564,6 +1564,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/cli_args.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6c018944e446415e690bfc4eba0d4caa5f8259dd5f28c78bd17290bfd0f681ed"
+        }
+      ],
+      "name": "scripts/_lib/cli_args.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/cli_parser.py",
       "hashes": [
         {
@@ -1744,7 +1755,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6fc82d2f21e4c2ed446fee4639e9c501b2ac82eb7fcb82216daf155725afa2f4"
+          "content": "f35f48c5b7d29b161b5798c9d58a440e4910b409578767d2fb6b5bd45d401237"
         }
       ],
       "name": "scripts/_lib/verify_report.py",
@@ -1777,7 +1788,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ee44c0a94d4eec09c854c8471eaedb49e3d1b74e65e22719f9ade186f3d308df"
+          "content": "57eebc58a1df681688d5ef1ea984e5b953f120eb435ef9e0eca06afb4e19c0b3"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -4343,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T14:16:24Z",
+    "timestamp": "2026-09-27T14:39:20Z",
     "tools": {
       "components": [
         {

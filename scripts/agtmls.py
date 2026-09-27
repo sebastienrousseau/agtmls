@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib import (  # noqa: E402  (needs ROOT on the path first)
+    cli_args,
     lockfile,
     uninstall_steps,
     verify_report,
@@ -133,26 +134,23 @@ def load_index() -> dict[str, object]:
     return json.loads((ROOT / "index.json").read_text(encoding="utf-8"))
 
 
+def print_rows(items: list[dict], json_output: bool, line) -> int:
+    """`items` as JSON, or one `line(item)` each."""
+    if json_output:
+        print(json.dumps(items, indent=2, sort_keys=True))
+    else:
+        for item in items:
+            print(line(item))
+    return 0
+
+
 def list_entries(kind: str, bundle: str | None, json_output: bool) -> int:
     index = load_index()
     if kind == "commands":
-        entries = index.get("commands", [])
-        if json_output:
-            print(json.dumps(entries, indent=2, sort_keys=True))
-            return 0
-        for command in entries:
-            print(f"command/{command['name']}  {command['description']}")
-        return 0
-    skills = index["skills"]
-    if bundle:
-        skills = [skill for skill in skills if (skill["bundle"] or "_general") == bundle]
-    if json_output:
-        print(json.dumps(skills, indent=2, sort_keys=True))
-        return 0
-    for skill in skills:
-        prefix = skill["bundle"] or "general"
-        print(f"{prefix}/{skill['name']}  {', '.join(skill['tags'])}")
-    return 0
+        return print_rows(index.get("commands", []), json_output,
+                          lambda c: f"command/{c['name']}  {c['description']}")
+    skills = [s for s in index["skills"] if not bundle or (s["bundle"] or "_general") == bundle]
+    return print_rows(skills, json_output, lambda s: f"{s['bundle'] or 'general'}/{s['name']}  {', '.join(s['tags'])}")
 
 
 def all_entries(index: dict[str, object]) -> list[dict[str, object]]:
@@ -170,23 +168,17 @@ def all_entries(index: dict[str, object]) -> list[dict[str, object]]:
 
 def search_entries(query: str, json_output: bool) -> int:
     terms = [term.lower() for term in query.split() if term.strip()]
-    entries = []
-    for entry in all_entries(load_index()):
-        haystack = " ".join(
-            str(entry.get(key, ""))
-            for key in ["name", "description", "bundle", "path", "tags", "entry_type"]
-        ).lower()
-        if all(term in haystack for term in terms):
-            entries.append(entry)
-    if json_output:
-        print(json.dumps(entries, indent=2, sort_keys=True))
-        return 0
-    for entry in entries:
-        prefix = entry["entry_type"]
-        if entry["entry_type"] == "skill":
-            prefix = entry.get("bundle") or "general"
-        print(f"{prefix}/{entry['name']}  {entry.get('description', '')}")
-    return 0
+    fields = ["name", "description", "bundle", "path", "tags", "entry_type"]
+    entries = [
+        entry for entry in all_entries(load_index())
+        if all(term in " ".join(str(entry.get(key, "")) for key in fields).lower() for term in terms)
+    ]
+
+    def line(entry: dict) -> str:
+        prefix = (entry.get("bundle") or "general") if entry["entry_type"] == "skill" else entry["entry_type"]
+        return f"{prefix}/{entry['name']}  {entry.get('description', '')}"
+
+    return print_rows(entries, json_output, line)
 
 
 def show_entry(name: str, json_output: bool) -> int:
@@ -319,39 +311,6 @@ def live_check(target: Path, agent: str) -> dict:
             "missing": [name for name in expected if name not in loaded]}
 
 
-def trust_statuses(require_signed: bool) -> tuple[str, str]:
-    """(index signature, advisory feed) status: `verified`, `bad_signature`,
-    `unsigned`, or `not checked` / `absent` when there is nothing to check.
-    Raises signatures.ToolMissing when ssh-keygen is needed and missing."""
-    from _lib import signatures
-
-    index_status = (
-        signatures.verify(ROOT / "index.json", ROOT / "index.json.sig", ROOT / "ALLOWED_SIGNERS",
-                          signatures.INDEX_NAMESPACE)
-        if require_signed else "not checked"
-    )
-    feed_path = ROOT / "advisories.json"
-    feed_status = (
-        signatures.verify(feed_path, ROOT / "advisories.json.sig", ROOT / "ALLOWED_SIGNERS",
-                          signatures.ADVISORY_NAMESPACE)
-        if feed_path.exists() else "absent"
-    )
-    return index_status, feed_status
-
-
-def revocations(target: Path, feed_status: str) -> tuple[list[tuple[str, str, list[str]]], list[str]]:
-    """(installed skills a verified feed revokes, notes). An unsigned feed is
-    not consulted, and says so."""
-    from _lib import advisories
-
-    if feed_status == "verified":
-        feed = json.loads((ROOT / "advisories.json").read_text(encoding="utf-8"))
-        return advisories.revoked(feed, lockfile.read(target) or {}), []
-    if feed_status == "unsigned":
-        return [], ["advisories.json is not signed; not consulted"]
-    return [], []
-
-
 def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False,
                    live: bool = False) -> int:
     """Check an installed tree against its lockfile, the index signature and
@@ -367,11 +326,11 @@ def verify_install(target: Path, agent: str, json_output: bool, require_signed: 
     dot, _ = agent_paths(agent)
     problems = lockfile.verify(target, target / dot / "skills", agent)
     try:
-        statuses = trust_statuses(require_signed)
+        statuses = verify_report.trust_statuses(ROOT, require_signed)
     except signatures.ToolMissing as exc:
         print(f"error: {exc}", file=sys.stderr)
         return lockfile.EXIT_ERROR
-    hits, notes = revocations(target, statuses[1])
+    hits, notes = verify_report.revocations(ROOT, target, statuses[1])
     integrity = [p for p in problems if p[1] != "unmanaged"]
     code = verify_report.verify_code(statuses, integrity, hits, require_signed)
 
@@ -397,24 +356,6 @@ def script(name: str, *argv: str) -> list[str]:
     return [sys.executable, str(ROOT / "scripts" / name), *argv]
 
 
-def option(cmd: list[str], flag: str, value: object) -> None:
-    """Forward `flag value` when a value was given."""
-    if value:
-        cmd.extend([flag, str(value)])
-
-
-def repeated(cmd: list[str], flag: str, values: list) -> None:
-    """Forward `flag value` once per value."""
-    for value in values:
-        cmd.extend([flag, str(value)])
-
-
-def switch(cmd: list[str], flag: str, on: bool) -> None:
-    """Forward a flag that takes no value."""
-    if on:
-        cmd.append(flag)
-
-
 def write_or_check(name: str):
     """A generator subcommand: `--write`, `--check`, or neither."""
     def handler(args) -> int:
@@ -428,114 +369,102 @@ def doctor_command(args) -> int:
     # The doctor runs with the registry as its working directory, so a
     # relative target must be resolved here, against the caller's:
     # `doctor --target .` from a wheel inspected the registry itself.
-    option(cmd, "--target", args.target and args.target.resolve())
-    option(cmd, "--agent", args.agent)
-    switch(cmd, "--skills-only", args.skills_only)
-    switch(cmd, "--installed", args.installed)
-    repeated(cmd, "--bundle", args.bundle)
+    cli_args.option(cmd, "--target", args.target and args.target.resolve())
+    cli_args.option(cmd, "--agent", args.agent)
+    cli_args.switch(cmd, "--skills-only", args.skills_only)
+    cli_args.switch(cmd, "--installed", args.installed)
+    cli_args.repeated(cmd, "--bundle", args.bundle)
     return run(cmd)
 
 
 def export_command(args) -> int:
     cmd = script("export-registry.py", "--provider", args.provider)
-    option(cmd, "--profile", args.profile)
-    repeated(cmd, "--bundle", args.bundle)
-    option(cmd, "--out-dir", args.out_dir)
+    cli_args.option(cmd, "--profile", args.profile)
+    cli_args.repeated(cmd, "--bundle", args.bundle)
+    cli_args.option(cmd, "--out-dir", args.out_dir)
     return run(cmd)
 
 
 def release_pack_command(args) -> int:
     cmd = script("release-pack.py")
-    option(cmd, "--out-dir", args.out_dir)
-    option(cmd, "--profile", args.profile)
-    repeated(cmd, "--provider", args.provider)
+    cli_args.option(cmd, "--out-dir", args.out_dir)
+    cli_args.option(cmd, "--profile", args.profile)
+    cli_args.repeated(cmd, "--provider", args.provider)
     return run(cmd)
 
 
 def next_version_command(args) -> int:
     cmd = script("next-version.py")
-    switch(cmd, "--tag", args.tag)
-    switch(cmd, "--json", args.json)
+    cli_args.switch(cmd, "--tag", args.tag)
+    cli_args.switch(cmd, "--json", args.json)
     return run(cmd)
 
 
 def bump_version_command(args) -> int:
     cmd = script("bump-version.py")
-    option(cmd, "--version", args.version)
-    option(cmd, "--date", args.date)
-    switch(cmd, "--check", args.check)
+    cli_args.option(cmd, "--version", args.version)
+    cli_args.option(cmd, "--date", args.date)
+    cli_args.switch(cmd, "--check", args.check)
     return run(cmd)
 
 
 def release_dry_run_command(args) -> int:
     cmd = script("release-dry-run.py")
-    option(cmd, "--version", args.version)
-    switch(cmd, "--skip-check", args.skip_check)
-    option(cmd, "--profile", args.profile)
-    repeated(cmd, "--provider", args.provider)
+    cli_args.option(cmd, "--version", args.version)
+    cli_args.switch(cmd, "--skip-check", args.skip_check)
+    cli_args.option(cmd, "--profile", args.profile)
+    cli_args.repeated(cmd, "--provider", args.provider)
     return run(cmd)
 
 
 def verify_release_assets_command(args) -> int:
     cmd = script("verify-release-assets.py", "--tag", args.tag)
-    option(cmd, "--repo", args.repo)
-    option(cmd, "--out-dir", args.out_dir)
+    cli_args.option(cmd, "--repo", args.repo)
+    cli_args.option(cmd, "--out-dir", args.out_dir)
     return run(cmd)
 
 
 def evidence_command(args) -> int:
     cmd = script("record-evidence.py", "--skill", args.skill, "--outcome", args.outcome)
-    repeated(cmd, "--command", args.evidence_commands)
-    repeated(cmd, "--file", args.file)
+    cli_args.repeated(cmd, "--command", args.evidence_commands)
+    cli_args.repeated(cmd, "--file", args.file)
     return run(cmd)
 
 
 def provider_install_command(args) -> int:
     cmd = script("provider-install.py", "--provider", args.provider, "--target", str(args.target))
-    option(cmd, "--profile", args.profile)
-    switch(cmd, "--check", args.check)
+    cli_args.option(cmd, "--profile", args.profile)
+    cli_args.switch(cmd, "--check", args.check)
     return run(cmd)
-
-
-def callers_path(spec: str) -> str:
-    """A path the caller typed, made absolute; anything else as given."""
-    return str(Path(spec).resolve()) if Path(spec).exists() else spec
 
 
 def diff_command(args) -> int:
     # registry-diff runs from the checkout, so a relative path the caller
     # typed would be looked up there. Revision specs pass through as-is.
-    cmd = script("registry-diff.py", "--from", callers_path(args.old))
-    option(cmd, "--to", args.new and callers_path(args.new))
-    switch(cmd, "--json", args.json)
+    cmd = script("registry-diff.py", "--from", cli_args.callers_path(args.old))
+    cli_args.option(cmd, "--to", args.new and cli_args.callers_path(args.new))
+    cli_args.switch(cmd, "--json", args.json)
     return run(cmd)
-
-
-def foreign_target(target: str) -> str:
-    """A path is the caller's; a URL@sha is passed through as given."""
-    if "@" not in target or Path(target).exists():
-        return str(Path(target).resolve())
-    return target
 
 
 def audit_command(args) -> int:
     cmd = script("audit-skill.py")
     if args.path:
         cmd.append(str(args.path))
-    switch(cmd, "--all", args.all)
-    option(cmd, "--foreign", args.foreign and foreign_target(args.foreign))
-    switch(cmd, "--strict", args.strict)
-    switch(cmd, "--pedantic", args.pedantic)
-    option(cmd, "--format", (args.format or args.json) and (args.format or "json"))
-    option(cmd, "--baseline", args.baseline and args.baseline.resolve())
-    option(cmd, "--write-baseline", args.write_baseline and args.write_baseline.resolve())
+    cli_args.switch(cmd, "--all", args.all)
+    cli_args.option(cmd, "--foreign", args.foreign and cli_args.foreign_target(args.foreign))
+    cli_args.switch(cmd, "--strict", args.strict)
+    cli_args.switch(cmd, "--pedantic", args.pedantic)
+    cli_args.option(cmd, "--format", (args.format or args.json) and (args.format or "json"))
+    cli_args.option(cmd, "--baseline", args.baseline and args.baseline.resolve())
+    cli_args.option(cmd, "--write-baseline", args.write_baseline and args.write_baseline.resolve())
     return run(cmd)
 
 
 def import_skill_command(args) -> int:
     cmd = script("import-skill.py", str(args.source))
-    option(cmd, "--name", args.name)
-    option(cmd, "--bundle", args.bundle)
+    cli_args.option(cmd, "--name", args.name)
+    cli_args.option(cmd, "--bundle", args.bundle)
     return run(cmd)
 
 
@@ -587,11 +516,11 @@ def install_command(args) -> int:
     cmd = [str(ROOT / "scripts" / "setup-workspace.sh"), args.language, args.agent]
     for flag, on in (("--skills-only", args.skills_only), ("--copy", args.copy),
                      ("--force", args.force), ("--dry-run", args.dry_run)):
-        switch(cmd, flag, on)
+        cli_args.switch(cmd, flag, on)
     bundles = install_bundles(args)
     if bundles is None:
         return 1
-    repeated(cmd, "--bundle", bundles)
+    cli_args.repeated(cmd, "--bundle", bundles)
     target = args.target.resolve()
     refused = None if args.no_verify or args.dry_run else refuse_drift()
     if refused is not None:
@@ -604,8 +533,8 @@ def install_command(args) -> int:
 
 def scaffold_skill_command(args) -> int:
     cmd = script("scaffold-skill.py", args.name)
-    option(cmd, "--bundle", args.bundle)
-    option(cmd, "--title", args.title)
+    cli_args.option(cmd, "--bundle", args.bundle)
+    cli_args.option(cmd, "--title", args.title)
     return run(cmd)
 
 

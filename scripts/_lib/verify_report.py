@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 # SPDX-License-Identifier: Apache-2.0 OR MIT
-"""What `agtmls verify` concludes and prints (agtmls-spec 6, 9 and 11).
+"""What `agtmls verify` checks, concludes and prints (agtmls-spec 6, 9 and 11).
 
-The checks themselves live in scripts/agtmls.py, which gathers the lockfile
-problems, the signature statuses, the revocations and the live result; this
-decides the exit code from them and reports them as JSON or as text.
+scripts/agtmls.py gathers the lockfile problems and the live result; this
+reads the index signature and advisory feed of the registry at `root`,
+decides the exit code from all of them, and reports them as JSON or text.
 """
 
 from __future__ import annotations
@@ -14,6 +14,39 @@ import sys
 from pathlib import Path
 
 from _lib import lockfile
+
+
+def trust_statuses(root: Path, require_signed: bool) -> tuple[str, str]:
+    """(index signature, advisory feed) status: `verified`, `bad_signature`,
+    `unsigned`, or `not checked` / `absent` when there is nothing to check.
+    Raises signatures.ToolMissing when ssh-keygen is needed and missing."""
+    from _lib import signatures
+
+    index_status = (
+        signatures.verify(root / "index.json", root / "index.json.sig", root / "ALLOWED_SIGNERS",
+                          signatures.INDEX_NAMESPACE)
+        if require_signed else "not checked"
+    )
+    feed_path = root / "advisories.json"
+    feed_status = (
+        signatures.verify(feed_path, root / "advisories.json.sig", root / "ALLOWED_SIGNERS",
+                          signatures.ADVISORY_NAMESPACE)
+        if feed_path.exists() else "absent"
+    )
+    return index_status, feed_status
+
+
+def revocations(root: Path, target: Path, feed_status: str) -> tuple[list[tuple[str, str, list[str]]], list[str]]:
+    """(installed skills a verified feed revokes, notes). An unsigned feed is
+    not consulted, and says so."""
+    from _lib import advisories
+
+    if feed_status == "verified":
+        feed = json.loads((root / "advisories.json").read_text(encoding="utf-8"))
+        return advisories.revoked(feed, lockfile.read(target) or {}), []
+    if feed_status == "unsigned":
+        return [], ["advisories.json is not signed; not consulted"]
+    return [], []
 
 
 def verify_code(statuses: tuple[str, str], integrity: list, hits: list, require_signed: bool) -> int:

@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-27T14:16:23Z",
+    "created": "2026-09-27T14:39:20Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -2285,6 +2285,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-cli-args.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "add3a5e7d52842a7229a6f87955142ba76bc26c5"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6c018944e446415e690bfc4eba0d4caa5f8259dd5f28c78bd17290bfd0f681ed"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/cli_args.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-cli-parser.py",
       "checksums": [
         {
@@ -2545,11 +2561,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "97c07bdb672af611c11edf70577c39976acc2516"
+          "checksumValue": "544222e7903e0849141c13109ac4bc500b4faec5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6fc82d2f21e4c2ed446fee4639e9c501b2ac82eb7fcb82216daf155725afa2f4"
+          "checksumValue": "f35f48c5b7d29b161b5798c9d58a440e4910b409578767d2fb6b5bd45d401237"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2593,11 +2609,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "2002479455a43a7c85da371d6191b556e8b6ea09"
+          "checksumValue": "eed162fb216fc2d389fc8c7baff1a4769ea042d0"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ee44c0a94d4eec09c854c8471eaedb49e3d1b74e65e22719f9ade186f3d308df"
+          "checksumValue": "57eebc58a1df681688d5ef1ea984e5b953f120eb435ef9e0eca06afb4e19c0b3"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6458,6 +6474,7 @@
         "SPDXRef-File-scripts--lib-analyzer.py",
         "SPDXRef-File-scripts--lib-attestations.py",
         "SPDXRef-File-scripts--lib-checksums.py",
+        "SPDXRef-File-scripts--lib-cli-args.py",
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-complexity.py",
         "SPDXRef-File-scripts--lib-covered.py",
