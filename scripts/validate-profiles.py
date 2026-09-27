@@ -73,7 +73,14 @@ def root_problems(data: dict) -> tuple[list[str], dict]:
 
 
 def main() -> int:
-    data = json.loads(PROFILES.read_text(encoding="utf-8"))
+    try:
+        data = json.loads(PROFILES.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as exc:
+        print(f"FAIL: profiles.json invalid or missing: {exc}")
+        return 1
+    if not isinstance(data, dict):
+        print("FAIL: profiles.json must be an object")
+        return 1
     skills, members, bundles = index_sets(json.loads(INDEX.read_text(encoding="utf-8")))
     errors, profiles = root_problems(data)
     resolved: dict[frozenset[str], str] = {}

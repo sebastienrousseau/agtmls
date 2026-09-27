@@ -354,6 +354,19 @@ class ProfileBranchTests(BrokenTreeCase):
     def minimal(self, mutate):
         return lambda data: mutate(data["profiles"]["minimal"])
 
+    def test_a_missing_table_is_reported_rather_than_raised(self) -> None:
+        self.remove(self.FILE)
+        self.assert_fails(self.SCRIPT, "FAIL: profiles.json invalid or missing")
+
+    def test_malformed_json_is_reported_rather_than_raised(self) -> None:
+        self.overwrite(self.FILE, "{ not json")
+        self.assert_fails(self.SCRIPT, "FAIL: profiles.json invalid or missing")
+
+    def test_a_table_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        """Valid JSON that is not an object crashed the validator on .get()."""
+        self.overwrite(self.FILE, "[]")
+        self.assert_fails(self.SCRIPT, "FAIL: profiles.json must be an object")
+
     def test_an_unknown_schema_version_is_refused(self) -> None:
         self.edit_json(self.FILE, lambda data: data.__setitem__("schema_version", 2))
         self.assert_fails(self.SCRIPT, "FAIL: profiles.json schema_version must be 1")
