@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "7ecbd8f9e52b4da302a31f8fc0ac8a68108e8f460fa9f9c31e93b13eb82b5fd2"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "420904c8ef914921c5cef8e77416a1dce3af2ba5e44fe8854d7026c2d985caa8"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "a533bc7b2afc99bb9eb28d8c169e22ac2b2a100fb57b3c808b9f5b0cbed02476"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5665335bd31b4d73ab51f47d5c7ee26408a8c7bde5452475e10fa29ff09a14de"
+      },
+      "name": "authoring-portable-skills"
+    }
+  ]
+}

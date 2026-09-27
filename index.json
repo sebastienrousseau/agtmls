@@ -1,6 +1,6 @@
 {
   "bundles": {
-    "_general": 13,
+    "_general": 16,
     "engineering": 1,
     "loops": 1,
     "noyalib": 14,
@@ -32,24 +32,24 @@
   ],
   "coverage": {
     "behavioral": {
-      "covered": 31,
-      "total": 31
+      "covered": 34,
+      "total": 34
     },
     "routing": {
-      "covered": 31,
-      "total": 31
+      "covered": 34,
+      "total": 34
     }
   },
   "description": "Agent Multiple Listing Service skill registry",
   "generated_by": "scripts/generate-skill-index.py",
   "name": "agtmls",
   "quality": {
-    "average_score": 100,
-    "total": 31
+    "average_score": 99,
+    "total": 34
   },
   "registry_version": "0.0.16",
   "schema_version": 1,
-  "skill_count": 31,
+  "skill_count": 34,
   "skills": [
     {
       "allowed_tools": [
@@ -240,6 +240,70 @@
         "docs",
         "release",
         "review"
+      ]
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Use when writing or editing a SKILL.md that more than one agent will read (Claude Code, Codex, Antigravity, Cursor, Copilot, Gemini CLI, OpenCode). Keeps the shared file to what every agent honours, sizes the body, checks it with validate-skills.py and the agents themselves, and requires evidence before calling it hardened. Not for choosing what a skill should teach.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "integrity": "sha256:5665335bd31b4d73ab51f47d5c7ee26408a8c7bde5452475e10fa29ff09a14de",
+      "kind": "general",
+      "last_changed_version": "0.0.16",
+      "license": "MIT",
+      "maturity": "draft",
+      "metadata_path": "skills/authoring-portable-skills/metadata.json",
+      "name": "authoring-portable-skills",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/authoring-portable-skills",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": false,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 7,
+        "score": 88,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "low",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "docs",
+        "validation"
       ]
     },
     {
@@ -498,6 +562,70 @@
       "tags": [
         "continuity",
         "validation"
+      ]
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Use when setting up or reviewing a coding agent's configuration in a repository or a home directory: approval modes, permission rules, hooks, MCP servers and where each setting lives, for Claude Code, Codex, Aider and Antigravity. Also when agtmls doctor warns that an agent runs tools without asking. Not for vetting a third-party skill (vetting-a-skill-before-install).",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "integrity": "sha256:39bffe75e94c5b945d4ca9640368bdc7e5e2b9dcb1b50758246b14c1526c987e",
+      "kind": "general",
+      "last_changed_version": "0.0.16",
+      "license": "MIT",
+      "maturity": "draft",
+      "metadata_path": "skills/hardening-agent-config/metadata.json",
+      "name": "hardening-agent-config",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/hardening-agent-config",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": false,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 7,
+        "score": 88,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "none",
+        "requires_human_review": true,
+        "risk_level": "medium",
+        "writes_files": true
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "config",
+        "review"
       ]
     },
     {
@@ -1936,6 +2064,70 @@
         "porting",
         "qa",
         "validation"
+      ]
+    },
+    {
+      "allowed_tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Bash",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "assets": [],
+      "bundle": null,
+      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
+      "description": "Use before installing, importing or enabling a third-party skill, plugin, marketplace or skills repository in Claude Code, Codex, Antigravity, Cursor or any agent. Pins the source to a commit, audits every skill and the agent configuration it ships, reads what the audit could not cover, and ends in install, mirror or refuse. Not for auditing this registry's own skills.",
+      "evals": {
+        "behavioral": true,
+        "routing": true
+      },
+      "integrity": "sha256:2319b3ac15789b8507683351ad198e70da7825ae1c4e84ec4cce1e007a7310b3",
+      "kind": "general",
+      "last_changed_version": "0.0.16",
+      "license": "MIT",
+      "maturity": "draft",
+      "metadata_path": "skills/vetting-a-skill-before-install/metadata.json",
+      "name": "vetting-a-skill-before-install",
+      "owner": "Sebastien Rousseau",
+      "path": "skills/vetting-a-skill-before-install",
+      "quality": {
+        "checks": {
+          "behavioral_eval": true,
+          "description": true,
+          "maturity": false,
+          "metadata": true,
+          "references": true,
+          "routing_eval": true,
+          "safety_policy": true,
+          "supported_agents": true
+        },
+        "passed": 7,
+        "score": 88,
+        "total": 8
+      },
+      "references": [
+        "reference.md"
+      ],
+      "required_tools": [],
+      "safety_policy": {
+        "executes_commands": true,
+        "handles_secrets": false,
+        "network_access": "optional",
+        "requires_human_review": true,
+        "risk_level": "medium",
+        "writes_files": false
+      },
+      "scripts": [],
+      "supported_agents": [
+        "claude",
+        "codex",
+        "aider"
+      ],
+      "tags": [
+        "config",
+        "porting"
       ]
     },
     {

@@ -22,6 +22,13 @@
       "uri": "agtmls://skill/anti-slop-pr-and-writing"
     },
     {
+      "description": "Use when writing or editing a SKILL.md that more than one agent will read (Claude Code, Codex, Antigravity, Cursor, Copilot, Gemini CLI, OpenCode). Keeps the shared file to what every agent honours, sizes the body, checks it with validate-skills.py and the agents themselves, and requires evidence before calling it hardened. Not for choosing what a skill should teach.",
+      "mimeType": "text/markdown",
+      "name": "authoring-portable-skills",
+      "path": "skills/authoring-portable-skills/SKILL.md",
+      "uri": "agtmls://skill/authoring-portable-skills"
+    },
+    {
       "description": "Turn a vague request into a specification before any plan or code exists. Load when an ask is underspecified, when a feature request arrives with no acceptance criteria, or when you notice you are guessing at what someone wants. Surfaces the decisions, constraints, and deliberate non-goals by asking rather than assuming. Not for diagnosing a defect.",
       "mimeType": "text/markdown",
       "name": "brainstorming",
@@ -48,6 +55,13 @@
       "name": "handoff",
       "path": "skills/handoff/SKILL.md",
       "uri": "agtmls://skill/handoff"
+    },
+    {
+      "description": "Use when setting up or reviewing a coding agent's configuration in a repository or a home directory: approval modes, permission rules, hooks, MCP servers and where each setting lives, for Claude Code, Codex, Aider and Antigravity. Also when agtmls doctor warns that an agent runs tools without asking. Not for vetting a third-party skill (vetting-a-skill-before-install).",
+      "mimeType": "text/markdown",
+      "name": "hardening-agent-config",
+      "path": "skills/hardening-agent-config/SKILL.md",
+      "uri": "agtmls://skill/hardening-agent-config"
     },
     {
       "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
@@ -195,6 +209,13 @@
       "name": "verification-before-completion",
       "path": "skills/verification-before-completion/SKILL.md",
       "uri": "agtmls://skill/verification-before-completion"
+    },
+    {
+      "description": "Use before installing, importing or enabling a third-party skill, plugin, marketplace or skills repository in Claude Code, Codex, Antigravity, Cursor or any agent. Pins the source to a commit, audits every skill and the agent configuration it ships, reads what the audit could not cover, and ends in install, mirror or refuse. Not for auditing this registry's own skills.",
+      "mimeType": "text/markdown",
+      "name": "vetting-a-skill-before-install",
+      "path": "skills/vetting-a-skill-before-install/SKILL.md",
+      "uri": "agtmls://skill/vetting-a-skill-before-install"
     },
     {
       "description": "Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.",

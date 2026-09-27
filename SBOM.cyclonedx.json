@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e5ee8a0a4bb11f29a2a1ea29aa8c6d014e07aedda009de25cc50b70639ee6286"
+          "content": "33f391501b7315263f7950c410303f80431e1efb87d8cde4b189f76cca1dc732"
         }
       ],
       "name": "CATALOG.md",
@@ -211,6 +211,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/authoring-portable-skills.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "72398534609f829231c05c1ba0ce41fe35d918057e8c238b613466aebe8d69cb"
+        }
+      ],
+      "name": "evals/behavioral/cases/authoring-portable-skills.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "evals/behavioral/cases/brainstorming.json",
       "hashes": [
         {
@@ -252,6 +263,17 @@
         }
       ],
       "name": "evals/behavioral/cases/handoff.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/behavioral/cases/hardening-agent-config.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f56760092303fec37235c960163514cc96d4853bfde72753851eacafe99dcc9f"
+        }
+      ],
+      "name": "evals/behavioral/cases/hardening-agent-config.json",
       "type": "file"
     },
     {
@@ -486,6 +508,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "evals/behavioral/cases/vetting-a-skill-before-install.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "32844d3458bf25f151a880a9e2ca2aa655675813a19f4678bfd188fc1ecdd4c6"
+        }
+      ],
+      "name": "evals/behavioral/cases/vetting-a-skill-before-install.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "evals/behavioral/cases/web-research-and-source-triage.json",
       "hashes": [
         {
@@ -552,6 +585,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "evals/cases/authoring-portable-skills.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ed1c4bb1fb91bf0bd1710162c7870c19642ca520849a326a2f350687bb4ce208"
+        }
+      ],
+      "name": "evals/cases/authoring-portable-skills.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "evals/cases/brainstorming.json",
       "hashes": [
         {
@@ -593,6 +637,17 @@
         }
       ],
       "name": "evals/cases/handoff.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/cases/hardening-agent-config.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "971f6819d28e7197842eb3f0ab0a9919d5464f739f5c350bfdf60f333d3fa52a"
+        }
+      ],
+      "name": "evals/cases/hardening-agent-config.json",
       "type": "file"
     },
     {
@@ -827,6 +882,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "evals/cases/vetting-a-skill-before-install.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0b5c55513c49cf8c9be5590c34498e29fb6d9be7116facfc881852fbcf14d916"
+        }
+      ],
+      "name": "evals/cases/vetting-a-skill-before-install.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "evals/cases/web-research-and-source-triage.json",
       "hashes": [
         {
@@ -886,7 +952,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d4192dcae6fce0e9b5ab2e9158687f897dc6c3d0a7d05c08fafdffb7ee84dda9"
+          "content": "d78ee3f6105c6327f32d99a9320e79171ed7113010412c9c60df74f9ec3579e7"
         }
       ],
       "name": "index.json",
@@ -2785,6 +2851,39 @@
       "type": "file"
     },
     {
+      "bom-ref": "skills/authoring-portable-skills/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7ecbd8f9e52b4da302a31f8fc0ac8a68108e8f460fa9f9c31e93b13eb82b5fd2"
+        }
+      ],
+      "name": "skills/authoring-portable-skills/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/authoring-portable-skills/metadata.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "420904c8ef914921c5cef8e77416a1dce3af2ba5e44fe8854d7026c2d985caa8"
+        }
+      ],
+      "name": "skills/authoring-portable-skills/metadata.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/authoring-portable-skills/reference.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a533bc7b2afc99bb9eb28d8c169e22ac2b2a100fb57b3c808b9f5b0cbed02476"
+        }
+      ],
+      "name": "skills/authoring-portable-skills/reference.md",
+      "type": "file"
+    },
+    {
       "bom-ref": "skills/brainstorming/SKILL.md",
       "hashes": [
         {
@@ -3577,6 +3676,39 @@
       "type": "file"
     },
     {
+      "bom-ref": "skills/hardening-agent-config/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eb9038f8f3b4a268702d762bb5786f1b11a9c1b7f0a74ac0d5dceeb93dc1d96c"
+        }
+      ],
+      "name": "skills/hardening-agent-config/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/hardening-agent-config/metadata.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5e424c4f1a325895c1497707fc6a374a13c69e1c034059a419d4b201d45adebd"
+        }
+      ],
+      "name": "skills/hardening-agent-config/metadata.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/hardening-agent-config/reference.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eb0559d4c11974e714a5eac30263fb3983f7d5e2174af3c9afb5ffd047ba65cd"
+        }
+      ],
+      "name": "skills/hardening-agent-config/reference.md",
+      "type": "file"
+    },
+    {
       "bom-ref": "skills/incident-response/SKILL.md",
       "hashes": [
         {
@@ -3838,6 +3970,39 @@
         }
       ],
       "name": "skills/verification-before-completion/reference.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/vetting-a-skill-before-install/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a81e5ff1a7d32da095cf9ca9bf354c69a3be7bf313c051326db52a4bd2b0eb8d"
+        }
+      ],
+      "name": "skills/vetting-a-skill-before-install/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/vetting-a-skill-before-install/metadata.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+        }
+      ],
+      "name": "skills/vetting-a-skill-before-install/metadata.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "skills/vetting-a-skill-before-install/reference.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "965d84428f7159d45d602120418227fa7b2eed3986901a4d43a929a4940631e6"
+        }
+      ],
+      "name": "skills/vetting-a-skill-before-install/reference.md",
       "type": "file"
     },
     {
@@ -4134,7 +4299,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-26T23:19:27Z",
+    "timestamp": "2026-09-27T01:22:27Z",
     "tools": {
       "components": [
         {

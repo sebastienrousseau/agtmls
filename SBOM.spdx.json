@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-26T23:19:27Z",
+    "created": "2026-09-27T01:22:27Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -33,11 +33,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "90de006c16b6621e22fcd363800fd70d794785c7"
+          "checksumValue": "d872ed209c07948ab251c867a001ddf2a49d544b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e5ee8a0a4bb11f29a2a1ea29aa8c6d014e07aedda009de25cc50b70639ee6286"
+          "checksumValue": "33f391501b7315263f7950c410303f80431e1efb87d8cde4b189f76cca1dc732"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -317,6 +317,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-evals-behavioral-cases-authoring-portable-skills.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f83bfbf2fc0ac6cfc67830b3aa322b1ecca35487"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "72398534609f829231c05c1ba0ce41fe35d918057e8c238b613466aebe8d69cb"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/behavioral/cases/authoring-portable-skills.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-evals-behavioral-cases-brainstorming.json",
       "checksums": [
         {
@@ -378,6 +394,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./evals/behavioral/cases/handoff.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-behavioral-cases-hardening-agent-config.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c58abe6515e413d3af4254d8f2548103da217e7e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f56760092303fec37235c960163514cc96d4853bfde72753851eacafe99dcc9f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/behavioral/cases/hardening-agent-config.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -717,6 +749,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-evals-behavioral-cases-vetting-a-skill-before-install.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "ea45ceab03a0d1a46f212a1185fb2f1d96184172"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32844d3458bf25f151a880a9e2ca2aa655675813a19f4678bfd188fc1ecdd4c6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/behavioral/cases/vetting-a-skill-before-install.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-evals-behavioral-cases-web-research-and-source-triage.json",
       "checksums": [
         {
@@ -813,6 +861,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-evals-cases-authoring-portable-skills.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "91f1ceafce58cb2e0f36768aee5dc00d1a333b7b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed1c4bb1fb91bf0bd1710162c7870c19642ca520849a326a2f350687bb4ce208"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/cases/authoring-portable-skills.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-evals-cases-brainstorming.json",
       "checksums": [
         {
@@ -874,6 +938,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./evals/cases/handoff.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-cases-hardening-agent-config.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "79d79285b68714715d292d014140218b01aae7e3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "971f6819d28e7197842eb3f0ab0a9919d5464f739f5c350bfdf60f333d3fa52a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/cases/hardening-agent-config.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1213,6 +1293,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-evals-cases-vetting-a-skill-before-install.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "45df7a0e4df30e2ae76aef6f6b9719ffef14524c"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0b5c55513c49cf8c9be5590c34498e29fb6d9be7116facfc881852fbcf14d916"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/cases/vetting-a-skill-before-install.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-evals-cases-web-research-and-source-triage.json",
       "checksums": [
         {
@@ -1297,11 +1393,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9026b033995f4a8c51fab760d9e45f0fb922afe7"
+          "checksumValue": "c2a97d8bf72fe55c88271375f6e88fdc9d89b4a6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "d4192dcae6fce0e9b5ab2e9158687f897dc6c3d0a7d05c08fafdffb7ee84dda9"
+          "checksumValue": "d78ee3f6105c6327f32d99a9320e79171ed7113010412c9c60df74f9ec3579e7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4061,6 +4157,54 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-skills-authoring-portable-skills-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b0c8e558b05f843f9026216240ec7761a3b23a98"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7ecbd8f9e52b4da302a31f8fc0ac8a68108e8f460fa9f9c31e93b13eb82b5fd2"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/authoring-portable-skills/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-authoring-portable-skills-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "53938dc5b6c1454ed1e70e291447046e646aa4e5"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "420904c8ef914921c5cef8e77416a1dce3af2ba5e44fe8854d7026c2d985caa8"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/authoring-portable-skills/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-authoring-portable-skills-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "067e1fbde5fd1a4d1009943caa6181b46c603a5e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a533bc7b2afc99bb9eb28d8c169e22ac2b2a100fb57b3c808b9f5b0cbed02476"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/authoring-portable-skills/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-skills-brainstorming-SKILL.md",
       "checksums": [
         {
@@ -5213,6 +5357,54 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f16276c4a854af4d6c6257a64e613793e4726383"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eb9038f8f3b4a268702d762bb5786f1b11a9c1b7f0a74ac0d5dceeb93dc1d96c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/hardening-agent-config/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "38c60fdefc99709a4e01f646feab54b5bf5d6850"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5e424c4f1a325895c1497707fc6a374a13c69e1c034059a419d4b201d45adebd"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/hardening-agent-config/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e1a9a91a5ec6e15f097e3f08d3478ed79a3262e9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "eb0559d4c11974e714a5eac30263fb3983f7d5e2174af3c9afb5ffd047ba65cd"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/hardening-agent-config/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-skills-incident-response-SKILL.md",
       "checksums": [
         {
@@ -5594,6 +5786,54 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./skills/verification-before-completion/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-vetting-a-skill-before-install-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3b064620004cb4e531967f92ba62eb268a8899e0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a81e5ff1a7d32da095cf9ca9bf354c69a3be7bf313c051326db52a4bd2b0eb8d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/vetting-a-skill-before-install/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-vetting-a-skill-before-install-metadata.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6b93d9b5bab20a8a9ebc32eb3badf7ae58bdfb22"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/vetting-a-skill-before-install/metadata.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-skills-vetting-a-skill-before-install-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "28b8edd122fcf641f3024a92ba36ff7c3a648fa0"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "965d84428f7159d45d602120418227fa7b2eed3986901a4d43a929a4940631e6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./skills/vetting-a-skill-before-install/reference.md",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -6031,10 +6271,12 @@
         "SPDXRef-File-evals-behavioral-cases-agent-loop-design.json",
         "SPDXRef-File-evals-behavioral-cases-ai-supply-chain-security.json",
         "SPDXRef-File-evals-behavioral-cases-anti-slop-pr-and-writing.json",
+        "SPDXRef-File-evals-behavioral-cases-authoring-portable-skills.json",
         "SPDXRef-File-evals-behavioral-cases-brainstorming.json",
         "SPDXRef-File-evals-behavioral-cases-cross-language-port.json",
         "SPDXRef-File-evals-behavioral-cases-giving-code-review.json",
         "SPDXRef-File-evals-behavioral-cases-handoff.json",
+        "SPDXRef-File-evals-behavioral-cases-hardening-agent-config.json",
         "SPDXRef-File-evals-behavioral-cases-incident-response.json",
         "SPDXRef-File-evals-behavioral-cases-noyalib-architecture-contract.json",
         "SPDXRef-File-evals-behavioral-cases-noyalib-build-and-env.json",
@@ -6056,16 +6298,19 @@
         "SPDXRef-File-evals-behavioral-cases-test-driven-development.json",
         "SPDXRef-File-evals-behavioral-cases-using-agtmls.json",
         "SPDXRef-File-evals-behavioral-cases-verification-before-completion.json",
+        "SPDXRef-File-evals-behavioral-cases-vetting-a-skill-before-install.json",
         "SPDXRef-File-evals-behavioral-cases-web-research-and-source-triage.json",
         "SPDXRef-File-evals-behavioral-cases-writing-plans.json",
         "SPDXRef-File-evals-behavioral-cases-yaml-domain-reference.json",
         "SPDXRef-File-evals-cases-agent-loop-design.json",
         "SPDXRef-File-evals-cases-ai-supply-chain-security.json",
         "SPDXRef-File-evals-cases-anti-slop-pr-and-writing.json",
+        "SPDXRef-File-evals-cases-authoring-portable-skills.json",
         "SPDXRef-File-evals-cases-brainstorming.json",
         "SPDXRef-File-evals-cases-cross-language-port.json",
         "SPDXRef-File-evals-cases-giving-code-review.json",
         "SPDXRef-File-evals-cases-handoff.json",
+        "SPDXRef-File-evals-cases-hardening-agent-config.json",
         "SPDXRef-File-evals-cases-incident-response.json",
         "SPDXRef-File-evals-cases-noyalib-architecture-contract.json",
         "SPDXRef-File-evals-cases-noyalib-build-and-env.json",
@@ -6087,6 +6332,7 @@
         "SPDXRef-File-evals-cases-test-driven-development.json",
         "SPDXRef-File-evals-cases-using-agtmls.json",
         "SPDXRef-File-evals-cases-verification-before-completion.json",
+        "SPDXRef-File-evals-cases-vetting-a-skill-before-install.json",
         "SPDXRef-File-evals-cases-web-research-and-source-triage.json",
         "SPDXRef-File-evals-cases-writing-plans.json",
         "SPDXRef-File-evals-cases-yaml-domain-reference.json",
@@ -6265,6 +6511,9 @@
         "SPDXRef-File-skills-anti-slop-pr-and-writing-SKILL.md",
         "SPDXRef-File-skills-anti-slop-pr-and-writing-metadata.json",
         "SPDXRef-File-skills-anti-slop-pr-and-writing-reference.md",
+        "SPDXRef-File-skills-authoring-portable-skills-SKILL.md",
+        "SPDXRef-File-skills-authoring-portable-skills-metadata.json",
+        "SPDXRef-File-skills-authoring-portable-skills-reference.md",
         "SPDXRef-File-skills-brainstorming-SKILL.md",
         "SPDXRef-File-skills-brainstorming-metadata.json",
         "SPDXRef-File-skills-brainstorming-reference.md",
@@ -6337,6 +6586,9 @@
         "SPDXRef-File-skills-handoff-SKILL.md",
         "SPDXRef-File-skills-handoff-metadata.json",
         "SPDXRef-File-skills-handoff-reference.md",
+        "SPDXRef-File-skills-hardening-agent-config-SKILL.md",
+        "SPDXRef-File-skills-hardening-agent-config-metadata.json",
+        "SPDXRef-File-skills-hardening-agent-config-reference.md",
         "SPDXRef-File-skills-incident-response-SKILL.md",
         "SPDXRef-File-skills-incident-response-metadata.json",
         "SPDXRef-File-skills-incident-response-reference.md",
@@ -6361,6 +6613,9 @@
         "SPDXRef-File-skills-verification-before-completion-SKILL.md",
         "SPDXRef-File-skills-verification-before-completion-metadata.json",
         "SPDXRef-File-skills-verification-before-completion-reference.md",
+        "SPDXRef-File-skills-vetting-a-skill-before-install-SKILL.md",
+        "SPDXRef-File-skills-vetting-a-skill-before-install-metadata.json",
+        "SPDXRef-File-skills-vetting-a-skill-before-install-reference.md",
         "SPDXRef-File-skills-web-research-and-source-triage-SKILL.md",
         "SPDXRef-File-skills-web-research-and-source-triage-metadata.json",
         "SPDXRef-File-skills-web-research-and-source-triage-reference.md",

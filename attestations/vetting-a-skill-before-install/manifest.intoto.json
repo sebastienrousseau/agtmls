@@ -1,0 +1,35 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "digest_algorithm": "agtmls-skill-digest-v1",
+    "files": [
+      {
+        "digest": {
+          "sha256": "a81e5ff1a7d32da095cf9ca9bf354c69a3be7bf313c051326db52a4bd2b0eb8d"
+        },
+        "path": "SKILL.md"
+      },
+      {
+        "digest": {
+          "sha256": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+        },
+        "path": "metadata.json"
+      },
+      {
+        "digest": {
+          "sha256": "965d84428f7159d45d602120418227fa7b2eed3986901a4d43a929a4940631e6"
+        },
+        "path": "reference.md"
+      }
+    ]
+  },
+  "predicateType": "https://agtmls.dev/manifest/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2319b3ac15789b8507683351ad198e70da7825ae1c4e84ec4cce1e007a7310b3"
+      },
+      "name": "vetting-a-skill-before-install"
+    }
+  ]
+}

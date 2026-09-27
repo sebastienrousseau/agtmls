@@ -1,0 +1,13 @@
+{
+  "skill": "hardening-agent-config",
+  "positive": [
+    "review our .claude/settings.json permissions and hooks",
+    "doctor warns that codex runs tools without asking",
+    "harden the agent configuration in this repository",
+    "which approval mode and sandbox settings should Codex use"
+  ],
+  "negative": [
+    "port this code to Rust",
+    "write release notes for the tag"
+  ]
+}

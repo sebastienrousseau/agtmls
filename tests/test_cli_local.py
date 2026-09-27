@@ -668,7 +668,7 @@ class QueryTests(CliFixture):
         self.assertIn(f"skills: {len(SKILLS)}\n", output)
         self.assertIn(f"bundle/general: {len(GENERAL)}\n", output)
         self.assertIn("bundle/noyalib: 1\n", output)
-        self.assertIn("quality: 100\n", output)
+        self.assertIn(f"quality: {self.index()['quality']['average_score']}\n", output)
         routing = self.index()["coverage"]["routing"]
         self.assertIn(f"routing coverage: {routing['covered']}/{routing['total']}\n", output)
 

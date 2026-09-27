@@ -1,0 +1,26 @@
+{
+  "skill": "vetting-a-skill-before-install",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "40-hex commit",
+      "agtmls audit --foreign",
+      "NOT AUDITED",
+      "Install",
+      "Mirror",
+      "Refuse"
+    ],
+    "reference_contains": [
+      "Red flags",
+      "Worked outcomes"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "install the latest",
+      "stars are a good sign"
+    ]
+  }
+}

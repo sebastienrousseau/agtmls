@@ -219,7 +219,7 @@ entry written before `agents` existed counts for every agent, and the next
 
 ```
 $ agtmls verify claude --target /path/to/repo
-OK: 13 skill(s) match the lockfile in /path/to/repo
+OK: 16 skill(s) match the lockfile in /path/to/repo
 ```
 
 | Status | Meaning | Exit |

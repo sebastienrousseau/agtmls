@@ -1,0 +1,13 @@
+{
+  "skill": "vetting-a-skill-before-install",
+  "positive": [
+    "can I trust this skills repository before I install it",
+    "vet this third-party plugin before we enable it in Claude Code",
+    "audit a marketplace of skills before installing it",
+    "should we install this skill pack from GitHub"
+  ],
+  "negative": [
+    "write a new skill for our release process",
+    "explain YAML merge keys"
+  ]
+}
