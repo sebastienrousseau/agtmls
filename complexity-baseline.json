@@ -1,0 +1,305 @@
+{
+  "ceilings": {
+    "cognitive": 15,
+    "cyclomatic": 10,
+    "file_lines": 500,
+    "halstead": 30.0,
+    "lines": 60
+  },
+  "files": {
+    "scripts/_lib/analyzer.py": {
+      "lines": 888
+    },
+    "scripts/agtmls.py": {
+      "lines": 629
+    }
+  },
+  "functions": {
+    "scripts/_lib/advisories.py::feed_problems": {
+      "cognitive": 36,
+      "cyclomatic": 21
+    },
+    "scripts/_lib/advisories.py::revoked": {
+      "cognitive": 17,
+      "cyclomatic": 11
+    },
+    "scripts/_lib/analyzer.py::_declared_skills": {
+      "cognitive": 29,
+      "cyclomatic": 15
+    },
+    "scripts/_lib/analyzer.py::check_steganography": {
+      "cognitive": 40,
+      "cyclomatic": 18
+    },
+    "scripts/_lib/analyzer.py::decode_json_escapes": {
+      "cognitive": 25,
+      "cyclomatic": 13,
+      "halstead": 37.5
+    },
+    "scripts/_lib/analyzer.py::foreign_coverage": {
+      "cognitive": 42,
+      "cyclomatic": 29
+    },
+    "scripts/_lib/analyzer.py::scan_rules": {
+      "cognitive": 31,
+      "cyclomatic": 12
+    },
+    "scripts/_lib/analyzer.py::subdivision_flags": {
+      "halstead": 36.4
+    },
+    "scripts/_lib/cli_parser.py::build_parser": {
+      "lines": 160
+    },
+    "scripts/_lib/scaling.py::scaling": {
+      "cognitive": 19,
+      "cyclomatic": 13,
+      "lines": 68
+    },
+    "scripts/agtmls-doctor.py::main": {
+      "cognitive": 129,
+      "cyclomatic": 49,
+      "halstead": 33.3,
+      "lines": 141
+    },
+    "scripts/agtmls.py::list_entries": {
+      "cyclomatic": 11
+    },
+    "scripts/agtmls.py::main": {
+      "cognitive": 181,
+      "cyclomatic": 104,
+      "halstead": 52.9,
+      "lines": 228
+    },
+    "scripts/agtmls.py::search_entries": {
+      "cyclomatic": 11
+    },
+    "scripts/agtmls.py::uninstall": {
+      "cognitive": 61,
+      "cyclomatic": 33,
+      "halstead": 43.9,
+      "lines": 75
+    },
+    "scripts/agtmls.py::verify_install": {
+      "cognitive": 47,
+      "cyclomatic": 39,
+      "halstead": 42.4,
+      "lines": 80
+    },
+    "scripts/audit-skill.py::foreign_audit": {
+      "cognitive": 47,
+      "cyclomatic": 27
+    },
+    "scripts/audit-skill.py::main": {
+      "cognitive": 63,
+      "cyclomatic": 47,
+      "halstead": 36.1,
+      "lines": 83
+    },
+    "scripts/bench.py::main": {
+      "cognitive": 32,
+      "cyclomatic": 22,
+      "halstead": 30.7,
+      "lines": 109
+    },
+    "scripts/check-publishing-readiness.py::check": {
+      "cyclomatic": 12
+    },
+    "scripts/check-skill-collisions.py::main": {
+      "cognitive": 18,
+      "cyclomatic": 15
+    },
+    "scripts/generate-benchmarks-doc.py::main": {
+      "cognitive": 25,
+      "cyclomatic": 15
+    },
+    "scripts/generate-plugin-manifests.py::main": {
+      "cognitive": 17,
+      "cyclomatic": 13
+    },
+    "scripts/generate-plugin-manifests.py::render": {
+      "lines": 74
+    },
+    "scripts/generate-skill-index.py::collect": {
+      "cognitive": 21,
+      "cyclomatic": 17,
+      "lines": 89
+    },
+    "scripts/generate-skill-index.py::parse_frontmatter": {
+      "cognitive": 19,
+      "cyclomatic": 11
+    },
+    "scripts/generate-skill-manifests.py::main": {
+      "cyclomatic": 12
+    },
+    "scripts/import-skill.py::main": {
+      "cognitive": 19,
+      "cyclomatic": 13,
+      "lines": 86
+    },
+    "scripts/release-audit.py::audit_provenance": {
+      "cognitive": 33,
+      "cyclomatic": 25,
+      "halstead": 38.7
+    },
+    "scripts/release-dry-run.py::main": {
+      "cyclomatic": 14
+    },
+    "scripts/release-preflight.py::check_tag": {
+      "cyclomatic": 12
+    },
+    "scripts/run-all-checks.py::main": {
+      "cognitive": 17,
+      "cyclomatic": 11,
+      "lines": 61
+    },
+    "scripts/run-behavioral-evals.py::main": {
+      "cognitive": 23,
+      "cyclomatic": 14
+    },
+    "scripts/run-security-evals.py::main": {
+      "cognitive": 48,
+      "cyclomatic": 30,
+      "halstead": 31.3,
+      "lines": 69
+    },
+    "scripts/run-trigger-evals.py::main": {
+      "cognitive": 29,
+      "cyclomatic": 14
+    },
+    "scripts/smoke-cli.py::main": {
+      "cognitive": 40,
+      "cyclomatic": 38,
+      "halstead": 31.8,
+      "lines": 71
+    },
+    "scripts/smoke-export.py::check_archive": {
+      "cyclomatic": 13
+    },
+    "scripts/smoke-install-safety.py::main": {
+      "cognitive": 21,
+      "cyclomatic": 21,
+      "halstead": 31.7,
+      "lines": 64
+    },
+    "scripts/smoke-install-verify.py::main": {
+      "cognitive": 27,
+      "cyclomatic": 21,
+      "halstead": 36.1,
+      "lines": 72
+    },
+    "scripts/smoke-make-install.py::main": {
+      "cognitive": 23,
+      "cyclomatic": 16,
+      "lines": 63
+    },
+    "scripts/smoke-scaffold.py::main": {
+      "cyclomatic": 12,
+      "lines": 61
+    },
+    "scripts/sync-spec-rules.py::main": {
+      "cognitive": 18
+    },
+    "scripts/sync-spec-rules.py::problems": {
+      "cognitive": 24,
+      "cyclomatic": 14
+    },
+    "scripts/validate-check-manifest.py::main": {
+      "cognitive": 22,
+      "cyclomatic": 16
+    },
+    "scripts/validate-cli-surface.py::main": {
+      "lines": 62
+    },
+    "scripts/validate-commands.py::main": {
+      "cognitive": 23,
+      "cyclomatic": 16
+    },
+    "scripts/validate-eval-cases.py::validate_behavioral": {
+      "cognitive": 36,
+      "cyclomatic": 19
+    },
+    "scripts/validate-gitignore.py::main": {
+      "cyclomatic": 12
+    },
+    "scripts/validate-licence-headers.py::main": {
+      "cognitive": 25,
+      "cyclomatic": 14
+    },
+    "scripts/validate-lifecycle.py::main": {
+      "cyclomatic": 12
+    },
+    "scripts/validate-packaging.py::main": {
+      "cognitive": 25,
+      "cyclomatic": 18,
+      "lines": 62
+    },
+    "scripts/validate-plugin-manifest.py::check_marketplace": {
+      "cognitive": 47,
+      "cyclomatic": 30,
+      "halstead": 37.2
+    },
+    "scripts/validate-plugin-manifest.py::check_plugin": {
+      "cognitive": 17,
+      "cyclomatic": 17
+    },
+    "scripts/validate-profiles.py::main": {
+      "cognitive": 47,
+      "cyclomatic": 31,
+      "halstead": 35.7
+    },
+    "scripts/validate-providers.py::main": {
+      "cognitive": 98,
+      "cyclomatic": 59,
+      "halstead": 41.6,
+      "lines": 100
+    },
+    "scripts/validate-readme.py::problems": {
+      "cyclomatic": 13
+    },
+    "scripts/validate-sbom-conformance.py::main": {
+      "cognitive": 32,
+      "cyclomatic": 25,
+      "lines": 65
+    },
+    "scripts/validate-skill-index.py::main": {
+      "cognitive": 39,
+      "cyclomatic": 30,
+      "halstead": 31.4,
+      "lines": 62
+    },
+    "scripts/validate-skill-metadata.py::main": {
+      "cognitive": 50,
+      "cyclomatic": 28
+    },
+    "scripts/validate-skills.py::check": {
+      "cognitive": 34,
+      "cyclomatic": 23
+    },
+    "scripts/validate-system-prompts.py::main": {
+      "cyclomatic": 12
+    },
+    "scripts/validate-templates.py::main": {
+      "cyclomatic": 11
+    },
+    "scripts/validate-version-policy.py::main": {
+      "cognitive": 26,
+      "cyclomatic": 21
+    },
+    "scripts/validate-version-policy.py::sequencing_errors": {
+      "cognitive": 22,
+      "cyclomatic": 15,
+      "halstead": 31.0
+    },
+    "scripts/verify-release-assets.py::main": {
+      "cognitive": 38,
+      "cyclomatic": 25,
+      "halstead": 30.5,
+      "lines": 67
+    },
+    "src/agtmls/cli.py::main": {
+      "cyclomatic": 15
+    }
+  },
+  "generated_by": "scripts/check-complexity.py --write",
+  "schema_version": 1
+}

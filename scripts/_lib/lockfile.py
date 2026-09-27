@@ -115,14 +115,25 @@ def resolve_agents(lock: dict[str, object], skills_dirs: dict[str, Path]) -> dic
     return lock
 
 
+def _join(entries: list[dict[str, object]], fresh: dict[str, object], agent: str) -> None:
+    """Add `agent` to the entry for `fresh`'s name at its digest, or add
+    `fresh` as a new entry: two agents holding different versions of a
+    skill keep one entry each."""
+    same = next((e for e in entries if e["name"] == fresh["name"] and e["integrity"] == fresh["integrity"]), None)
+    if same is None:
+        entries.append(fresh)
+        return
+    same["agents"] = sorted({*same["agents"], agent})
+    same["executable_files"] = fresh["executable_files"]
+
+
 def record(target: Path, registry_root: Path, skills: list[str], mode: str,
            registry_version: str, agent: str, skills_dirs: dict[str, Path]) -> dict[str, object]:
     """The lockfile after installing `skills` for `agent`.
 
     One lockfile serves every agent in a target. Only `agent`'s record is
     replaced: it leaves every entry, joins the entries for what it installed
-    now (an entry is one name at one digest, so two agents holding different
-    versions keep one entry each), and entries no agent holds are dropped.
+    now, and entries no agent holds are dropped.
     """
     payload = build(target, registry_root, skills, mode, registry_version, agent)
     previous = read(target)
@@ -130,15 +141,8 @@ def record(target: Path, registry_root: Path, skills: list[str], mode: str,
     for entry in entries:
         entry["agents"] = [a for a in entry["agents"] if a != agent]
     for fresh in payload["skills"]:
-        same = next((e for e in entries if e["name"] == fresh["name"] and e["integrity"] == fresh["integrity"]), None)
-        if same is None:
-            entries.append(fresh)
-        else:
-            same["agents"] = sorted({*same["agents"], agent})
-            same["executable_files"] = fresh["executable_files"]
-    payload["skills"] = sorted(
-        (e for e in entries if e["agents"]), key=lambda e: (e["name"], e["integrity"]),
-    )
+        _join(entries, fresh, agent)
+    payload["skills"] = sorted((e for e in entries if e["agents"]), key=lambda e: (e["name"], e["integrity"]))
     return payload
 
 

@@ -32,3 +32,11 @@ python3 scripts/run-coverage.py --scope core
 ```
 
 Both need `coverage` installed; CI runs them in `conformance.yml`. New code ships with tests that were seen to fail before the change.
+
+Before any task, run the hygiene check of `~/Code/AGENTS.md` section 0 (open
+Dependabot PRs and alerts, code-scanning and secret-scanning alerts, red CI
+on `main`), and fix what it finds first. Every function in `scripts/`, `src/`
+and `fuzz/` is held to cyclomatic 10, cognitive 15, Halstead difficulty 30
+and 60 lines, and every file to 500 lines, by `scripts/check-complexity.py`
+in the gate. Code you write or touch meets them; the offenders recorded in
+`complexity-baseline.json` may only shrink.

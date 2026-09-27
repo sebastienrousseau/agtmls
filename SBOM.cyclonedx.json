@@ -94,7 +94,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7bec4f5eecb32f1d5017bfaca9602c37f0b4e2716aca2d8bde8f6643702c6e90"
+          "content": "aeb0c7ff32ae573673d93e1af961d6795176d0500deb0cc0a70705cf04157780"
         }
       ],
       "name": "checks.json",
@@ -1524,7 +1524,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "796ce00e93d8782c90c029faefe80c4053c88d3bdd052a3ba5cf5127415e9b7d"
+          "content": "0c68c4f68a8b8e3f4066189f693d9010db6761ce07c4f3e5af0ae186f34709f1"
         }
       ],
       "name": "scripts/_lib/aider_conf.py",
@@ -1575,6 +1575,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/complexity.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c3be987e7b5c60b8d26de2ed2188d50931f3a6e017670662fc43fb0264924628"
+        }
+      ],
+      "name": "scripts/_lib/complexity.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/covered.py",
       "hashes": [
         {
@@ -1612,7 +1623,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "06cc52996c5b356ad890b78c8cdb0e38fe3bc81b4b0175b2f4f2046807e21310"
+          "content": "8e0aa29c7fcca680301a7079f19dabd8116fc7e55c850277ff1519f5e69de05b"
         }
       ],
       "name": "scripts/_lib/lockfile.py",
@@ -1623,7 +1634,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1ae762f842f687a058dbc2fa5371fa9428f7865ad581a3b7698b03e6a486979f"
+          "content": "ff7b86a0040f2b216814d104ec9c8fc58271c1ce82f1fb748ea2e283b191ebc6"
         }
       ],
       "name": "scripts/_lib/portability.py",
@@ -1733,7 +1744,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ff24a2e078cbf7e66fb2994462893253f7a8216f29fc25def5a8e7137871d57a"
+          "content": "a0c84ba2b2e37d216115616df577e8356983a613b9891bd9f93d367c83d97097"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1781,6 +1792,17 @@
         }
       ],
       "name": "scripts/bump-version.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/check-complexity.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f63c68ef5c85f38532b6be6f4e7c9052d9dc0b4f6f6c1a4ace2062fbe02f3cef"
+        }
+      ],
+      "name": "scripts/check-complexity.py",
       "type": "file"
     },
     {
@@ -4299,7 +4321,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T07:32:56Z",
+    "timestamp": "2026-09-27T08:50:41Z",
     "tools": {
       "components": [
         {
