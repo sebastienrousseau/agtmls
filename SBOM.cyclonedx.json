@@ -2613,7 +2613,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "96e08cf1166536c662543a86b6568795631db635f1adee90697656863ac099c5"
+          "content": "9ec8419d4d93c1c27a671eafb301d06bbbc33ecb6edf0f2ed8aeb4fef78115b8"
         }
       ],
       "name": "scripts/validate-plugin-manifest.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T21:33:44Z",
+    "timestamp": "2026-09-27T22:07:07Z",
     "tools": {
       "components": [
         {

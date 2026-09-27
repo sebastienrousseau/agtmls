@@ -88,6 +88,9 @@ def check_agent_paths(label: str, value: object, errors: list[str]) -> None:
     if not isinstance(value, list):
         errors.append(f"{label} must be an array of agent file paths, not {type(value).__name__}")
         return
+    if not all(isinstance(item, str) for item in value):
+        errors.append(f"{label} must list agent file paths as strings")
+        return
     if sorted(value) != on_disk:
         errors.append(f"{label} does not match agents/ on disk: {sorted(set(on_disk) ^ set(value))}")
 
@@ -223,6 +226,13 @@ def check_marketplace_entry(entry: dict, plugin: dict[str, object], errors: list
     return pack
 
 
+def lists_plugin(entries: list, name: object) -> bool:
+    """Whether an entry names the plugin; a name that is not a string names nothing."""
+    return isinstance(name, str) and any(
+        isinstance(entry, dict) and entry.get("name") == name for entry in entries
+    )
+
+
 def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
     catalog = json.loads(MARKETPLACE.read_text(encoding="utf-8"))
     check_marketplace_identity(catalog, errors)
@@ -232,8 +242,7 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
         errors.append("marketplace plugins must be a non-empty array")
         return
 
-    listed = {entry.get("name") for entry in entries if isinstance(entry, dict)}
-    if plugin.get("name") not in listed:
+    if not lists_plugin(entries, plugin.get("name")):
         errors.append(f"marketplace does not list the plugin {plugin.get('name')!r}")
 
     packed: set[str] = set()
@@ -257,10 +266,13 @@ def main() -> int:
             print(f"FAIL: .claude-plugin/{label} missing; run generate-plugin-manifests.py --write")
             return 1
         try:
-            json.loads(path.read_text(encoding="utf-8"))
+            document = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             print(f"FAIL: .claude-plugin/{label} invalid JSON: {exc}; fix it by hand or "
                   "regenerate with generate-plugin-manifests.py --write")
+            return 1
+        if not isinstance(document, dict):
+            print(f"FAIL: .claude-plugin/{label} must be an object")
             return 1
 
     plugin = check_plugin(errors)
