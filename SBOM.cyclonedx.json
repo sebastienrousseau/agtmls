@@ -2624,7 +2624,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1f9a1c7867e697e843ddd5149ec06384b20faaa5cd00e5e5908a19232819a799"
+          "content": "e4d9dfa1d52f4966c6720ad422dd6c7ae501dbcfdc15fdb846d27775f7c3e6fe"
         }
       ],
       "name": "scripts/validate-profiles.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T19:21:56Z",
+    "timestamp": "2026-09-27T19:34:11Z",
     "tools": {
       "components": [
         {

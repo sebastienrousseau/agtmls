@@ -193,11 +193,6 @@
       "cognitive": 17,
       "cyclomatic": 17
     },
-    "scripts/validate-profiles.py::main": {
-      "cognitive": 47,
-      "cyclomatic": 31,
-      "halstead": 35.7
-    },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },
