@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-27T13:14:53Z",
+    "created": "2026-09-27T14:16:23Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -2525,6 +2525,38 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-uninstall-steps.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "91a574c4753c1870e900cf3eb4e451903467bb0d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "32242004c74f531ca6449b4b60f94fcc0e855ae5f6f55f7a55ef2a475fd07076"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/uninstall_steps.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-verify-report.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "97c07bdb672af611c11edf70577c39976acc2516"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6fc82d2f21e4c2ed446fee4639e9c501b2ac82eb7fcb82216daf155725afa2f4"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/verify_report.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-workloads.py",
       "checksums": [
         {
@@ -2561,11 +2593,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "f01439d3dc4b9a246bac2e8fb377f922185b6304"
+          "checksumValue": "2002479455a43a7c85da371d6191b556e8b6ea09"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f55c8575eb93af7fa1f45d3d4445717288fbc83af114b54add1e032d0a14b79a"
+          "checksumValue": "ee44c0a94d4eec09c854c8471eaedb49e3d1b74e65e22719f9ade186f3d308df"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6441,6 +6473,8 @@
         "SPDXRef-File-scripts--lib-signatures.py",
         "SPDXRef-File-scripts--lib-skill-roots.py",
         "SPDXRef-File-scripts--lib-stamp.py",
+        "SPDXRef-File-scripts--lib-uninstall-steps.py",
+        "SPDXRef-File-scripts--lib-verify-report.py",
         "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",
         "SPDXRef-File-scripts-agtmls.py",
