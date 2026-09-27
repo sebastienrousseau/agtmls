@@ -113,12 +113,6 @@
       "cognitive": 23,
       "cyclomatic": 14
     },
-    "scripts/run-security-evals.py::main": {
-      "cognitive": 48,
-      "cyclomatic": 30,
-      "halstead": 31.3,
-      "lines": 69
-    },
     "scripts/run-trigger-evals.py::main": {
       "cognitive": 29,
       "cyclomatic": 14
