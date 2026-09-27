@@ -5,7 +5,7 @@
 # AgtMLS Catalog
 
 Registry version: `0.0.16`
-Skills: `31`
+Skills: `34`
 Commands: `4`
 
 ## Skills
@@ -15,10 +15,12 @@ Commands: `4`
 | `agent-loop-design` | `loops` | loops, review, validation | `skills/agent-loop-design` |
 | `ai-supply-chain-security` | `security` | release, security, validation | `skills/ai-supply-chain-security` |
 | `anti-slop-pr-and-writing` | `general` | docs, release, review | `skills/anti-slop-pr-and-writing` |
+| `authoring-portable-skills` | `general` | docs, validation | `skills/authoring-portable-skills` |
 | `brainstorming` | `general` | ci, config, planning | `skills/brainstorming` |
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
 | `giving-code-review` | `general` | ci, review | `skills/giving-code-review` |
 | `handoff` | `general` | continuity, validation | `skills/handoff` |
+| `hardening-agent-config` | `general` | config, review | `skills/hardening-agent-config` |
 | `incident-response` | `general` | ci, debugging, incident | `skills/incident-response` |
 | `noyalib-architecture-contract` | `noyalib` | architecture, ci, incident, noyalib | `packs/noyalib/skills/noyalib-architecture-contract` |
 | `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `packs/noyalib/skills/noyalib-build-and-env` |
@@ -40,6 +42,7 @@ Commands: `4`
 | `test-driven-development` | `general` | qa, refactoring | `skills/test-driven-development` |
 | `using-agtmls` | `general` | noyalib, porting, routing | `skills/using-agtmls` |
 | `verification-before-completion` | `general` | porting, qa, validation | `skills/verification-before-completion` |
+| `vetting-a-skill-before-install` | `general` | config, porting | `skills/vetting-a-skill-before-install` |
 | `web-research-and-source-triage` | `web-reach` | ci, debugging, docs, research, validation, web-reach | `skills/web-research-and-source-triage` |
 | `writing-plans` | `general` | continuity, docs, planning, review | `skills/writing-plans` |
 | `yaml-domain-reference` | `noyalib` | config, noyalib, yaml | `packs/noyalib/skills/yaml-domain-reference` |

@@ -1,0 +1,24 @@
+{
+  "skill": "authoring-portable-skills",
+  "requires": {
+    "files_exist": [
+      "reference.md"
+    ],
+    "skill_contains": [
+      "one level deep",
+      "5,000 tokens",
+      "--live",
+      "Draft until measured"
+    ],
+    "reference_contains": [
+      "Where agents read skills",
+      "Before and after"
+    ]
+  },
+  "forbids": {
+    "skill_contains": [
+      "${CLAUDE_SKILL_DIR}/",
+      "hardened once the validators pass"
+    ]
+  }
+}

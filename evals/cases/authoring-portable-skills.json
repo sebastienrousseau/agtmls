@@ -1,0 +1,13 @@
+{
+  "skill": "authoring-portable-skills",
+  "positive": [
+    "write a SKILL.md that works in Codex and Claude Code",
+    "port this Claude-only skill so Antigravity and Cursor can use it",
+    "what frontmatter fields are portable across agents",
+    "make this skill portable across agents"
+  ],
+  "negative": [
+    "install a third-party plugin safely",
+    "port this Python module to Rust"
+  ]
+}

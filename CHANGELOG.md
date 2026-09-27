@@ -7,6 +7,18 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Three general skills, the trust layer only a registry that audits can
+  offer, shipped as `draft` until a with/without run shows they help:
+  `vetting-a-skill-before-install` (pin a third-party skill to a commit,
+  run `audit --foreign`, read what it could not cover, then install,
+  mirror or refuse), `authoring-portable-skills` (the shared frontmatter,
+  body budget and portability rules, `verify --live` to check agents load
+  it, and draft until measured) and `hardening-agent-config` (approval
+  modes, scoped permissions, hooks and MCP servers for Claude Code, Codex
+  and Aider, checked with `doctor`).
+
 ### Fixed
 
 - Installing a second agent into a target rewrote the lockfile they share,

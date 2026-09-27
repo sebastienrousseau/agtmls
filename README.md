@@ -170,7 +170,7 @@ Agent skills are instructions a model will follow. Copied between repositories b
 
 | Area | Capability | Status |
 | :--- | :--- | :--- |
-| Registry | 31 skills conforming to the [Agent Skills specification](https://agentskills.io), in [`skills/`](skills/) | Shipped |
+| Registry | 34 skills conforming to the [Agent Skills specification](https://agentskills.io), in [`skills/`](skills/) and the noyalib pack in [`packs/`](packs/) | Shipped |
 | Registry | 10 system prompts: `_base.md` plus Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, Bash, in [`system-prompts/`](system-prompts/) | Shipped |
 | Registry | 4 slash commands (`agtmls`, `agtmls-audit`, `agtmls-new-skill`, `agtmls-release`), in [`commands/`](commands/) | Shipped |
 | Registry | 4 subagents (`anti-slop-editor`, `security-sentinel`, `skill-author`, `registry-auditor`), in [`agents/`](agents/) | Shipped |
