@@ -114,9 +114,7 @@ def check_skill_paths(label: str, value: object, errors: list[str], base: Path |
         )
 
 
-def check_plugin(errors: list[str]) -> dict[str, object]:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-
+def check_plugin_fields(manifest: dict, errors: list[str]) -> None:
     for field in REQUIRED:
         if field not in manifest:
             errors.append(f"plugin manifest missing {field}")
@@ -127,6 +125,10 @@ def check_plugin(errors: list[str]) -> dict[str, object]:
         errors.append("plugin manifest version must be semver")
     if manifest.get("license") != "MIT":
         errors.append("plugin manifest license must be MIT")
+    check_plugin_owner(manifest, errors)
+
+
+def check_plugin_owner(manifest: dict, errors: list[str]) -> None:
     author = manifest.get("author")
     if not isinstance(author, dict) or not author.get("name"):
         errors.append("plugin manifest author.name is required")
@@ -134,31 +136,39 @@ def check_plugin(errors: list[str]) -> dict[str, object]:
     if not isinstance(homepage, str) or not homepage.startswith("https://github.com/"):
         errors.append("plugin manifest homepage must be a GitHub HTTPS URL")
 
-    check_skill_paths("plugin manifest skills", manifest.get("skills"), errors)
-    check_agent_paths("plugin manifest agents", manifest.get("agents"), errors)
 
-    commands = rel_path(manifest.get("commands"))
+def check_commands_path(value: object, errors: list[str]) -> None:
+    commands = rel_path(value)
     if commands is None:
         errors.append("plugin manifest commands must be a safe ./ relative path")
     elif not commands.is_dir():
         errors.append(
-            f"plugin manifest commands path must be a directory: {manifest.get('commands')}"
+            f"plugin manifest commands path must be a directory: {value}"
         )
 
+
+def check_license_text(license_id: object, errors: list[str]) -> None:
     license_file = ROOT / "LICENSE" if (ROOT / "LICENSE").exists() else ROOT / "LICENSE-MIT"
     license_text = (
         license_file.read_text(encoding="utf-8", errors="replace")
         if license_file.exists()
         else ""
     )
-    if manifest.get("license") in ("MIT", "Apache-2.0 OR MIT") and "MIT License" not in license_text:
+    if license_id in ("MIT", "Apache-2.0 OR MIT") and "MIT License" not in license_text:
         errors.append("LICENSE file must contain MIT License text")
+
+
+def check_plugin(errors: list[str]) -> dict[str, object]:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    check_plugin_fields(manifest, errors)
+    check_skill_paths("plugin manifest skills", manifest.get("skills"), errors)
+    check_agent_paths("plugin manifest agents", manifest.get("agents"), errors)
+    check_commands_path(manifest.get("commands"), errors)
+    check_license_text(manifest.get("license"), errors)
     return manifest
 
 
-def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
-    catalog = json.loads(MARKETPLACE.read_text(encoding="utf-8"))
-
+def check_marketplace_identity(catalog: dict, errors: list[str]) -> None:
     name = catalog.get("name")
     if not isinstance(name, str) or not KEBAB.match(name):
         errors.append("marketplace name must be kebab-case")
@@ -168,6 +178,54 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
     owner = catalog.get("owner")
     if not isinstance(owner, dict) or not owner.get("name"):
         errors.append("marketplace owner.name is required")
+
+
+def check_entry_source(label: str, source: object, errors: list[str]) -> None:
+    if isinstance(source, str):
+        if not source.startswith("./") or ".." in Path(source).parts:
+            errors.append(f"{label} source must be a safe ./ relative path or a source object")
+    elif not isinstance(source, dict):
+        errors.append(f"{label} source is required")
+
+
+def check_entry_versions(label: str, entry: dict, plugin: dict[str, object], pack: str | None,
+                         errors: list[str]) -> None:
+    # Version pinning drives updates for installed users; an entry that
+    # drifts from plugin.json ships stale metadata to the catalog.
+    if entry.get("name") == plugin.get("name"):
+        for field in ("version", "license", "homepage"):
+            if entry.get(field) != plugin.get(field):
+                errors.append(
+                    f"{label} {field} ({entry.get(field)!r}) "
+                    f"!= plugin.json ({plugin.get(field)!r})"
+                )
+    elif pack is not None and entry.get("version") != plugin.get("version"):
+        errors.append(f"{label} version ({entry.get('version')!r}) != plugin.json ({plugin.get('version')!r})")
+
+
+def check_marketplace_entry(entry: dict, plugin: dict[str, object], errors: list[str]) -> str | None:
+    """Check one plugin entry; return the pack it serves, if any."""
+    label = f"marketplace plugin {entry.get('name', '<unnamed>')!r}"
+    if not isinstance(entry.get("name"), str) or not KEBAB.match(entry.get("name", "")):
+        errors.append(f"{label} name must be kebab-case")
+    source = entry.get("source")
+    check_entry_source(label, source, errors)
+    pack = pack_of_source(source)
+    if "skills" in entry:
+        check_skill_paths(
+            f"{label} skills", entry["skills"], errors,
+            base=ROOT / source if isinstance(source, str) else None,
+            required={f"./{skill_roots.PACKS}/{pack}/skills"} if pack else None,
+        )
+    if "agents" in entry:
+        check_agent_paths(f"{label} agents", entry["agents"], errors)
+    check_entry_versions(label, entry, plugin, pack, errors)
+    return pack
+
+
+def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
+    catalog = json.loads(MARKETPLACE.read_text(encoding="utf-8"))
+    check_marketplace_identity(catalog, errors)
 
     entries = catalog.get("plugins")
     if not isinstance(entries, list) or not entries:
@@ -183,37 +241,9 @@ def check_marketplace(plugin: dict[str, object], errors: list[str]) -> None:
         if not isinstance(entry, dict):
             errors.append("marketplace plugin entry must be an object")
             continue
-        label = f"marketplace plugin {entry.get('name', '<unnamed>')!r}"
-        if not isinstance(entry.get("name"), str) or not KEBAB.match(entry.get("name", "")):
-            errors.append(f"{label} name must be kebab-case")
-        source = entry.get("source")
-        if isinstance(source, str):
-            if not source.startswith("./") or ".." in Path(source).parts:
-                errors.append(f"{label} source must be a safe ./ relative path or a source object")
-        elif not isinstance(source, dict):
-            errors.append(f"{label} source is required")
-        pack = pack_of_source(source)
-        if "skills" in entry:
-            check_skill_paths(
-                f"{label} skills", entry["skills"], errors,
-                base=ROOT / source if isinstance(source, str) else None,
-                required={f"./{skill_roots.PACKS}/{pack}/skills"} if pack else None,
-            )
+        pack = check_marketplace_entry(entry, plugin, errors)
         if pack is not None:
             packed.add(pack)
-        if "agents" in entry:
-            check_agent_paths(f"{label} agents", entry["agents"], errors)
-        # Version pinning drives updates for installed users; an entry that
-        # drifts from plugin.json ships stale metadata to the catalog.
-        if entry.get("name") == plugin.get("name"):
-            for field in ("version", "license", "homepage"):
-                if entry.get(field) != plugin.get(field):
-                    errors.append(
-                        f"{label} {field} ({entry.get(field)!r}) "
-                        f"!= plugin.json ({plugin.get(field)!r})"
-                    )
-        elif pack is not None and entry.get("version") != plugin.get("version"):
-            errors.append(f"{label} version ({entry.get('version')!r}) != plugin.json ({plugin.get('version')!r})")
     # A pack is left out of the default plugin, so the marketplace is the only
     # way its skills load as a plugin at all.
     for pack in sorted(set(skill_roots.packs(ROOT)) - packed):

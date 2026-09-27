@@ -178,15 +178,6 @@
       "cyclomatic": 18,
       "lines": 62
     },
-    "scripts/validate-plugin-manifest.py::check_marketplace": {
-      "cognitive": 47,
-      "cyclomatic": 30,
-      "halstead": 37.2
-    },
-    "scripts/validate-plugin-manifest.py::check_plugin": {
-      "cognitive": 17,
-      "cyclomatic": 17
-    },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },
