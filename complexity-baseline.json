@@ -52,16 +52,6 @@
       "cyclomatic": 13,
       "lines": 68
     },
-    "scripts/audit-skill.py::foreign_audit": {
-      "cognitive": 47,
-      "cyclomatic": 27
-    },
-    "scripts/audit-skill.py::main": {
-      "cognitive": 63,
-      "cyclomatic": 47,
-      "halstead": 36.1,
-      "lines": 83
-    },
     "scripts/bench.py::main": {
       "cognitive": 32,
       "cyclomatic": 22,

@@ -86,67 +86,88 @@ def print_coverage(coverage: dict) -> None:
         print(f"  skipped directories: {skipped}")
 
 
+def fails(findings: list[Finding], strict: bool) -> bool:
+    """HIGH or CRITICAL always fails; MEDIUM or LOW only under --strict."""
+    return any(f.severity in {"CRITICAL", "HIGH"} for f in findings) or (
+        strict and any(f.severity in {"MEDIUM", "LOW"} for f in findings)
+    )
+
+
+def foreign_skill_json(report, root: Path, notes: list[str]) -> dict:
+    return {
+        "plugin": report.plugin,
+        "path": report.path.relative_to(root).as_posix(),
+        "digest": report.digest,
+        "copies": [c.relative_to(root).as_posix() for c in report.copies],
+        "policy": report.policy,
+        "findings": [{
+            "file": f.file_path.relative_to(root).as_posix(),
+            "line": f.line, "severity": f.severity, "category": f.category,
+            "rule": f.rule, "message": f.message,
+        } for f in report.findings if f.suppressed is None],
+        "portability": notes,
+    }
+
+
+def print_foreign_skill(report, root: Path, notes: list[str]) -> None:
+    from _lib import portability
+
+    policy = ", ".join(f"{k}={str(v).lower()}" for k, v in report.policy.items() if k != "provisional")
+    kind = "provisional policy" if report.policy.get("provisional") else "declared policy"
+    print(f"plugin {report.plugin}: {report.path.relative_to(root).as_posix()} ({kind}: {policy})")
+    if report.copies:
+        print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in report.copies)}")
+    for f in report.findings:
+        if f.suppressed is None:
+            print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
+    for note in portability.summarize(notes):
+        print(f"  portability: {note}")
+
+
+def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str) -> int | list[Finding]:
+    """Audit and print a fetched tree; the unsuppressed findings, or 2 when
+    its layout cannot be read."""
+    from _lib import portability
+    from _lib.analyzer import foreign_coverage, foreign_layout
+
+    try:
+        reports = audit_foreign(root, pedantic)
+    except ForeignLayoutError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    layout = foreign_layout(root)
+    coverage = foreign_coverage(root, reports)
+    every = [f for report in reports for f in report.findings if f.suppressed is None]
+    # Notes, not findings: a skill that works in one agent only is not a
+    # security risk, so portability never changes the exit code.
+    notes = {r.path: portability.problems(r.path) for r in reports}
+    if fmt == "json":
+        print(json.dumps({
+            "target": target, "layout": layout, "coverage": coverage,
+            "skills": [foreign_skill_json(r, root, notes[r.path]) for r in reports],
+        }, indent=2))
+        return every
+    print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
+          f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
+          f"{len(every)} finding(s)\n")
+    for r in reports:
+        print_foreign_skill(r, root, notes[r.path])
+    print_coverage(coverage)
+    return every
+
+
 def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -> int:
     with tempfile.TemporaryDirectory(prefix="agtmls-foreign-") as raw:
         root = fetch_foreign(target, Path(raw))
         if isinstance(root, str):
             print(f"error: {root}", file=sys.stderr)
             return 2
-        try:
-            reports = audit_foreign(root, pedantic)
-        except ForeignLayoutError as exc:
-            print(f"error: {exc}", file=sys.stderr)
-            return 2
-        from _lib import portability
-        from _lib.analyzer import foreign_coverage, foreign_layout
+        every = foreign_reports(target, root, pedantic, fmt)
+        if isinstance(every, int):
+            return every
+        return 1 if fails(every, strict) else 0
 
-        layout = foreign_layout(root)
-        coverage = foreign_coverage(root, reports)
-        every = [f for report in reports for f in report.findings if f.suppressed is None]
-        # Notes, not findings: a skill that works in one agent only is not a
-        # security risk, so portability never changes the exit code.
-        notes = {r.path: portability.problems(r.path) for r in reports}
-        if fmt == "json":
-            print(json.dumps({
-                "target": target,
-                "layout": layout,
-                "coverage": coverage,
-                "skills": [{
-                    "plugin": r.plugin,
-                    "path": r.path.relative_to(root).as_posix(),
-                    "digest": r.digest,
-                    "copies": [c.relative_to(root).as_posix() for c in r.copies],
-                    "policy": r.policy,
-                    "findings": [{
-                        "file": f.file_path.relative_to(root).as_posix(),
-                        "line": f.line, "severity": f.severity, "category": f.category,
-                        "rule": f.rule, "message": f.message,
-                    } for f in r.findings if f.suppressed is None],
-                    "portability": notes[r.path],
-                } for r in reports],
-            }, indent=2))
-        else:
-            print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
-                  f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
-                  f"{len(every)} finding(s)\n")
-            for r in reports:
-                policy = ", ".join(
-                    f"{k}={str(v).lower()}" for k, v in r.policy.items() if k != "provisional"
-                )
-                kind = "provisional policy" if r.policy.get("provisional") else "declared policy"
-                print(f"plugin {r.plugin}: {r.path.relative_to(root).as_posix()} ({kind}: {policy})")
-                if r.copies:
-                    print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in r.copies)}")
-                for f in r.findings:
-                    if f.suppressed is None:
-                        print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
-                for note in portability.summarize(notes[r.path]):
-                    print(f"  portability: {note}")
-            print_coverage(coverage)
-        failed = any(f.severity in {"CRITICAL", "HIGH"} for f in every) or (
-            strict and any(f.severity in {"MEDIUM", "LOW"} for f in every)
-        )
-        return 1 if failed else 0
+
 SARIF_LEVEL = {"CRITICAL": "error", "HIGH": "error", "MEDIUM": "warning", "LOW": "note"}
 BASELINE_SCHEMA_VERSION = 1
 
@@ -213,7 +234,7 @@ def sarif_log(active: list[Finding], suppressed: list[Finding], baseline: set[st
     }
 
 
-def main() -> int:
+def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
     parser = argparse.ArgumentParser(
         description="Static security, steganography, and prompt injection analyzer for AgtMLS skills."
     )
@@ -225,95 +246,122 @@ def main() -> int:
     parser.add_argument("--format", choices=["text", "json", "sarif"], default="text", help="Output format")
     parser.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail the audit")
     parser.add_argument("--write-baseline", type=Path, help="record the fingerprints of this audit's findings")
-    args = parser.parse_args()
+    return parser, parser.parse_args()
 
+
+def audit_targets(args: argparse.Namespace) -> list[Path]:
+    if not args.all:
+        return [args.path.resolve()]  # a path is present: its absence returned earlier
+    targets = list(skill_roots.skill_dirs(ROOT))
+    agents_dir = ROOT / "agents"
+    if agents_dir.exists():
+        targets.extend(sorted(p for p in agents_dir.glob("*.md")))
+    return targets
+
+
+def finding_record(f: Finding, baseline: set[str] | None) -> dict:
+    return {
+        "file": relative(f.file_path),
+        "line": f.line,
+        "severity": f.severity,
+        "category": f.category,
+        "rule": f.rule,
+        "message": f.message,
+        "fingerprint": fingerprint(f),
+        "baseline": baseline is not None and fingerprint(f) in baseline,
+    }
+
+
+def severity_counts(findings: list[Finding]) -> dict[str, int]:
+    return {level.lower(): sum(1 for f in findings if f.severity == level)
+            for level in ("CRITICAL", "HIGH", "MEDIUM", "LOW")}
+
+
+def print_json_report(scanned: int, active: list[Finding], suppressed: list[Finding], baseline: set[str] | None) -> None:
+    counts = severity_counts(active)
+    print(json.dumps({
+        "scanned_targets": scanned,
+        "findings_count": len(active),
+        **counts,
+        "findings": [finding_record(f, baseline) for f in active],
+        "suppressed": [{**finding_record(f, baseline), "justification": f.suppressed} for f in suppressed],
+    }, indent=2))
+
+
+def print_text_report(scanned: int, active: list[Finding], suppressed: list[Finding], known: list[Finding], new: list[Finding]) -> None:
+    if not (active or suppressed):
+        print(f"OK: Audited {scanned} target(s). Zero security or steganography findings detected.")
+        return
+    print(f"Audited {scanned} target(s): found {len(active)} issue(s).\n")
+    for f in active:
+        mark = " [baseline]" if f in known else ""
+        print(f"[{f.severity}] {relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message}{mark}")
+    for f in suppressed:
+        print(f"[suppressed] {relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message} -- {f.suppressed}")
+    counts = severity_counts(active)
+    print(f"\nSummary: {counts['critical']} critical, {counts['high']} high, {counts['medium']} medium, {counts['low']} low.")
+    if known:
+        print(f"{len(known)} finding(s) in the baseline; {len(new)} new.")
+    if suppressed:
+        print(f"{len(suppressed)} finding(s) suppressed in source.")
+
+
+def write_baseline(path: Path, active: list[Finding]) -> None:
+    payload = {
+        "schema_version": BASELINE_SCHEMA_VERSION,
+        "fingerprints": sorted({fingerprint(f) for f in active}),
+    }
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def classify(every: list[Finding], baseline: set[str] | None) -> tuple[list, list, list, list]:
+    """(suppressed, active, known, new) findings."""
+    # Suppressed in source: shown, never counted. In the baseline: counted,
+    # never failed. Only a new, unsuppressed finding decides the exit code.
+    suppressed = [f for f in every if f.suppressed is not None]
+    active = [f for f in every if f.suppressed is None]
+    recorded = baseline or set()
+    known = [f for f in active if fingerprint(f) in recorded]
+    new = [f for f in active if fingerprint(f) not in recorded]
+    return suppressed, active, known, new
+
+
+def load_baseline(path: Path | None) -> tuple[set[str] | None, bool]:
+    """(the baseline, whether it could be read); no path is no baseline."""
+    if not path:
+        return None, True
+    baseline = read_baseline(path)
+    if baseline is None:
+        print(f"error: cannot read the baseline at {path}", file=sys.stderr)
+    return baseline, baseline is not None
+
+
+def report(fmt: str, scanned: int, found: tuple[list, list, list, list], baseline: set[str] | None) -> None:
+    suppressed, active, known, new = found
+    if fmt == "sarif":
+        print(json.dumps(sarif_log(active, suppressed, baseline), indent=2))
+    elif fmt == "json":
+        print_json_report(scanned, active, suppressed, baseline)
+    else:
+        print_text_report(scanned, active, suppressed, known, new)
+
+
+def main() -> int:
+    parser, args = parse_args()
     if args.foreign:
         return foreign_audit(args.foreign, "json" if args.format == "json" else "text", args.strict, args.pedantic)
     if not args.path and not args.all:
         parser.print_help(sys.stderr)
         return 2
-    baseline: set[str] | None = None
-    if args.baseline:
-        baseline = read_baseline(args.baseline)
-        if baseline is None:
-            print(f"error: cannot read the baseline at {args.baseline}", file=sys.stderr)
-            return 2
-
-    targets: list[Path] = []
-    if args.all:
-        targets.extend(skill_roots.skill_dirs(ROOT))
-        agents_dir = ROOT / "agents"
-        if agents_dir.exists():
-            targets.extend(sorted(p for p in agents_dir.glob("*.md")))
-    else:  # a path is present: its absence returned above
-        targets.append(args.path.resolve())
-
-    every: list[Finding] = []
-    scanned_count = 0
-    for target in targets:
-        scanned_count += 1
-        every.extend(audit_skill_target(target, args.pedantic))
-    # Suppressed in source: shown, never counted. In the baseline: counted,
-    # never failed. Only a new, unsuppressed finding decides the exit code.
-    suppressed = [f for f in every if f.suppressed is not None]
-    all_findings = [f for f in every if f.suppressed is None]
-    known = [f for f in all_findings if baseline is not None and fingerprint(f) in baseline]
-    new = [f for f in all_findings if baseline is None or fingerprint(f) not in baseline]
+    baseline, readable = load_baseline(args.baseline)
+    if not readable:
+        return 2
+    targets = audit_targets(args)
+    found = classify([f for target in targets for f in audit_skill_target(target, args.pedantic)], baseline)
     if args.write_baseline:
-        payload = {
-            "schema_version": BASELINE_SCHEMA_VERSION,
-            "fingerprints": sorted({fingerprint(f) for f in all_findings}),
-        }
-        args.write_baseline.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    critical_count = sum(1 for f in all_findings if f.severity == "CRITICAL")
-    high_count = sum(1 for f in all_findings if f.severity == "HIGH")
-    medium_count = sum(1 for f in all_findings if f.severity == "MEDIUM")
-    low_count = sum(1 for f in all_findings if f.severity == "LOW")
-
-    def record(f: Finding) -> dict:
-        return {
-            "file": relative(f.file_path),
-            "line": f.line,
-            "severity": f.severity,
-            "category": f.category,
-            "rule": f.rule,
-            "message": f.message,
-            "fingerprint": fingerprint(f),
-            "baseline": baseline is not None and fingerprint(f) in baseline,
-        }
-
-    if args.format == "sarif":
-        print(json.dumps(sarif_log(all_findings, suppressed, baseline), indent=2))
-    elif args.format == "json":
-        data = {
-            "scanned_targets": scanned_count,
-            "findings_count": len(all_findings),
-            "critical": critical_count,
-            "high": high_count,
-            "medium": medium_count,
-            "low": low_count,
-            "findings": [record(f) for f in all_findings],
-            "suppressed": [{**record(f), "justification": f.suppressed} for f in suppressed],
-        }
-        print(json.dumps(data, indent=2))
-    elif all_findings or suppressed:
-        print(f"Audited {scanned_count} target(s): found {len(all_findings)} issue(s).\n")
-        for f in all_findings:
-            mark = " [baseline]" if f in known else ""
-            print(f"[{f.severity}] {relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message}{mark}")
-        for f in suppressed:
-            print(f"[suppressed] {relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message} -- {f.suppressed}")
-        print(f"\nSummary: {critical_count} critical, {high_count} high, {medium_count} medium, {low_count} low.")
-        if known:
-            print(f"{len(known)} finding(s) in the baseline; {len(new)} new.")
-        if suppressed:
-            print(f"{len(suppressed)} finding(s) suppressed in source.")
-    else:
-        print(f"OK: Audited {scanned_count} target(s). Zero security or steganography findings detected.")
-    failed = any(f.severity in {"CRITICAL", "HIGH"} for f in new) or (
-        args.strict and any(f.severity in {"MEDIUM", "LOW"} for f in new)
-    )
-    return 1 if failed else 0
+        write_baseline(args.write_baseline, found[1])
+    report(args.format, len(targets), found, baseline)
+    return 1 if fails(found[3], args.strict) else 0
 
 
 if __name__ == "__main__":
