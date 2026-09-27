@@ -1799,7 +1799,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c5d4861a0e47c629b156c794109437dbdcb17ca311365459276b712db7364225"
+          "content": "22b5e4cc33b122584d424efd922292034f5f91e95fe6f9ca312b8109cd102843"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T16:34:46Z",
+    "timestamp": "2026-09-27T18:28:12Z",
     "tools": {
       "components": [
         {
