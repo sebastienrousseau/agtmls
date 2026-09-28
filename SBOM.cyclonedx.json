@@ -2800,7 +2800,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d264df90d0f72385cbc2474ae7c6673dd7187ddcf90706cdfaa74689681bc7c8"
+          "content": "f534e7d563c353696cabb5029038c94a42288e0cc22756af3c26d97bf0e56647"
         }
       ],
       "name": "scripts/validate-version-policy.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T20:29:32Z",
+    "timestamp": "2026-09-28T20:51:24Z",
     "tools": {
       "components": [
         {

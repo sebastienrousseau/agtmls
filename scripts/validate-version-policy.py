@@ -33,6 +33,24 @@ def read_json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _mapping(value: object) -> dict:
+    return value if isinstance(value, dict) else {}
+
+
+def read_object(path: Path, errors: list[str]) -> dict:
+    """The JSON object in `path`; {} (and a refusal in `errors`) for any other value."""
+    data = read_json(path)
+    if isinstance(data, dict):
+        return data
+    errors.append(f"{path.relative_to(ROOT)} must be a JSON object")
+    return {}
+
+
+def _has_version(data: object) -> bool:
+    """Whether a version-free file mentions a version; a number or null cannot."""
+    return isinstance(data, (dict, list, str)) and "version" in data
+
+
 def parse_version(value: str) -> tuple[int, int, int] | None:
     match = SEMVER.match(value)
     if not match:
@@ -91,7 +109,7 @@ def sequencing_errors(current: str, tags: list[tuple[int, int, int]]) -> list[st
 def metadata_errors(current: str) -> list[str]:
     errors = []
     for path in METADATA_FILES:
-        version = str(read_json(path).get("version", ""))
+        version = str(_mapping(read_json(path)).get("version", ""))
         if version != current:
             errors.append(f"{path.relative_to(ROOT)} version {version} must match {current}")
     return errors
@@ -101,7 +119,7 @@ def version_free_errors() -> list[str]:
     errors = [
         f"{path.relative_to(ROOT)} must not carry a version: it would put "
         "the release back inside the skill's content address"
-        for path in VERSION_FREE if path.exists() and "version" in read_json(path)
+        for path in VERSION_FREE if path.exists() and _has_version(read_json(path))
     ]
     return errors + [
         f"{skill_md.relative_to(ROOT)} must not carry agtmls-version"
@@ -114,22 +132,19 @@ def provenance_errors(current: str) -> list[str]:
     # `digest` and has no `version` field, so the registry version is read
     # from the predicate's externalParameters, and the subject name must still
     # embed it -- both are checked, because either drifting is a real defect.
-    errors = []
-    provenance = read_json(ROOT / "provenance.json")
+    errors: list[str] = []
+    provenance = read_object(ROOT / "provenance.json", errors)
     subject = provenance.get("subject", [{}])
     if not isinstance(subject, list) or not subject:
         errors.append("provenance.json must carry an in-toto subject list")
-    elif subject[0].get("name") != f"agtmls-{current}":
+    elif _mapping(subject[0]).get("name") != f"agtmls-{current}":
         errors.append(
             f"provenance.json subject name must be 'agtmls-{current}', "
-            f"got {subject[0].get('name')!r}"
+            f"got {_mapping(subject[0]).get('name')!r}"
         )
-    declared = (
-        provenance.get("predicate", {})
-        .get("buildDefinition", {})
-        .get("externalParameters", {})
-        .get("registryVersion")
-    )
+    predicate = _mapping(provenance.get("predicate", {}))
+    parameters = _mapping(_mapping(predicate.get("buildDefinition", {})).get("externalParameters", {}))
+    declared = parameters.get("registryVersion")
     if declared != current:
         errors.append("provenance.json registryVersion must match plugin version")
     return errors
@@ -150,12 +165,12 @@ def document_errors(current: str) -> list[str]:
 
 def main() -> int:
     errors: list[str] = []
-    plugin = read_json(ROOT / ".claude-plugin" / "plugin.json")
+    plugin = read_object(ROOT / ".claude-plugin" / "plugin.json", errors)
     current = str(plugin.get("version", ""))
     errors.extend(sequencing_errors(current, []))
     errors += metadata_errors(current) + version_free_errors()
 
-    index = read_json(ROOT / "index.json")
+    index = read_object(ROOT / "index.json", errors)
     if index.get("registry_version") != current:
         errors.append("index.json registry_version must match plugin version")
     errors += provenance_errors(current) + document_errors(current)

@@ -384,6 +384,31 @@ class VersionPolicyRefusalTests(FixtureCase):
             code, output = run_main(module)
         self.assertEqual(code, 0, output)
 
+    # A version-bearing file of the wrong JSON shape raised AttributeError
+    # instead of being refused; fault injection found 15 such cases.
+
+    def overwrite(self, rel: str, text: str) -> None:
+        self.preserve(rel)
+        (FIXTURE / rel).write_text(text, encoding="utf-8")
+
+    def test_version_files_that_are_not_objects_are_refused_not_raised(self) -> None:
+        for rel in (".claude-plugin/plugin.json", "index.json", "provenance.json"):
+            with self.subTest(rel=rel):
+                self.overwrite(rel, "[]")
+                self.assertRefused(f"{rel} must be a JSON object")
+                self.doCleanups()
+
+    def test_a_provenance_subject_that_is_not_an_object_is_refused_not_raised(self) -> None:
+        self.edit_json("provenance.json", lambda d: d.update(subject=["agtmls"]))
+        self.assertRefused(f"provenance.json subject name must be 'agtmls-{self.version()}', got None")
+
+    def test_a_provenance_predicate_of_the_wrong_shape_is_refused_not_raised(self) -> None:
+        for predicate in (None, [], {"buildDefinition": []}, {"buildDefinition": {"externalParameters": "x"}}):
+            with self.subTest(predicate=predicate):
+                self.edit_json("provenance.json", lambda d, p=predicate: d.update(predicate=p))
+                self.assertRefused("provenance.json registryVersion must match plugin version")
+                self.doCleanups()
+
     def test_provenance_without_a_subject_list_is_refused(self) -> None:
         self.edit_json("provenance.json", lambda d: d.update(subject={"name": "x"}))
         self.assertRefused("provenance.json must carry an in-toto subject list")
