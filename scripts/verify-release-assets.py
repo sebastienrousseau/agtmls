@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -63,18 +64,23 @@ def download(url: str, path: Path) -> None:
 TARBALL_MEMBERS = ["agtmls/index.json", "agtmls/export-manifest.json", "agtmls/ADAPTERS.md"]
 
 
-def fetch(tag: str, repo: str, out_dir: Path, required_assets: list[str]) -> int:
-    """Download the release into `out_dir`; gh's exit code, or 0."""
+def fetch(tag: str, repo: str, out_dir: Path, required_assets: list[str]) -> tuple[int, dict[str, str]]:
+    """Download the release into `out_dir`: (gh's exit code or 0, why each
+    asset fetched without gh could not be downloaded)."""
     gh = shutil.which("gh")
     if gh:
         proc = subprocess.run([gh, "release", "download", tag, "--repo", repo, "--dir", str(out_dir), "--clobber"], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
         if proc.returncode != 0:
             print(proc.stdout, end="")
-        return proc.returncode
+        return proc.returncode, {}
     base = f"https://github.com/{repo}/releases/download/{tag}"
+    failed: dict[str, str] = {}
     for name in required_assets:
-        download(f"{base}/{name}", out_dir / name)
-    return 0
+        try:
+            download(f"{base}/{name}", out_dir / name)
+        except urllib.error.URLError as exc:
+            failed[name] = str(exc)
+    return 0, failed
 
 
 def tarball_problems(name: str, artifact: Path) -> list[str]:
@@ -114,11 +120,27 @@ def stray_sum_problems(out_dir: Path, sums: dict[str, str], in_manifest: set[str
     return errors
 
 
+def manifest_artifacts(path: Path) -> tuple[list[dict], list[str]]:
+    """(the manifest's well-formed artifact entries, what is wrong with it)."""
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [], [f"release-manifest.json invalid: {exc}"]
+    artifacts = manifest.get("artifacts", []) if isinstance(manifest, dict) else None
+    if not isinstance(artifacts, list):
+        return [], ["release-manifest.json must be an object with an artifacts list"]
+    well_formed = [item for item in artifacts if isinstance(item, dict) and isinstance(item.get("file"), str)]
+    errors = [f"release-manifest.json artifact {i} must be an object with a file"
+              for i, item in enumerate(artifacts) if not (isinstance(item, dict) and isinstance(item.get("file"), str))]
+    return well_formed, errors
+
+
 def asset_problems(out_dir: Path) -> list[str]:
     sums, errors = parse_sums((out_dir / "SHA256SUMS").read_text(encoding="utf-8"))
-    manifest = json.loads((out_dir / "release-manifest.json").read_text(encoding="utf-8"))
-    in_manifest = {item["file"] for item in manifest.get("artifacts", [])}
-    for item in manifest.get("artifacts", []):
+    artifacts, problems = manifest_artifacts(out_dir / "release-manifest.json")
+    errors += problems
+    in_manifest = {item["file"] for item in artifacts}
+    for item in artifacts:
         errors += artifact_problems(out_dir, item, sums)
     return errors + stray_sum_problems(out_dir, sums, in_manifest)
 
@@ -142,12 +164,13 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="agtmls-release-assets-") as td:
         out_dir = args.out_dir or Path(td)
         out_dir.mkdir(parents=True, exist_ok=True)
-        code = fetch(tag, args.repo, out_dir, required_assets)
+        code, failed = fetch(tag, args.repo, out_dir, required_assets)
         if code != 0:
             return code
         missing = [name for name in required_assets if not (out_dir / name).exists()]
         if missing:
-            return report([f"release asset missing after download: {name}" for name in missing])
+            return report([f"release asset missing after download: {name}"
+                           + (f" ({failed[name]})" if name in failed else "") for name in missing])
         errors = asset_problems(out_dir)
         if errors:
             return report(errors)

@@ -506,6 +506,54 @@ class PublishedAssetTests(TreeCase):
                          ["checksum mismatch for NOTES.md", "1 release asset issue(s)"])
 
 
+    # A malformed manifest, or a download that fails without gh, raised
+    # instead of being reported; fault injection over broken releases found them.
+
+    def write_manifest(self, text: str) -> None:
+        (self.source / "release-manifest.json").write_text(text, encoding="utf-8")
+
+    def test_a_manifest_that_is_not_json_is_reported_not_raised(self) -> None:
+        self.write_manifest("{ not json")
+        code, output, _ = self.verify("--tag", "v0.0.2")
+        self.assertEqual(code, 1)
+        self.assertTrue(self.failures(output)[0].startswith("release-manifest.json invalid:"), output)
+
+    def test_a_manifest_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        self.write_manifest("[]")
+        code, output, _ = self.verify("--tag", "v0.0.2")
+        self.assertEqual(code, 1)
+        self.assertIn("release-manifest.json must be an object with an artifacts list", self.failures(output))
+
+    def test_manifest_entries_that_name_no_file_are_reported_not_raised(self) -> None:
+        manifest = json.loads((self.source / "release-manifest.json").read_text(encoding="utf-8"))
+        manifest["artifacts"] += ["agtmls-openai-polyglot.tar.gz", {"sha256": "0"}]
+        self.write_manifest(json.dumps(manifest))
+        code, output, _ = self.verify("--tag", "v0.0.2")
+        self.assertEqual(code, 1)
+        self.assertEqual(self.failures(output), [
+            "release-manifest.json artifact 2 must be an object with a file",
+            "release-manifest.json artifact 3 must be an object with a file",
+            "2 release asset issue(s)",
+        ])
+
+    def test_without_gh_an_asset_that_fails_to_download_is_reported_not_raised(self) -> None:
+        import urllib.error
+
+        def download(url: str, path: Path) -> None:
+            name = url.rsplit("/", 1)[1]
+            if name == self.PROVIDERS[1]:
+                raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+            shutil.copy2(self.source / name, path)
+
+        with mock.patch.object(self.mod, "download", side_effect=download):
+            code, output, _ = self.verify("--tag", "v0.0.2", gh=None)
+        self.assertEqual(code, 1)
+        self.assertEqual(self.failures(output), [
+            f"release asset missing after download: {self.PROVIDERS[1]} (HTTP Error 404: Not Found)",
+            "1 release asset issue(s)",
+        ])
+
+
 class LatestReleaseTagTests(TreeCase):
     """Which release `latest` means, with and without the gh CLI."""
 
