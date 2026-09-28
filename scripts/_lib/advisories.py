@@ -29,6 +29,37 @@ def _string(value: object) -> str | None:
     return value if isinstance(value, str) else None
 
 
+def _affected_problems(name: str, affected: list) -> list[str]:
+    """Each affected entry names the AgtMLS ecosystem and one or more digests."""
+    problems = [] if affected else [f"{name}: no affected entries"]
+    for entry in affected:
+        entry = _mapping(entry)
+        if _mapping(entry.get("package")).get("ecosystem") != "AgtMLS":
+            problems.append(f"{name}: affected ecosystem is not AgtMLS")
+        digests = _items(_mapping(entry.get("ecosystem_specific")).get("digests"))
+        if not digests or not all(DIGEST.match(d) for d in digests if isinstance(d, str)) \
+                or not all(isinstance(d, str) for d in digests):
+            problems.append(f"{name}: affected needs one or more sha256: digests")
+    return problems
+
+
+def _advisory_problems(advisory: dict, seen: set[str]) -> list[str]:
+    """One advisory's id, timestamps and affected entries; records its id in `seen`."""
+    problems = []
+    name = _string(advisory.get("id")) or "?"
+    if not ADVISORY_ID.match(name):
+        problems.append(f"{name}: id is not AGT-ADV-YYYY-NNN")
+    if name in seen:
+        problems.append(f"{name}: id is not unique")
+    seen.add(name)
+    for field in ("modified", "published", "withdrawn"):
+        if field in advisory and not TIMESTAMP.match(_string(advisory[field]) or ""):
+            problems.append(f"{name}: {field} is not an RFC 3339 UTC timestamp")
+    if "modified" not in advisory:
+        problems.append(f"{name}: OSV requires modified")
+    return problems + _affected_problems(name, _items(advisory.get("affected")))
+
+
 def feed_problems(feed: dict) -> list[str]:
     """Every way a feed breaks spec 11.2, whatever JSON shape it has.
 
@@ -45,29 +76,27 @@ def feed_problems(feed: dict) -> list[str]:
         if not isinstance(advisory, dict):
             problems.append(f"advisory {index}: not an object")
             continue
-        name = _string(advisory.get("id")) or "?"
-        if not ADVISORY_ID.match(name):
-            problems.append(f"{name}: id is not AGT-ADV-YYYY-NNN")
-        if name in seen:
-            problems.append(f"{name}: id is not unique")
-        seen.add(name)
-        for field in ("modified", "published", "withdrawn"):
-            if field in advisory and not TIMESTAMP.match(_string(advisory[field]) or ""):
-                problems.append(f"{name}: {field} is not an RFC 3339 UTC timestamp")
-        if "modified" not in advisory:
-            problems.append(f"{name}: OSV requires modified")
-        affected = _items(advisory.get("affected"))
-        if not affected:
-            problems.append(f"{name}: no affected entries")
-        for entry in affected:
-            entry = _mapping(entry)
-            if _mapping(entry.get("package")).get("ecosystem") != "AgtMLS":
-                problems.append(f"{name}: affected ecosystem is not AgtMLS")
-            digests = _items(_mapping(entry.get("ecosystem_specific")).get("digests"))
-            if not digests or not all(DIGEST.match(d) for d in digests if isinstance(d, str)) \
-                    or not all(isinstance(d, str) for d in digests):
-                problems.append(f"{name}: affected needs one or more sha256: digests")
+        problems += _advisory_problems(advisory, seen)
     return problems
+
+
+def _digests(entry: object) -> list[str]:
+    """The digest strings an affected entry lists."""
+    return [d for d in _items(_mapping(_mapping(entry).get("ecosystem_specific")).get("digests")) if isinstance(d, str)]
+
+
+def _live_digests(feed: dict) -> dict[str, list[str]]:
+    """Advisory ids by digest, for every advisory that is not withdrawn."""
+    by_digest: dict[str, list[str]] = {}
+    for advisory in _items(feed.get("advisories")):
+        advisory = _mapping(advisory)
+        advisory_id = _string(advisory.get("id"))
+        if "withdrawn" in advisory or advisory_id is None:
+            continue
+        for entry in _items(advisory.get("affected")):
+            for digest in _digests(entry):
+                by_digest.setdefault(digest, []).append(advisory_id)
+    return by_digest
 
 
 def revoked(feed: dict, lock: dict) -> list[tuple[str, str, list[str]]]:
@@ -76,16 +105,7 @@ def revoked(feed: dict, lock: dict) -> list[tuple[str, str, list[str]]]:
     Entries of the wrong shape revoke nothing: matching is on a digest
     string and an advisory id string, and anything else is not a match.
     """
-    by_digest: dict[str, list[str]] = {}
-    for advisory in _items(feed.get("advisories")):
-        advisory = _mapping(advisory)
-        advisory_id = _string(advisory.get("id"))
-        if "withdrawn" in advisory or advisory_id is None:
-            continue
-        for entry in _items(advisory.get("affected")):
-            for digest in _items(_mapping(_mapping(entry).get("ecosystem_specific")).get("digests")):
-                if isinstance(digest, str):
-                    by_digest.setdefault(digest, []).append(advisory_id)
+    by_digest = _live_digests(feed)
     installed = [_mapping(skill) for skill in _items(lock.get("skills"))]
     return [
         (skill["name"], skill["integrity"], sorted(by_digest[skill["integrity"]]))

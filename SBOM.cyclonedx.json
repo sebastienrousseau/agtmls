@@ -1513,7 +1513,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf122cd4c617d3c9fe226ef6b684bee1b57e6747e8a4680811e3e1f47f9cf963"
+          "content": "43a46de1f392a19499bdc5e2f2f5904733f0a7551eadc71d59359264760fa414"
         }
       ],
       "name": "scripts/_lib/advisories.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T19:46:06Z",
+    "timestamp": "2026-09-28T19:55:04Z",
     "tools": {
       "components": [
         {

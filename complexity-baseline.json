@@ -12,14 +12,6 @@
     }
   },
   "functions": {
-    "scripts/_lib/advisories.py::feed_problems": {
-      "cognitive": 36,
-      "cyclomatic": 21
-    },
-    "scripts/_lib/advisories.py::revoked": {
-      "cognitive": 17,
-      "cyclomatic": 11
-    },
     "scripts/_lib/analyzer.py::check_steganography": {
       "cognitive": 40,
       "cyclomatic": 18
