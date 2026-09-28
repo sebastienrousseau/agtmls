@@ -322,6 +322,69 @@ class SbomValidatorTests(SliceFixture):
         self.assert_catches("SBOM.cyclonedx.json is not a CycloneDX document", count=1)
 
 
+    # Valid JSON of the wrong shape, or invalid JSON, raised instead of being
+    # reported; fault injection over both SBOMs found 216 such cases.
+
+    def test_an_spdx_document_that_is_not_json_is_reported_not_raised(self) -> None:
+        self.overwrite(self.SPDX, "{ not json")
+        code, output = self.run_validator()
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL: SBOM.spdx.json is not valid JSON:", output)
+
+    def test_an_spdx_document_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        self.overwrite(self.SPDX, "[]")
+        code, output = self.run_validator()
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL: SBOM.spdx.json must be a JSON object", output)
+
+    def test_creation_info_of_the_wrong_shape_is_reported_not_raised(self) -> None:
+        self.spdx(lambda data: data.__setitem__("creationInfo", []))
+        self.assert_catches("creationInfo.created is required")
+        self.doCleanups()
+        self.spdx(lambda data: data["creationInfo"].__setitem__("created", 7))
+        self.assert_catches("creationInfo.created is required", count=1)
+
+    def test_a_namespace_that_is_not_a_string_is_reported_not_raised(self) -> None:
+        self.spdx(lambda data: data.__setitem__("documentNamespace", 7))
+        self.assert_catches("SBOM.spdx.json: documentNamespace must be a string", count=1)
+
+    def test_files_that_are_not_a_list_are_reported_not_raised(self) -> None:
+        self.spdx(lambda data: data.__setitem__("files", {"a": 1}))
+        self.assert_catches("SBOM.spdx.json: files must be a list")
+
+    def test_a_file_entry_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        self.spdx(lambda data: data["files"].insert(0, "./skills/x"))
+        self.assert_catches("SBOM.spdx.json: file entry 0 must be an object with a fileName", count=1)
+
+    def test_a_file_entry_without_a_file_name_is_reported_not_raised(self) -> None:
+        self.spdx(lambda data: data["files"][0].pop("fileName"))
+        # The entry no longer covers its path either, which is reported too.
+        self.assert_catches("SBOM.spdx.json: file entry 0 must be an object with a fileName")
+
+    def test_checksums_of_the_wrong_shape_are_reported_not_raised(self) -> None:
+        def mutate(data) -> None:
+            data["files"][0]["checksums"] = [["SHA1"], {"algorithm": ["SHA1"]}]
+            self.first = data["files"][0]["fileName"]
+        self.spdx(mutate)
+        self.assert_catches(f"file {self.first} has malformed checksums", count=1)
+
+    def test_a_malformed_checksum_beside_a_good_sha1_is_still_reported(self) -> None:
+        """Skipping it would pass a document spdx-tools rejects."""
+        def mutate(data) -> None:
+            data["files"][0]["checksums"].append("SHA256")
+            self.first = data["files"][0]["fileName"]
+        self.spdx(mutate)
+        self.assert_catches(f"file {self.first} has malformed checksums", count=1)
+
+    def test_a_cyclonedx_document_that_is_not_json_is_reported_not_raised(self) -> None:
+        self.overwrite("SBOM.cyclonedx.json", "{ not json")
+        self.assert_catches("SBOM.cyclonedx.json is not valid JSON:", count=1)
+
+    def test_a_cyclonedx_document_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        self.overwrite("SBOM.cyclonedx.json", "[]")
+        self.assert_catches("SBOM.cyclonedx.json is not a CycloneDX document", count=1)
+
+
 class WheelPathTests(SliceFixture):
     """What counts as shipped is read from pyproject, so its parsing must be right."""
 

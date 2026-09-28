@@ -48,23 +48,32 @@ def wheel_paths() -> set[str]:
 MANDATORY = ("spdxVersion", "SPDXID", "creationInfo", "name", "documentNamespace", "dataLicense")
 
 
-def creation_problems(creation: dict) -> list[str]:
+def creation_problems(creation: object) -> list[str]:
+    creation = creation if isinstance(creation, dict) else {}
+    created = creation.get("created")
     errors = []
-    if not creation.get("created"):
+    if not created or not isinstance(created, str):
         errors.append("SBOM.spdx.json: creationInfo.created is required")
-    if creation.get("created", "").startswith("1970-01-01"):
+    elif created.startswith("1970-01-01"):
         errors.append("SBOM.spdx.json: creationInfo.created is the epoch placeholder, not a real date")
     if not creation.get("creators"):
         errors.append("SBOM.spdx.json: creationInfo.creators is required")
     return errors
 
 
+def namespace_problems(namespace: object) -> list[str]:
+    if not isinstance(namespace, str):
+        return ["SBOM.spdx.json: documentNamespace must be a string"]
+    if "example.invalid" in namespace:
+        return ["SBOM.spdx.json: documentNamespace is still a placeholder"]
+    return []
+
+
 def document_problems(document: dict) -> list[str]:
     """The SPDX fields a validator requires, and placeholders left in them."""
     errors = [f"SBOM.spdx.json: missing mandatory field {field!r}" for field in MANDATORY if field not in document]
     errors += creation_problems(document.get("creationInfo", {}))
-    if "example.invalid" in document.get("documentNamespace", ""):
-        errors.append("SBOM.spdx.json: documentNamespace is still a placeholder")
+    errors += namespace_problems(document.get("documentNamespace", ""))
     if not document.get("packages"):
         errors.append("SBOM.spdx.json: no packages section, so it describes no artifact")
     if not document.get("relationships"):
@@ -72,22 +81,51 @@ def document_problems(document: dict) -> list[str]:
     return errors
 
 
-def file_problems(files: list) -> list[str]:
-    """The first file entry without an SPDXID or a SHA1 checksum."""
-    for entry in files:
-        if "SPDXID" not in entry:
-            return [f"SBOM.spdx.json: file {entry.get('fileName')} has no SPDXID"]
-        algorithms = {c.get("algorithm") for c in entry.get("checksums", [])}
-        if "SHA1" not in algorithms:
-            return [f"SBOM.spdx.json: file {entry.get('fileName')} lacks the mandatory SHA1 checksum"]
+def checksum_algorithms(entry: dict) -> set[str | None] | None:
+    """The file's checksum algorithms, or None when the list is malformed."""
+    checksums = entry.get("checksums", [])
+    # An entry with no algorithm names none (and the file then lacks SHA1);
+    # one that is not an object, or names a non-string, is malformed.
+    if not isinstance(checksums, list) or not all(
+        isinstance(c, dict) and isinstance(c.get("algorithm", ""), str) for c in checksums
+    ):
+        return None
+    return {c.get("algorithm") for c in checksums}
+
+
+def entry_problem(i: int, entry: object) -> str | None:
+    if not isinstance(entry, dict) or not isinstance(entry.get("fileName"), str):
+        return f"SBOM.spdx.json: file entry {i} must be an object with a fileName"
+    if "SPDXID" not in entry:
+        return f"SBOM.spdx.json: file {entry['fileName']} has no SPDXID"
+    algorithms = checksum_algorithms(entry)
+    if algorithms is None:
+        return f"SBOM.spdx.json: file {entry['fileName']} has malformed checksums (each needs a string algorithm)"
+    if "SHA1" not in algorithms:
+        return f"SBOM.spdx.json: file {entry['fileName']} lacks the mandatory SHA1 checksum"
+    return None
+
+
+def file_problems(files: object) -> list[str]:
+    """The first malformed file entry: one complaint, since a systematic
+    fault is one fault."""
+    if not isinstance(files, list):
+        return ["SBOM.spdx.json: files must be a list"]
+    for i, entry in enumerate(files):
+        problem = entry_problem(i, entry)
+        if problem is not None:
+            return [problem]
     return []
 
 
 def cyclonedx_problems() -> list[str]:
     if not CYCLONEDX.exists():
         return ["SBOM.cyclonedx.json is missing"]
-    cyclone = json.loads(CYCLONEDX.read_text(encoding="utf-8"))
-    if cyclone.get("bomFormat") != "CycloneDX" or not cyclone.get("specVersion"):
+    try:
+        cyclone = json.loads(CYCLONEDX.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"SBOM.cyclonedx.json is not valid JSON: {exc}"]
+    if not isinstance(cyclone, dict) or cyclone.get("bomFormat") != "CycloneDX" or not cyclone.get("specVersion"):
         return ["SBOM.cyclonedx.json is not a CycloneDX document"]
     return []
 
@@ -112,17 +150,31 @@ def upstream_validation() -> tuple[list[str], str]:
         return [], "skipped (spdx-tools not installed)"
 
 
+def load_spdx() -> dict | str:
+    """The SPDX document, or why it cannot be read as one."""
+    try:
+        document = json.loads(SPDX.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return f"SBOM.spdx.json is not valid JSON: {exc}"
+    return document if isinstance(document, dict) else "SBOM.spdx.json must be a JSON object"
+
+
 def main() -> int:
     if not SPDX.exists():
         print("FAIL: SBOM.spdx.json is missing")
         return 1
-    document = json.loads(SPDX.read_text(encoding="utf-8"))
-    errors = document_problems(document) + file_problems(document.get("files", []))
+    document = load_spdx()
+    if isinstance(document, str):
+        print(f"FAIL: {document}")
+        return 1
+    files = document.get("files", [])
+    errors = document_problems(document) + file_problems(files)
 
     # The SBOM must cover every directory the wheel ships.
     covered = {
         entry["fileName"].lstrip("./").split("/")[0]
-        for entry in document.get("files", [])
+        for entry in (files if isinstance(files, list) else [])
+        if isinstance(entry, dict) and isinstance(entry.get("fileName"), str)
     }
     missing = sorted(wheel_paths() - covered)
     if missing:
@@ -139,7 +191,7 @@ def main() -> int:
         print()
         print(f"FAIL: {len(errors)} SBOM conformance issue(s)")
         return 1
-    print(f"OK: SBOM conformant — {len(document.get('files', []))} files, {len(covered)} shipped paths, {validator}")
+    print(f"OK: SBOM conformant — {len(files)} files, {len(covered)} shipped paths, {validator}")
     return 0
 
 
