@@ -21,6 +21,12 @@ updates:
     labels:
       - dependencies
       - github-actions
+    groups:
+      # init, analyze and upload-sarif must run the same release: analyze
+      # refuses a configuration written by a different init version.
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"
 
   # ── Python packages (pip) ────────────────────────────────────────
   - package-ecosystem: pip
