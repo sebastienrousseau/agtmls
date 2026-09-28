@@ -64,6 +64,8 @@ def _manifest_skills(root: Path, manifest: Path, default_name: str) -> list[tupl
         data = json.loads(manifest.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return []
+    if not isinstance(data, dict):
+        return []
     name = str(data.get("name") or default_name)
     declared = data.get("skills") or ["./skills"]
     found: list[tuple[str, Path]] = []
@@ -90,9 +92,10 @@ def foreign_layout(root: Path) -> str | None:
 def _marketplace_plugins(marketplace: Path) -> list:
     """The `plugins` a marketplace lists, or [] when it cannot be read."""
     try:
-        plugins = json.loads(marketplace.read_text(encoding="utf-8")).get("plugins", [])
+        catalog = json.loads(marketplace.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        plugins = []
+        return []
+    plugins = catalog.get("plugins", []) if isinstance(catalog, dict) else []
     return plugins if isinstance(plugins, list) else []
 
 

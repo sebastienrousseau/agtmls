@@ -457,6 +457,21 @@ class ForeignLayoutTests(_ForeignTree):
         self.write(".codex-plugin/plugin.json", json.dumps({"name": "c", "skills": [7, "../out", "./skills"]}))
         self.assertEqual(self.found(), [("c", "skills/one")])
 
+    def test_manifests_that_are_not_objects_are_skipped_not_raised(self) -> None:
+        """Valid JSON of another shape raised AttributeError on .get(), which
+        stopped the whole foreign audit instead of skipping one manifest."""
+        self.write("skills/one/SKILL.md")
+        for text in ("[]", '"x"', "7", "null"):
+            with self.subTest(marketplace=text):
+                self.write(".claude-plugin/marketplace.json", text)
+                self.assertEqual(self.found(), [("skills", "skills/one")])
+        self.write(".claude-plugin/marketplace.json", json.dumps({"plugins": [{"source": "./plugins/a"}]}))
+        self.write("plugins/a/.claude-plugin/plugin.json", "[]")
+        self.assertEqual(self.found(), [("skills", "skills/one")])
+        shutil.rmtree(self.tmp / ".claude-plugin")
+        self.write(".codex-plugin/plugin.json", "[]")
+        self.assertEqual(self.found(), [("skills", "skills/one")])
+
     def test_a_marketplace_plugin_with_its_own_manifest_is_read_through_it(self) -> None:
         self.write(".claude-plugin/marketplace.json", json.dumps({"plugins": [{"name": "alpha", "source": "./plugins/alpha"}]}))
         self.write("plugins/alpha/.claude-plugin/plugin.json", json.dumps({"name": "alpha", "skills": ["./sk"]}))
