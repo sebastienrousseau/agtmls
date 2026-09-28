@@ -43,85 +43,99 @@ def fresh(tmp: Path, name: str) -> Path:
     return target
 
 
+def lockfile_problems(target: Path) -> list[str]:
+    """1. A clean install records a lockfile covering what it installed."""
+    lock_path = target / ".agtmls" / "manifest.json"
+    if not lock_path.exists():
+        return ["install wrote no lockfile"]
+    errors = []
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    installed = sorted(p.name for p in (target / ".claude" / "skills").iterdir())
+    recorded = sorted(entry["name"] for entry in lock["skills"])
+    if installed != recorded:
+        errors.append(f"lockfile records {recorded}, installed {installed}")
+    if not all(e["integrity"].startswith("sha256:") for e in lock["skills"]):
+        errors.append("lockfile entries lack a sha256 digest")
+    return errors
+
+
+def tamper_problems(target: Path) -> list[str]:
+    """2-4. A clean tree verifies; modifying or deleting a skill is detected."""
+    errors = []
+    proc = agtmls("verify", "claude", "--target", str(target))
+    if proc.returncode != 0:
+        errors.append(f"clean tree failed verification:\n{proc.stdout}")
+
+    victim = next((target / ".claude" / "skills").iterdir())
+    (victim / "SKILL.md").write_text("tampered\n", encoding="utf-8")
+    proc = agtmls("verify", "claude", "--target", str(target))
+    if proc.returncode != EXIT_INTEGRITY_FAILURE:
+        errors.append(f"modified skill: expected exit {EXIT_INTEGRITY_FAILURE}, got {proc.returncode}")
+    if "MODIFIED" not in proc.stdout:
+        errors.append(f"modified skill not reported:\n{proc.stdout}")
+
+    shutil.rmtree(victim)
+    proc = agtmls("verify", "claude", "--target", str(target))
+    if "MISSING" not in proc.stdout:
+        errors.append(f"deleted skill not reported:\n{proc.stdout}")
+    return errors
+
+
+def unmanaged_problems(tmp: Path) -> list[str]:
+    """5. An unmanaged skill is reported but not an integrity failure, and
+    must never be removed: deleting what we did not install is not ours
+    to do."""
+    errors = []
+    target = fresh(tmp, "unmanaged")
+    agtmls("install", "rust", "claude", "--target", str(target), "--copy")
+    stranger = target / ".claude" / "skills" / "not-ours"
+    stranger.mkdir()
+    (stranger / "SKILL.md").write_text("mine\n", encoding="utf-8")
+    proc = agtmls("verify", "claude", "--target", str(target), "--json")
+    payload = json.loads(proc.stdout)
+    statuses = {p["skill"]: p["status"] for p in payload["problems"]}
+    if statuses.get("not-ours") != "unmanaged":
+        errors.append(f"unmanaged skill not reported: {payload}")
+    if proc.returncode != 0:
+        errors.append(f"unmanaged-only tree should not be an integrity failure, got {proc.returncode}")
+    if not stranger.exists():
+        errors.append("verify deleted a skill it did not install")
+    return errors
+
+
+def drift_problems(tmp: Path) -> list[str]:
+    """6. A registry that no longer matches index.json cannot be installed,
+    and the refusal installs nothing."""
+    errors = []
+    backup = None
+    drifted = ROOT / "skills" / "writing-plans" / "SKILL.md"
+    try:
+        backup = drifted.read_text(encoding="utf-8")
+        drifted.write_text(backup + "\ndrifted\n", encoding="utf-8")
+        target = fresh(tmp, "drift")
+        proc = agtmls("install", "rust", "claude", "--target", str(target), "--copy")
+        if proc.returncode != EXIT_INTEGRITY_FAILURE:
+            errors.append(
+                f"drifted registry: expected exit {EXIT_INTEGRITY_FAILURE}, got {proc.returncode}"
+            )
+        if (target / ".claude" / "skills").exists():
+            errors.append("drifted registry install copied skills before refusing")
+    finally:
+        if backup is not None:
+            drifted.write_text(backup, encoding="utf-8")
+    return errors
+
+
 def main() -> int:
-    errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="agtmls-verify-") as raw:
         tmp = Path(raw)
-
-        # 1. A clean install records a lockfile covering what it installed.
         target = fresh(tmp, "clean")
         proc = agtmls("install", "rust", "claude", "--target", str(target), "--copy")
         if proc.returncode != 0:
             print(f"FAIL: install failed:\n{proc.stdout}")
             return 1
-        lock_path = target / ".agtmls" / "manifest.json"
-        if not lock_path.exists():
-            errors.append("install wrote no lockfile")
-        else:
-            lock = json.loads(lock_path.read_text(encoding="utf-8"))
-            installed = sorted(p.name for p in (target / ".claude" / "skills").iterdir())
-            recorded = sorted(entry["name"] for entry in lock["skills"])
-            if installed != recorded:
-                errors.append(f"lockfile records {recorded}, installed {installed}")
-            if not all(e["integrity"].startswith("sha256:") for e in lock["skills"]):
-                errors.append("lockfile entries lack a sha256 digest")
-
-        # 2. A clean tree verifies.
-        proc = agtmls("verify", "claude", "--target", str(target))
-        if proc.returncode != 0:
-            errors.append(f"clean tree failed verification:\n{proc.stdout}")
-
-        # 3. Modifying an installed skill is detected.
-        victim = next((target / ".claude" / "skills").iterdir())
-        (victim / "SKILL.md").write_text("tampered\n", encoding="utf-8")
-        proc = agtmls("verify", "claude", "--target", str(target))
-        if proc.returncode != EXIT_INTEGRITY_FAILURE:
-            errors.append(f"modified skill: expected exit {EXIT_INTEGRITY_FAILURE}, got {proc.returncode}")
-        if "MODIFIED" not in proc.stdout:
-            errors.append(f"modified skill not reported:\n{proc.stdout}")
-
-        # 4. Deleting an installed skill is detected.
-        shutil.rmtree(victim)
-        proc = agtmls("verify", "claude", "--target", str(target))
-        if "MISSING" not in proc.stdout:
-            errors.append(f"deleted skill not reported:\n{proc.stdout}")
-
-        # 5. An unmanaged skill is reported but not an integrity failure, and
-        #    must never be removed: deleting what we did not install is not ours
-        #    to do.
-        target = fresh(tmp, "unmanaged")
-        agtmls("install", "rust", "claude", "--target", str(target), "--copy")
-        stranger = target / ".claude" / "skills" / "not-ours"
-        stranger.mkdir()
-        (stranger / "SKILL.md").write_text("mine\n", encoding="utf-8")
-        proc = agtmls("verify", "claude", "--target", str(target), "--json")
-        payload = json.loads(proc.stdout)
-        statuses = {p["skill"]: p["status"] for p in payload["problems"]}
-        if statuses.get("not-ours") != "unmanaged":
-            errors.append(f"unmanaged skill not reported: {payload}")
-        if proc.returncode != 0:
-            errors.append(f"unmanaged-only tree should not be an integrity failure, got {proc.returncode}")
-        if not stranger.exists():
-            errors.append("verify deleted a skill it did not install")
-
-        # 6. A registry that no longer matches index.json cannot be installed,
-        #    and the refusal installs nothing.
-        backup = None
-        drifted = ROOT / "skills" / "writing-plans" / "SKILL.md"
-        try:
-            backup = drifted.read_text(encoding="utf-8")
-            drifted.write_text(backup + "\ndrifted\n", encoding="utf-8")
-            target = fresh(tmp, "drift")
-            proc = agtmls("install", "rust", "claude", "--target", str(target), "--copy")
-            if proc.returncode != EXIT_INTEGRITY_FAILURE:
-                errors.append(
-                    f"drifted registry: expected exit {EXIT_INTEGRITY_FAILURE}, got {proc.returncode}"
-                )
-            if (target / ".claude" / "skills").exists():
-                errors.append("drifted registry install copied skills before refusing")
-        finally:
-            if backup is not None:
-                drifted.write_text(backup, encoding="utf-8")
+        errors = lockfile_problems(target) + tamper_problems(target)
+        errors += unmanaged_problems(tmp) + drift_problems(tmp)
 
     if errors:
         for error in errors:

@@ -93,18 +93,6 @@
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
     },
-    "scripts/smoke-install-safety.py::main": {
-      "cognitive": 21,
-      "cyclomatic": 21,
-      "halstead": 31.7,
-      "lines": 64
-    },
-    "scripts/smoke-install-verify.py::main": {
-      "cognitive": 27,
-      "cyclomatic": 21,
-      "halstead": 36.1,
-      "lines": 72
-    },
     "scripts/smoke-make-install.py::main": {
       "cognitive": 23,
       "cyclomatic": 16,
