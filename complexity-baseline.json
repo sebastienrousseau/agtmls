@@ -8,7 +8,7 @@
   },
   "files": {
     "scripts/_lib/analyzer.py": {
-      "lines": 888
+      "lines": 649
     }
   },
   "functions": {
@@ -20,10 +20,6 @@
       "cognitive": 17,
       "cyclomatic": 11
     },
-    "scripts/_lib/analyzer.py::_declared_skills": {
-      "cognitive": 29,
-      "cyclomatic": 15
-    },
     "scripts/_lib/analyzer.py::check_steganography": {
       "cognitive": 40,
       "cyclomatic": 18
@@ -32,10 +28,6 @@
       "cognitive": 25,
       "cyclomatic": 13,
       "halstead": 37.5
-    },
-    "scripts/_lib/analyzer.py::foreign_coverage": {
-      "cognitive": 42,
-      "cyclomatic": 29
     },
     "scripts/_lib/analyzer.py::scan_rules": {
       "cognitive": 31,

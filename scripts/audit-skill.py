@@ -27,9 +27,7 @@ from _lib import analyzer  # noqa: E402, F401  (the module, for tests that patch
 from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; re-exported)
     MAX_AUDIT_BYTES,
     Finding,
-    ForeignLayoutError,
     audit_file,
-    audit_foreign,
     audit_skill_target,
     check_dangerous_shell,
     check_prompt_injection,
@@ -38,6 +36,10 @@ from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; 
     line_map,
 )
 from _lib.cli_parser import registry_version  # noqa: E402  (same path insertion)
+from _lib.foreign import (  # noqa: E402  (same path insertion)
+    ForeignLayoutError,
+    audit_foreign,
+)
 from _lib.rules import RULES  # noqa: E402  (same path insertion)
 
 SARIF_SCHEMA = "https://json.schemastore.org/sarif-2.1.0.json"
@@ -128,7 +130,7 @@ def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str) -> int | 
     """Audit and print a fetched tree; the unsuppressed findings, or 2 when
     its layout cannot be read."""
     from _lib import portability
-    from _lib.analyzer import foreign_coverage, foreign_layout
+    from _lib.foreign import foreign_coverage, foreign_layout
 
     try:
         reports = audit_foreign(root, pedantic)
