@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.17 - 2026-09-29
+
 ### Fixed
 
 - `validate-providers.py` crashed, instead of reporting the problem, on a
@@ -24,6 +26,24 @@ All notable changes to AgtMLS are recorded here.
   and `--live` check only that agent's entries, and uninstall forgets only
   that agent, removing its copies whatever mode the last install recorded.
   Lockfiles written before resolve their agents from what is on disk.
+- `audit --foreign` stopped with a traceback on a tree whose
+  `.claude-plugin/marketplace.json` or a plugin manifest was valid JSON
+  but not an object; such a manifest is now skipped, as an unreadable one
+  already was, and the tree's other skills are still audited.
+- `trust-check.py advisory` and `agtmls verify` with an advisory feed
+  crashed on a feed or lockfile that is not a JSON object, or on an
+  installed entry without a name. A non-object feed now revokes nothing
+  and is named by the feed check, and a revoked entry without a name is
+  reported as `?` rather than dropped.
+- The repository's own validators now name a malformed file instead of
+  stopping with a traceback: profiles, plugin and marketplace manifests,
+  `index.json`, skill `metadata.json`, both SBOMs, the version files, the
+  release manifest checked after publishing, the security corpus, and the
+  install-safety smoke test when an install deletes the user's prompt.
+  Each was run over every single-field mutation of its real input, or
+  fuzzed, and only the inputs that crashed changed, apart from a few
+  deliberate refusals (a non-string skill name, a non-string SBOM
+  namespace, a malformed checksum beside a good SHA1).
 
 ### Added
 
@@ -36,8 +56,9 @@ All notable changes to AgtMLS are recorded here.
   Halstead counts every token, so Python 3.10, 3.12 and 3.14 measure the
   same. The 66 functions and 2 files already over a ceiling are recorded
   in `complexity-baseline.json`; none may get worse, nothing may join
-  them, and an improvement must be recorded. Seven functions written in
-  recent releases were brought under every ceiling.
+  them, and an improvement must be recorded. By this release 37 functions
+  remain, worst first, and the foreign-tree audit moved to
+  `scripts/_lib/foreign.py`, taking `analyzer.py` from 888 to 649 lines.
 - A skill's `metadata.json` may list `antigravity` in `supported_agents`.
   The validator kept its own list of claude, codex and aider after
   Antigravity became an install target; it now reads the native agents
