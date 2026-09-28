@@ -44,12 +44,6 @@
       "cyclomatic": 13,
       "lines": 68
     },
-    "scripts/bench.py::main": {
-      "cognitive": 32,
-      "cyclomatic": 22,
-      "halstead": 30.7,
-      "lines": 109
-    },
     "scripts/check-publishing-readiness.py::check": {
       "cyclomatic": 12
     },

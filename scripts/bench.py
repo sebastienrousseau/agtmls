@@ -348,7 +348,7 @@ def smoke() -> int:
     return 0
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Measure AgtMLS performance.")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--smoke", action="store_true", help="one iteration per workload; no timing assertions")
@@ -384,41 +384,53 @@ def main() -> int:
         help="baseline to check against or record (default: bench-baseline.json). Ratios "
              "do not transfer between machines, so CI keeps its own, recorded on the runner",
     )
-    args = parser.parse_args()
-    baseline_path = args.baseline or BASELINE
+    return parser
 
-    if args.smoke:
-        return smoke()
-    if args.scaling:
-        return scaling(record=args.record)
-    if args.redeclare:
-        return redeclare(baseline_path)
 
-    if args.write_baseline:
-        # One run cannot observe its own run-to-run spread, and the spread is
-        # what the per-workload threshold is derived from.
-        reports = []
-        for index in range(args.repeats):
-            print(f"suite run {index + 1} of {args.repeats}")
-            reports.append(run_suite(args.iterations, args.warmup))
-        report = reports[-1]
-        print()
-        print_table(report)
-        baseline_path.write_text(
-            json.dumps(as_baseline(reports), indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
-        if baseline_path != BASELINE:
-            # Another machine's baseline is a gate reference, not the
-            # published measurement BENCHMARKS.md is generated from.
-            print(f"\nwrote {baseline_path.name}")
-            return 0
-        RESULTS.mkdir(parents=True, exist_ok=True)
-        (RESULTS / "latency.json").write_text(
-            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
-        print(f"\nwrote {BASELINE.relative_to(ROOT)} and {(RESULTS / 'latency.json').relative_to(ROOT)}")
+def write_baseline(args: argparse.Namespace, baseline_path: Path) -> int:
+    # One run cannot observe its own run-to-run spread, and the spread is
+    # what the per-workload threshold is derived from.
+    reports = []
+    for index in range(args.repeats):
+        print(f"suite run {index + 1} of {args.repeats}")
+        reports.append(run_suite(args.iterations, args.warmup))
+    report = reports[-1]
+    print()
+    print_table(report)
+    baseline_path.write_text(
+        json.dumps(as_baseline(reports), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    if baseline_path != BASELINE:
+        # Another machine's baseline is a gate reference, not the
+        # published measurement BENCHMARKS.md is generated from.
+        print(f"\nwrote {baseline_path.name}")
         return 0
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    (RESULTS / "latency.json").write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"\nwrote {BASELINE.relative_to(ROOT)} and {(RESULTS / 'latency.json').relative_to(ROOT)}")
+    return 0
 
+
+def best_of(reports: list[dict[str, object]]) -> dict[str, object]:
+    """The last report, with each workload's ratio and P50 at their minimum across all."""
+    report = reports[-1]
+    for name in report["workloads"]:
+        entry = report["workloads"][name]
+        entry["ratio_to_calibration"] = round(
+            min(float(r["workloads"][name]["ratio_to_calibration"]) for r in reports), 4
+        )
+        # The cold-start budget is judged the same way, so one warm run
+        # cannot fail a build on its own.
+        entry["p50_ms"] = round(
+            min(float(r["workloads"][name]["p50_ms"]) for r in reports), 3
+        )
+    return report
+
+
+def measured_report(args: argparse.Namespace) -> tuple[dict[str, object], int]:
+    """(the report, how many suite runs it took)."""
     # A --check run must be measured the way the baseline was measured, or the
     # two numbers are not comparable. The baseline takes the minimum ratio
     # across several full suite runs; so does this.
@@ -434,26 +446,10 @@ def main() -> int:
         if passes > 1:
             print(f"suite run {index + 1} of {passes}")
         reports.append(run_suite(args.iterations, args.warmup))
-    report = reports[-1]
-    if passes > 1:
-        for name in report["workloads"]:
-            entry = report["workloads"][name]
-            entry["ratio_to_calibration"] = round(
-                min(float(r["workloads"][name]["ratio_to_calibration"]) for r in reports), 4
-            )
-            # The cold-start budget is judged the same way, so one warm run
-            # cannot fail a build on its own.
-            entry["p50_ms"] = round(
-                min(float(r["workloads"][name]["p50_ms"]) for r in reports), 3
-            )
+    return (best_of(reports) if passes > 1 else reports[-1]), passes
 
-    if args.json:
-        print(json.dumps(report, indent=2, sort_keys=True))
-    else:
-        if passes > 1:
-            print()
-        print_table(report)
 
+def keep_history(report: dict[str, object]) -> None:
     # Local history, never the committed record: a --check run in CI must not
     # dirty the tree. Capped for the same reason the gate's run records are.
     HISTORY.mkdir(parents=True, exist_ok=True)
@@ -463,9 +459,8 @@ def main() -> int:
     for old in sorted(HISTORY.glob("bench-*.json"))[:-RETAINED_RUNS]:
         old.unlink()
 
-    if not args.check:
-        return 0
 
+def check_against(report: dict[str, object], baseline_path: Path) -> int:
     if not baseline_path.exists():
         print(f"\nFAIL: no {baseline_path.name}; run bench.py --write-baseline")
         return 1
@@ -483,6 +478,30 @@ def main() -> int:
           f"{(REGRESSION_THRESHOLD - 1) * 100:.0f}% of baseline; "
           f"interactive P50 under {COLD_START_BUDGET_MS:.0f}ms")
     return 0
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    baseline_path = args.baseline or BASELINE
+
+    if args.smoke:
+        return smoke()
+    if args.scaling:
+        return scaling(record=args.record)
+    if args.redeclare:
+        return redeclare(baseline_path)
+    if args.write_baseline:
+        return write_baseline(args, baseline_path)
+
+    report, passes = measured_report(args)
+    if args.json:
+        print(json.dumps(report, indent=2, sort_keys=True))
+    else:
+        if passes > 1:
+            print()
+        print_table(report)
+    keep_history(report)
+    return check_against(report, baseline_path) if args.check else 0
 
 
 if __name__ == "__main__":
