@@ -60,6 +60,77 @@ def download(url: str, path: Path) -> None:
         path.write_bytes(response.read())
 
 
+TARBALL_MEMBERS = ["agtmls/index.json", "agtmls/export-manifest.json", "agtmls/ADAPTERS.md"]
+
+
+def fetch(tag: str, repo: str, out_dir: Path, required_assets: list[str]) -> int:
+    """Download the release into `out_dir`; gh's exit code, or 0."""
+    gh = shutil.which("gh")
+    if gh:
+        proc = subprocess.run([gh, "release", "download", tag, "--repo", repo, "--dir", str(out_dir), "--clobber"], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+        if proc.returncode != 0:
+            print(proc.stdout, end="")
+        return proc.returncode
+    base = f"https://github.com/{repo}/releases/download/{tag}"
+    for name in required_assets:
+        download(f"{base}/{name}", out_dir / name)
+    return 0
+
+
+def tarball_problems(name: str, artifact: Path) -> list[str]:
+    try:
+        with tarfile.open(artifact, "r:gz") as tf:
+            names = set(tf.getnames())
+    except tarfile.TarError as exc:
+        return [f"invalid tarball {name}: {exc}"]
+    return [f"{name} missing {required}" for required in TARBALL_MEMBERS if required not in names]
+
+
+def artifact_problems(out_dir: Path, item: dict, sums: dict[str, str]) -> list[str]:
+    """One manifest artifact against SHA256SUMS, the manifest and its contents."""
+    name = item["file"]
+    artifact = out_dir / name
+    if not artifact.exists():
+        return [f"manifest artifact missing: {name}"]
+    errors = []
+    actual = sha256(artifact)
+    if sums.get(name) != actual:
+        errors.append(f"SHA256SUMS mismatch for {name}")
+    if item.get("sha256") != actual:
+        errors.append(f"release-manifest checksum mismatch for {name}")
+    return errors + tarball_problems(name, artifact)
+
+
+def stray_sum_problems(out_dir: Path, sums: dict[str, str], in_manifest: set[str]) -> list[str]:
+    errors = []
+    for name, expected in sums.items():
+        # Manifest artifacts were compared against both sources above;
+        # this sweep is for summed files the manifest does not list.
+        if name == "SHA256SUMS" or name in in_manifest:
+            continue
+        path = out_dir / name
+        if path.exists() and sha256(path) != expected:
+            errors.append(f"checksum mismatch for {name}")
+    return errors
+
+
+def asset_problems(out_dir: Path) -> list[str]:
+    sums, errors = parse_sums((out_dir / "SHA256SUMS").read_text(encoding="utf-8"))
+    manifest = json.loads((out_dir / "release-manifest.json").read_text(encoding="utf-8"))
+    in_manifest = {item["file"] for item in manifest.get("artifacts", [])}
+    for item in manifest.get("artifacts", []):
+        errors += artifact_problems(out_dir, item, sums)
+    return errors + stray_sum_problems(out_dir, sums, in_manifest)
+
+
+def report(problems: list[str]) -> int:
+    for problem in problems:
+        print(f"FAIL: {problem}")
+    print()
+    print(f"FAIL: {len(problems)} release asset issue(s)")
+    return 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", default="latest", help="release tag to verify, or latest")
@@ -67,66 +138,19 @@ def main() -> int:
     parser.add_argument("--out-dir", type=Path)
     args = parser.parse_args()
     tag = latest_release_tag(args.repo) if args.tag == "latest" else args.tag
-    base = f"https://github.com/{args.repo}/releases/download/{tag}"
     required_assets = [*provider_assets(), *BASE_ASSETS]
-    errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="agtmls-release-assets-") as td:
         out_dir = args.out_dir or Path(td)
         out_dir.mkdir(parents=True, exist_ok=True)
-        gh = shutil.which("gh")
-        if gh:
-            proc = subprocess.run([gh, "release", "download", tag, "--repo", args.repo, "--dir", str(out_dir), "--clobber"], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
-            if proc.returncode != 0:
-                print(proc.stdout, end="")
-                return proc.returncode
-        else:
-            for name in required_assets:
-                download(f"{base}/{name}", out_dir / name)
+        code = fetch(tag, args.repo, out_dir, required_assets)
+        if code != 0:
+            return code
         missing = [name for name in required_assets if not (out_dir / name).exists()]
         if missing:
-            for name in missing:
-                print(f"FAIL: release asset missing after download: {name}")
-            print()
-            print(f"FAIL: {len(missing)} release asset issue(s)")
-            return 1
-        sums, problems = parse_sums((out_dir / "SHA256SUMS").read_text(encoding="utf-8"))
-        errors.extend(problems)
-        manifest = json.loads((out_dir / "release-manifest.json").read_text(encoding="utf-8"))
-        in_manifest = {item["file"] for item in manifest.get("artifacts", [])}
-        for item in manifest.get("artifacts", []):
-            name = item["file"]
-            artifact = out_dir / name
-            if not artifact.exists():
-                errors.append(f"manifest artifact missing: {name}")
-                continue
-            actual = sha256(artifact)
-            if sums.get(name) != actual:
-                errors.append(f"SHA256SUMS mismatch for {name}")
-            if item.get("sha256") != actual:
-                errors.append(f"release-manifest checksum mismatch for {name}")
-            try:
-                with tarfile.open(artifact, "r:gz") as tf:
-                    names = set(tf.getnames())
-            except tarfile.TarError as exc:
-                errors.append(f"invalid tarball {name}: {exc}")
-                continue
-            for required in ["agtmls/index.json", "agtmls/export-manifest.json", "agtmls/ADAPTERS.md"]:
-                if required not in names:
-                    errors.append(f"{name} missing {required}")
-        for name, expected in sums.items():
-            # Manifest artifacts were compared against both sources above;
-            # this sweep is for summed files the manifest does not list.
-            if name == "SHA256SUMS" or name in in_manifest:
-                continue
-            path = out_dir / name
-            if path.exists() and sha256(path) != expected:
-                errors.append(f"checksum mismatch for {name}")
+            return report([f"release asset missing after download: {name}" for name in missing])
+        errors = asset_problems(out_dir)
         if errors:
-            for error in errors:
-                print(f"FAIL: {error}")
-            print()
-            print(f"FAIL: {len(errors)} release asset issue(s)")
-            return 1
+            return report(errors)
         print(f"OK: verified {args.repo} {tag} release assets in {out_dir}")
     return 0
 

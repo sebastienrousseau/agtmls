@@ -197,12 +197,6 @@
       "cyclomatic": 15,
       "halstead": 31.0
     },
-    "scripts/verify-release-assets.py::main": {
-      "cognitive": 38,
-      "cyclomatic": 25,
-      "halstead": 30.5,
-      "lines": 67
-    },
     "src/agtmls/cli.py::main": {
       "cyclomatic": 15
     }
