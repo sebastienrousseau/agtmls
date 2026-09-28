@@ -2811,7 +2811,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1d7c91c2d30cec16cd1767bc204d96c0f78f392e5ffbee7621a03d29c3b55c3a"
+          "content": "84bbe4961f368f2d158c8d3bf8f45697b90555a0fbba229e498b2ab565db3728"
         }
       ],
       "name": "scripts/verify-release-assets.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T16:38:38Z",
+    "timestamp": "2026-09-28T18:00:11Z",
     "tools": {
       "components": [
         {
