@@ -2690,7 +2690,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "57f4ecd755433f5bb9c7fc40dbbd6875002000f3da75fbccc48de688bb97c938"
+          "content": "e91609622b5212460f7626b602beed628fdefb4201f90904816ac96d3f084d09"
         }
       ],
       "name": "scripts/validate-sbom-conformance.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T18:36:54Z",
+    "timestamp": "2026-09-28T18:48:01Z",
     "tools": {
       "components": [
         {

@@ -168,11 +168,6 @@
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },
-    "scripts/validate-sbom-conformance.py::main": {
-      "cognitive": 32,
-      "cyclomatic": 25,
-      "lines": 65
-    },
     "scripts/validate-skills.py::check": {
       "cognitive": 34,
       "cyclomatic": 23

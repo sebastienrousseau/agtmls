@@ -45,57 +45,56 @@ def wheel_paths() -> set[str]:
     return names
 
 
-def main() -> int:
-    errors: list[str] = []
+MANDATORY = ("spdxVersion", "SPDXID", "creationInfo", "name", "documentNamespace", "dataLicense")
 
-    if not SPDX.exists():
-        print("FAIL: SBOM.spdx.json is missing")
-        return 1
-    document = json.loads(SPDX.read_text(encoding="utf-8"))
 
-    for field in ("spdxVersion", "SPDXID", "creationInfo", "name", "documentNamespace", "dataLicense"):
-        if field not in document:
-            errors.append(f"SBOM.spdx.json: missing mandatory field {field!r}")
-    creation = document.get("creationInfo", {})
+def creation_problems(creation: dict) -> list[str]:
+    errors = []
     if not creation.get("created"):
         errors.append("SBOM.spdx.json: creationInfo.created is required")
     if creation.get("created", "").startswith("1970-01-01"):
         errors.append("SBOM.spdx.json: creationInfo.created is the epoch placeholder, not a real date")
     if not creation.get("creators"):
         errors.append("SBOM.spdx.json: creationInfo.creators is required")
+    return errors
+
+
+def document_problems(document: dict) -> list[str]:
+    """The SPDX fields a validator requires, and placeholders left in them."""
+    errors = [f"SBOM.spdx.json: missing mandatory field {field!r}" for field in MANDATORY if field not in document]
+    errors += creation_problems(document.get("creationInfo", {}))
     if "example.invalid" in document.get("documentNamespace", ""):
         errors.append("SBOM.spdx.json: documentNamespace is still a placeholder")
     if not document.get("packages"):
         errors.append("SBOM.spdx.json: no packages section, so it describes no artifact")
     if not document.get("relationships"):
         errors.append("SBOM.spdx.json: no relationships, so nothing is DESCRIBES-linked")
-    for entry in document.get("files", []):
+    return errors
+
+
+def file_problems(files: list) -> list[str]:
+    """The first file entry without an SPDXID or a SHA1 checksum."""
+    for entry in files:
         if "SPDXID" not in entry:
-            errors.append(f"SBOM.spdx.json: file {entry.get('fileName')} has no SPDXID")
-            break
+            return [f"SBOM.spdx.json: file {entry.get('fileName')} has no SPDXID"]
         algorithms = {c.get("algorithm") for c in entry.get("checksums", [])}
         if "SHA1" not in algorithms:
-            errors.append(f"SBOM.spdx.json: file {entry.get('fileName')} lacks the mandatory SHA1 checksum")
-            break
+            return [f"SBOM.spdx.json: file {entry.get('fileName')} lacks the mandatory SHA1 checksum"]
+    return []
 
-    # The SBOM must cover every directory the wheel ships.
-    covered = {
-        entry["fileName"].lstrip("./").split("/")[0]
-        for entry in document.get("files", [])
-    }
-    missing = sorted(wheel_paths() - covered)
-    if missing:
-        errors.append(f"SBOM.spdx.json omits shipped wheel paths: {', '.join(missing)}")
 
+def cyclonedx_problems() -> list[str]:
     if not CYCLONEDX.exists():
-        errors.append("SBOM.cyclonedx.json is missing")
-    else:
-        cyclone = json.loads(CYCLONEDX.read_text(encoding="utf-8"))
-        if cyclone.get("bomFormat") != "CycloneDX" or not cyclone.get("specVersion"):
-            errors.append("SBOM.cyclonedx.json is not a CycloneDX document")
+        return ["SBOM.cyclonedx.json is missing"]
+    cyclone = json.loads(CYCLONEDX.read_text(encoding="utf-8"))
+    if cyclone.get("bomFormat") != "CycloneDX" or not cyclone.get("specVersion"):
+        return ["SBOM.cyclonedx.json is not a CycloneDX document"]
+    return []
 
-    # Upstream validator, when the optional dev dependency is present.
-    validator = "skipped (spdx-tools not installed)"
+
+def upstream_validation() -> tuple[list[str], str]:
+    """(spdx-tools' rejection, if any; what it said), when the optional dev
+    dependency is present."""
     try:
         proc = subprocess.run(
             [sys.executable, "-m", "spdx_tools.spdx.clitools.pyspdxtools", "-i", str(SPDX)],
@@ -107,11 +106,32 @@ def main() -> int:
         # a second, exact signal; matching any output containing "must" was a
         # guess that would fail the gate on an informational line.
         if proc.returncode != 0 or INVALID_BANNER in proc.stdout:
-            errors.append(f"spdx-tools rejected the document:\n{proc.stdout[:2000]}")
-        else:
-            validator = "spdx-tools: valid"
+            return [f"spdx-tools rejected the document:\n{proc.stdout[:2000]}"], "skipped (spdx-tools not installed)"
+        return [], "spdx-tools: valid"
     except (FileNotFoundError, OSError):
-        pass
+        return [], "skipped (spdx-tools not installed)"
+
+
+def main() -> int:
+    if not SPDX.exists():
+        print("FAIL: SBOM.spdx.json is missing")
+        return 1
+    document = json.loads(SPDX.read_text(encoding="utf-8"))
+    errors = document_problems(document) + file_problems(document.get("files", []))
+
+    # The SBOM must cover every directory the wheel ships.
+    covered = {
+        entry["fileName"].lstrip("./").split("/")[0]
+        for entry in document.get("files", [])
+    }
+    missing = sorted(wheel_paths() - covered)
+    if missing:
+        errors.append(f"SBOM.spdx.json omits shipped wheel paths: {', '.join(missing)}")
+
+    errors += cyclonedx_problems()
+    # Upstream validator, when the optional dev dependency is present.
+    rejected, validator = upstream_validation()
+    errors += rejected
 
     if errors:
         for error in errors:
