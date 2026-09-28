@@ -186,12 +186,6 @@
       "cyclomatic": 25,
       "lines": 65
     },
-    "scripts/validate-skill-index.py::main": {
-      "cognitive": 39,
-      "cyclomatic": 30,
-      "halstead": 31.4,
-      "lines": 62
-    },
     "scripts/validate-skill-metadata.py::main": {
       "cognitive": 50,
       "cyclomatic": 28

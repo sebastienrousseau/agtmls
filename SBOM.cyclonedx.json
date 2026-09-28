@@ -2723,7 +2723,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7cc0d8a4c222000c73e13f1dbeb86aebad5e2c261816dd51b7adf993dc85e87d"
+          "content": "bb6f454f4ea92383db2b937d97e2cfb5f26062acf9936dc5621c475ce54ff1ea"
         }
       ],
       "name": "scripts/validate-skill-index.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T00:36:50Z",
+    "timestamp": "2026-09-28T08:38:56Z",
     "tools": {
       "components": [
         {
