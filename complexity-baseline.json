@@ -85,11 +85,6 @@
       "cyclomatic": 13,
       "lines": 86
     },
-    "scripts/release-audit.py::audit_provenance": {
-      "cognitive": 33,
-      "cyclomatic": 25,
-      "halstead": 38.7
-    },
     "scripts/release-dry-run.py::main": {
       "cyclomatic": 14
     },
