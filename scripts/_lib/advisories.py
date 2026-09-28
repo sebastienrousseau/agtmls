@@ -60,13 +60,15 @@ def _advisory_problems(advisory: dict, seen: set[str]) -> list[str]:
     return problems + _affected_problems(name, _items(advisory.get("affected")))
 
 
-def feed_problems(feed: dict) -> list[str]:
+def feed_problems(feed: object) -> list[str]:
     """Every way a feed breaks spec 11.2, whatever JSON shape it has.
 
     A feed is only read after its signature verifies, but a validator that
     raises on a list where a dict belongs reports nothing about the feed it
     was asked to judge; fuzzing found exactly that.
     """
+    if not isinstance(feed, dict):
+        return ["feed is not an object"]
     problems: list[str] = []
     seen: set[str] = set()
     advisories = feed.get("advisories", [])
@@ -85,10 +87,10 @@ def _digests(entry: object) -> list[str]:
     return [d for d in _items(_mapping(_mapping(entry).get("ecosystem_specific")).get("digests")) if isinstance(d, str)]
 
 
-def _live_digests(feed: dict) -> dict[str, list[str]]:
+def _live_digests(feed: object) -> dict[str, list[str]]:
     """Advisory ids by digest, for every advisory that is not withdrawn."""
     by_digest: dict[str, list[str]] = {}
-    for advisory in _items(feed.get("advisories")):
+    for advisory in _items(_mapping(feed).get("advisories")):
         advisory = _mapping(advisory)
         advisory_id = _string(advisory.get("id"))
         if "withdrawn" in advisory or advisory_id is None:
@@ -99,16 +101,18 @@ def _live_digests(feed: dict) -> dict[str, list[str]]:
     return by_digest
 
 
-def revoked(feed: dict, lock: dict) -> list[tuple[str, str, list[str]]]:
+def revoked(feed: object, lock: object) -> list[tuple[str, str, list[str]]]:
     """(skill, digest, advisory ids) for every installed digest a live advisory lists.
 
     Entries of the wrong shape revoke nothing: matching is on a digest
     string and an advisory id string, and anything else is not a match.
     """
     by_digest = _live_digests(feed)
-    installed = [_mapping(skill) for skill in _items(lock.get("skills"))]
+    installed = [_mapping(skill) for skill in _items(_mapping(lock).get("skills"))]
+    # An entry without a name is still reported: dropping it would hide
+    # a revocation of something installed.
     return [
-        (skill["name"], skill["integrity"], sorted(by_digest[skill["integrity"]]))
+        (skill.get("name", "?"), skill["integrity"], sorted(by_digest[skill["integrity"]]))
         for skill in installed
         if isinstance(skill.get("integrity"), str) and skill["integrity"] in by_digest
     ]
