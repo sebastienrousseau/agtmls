@@ -27,52 +27,78 @@ RISK_LEVELS = {"low", "medium", "high"}
 SAFETY_BOOLEANS = ["writes_files", "executes_commands", "handles_secrets", "requires_human_review"]
 
 
+def one_of(value: object, allowed: set[str]) -> bool:
+    """Whether `value` is one of the allowed strings; a list or object is
+    not, rather than raising when looked up in the set."""
+    return isinstance(value, str) and value in allowed
+
+
+def identity_problems(data: dict) -> list[str]:
+    errors = []
+    if "version" in data:
+        errors.append(
+            "must not carry a version; a skill is "
+            "identified by its digest, and index.json records the release "
+            "that last moved it"
+        )
+    if not data.get("owner"):
+        errors.append("missing owner")
+    # Bundle membership is a field, not a parent directory: the skill
+    # tree is flat so every runtime's non-recursive scan finds all of it.
+    if "bundle" not in data:
+        errors.append("missing bundle (use null for general skills)")
+    elif data["bundle"] is not None and not (
+        isinstance(data["bundle"], str) and KEBAB.match(data["bundle"])
+    ):
+        errors.append("bundle must be null or kebab-case")
+    return errors
+
+
+def catalog_problems(data: dict) -> list[str]:
+    errors = []
+    if not one_of(data.get("maturity"), MATURITY):
+        errors.append(f"maturity must be one of {sorted(MATURITY)}")
+    agents = data.get("supported_agents", [])
+    if not isinstance(agents, list) or not all(one_of(agent, AGENTS) for agent in agents):
+        errors.append(f"supported_agents must be subset of {sorted(AGENTS)}")
+    tools = data.get("required_tools", [])
+    if not isinstance(tools, list) or not all(isinstance(tool, str) for tool in tools):
+        errors.append("required_tools must be a string list")
+    return errors
+
+
+def policy_problems(policy: object) -> list[str]:
+    if not isinstance(policy, dict):
+        return ["safety_policy must be an object"]
+    errors = []
+    if not one_of(policy.get("network_access"), NETWORK_ACCESS):
+        errors.append(f"safety_policy.network_access must be one of {sorted(NETWORK_ACCESS)}")
+    if not one_of(policy.get("risk_level"), RISK_LEVELS):
+        errors.append(f"safety_policy.risk_level must be one of {sorted(RISK_LEVELS)}")
+    errors += [f"safety_policy.{key} must be boolean" for key in SAFETY_BOOLEANS if not isinstance(policy.get(key), bool)]
+    if policy.get("risk_level") == "high" and not policy.get("requires_human_review"):
+        errors.append("high-risk skills must require human review")
+    return errors
+
+
+def file_problems(mf: Path) -> list[str]:
+    """Every problem with one metadata.json, prefixed with its path."""
+    where = mf.relative_to(ROOT)
+    try:
+        data = json.loads(mf.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{where}: invalid JSON: {exc}"]
+    if not isinstance(data, dict):
+        return [f"{where}: metadata must be an object"]
+    found = identity_problems(data) + catalog_problems(data) + policy_problems(data.get("safety_policy"))
+    return [f"{where}: {problem}" for problem in found]
+
+
 def main() -> int:
     errors: list[str] = []
     metadata_files = sorted(p / "metadata.json" for p in skill_roots.skill_dirs(ROOT) if (p / "metadata.json").exists())
     for mf in metadata_files:
-        try:
-            data = json.loads(mf.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            errors.append(f"{mf.relative_to(ROOT)}: invalid JSON: {exc}")
-            continue
-        if "version" in data:
-            errors.append(
-                f"{mf.relative_to(ROOT)}: must not carry a version; a skill is "
-                "identified by its digest, and index.json records the release "
-                "that last moved it"
-            )
-        if not data.get("owner"):
-            errors.append(f"{mf.relative_to(ROOT)}: missing owner")
-        # Bundle membership is a field, not a parent directory: the skill
-        # tree is flat so every runtime's non-recursive scan finds all of it.
-        if "bundle" not in data:
-            errors.append(f"{mf.relative_to(ROOT)}: missing bundle (use null for general skills)")
-        elif data["bundle"] is not None and not (
-            isinstance(data["bundle"], str) and KEBAB.match(data["bundle"])
-        ):
-            errors.append(f"{mf.relative_to(ROOT)}: bundle must be null or kebab-case")
-        if data.get("maturity") not in MATURITY:
-            errors.append(f"{mf.relative_to(ROOT)}: maturity must be one of {sorted(MATURITY)}")
-        agents = data.get("supported_agents", [])
-        if not isinstance(agents, list) or not set(agents).issubset(AGENTS):
-            errors.append(f"{mf.relative_to(ROOT)}: supported_agents must be subset of {sorted(AGENTS)}")
-        tools = data.get("required_tools", [])
-        if not isinstance(tools, list) or not all(isinstance(tool, str) for tool in tools):
-            errors.append(f"{mf.relative_to(ROOT)}: required_tools must be a string list")
-        policy = data.get("safety_policy")
-        if not isinstance(policy, dict):
-            errors.append(f"{mf.relative_to(ROOT)}: safety_policy must be an object")
-        else:
-            if policy.get("network_access") not in NETWORK_ACCESS:
-                errors.append(f"{mf.relative_to(ROOT)}: safety_policy.network_access must be one of {sorted(NETWORK_ACCESS)}")
-            if policy.get("risk_level") not in RISK_LEVELS:
-                errors.append(f"{mf.relative_to(ROOT)}: safety_policy.risk_level must be one of {sorted(RISK_LEVELS)}")
-            for key in SAFETY_BOOLEANS:
-                if not isinstance(policy.get(key), bool):
-                    errors.append(f"{mf.relative_to(ROOT)}: safety_policy.{key} must be boolean")
-            if policy.get("risk_level") == "high" and not policy.get("requires_human_review"):
-                errors.append(f"{mf.relative_to(ROOT)}: high-risk skills must require human review")
+        errors += file_problems(mf)
 
     # Every skill owns its metadata.json: the tree is flat, so there is no
     # bundle directory to inherit one from. Its contents were judged above;

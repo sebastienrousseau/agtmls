@@ -150,6 +150,29 @@ class SkillMetadataBranchTests(BrokenTreeCase):
         self.overwrite(self.relative, "{ not json")
         self.fails_with("invalid JSON")
 
+    # Valid JSON of the wrong shape raised TypeError or AttributeError
+    # instead of naming the file; fault injection found 80 such cases.
+
+    def test_metadata_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        self.overwrite(self.relative, "[]")
+        self.fails_with("metadata must be an object")
+
+    def test_a_maturity_that_is_a_list_is_refused_rather_than_raised(self) -> None:
+        self.edit(lambda data: data.__setitem__("maturity", ["draft"]))
+        self.fails_with("maturity must be one of")
+
+    def test_policy_enums_that_are_not_strings_are_refused_rather_than_raised(self) -> None:
+        self.policy("network_access", {})
+        self.fails_with("safety_policy.network_access must be one of")
+
+    def test_a_risk_level_that_is_a_list_is_refused_rather_than_raised(self) -> None:
+        self.policy("risk_level", ["low"])
+        self.fails_with("safety_policy.risk_level must be one of")
+
+    def test_agents_that_are_not_strings_are_refused_rather_than_raised(self) -> None:
+        self.edit(lambda data: data.__setitem__("supported_agents", [["claude"]]))
+        self.fails_with("supported_agents must be subset of")
+
     def test_metadata_without_an_owner_is_refused(self) -> None:
         self.edit(lambda data: data.pop("owner"))
         self.fails_with("missing owner")
