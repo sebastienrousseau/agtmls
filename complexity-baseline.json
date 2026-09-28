@@ -12,14 +12,6 @@
     }
   },
   "functions": {
-    "scripts/_lib/advisories.py::feed_problems": {
-      "cognitive": 36,
-      "cyclomatic": 21
-    },
-    "scripts/_lib/advisories.py::revoked": {
-      "cognitive": 17,
-      "cyclomatic": 11
-    },
     "scripts/_lib/analyzer.py::check_steganography": {
       "cognitive": 40,
       "cyclomatic": 18
@@ -43,12 +35,6 @@
       "cognitive": 19,
       "cyclomatic": 13,
       "lines": 68
-    },
-    "scripts/bench.py::main": {
-      "cognitive": 32,
-      "cyclomatic": 22,
-      "halstead": 30.7,
-      "lines": 109
     },
     "scripts/check-publishing-readiness.py::check": {
       "cyclomatic": 12
@@ -167,10 +153,6 @@
     },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
-    },
-    "scripts/validate-skills.py::check": {
-      "cognitive": 34,
-      "cyclomatic": 23
     },
     "scripts/validate-system-prompts.py::main": {
       "cyclomatic": 12

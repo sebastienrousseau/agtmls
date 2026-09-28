@@ -11,6 +11,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 from unittest import mock
 
 from .support import ROOT, load_script, registry_fixture, retarget, run_main
@@ -65,6 +66,32 @@ class AdvisoryVectorTests(unittest.TestCase):
         problems = " | ".join(advisories.feed_problems(bad))
         for text in ("not AGT-ADV-YYYY-NNN", "published is not", "OSV requires modified", "no affected", "ecosystem is not AgtMLS", "sha256: digests", "not unique"):
             self.assertIn(text, problems)
+
+
+    # A feed or lockfile that is not an object, or a lock entry without a
+    # name, raised; fuzzing both functions found them.
+
+    DIGEST = "sha256:" + "a" * 64
+    FEED: ClassVar[dict] = {"advisories": [{"id": "AGT-ADV-2026-001", "affected": [{"ecosystem_specific": {"digests": [DIGEST]}}]}]}
+
+    def test_a_feed_that_is_not_an_object_is_named_not_raised(self) -> None:
+        for feed in ([], "feed", None, 7):
+            with self.subTest(feed=feed):
+                self.assertEqual(advisories.feed_problems(feed), ["feed is not an object"])
+
+    def test_a_feed_or_lockfile_that_is_not_an_object_revokes_nothing(self) -> None:
+        lock = {"skills": [{"name": "s", "integrity": self.DIGEST}]}
+        for feed in ([], "feed", None):
+            with self.subTest(feed=feed):
+                self.assertEqual(advisories.revoked(feed, lock), [])
+        for bad_lock in ([], "lock", None):
+            with self.subTest(lock=bad_lock):
+                self.assertEqual(advisories.revoked(self.FEED, bad_lock), [])
+
+    def test_a_revoked_install_without_a_name_is_still_reported(self) -> None:
+        """Dropping it would hide a revocation; it is named "?" instead."""
+        lock = {"skills": [{"integrity": self.DIGEST}]}
+        self.assertEqual(advisories.revoked(self.FEED, lock), [("?", self.DIGEST, ["AGT-ADV-2026-001"])])
 
 
 class VerifyCommandTests(unittest.TestCase):
