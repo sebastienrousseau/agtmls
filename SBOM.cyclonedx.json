@@ -2756,7 +2756,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c0a9ea98f6d0f1edc2eedc7b7b383b6d0964502119dee6b39b19edb14f06d0d8"
+          "content": "a1ebb0978f1e1098b9a830fce54b7876c18e38a13628675ac30df658c3c06e1b"
         }
       ],
       "name": "scripts/validate-skills.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T19:00:40Z",
+    "timestamp": "2026-09-28T19:37:18Z",
     "tools": {
       "components": [
         {

@@ -92,6 +92,68 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str] | None, str | None]:
     return fields, None
 
 
+def name_problems(name: str, dirname: str) -> list[str]:
+    if not name:
+        return ["missing `name`"]
+    errors = []
+    if name != dirname:
+        errors.append(f"`name` ({name!r}) != directory name ({dirname!r})")
+    if not KEBAB.match(name):
+        errors.append(f"`name` is not kebab-case: {name!r}")
+    if len(name) > MAX_NAME:
+        errors.append(f"`name` too long: {len(name)} > {MAX_NAME} chars")
+    return errors
+
+
+def compatibility_problems(compat: str | None) -> list[str]:
+    if compat is None:
+        return []
+    flat_compat = re.sub(r"\s+", " ", compat).strip()
+    if not flat_compat:
+        return ["`compatibility` present but empty"]
+    if len(flat_compat) > MAX_COMPAT:
+        return [f"`compatibility` too long: {len(flat_compat)} > {MAX_COMPAT} chars"]
+    return []
+
+
+def metadata_problems(metadata: str | None) -> list[str]:
+    if metadata is None:
+        return []
+    errors = [] if metadata.strip() else ["`metadata` present but empty"]
+    for line in metadata.split("\n"):
+        if line.strip() and not re.match(r"^[A-Za-z0-9_.-]+:[ \t]*\S", line.strip()):
+            errors.append(f"`metadata` must be flat string key/value pairs: {line.strip()!r}")
+    return errors
+
+
+def description_problems(desc: str) -> list[str]:
+    if not desc:
+        return ["missing `description`"]
+    errors = []
+    flat = re.sub(r"\s+", " ", desc).strip()
+    if len(flat) > MAX_DESC:
+        errors.append(f"`description` too long: {len(flat)} > {MAX_DESC} chars")
+    if not TRIGGER.search(desc):
+        errors.append("`description` lacks a trigger cue (a 'when…' / 'use for' phrase)")
+    return errors
+
+
+def body_problems(text: str) -> list[str]:
+    errors = []
+    parts = re.split(r"\n---[ \t]*\n", text, maxsplit=1)
+    body = parts[1] if len(parts) > 1 else ""
+    if not re.search(r"^#[ \t]+\S", body, re.MULTILINE):
+        errors.append("body has no top-level `# ` heading")
+
+    lines = len(text.splitlines())
+    if lines > MAX_BODY_LINES:
+        errors.append(
+            f"SKILL.md too long: {lines} > {MAX_BODY_LINES} lines "
+            "(move detail into reference.md)"
+        )
+    return errors
+
+
 def check(skill_md: Path) -> list[str]:
     errors: list[str] = []
     dirname = skill_md.parent.name
@@ -109,55 +171,11 @@ def check(skill_md: Path) -> list[str]:
             + ", ".join(f"`{key}`" for key in unknown)
         )
 
-    name = fields.get("name", "")
-    if not name:
-        errors.append("missing `name`")
-    else:
-        if name != dirname:
-            errors.append(f"`name` ({name!r}) != directory name ({dirname!r})")
-        if not KEBAB.match(name):
-            errors.append(f"`name` is not kebab-case: {name!r}")
-        if len(name) > MAX_NAME:
-            errors.append(f"`name` too long: {len(name)} > {MAX_NAME} chars")
-
-    compat = fields.get("compatibility")
-    if compat is not None:
-        flat_compat = re.sub(r"\s+", " ", compat).strip()
-        if not flat_compat:
-            errors.append("`compatibility` present but empty")
-        elif len(flat_compat) > MAX_COMPAT:
-            errors.append(f"`compatibility` too long: {len(flat_compat)} > {MAX_COMPAT} chars")
-
-    metadata = fields.get("metadata")
-    if metadata is not None:
-        if not metadata.strip():
-            errors.append("`metadata` present but empty")
-        for line in metadata.split("\n"):
-            if line.strip() and not re.match(r"^[A-Za-z0-9_.-]+:[ \t]*\S", line.strip()):
-                errors.append(f"`metadata` must be flat string key/value pairs: {line.strip()!r}")
-
-    desc = fields.get("description", "")
-    if not desc:
-        errors.append("missing `description`")
-    else:
-        flat = re.sub(r"\s+", " ", desc).strip()
-        if len(flat) > MAX_DESC:
-            errors.append(f"`description` too long: {len(flat)} > {MAX_DESC} chars")
-        if not TRIGGER.search(desc):
-            errors.append("`description` lacks a trigger cue (a 'when…' / 'use for' phrase)")
-
-    parts = re.split(r"\n---[ \t]*\n", text, maxsplit=1)
-    body = parts[1] if len(parts) > 1 else ""
-    if not re.search(r"^#[ \t]+\S", body, re.MULTILINE):
-        errors.append("body has no top-level `# ` heading")
-
-    lines = len(text.splitlines())
-    if lines > MAX_BODY_LINES:
-        errors.append(
-            f"SKILL.md too long: {lines} > {MAX_BODY_LINES} lines "
-            "(move detail into reference.md)"
-        )
-
+    errors += name_problems(fields.get("name", ""), dirname)
+    errors += compatibility_problems(fields.get("compatibility"))
+    errors += metadata_problems(fields.get("metadata"))
+    errors += description_problems(fields.get("description", ""))
+    errors += body_problems(text)
     errors += portability.problems(skill_md.parent)
     return errors
 

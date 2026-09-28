@@ -168,10 +168,6 @@
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },
-    "scripts/validate-skills.py::check": {
-      "cognitive": 34,
-      "cyclomatic": 23
-    },
     "scripts/validate-system-prompts.py::main": {
       "cyclomatic": 12
     },
