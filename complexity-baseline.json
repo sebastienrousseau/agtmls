@@ -85,11 +85,6 @@
       "cyclomatic": 13,
       "lines": 86
     },
-    "scripts/release-audit.py::audit_provenance": {
-      "cognitive": 33,
-      "cyclomatic": 25,
-      "halstead": 38.7
-    },
     "scripts/release-dry-run.py::main": {
       "cyclomatic": 14
     },
@@ -172,11 +167,6 @@
     },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
-    },
-    "scripts/validate-sbom-conformance.py::main": {
-      "cognitive": 32,
-      "cyclomatic": 25,
-      "lines": 65
     },
     "scripts/validate-skills.py::check": {
       "cognitive": 34,
