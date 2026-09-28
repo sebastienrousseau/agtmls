@@ -324,6 +324,90 @@ class SkillIndexBranchTests(BrokenTreeCase):
         )
 
 
+    # Valid JSON of the wrong shape raised AttributeError or TypeError
+    # instead of naming the problem; fault injection found 590 such cases.
+
+    def test_malformed_json_is_reported_rather_than_raised(self) -> None:
+        self.overwrite(self.FILE, "{ not json")
+        self.assert_fails(self.SCRIPT, "FAIL: index.json invalid:")
+
+    def test_an_index_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        self.overwrite(self.FILE, "[]")
+        self.assert_fails(self.SCRIPT, "FAIL: index.json must be an object")
+
+    def test_lists_of_the_wrong_type_are_reported_rather_than_raised(self) -> None:
+        def mutate(data: dict) -> None:
+            data["skills"] = "skills"
+            data["commands"] = 7
+
+        self.edit_json(self.FILE, mutate)
+        self.assert_fails(self.SCRIPT, "FAIL: skills must be an array", "FAIL: commands must be an array")
+
+    def test_entries_that_are_not_objects_are_reported_rather_than_raised(self) -> None:
+        def mutate(data: dict) -> None:
+            data["skills"][0] = ""
+            data["commands"][0] = None
+
+        self.edit_json(self.FILE, mutate)
+        self.assert_fails(
+            self.SCRIPT, "FAIL: skills entry 0 must be an object", "FAIL: commands entry 0 must be an object"
+        )
+
+    def test_names_that_are_not_strings_are_reported_rather_than_raised(self) -> None:
+        def mutate(data: dict) -> None:
+            data["skills"][0]["name"] = ["x"]
+            data["commands"][0]["name"] = {"x": 1}
+
+        self.edit_json(self.FILE, mutate)
+        self.assert_fails(
+            self.SCRIPT,
+            "FAIL: skill name must be a string: ['x']",
+            "FAIL: command name must be a string: {'x': 1}",
+        )
+
+    def test_paths_that_are_not_strings_are_reported_rather_than_raised(self) -> None:
+        name = self.skill_name()
+
+        def mutate(data: dict) -> None:
+            data["skills"][0]["path"] = 7
+            data["commands"][0]["path"] = ["commands"]
+
+        command = json.loads((self.fixture / self.FILE).read_text(encoding="utf-8"))["commands"][0]["name"]
+        self.edit_json(self.FILE, mutate)
+        self.assert_fails(
+            self.SCRIPT,
+            f"FAIL: {name}: path must be a string",
+            f"FAIL: command {command}: indexed path does not exist",
+        )
+
+    def test_evals_that_are_not_an_object_are_reported_rather_than_raised(self) -> None:
+        name = self.skill_name()
+        self.edit_json(self.FILE, self.first_skill(lambda skill: skill.__setitem__("evals", "")))
+        self.assert_fails(
+            self.SCRIPT, f"FAIL: {name}: missing routing eval", f"FAIL: {name}: missing behavioral eval"
+        )
+
+    def test_a_coverage_summary_of_the_wrong_shape_is_reported_rather_than_raised(self) -> None:
+        self.edit_json(self.FILE, lambda data: data["coverage"].__setitem__("routing", ""))
+        self.assert_fails(self.SCRIPT, "FAIL: routing coverage summary is not complete")
+
+    def test_a_coverage_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        self.edit_json(self.FILE, lambda data: data.__setitem__("coverage", []))
+        self.assert_fails(
+            self.SCRIPT,
+            "FAIL: routing coverage summary is not complete",
+            "FAIL: behavioral coverage summary is not complete",
+        )
+
+    def test_bundle_counts_that_are_not_integers_are_reported_rather_than_raised(self) -> None:
+        self.edit_json(self.FILE, lambda data: data["bundles"].__setitem__("_general", "3"))
+        self.assert_fails(self.SCRIPT, "FAIL: bundles must map bundle names to integer counts")
+
+    def test_bundles_that_are_not_an_object_are_reported_rather_than_raised(self) -> None:
+        self.edit_json(self.FILE, lambda data: data.__setitem__("bundles", "all"))
+        self.assert_fails(self.SCRIPT, "FAIL: bundles must map bundle names to integer counts")
+
+
 class SystemPromptBranchTests(BrokenTreeCase):
     """One prompt per supported language plus a base; nothing more, nothing less."""
 
