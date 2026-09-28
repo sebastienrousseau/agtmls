@@ -165,6 +165,14 @@ class SecurityCorpusTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("exfil: missed steganography >= LOW --", output)
 
+    def test_a_miss_in_a_case_without_a_description_is_reported_rather_than_raised(self) -> None:
+        """The miss line quoted the description, so a case without one raised
+        KeyError and hid every other result."""
+        exfil = {k: v for k, v in CORPUS["cases"][1].items() if k != "description"}
+        code, output = self.run_corpus({"cases": [dict(exfil, must_detect=[{"category": "steganography"}])]})
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: exfil: missed steganography >= LOW\n", output)
+
     def test_a_finding_in_a_must_not_detect_category_is_a_false_positive(self) -> None:
         corpus = {"cases": [dict(
             CORPUS["cases"][0],

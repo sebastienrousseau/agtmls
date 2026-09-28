@@ -99,10 +99,10 @@ def detects(want: dict, findings: list[dict]) -> bool:
 
 def miss(case: dict, want: dict) -> str:
     where = f" in {want['in_file']}" if want.get("in_file") else ""
+    why = f" -- {case['description']}" if "description" in case else ""
     return (
         f"{case['name']}: missed {want['category']} "
-        f">= {want.get('min_severity', 'LOW')}{where} "
-        f"-- {case['description']}"
+        f">= {want.get('min_severity', 'LOW')}{where}{why}"
     )
 
 
