@@ -160,15 +160,6 @@
     "scripts/validate-templates.py::main": {
       "cyclomatic": 11
     },
-    "scripts/validate-version-policy.py::main": {
-      "cognitive": 26,
-      "cyclomatic": 21
-    },
-    "scripts/validate-version-policy.py::sequencing_errors": {
-      "cognitive": 22,
-      "cyclomatic": 15,
-      "halstead": 31.0
-    },
     "src/agtmls/cli.py::main": {
       "cyclomatic": 15
     }

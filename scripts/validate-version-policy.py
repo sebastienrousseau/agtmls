@@ -33,6 +33,24 @@ def read_json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _mapping(value: object) -> dict:
+    return value if isinstance(value, dict) else {}
+
+
+def read_object(path: Path, errors: list[str]) -> dict:
+    """The JSON object in `path`; {} (and a refusal in `errors`) for any other value."""
+    data = read_json(path)
+    if isinstance(data, dict):
+        return data
+    errors.append(f"{path.relative_to(ROOT)} must be a JSON object")
+    return {}
+
+
+def _has_version(data: object) -> bool:
+    """Whether a version-free file mentions a version; a number or null cannot."""
+    return isinstance(data, (dict, list, str)) and "version" in data
+
+
 def parse_version(value: str) -> tuple[int, int, int] | None:
     match = SEMVER.match(value)
     if not match:
@@ -57,6 +75,24 @@ def release_tags() -> list[tuple[int, int, int]]:
     return sorted(tags)
 
 
+def tag_errors(current: str, patch: int, tags: list[tuple[int, int, int]]) -> list[str]:
+    """The current version against the release tags that exist."""
+    errors: list[str] = []
+    if any((tag_major, tag_minor) != (0, 0) for tag_major, tag_minor, _ in tags) and (0, 0, 999) not in tags:
+        errors.append("minor/major release tags are forbidden until v0.0.999 exists")
+    patch_tags = [tag_patch for tag_major, tag_minor, tag_patch in tags if (tag_major, tag_minor) == (0, 0)]
+    if not patch_tags:
+        return errors
+    latest_patch = max(patch_tags)
+    if patch < latest_patch:
+        errors.append(f"current version {current} is behind latest tag v0.0.{latest_patch}")
+    if patch > latest_patch + 1:
+        errors.append(
+            f"current version {current} skips patch releases; next allowed after v0.0.{latest_patch} is 0.0.{latest_patch + 1}"
+        )
+    return errors
+
+
 def sequencing_errors(current: str, tags: list[tuple[int, int, int]]) -> list[str]:
     errors: list[str] = []
     parsed = parse_version(current)
@@ -67,69 +103,56 @@ def sequencing_errors(current: str, tags: list[tuple[int, int, int]]) -> list[st
         errors.append("public releases must stay on the 0.0.x line")
     if patch < 1 or patch > 999:
         errors.append("0.0.x patch must be between 1 and 999")
-    if tags:
-        if any((tag_major, tag_minor) != (0, 0) for tag_major, tag_minor, _ in tags) and (0, 0, 999) not in tags:
-            errors.append("minor/major release tags are forbidden until v0.0.999 exists")
-        patch_tags = [tag_patch for tag_major, tag_minor, tag_patch in tags if (tag_major, tag_minor) == (0, 0)]
-        if patch_tags:
-            latest_patch = max(patch_tags)
-            if patch < latest_patch:
-                errors.append(f"current version {current} is behind latest tag v0.0.{latest_patch}")
-            if patch > latest_patch + 1:
-                errors.append(
-                    f"current version {current} skips patch releases; next allowed after v0.0.{latest_patch} is 0.0.{latest_patch + 1}"
-                )
+    return errors + tag_errors(current, patch, tags)
+
+
+def metadata_errors(current: str) -> list[str]:
+    errors = []
+    for path in METADATA_FILES:
+        version = str(_mapping(read_json(path)).get("version", ""))
+        if version != current:
+            errors.append(f"{path.relative_to(ROOT)} version {version} must match {current}")
     return errors
 
 
-def main() -> int:
-    errors: list[str] = []
-    plugin = read_json(ROOT / ".claude-plugin" / "plugin.json")
-    current = str(plugin.get("version", ""))
-    errors.extend(sequencing_errors(current, []))
+def version_free_errors() -> list[str]:
+    errors = [
+        f"{path.relative_to(ROOT)} must not carry a version: it would put "
+        "the release back inside the skill's content address"
+        for path in VERSION_FREE if path.exists() and _has_version(read_json(path))
+    ]
+    return errors + [
+        f"{skill_md.relative_to(ROOT)} must not carry agtmls-version"
+        for skill_md in skill_roots.skill_files(ROOT) if "agtmls-version" in skill_md.read_text(encoding="utf-8")
+    ]
 
-    for path in METADATA_FILES:
-        version = str(read_json(path).get("version", ""))
-        if version != current:
-            errors.append(f"{path.relative_to(ROOT)} version {version} must match {current}")
 
-    for path in VERSION_FREE:
-        if not path.exists():
-            continue
-        if "version" in read_json(path):
-            errors.append(
-                f"{path.relative_to(ROOT)} must not carry a version: it would put "
-                "the release back inside the skill's content address"
-            )
-    for skill_md in skill_roots.skill_files(ROOT):
-        if "agtmls-version" in skill_md.read_text(encoding="utf-8"):
-            errors.append(f"{skill_md.relative_to(ROOT)} must not carry agtmls-version")
-
-    index = read_json(ROOT / "index.json")
-    if index.get("registry_version") != current:
-        errors.append("index.json registry_version must match plugin version")
+def provenance_errors(current: str) -> list[str]:
     # provenance.json is an in-toto Statement. A subject carries `name` and
     # `digest` and has no `version` field, so the registry version is read
     # from the predicate's externalParameters, and the subject name must still
     # embed it -- both are checked, because either drifting is a real defect.
-    provenance = read_json(ROOT / "provenance.json")
+    errors: list[str] = []
+    provenance = read_object(ROOT / "provenance.json", errors)
     subject = provenance.get("subject", [{}])
     if not isinstance(subject, list) or not subject:
         errors.append("provenance.json must carry an in-toto subject list")
-    elif subject[0].get("name") != f"agtmls-{current}":
+    elif _mapping(subject[0]).get("name") != f"agtmls-{current}":
         errors.append(
             f"provenance.json subject name must be 'agtmls-{current}', "
-            f"got {subject[0].get('name')!r}"
+            f"got {_mapping(subject[0]).get('name')!r}"
         )
-    declared = (
-        provenance.get("predicate", {})
-        .get("buildDefinition", {})
-        .get("externalParameters", {})
-        .get("registryVersion")
-    )
+    predicate = _mapping(provenance.get("predicate", {}))
+    parameters = _mapping(_mapping(predicate.get("buildDefinition", {})).get("externalParameters", {}))
+    declared = parameters.get("registryVersion")
     if declared != current:
         errors.append("provenance.json registryVersion must match plugin version")
+    return errors
 
+
+def document_errors(current: str) -> list[str]:
+    """The changelog entry and the policy text the release depends on."""
+    errors = []
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     if f"## {current} - " not in changelog:
         errors.append(f"CHANGELOG.md must contain a dated ## {current} release entry")
@@ -137,6 +160,20 @@ def main() -> int:
     for required in ["Versions increment by exactly `0.0.1`", "`v0.1.0` is forbidden until `v0.0.999`"]:
         if required not in policy:
             errors.append(f"VERSIONING.md must document: {required}")
+    return errors
+
+
+def main() -> int:
+    errors: list[str] = []
+    plugin = read_object(ROOT / ".claude-plugin" / "plugin.json", errors)
+    current = str(plugin.get("version", ""))
+    errors.extend(sequencing_errors(current, []))
+    errors += metadata_errors(current) + version_free_errors()
+
+    index = read_object(ROOT / "index.json", errors)
+    if index.get("registry_version") != current:
+        errors.append("index.json registry_version must match plugin version")
+    errors += provenance_errors(current) + document_errors(current)
 
     tags = release_tags()
     errors.extend(error for error in sequencing_errors(current, tags) if error not in errors)
