@@ -2745,7 +2745,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2dad655d163f7cf696b74d4b326c35aba0ecbeb7138aa0c9eb7deee7e1c97cb2"
+          "content": "0740ab4dc8d58c4b9be9aadfbf8f458c9cd31d18a3ba46b87ff8326bd6d4cbfe"
         }
       ],
       "name": "scripts/validate-skill-metadata.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-28T10:16:15Z",
+    "timestamp": "2026-09-28T16:32:15Z",
     "tools": {
       "components": [
         {

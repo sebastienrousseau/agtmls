@@ -178,10 +178,6 @@
       "cyclomatic": 25,
       "lines": 65
     },
-    "scripts/validate-skill-metadata.py::main": {
-      "cognitive": 50,
-      "cyclomatic": 28
-    },
     "scripts/validate-skills.py::check": {
       "cognitive": 34,
       "cyclomatic": 23
