@@ -57,6 +57,33 @@ class PluginManifestBranchTests(BrokenTreeCase):
         self.overwrite(MARKETPLACE, "{ not json")
         self.assert_fails(self.SCRIPT, "FAIL: .claude-plugin/marketplace.json invalid JSON")
 
+    def test_a_manifest_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        """Valid JSON of another shape crashed the validator on .get()."""
+        self.overwrite(PLUGIN, "[]")
+        self.assert_fails(self.SCRIPT, "FAIL: .claude-plugin/plugin.json must be an object")
+
+    def test_a_marketplace_that_is_not_an_object_is_reported_rather_than_raised(self) -> None:
+        self.overwrite(MARKETPLACE, '"agtmls"')
+        self.assert_fails(self.SCRIPT, "FAIL: .claude-plugin/marketplace.json must be an object")
+
+    def test_agents_that_are_not_all_strings_are_refused_rather_than_raised(self) -> None:
+        """sorted() raised TypeError on a list mixing strings and other values."""
+        self.edit_json(PLUGIN, lambda data: data["agents"].append(7))
+        self.assert_fails(self.SCRIPT, "FAIL: plugin manifest agents must list agent file paths as strings")
+        self.edit_json(MARKETPLACE, lambda data: self.entry(data)["agents"].append({}))
+        self.assert_fails(
+            self.SCRIPT, "FAIL: marketplace plugin 'agtmls' agents must list agent file paths as strings"
+        )
+
+    def test_a_name_that_is_not_a_string_is_refused_rather_than_raised(self) -> None:
+        """A list or object name raised TypeError when looked up in a set."""
+        self.edit_json(PLUGIN, lambda data: data.__setitem__("name", ["agtmls"]))
+        self.assert_fails(self.SCRIPT, "FAIL: plugin manifest name must be agtmls")
+
+    def test_an_entry_name_that_is_not_a_string_is_refused_rather_than_raised(self) -> None:
+        self.edit_json(MARKETPLACE, lambda data: self.entry(data).__setitem__("name", {"x": 1}))
+        self.assert_fails(self.SCRIPT, "FAIL: marketplace does not list the plugin 'agtmls'")
+
     def test_agents_given_as_a_directory_string_are_refused(self) -> None:
         """`claude plugin validate` rejects a directory where it wants files."""
         self.edit_json(PLUGIN, lambda data: data.__setitem__("agents", "./agents"))

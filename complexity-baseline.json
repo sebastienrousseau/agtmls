@@ -113,12 +113,6 @@
       "cognitive": 23,
       "cyclomatic": 14
     },
-    "scripts/run-security-evals.py::main": {
-      "cognitive": 48,
-      "cyclomatic": 30,
-      "halstead": 31.3,
-      "lines": 69
-    },
     "scripts/run-trigger-evals.py::main": {
       "cognitive": 29,
       "cyclomatic": 14
@@ -183,15 +177,6 @@
       "cognitive": 25,
       "cyclomatic": 18,
       "lines": 62
-    },
-    "scripts/validate-plugin-manifest.py::check_marketplace": {
-      "cognitive": 47,
-      "cyclomatic": 30,
-      "halstead": 37.2
-    },
-    "scripts/validate-plugin-manifest.py::check_plugin": {
-      "cognitive": 17,
-      "cyclomatic": 17
     },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13

@@ -2184,7 +2184,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "91dbe96eb7b8953346328d80e5ff6f4d936a46c7ca5ebfa2c45a13d4998f0ae2"
+          "content": "8b48287885331ff6fd1f1b62a3e60e310ad56593a28f4b9ef483ca61e813bdfd"
         }
       ],
       "name": "scripts/run-security-evals.py",
@@ -2613,7 +2613,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "213257390c983a47c88b7e4d2464327e2278c141cab7df2a99a25f8223a5775f"
+          "content": "9ec8419d4d93c1c27a671eafb301d06bbbc33ecb6edf0f2ed8aeb4fef78115b8"
         }
       ],
       "name": "scripts/validate-plugin-manifest.py",
@@ -4354,7 +4354,7 @@
       "type": "application",
       "version": "0.0.16"
     },
-    "timestamp": "2026-09-27T19:47:28Z",
+    "timestamp": "2026-09-28T00:36:50Z",
     "tools": {
       "components": [
         {
