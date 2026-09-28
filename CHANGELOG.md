@@ -7,7 +7,7 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
-## 0.0.17 - 2026-09-28
+## 0.0.17 - 2026-09-29
 
 ### Fixed
 
