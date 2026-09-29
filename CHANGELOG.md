@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.19 - 2026-09-29
+
 ### Removed
 
 - The draft skill `hardening-agent-config`. Two uplift cases and 40
