@@ -11,11 +11,6 @@
     "scripts/_lib/cli_parser.py::build_parser": {
       "lines": 160
     },
-    "scripts/_lib/scaling.py::scaling": {
-      "cognitive": 19,
-      "cyclomatic": 13,
-      "lines": 68
-    },
     "scripts/check-publishing-readiness.py::check": {
       "cyclomatic": 12
     },
