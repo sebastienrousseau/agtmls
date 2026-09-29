@@ -9,6 +9,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import context_cost  # noqa: E402  (scripts path first)
+
 PROMPTS = ROOT / "system-prompts"
 LANGUAGES = ["rust", "python", "go", "cpp", "swift", "typescript", "javascript", "ruby", "bash"]
 
@@ -30,7 +33,8 @@ def base_problems() -> list[str]:
         return ["system-prompts/_base.md is not UTF-8 text"]
     if "# " not in text:
         return ["system-prompts/_base.md missing top-level heading"]
-    return []
+    # Every generated CLAUDE.md or AGENTS.md begins with this, in every session.
+    return context_cost.volatile_problems("system-prompts/_base.md", text, context_cost.registry_version(ROOT))
 
 
 def language_problems(lang: str) -> list[str]:
@@ -43,7 +47,7 @@ def language_problems(lang: str) -> list[str]:
     errors = [] if text.strip() else [f"system-prompts/{lang}.md is empty"]
     if "# " not in text:
         errors.append(f"system-prompts/{lang}.md missing top-level heading")
-    return errors
+    return errors + context_cost.volatile_problems(f"system-prompts/{lang}.md", text, context_cost.registry_version(ROOT))
 
 
 def main() -> int:

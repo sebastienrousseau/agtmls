@@ -276,6 +276,23 @@ def check_prompt(r: Reporter, target: Path, prompt: str, skills_only: bool) -> N
         r.warn(f"target {prompt} exists but is not AgtMLS-generated")
 
 
+def check_context(r: Reporter, target: Path, dot: str, prompt: str) -> None:
+    """What this install puts in front of the agent in every session: each
+    skill's name and description (bodies load only on use) and the prompt
+    file. Every skill in the directory counts, whoever installed it."""
+    from _lib import context_cost
+
+    skills_dir = target / dot / "skills"
+    names = sorted(p.name for p in skills_dir.iterdir() if (p / "SKILL.md").is_file()) if skills_dir.is_dir() else []
+    cost = context_cost.install_cost(skills_dir, names, target / prompt)
+    skills = f"{cost.skills} skill description(s), about {context_cost.approx_tokens(cost.description_chars):,} tokens"
+    if cost.prompt_chars:
+        r.ok(f"context: {skills}, and {prompt}, about {context_cost.approx_tokens(cost.prompt_chars):,} tokens,"
+             " load in every session")
+    else:
+        r.ok(f"context: {skills}, load in every session (no {prompt})")
+
+
 def check_target(r: Reporter, args: argparse.Namespace, agents: dict) -> None:
     target = args.target.resolve()
     if not target.exists():
@@ -289,6 +306,7 @@ def check_target(r: Reporter, args: argparse.Namespace, agents: dict) -> None:
     if (target / dot / "skills").exists():
         check_skill_links(r, target, target / dot / "skills", args.agent, args.bundle)
     check_prompt(r, target, prompt, args.skills_only)
+    check_context(r, target, dot, prompt)
     approval_posture(args.agent, target, r)
 
 

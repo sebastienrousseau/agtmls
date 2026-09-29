@@ -18,6 +18,16 @@ All notable changes to AgtMLS are recorded here.
   only counting them by directory (`coverage.source_commit`,
   `coverage.not_audited_files` in JSON). Pinning and reading those files
   no longer take an agent extra turns of probing.
+- `doctor --target --agent` reports what an install loads in every
+  session: its skill descriptions and prompt file, in approximate tokens.
+  `verify --live` names any installed skill whose description Codex shows
+  shorter than written (its listing budget), without failing: the skill
+  still loads, but routes worse.
+- `validate-skills.py` and `validate-system-prompts.py` refuse a date or
+  the registry's own version in a description or system prompt. Both are
+  read in every session, and a value that changes each release breaks a
+  provider's prompt cache. Exported `ADAPTERS.md` says to put static text
+  first in a fixed order.
 
 ## 0.0.19 - 2026-09-29
 

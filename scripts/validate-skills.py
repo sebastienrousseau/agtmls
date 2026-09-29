@@ -46,7 +46,11 @@ MAX_BODY_LINES = 500  # Spec guidance: keep SKILL.md under 500 lines.
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import portability, skill_roots  # noqa: E402  (scripts path first)
+from _lib import (  # noqa: E402  (scripts path first)
+    context_cost,
+    portability,
+    skill_roots,
+)
 
 SKILLS_DIR = ROOT / "skills"
 
@@ -175,6 +179,8 @@ def check(skill_md: Path) -> list[str]:
     errors += compatibility_problems(fields.get("compatibility"))
     errors += metadata_problems(fields.get("metadata"))
     errors += description_problems(fields.get("description", ""))
+    errors += context_cost.volatile_problems("description", fields.get("description", ""),
+                                             context_cost.registry_version(ROOT))
     errors += body_problems(text)
     errors += portability.problems(skill_md.parent)
     return errors

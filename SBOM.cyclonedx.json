@@ -1729,6 +1729,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/context_cost.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "99a83f222aef7782d1445d67ad90fe51a9630f1b85688a23542a12e78824c66b"
+        }
+      ],
+      "name": "scripts/_lib/context_cost.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/covered.py",
       "hashes": [
         {
@@ -1777,7 +1788,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8b5cac8685c85fbf8427b2d346cf650d89cfdc4c14a7ff861559ed92dbeb8b0c"
+          "content": "69a5717779c3f10ee6094c68bb41f9a08fb3a9cebe208c51560b19455f1728ec"
         }
       ],
       "name": "scripts/_lib/liveness.py",
@@ -1942,7 +1953,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f35f48c5b7d29b161b5798c9d58a440e4910b409578767d2fb6b5bd45d401237"
+          "content": "904e75cef8e655d270e4bb3d06cd74bd820190faa5483ac5280444bfa4f2acb1"
         }
       ],
       "name": "scripts/_lib/verify_report.py",
@@ -1964,7 +1975,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4375f1513b91860e441824fcaa2da845d720e051028e1e28b95c3943e4ac672d"
+          "content": "4ae1d742dcc1cb07cab0f65b96739045a9ba829a4171bf212ae88d840f204af1"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -1975,7 +1986,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "57eebc58a1df681688d5ef1ea984e5b953f120eb435ef9e0eca06afb4e19c0b3"
+          "content": "23710ddd2f55ba8848dc0d50158e827683e17da6e242bd60f356dec82ecc430b"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -2063,7 +2074,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8b6e74cddbbe46ac5f2e14104d2965a953ed2e0ba2cb273fd14b01d5ebae14f3"
+          "content": "b0ef5e9fd2a385be3534f7ff50b5b1abd14c7a0e893ca973516f1d5959b7fed5"
         }
       ],
       "name": "scripts/export-registry.py",
@@ -2943,7 +2954,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a1ebb0978f1e1098b9a830fce54b7876c18e38a13628675ac30df658c3c06e1b"
+          "content": "c708a4d4a05f82fd67920f8f7a7087e78276c991b6fc3711da16fb89c81960bf"
         }
       ],
       "name": "scripts/validate-skills.py",
@@ -2965,7 +2976,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dc291132dfd41b1bf28a049f9012eb11fe3704cc3d2786e9bfaf2e9a19104ac8"
+          "content": "8f15cc277525e1ac181382032a2bd129392b415002fef1f3c63742a15a420585"
         }
       ],
       "name": "scripts/validate-system-prompts.py",
@@ -4519,7 +4530,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T22:58:23Z",
+    "timestamp": "2026-09-29T23:07:12Z",
     "tools": {
       "components": [
         {
