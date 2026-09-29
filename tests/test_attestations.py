@@ -122,6 +122,17 @@ class GeneratorTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("no-such-skill", output)
 
+    def test_write_removes_the_attestations_of_a_removed_skill(self) -> None:
+        # --check tells you to run --write; --write must then clear what --check refused.
+        stray = self.fixture / "attestations" / "no-such-skill" / "manifest.intoto.json"
+        stray.parent.mkdir(parents=True, exist_ok=True)
+        stray.write_text("{}\n", encoding="utf-8")
+        self.addCleanup(shutil.rmtree, stray.parent, True)
+        self.assertEqual(run_main(self.module, "--write")[0], 0)
+        self.assertFalse(stray.parent.exists())
+        code, output = run_main(self.module, "--check")
+        self.assertEqual(code, 0, output)
+
     def test_no_mode_prints_usage(self) -> None:
         self.assertEqual(run_main(self.module)[0], 2)
 

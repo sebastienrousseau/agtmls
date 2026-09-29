@@ -39,10 +39,21 @@ def expected() -> dict[Path, str]:
     return rendered
 
 
+def orphans(want: dict[Path, str]) -> list[Path]:
+    """Attestation files no current skill accounts for (a removed skill's)."""
+    present = set(OUT.rglob("*.json")) if OUT.exists() else set()
+    return sorted(present - set(want))
+
+
 def write_all(want: dict[Path, str]) -> None:
     for path, text in want.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
+    # --check refuses these and says to run --write, so --write clears them.
+    for path in orphans(want):
+        path.unlink()
+        if not any(path.parent.iterdir()):
+            path.parent.rmdir()
     print(f"wrote {len(want)} attestation(s) for {len(want) // 2} skill(s)")
 
 
@@ -53,8 +64,7 @@ def stale(want: dict[Path, str]) -> list[str]:
         for path, text in want.items()
         if not path.exists() or path.read_text(encoding="utf-8") != text
     ]
-    present = set(OUT.rglob("*.json")) if OUT.exists() else set()
-    errors += [f"{path.relative_to(ROOT).as_posix()} belongs to no current skill" for path in sorted(present - set(want))]
+    errors += [f"{path.relative_to(ROOT).as_posix()} belongs to no current skill" for path in orphans(want)]
     return errors
 
 
