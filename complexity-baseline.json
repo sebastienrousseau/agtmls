@@ -15,9 +15,6 @@
       "cognitive": 17,
       "cyclomatic": 11,
       "lines": 61
-    },
-    "scripts/validate-cli-surface.py::main": {
-      "lines": 62
     }
   },
   "generated_by": "scripts/check-complexity.py --write",

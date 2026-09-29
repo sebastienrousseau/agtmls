@@ -2514,7 +2514,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3b46ce668139d1390b96385b9a1bd60723f99b0b8b64d2060006934b8dfe862d"
+          "content": "c4d60ff51f662d02b310c7d7b2ff9cc8d4fdb840ee46a1cade14073c959718d9"
         }
       ],
       "name": "scripts/validate-cli-surface.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:35:40Z",
+    "timestamp": "2026-09-29T13:38:35Z",
     "tools": {
       "components": [
         {
