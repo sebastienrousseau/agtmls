@@ -49,3 +49,27 @@ def verify(data: Path, signature: Path, allowed_signers: Path, namespace: str,
     with data.open("rb") as handle:
         proc = subprocess.run(argv, stdin=handle, capture_output=True, check=False)
     return "verified" if proc.returncode == 0 else "bad_signature"
+
+
+ATTESTATION_NAMESPACE = "agtmls-attestation@v1"
+
+
+def attestation_files(root: Path) -> list[Path]:
+    """Every attestation under `root`/attestations (spec 10.2)."""
+    return sorted((root / "attestations").glob("*/*.intoto.json"))
+
+
+def attestation_signature(path: Path) -> Path:
+    return path.with_name(path.name + ".sig")
+
+
+def unverified_attestations(root: Path) -> list[str]:
+    """Each attestation under `root` whose sibling .sig is missing or does
+    not verify against `root`/ALLOWED_SIGNERS (spec 10.7)."""
+    signers = root / "ALLOWED_SIGNERS"
+    problems = []
+    for path in attestation_files(root):
+        status = verify(path, attestation_signature(path), signers, ATTESTATION_NAMESPACE)
+        if status != "verified":
+            problems.append(f"{path.relative_to(root).as_posix()}: {status}")
+    return problems

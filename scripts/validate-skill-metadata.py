@@ -81,6 +81,21 @@ def policy_problems(policy: object) -> list[str]:
     return errors
 
 
+def hardened_problems(name: str, data: dict) -> list[str]:
+    """A skill with an uplift case is hardened only once a run shows it helps
+    (evals/uplift/README.md), recorded as an efficacy attestation that meets
+    the bar. The release signs it. Skills without a case predate the rule."""
+    if data.get("maturity") != "hardened" or not (ROOT / "evals/uplift/cases" / f"{name}.json").is_file():
+        return []
+    attestation = ROOT / "attestations" / name / "efficacy.intoto.json"
+    try:
+        meets = json.loads(attestation.read_text(encoding="utf-8"))["predicate"]["meets_bar"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return [("hardened needs an efficacy attestation of its current bytes (run-uplift-evals.py, "
+                 "then generate-skill-manifests.py --write)")]
+    return [] if meets is True else ["hardened, but its efficacy attestation does not meet the bar"]
+
+
 def file_problems(mf: Path) -> list[str]:
     """Every problem with one metadata.json, prefixed with its path."""
     where = mf.relative_to(ROOT)
@@ -91,6 +106,7 @@ def file_problems(mf: Path) -> list[str]:
     if not isinstance(data, dict):
         return [f"{where}: metadata must be an object"]
     found = identity_problems(data) + catalog_problems(data) + policy_problems(data.get("safety_policy"))
+    found += hardened_problems(mf.parent.name, data)
     return [f"{where}: {problem}" for problem in found]
 
 

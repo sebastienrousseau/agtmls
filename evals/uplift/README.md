@@ -28,6 +28,14 @@ A skill meets the `hardened` bar when it `helps` on at least two agents; the
 rendered report names those skills. The ceiling is `TOKEN_CEILING` and
 `BIG_GAIN` in `scripts/_lib/uplift.py`.
 
+Commit the results file under `docs/evidence/`. `generate-skill-manifests.py
+--write` then writes `attestations/<skill>/efficacy.intoto.json`, but only
+while the skill's bytes match the digest the run recorded: edit the skill and
+the attestation goes until a new run measures it. A skill with a case here is
+`hardened` only on an efficacy attestation that meets the bar
+(`validate-skill-metadata.py`), and the release signs every attestation
+(`sign-attestations.py`, agtmls-spec chapter 10).
+
 ## Case format (`cases/<skill>.json`)
 
 ```json

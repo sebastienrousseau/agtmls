@@ -42,6 +42,10 @@ OUT_CYCLONEDX = ROOT / "SBOM.cyclonedx.json"
 
 SKIP_NAMES = {".DS_Store"}
 SKIP_PARTS = {"__pycache__"}
+# Signatures exist only once the release has signed (index.json.sig, and each
+# attestation's .sig): listing them would make the SBOM differ between a
+# checkout and the release job, which has them.
+SKIP_SUFFIXES = {".sig"}
 NAMESPACE_BASE = "https://github.com/sebastienrousseau/agtmls/spdx"
 # Stable per-document UUID seed: the namespace must be unique per document but
 # must not change unless the document does.
@@ -69,6 +73,7 @@ def included(path: Path) -> bool:
         and not path.is_symlink()
         and path.name not in SKIP_NAMES
         and not (SKIP_PARTS & set(path.parts))
+        and path.suffix not in SKIP_SUFFIXES
     )
 
 

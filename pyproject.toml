@@ -56,6 +56,7 @@ packages = ["src/agtmls"]
 "references" = "agtmls/_registry/references"
 "templates" = "agtmls/_registry/templates"
 "evals" = "agtmls/_registry/evals"
+"attestations" = "agtmls/_registry/attestations"
 "index.json" = "agtmls/_registry/index.json"
 "ALLOWED_SIGNERS" = "agtmls/_registry/ALLOWED_SIGNERS"
 "profiles.json" = "agtmls/_registry/profiles.json"
@@ -79,6 +80,7 @@ include = [
   "references",
   "templates",
   "evals",
+  "attestations",
   "*.json",
   "*.md",
   "LICENSE-APACHE",
@@ -90,7 +92,7 @@ include = [
 # The release signature is gitignored, and hatch leaves gitignored files out
 # of an sdist unless they are artifacts. The release builds its wheel from
 # the sdist, so without this the wheel would ship unsigned.
-artifacts = ["index.json.sig"]
+artifacts = ["index.json.sig", "attestations/**/*.sig"]
 
 # Coverage of the tooling, not of the registry data it validates. Subprocess
 # tracing is on because most of this repository's work happens in child

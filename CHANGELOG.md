@@ -28,6 +28,24 @@ All notable changes to AgtMLS are recorded here.
   read in every session, and a value that changes each release breaks a
   provider's prompt cache. Exported `ADAPTERS.md` says to put static text
   first in a fixed order.
+- Efficacy attestations: `attestations/<skill>/efficacy.intoto.json`
+  (`https://agtmls.dev/efficacy/v1`) records a skill's uplift result,
+  written only while a committed run measured the skill's current bytes.
+  A skill with an uplift case is `hardened` only on one that meets the
+  bar. vetting-a-skill-before-install is the first to have one.
+- The release signs every attestation under `agtmls-attestation@v1` with
+  the release key, ships them with their signatures in the wheel, and
+  `release-audit.py` refuses a release whose attestations are not the
+  commit's or do not verify. `sign-attestations.py --verify` checks them
+  offline.
+
+### Changed
+
+- vetting-a-skill-before-install costs less: 1.32x the tokens of the task
+  without it on Claude Code and 1.33x on Codex, down from 1.65x and 1.54x,
+  with the same gains (+20 and +12 points). Its body is shorter, it starts
+  from the audit, and its report leads with whether the source can be
+  pinned.
 
 ## 0.0.19 - 2026-09-29
 
