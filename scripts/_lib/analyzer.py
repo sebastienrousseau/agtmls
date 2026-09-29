@@ -198,6 +198,35 @@ JSON_ESCAPE = re.compile(r'\\(?:u([0-9a-fA-F]{4})|(["\\/bfnrt]))')
 _SIMPLE = {'"': '"', "\\": "\\", "/": "/", "b": " ", "f": " ", "n": " ", "r": " ", "t": " "}
 
 
+class _EscapeDecoder:
+    """Decoded text, holding a high surrogate until its low half arrives."""
+
+    def __init__(self) -> None:
+        self.out: list[str] = []
+        self.pending_high: int | None = None
+
+    def flush(self) -> None:
+        """A high surrogate with no low half becomes U+FFFD."""
+        if self.pending_high is not None:
+            self.out.append("\ufffd")
+            self.pending_high = None
+
+    def code_point(self, code: int) -> None:
+        if 0xD800 <= code <= 0xDBFF:
+            self.flush()
+            self.pending_high = code
+        elif 0xDC00 <= code <= 0xDFFF:
+            if self.pending_high is None:
+                self.out.append("\ufffd")
+            else:
+                self.out.append(chr(0x10000 + ((self.pending_high - 0xD800) << 10) + (code - 0xDC00)))
+                self.pending_high = None
+        else:
+            self.flush()
+            char = chr(code)
+            self.out.append(" " if char in "\n\r\u2028\u2029\x85\x0b\x0c" else char)
+
+
 def decode_json_escapes(content: str) -> str:
     """JSON string escapes decoded, never creating a line (spec 4.3).
 
@@ -206,43 +235,21 @@ def decode_json_escapes(content: str) -> str:
     decoded line terminator become a space, so line numbers still point into
     the source; a surrogate pair is one code point, a lone one U+FFFD.
     """
-    out: list[str] = []
+    decoder = _EscapeDecoder()
     last = 0
-    pending_high: int | None = None
     for match in JSON_ESCAPE.finditer(content):
-        if match.start() != last and pending_high is not None:
-            out.append("�")
-            pending_high = None
-        out.append(content[last:match.start()])
+        if match.start() != last:
+            decoder.flush()
+        decoder.out.append(content[last:match.start()])
         last = match.end()
         if match.group(2) is not None:
-            if pending_high is not None:
-                out.append("�")
-                pending_high = None
-            out.append(_SIMPLE[match.group(2)])
-            continue
-        code = int(match.group(1), 16)
-        if 0xD800 <= code <= 0xDBFF:
-            if pending_high is not None:
-                out.append("�")
-            pending_high = code
-            continue
-        if 0xDC00 <= code <= 0xDFFF:
-            if pending_high is None:
-                out.append("�")
-            else:
-                out.append(chr(0x10000 + ((pending_high - 0xD800) << 10) + (code - 0xDC00)))
-                pending_high = None
-            continue
-        if pending_high is not None:
-            out.append("�")
-            pending_high = None
-        char = chr(code)
-        out.append(" " if char in "\n\r  \x85\x0b\x0c" else char)
-    if pending_high is not None:
-        out.append("�")
-    out.append(content[last:])
-    return "".join(out)
+            decoder.flush()
+            decoder.out.append(_SIMPLE[match.group(2)])
+        else:
+            decoder.code_point(int(match.group(1), 16))
+    decoder.flush()
+    decoder.out.append(content[last:])
+    return "".join(decoder.out)
 
 
 def flatten(content: str) -> str:

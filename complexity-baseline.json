@@ -8,11 +8,6 @@
   },
   "files": {},
   "functions": {
-    "scripts/_lib/analyzer.py::decode_json_escapes": {
-      "cognitive": 25,
-      "cyclomatic": 13,
-      "halstead": 37.5
-    },
     "scripts/_lib/analyzer.py::scan_rules": {
       "cognitive": 31,
       "cyclomatic": 12
