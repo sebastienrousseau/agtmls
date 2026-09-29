@@ -50,11 +50,6 @@
     "scripts/generate-plugin-manifests.py::render": {
       "lines": 74
     },
-    "scripts/generate-skill-index.py::collect": {
-      "cognitive": 21,
-      "cyclomatic": 17,
-      "lines": 89
-    },
     "scripts/generate-skill-index.py::parse_frontmatter": {
       "cognitive": 19,
       "cyclomatic": 11
