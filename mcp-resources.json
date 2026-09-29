@@ -57,13 +57,6 @@
       "uri": "agtmls://skill/handoff"
     },
     {
-      "description": "Use when setting up or reviewing a coding agent's configuration in a repository or a home directory: approval modes, permission rules, hooks, MCP servers and where each setting lives, for Claude Code, Codex, Aider and Antigravity. Also when agtmls doctor warns that an agent runs tools without asking. Not for vetting a third-party skill (vetting-a-skill-before-install).",
-      "mimeType": "text/markdown",
-      "name": "hardening-agent-config",
-      "path": "skills/hardening-agent-config/SKILL.md",
-      "uri": "agtmls://skill/hardening-agent-config"
-    },
-    {
       "description": "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect.",
       "mimeType": "text/markdown",
       "name": "incident-response",

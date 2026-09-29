@@ -304,7 +304,7 @@ class ScriptTests(FakeAgents):
 
     def test_check_validates_the_real_cases(self) -> None:
         code, out = run_main(self.script, "--check")
-        self.assertEqual((code, out.strip()), (0, "OK: 3 uplift case(s) valid"))
+        self.assertEqual((code, out.strip()), (0, "OK: 2 uplift case(s) valid"))
 
     def test_an_unknown_skill_fails(self) -> None:
         code, out = run_main(self.script, "--check", "--skill", "nope")
@@ -328,7 +328,7 @@ class ScriptTests(FakeAgents):
     def test_a_run_without_transcripts_keeps_none(self) -> None:
         out = self.tmp / "one.json"
         code, _ = run_main(self.script, "--out", str(out), "--agent", "claude", "--trials", "1",
-                           "--skill", "hardening-agent-config", "--claude-model", "m")
+                           "--skill", "authoring-portable-skills", "--claude-model", "m")
         self.assertEqual(code, 0)
         results = json.loads(out.read_text(encoding="utf-8"))
         self.assertEqual((len(results["runs"]), results["meta"]["agents"]), (2, {"claude": "m"}))

@@ -1,5 +1,0 @@
-# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
-model: sonnet
-auto-commits: true
-yes-always: true

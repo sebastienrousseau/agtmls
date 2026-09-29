@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "22d98dd0ab32123e07afe10de83d5f777125ef3d0fd5098e1d71ba2a15ea3f04"
+          "content": "53637d4546f2cf34d74d03005f528e62edfb8a46b7435d5c2264a6f90bc33e47"
         }
       ],
       "name": "CATALOG.md",
@@ -263,17 +263,6 @@
         }
       ],
       "name": "evals/behavioral/cases/handoff.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/behavioral/cases/hardening-agent-config.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "f56760092303fec37235c960163514cc96d4853bfde72753851eacafe99dcc9f"
-        }
-      ],
-      "name": "evals/behavioral/cases/hardening-agent-config.json",
       "type": "file"
     },
     {
@@ -640,17 +629,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "evals/cases/hardening-agent-config.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "971f6819d28e7197842eb3f0ab0a9919d5464f739f5c350bfdf60f333d3fa52a"
-        }
-      ],
-      "name": "evals/cases/hardening-agent-config.json",
-      "type": "file"
-    },
-    {
       "bom-ref": "evals/cases/incident-response.json",
       "hashes": [
         {
@@ -970,17 +948,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "evals/uplift/cases/hardening-agent-config.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "23389f6296fd0fe66f3db35c7fe62bcc70dfa15dbec4ef4b7994cb4b1a7dc2c2"
-        }
-      ],
-      "name": "evals/uplift/cases/hardening-agent-config.json",
-      "type": "file"
-    },
-    {
       "bom-ref": "evals/uplift/cases/vetting-a-skill-before-install.json",
       "hashes": [
         {
@@ -1069,28 +1036,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.aider.conf.yml",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "015ddba75b637085e9618bc374a922d03806479552bf73e05f795545cb22e680"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.aider.conf.yml",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.claude/settings.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "0364f0e3a9d702a82ffab3bedccc6f3b7beeefe8f303cfa1f21372dc2eece0d2"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.claude/settings.json",
-      "type": "file"
-    },
-    {
       "bom-ref": "evals/uplift/fixtures/platform-api/.claude/settings.local.json",
       "hashes": [
         {
@@ -1099,61 +1044,6 @@
         }
       ],
       "name": "evals/uplift/fixtures/platform-api/.claude/settings.local.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.codex/config.toml",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "d54cb93b80c4f5ffcef5c86913e699b9f1ab43d93ed16375bf7b44ce8dca33a8"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.codex/config.toml",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.gitignore",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "b4e6bbd79ad86dcfefe0b15b6ac92202d42293d4020e4a2e1d3b5a9a8b005a16"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.gitignore",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.mcp.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "573a0d1146b088fd2a1c5e0a09509ea6a54d744f5ee2d4ac6c03d6fa2de74ce1"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.mcp.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/README.md",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "29d9cce7ed52f2703e0fccb42937d284855dc7f4b8c34a46af4a0475c4be2177"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/README.md",
-      "type": "file"
-    },
-    {
-      "bom-ref": "evals/uplift/fixtures/platform-api/src/app.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "184ea4a7c3c9fdd7bbaa5ecf5d209c68f3d6a7f78223d203222d32409c1ea265"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/src/app.py",
       "type": "file"
     },
     {
@@ -1205,7 +1095,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4229ee281feaab5cd4bbcf4d6295965a710d04419d20707da36ac22adbdac62f"
+          "content": "fa1c3ecf0720e68e1719961cbb2a5f17ad330e2311c64e695d707a2f4c9fd7e6"
         }
       ],
       "name": "index.json",
@@ -2316,7 +2206,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b4d050038cd71ae007674e6f3d0544b7d14eaf664599e9afda2059e764cf0954"
+          "content": "2fe188a749f0af6775c09324113a474a850dce0ecd9bed5f3da19679fb1c42d5"
         }
       ],
       "name": "scripts/generate-skill-manifests.py",
@@ -4050,39 +3940,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "skills/hardening-agent-config/SKILL.md",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "eb9038f8f3b4a268702d762bb5786f1b11a9c1b7f0a74ac0d5dceeb93dc1d96c"
-        }
-      ],
-      "name": "skills/hardening-agent-config/SKILL.md",
-      "type": "file"
-    },
-    {
-      "bom-ref": "skills/hardening-agent-config/metadata.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "5e424c4f1a325895c1497707fc6a374a13c69e1c034059a419d4b201d45adebd"
-        }
-      ],
-      "name": "skills/hardening-agent-config/metadata.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "skills/hardening-agent-config/reference.md",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "eb0559d4c11974e714a5eac30263fb3983f7d5e2174af3c9afb5ffd047ba65cd"
-        }
-      ],
-      "name": "skills/hardening-agent-config/reference.md",
-      "type": "file"
-    },
-    {
       "bom-ref": "skills/incident-response/SKILL.md",
       "hashes": [
         {
@@ -4673,7 +4530,7 @@
       "type": "application",
       "version": "0.0.18"
     },
-    "timestamp": "2026-09-29T21:02:03Z",
+    "timestamp": "2026-09-29T21:19:18Z",
     "tools": {
       "components": [
         {

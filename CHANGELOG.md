@@ -7,6 +7,22 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Removed
+
+- The draft skill `hardening-agent-config`. Two uplift cases and 40
+  measured runs showed no gain worth the name on Claude Code or Codex:
+  without it, both agents already found almost every planted flaw, and
+  with it they used 1.2 to 1.8 times the tokens
+  (`docs/evidence/uplift-2026-09-29-hardening.md`). A copy installed from
+  v0.0.17 or v0.0.18 keeps working; uninstall it with the rest of its
+  bundle, or delete its directory.
+
+### Fixed
+
+- `generate-skill-manifests.py --write` now removes the attestations of a
+  removed skill. `--check` refused them and said to run `--write`, which
+  left them in place.
+
 ### Added
 
 - `run-uplift-evals.py` measures whether a skill helps: it runs the same
