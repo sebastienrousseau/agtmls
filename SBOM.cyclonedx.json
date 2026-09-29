@@ -1920,7 +1920,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cbb869572a7912acaa6cae0cc6ddb4e968876af03eaab9558d1a2be02cb1a1ed"
+          "content": "1eb7401fbb01ccd990b577b85209519fc3d21169508a8caceb968d10dd44a3b6"
         }
       ],
       "name": "scripts/_lib/uplift.py",
@@ -1931,7 +1931,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1da2632ca83b34e71d578e9c52dc8bdc908e8ca32f85c2c0ef4b5d52c0e86748"
+          "content": "b2ca628ee52d1a041ddc81b45a85bddac24f0554b5b6430b47566dbfacfe91dd"
         }
       ],
       "name": "scripts/_lib/uplift_agents.py",
@@ -2404,7 +2404,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf0c329edaf727effd62217a324f8f8f9e3f67eeb7f2a6430ad213e2cc5e0d2f"
+          "content": "59d44425da32f0719bd97178e19c9988daca5bb63ec202bff3862142c638050d"
         }
       ],
       "name": "scripts/run-uplift-evals.py",
@@ -4519,7 +4519,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T21:55:51Z",
+    "timestamp": "2026-09-29T22:49:26Z",
     "tools": {
       "components": [
         {

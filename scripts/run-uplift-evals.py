@@ -98,7 +98,7 @@ def run_one(case: uplift.Case, agent_name: str, trial: int, arm: str, args: argp
           f"{' ERROR ' + outcome.error if outcome.error else ''}", file=sys.stderr, flush=True)
     return {"skill": case.skill, "agent": agent_name, "arm": arm, "trial": trial, "hits": hits,
             "score": round(len(hits) / len(case.expectations), 3), "skill_used": outcome.skill_used,
-            "tokens": outcome.tokens, "cost_usd": outcome.cost_usd, "seconds": round(seconds, 1),
+            "tokens": outcome.tokens, "output_tokens": outcome.output_tokens, "cost_usd": outcome.cost_usd, "seconds": round(seconds, 1),
             "model": outcome.model, "error": outcome.error, "answer": outcome.answer}
 
 

@@ -187,15 +187,22 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 | no token data |", text)
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | n/a | 100% | 1 | no token data |", text)
         self.assertIn("| b | 0% | 50% |", text)
         with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
-        self.assertIn("| +0 pts | 3.00x | 100% | 0 | no gain |", uplift.render(with_tokens))
+        self.assertIn("| +0 pts | 3.00x | n/a | 100% | 0 | no gain |", uplift.render(with_tokens))
+
+    def test_output_tokens_are_averaged_and_compared(self) -> None:
+        runs = [_run("with", ["a"], output_tokens=90), _run("with", ["a"], output_tokens=110),
+                _run("without", ["a"], output_tokens=50)]
+        (row,) = uplift.summarise([self.CASE], runs)
+        self.assertEqual((row["with"]["output_tokens"], row["without"]["output_tokens"]), (100.0, 50.0))
+        self.assertIn("| +0 pts | 1.00x | 2.00x |", uplift.render([row]))
 
     def test_an_arm_with_only_errors_has_no_delta(self) -> None:
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
-        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
+        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
 
 
 class VerdictTests(unittest.TestCase):
@@ -282,6 +289,7 @@ class RunTests(FakeAgents):
             self.assertIn("commit", with_skill.answer)
             self.assertNotIn("commit", without.answer)
             self.assertEqual(with_skill.tokens, 15 if agent == "claude" else 10)
+            self.assertEqual(with_skill.output_tokens, 5 if agent == "claude" else 3)
             self.assertTrue(raw)
 
     def test_the_agtmls_on_path_is_this_checkout(self) -> None:
@@ -331,6 +339,7 @@ class ScriptTests(FakeAgents):
         self.assertEqual(code, 0, text)
         results = json.loads(out.read_text(encoding="utf-8"))
         self.assertEqual(len(results["runs"]), 8)
+        self.assertEqual({run["output_tokens"] for run in results["runs"]}, {5, 3})
         self.assertEqual(set(results["meta"]["agents"]), {"claude", "codex"})
         self.assertRegex(results["meta"]["skills"]["vetting-a-skill-before-install"], r"^sha256:")
         by_arm = {(row["agent"]): row for row in results["summary"]}

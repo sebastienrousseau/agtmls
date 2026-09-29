@@ -7,6 +7,13 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `run-uplift-evals.py` records the tokens each agent wrote per run
+  (`output_tokens`, reasoning included), and the report shows the with
+  over without ratio in an `Output` column beside the total. A skill that
+  makes answers longer now shows up on its own.
+
 ## 0.0.19 - 2026-09-29
 
 ### Removed

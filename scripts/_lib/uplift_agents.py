@@ -51,6 +51,7 @@ class Outcome(NamedTuple):
     cost_usd: float | None
     model: str | None
     error: str | None
+    output_tokens: int | None = None  # what the agent wrote, reasoning included
 
 
 class Agent(NamedTuple):
@@ -115,7 +116,7 @@ def _claude_parse(stdout: str, skill: str, options: Options) -> Outcome:
         return Outcome("", False, None, None, model, "claude printed no result")
     error = f"claude: {result.get('subtype')}" if result.get("is_error") else None
     return Outcome(str(result.get("result") or ""), _claude_used(events, skill), _tokens(result.get("usage")),
-                   result.get("total_cost_usd"), model, error)
+                   result.get("total_cost_usd"), model, error, _tokens(result.get("usage"), ("output_tokens",)))
 
 
 def codex_auth() -> Path:
@@ -146,18 +147,19 @@ def _codex_event(event: dict, skill: str, state: dict) -> None:
         state["used"] = state["used"] or f"{skill}/SKILL.md" in str(item.get("command", ""))
     elif kind == "turn.completed":
         state["tokens"] = _tokens(event.get("usage"), ("input_tokens", "output_tokens"))
+        state["output_tokens"] = _tokens(event.get("usage"), ("output_tokens",))
     elif kind in ("error", "turn.failed"):
         state["error"] = f"codex: {_codex_message(event)}"
 
 
 def _codex_parse(stdout: str, skill: str, options: Options) -> Outcome:
-    state: dict = {"answer": "", "used": False, "tokens": None, "error": None}
+    state: dict = {"answer": "", "used": False, "tokens": None, "error": None, "output_tokens": None}
     for event in _events(stdout):
         _codex_event(event, skill, state)
     if not state["answer"] and state["error"] is None:
         state["error"] = "codex printed no answer"
     return Outcome(state["answer"], state["used"], state["tokens"], None,
-                   options.model or "codex default", state["error"])
+                   options.model or "codex default", state["error"], state["output_tokens"])
 
 
 AGENTS = {
