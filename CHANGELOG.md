@@ -7,6 +7,40 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.18 - 2026-09-29
+
+### Fixed
+
+- `import-skill.py` wrote the registry's version into every imported
+  skill's `metadata.json`, a field `validate-skill-metadata.py` and the
+  version policy both refuse, so an imported skill failed the gate the
+  moment it landed. The importer no longer writes it.
+- Malformed input that passed silently now fails. `run-trigger-evals.py`
+  ran prompt lists given as a string one letter at a time (one case
+  "passed" 210 checks), and `run-behavioral-evals.py` did the same with
+  needle lists; `validate-check-manifest.py` accepted a `checks` object as
+  "1 check"; `validate-lifecycle.py` matched `non_negotiables` given as
+  one string by substring; `sync-spec-rules.py` accepted rule examples
+  given as an empty string or object.
+- Malformed or non-UTF-8 files are reported by name instead of stopping
+  a check with a traceback: routing and behavioral eval cases, the
+  packaging files, the skill index generator (which now stops with a
+  FAIL line and writes nothing), command files, `checks.json`, the rule
+  snapshot, licence headers, `.gitignore`, templates, system prompts,
+  `lifecycle.json`, and the make-install, export and scaffold smoke
+  tests. Each was found by fault injection over the file's real
+  contents, and only the inputs that crashed changed, apart from the
+  refusals above.
+
+### Changed
+
+- No function or file in `scripts/`, `src/` or `fuzz/` is over a
+  complexity ceiling any more: `complexity-baseline.json` is empty, from
+  66 functions and 2 files when the gate landed, and the gate keeps it
+  so. Every refactor was checked against the code it replaced before
+  it merged. The skill policy checks moved from `_lib/analyzer.py` to
+  `_lib/policy.py`, and `Finding` and `read_capped` to `_lib/findings.py`.
+
 ## 0.0.17 - 2026-09-29
 
 ### Fixed
