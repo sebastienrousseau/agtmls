@@ -112,6 +112,7 @@ def audit_release(tag: str, repo: str, commit: str) -> tuple[list[str], str | No
         errors.append(f"the {tag} release is titled {release.get('name')!r}, not {title(tag.removeprefix('v'))!r}")
     errors += audit_assets(assets, sums)
     errors += audit_signature(commit, repo, assets)
+    errors += audit_attestations(commit, repo, assets)
     errors += audit_provenance(commit, repo, tag, assets)
     return errors, sums
 
@@ -144,6 +145,66 @@ def audit_signature(commit: str, repo: str, assets: list[dict]) -> list[str]:
         return [f"index.json.sig does not verify against the release commit's ALLOWED_SIGNERS ({status})"]
     print("OK: index.json.sig verifies against the release commit's ALLOWED_SIGNERS")
     return []
+
+
+REGISTRY = "agtmls/_registry/"
+
+
+def _commit_attestations(commit: str) -> dict[str, bytes]:
+    """The release commit's attestations, by path."""
+    listed = fetch_bytes("git", "ls-tree", "-r", "--name-only", commit, "attestations/") or b""
+    paths = [line for line in listed.decode().splitlines() if line.endswith(".intoto.json")]
+    return {path: fetch_bytes("git", "show", f"{commit}:{path}") or b"" for path in paths}
+
+
+def _wheel_registry(data: bytes, into: Path) -> Path:
+    """Unpack the wheel's attestations into `into`; the registry root."""
+    import io
+    import zipfile
+    with zipfile.ZipFile(io.BytesIO(data)) as wheel:
+        members = [name for name in wheel.namelist() if name.startswith(REGISTRY + "attestations/")]
+        wheel.extractall(into, members=members)
+    return into / REGISTRY
+
+
+def _matches(expected: dict[str, bytes], registry: Path) -> list[str]:
+    """The wheel carries exactly the commit's attestations, byte for byte."""
+    errors = []
+    for rel, data in sorted(expected.items()):
+        shipped = registry / rel
+        if not shipped.is_file():
+            errors.append(f"{rel} is not in the wheel")
+        elif shipped.read_bytes() != data:
+            errors.append(f"{rel} differs from the commit's")
+    return errors
+
+
+def audit_attestations(commit: str, repo: str, assets: list[dict]) -> list[str]:
+    """The wheel's attestations are the commit's and each one verifies
+    against the commit's ALLOWED_SIGNERS (agtmls-spec 10.7).
+
+    Only a commit that signs attestations is asked, so releases from before
+    signing began still audit clean. As for the index, the keys come from
+    the commit, never from the release being checked.
+    """
+    if fetch_bytes("git", "show", f"{commit}:scripts/sign-attestations.py") is None:
+        return []
+    wheel = next((a for a in assets if a["name"].endswith(".whl")), None)
+    if wheel is None:
+        return ["the release has no wheel whose attestations could be checked"]
+    data = fetch_bytes("gh", "api", "-H", "Accept: application/octet-stream", f"repos/{repo}/releases/assets/{wheel['id']}")
+    signers = fetch_bytes("git", "show", f"{commit}:ALLOWED_SIGNERS")
+    if data is None or signers is None:
+        return ["the wheel or ALLOWED_SIGNERS could not be read back to check the attestations"]
+    expected = _commit_attestations(commit)
+    with tempfile.TemporaryDirectory(prefix="agtmls-audit-att-") as raw:
+        registry = _wheel_registry(data, Path(raw))
+        (registry / "ALLOWED_SIGNERS").write_bytes(signers)
+        errors = _matches(expected, registry)
+        errors += [f"{problem} in the wheel" for problem in signatures.unverified_attestations(registry)]
+    if not errors:
+        print(f"OK: the wheel's {len(expected)} attestation(s) are the commit's and verify against its ALLOWED_SIGNERS")
+    return errors
 
 
 WORKFLOW = ".github/workflows/release.yml"

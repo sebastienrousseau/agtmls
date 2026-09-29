@@ -7,6 +7,46 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `run-uplift-evals.py` records the tokens each agent wrote per run
+  (`output_tokens`, reasoning included), and the report shows the with
+  over without ratio in an `Output` column beside the total. A skill that
+  makes answers longer now shows up on its own.
+- `audit --foreign` states the source it audited, as a git commit or as
+  not a git checkout, and names every file it did not audit instead of
+  only counting them by directory (`coverage.source_commit`,
+  `coverage.not_audited_files` in JSON). Pinning and reading those files
+  no longer take an agent extra turns of probing.
+- `doctor --target --agent` reports what an install loads in every
+  session: its skill descriptions and prompt file, in approximate tokens.
+  `verify --live` names any installed skill whose description Codex shows
+  shorter than written (its listing budget), without failing: the skill
+  still loads, but routes worse.
+- `validate-skills.py` and `validate-system-prompts.py` refuse a date or
+  the registry's own version in a description or system prompt. Both are
+  read in every session, and a value that changes each release breaks a
+  provider's prompt cache. Exported `ADAPTERS.md` says to put static text
+  first in a fixed order.
+- Efficacy attestations: `attestations/<skill>/efficacy.intoto.json`
+  (`https://agtmls.dev/efficacy/v1`) records a skill's uplift result,
+  written only while a committed run measured the skill's current bytes.
+  A skill with an uplift case is `hardened` only on one that meets the
+  bar. vetting-a-skill-before-install is the first to have one.
+- The release signs every attestation under `agtmls-attestation@v1` with
+  the release key, ships them with their signatures in the wheel, and
+  `release-audit.py` refuses a release whose attestations are not the
+  commit's or do not verify. `sign-attestations.py --verify` checks them
+  offline.
+
+### Changed
+
+- vetting-a-skill-before-install costs less: 1.32x the tokens of the task
+  without it on Claude Code and 1.33x on Codex, down from 1.65x and 1.54x,
+  with the same gains (+20 and +12 points). Its body is shorter, it starts
+  from the audit, and its report leads with whether the source can be
+  pinned.
+
 ## 0.0.19 - 2026-09-29
 
 ### Removed

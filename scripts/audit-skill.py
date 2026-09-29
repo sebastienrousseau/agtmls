@@ -70,10 +70,22 @@ def fetch_foreign(target: str, workspace: Path) -> Path | str:
     return clone
 
 
+LISTED_FILES = 20
+
+
+def _listed(paths: list[str]) -> str:
+    """Paths in one line, so an agent can read them all in one call."""
+    shown = ", ".join(paths[:LISTED_FILES])
+    rest = len(paths) - LISTED_FILES
+    return f"{shown}, and {rest} more (--format json lists every one)" if rest > 0 else shown
+
+
 def print_coverage(coverage: dict) -> None:
     """What the foreign audit read and what it did not: an unscanned file is
     not a clean one."""
     print("\nCoverage:")
+    commit = coverage.get("source_commit")
+    print(f"  source: git commit {commit}" if commit else "  source: not a git checkout, so it cannot be pinned to a commit")
     print(f"  {coverage['skills_audited']} distinct skill(s) audited from {coverage['skills_found']} location(s) "
           f"({coverage['duplicate_copies']} identical copies), {coverage['files_audited']} file(s) read")
     for name, paths in coverage["divergent_copies"].items():
@@ -81,6 +93,7 @@ def print_coverage(coverage: dict) -> None:
     if coverage["files_not_audited"]:
         areas = ", ".join(f"{area} ({count})" for area, count in list(coverage["not_audited_by_area"].items())[:6])
         print(f"  NOT AUDITED: {coverage['files_not_audited']} auditable file(s) outside any skill: {areas}")
+        print(f"  NOT AUDITED files: {_listed(coverage['not_audited_files'])}")
     for rel in coverage["agent_configs_not_audited"]:
         print(f"  NOT AUDITED agent config: {rel}")
     if coverage["skipped_directories"]:

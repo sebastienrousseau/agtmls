@@ -61,7 +61,14 @@ def adapter_text(provider: str, profile: str | None, skill_count: int) -> str:
         "Load relevant skills from `skills/<name>/SKILL.md`; read "
         "`reference.md` files only when the selected skill asks for them. "
         "Respect each skill's `safety_policy` in `index.json` before running "
-        "commands, editing files, using network access, or handling secrets.\n"
+        "commands, editing files, using network access, or handling secrets.\n\n"
+        "Prompt caching: providers that cache a repeated prompt prefix bill it "
+        "at a discount, but only while the prefix is byte-identical. Put the "
+        "static text first and keep its order fixed: the system prompt, then "
+        "the skill names and descriptions, sorted, then any skill bodies you "
+        "load. Put the conversation and anything that changes per request "
+        "(dates, versions, retrieved documents) after them. The files in this "
+        "bundle are static and carry no dates or registry versions.\n"
     )
 
 

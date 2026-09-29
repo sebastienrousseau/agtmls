@@ -298,17 +298,22 @@ def live_check(target: Path, agent: str) -> dict:
     skill on disk that the agent does not list is reported, since it will
     never be used. Returns {"loaded": n, "missing": [...]} or {"error": ...}.
     """
-    from _lib import liveness
+    from _lib import context_cost, liveness
 
     item = json.loads((ROOT / "providers.json").read_text(encoding="utf-8"))["native_agents"][agent]
     lock = lockfile.read(target) or {}
     expected = sorted(entry["name"] for entry in lockfile.entries_for(lock, agent))
     try:
-        loaded = liveness.loaded_skills(item, target)
+        listed = liveness.listed_skills(item, target)
     except liveness.ProbeError as exc:
         return {"error": str(exc)}
-    return {"loaded": len(set(expected) & loaded), "expected": len(expected),
-            "missing": [name for name in expected if name not in loaded]}
+    # A description the agent shortens past its listing budget still loads,
+    # but routes worse; it is named, and does not fail the check.
+    shown = {name: listed[name] for name in expected if name in listed}
+    cut = context_cost.shortened(target / agent_paths(agent)[0] / "skills", shown)
+    return {"loaded": len(shown), "expected": len(expected),
+            "missing": [name for name in expected if name not in listed],
+            "shortened": [list(entry) for entry in cut]}
 
 
 def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False,

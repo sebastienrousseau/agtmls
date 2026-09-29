@@ -48,10 +48,12 @@ and can be evaded. Knowing which is which is the point of this section.
 | Signed commits and tags (`KEYS.asc`) | Boundary | Which maintainer key produced a given revision |
 | `verify --signatures` against the shipped `ALLOWED_SIGNERS` (exit `4` unsigned, `5` bad signature) | Boundary | `index.json` was signed by the `agtmls-release` key, held only in a protected release environment (agtmls-spec chapter 9) |
 | Signed advisory feed, consulted on every `verify` (exit `6`) | Boundary | An installed skill whose digest has been revoked is named; a feed that does not verify is never read (chapter 11) |
+| Signed skill attestations (`attestations/`, `sign-attestations.py --verify`), from v0.0.20 | Boundary | Each skill's manifest and capabilities statements, and its efficacy statement where a run measured it, are the release's, signed by the `agtmls-release` key under `agtmls-attestation@v1` (chapter 10) |
 | Build provenance on every release asset (`gh attestation verify`) | Boundary | The wheel, sdist and exports were built by this repository's `release.yml` from the release tag on a GitHub-hosted runner, signed keylessly through Sigstore |
 | `agtmls audit` rules (`AGT-STEG`, `AGT-INJ`, `AGT-EXEC`, `AGT-EXFIL`, `AGT-HOOK`, `AGT-SUPPLY`, `AGT-MCP`, `AGT-PACK`, `AGT-SOCIAL`, `AGT-SEL`) | Heuristic | Known patterns are flagged on the text an agent reads (hidden code points stripped, NFKC-folded); packed or obfuscated payloads can evade static scanning. In-source suppressions need a reason and never cover `AGT-STEG` |
 | Capability and policy honesty (`AGT-CAP`, `AGT-POLICY`) | Heuristic | Frontmatter and `metadata.json` agree with each other and with the skill's prose; it cannot see what a script does at run time |
 | Collision, routing and behavioral evals | Heuristic | Skills stay distinguishable and keep their documented shape; they do not measure whether a skill helps |
+| Uplift runs (`run-uplift-evals.py`) | Heuristic | Whether a skill changed what Claude Code and Codex found in a fixture with planted flaws, and at what token cost; five trials per arm show large effects only |
 
 A signature proves who published the registry, never that a skill is safe:
 the heuristics above are what look at content.

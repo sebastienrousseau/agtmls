@@ -12,3 +12,4 @@ dist/
 htmlcov/
 # Made by the release workflow, never committed (agtmls-spec chapter 9).
 /index.json.sig
+/attestations/**/*.sig

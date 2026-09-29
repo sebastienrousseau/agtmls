@@ -110,6 +110,8 @@ def print_live(agent: str, live_result: dict | None) -> None:
         return
     for name in live_result["missing"]:
         print(f"{'NOT LOADED':<12} {name}  installed, but {agent} does not list it", file=sys.stderr)
+    for name, shown, full in live_result.get("shortened", []):
+        print(f"{'SHORTENED':<12} {name}  {agent} shows {shown} of {full} description characters", file=sys.stderr)
     if not live_result["missing"]:
         print(f"OK: {agent} loads all {live_result['expected']} installed skill(s)")
 

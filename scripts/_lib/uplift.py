@@ -175,7 +175,7 @@ def _mean(values: list[float]) -> float | None:
 
 def _mean_of(runs: list[dict], key: str) -> float | None:
     """The mean of a numeric field, over the runs that reported it."""
-    return _mean([run[key] for run in runs if run[key] is not None])
+    return _mean([run[key] for run in runs if run.get(key) is not None])
 
 
 def _arm(runs: list[dict], ids: list[str]) -> dict:
@@ -187,6 +187,7 @@ def _arm(runs: list[dict], ids: list[str]) -> dict:
         "found": {key: _mean([float(key in run["hits"]) for run in ok]) for key in ids},
         "skill_used": _mean([float(run["skill_used"]) for run in ok]),
         "tokens": _mean_of(ok, "tokens"),
+        "output_tokens": _mean_of(ok, "output_tokens"),
         "cost_usd": _mean_of(ok, "cost_usd"),
         "seconds": _mean_of(ok, "seconds"),
     }
@@ -255,21 +256,23 @@ def _flaw_table(rows: list[dict]) -> list[str]:
     return lines
 
 
-def _ratio(row: dict) -> str:
-    """Mean tokens with the skill over mean tokens without it."""
-    with_, without = row["with"]["tokens"], row["without"]["tokens"]
+def _ratio(row: dict, key: str = "tokens") -> str:
+    """Mean tokens (or output tokens) with the skill over those without it.
+    Results written before a field existed have no value for it: n/a."""
+    with_, without = row["with"].get(key), row["without"].get(key)
     return "n/a" if not (with_ and without) else f"{with_ / without:.2f}x"
 
 
 def render(summary: list[dict]) -> str:
     """The summary as Markdown: one row per skill and agent, then each
     skill's planted flaws and how often each arm found them. `Tokens` is
-    what the skill cost: mean tokens with it over mean tokens without.
+    what the skill cost: mean tokens with it over mean tokens without;
+    `Output` is the same ratio for the tokens the agent wrote.
     Verdicts are computed here, so results written before they existed
     render the same way."""
     lines = [
-        "| Skill | Agent | Without | With | Delta | Tokens | Skill read | Errors | Verdict |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Skill | Agent | Without | With | Delta | Tokens | Output | Skill read | Errors | Verdict |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     judged = [{**row, "verdict": verdict(row)} for row in summary]
     for row in judged:
@@ -278,7 +281,8 @@ def render(summary: list[dict]) -> str:
         errors = without["errors"] + with_["errors"]
         lines.append(
             f"| {row['skill']} | {row['agent']} | {_pct(without['score'])} | {_pct(with_['score'])}"
-            f" | {delta} | {_ratio(row)} | {_pct(with_['skill_used'])} | {errors} | {row['verdict']} |"
+            f" | {delta} | {_ratio(row)} | {_ratio(row, 'output_tokens')} | {_pct(with_['skill_used'])}"
+            f" | {errors} | {row['verdict']} |"
         )
     lines += ["", f"Meets the hardened bar: {', '.join(meets_hardened(judged)) or 'none'}."]
     for skill in dict.fromkeys(row["skill"] for row in summary):

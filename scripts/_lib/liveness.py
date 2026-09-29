@@ -65,7 +65,7 @@ def user_skill_links(agent: dict, home: Path | None = None) -> list[Link]:
     return links
 
 
-def _claude_init(cwd: Path) -> set[str]:
+def _claude_init(cwd: Path) -> dict[str, str | None]:
     """Skills from Claude Code's init event.
 
     The event arrives before the model is called; the process is stopped as
@@ -80,13 +80,14 @@ def _claude_init(cwd: Path) -> set[str]:
                 except ValueError:
                     continue
                 if event.get("type") == "system" and event.get("subtype") == "init":
-                    return {s if isinstance(s, str) else str(s.get("name")) for s in event.get("skills", [])}
+                    # The init event names skills but does not show their descriptions.
+                    return {(s if isinstance(s, str) else str(s.get("name"))): None for s in event.get("skills", [])}
         finally:
             proc.kill()
     raise ProbeError("claude printed no init event")
 
 
-_CODEX_ENTRY = re.compile(r"^- (\S+?): .*\(file: r\d+/([^/]+)/SKILL\.md\)", re.MULTILINE)
+_CODEX_ENTRY = re.compile(r"^- (\S+?): (.*?) ?\(file: r\d+/([^/]+)/SKILL\.md\)", re.MULTILINE)
 
 
 def _texts(value: object):
@@ -100,27 +101,33 @@ def _texts(value: object):
         yield value
 
 
-def codex_skill_names(prompt_input: object) -> set[str]:
-    """Skill directory names Codex lists in its rendered prompt input.
+def codex_listing(prompt_input: object) -> dict[str, str]:
+    """Each skill Codex lists in its rendered prompt input, and the
+    description it shows for it.
 
     Names are taken from the listed SKILL.md path rather than the display
     name, which Codex prefixes with a plugin namespace (`agtmls:<skill>`).
     """
-    names: set[str] = set()
+    listing: dict[str, str] = {}
     for text in _texts(prompt_input):
         if "<skills_instructions>" in text:
-            names.update(directory for _, directory in _CODEX_ENTRY.findall(text))
-    return names
+            listing.update({directory: shown for _, shown, directory in _CODEX_ENTRY.findall(text)})
+    return listing
 
 
-def _codex_prompt(cwd: Path) -> set[str]:
+def codex_skill_names(prompt_input: object) -> set[str]:
+    """Skill directory names Codex lists in its rendered prompt input."""
+    return set(codex_listing(prompt_input))
+
+
+def _codex_prompt(cwd: Path) -> dict[str, str]:
     """Codex renders the prompt it would send without calling the model."""
     proc = subprocess.run(["codex", "debug", "prompt-input", "agtmls live check"], cwd=cwd,
                           capture_output=True, text=True, timeout=PROBE_TIMEOUT, check=False)
     if proc.returncode != 0:
         raise ProbeError(f"codex debug prompt-input exited {proc.returncode}")
     try:
-        return codex_skill_names(json.loads(proc.stdout))
+        return codex_listing(json.loads(proc.stdout))
     except ValueError as exc:
         raise ProbeError("codex debug prompt-input printed no JSON") from exc
 
@@ -130,6 +137,12 @@ PROBES = {"claude-init": ("claude", _claude_init), "codex-prompt-input": ("codex
 
 def loaded_skills(agent: dict, cwd: Path) -> set[str]:
     """The skills the agent itself reports it can use, run in `cwd`."""
+    return set(listed_skills(agent, cwd))
+
+
+def listed_skills(agent: dict, cwd: Path) -> dict[str, str | None]:
+    """Each skill the agent reports, with the description it shows for it,
+    or None when the agent does not say (Claude Code's init event)."""
     probe = agent.get("live_probe")
     if probe not in PROBES:
         raise ProbeError("no live check is known for this agent")

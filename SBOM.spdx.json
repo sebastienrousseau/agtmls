@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-29T21:55:51Z",
+    "created": "2026-09-29T23:25:12Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -138,6 +138,1078 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./agents/skill-author.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-agent-loop-design-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7639312928aa71ae09b8c765cafdebf9aec9ea11"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d344426be5bc2b51302da6a65e7658a53937534146e7de8deea90aa27ddc6924"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/agent-loop-design/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-agent-loop-design-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3a774eeddcb7b186a8eb0ec18bc3fb4bac0c6dcb"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7854fbe211e1e45fda5fb98e3cce24eda32ec954a404bb67e7defce4518dc2b6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/agent-loop-design/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-ai-supply-chain-security-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "519fa6e25187ef318281d81f914cf7c4e7fa429a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ce22c10198a4cfc9e870d7407e83e45cb290b3c0d20dea701dc379c9039b96ed"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/ai-supply-chain-security/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-ai-supply-chain-security-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9aeb6484516a8f3c1fbfcb8158230cc310ddcdbc"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c1d99794e57a48e4bff18a307e36b934994f88e8f7d5e733ec5967c832322c79"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/ai-supply-chain-security/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-anti-slop-pr-and-writing-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dcde93488ee59b3c70347f3dead11d5ba3be439e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7bec50fbf90d90cc727f2a02b3ec022b9fff024de30598e0d7c0f55ebf0a526c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/anti-slop-pr-and-writing/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-anti-slop-pr-and-writing-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "32387b0b0ab90f39ac711ceb09766e5024b25d45"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "116472d560b4ff3d837b9a2b154277051091f18b1c89a9b9467f578456fe6f7b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/anti-slop-pr-and-writing/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-authoring-portable-skills-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2384f4d8ec797511e5f1feae4b414765d7b6a15e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e4b5d70cb2b132e64df1b1ff1ef8f0d7afe5c26b1b1c98a0622d5f469b9e5081"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/authoring-portable-skills/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-authoring-portable-skills-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c1b91cb9283f40344b9ea7c9746897759c906ba8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "299f8d8fe67cf026ecdb694c363a07765b06c4aa2c29ad3d6aac3c0527f3eb02"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/authoring-portable-skills/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-brainstorming-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "afecfd1e02a0a8b916f42f85e790fc3bd4478f0a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8774cb9f1bbb2bb942baa2cae807df0a89e37ed417c44f6e3c4cf05244fb9f9f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/brainstorming/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-brainstorming-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "29dad785b083ecec3c48c4f31dfdb6ec7dbecbda"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2c05e08d20d7e87ba9c7261e765c6512d2ce0300c82e76ac701d4bf11afd88ce"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/brainstorming/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-cross-language-port-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "72bbdc29429ecea97679ea5e0648a0e2c22779f1"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9610720ddfc0f6c8672e899e1a9b1b70f9067f95f10d2dd66f77d84acba73e96"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/cross-language-port/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-cross-language-port-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3a9d0f4b2ccb8156dba80b1a3809fa1a9c2a5f67"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b61b4e025c7231908b13be452cfdbd15cb6f21c466393006d6ffebf12aff7b7"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/cross-language-port/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-giving-code-review-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "88fe31fb0eec555dba1b1b2e395f9da75af5e972"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e0d5a9718467069d0f088d2f83f40a7dac69abe38ba5df4a6fc6c8b2f6dbba96"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/giving-code-review/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-giving-code-review-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3988af674741e864a24ff63ecbd10426ce7fa5f3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5b4ce25163db2aec18113a67767dc887c1feecd34856807674d0237902ff657e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/giving-code-review/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-handoff-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "54ca244e3e36e5774968e1c8f305bbbcabf3ce62"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9f9aa66c6e59d020a2a1cd73f1c0c41d329b19fd085d53667c31b3513437d817"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/handoff/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-handoff-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "aa97340f42e9ed8358eb94119d16425667b299d7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a557757166c41a70eb3a846955a86631d8b41ae83110888aa19339b1ab52f21d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/handoff/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-incident-response-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f5fad7c85f9b2b27800283bc096b743cdd3527dd"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0b5b2912f006f3e9c18118a827a6ed426aaa9af5cce5ac0c3afdecfbf22d7bec"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/incident-response/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-incident-response-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b624dc9cf3ec2f73addd180ebace8d3e818d2440"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6c52b475b736eae2f9dcad31ca95cb6691b7da099c726256dbe6f12f4f8cccfc"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/incident-response/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-architecture-contract-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "a145ff93b52a0132b4970ac18a4dfe0577639de3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b2c0712447e4cbfee0adb6f47c89734264f59d7bee9d6bc7970d3ddb89913877"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-architecture-contract/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-architecture-contract-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3dfb0d68c4617f799d88bbe5eab4e23c068bdb0a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7cb7a5de77b0472753fb7e00436628d57ce72f9abecfe756075332cfe5da6c61"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-architecture-contract/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-build-and-env-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "acee31a4d33553ad17f74b6bc70a27cc0daace92"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "61b8c575cf2924e4afe54947a6798202698560a9e034e900b54c5f0f1e24aacc"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-build-and-env/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-build-and-env-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b92168ac55de7a37a2c1c403c233a18e344c3d80"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2fc861cc4e375d36222048118913d7d198062984e90dad73880ba50e6780e14f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-build-and-env/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-change-control-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "16dfe9291cfd7298894cdceefba37b7d6f3b834d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ba64b06b6fd1cd8ebf6feb596edf1c5676613fc218abe836977c58223ffda977"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-change-control/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-change-control-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "774963c02c9a2da8ec0d3956693d0cc3db89fa77"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b5863f4d3d1d586a9dc77080905cbf473e37b414ef3885460d667ea0e4b39ed7"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-change-control/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-ci-and-release-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "208e97335c3b20431826e04d3de3ea990c6efb66"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "789eb9b3dd28c23da9b76dae90a4f15b4728f63b651017805e684b1f3c83d588"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-ci-and-release/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-ci-and-release-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cfc0e06c781cc4d74f583da5f67975f834840660"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1589d4050c413baf9ca475053927ed4bd412a93ce3485e42adb889fe658b1503"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-ci-and-release/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-config-and-flags-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2b4835ee0c91366274a3c1ca31d3720ae6fe99c3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ea5b04bc60406125d909a65214d038ba9f1122304eb35dd780fb3d341fd99cc8"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-config-and-flags/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-config-and-flags-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c76065a615ca8e95879268871475d4f6ee23f943"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8cc158b79f8ba6e6859f35223f81d804937de26627afb319299e3629ca30157a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-config-and-flags/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-coverage-campaign-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cfa7c34fb1aed7d7e144afccf692a7624fefa698"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a2aa5f716a32c4be1b2df85cf391680a4dc5537b2a3949fc765d0aaa7c489e75"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-coverage-campaign/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-coverage-campaign-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3cc692d2d284e61d5e3eb2b28ea3f76d4a83d9d6"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "21379b9f1e74f488014a1422ea6a95f62b48f8d08fbe454bb27597cc0275141a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-coverage-campaign/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-debugging-playbook-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "a86fbd6a4a000d94a567f0240971695649d4432e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fd33df4faee9a124857b9399200782dec4cd8fe6a32eb6d3c4cfcad7e565b1f5"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-debugging-playbook/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-debugging-playbook-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4ba205cdd78619e304aeae479da320922f613dd9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6e86079419a614d7e0b4af29ce88dc9114aa57ff540e93026d5ca957131ad33d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-debugging-playbook/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-diagnostics-and-tooling-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "52a1a81128e34687c437151038e29d5352792e37"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fd5a4ee319b58bc9ff4b5b61ed4c55a9432a526005c578963932ce1e28d2d032"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-diagnostics-and-tooling/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-diagnostics-and-tooling-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "86d78e4447f15beda15edbb8a8ce55f26a1830ec"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bcd61f08d28fbce328d7a8b7fbeb44979c320082c41c3a2c73bf76d7be202480"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-diagnostics-and-tooling/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-docs-and-writing-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5bafe5f166613f220884e986ba61cbceb43a7e90"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ff3159e37ba204d8f4c3df532dc51762c50e2b9f2b425e11078dbcdd1e94b2c6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-docs-and-writing/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-docs-and-writing-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8c723d55905a640d8aaa763c10605dc6239ae4a2"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "14188491258f3cba2beb6b744065315aa89f2b957991d99416a3c9fc43bf433b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-docs-and-writing/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-external-positioning-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "cae8e02834effa793b85f66ced26e5eb0e967e0c"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f9ff8ff6af8ddf917a55a65fd9f4264a8b77a53cad62bf1fa840e3cde16d7824"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-external-positioning/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-external-positioning-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "9243096012294e875cf47730c1f341a4512a1cd9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a0824b57ea60a63fd0a3f3829a4768ee1122a842d575fb2c167138e81b9dd8be"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-external-positioning/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-failure-archaeology-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "71c7d3a1f5852393e4f5d86548e6c7b114c3e6ad"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "64ed8af8ce2ca985468a5879b0217e6bee6601c60c6378cd062cd183a50dbcea"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-failure-archaeology/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-failure-archaeology-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "aecf25a7de74d75b06c5e63561c788054b39aaf8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bda9eaeaee20e5d08831af70b6e5f86c6a602c8ed5ea8c34b6db67365648dee9"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-failure-archaeology/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-research-frontier-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "17a060c5024f865ec740a4f289ee3c8cff454860"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7fdf6f8647a91b3dbfd04dc69e7856e15a235e5762b07b33e9fefc1adc839b90"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-research-frontier/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-research-frontier-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "99bb855d801cde016bcd9cbcd8ec0371f5c8aa3f"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e76c6b63c1cbaa6c539f68d68b76ef48e3f00cc4d10c297f812d97b7622793c0"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-research-frontier/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-validation-and-qa-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dd2c1c606ffa7dbded700865c9281420f80a1245"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "47c34a0dc473b2b40ab4ae896907eb4a7e64ee42777de63eff51e2a60ea41b51"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-validation-and-qa/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-noyalib-validation-and-qa-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "21c4c7870f845edddf9095778eff530e31f07384"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3d8bed693c2df1324cdba90464c939c3b6fb4370c0fe822126e607d2403ae1f6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/noyalib-validation-and-qa/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-pr-review-and-release-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "eef87e03738066d0908fd16b268f4cff1df91d93"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "12562bece8ab9c5e0d08b1b32ffb14b4b1e3b7cae849453e4aa3ba37238e4d7c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/pr-review-and-release/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-pr-review-and-release-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7f71d2780331ca89f388723bbd06c019c23a1d5d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3d6a8f71e3808a9d656a550e4fb47d3b5c3c8b6ce7d871c089d7ac92c1c76c7"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/pr-review-and-release/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-receiving-code-review-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "50ed133fd23faa0558f1b5143049714bd22410d3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "36337faa07965fa1b1fd94b5f24080d1143e36e14e1a3176ae9d1054d83d318e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/receiving-code-review/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-receiving-code-review-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b3628d93acc92450bd3cc85c1df26c694952206d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d2e04c7e232223eda6d4fd65a79463b29e763df0eee459683b708ade00343055"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/receiving-code-review/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-refactoring-safely-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3524d7d13941ad92ad5f08375c58db063cee5612"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9461c1fa0ca7aab8f3a35516cc685cd16747293eb8d366d0b27700eff9a9bb06"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/refactoring-safely/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-refactoring-safely-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "a4e2e423065da975c40b44004ea1a1d04916748a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "96dba621bc3d9270b9975c3d39fa73b9c518619e7c31e1362044943b7fc34b6c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/refactoring-safely/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-systematic-debugging-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f719a1cf13ed48a1c69a3ad8f8f3f7c9b753ec52"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9634251bfb244176d98040da5eb7cb491cc8de5840532ee7d6db4f50f42fefb2"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/systematic-debugging/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-systematic-debugging-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "fbc2292ce4f2c2e48095b1b7e321c6d0bfffa399"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "38ecbb98e7d300d179bb1097c71c521e36f95f4f5765b367d690963d7b4515d0"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/systematic-debugging/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-test-driven-development-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "86ba35de7d5e2e0e16244e0bfdbf323ac6ec671e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3ff14f6b1531ea9c9705635500d3b932c594701c6765d661a503a17f9346e524"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/test-driven-development/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-test-driven-development-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2a1a229bec3907a5da4e80decea477e552412f83"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "10559153c9fc592c5c1b9547a091cb042a42a25153c8868272521d506499659d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/test-driven-development/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-using-agtmls-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "2fc36098a452eb14e9045d38693b094916affcf3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3026e70ce0ef5c4065ed7f8cd9af61ed2b8630e04785de555ac944220e40937d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/using-agtmls/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-using-agtmls-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6c0e53e20ef3acdebad32fc5a7a7a423229bf222"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "66dfbeec80d9cdfdabf81d52bce7442a24e250c0dffa7ed49822006677189ac6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/using-agtmls/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-verification-before-completion-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e0f77e5a86e0f5948fe5ff34dd3efc1519fa2ebd"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c2a8ba516fb0e32de98bcfc04c92cbe904410fae067cbc760aa6140ca1eb9c9e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/verification-before-completion/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-verification-before-completion-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b7994e5f0d206dc3d1ba37e4db209b39eca3dd59"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "26eff2b1ca107abf3d816cfb22a690d359eb07623a9dbcc6badf10560f26e6c9"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/verification-before-completion/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7117afbe125691be16594e6199d8dfee1a94179d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "83060438d9d63e9ae743b3f82fd109a2e3f020a4853e8d7f6554aeaa5f3b044d"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8f36349dbb0c8e88fa6764b3e7969a9864b4430d"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5be8279d6e09d565e197308cc11dd3c3c06f131340bc6d5dc7548b5305d82086"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "bacd0b9d22b8b0d7e84be5d605dfe9f53a38afb8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "624dd956ac4a875d58708ff95b31171272e8a4d9351a63b09de771f73a091aa3"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-web-research-and-source-triage-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e60a85d9a78427cd7b194d3a7b1f3a44b21ce39b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "be6e84f8416f827867cf766ce97aa806d099a529cb150a547cd3d68092434b13"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/web-research-and-source-triage/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-web-research-and-source-triage-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "642d7835cc6cb1e1778f2eb3939fe1b4f1285253"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b680fa1fd086ced4da71d7a4dbfa8e69ea76a53cd49d83dd1d85a69a3d970271"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/web-research-and-source-triage/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-writing-plans-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "45a2630a1eed97439c29d4272fd7e603b7f9a12b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8e57fad8544d3ddd205e5b8e1cd3c6f60dbdbd50146f6ff1985116bfc26fc12e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/writing-plans/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-writing-plans-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5080226c4934df7f355e0b7b60a27c73ac71890e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1981a2b36197f9411e2a07d7e5956cb3f07953d24928431f0387222352a31139"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/writing-plans/manifest.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-yaml-domain-reference-capabilities.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4813b20c88c2c3d4080269f88359d6d59c2dab06"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2783064ea4f06d51986896115187f13c0ef5f842ec6e646a586a92a33d260b04"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/yaml-domain-reference/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-yaml-domain-reference-manifest.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6dcb3fa34891aac0c51241d26f7118ae71db39a7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "255e72a47cb29676557729cae02e2dd7870aa7c44410e7a5912aba62e0335cb6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/yaml-domain-reference/manifest.intoto.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1361,11 +2433,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9c1ea12c918ea4d37e647c57da45a3d87ca4b71f"
+          "checksumValue": "7183803a296b1cf65f04b4f564091b21f0f85c89"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a4a7f34b6e65ffe9db02b0be166532c223de2e4ebfbdc13cca0b3e43a0af4101"
+          "checksumValue": "5706aba4c998d8ef301e687e5ac327e6bf0240048e687c8d4a7b5c41b97691e8"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1585,11 +2657,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "818e9bd5f79f77d2f3bb1bc179b61c7fb7bfa35b"
+          "checksumValue": "c056883b44d23c391a91ae5e9b5313c4e8b72054"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ec7ef733b4817883576a96ac54108b4e14b81aacc5f127ffb316b3a05973531f"
+          "checksumValue": "bf19983dbb1549aaafbc12d7229d3ac3e6b0c15c2f7a18c8a6a5668fa05df19c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2525,15 +3597,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-context-cost.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "df8f59eb61d9024ef3ab8cc21791d2c382afcc79"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "99a83f222aef7782d1445d67ad90fe51a9630f1b85688a23542a12e78824c66b"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/context_cost.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-covered.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a06e22dd86f58996e66f2676cb9aeeecd4aed070"
+          "checksumValue": "e4a42e6fdfd19f1c6376fd88cbc124305439e615"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f2700f0cfd1b1778043949b1db8b7a931be0ed927c109aac3fa29b303f111fcc"
+          "checksumValue": "11720cb90fec3b8111f76c270ef87811235a5a94973233ab2a11b1ced8965f1b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2557,6 +3645,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-efficacy.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "a0de2dbe4eec004e15fd580839b7a7b263d59590"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9956a8f4bac90a31bdf62e2eee7dd0a67ce68e028ce97f007d99d356cf667c07"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/efficacy.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-findings.py",
       "checksums": [
         {
@@ -2577,11 +3681,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "07d69cac392cf17016f87650ddefcd65da30d1c3"
+          "checksumValue": "f6630695f4780b877021a3d4c38d6dc02c8d3143"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e4767f230bb00559b47450f580953d2140e0d6a1e4b9bc5f94422266a2f1ef80"
+          "checksumValue": "7a3c2b1556859573898bfce00fd5ae645a9958d1fe0eef33cfcdfe8ed4c0d9d5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2593,11 +3697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "740236eea903a152d77ba983280ced7d079e9e20"
+          "checksumValue": "5c1d3c3f0d38c54fa8c0eaffda6bec28a0973fda"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8b5cac8685c85fbf8427b2d346cf650d89cfdc4c14a7ff861559ed92dbeb8b0c"
+          "checksumValue": "69a5717779c3f10ee6094c68bb41f9a08fb3a9cebe208c51560b19455f1728ec"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2737,11 +3841,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "07c662e61ac5f8ff1e4548647e6d32acd1c3557b"
+          "checksumValue": "a89a6fc3e40b3d5ca741423acfa2b1adb007b19f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7314258aa2c32d8cd4448a3d6efb56d29c16674b6a271f83a7e904b4c0e6e52b"
+          "checksumValue": "a2722f1025df4e5a97977238d56885c44f31e663551be49748346ef337c3a47f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2801,11 +3905,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "484f058501830b2324c56b31822a2e87296a46df"
+          "checksumValue": "7d97926572af6850c877a9fe7d8b4bbc7e9737be"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cbb869572a7912acaa6cae0cc6ddb4e968876af03eaab9558d1a2be02cb1a1ed"
+          "checksumValue": "1eb7401fbb01ccd990b577b85209519fc3d21169508a8caceb968d10dd44a3b6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2817,11 +3921,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "7e3cfcac3c86ad79dbef76a7d1dd7707302bcf71"
+          "checksumValue": "41d1cbaf9397d14a5109c20caa8e7d627dbc3196"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1da2632ca83b34e71d578e9c52dc8bdc908e8ca32f85c2c0ef4b5d52c0e86748"
+          "checksumValue": "b2ca628ee52d1a041ddc81b45a85bddac24f0554b5b6430b47566dbfacfe91dd"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2833,11 +3937,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "544222e7903e0849141c13109ac4bc500b4faec5"
+          "checksumValue": "d6866ee77128888b5c15e4a6957371746feab275"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f35f48c5b7d29b161b5798c9d58a440e4910b409578767d2fb6b5bd45d401237"
+          "checksumValue": "904e75cef8e655d270e4bb3d06cd74bd820190faa5483ac5280444bfa4f2acb1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2865,11 +3969,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "1f51ddbdecc6abab5bbcf1883457cc30524aa976"
+          "checksumValue": "2659f25f63ff6b18252c452a2491ebba0f939d85"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4375f1513b91860e441824fcaa2da845d720e051028e1e28b95c3943e4ac672d"
+          "checksumValue": "4ae1d742dcc1cb07cab0f65b96739045a9ba829a4171bf212ae88d840f204af1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2881,11 +3985,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "eed162fb216fc2d389fc8c7baff1a4769ea042d0"
+          "checksumValue": "d0a6bab20bc03d5381170d417d82158051a9073c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "57eebc58a1df681688d5ef1ea984e5b953f120eb435ef9e0eca06afb4e19c0b3"
+          "checksumValue": "23710ddd2f55ba8848dc0d50158e827683e17da6e242bd60f356dec82ecc430b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2897,11 +4001,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b21501cdf870cb156d4ddcb3e8b7c88b5b5d4831"
+          "checksumValue": "dbc581c3f9730457bd82ea18453c0bf3015a345d"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ce13bea0e7b39788869f5f6626a0ecba3bae5d3725a11bd6e4d4514c90fc534a"
+          "checksumValue": "7616a2abbb90e8732caaa5c43222ee8acd1529508c62a062a5ddfbc7e74c1289"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3009,11 +4113,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bd7e278cb7dedd5b4b67eb25252574ecc7b8bb5c"
+          "checksumValue": "c8e9672f7c991416daae5ea5c015ebd06d950495"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8b6e74cddbbe46ac5f2e14104d2965a953ed2e0ba2cb273fd14b01d5ebae14f3"
+          "checksumValue": "b0ef5e9fd2a385be3534f7ff50b5b1abd14c7a0e893ca973516f1d5959b7fed5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3169,11 +4273,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c99047f2e4ba54fa51e96f4e7370016ecbe2755b"
+          "checksumValue": "9c1d0049ef4cf0678e2244e1bb2998d855308eb9"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a7322ebd0103624e7a5c6bf396ddcefa049363ef3e664e0ee11160f95371a140"
+          "checksumValue": "1299fcca2ef1cde0e0d252faecffbc03684ef0a09935cc8220ac7f298f02a4cd"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3201,11 +4305,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "362946cef24a7e23c913228cd75de0c2bd3a0374"
+          "checksumValue": "7118bde78bfbf6b498249058f0081b79fc131fe8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "2fe188a749f0af6775c09324113a474a850dce0ecd9bed5f3da19679fb1c42d5"
+          "checksumValue": "420271a110e5269c9d39b7c39bed2ec9d04a2ca3543767e4d1e4f40649a69f7f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3313,11 +4417,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "bb01da5c149ba8334166cdbfcc2195d2dbf60fdf"
+          "checksumValue": "4aa5e10ed2a6cc9a09fbc16ea5f8dbe29b951394"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8a4ece8adf0ef1a30ebbf5a19c565da56c0ba0c46ae58e3cb4ba0d5a4cb45180"
+          "checksumValue": "41a54db59b9f98a2ec550c8d21b25fd71e2bd3b11d0643393ceaee79a4dbf9be"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3505,11 +4609,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c7358cb1287e91532ce855c43d26f6ce7db8e384"
+          "checksumValue": "4a2994f650854fb64b7274e0db1daaf39748d3f4"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bf0c329edaf727effd62217a324f8f8f9e3f67eeb7f2a6430ad213e2cc5e0d2f"
+          "checksumValue": "59d44425da32f0719bd97178e19c9988daca5bb63ec202bff3862142c638050d"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3546,6 +4650,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/setup-workspace.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-sign-attestations.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c2455dfac2c6504a1190c3326540e3f8eefe103a"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f796d2985f8499cca588e9d1a290b3a4048f99b07dcc05fa1cb2f7e23942275a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/sign-attestations.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -4273,11 +5393,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "79a956f43d9e3123603eb8f8caf1fb20edbb23d7"
+          "checksumValue": "f47407c472b722bb64fdacc5c8eb6dad523cded3"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "e605357aa616ad0e65dfc81f68ce97141e4001295f13656bfc6b1a3a2a29d7a8"
+          "checksumValue": "7b4bd7fc2518df2f39ee414ba4e2be3636acb086e56466d603900c31e7a76b80"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4289,11 +5409,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9a29237705d9832fb1ea5f4c591f8b31e4c65efe"
+          "checksumValue": "454c1ca901479c9ab8336692f43ead32da6f9b60"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a1ebb0978f1e1098b9a830fce54b7876c18e38a13628675ac30df658c3c06e1b"
+          "checksumValue": "c708a4d4a05f82fd67920f8f7a7087e78276c991b6fc3711da16fb89c81960bf"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4321,11 +5441,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "03091981c1b750739580210047cff0cce3da7a68"
+          "checksumValue": "1bd67bc4c011aabd3787f0aaa61e38ec5d962220"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "dc291132dfd41b1bf28a049f9012eb11fe3704cc3d2786e9bfaf2e9a19104ac8"
+          "checksumValue": "8f15cc277525e1ac181382032a2bd129392b415002fef1f3c63742a15a420585"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6113,11 +7233,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "3b064620004cb4e531967f92ba62eb268a8899e0"
+          "checksumValue": "eb9e2f9e695ddc69e907aaafec8cac8ee712cacd"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a81e5ff1a7d32da095cf9ca9bf354c69a3be7bf313c051326db52a4bd2b0eb8d"
+          "checksumValue": "8345f8a0e4e02490d38316af31acb3bddb882470f5746a430c49dcf0d41426fb"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6580,6 +7700,73 @@
         "SPDXRef-File-agents-registry-auditor.md",
         "SPDXRef-File-agents-security-sentinel.md",
         "SPDXRef-File-agents-skill-author.md",
+        "SPDXRef-File-attestations-agent-loop-design-capabilities.intoto.json",
+        "SPDXRef-File-attestations-agent-loop-design-manifest.intoto.json",
+        "SPDXRef-File-attestations-ai-supply-chain-security-capabilities.intoto.json",
+        "SPDXRef-File-attestations-ai-supply-chain-security-manifest.intoto.json",
+        "SPDXRef-File-attestations-anti-slop-pr-and-writing-capabilities.intoto.json",
+        "SPDXRef-File-attestations-anti-slop-pr-and-writing-manifest.intoto.json",
+        "SPDXRef-File-attestations-authoring-portable-skills-capabilities.intoto.json",
+        "SPDXRef-File-attestations-authoring-portable-skills-manifest.intoto.json",
+        "SPDXRef-File-attestations-brainstorming-capabilities.intoto.json",
+        "SPDXRef-File-attestations-brainstorming-manifest.intoto.json",
+        "SPDXRef-File-attestations-cross-language-port-capabilities.intoto.json",
+        "SPDXRef-File-attestations-cross-language-port-manifest.intoto.json",
+        "SPDXRef-File-attestations-giving-code-review-capabilities.intoto.json",
+        "SPDXRef-File-attestations-giving-code-review-manifest.intoto.json",
+        "SPDXRef-File-attestations-handoff-capabilities.intoto.json",
+        "SPDXRef-File-attestations-handoff-manifest.intoto.json",
+        "SPDXRef-File-attestations-incident-response-capabilities.intoto.json",
+        "SPDXRef-File-attestations-incident-response-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-architecture-contract-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-architecture-contract-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-build-and-env-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-build-and-env-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-change-control-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-change-control-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-ci-and-release-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-ci-and-release-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-config-and-flags-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-config-and-flags-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-coverage-campaign-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-coverage-campaign-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-debugging-playbook-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-debugging-playbook-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-diagnostics-and-tooling-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-diagnostics-and-tooling-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-docs-and-writing-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-docs-and-writing-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-external-positioning-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-external-positioning-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-failure-archaeology-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-failure-archaeology-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-research-frontier-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-research-frontier-manifest.intoto.json",
+        "SPDXRef-File-attestations-noyalib-validation-and-qa-capabilities.intoto.json",
+        "SPDXRef-File-attestations-noyalib-validation-and-qa-manifest.intoto.json",
+        "SPDXRef-File-attestations-pr-review-and-release-capabilities.intoto.json",
+        "SPDXRef-File-attestations-pr-review-and-release-manifest.intoto.json",
+        "SPDXRef-File-attestations-receiving-code-review-capabilities.intoto.json",
+        "SPDXRef-File-attestations-receiving-code-review-manifest.intoto.json",
+        "SPDXRef-File-attestations-refactoring-safely-capabilities.intoto.json",
+        "SPDXRef-File-attestations-refactoring-safely-manifest.intoto.json",
+        "SPDXRef-File-attestations-systematic-debugging-capabilities.intoto.json",
+        "SPDXRef-File-attestations-systematic-debugging-manifest.intoto.json",
+        "SPDXRef-File-attestations-test-driven-development-capabilities.intoto.json",
+        "SPDXRef-File-attestations-test-driven-development-manifest.intoto.json",
+        "SPDXRef-File-attestations-using-agtmls-capabilities.intoto.json",
+        "SPDXRef-File-attestations-using-agtmls-manifest.intoto.json",
+        "SPDXRef-File-attestations-verification-before-completion-capabilities.intoto.json",
+        "SPDXRef-File-attestations-verification-before-completion-manifest.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-capabilities.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-manifest.intoto.json",
+        "SPDXRef-File-attestations-web-research-and-source-triage-capabilities.intoto.json",
+        "SPDXRef-File-attestations-web-research-and-source-triage-manifest.intoto.json",
+        "SPDXRef-File-attestations-writing-plans-capabilities.intoto.json",
+        "SPDXRef-File-attestations-writing-plans-manifest.intoto.json",
+        "SPDXRef-File-attestations-yaml-domain-reference-capabilities.intoto.json",
+        "SPDXRef-File-attestations-yaml-domain-reference-manifest.intoto.json",
         "SPDXRef-File-checks.json",
         "SPDXRef-File-commands-README.md",
         "SPDXRef-File-commands-agtmls-audit.md",
@@ -6729,8 +7916,10 @@
         "SPDXRef-File-scripts--lib-cli-args.py",
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-complexity.py",
+        "SPDXRef-File-scripts--lib-context-cost.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
+        "SPDXRef-File-scripts--lib-efficacy.py",
         "SPDXRef-File-scripts--lib-findings.py",
         "SPDXRef-File-scripts--lib-foreign.py",
         "SPDXRef-File-scripts--lib-liveness.py",
@@ -6793,6 +7982,7 @@
         "SPDXRef-File-scripts-run-uplift-evals.py",
         "SPDXRef-File-scripts-scaffold-skill.py",
         "SPDXRef-File-scripts-setup-workspace.sh",
+        "SPDXRef-File-scripts-sign-attestations.py",
         "SPDXRef-File-scripts-smoke-bump-version-check.py",
         "SPDXRef-File-scripts-smoke-cli.py",
         "SPDXRef-File-scripts-smoke-evolve-evidence.py",

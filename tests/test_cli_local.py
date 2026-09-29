@@ -221,9 +221,9 @@ class InstallLifecycleTests(CliFixture):
         def fake(item, cwd):
             if error:
                 raise liveness.ProbeError(error)
-            return set(loaded)
+            return dict.fromkeys(loaded)  # claude shows no descriptions
 
-        with mock.patch.object(liveness, "loaded_skills", fake):
+        with mock.patch.object(liveness, "listed_skills", fake):
             return capture(self.cli.verify_install, self.target, "claude", json_output, False, True)
 
     def test_live_verify_passes_when_the_agent_lists_every_installed_skill(self) -> None:
@@ -240,7 +240,7 @@ class InstallLifecycleTests(CliFixture):
         self.assertIn(f"NOT LOADED   {GENERAL[0]}  installed, but claude does not list it", output)
         code, output = self.verify_live(loaded=set(GENERAL[1:]), json_output=True)
         self.assertEqual(json.loads(output)["live"], {"expected": len(GENERAL), "loaded": len(GENERAL) - 1,
-                                                       "missing": [GENERAL[0]]})
+                                                       "missing": [GENERAL[0]], "shortened": []})
 
     def test_an_agent_that_cannot_be_asked_fails_live_verify_and_says_why(self) -> None:
         self.install("--copy")
