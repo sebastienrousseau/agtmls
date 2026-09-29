@@ -29,9 +29,6 @@
     },
     "scripts/validate-lifecycle.py::main": {
       "cyclomatic": 12
-    },
-    "scripts/validate-system-prompts.py::main": {
-      "cyclomatic": 12
     }
   },
   "generated_by": "scripts/check-complexity.py --write",
