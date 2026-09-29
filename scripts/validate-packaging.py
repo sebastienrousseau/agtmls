@@ -150,27 +150,31 @@ def sdist_gaps(text: str) -> list[str]:
     return gaps
 
 
+def _table(value: object) -> dict:
+    """A TOML table; any other value reads as an empty one, so the checks it fails report it."""
+    return value if isinstance(value, dict) else {}
+
+
 def load_project(text: str) -> tuple[dict, dict]:
-    """([project], the wheel's force-include table), with tomllib where there is one."""
+    """([project], the wheel's force-include table), with tomllib where there is one.
+
+    Raises tomllib.TOMLDecodeError for text that is not TOML.
+    """
     if tomllib is None:
         return parse_project(text), parse_force_include(text)
     data = tomllib.loads(text)
-    include = (
-        data.get("tool", {})
-        .get("hatch", {})
-        .get("build", {})
-        .get("targets", {})
-        .get("wheel", {})
-        .get("force-include", {})
-    )
-    return data.get("project", {}), include
+    table = data
+    for key in ("tool", "hatch", "build", "targets", "wheel", "force-include"):
+        table = _table(table.get(key))
+    return _table(data.get("project")), table
 
 
-def project_errors(project: dict) -> list[str]:
+def project_errors(project: object) -> list[str]:
+    project = _table(project)
     errors = []
     if project.get("name") != "agtmls":
         errors.append("pyproject project.name must be agtmls")
-    if project.get("scripts", {}).get("agtmls") != ENTRY_POINT:
+    if _table(project.get("scripts")).get("agtmls") != ENTRY_POINT:
         errors.append(f"console script agtmls must be {ENTRY_POINT}")
     if project.get("dependencies"):
         errors.append("registry scripts are stdlib-only; dependencies must stay empty")
@@ -192,7 +196,7 @@ def include_errors(include: dict) -> list[str]:
     for source, target in include.items():
         if not (ROOT / source).exists():
             errors.append(f"force-include source does not exist: {source}")
-        if not target.startswith(f"{PREFIX}/"):
+        if not isinstance(target, str) or not target.startswith(f"{PREFIX}/"):
             errors.append(f"force-include target must live under {PREFIX}/: {target}")
     return errors
 
@@ -200,7 +204,13 @@ def include_errors(include: dict) -> list[str]:
 def version_errors(version: str) -> list[str]:
     """pyproject, plugin.json and __version__ carry one version."""
     errors = []
-    plugin_version = str(json.loads(PLUGIN.read_text(encoding="utf-8")).get("version", ""))
+    try:
+        plugin = json.loads(PLUGIN.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f".claude-plugin/plugin.json is not valid JSON: {exc}"]
+    if not isinstance(plugin, dict):
+        return [".claude-plugin/plugin.json must be a JSON object"]
+    plugin_version = str(plugin.get("version", ""))
     if version != plugin_version:
         errors.append(f"pyproject version {version} must match plugin.json {plugin_version}")
 
@@ -221,7 +231,11 @@ def main() -> int:
         print("FAIL: pyproject.toml missing")
         return 1
     text = PYPROJECT.read_text(encoding="utf-8")
-    project, include = load_project(text)
+    try:
+        project, include = load_project(text)
+    except ValueError as exc:  # tomllib.TOMLDecodeError
+        print(f"FAIL: pyproject.toml is not valid TOML: {exc}")
+        return 1
     errors = project_errors(project) + include_errors(include) + sdist_gaps(text)
     errors += version_errors(str(project.get("version", "")))
 
