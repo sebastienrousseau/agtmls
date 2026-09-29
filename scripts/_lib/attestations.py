@@ -14,8 +14,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from .analyzer import frontmatter_tools
 from .digest import digest_from_manifest, manifest
+from .policy import frontmatter_tools
 from .rules import TOOL_CAPABILITIES
 
 STATEMENT = "https://in-toto.io/Statement/v1"

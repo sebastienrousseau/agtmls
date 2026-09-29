@@ -6,11 +6,7 @@
     "halstead": 30.0,
     "lines": 60
   },
-  "files": {
-    "scripts/_lib/analyzer.py": {
-      "lines": 637
-    }
-  },
+  "files": {},
   "functions": {
     "scripts/_lib/analyzer.py::decode_json_escapes": {
       "cognitive": 25,
