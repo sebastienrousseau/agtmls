@@ -40,17 +40,6 @@ BLOCKING_SEVERITIES = {"CRITICAL", "HIGH"}
 NOT_APPLICABLE_TO_IMPORT = {"AGT-POLICY-001"}
 
 
-def registry_version() -> str:
-    """The canonical version, read rather than hardcoded.
-
-    A literal here drifted every release and had to be patched by
-    bump-version.py, which meant the importer's idea of the version was only
-    ever correct because another script kept rewriting it.
-    """
-    plugin = ROOT / ".claude-plugin" / "plugin.json"
-    return json.loads(plugin.read_text(encoding="utf-8"))["version"]
-
-
 def slugify(value: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     return slug or "imported-skill"
@@ -168,7 +157,6 @@ def copy_skill(source: Path, target: Path, skill_md: Path, name: str) -> None:
 def import_metadata(source: Path, target: Path, bundle: str, findings: list[dict]) -> dict:
     return {
         "bundle": bundle,
-        "version": registry_version(),
         "owner": "unassigned",
         "maturity": "draft",
         "supported_agents": ["claude", "codex", "aider"],
