@@ -28,13 +28,29 @@ INDEX = ROOT / "index.json"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 
 
+class IndexInputError(ValueError):
+    """A file the index is built from cannot be read as what it must be."""
+
+
+def read_object(path: Path) -> dict:
+    """The JSON object in `path`, or IndexInputError naming the file."""
+    rel = path.relative_to(ROOT).as_posix()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise IndexInputError(f"{rel} is not valid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise IndexInputError(f"{rel} must be a JSON object")
+    return data
+
+
 def load_skill_metadata(skill_dir: Path) -> tuple[str | None, dict[str, object]]:
     """Every skill carries its own metadata.json. The skill tree is flat, so
     bundle membership is a metadata field rather than a parent directory —
     runtimes scan `skills/` non-recursively for `<name>/SKILL.md`."""
     direct = skill_dir / "metadata.json"
     if direct.exists():
-        return direct.relative_to(ROOT).as_posix(), json.loads(direct.read_text(encoding="utf-8"))
+        return direct.relative_to(ROOT).as_posix(), read_object(direct)
     return None, {}
 
 
@@ -142,7 +158,7 @@ def quality_score(skill: dict[str, object]) -> dict[str, object]:
         "behavioral_eval": bool(skill.get("evals", {}).get("behavioral")),
         "safety_policy": bool(skill.get("safety_policy")),
         "supported_agents": bool(skill.get("supported_agents")),
-        "maturity": skill.get("maturity") in {"hardened", "project"},
+        "maturity": isinstance(skill.get("maturity"), str) and skill["maturity"] in {"hardened", "project"},
     }
     passed = sum(1 for ok in checks.values() if ok)
     return {
@@ -219,7 +235,7 @@ def summary(skills: list[dict]) -> dict[str, object]:
 
 
 def collect() -> dict[str, object]:
-    plugin = json.loads(PLUGIN.read_text(encoding="utf-8")) if PLUGIN.exists() else {}
+    plugin = read_object(PLUGIN) if PLUGIN.exists() else {}
     commands = collect_commands()
     skills = [skill_entry(skill_md) for skill_md in skill_roots.skill_files(ROOT)]
     apply_change_tracking(skills, plugin.get("version", "0.0.0"))
@@ -257,9 +273,10 @@ def apply_change_tracking(skills: list[dict], registry_version: str) -> None:
     index_path = ROOT / "index.json"
     if index_path.exists():
         try:
+            recorded = json.loads(index_path.read_text(encoding="utf-8"))
             previous = {
                 entry["name"]: entry
-                for entry in json.loads(index_path.read_text(encoding="utf-8")).get("skills", [])
+                for entry in (recorded.get("skills", []) if isinstance(recorded, dict) else [])
                 if isinstance(entry, dict) and "name" in entry
             }
         except (OSError, ValueError):
@@ -281,7 +298,11 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="fail if index.json is stale")
     args = parser.parse_args()
 
-    rendered = json.dumps(collect(), indent=2, sort_keys=True) + "\n"
+    try:
+        rendered = json.dumps(collect(), indent=2, sort_keys=True) + "\n"
+    except IndexInputError as exc:
+        print(f"FAIL: {exc}")
+        return 1
     if args.write:
         INDEX.write_text(rendered, encoding="utf-8")
         print(f"wrote {INDEX.relative_to(ROOT)}")

@@ -2008,7 +2008,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8c4edda8a3ed5ff5abf9e15ee5c512ecc3eb2b38d85528bee3ead173032b8b81"
+          "content": "c2c9b9ca83203fb30d4b5d89f43a9db6f34ae264f780e8d585388c872b6d510d"
         }
       ],
       "name": "scripts/generate-skill-index.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T10:48:35Z",
+    "timestamp": "2026-09-29T10:54:40Z",
     "tools": {
       "components": [
         {
