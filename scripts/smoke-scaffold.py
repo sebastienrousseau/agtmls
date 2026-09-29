@@ -26,6 +26,17 @@ def scaffold(out_root: Path, *extra: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+def skill_problems(skill: Path) -> list[str]:
+    """The scaffolded SKILL.md has its placeholders replaced."""
+    try:
+        text = skill.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return ["scaffolded SKILL.md is not UTF-8 text"]
+    if "name: sample-skill" not in text or "# Sample Skill" not in text:
+        return ["scaffolded SKILL.md did not replace placeholders"]
+    return []
+
+
 def scaffolded_problems(out_root: Path) -> list[str]:
     """Every file a scaffold promises exists, with its placeholders replaced."""
     expected = [
@@ -38,9 +49,7 @@ def scaffolded_problems(out_root: Path) -> list[str]:
     errors = [f"missing scaffolded file: {path}" for path in expected if not path.exists()]
     skill, metadata = expected[0], expected[2]
     if skill.exists():
-        text = skill.read_text(encoding="utf-8")
-        if "name: sample-skill" not in text or "# Sample Skill" not in text:
-            errors.append("scaffolded SKILL.md did not replace placeholders")
+        errors += skill_problems(skill)
     if metadata.exists():
         try:
             json.loads(metadata.read_text(encoding="utf-8"))

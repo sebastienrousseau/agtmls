@@ -154,3 +154,20 @@ class ExportArchiveTests(unittest.TestCase):
             with self.subTest(manifest=text):
                 errors = self.archive(text)
                 self.assertTrue(any(e.startswith(f"openai/minimal export manifest {reason}") for e in errors), errors)
+
+
+class ScaffoldSmokeTests(unittest.TestCase):
+    """smoke-scaffold.py reads back what the scaffolder wrote."""
+
+    def setUp(self) -> None:
+        self.module = load_script("smoke-scaffold.py")
+        self.root = Path(tempfile.mkdtemp(prefix="agtmls-scaffold-test-"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+
+    def test_a_scaffolded_skill_that_is_not_utf8_is_reported_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError on a SKILL.md the scaffolder mangled."""
+        skill = self.root / "skills" / "sample-skill"
+        skill.mkdir(parents=True)
+        (skill / "SKILL.md").write_bytes(b"\xff\xfe not text")
+        (skill / "metadata.json").write_text("{}", encoding="utf-8")
+        self.assertIn("scaffolded SKILL.md is not UTF-8 text", self.module.scaffolded_problems(self.root))
