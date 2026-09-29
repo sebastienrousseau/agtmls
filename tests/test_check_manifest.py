@@ -173,6 +173,40 @@ class CheckManifestValidatorTests(unittest.TestCase):
         self.assertEqual(failures[-1], "FAIL: 3 check manifest issue(s)")
 
 
+    # A malformed manifest or a runner that does not parse raised; fault
+    # injection over the manifest, runner, workflow and counted documents
+    # found 12 such runs.
+
+    def test_a_manifest_that_is_not_json_or_an_object_stops_the_check(self) -> None:
+        for text, reason in (("{nope", "is not valid JSON"), ("[]", "must be a JSON object")):
+            with self.subTest(manifest=text):
+                self.write("checks.json", text)
+                code, failures, out = self.failures()
+                self.assertEqual(code, 1, out)
+                self.assertTrue(failures[0].startswith(f"FAIL: checks.json {reason}"), out)
+
+    def test_checks_that_are_not_a_list_are_refused(self) -> None:
+        for checks in (None, 7, "alpha.py"):
+            with self.subTest(checks=checks):
+                self.write("checks.json", json.dumps({"schema_version": 1, "checks": checks}))
+                code, failures, out = self.failures()
+                self.assertEqual(code, 1, out)
+                self.assertIn("FAIL: checks.json checks must be a list of command strings", failures)
+
+    def test_an_entry_that_is_not_a_command_is_refused(self) -> None:
+        self.write("checks.json", json.dumps({"schema_version": 1, "checks": [*self.CHECKS, "", 7, ["x"]]}))
+        code, failures, out = self.failures()
+        self.assertEqual(code, 1, out)
+        for index in (10, 11, 12):
+            self.assertIn(f"FAIL: checks.json entry {index} must be a non-empty command string", failures)
+
+    def test_a_runner_that_does_not_parse_is_refused(self) -> None:
+        self.write("scripts/run-all-checks.py", "def (:\n")
+        code, failures, out = self.failures()
+        self.assertEqual(code, 1, out)
+        self.assertTrue(any(f.startswith("FAIL: run-all-checks.py does not parse:") for f in failures), out)
+
+
 class CountClaimTests(unittest.TestCase):
     """The pattern and the exemption, as functions."""
 

@@ -86,25 +86,34 @@ def cosine(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (na * nb) if na and nb else 0.0
 
 
+def similarity_pairs(names: list[str], descs: list[str]) -> list[tuple[float, str, str]]:
+    """(cosine similarity, name, name) for every pair of skills, most similar first."""
+    vecs = tfidf([vector(d) for d in descs])
+    pairs = [
+        (cosine(vecs[i], vecs[j]), names[i], names[j])
+        for i in range(len(names))
+        for j in range(i + 1, len(names))
+    ]
+    pairs.sort(reverse=True)
+    return pairs
+
+
+def print_top(pairs: list[tuple[float, str, str]], count: int) -> None:
+    print(f"Top description similarities ({count} skills):")
+    for sim, a, b in pairs[:8]:
+        flag = "FAIL" if sim >= FAIL_AT else "warn" if sim >= WARN_AT else "ok"
+        print(f"  {sim:.2f} [{flag}]  {a}  <->  {b}")
+
+
 def main() -> int:
     skills = skill_roots.skill_files(ROOT)
     names = [s.parent.name for s in skills]
     descs = [frontmatter_description(s.read_text(encoding="utf-8")) for s in skills]
-    vecs = tfidf([vector(d) for d in descs])
-
-    pairs = []
-    for i in range(len(skills)):
-        for j in range(i + 1, len(skills)):
-            pairs.append((cosine(vecs[i], vecs[j]), names[i], names[j]))
-    pairs.sort(reverse=True)
+    pairs = similarity_pairs(names, descs)
 
     warns = [p for p in pairs if p[0] >= WARN_AT]
     fails = [p for p in pairs if p[0] >= FAIL_AT]
-
-    print(f"Top description similarities ({len(skills)} skills):")
-    for sim, a, b in pairs[:8]:
-        flag = "FAIL" if sim >= FAIL_AT else "warn" if sim >= WARN_AT else "ok"
-        print(f"  {sim:.2f} [{flag}]  {a}  <->  {b}")
+    print_top(pairs, len(skills))
 
     print()
     if fails:

@@ -35,25 +35,12 @@
     "scripts/check-publishing-readiness.py::check": {
       "cyclomatic": 12
     },
-    "scripts/check-skill-collisions.py::main": {
-      "cognitive": 18,
-      "cyclomatic": 15
-    },
-    "scripts/generate-benchmarks-doc.py::main": {
-      "cognitive": 25,
-      "cyclomatic": 15
-    },
     "scripts/generate-plugin-manifests.py::main": {
       "cognitive": 17,
       "cyclomatic": 13
     },
     "scripts/generate-plugin-manifests.py::render": {
       "lines": 74
-    },
-    "scripts/generate-skill-index.py::collect": {
-      "cognitive": 21,
-      "cyclomatic": 17,
-      "lines": 89
     },
     "scripts/generate-skill-index.py::parse_frontmatter": {
       "cognitive": 19,
@@ -78,21 +65,8 @@
       "cyclomatic": 11,
       "lines": 61
     },
-    "scripts/run-behavioral-evals.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 14
-    },
-    "scripts/run-trigger-evals.py::main": {
-      "cognitive": 29,
-      "cyclomatic": 14
-    },
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
-    },
-    "scripts/smoke-make-install.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 16,
-      "lines": 63
     },
     "scripts/smoke-scaffold.py::main": {
       "cyclomatic": 12,
@@ -105,16 +79,8 @@
       "cognitive": 24,
       "cyclomatic": 14
     },
-    "scripts/validate-check-manifest.py::main": {
-      "cognitive": 22,
-      "cyclomatic": 16
-    },
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
-    },
-    "scripts/validate-commands.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 16
     },
     "scripts/validate-gitignore.py::main": {
       "cyclomatic": 12
@@ -134,9 +100,6 @@
     },
     "scripts/validate-templates.py::main": {
       "cyclomatic": 11
-    },
-    "src/agtmls/cli.py::main": {
-      "cyclomatic": 15
     }
   },
   "generated_by": "scripts/check-complexity.py --write",

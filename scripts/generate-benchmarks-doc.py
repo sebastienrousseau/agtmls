@@ -212,6 +212,32 @@ def rendered(text: str, doc: Path = DOC, expected: tuple[str, ...] = DOCS[0][1])
     return out, stale
 
 
+def write_docs(results: dict[Path, tuple[str, list[str]]]) -> int:
+    """Write every re-rendered document, unless one lacks a block's markers."""
+    missing = [item for _, stale in results.values() for item in stale if "no generated block" in item]
+    if missing:
+        for item in missing:
+            print(f"FAIL: {item}; add its markers first")
+        return 1
+    for doc, (out, _) in results.items():
+        doc.write_text(out, encoding="utf-8")
+        print(f"wrote {doc.relative_to(ROOT)} ({len(dict(DOCS)[doc])} generated block(s))")
+    return 0
+
+
+def check_docs(results: dict[Path, tuple[str, list[str]]]) -> int:
+    """Fail on every block that does not match what its results render."""
+    failures = [(doc, item) for doc, (_, stale) in results.items() for item in stale]
+    for doc, item in failures:
+        print(f"FAIL: {doc.name} block {item} does not match its results; "
+              "run generate-benchmarks-doc.py --write")
+    if failures:
+        return 1
+    names = ", ".join(doc.name for doc, _ in DOCS)
+    print(f"OK: {len(BLOCKS)} measured block(s) in {names} match benchmarks/results/")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--write", action="store_true")
@@ -220,25 +246,9 @@ def main() -> int:
     results = {doc: rendered(doc.read_text(encoding="utf-8"), doc, names) for doc, names in DOCS}
 
     if args.write:
-        missing = [item for _, stale in results.values() for item in stale if "no generated block" in item]
-        if missing:
-            for item in missing:
-                print(f"FAIL: {item}; add its markers first")
-            return 1
-        for doc, (out, _) in results.items():
-            doc.write_text(out, encoding="utf-8")
-            print(f"wrote {doc.relative_to(ROOT)} ({len(dict(DOCS)[doc])} generated block(s))")
-        return 0
+        return write_docs(results)
     if args.check:
-        failures = [(doc, item) for doc, (_, stale) in results.items() for item in stale]
-        for doc, item in failures:
-            print(f"FAIL: {doc.name} block {item} does not match its results; "
-                  "run generate-benchmarks-doc.py --write")
-        if failures:
-            return 1
-        names = ", ".join(doc.name for doc, _ in DOCS)
-        print(f"OK: {len(BLOCKS)} measured block(s) in {names} match benchmarks/results/")
-        return 0
+        return check_docs(results)
     parser.print_help()
     return 2
 

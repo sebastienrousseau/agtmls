@@ -104,15 +104,48 @@ class SkillIndexTests(SubsetCase):
 
     def test_with_no_readable_index_every_skill_changed_in_this_release(self) -> None:
         self.preserve("index.json")
-        for state in ("missing", "corrupt"):
+        for state in ("missing", "corrupt", "a list", "skills not a list"):
             with self.subTest(index=state):
                 if state == "missing":
                     self.path("index.json").unlink()
                 else:
-                    self.path("index.json").write_text("{not json", encoding="utf-8")
+                    text = {"corrupt": "{not json", "a list": "[]", "skills not a list": '{"skills": "x"}'}[state]
+                    self.path("index.json").write_text(text, encoding="utf-8")
                 skills = [{"name": "using-agtmls", "integrity": "sha256-x"}]
                 self.script().apply_change_tracking(skills, "0.0.9")
                 self.assertEqual(skills[0]["last_changed_version"], "0.0.9")
+
+
+    # Malformed metadata or plugin manifest raised a traceback out of --write
+    # and --check; a maturity that is a list or object raised in the quality
+    # score. Fault injection over the generator's inputs found 11 such runs.
+
+    def test_malformed_metadata_stops_the_generator_with_its_path(self) -> None:
+        self.preserve("index.json", "skills/using-agtmls/metadata.json")
+        before = self.path("index.json").read_text(encoding="utf-8")
+        for text, reason in (("[]", "must be a JSON object"), ("{nope", "is not valid JSON")):
+            with self.subTest(metadata=text):
+                self.path("skills/using-agtmls/metadata.json").write_text(text, encoding="utf-8")
+                code, output = self.drive("--write")
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"FAIL: skills/using-agtmls/metadata.json {reason}", output)
+                self.assertEqual(self.path("index.json").read_text(encoding="utf-8"), before)
+
+    def test_a_malformed_plugin_manifest_stops_the_generator(self) -> None:
+        self.preserve(".claude-plugin/plugin.json")
+        for text, reason in (("[]", "must be a JSON object"), ("{nope", "is not valid JSON")):
+            with self.subTest(plugin=text):
+                self.path(".claude-plugin/plugin.json").write_text(text, encoding="utf-8")
+                code, output = self.drive("--check")
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"FAIL: .claude-plugin/plugin.json {reason}", output)
+
+    def test_a_maturity_that_is_not_a_string_fails_its_quality_check(self) -> None:
+        skill = self.add_skill(
+            "zz-odd", '---\nname: zz-odd\ndescription: "Use when testing."\n---\n\n# Odd\n',
+            {"maturity": ["hardened"], "bundle": None},
+        )
+        self.assertFalse(skill["quality"]["checks"]["maturity"])
 
 
 class BenchmarkDocEdgeTests(SubsetCase):

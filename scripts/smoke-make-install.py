@@ -25,69 +25,78 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
+INSTALLED = [
+    "share/man/man1/agtmls.1",
+    "share/bash-completion/completions/agtmls",
+    "share/zsh/site-functions/_agtmls",
+    "share/fish/vendor_completions.d/agtmls.fish",
+]
+
+
+def stats_problems(binary: Path) -> list[str]:
+    """The point of the test: the installed binary must actually run."""
+    stats = subprocess.run(
+        [str(binary), "stats", "--json"],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+    )
+    if stats.returncode != 0:
+        return [f"installed binary cannot run `stats`:\n{stats.stdout}"]
+    try:
+        payload = json.loads(stats.stdout)
+    except json.JSONDecodeError as exc:
+        return [f"installed binary emitted invalid JSON: {exc}\n{stats.stdout}"]
+    if not isinstance(payload, dict):
+        return [f"installed binary's stats is not a JSON object:\n{stats.stdout}"]
+    errors = []
+    expected = json.loads(
+        (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
+    )["version"]
+    if payload.get("registry_version") != expected:
+        errors.append(
+            f"installed registry_version {payload.get('registry_version')!r} "
+            f"!= {expected!r}"
+        )
+    if not payload.get("skills"):
+        errors.append("installed binary reports zero skills")
+    return errors
+
+
+def uninstall_problems(prefix: Path) -> list[str]:
+    """uninstall must remove everything it installed."""
+    subprocess.run(
+        ["make", "uninstall", f"PREFIX={prefix}"],
+        cwd=ROOT, text=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
+    )
+    left = [p for p in prefix.rglob("*") if p.is_file()]
+    return [f"make uninstall left {len(left)} file(s), e.g. {left[0]}"] if left else []
+
+
+def install_problems(prefix: Path) -> list[str] | str:
+    """The problems of an installed tree, or why nothing usable was installed."""
+    proc = subprocess.run(
+        ["make", "install", f"PREFIX={prefix}"],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+    )
+    if proc.returncode != 0:
+        return f"make install failed:\n{proc.stdout}"
+    binary = prefix / "bin" / "agtmls"
+    if not binary.exists():
+        return f"no binary at {binary}"
+    errors = stats_problems(binary)
+    errors += [f"missing installed file: {relative}" for relative in INSTALLED if not (prefix / relative).exists()]
+    return errors + uninstall_problems(prefix)
+
+
 def main() -> int:
     if shutil.which("make") is None:
         print("SKIP: make is not available")
         return 0
 
-    errors: list[str] = []
     with tempfile.TemporaryDirectory(prefix="agtmls-make-install-") as raw:
-        prefix = Path(raw) / "opt"
-        proc = subprocess.run(
-            ["make", "install", f"PREFIX={prefix}"],
-            cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
-        )
-        if proc.returncode != 0:
-            print(f"FAIL: make install failed:\n{proc.stdout}")
-            return 1
-
-        binary = prefix / "bin" / "agtmls"
-        if not binary.exists():
-            print(f"FAIL: no binary at {binary}")
-            return 1
-
-        # The point of the test: the installed binary must actually run.
-        stats = subprocess.run(
-            [str(binary), "stats", "--json"],
-            text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
-        )
-        if stats.returncode != 0:
-            errors.append(f"installed binary cannot run `stats`:\n{stats.stdout}")
-        else:
-            try:
-                payload = json.loads(stats.stdout)
-            except json.JSONDecodeError as exc:
-                errors.append(f"installed binary emitted invalid JSON: {exc}\n{stats.stdout}")
-            else:
-                expected = json.loads(
-                    (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
-                )["version"]
-                if payload.get("registry_version") != expected:
-                    errors.append(
-                        f"installed registry_version {payload.get('registry_version')!r} "
-                        f"!= {expected!r}"
-                    )
-                if not payload.get("skills"):
-                    errors.append("installed binary reports zero skills")
-
-        for relative in [
-            "share/man/man1/agtmls.1",
-            "share/bash-completion/completions/agtmls",
-            "share/zsh/site-functions/_agtmls",
-            "share/fish/vendor_completions.d/agtmls.fish",
-        ]:
-            if not (prefix / relative).exists():
-                errors.append(f"missing installed file: {relative}")
-
-        # uninstall must remove everything it installed.
-        subprocess.run(
-            ["make", "uninstall", f"PREFIX={prefix}"],
-            cwd=ROOT, text=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
-        )
-        left = [p for p in prefix.rglob("*") if p.is_file()]
-        if left:
-            errors.append(f"make uninstall left {len(left)} file(s), e.g. {left[0]}")
-
+        errors = install_problems(Path(raw) / "opt")
+    if isinstance(errors, str):
+        print(f"FAIL: {errors}")
+        return 1
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

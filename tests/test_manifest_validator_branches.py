@@ -461,6 +461,22 @@ class CommandBranchTests(BrokenTreeCase):
         self.edit_json(PLUGIN, lambda data: data.__setitem__("commands", "./cmds"))
         self.assert_fails(self.SCRIPT, "FAIL: plugin manifest commands path must be ./commands")
 
+    # A malformed manifest or a command file that is not UTF-8 raised;
+    # fault injection over commands/ and plugin.json found 8 such runs.
+
+    def test_a_manifest_that_is_not_an_object_is_refused_not_raised(self) -> None:
+        self.overwrite(PLUGIN, "[]")
+        self.assert_fails(self.SCRIPT, "FAIL: .claude-plugin/plugin.json must be a JSON object")
+
+    def test_a_manifest_that_is_not_json_is_refused_not_raised(self) -> None:
+        self.overwrite(PLUGIN, "{ not json")
+        self.assert_fails(self.SCRIPT, "FAIL: .claude-plugin/plugin.json is not valid JSON:")
+
+    def test_a_command_file_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        path = self.restore_later("commands/zz-binary.md")
+        path.write_bytes(b"\xff\xfe\x00 not text")
+        self.assert_fails(self.SCRIPT, "FAIL: commands/zz-binary.md: not UTF-8 text")
+
     def test_a_command_without_frontmatter_is_refused(self) -> None:
         self.overwrite("commands/agtmls-audit.md", "Run `python3 scripts/agtmls.py audit`.\n")
         self.assert_fails(self.SCRIPT, "FAIL: commands/agtmls-audit.md: missing YAML frontmatter")
