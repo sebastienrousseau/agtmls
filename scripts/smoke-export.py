@@ -38,6 +38,20 @@ def manifest_problems(payload: dict, provider: str, profile: str, adapters: list
     return errors
 
 
+def read_manifest(tf: tarfile.TarFile, names: set[str], label: str) -> tuple[dict | None, list[str]]:
+    """(the export manifest, []), or (None, why it cannot be read as an object)."""
+    member = tf.extractfile("agtmls/export-manifest.json") if "agtmls/export-manifest.json" in names else None
+    if member is None:
+        return None, [f"{label} cannot read export manifest"]
+    try:
+        payload = json.loads(member.read().decode("utf-8"))
+    except json.JSONDecodeError as exc:
+        return None, [f"{label} export manifest is not valid JSON: {exc}"]
+    if not isinstance(payload, dict):
+        return None, [f"{label} export manifest is not a JSON object: {payload!r}"]
+    return payload, []
+
+
 def archive_problems(tf: tarfile.TarFile, provider: str, profile: str, adapters: list[str]) -> list[str]:
     """Every required member is in the archive, and its export manifest agrees."""
     names = set(tf.getnames())
@@ -48,10 +62,9 @@ def archive_problems(tf: tarfile.TarFile, provider: str, profile: str, adapters:
     ]
     if "agtmls/skills/using-agtmls/SKILL.md" not in names:
         errors.append(f"{provider}/{profile} archive missing using-agtmls")
-    member = tf.extractfile("agtmls/export-manifest.json")
-    if member is None:
-        return errors + [f"{provider}/{profile} cannot read export manifest"]
-    payload = json.loads(member.read().decode("utf-8"))
+    payload, problems = read_manifest(tf, names, f"{provider}/{profile}")
+    if payload is None:
+        return errors + problems
     return errors + manifest_problems(payload, provider, profile, adapters)
 
 
