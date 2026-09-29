@@ -31,15 +31,18 @@ PACKAGES = [
 ]
 
 
-def check(name: str, repo: Path, registry: str, environment: str) -> list[str]:
-    problems: list[str] = []
-    workflow = repo / ".github" / "workflows" / "release.yml"
-    if not repo.exists():
-        return [f"repository not found at {repo}"]
-    if not workflow.exists():
-        return [f"no release workflow at {workflow.relative_to(repo)}"]
+def unpinned_actions(text: str) -> list[str]:
+    """Every `uses:` line whose action is not pinned to a full commit SHA."""
+    return [
+        line.strip()
+        for line in text.splitlines()
+        if "uses:" in line and "@" in line and not re.search(r"@[a-f0-9]{40}", line)
+    ]
 
-    text = workflow.read_text(encoding="utf-8")
+
+def workflow_problems(text: str, environment: str) -> list[str]:
+    """What the release workflow must say for Trusted Publishing to work safely."""
+    problems: list[str] = []
     if "id-token: write" not in text:
         problems.append("workflow does not declare `id-token: write`; OIDC will fail at publish")
     if f"environment: {environment}" not in text:
@@ -52,14 +55,19 @@ def check(name: str, repo: Path, registry: str, environment: str) -> list[str]:
     if not re.search(r"does not match|tag.*version|version.*tag", text, re.IGNORECASE):
         problems.append("workflow does not appear to check the tag against the version")
 
-    unpinned = [
-        line.strip()
-        for line in text.splitlines()
-        if "uses:" in line and "@" in line and not re.search(r"@[a-f0-9]{40}", line)
-    ]
+    unpinned = unpinned_actions(text)
     if unpinned:
         problems.append(f"{len(unpinned)} action(s) not pinned to a SHA: {unpinned[0]}")
     return problems
+
+
+def check(name: str, repo: Path, registry: str, environment: str) -> list[str]:
+    workflow = repo / ".github" / "workflows" / "release.yml"
+    if not repo.exists():
+        return [f"repository not found at {repo}"]
+    if not workflow.exists():
+        return [f"no release workflow at {workflow.relative_to(repo)}"]
+    return workflow_problems(workflow.read_text(encoding="utf-8"), environment)
 
 
 def main() -> int:
