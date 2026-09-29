@@ -108,9 +108,6 @@
     },
     "scripts/validate-templates.py::main": {
       "cyclomatic": 11
-    },
-    "src/agtmls/cli.py::main": {
-      "cyclomatic": 15
     }
   },
   "generated_by": "scripts/check-complexity.py --write",

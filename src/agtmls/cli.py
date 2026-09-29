@@ -69,27 +69,26 @@ def registry_root() -> tuple[Path, bool]:
     )
 
 
-def main(argv: list[str] | None = None) -> int:
-    argv = list(sys.argv[1:] if argv is None else argv)
-    root, packaged = registry_root()
-    command = next((arg for arg in argv if not arg.startswith("-")), None)
-
-    if packaged and command in _CHECKOUT_ONLY:
+def packaged_argv(argv: list[str], command: str | None) -> list[str]:
+    """The argv an installed package runs, refusing checkout-only commands."""
+    if command in _CHECKOUT_ONLY:
         raise SystemExit(
             f"`agtmls {command}` needs a repository checkout, not an installed "
             "package. Clone https://github.com/sebastienrousseau/agtmls and run "
             f"`python3 scripts/agtmls.py {command}`, or set AGTMLS_HOME to a checkout."
         )
-
     # A wheel's skills disappear with the cache; copy them instead of linking.
-    if packaged and command == "install" and "--copy" not in argv:
+    if command == "install" and "--copy" not in argv:
         argv.append("--copy")
     # The doctor inspects a checkout unless told otherwise; the wheel has the
     # registry and none of the repository's documents, evals or gate.
-    if packaged and command in {"doctor", "status"} and "--installed" not in argv:
+    if command in {"doctor", "status"} and "--installed" not in argv:
         argv.append("--installed")
+    return argv
 
-    target = root / "scripts" / "agtmls.py"
+
+def run_dispatcher(target: Path, argv: list[str]) -> int:
+    """Run scripts/agtmls.py as __main__, and turn its SystemExit into an exit code."""
     sys.argv = [str(target), *argv]
     try:
         runpy.run_path(str(target), run_name="__main__")
@@ -97,6 +96,15 @@ def main(argv: list[str] | None = None) -> int:
         code = exc.code
         return code if isinstance(code, int) else (0 if code is None else 1)
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    root, packaged = registry_root()
+    command = next((arg for arg in argv if not arg.startswith("-")), None)
+    if packaged:
+        argv = packaged_argv(argv, command)
+    return run_dispatcher(root / "scripts" / "agtmls.py", argv)
 
 
 if __name__ == "__main__":

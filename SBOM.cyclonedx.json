@@ -4164,7 +4164,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a0196735e86e071b9ad08cc90398e1f6e56059bcbd18b0af5de48b55dd0fe8e3"
+          "content": "f7e86edaa25338925bece168f5d566c2d80e9717e7b17f1e55f9b334dbf670c9"
         }
       ],
       "name": "src/agtmls/cli.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:18:25Z",
+    "timestamp": "2026-09-29T11:20:46Z",
     "tools": {
       "components": [
         {
