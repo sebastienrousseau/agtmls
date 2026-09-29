@@ -57,15 +57,8 @@ def verify_sums(out_dir: Path) -> list[str]:
     return errors
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--version", help="expected release version; defaults to current registry version")
-    parser.add_argument("--skip-check", action="store_true", help="skip the full agtmls check gate")
-    parser.add_argument("--profile", default="minimal")
-    parser.add_argument("--provider", action="append", default=None)
-    args = parser.parse_args()
-
-    version = args.version or json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["version"]
+def version_refusal(version: str) -> int | None:
+    """An exit code when `version` may not be released now, else None."""
     next_proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "next-version.py")], cwd=ROOT, text=True, capture_output=True, check=False)
     if next_proc.returncode != 0:
         print(next_proc.stderr or next_proc.stdout, file=sys.stderr)
@@ -75,19 +68,26 @@ def main() -> int:
     if version != next_version and tag_proc.returncode != 0:
         print(f"FAIL: requested {version}; next allowed release is {next_version}")
         return 1
+    return None
 
+
+def gate(skip_check: bool) -> int:
+    """The gate (unless skipped), the version policy and the release check, stopping at the first failure."""
     checks = [[sys.executable, str(ROOT / "scripts" / "validate-version-policy.py")], [sys.executable, str(ROOT / "scripts" / "release-check.py")]]
-    if not args.skip_check:
+    if not skip_check:
         checks.insert(0, [sys.executable, str(ROOT / "scripts" / "run-all-checks.py")])
     for cmd in checks:
         rc = run(cmd)
         if rc != 0:
             return rc
+    return 0
 
-    providers = args.provider or ["generic", "openai"]
+
+def pack_and_verify(version: str, profile: str, providers: list[str]) -> int:
+    """Pack a release into a temporary directory and check its sums."""
     with tempfile.TemporaryDirectory(prefix="agtmls-release-dry-run-") as td:
         out_dir = Path(td) / "release"
-        pack_cmd = [sys.executable, str(ROOT / "scripts" / "release-pack.py"), "--out-dir", str(out_dir), "--profile", args.profile]
+        pack_cmd = [sys.executable, str(ROOT / "scripts" / "release-pack.py"), "--out-dir", str(out_dir), "--profile", profile]
         for provider in providers:
             pack_cmd.extend(["--provider", provider])
         rc = run(pack_cmd)
@@ -102,6 +102,24 @@ def main() -> int:
             return 1
         print(f"OK: release dry-run passed for {version} with {len(providers)} artifact(s)")
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", help="expected release version; defaults to current registry version")
+    parser.add_argument("--skip-check", action="store_true", help="skip the full agtmls check gate")
+    parser.add_argument("--profile", default="minimal")
+    parser.add_argument("--provider", action="append", default=None)
+    args = parser.parse_args()
+
+    version = args.version or json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["version"]
+    refusal = version_refusal(version)
+    if refusal is not None:
+        return refusal
+    rc = gate(args.skip_check)
+    if rc != 0:
+        return rc
+    return pack_and_verify(version, args.profile, args.provider or ["generic", "openai"])
 
 
 if __name__ == "__main__":

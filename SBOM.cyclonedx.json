@@ -2129,7 +2129,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "453339ca32bf73f2777cea8d9d993468917e7aff2db45a6dbfb3b415d101494a"
+          "content": "c8080191f6999e7c58643277679fb3294ee9d364d266dcc5bc94acf299c6156b"
         }
       ],
       "name": "scripts/release-dry-run.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:59:46Z",
+    "timestamp": "2026-09-29T12:02:18Z",
     "tools": {
       "components": [
         {

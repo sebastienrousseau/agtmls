@@ -54,9 +54,6 @@
       "cyclomatic": 13,
       "lines": 86
     },
-    "scripts/release-dry-run.py::main": {
-      "cyclomatic": 14
-    },
     "scripts/release-preflight.py::check_tag": {
       "cyclomatic": 12
     },
