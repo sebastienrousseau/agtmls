@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-29T15:12:53Z",
+    "created": "2026-09-29T20:12:10Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -145,11 +145,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a1097c5b47ea716d93398245fc9311a7c9499465"
+          "checksumValue": "4fd0f6445397ff8999c5e8aec4c8b7efddf7d75a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "aeb0c7ff32ae573673d93e1af961d6795176d0500deb0cc0a70705cf04157780"
+          "checksumValue": "78d8fb6eb0069db08b6f24c3b7d5096e4effce27accb9e907eab61526546d76c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1389,6 +1389,358 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-evals-uplift-README.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "abe68c10ee1bb3d3943d0200a2eabae5c69ad57e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "310f43a9b041378de916a13e1191cc8ca01a51bb367206d9f451746c14f9b1f3"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/README.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-cases-authoring-portable-skills.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8a125ee636a5fb11bec7f963ffa5499363642f5e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6d03e715776f96c769d6c22d49d793157544f88086c0d2dc6402e44ffde546dc"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/cases/authoring-portable-skills.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-cases-hardening-agent-config.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "dcbc658d9c4a993010b05a8eeab551f4ed4aefd3"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "397bf5ff92aaa7e6da8b35993b90b3400daa01d2545d04a9fc692f84402fb5ae"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/cases/hardening-agent-config.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-cases-vetting-a-skill-before-install.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "c0fb330b241b66f6eea084834313a80b0b4c276e"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "fe260fcc3fcc834bfbdf030eae7192bd365f89ee57624f8718ce4255ac67c45f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/cases/vetting-a-skill-before-install.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-.claude-plugin-plugin.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4f30e9b1d6eed15bc42fcea9200b5cb4a487d172"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "385eb2d513cf0b28a1f25a7fb65036077d6a0a87a19d8174ad3531a6d34096ee"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/.claude-plugin/plugin.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-.mcp.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "ceb92b195154558a4d6e8f2830cbe6dc865505df"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0d9e119d357c2e42b4d3b4d81cd45f05b1b831a53389e813bb66b977a4f9acc1"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/.mcp.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-README.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8b947d7701e103b65b86de0771412292e27bc5d7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a84327c04b32d7ee702809d02e21a1e3284c343fc3d6b4a8e2bc6b213c07e9db"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/README.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-hooks.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7d2a50e5f0ff78b172ebdeb69e22f39d74cb6bc6"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "39c786891ab86e16b66862b048dd9e2381fe9e940577e4aa3ee8c50b6fb73efa"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/hooks/hooks.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-setup.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b562203f8c5844a3e14e7f2eaf0f4e2e62f20ace"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "12d76f3a1ba0d535ffd92c550b4680237ca97adc1b2d16495a64124ec5c55120"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/hooks/setup.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-sync.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "e5de1faa0d1775415c86d524082d4b64d9720eb7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "21a80c3c1df4bfb45a99ba01ec857fa8186f86c9f29419cbc477d736ccf7a03a"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/hooks/sync.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-acme-skills-skills-pretty-commits-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b66cffc619e9e341ea18fc577f7114e27cce1ba8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cf10efabbf3918a3702edb2e32ccb773893576084ba32e83275ff9d4b022c0db"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/acme-skills/skills/pretty-commits/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-SKILL.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "83242409dd996728d8e56776e3478bd095587640"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7545f9ecb63cc35c6a9d7f409f14c676332c28ae2c3458efeeb874fec66630d4"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/SKILL.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-reference.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "fd5a621a5a085ac901db16fb32ec58cef4ed02e6"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e331cf80cde7642f4a7647d6028ab1ff88bc0a499639e2afe47030701ece125e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/reference.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-scripts-collect.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "17d5b394e4dbdf90c9f2e87aefdfe420c1543ae7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "903e25aff9a43bd274b68a7b0004a390fda047e96a9d83eb58485daeecd62903"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/scripts/collect.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-templates-notes.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "1299a6fc30bb0c60946f963f0530173d3268f5cc"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3fec08eddd5ce1508be5571b37ce5d9e3112990ea5ba8310a5eca157d0f65be"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/templates/notes.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-approve.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "32d85f7a57fe8c1896f9484d455ebdf9b38205ba"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ebded372a38445f4c8767e6a7d8f3a52cd69047a58196117efb485bca3f57bae"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/.claude/hooks/approve.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-context.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b1287d41e4049f57a0708eced851fcf597692bf7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "10e74bc446a75c15411068d5377e186396eaad6d37a1461560c8263103a3fc22"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/.claude/hooks/context.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-settings.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6ffa5e1a866154fe6c0de59bd9a2da6c31e8c6ee"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a1b5e3d8158554b7cd126d5b51d053531f0b97c8b8df6d9ada34083b8851b7b0"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/.claude/settings.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.codex-config.toml",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "873e859bd9c2b06a1bd24b73eef9e796c86ea653"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6b6a22e8b95d06bb71b7ed6f998cb7d56ec6bdde74f581c40f97deaf266e4d8e"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/.codex/config.toml",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.mcp.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "d1cd117a3b5db19394c7a2bc805573b3ce2e85d2"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8c83d8bbf6308c3c6616bdce9b81ce4ad64aa674464cf27c206aeb01dec91871"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/.mcp.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-README.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "75f49a27ff13bd172649ec0423c317d8cd08f1f4"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2af059c4d97120c4776141c71f60eb92f5e641fe5809825a116ddedebaa639cf"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/README.md",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-src-app.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7979b16f839fb55e11b6df019ec26eb47cef158c"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "04557aa95f4165fbff09ff38b287ea9e0e2ff43adfed4a11b88d227a196fd1b6"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./evals/uplift/fixtures/team-service/src/app.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-index.json",
       "checksums": [
         {
@@ -2605,6 +2957,38 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-uplift.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "5002687f278647f22959eb8ff567168ecb0ed673"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c5c18c9fd9a3c3854551de47a8e42bc35a0c6c4734ee805ac8315ddc18222edd"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/uplift.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-uplift-agents.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "7e3cfcac3c86ad79dbef76a7d1dd7707302bcf71"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1da2632ca83b34e71d578e9c52dc8bdc908e8ca32f85c2c0ef4b5d52c0e86748"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/uplift_agents.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-verify-report.py",
       "checksums": [
         {
@@ -3274,6 +3658,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/run-unit-tests.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-run-uplift-evals.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "a6cccd99efb8ab934b035c977989a676ed611808"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8ba26da2ffa3862b35975ed118104021978812879e0bd3f4668bf49aef1c5942"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/run-uplift-evals.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -6466,6 +6866,28 @@
         "SPDXRef-File-evals-cases-yaml-domain-reference.json",
         "SPDXRef-File-evals-security-corpus.json",
         "SPDXRef-File-evals-security-floor.json",
+        "SPDXRef-File-evals-uplift-README.md",
+        "SPDXRef-File-evals-uplift-cases-authoring-portable-skills.json",
+        "SPDXRef-File-evals-uplift-cases-hardening-agent-config.json",
+        "SPDXRef-File-evals-uplift-cases-vetting-a-skill-before-install.json",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-.claude-plugin-plugin.json",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-.mcp.json",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-README.md",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-hooks.json",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-setup.sh",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-sync.sh",
+        "SPDXRef-File-evals-uplift-fixtures-acme-skills-skills-pretty-commits-SKILL.md",
+        "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-SKILL.md",
+        "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-reference.md",
+        "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-scripts-collect.sh",
+        "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-templates-notes.md",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-approve.sh",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-context.sh",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-settings.json",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-.codex-config.toml",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-.mcp.json",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-README.md",
+        "SPDXRef-File-evals-uplift-fixtures-team-service-src-app.py",
         "SPDXRef-File-index.json",
         "SPDXRef-File-lifecycle.json",
         "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-SKILL.md",
@@ -6542,6 +6964,8 @@
         "SPDXRef-File-scripts--lib-skill-roots.py",
         "SPDXRef-File-scripts--lib-stamp.py",
         "SPDXRef-File-scripts--lib-uninstall-steps.py",
+        "SPDXRef-File-scripts--lib-uplift.py",
+        "SPDXRef-File-scripts--lib-uplift-agents.py",
         "SPDXRef-File-scripts--lib-verify-report.py",
         "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",
@@ -6584,6 +7008,7 @@
         "SPDXRef-File-scripts-run-security-evals.py",
         "SPDXRef-File-scripts-run-trigger-evals.py",
         "SPDXRef-File-scripts-run-unit-tests.py",
+        "SPDXRef-File-scripts-run-uplift-evals.py",
         "SPDXRef-File-scripts-scaffold-skill.py",
         "SPDXRef-File-scripts-setup-workspace.sh",
         "SPDXRef-File-scripts-smoke-bump-version-check.py",
