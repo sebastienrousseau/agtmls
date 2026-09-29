@@ -26,9 +26,6 @@
     },
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
-    },
-    "scripts/validate-lifecycle.py::main": {
-      "cyclomatic": 12
     }
   },
   "generated_by": "scripts/check-complexity.py --write",
