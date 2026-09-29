@@ -188,7 +188,7 @@ def report(results: list[CheckResult], wall_s: float, jobs: int) -> None:
         print(f"OK: {len(results)} check(s) passed")
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--jobs",
@@ -207,7 +207,39 @@ def main() -> int:
         default="text",
         help="human table, or the machine-readable run record",
     )
-    args = parser.parse_args()
+    return parser
+
+
+def gate_record(results: list[CheckResult], wall: float, jobs: int) -> dict[str, object]:
+    """The committed record of one gate run."""
+    # Top-level keys sorted by hand rather than with sort_keys,
+    # which also re-sorted `slowest` alphabetically and lost
+    # the one thing its order says.
+    return dict(sorted(
+        {
+            "schema_version": 1,
+            "generated_by": "scripts/run-all-checks.py --record",
+            "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "environment": {"python": sys.version.split()[0]},
+            "jobs": jobs,
+            "checks": len(results),
+            "wall_s": round(wall, 3),
+            "serial_s": round(sum(r.duration_s for r in results), 3),
+            # A duration from a run that failed is still a duration,
+            # but it is not "the gate passes in N seconds". Record
+            # which it was rather than letting the reader assume.
+            "passed": all(r.returncode == 0 for r in results),
+            "failed": [r.check for r in results if r.returncode != 0],
+            "slowest": {
+                r.check: round(r.duration_s, 3)
+                for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
+            },
+        }.items()
+    ))
+
+
+def main() -> int:
+    args = build_parser().parse_args()
 
     checks = manifest_checks()
     started = time.perf_counter()
@@ -217,36 +249,7 @@ def main() -> int:
     path = record(results, wall, args.jobs)
     if args.record:
         RECORD.parent.mkdir(parents=True, exist_ok=True)
-        RECORD.write_text(
-            json.dumps(
-                # Top-level keys sorted by hand rather than with sort_keys,
-                # which also re-sorted `slowest` alphabetically and lost
-                # the one thing its order says.
-                dict(sorted(
-                    {
-                        "schema_version": 1,
-                        "generated_by": "scripts/run-all-checks.py --record",
-                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "environment": {"python": sys.version.split()[0]},
-                        "jobs": args.jobs,
-                        "checks": len(results),
-                        "wall_s": round(wall, 3),
-                        "serial_s": round(sum(r.duration_s for r in results), 3),
-                        # A duration from a run that failed is still a duration,
-                        # but it is not "the gate passes in N seconds". Record
-                        # which it was rather than letting the reader assume.
-                        "passed": all(r.returncode == 0 for r in results),
-                        "failed": [r.check for r in results if r.returncode != 0],
-                        "slowest": {
-                            r.check: round(r.duration_s, 3)
-                            for r in sorted(results, key=lambda r: r.duration_s, reverse=True)[:5]
-                        },
-                    }.items()
-                )),
-                indent=2,
-            ) + "\n",
-            encoding="utf-8",
-        )
+        RECORD.write_text(json.dumps(gate_record(results, wall, args.jobs), indent=2) + "\n", encoding="utf-8")
         print(f"recorded {RECORD.relative_to(ROOT)}")
     if args.format == "json":
         print(json.dumps(

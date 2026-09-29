@@ -466,6 +466,14 @@ class IgnorePolicyValidatorTests(SliceFixture):
         self.overwrite(self.POLICY, "# local artifacts\n" + text + "  # local artifacts\n")
         self.assert_clean()
 
+    def test_a_missing_or_unreadable_gitignore_is_refused_not_raised(self) -> None:
+        """read_text raised FileNotFoundError or UnicodeDecodeError."""
+        self.remove(".gitignore")
+        self.assert_catches("FAIL: .gitignore is missing", count=1)
+        self.doCleanups()
+        self.restore_later(".gitignore").write_bytes(b"\xff\xfe")
+        self.assert_catches("FAIL: .gitignore is not UTF-8 text", count=1)
+
     def test_a_pattern_padded_with_whitespace_still_counts(self) -> None:
         self.replace(self.POLICY, "*.swp\n", "  *.swp  \n")
         self.assert_clean()

@@ -14,34 +14,39 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "templates"
 
 
-def main() -> int:
-    errors: list[str] = []
-    required = [
-        TEMPLATES / "README.md",
-        TEMPLATES / "skill" / "SKILL.md",
-        TEMPLATES / "skill" / "reference.md",
-        TEMPLATES / "skill" / "metadata.json",
-        TEMPLATES / "evals" / "routing.json",
-        TEMPLATES / "evals" / "behavioral.json",
-    ]
-    for path in required:
-        if not path.exists():
-            errors.append(f"missing template: {path.relative_to(ROOT)}")
-    skill = (TEMPLATES / "skill" / "SKILL.md").read_text(encoding="utf-8") if (TEMPLATES / "skill" / "SKILL.md").exists() else ""
-    if not re.match(r"^---[ \t]*\n", skill):
-        errors.append("skill template must start with frontmatter")
+REQUIRED = ["README.md", "skill/SKILL.md", "skill/reference.md", "skill/metadata.json", "evals/routing.json", "evals/behavioral.json"]
+JSON_TEMPLATES = ["skill/metadata.json", "evals/routing.json", "evals/behavioral.json"]
+
+
+def skill_template_problems() -> list[str]:
+    """The skill template opens with frontmatter and carries the placeholder name."""
+    path = TEMPLATES / "skill" / "SKILL.md"
+    try:
+        skill = path.read_text(encoding="utf-8") if path.exists() else ""
+    except UnicodeDecodeError:
+        return [f"{path.relative_to(ROOT)} is not UTF-8 text"]
+    errors = [] if re.match(r"^---[ \t]*\n", skill) else ["skill template must start with frontmatter"]
     if "example-skill" not in skill:
         errors.append("skill template must contain example-skill placeholder")
-    for path in [
-        TEMPLATES / "skill" / "metadata.json",
-        TEMPLATES / "evals" / "routing.json",
-        TEMPLATES / "evals" / "behavioral.json",
-    ]:
+    return errors
+
+
+def json_problems() -> list[str]:
+    errors = []
+    for path in (TEMPLATES / rel for rel in JSON_TEMPLATES):
         if path.exists():
             try:
                 json.loads(path.read_text(encoding="utf-8"))
+            except UnicodeDecodeError:
+                errors.append(f"{path.relative_to(ROOT)} is not UTF-8 text")
             except json.JSONDecodeError as exc:
                 errors.append(f"{path.relative_to(ROOT)} invalid JSON: {exc}")
+    return errors
+
+
+def main() -> int:
+    errors = [f"missing template: {(TEMPLATES / rel).relative_to(ROOT)}" for rel in REQUIRED if not (TEMPLATES / rel).exists()]
+    errors += skill_template_problems() + json_problems()
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

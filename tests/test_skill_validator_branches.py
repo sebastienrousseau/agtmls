@@ -436,6 +436,14 @@ class SystemPromptBranchTests(BrokenTreeCase):
 
     SCRIPT = "validate-system-prompts.py"
 
+    def test_a_prompt_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError on the base and a language prompt."""
+        for rel in ("system-prompts/_base.md", "system-prompts/rust.md"):
+            with self.subTest(prompt=rel):
+                self.restore_later(rel).write_bytes(b"\xff\xfe not text")
+                self.assert_fails(self.SCRIPT, f"FAIL: {rel} is not UTF-8 text")
+                self.doCleanups()
+
     def test_a_missing_base_prompt_is_refused(self) -> None:
         self.remove("system-prompts/_base.md")
         self.assert_fails(self.SCRIPT, "FAIL: system-prompts/_base.md missing")
@@ -474,6 +482,14 @@ class TemplateBranchTests(BrokenTreeCase):
             self.SCRIPT, "FAIL: missing template: templates/skill/metadata.json"
         )
         self.assertNotIn("metadata.json invalid JSON", output)
+
+    def test_a_template_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError on the skill and JSON templates."""
+        for rel in ("templates/skill/SKILL.md", "templates/evals/routing.json"):
+            with self.subTest(template=rel):
+                self.restore_later(rel).write_bytes(b"\xff\xfe not text")
+                self.assert_fails(self.SCRIPT, f"FAIL: {rel} is not UTF-8 text")
+                self.doCleanups()
 
     def test_a_malformed_json_template_is_refused(self) -> None:
         self.overwrite("templates/evals/routing.json", "{ not json")

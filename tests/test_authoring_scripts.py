@@ -103,8 +103,10 @@ class ImportSkillTests(ScriptCase):
         self.assertFalse(meta["provenance"]["attested"])
         self.assertEqual(meta["safety_policy"]["risk_level"], "high")
         self.assertTrue(meta["safety_policy"]["requires_human_review"])
-        plugin = json.loads((self.fixture / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
-        self.assertEqual(meta["version"], plugin["version"])
+        # No version: a skill is identified by its digest, and both
+        # validate-skill-metadata.py and the version policy refuse one here,
+        # so an imported skill used to fail the gate the moment it landed.
+        self.assertNotIn("version", meta)
         self.assertIn("Imported draft", (skill / "reference.md").read_text(encoding="utf-8"))
 
     def test_the_missing_metadata_rule_is_recorded_but_does_not_block(self) -> None:

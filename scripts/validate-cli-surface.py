@@ -34,60 +34,69 @@ def subcommands() -> set[str]:
     return found
 
 
+EXPECTED = {
+    "doctor",
+    "status",
+    "check",
+    "audit",
+    "list",
+    "search",
+    "show",
+    "stats",
+    "profiles",
+    "providers",
+    "export",
+    "docs-site",
+    "release-pack",
+    "verify-release-assets",
+    "release-dry-run",
+    "next-version",
+    "bump-version",
+    "evolve",
+    "evidence",
+    "mcp-resources",
+    "plugin-manifests",
+    "sbom",
+    "provenance",
+    "provider-install",
+    "bench",
+    "diff",
+    "release-check",
+    "import-skill",
+    "index",
+    "install",
+    "uninstall",
+    "verify",
+    "propose-skill",
+    "scaffold-skill",
+}
+
+
+def doc_problems(readme: str, command: str) -> list[str]:
+    """Every subcommand is shown in the README or docs/cli.md, and the command file invokes status."""
+    errors = [
+        f"README/docs/cli.md missing agtmls.py {name} example or mention"
+        for name in EXPECTED
+        if f"agtmls.py {name}" not in readme and name not in {"doctor"}
+    ]
+    if "agtmls.py status" not in command:
+        errors.append("commands/agtmls.md must invoke agtmls.py status")
+    if re.search(r"agtmls.py\s+list\s+commands", readme) is None:
+        errors.append("README missing agtmls.py list commands example")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
-    expected = {
-        "doctor",
-        "status",
-        "check",
-        "audit",
-        "list",
-        "search",
-        "show",
-        "stats",
-        "profiles",
-        "providers",
-        "export",
-        "docs-site",
-        "release-pack",
-        "verify-release-assets",
-        "release-dry-run",
-        "next-version",
-        "bump-version",
-        "evolve",
-        "evidence",
-        "mcp-resources",
-        "plugin-manifests",
-        "sbom",
-        "provenance",
-        "provider-install",
-        "bench",
-        "diff",
-        "release-check",
-        "import-skill",
-        "index",
-        "install",
-        "uninstall",
-        "verify",
-        "propose-skill",
-        "scaffold-skill",
-    }
     found = subcommands()
-    if found != expected:
-        errors.append(f"CLI subcommands mismatch: expected {sorted(expected)}, found {sorted(found)}")
+    if found != EXPECTED:
+        errors.append(f"CLI subcommands mismatch: expected {sorted(EXPECTED)}, found {sorted(found)}")
     readme = README.read_text(encoding="utf-8")
     if CLI_DOC.exists():
         readme += CLI_DOC.read_text(encoding="utf-8")
     else:
         errors.append("docs/cli.md is missing; the CLI surface must stay documented")
-    command = COMMAND.read_text(encoding="utf-8")
-    for name in expected:
-        if f"agtmls.py {name}" not in readme and name not in {"doctor"}:
-            errors.append(f"README/docs/cli.md missing agtmls.py {name} example or mention")
-    if "agtmls.py status" not in command:
-        errors.append("commands/agtmls.md must invoke agtmls.py status")
-    if re.search(r"agtmls.py\s+list\s+commands", readme) is None:
-        errors.append("README missing agtmls.py list commands example")
+    errors += doc_problems(readme, COMMAND.read_text(encoding="utf-8"))
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

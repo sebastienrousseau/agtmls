@@ -1535,7 +1535,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b9d42b17902ac55e8ca2f075ed4d48111202063d8cc1db2f9ab180b35e7bb8c6"
+          "content": "ac23ba3ae9577bfc444b639bc45db2ece4e76222e63e72781013e73abd8f2aef"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -1546,7 +1546,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ee4f56e5de673c848262200ec2fa5342e895215c7f0903238ffd3deb74b263ec"
+          "content": "e294e316d60d1923f3bf4607b98606cb1700a6cf175a1278ed215174e09d0cab"
         }
       ],
       "name": "scripts/_lib/attestations.py",
@@ -1579,7 +1579,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a51af8b1d1a6598de0755805b2589e46e74cb2c77184eaa4398457744c2f559b"
+          "content": "c94851c4c422e28a2dc17d3003835907b4b70eb407eb9e0edf44bdd14a9fe449"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -1619,11 +1619,22 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/findings.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6d6cc9966a260a27f5a9051e26309a5ce9c1b8063fe3550902871314553e2669"
+        }
+      ],
+      "name": "scripts/_lib/findings.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/foreign.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e1a4ad47cf20dbec0472cc1b62129d047c626246b34adc613724df1095e91954"
+          "content": "e4767f230bb00559b47450f580953d2140e0d6a1e4b9bc5f94422266a2f1ef80"
         }
       ],
       "name": "scripts/_lib/foreign.py",
@@ -1649,6 +1660,17 @@
         }
       ],
       "name": "scripts/_lib/lockfile.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/policy.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2c1f3815316e4efcb7ae1fce2564cb8769ab9028eeddb9b1499e77467d6d7c40"
+        }
+      ],
+      "name": "scripts/_lib/policy.py",
       "type": "file"
     },
     {
@@ -1711,7 +1733,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e62cab22cd76d4ce79da5b1febdd70b9a1e7156c719f1fd56d000748997c95dc"
+          "content": "f8c72c87f31288ea33e5d5ab22257eb59bf77049c7c025c4aa4e5a6783b8f5d5"
         }
       ],
       "name": "scripts/_lib/scaling.py",
@@ -1854,7 +1876,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "06da54d2f27a63c81bf6836e6f2bb0400636e4c3ea0818eb8b9cc77b8f7deca9"
+          "content": "fde75d9af76e495bee2acc07a483fbeab125d4af7b4bdb688e01aad4b10309b3"
         }
       ],
       "name": "scripts/check-publishing-readiness.py",
@@ -1975,7 +1997,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d31bc16c58a70056bc426ce057274dd8349be9f1146b779e660e2e0e31f8d771"
+          "content": "638d344ecbc2069845d2e28f134da7321bbe61fc3138ba0f6bf10ca3e5f3e3c7"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -2008,7 +2030,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c2c9b9ca83203fb30d4b5d89f43a9db6f34ae264f780e8d585388c872b6d510d"
+          "content": "f1d7b4e9bae1f8eeeaedc5bdddd30270046a082f6fd766f722158fa8c6e6cd39"
         }
       ],
       "name": "scripts/generate-skill-index.py",
@@ -2019,7 +2041,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8edd5dab3f0f67dc187d2642202a8d9acc661acc1b8196b8ab44ccd2f2f38105"
+          "content": "b4d050038cd71ae007674e6f3d0544b7d14eaf664599e9afda2059e764cf0954"
         }
       ],
       "name": "scripts/generate-skill-manifests.py",
@@ -2030,7 +2052,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e1f67c4804876038b19553fa3959766faffb11fd142f161f4478cc28bcd9e666"
+          "content": "e66da9e969184f4b95aa15e32d1639e931e2808b434eb6d249b3bb68af34d593"
         }
       ],
       "name": "scripts/import-skill.py",
@@ -2129,7 +2151,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "453339ca32bf73f2777cea8d9d993468917e7aff2db45a6dbfb3b415d101494a"
+          "content": "c8080191f6999e7c58643277679fb3294ee9d364d266dcc5bc94acf299c6156b"
         }
       ],
       "name": "scripts/release-dry-run.py",
@@ -2151,7 +2173,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f8b5a130e59bea36cffca23b9e71f6a797df9c4ddf12c393013b6a449c994a76"
+          "content": "01886a3cb7ade2c49d9b421d02cced2c47b8a9a0fe693e7eaa705aa92204220b"
         }
       ],
       "name": "scripts/release-preflight.py",
@@ -2162,7 +2184,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "01ea6878b8effb1e29613c4b5b1e70e1bd5c47a04a8112c62f2655e3168ccf4f"
+          "content": "3283ad310c837c1ae5601a709a99e82b1be76b981a03919ab9df1a3cbe17b8fb"
         }
       ],
       "name": "scripts/run-all-checks.py",
@@ -2283,7 +2305,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "76fab645f06ad5a66814041f7d17c23af6021d6a4f92994db4753098e4852ceb"
+          "content": "fd795a871cb48f28776c7091bddeb04c5a44586fe2da0b600137f6766ad17ebe"
         }
       ],
       "name": "scripts/smoke-export.py",
@@ -2437,7 +2459,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c3bd12f541a0358151392a1b3c2f052dff43651d1d8f3fb13e5ed84720a8cacb"
+          "content": "ca2d4f6f3216d1bc1ab6212b92949e6e7f2330b582eb959f9379f6edb5b6d4cd"
         }
       ],
       "name": "scripts/smoke-scaffold.py",
@@ -2459,7 +2481,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7c4d199b41b8e918346f4f12e37bc61f74a4ad7b58253addc2e1d29a0be5d6ea"
+          "content": "44ba58866fb5e8ffc8a4480f896c7d4e2bd3e1dc419110f51e4782c3c9b37472"
         }
       ],
       "name": "scripts/sync-spec-rules.py",
@@ -2492,7 +2514,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3b46ce668139d1390b96385b9a1bd60723f99b0b8b64d2060006934b8dfe862d"
+          "content": "c4d60ff51f662d02b310c7d7b2ff9cc8d4fdb840ee46a1cade14073c959718d9"
         }
       ],
       "name": "scripts/validate-cli-surface.py",
@@ -2558,7 +2580,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "07052dee77b7eaa2093e933117ae81ea616e87f746d22fcffc74e4bfae40abb0"
+          "content": "818e608a4e56752ff455fad1c88302663c1552648fa3c7f27063e3e0bbcaedd8"
         }
       ],
       "name": "scripts/validate-gitignore.py",
@@ -2591,7 +2613,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eed8c59a859855d310390831abeafca9eb330a63d7725a95915bf56f9e3a9835"
+          "content": "71affd6efa1d8e1a3d672484e53fb7347372a5b4c0460f17d83fc07deb53176a"
         }
       ],
       "name": "scripts/validate-licence-headers.py",
@@ -2602,7 +2624,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7cb209581bcc7d9aa46de5016fc93f10c8f4af73939fba3134280eb8c3129dee"
+          "content": "6c7fbe40449c08029cba39be1d1d425af95b30d0021e93e8fb61bccdebe3b4db"
         }
       ],
       "name": "scripts/validate-lifecycle.py",
@@ -2668,7 +2690,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ad399cc1e1aa6141fdee9ecaccf4bd235bba02aa2319b57561775fdf2bda455e"
+          "content": "b31fe9f3856831a814b8c4486d5b05a1bd605d2ca8b32fef4bd1f6e05f303043"
         }
       ],
       "name": "scripts/validate-readme.py",
@@ -2778,7 +2800,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "23711c9a6fe7934e9b6112090a7ed528a2af5a085a58045095b169cc8ee6a4ed"
+          "content": "dc291132dfd41b1bf28a049f9012eb11fe3704cc3d2786e9bfaf2e9a19104ac8"
         }
       ],
       "name": "scripts/validate-system-prompts.py",
@@ -2789,7 +2811,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7d2206fc6f10833aa21ccb06e7c18b95b257def28c88a3b72ab7220f6f2ef57b"
+          "content": "6bbdd15895b4ed59829f916f117d43f1f0be6fe92cb403a670806e38d444d128"
         }
       ],
       "name": "scripts/validate-templates.py",
@@ -4365,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:37:55Z",
+    "timestamp": "2026-09-29T13:43:47Z",
     "tools": {
       "components": [
         {

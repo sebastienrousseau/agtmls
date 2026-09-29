@@ -64,6 +64,18 @@ def unquote(value: str) -> str:
     return value
 
 
+BLOCK_MARKERS = {"|", ">", "|-", ">-", "|+", ">+", ""}
+
+
+def top_level_key(line: str) -> tuple[str, list[str]] | None:
+    """(key, its first value parts) when `line` starts a top-level field, else None."""
+    top = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
+    if not top or line.startswith((" ", "\t")):
+        return None
+    value = top.group(2).strip()
+    return top.group(1), [] if value in BLOCK_MARKERS else [value]
+
+
 def parse_frontmatter(text: str) -> dict[str, str]:
     match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
     if not match:
@@ -72,13 +84,11 @@ def parse_frontmatter(text: str) -> dict[str, str]:
     key: str | None = None
     buf: list[str] = []
     for line in match.group(1).splitlines():
-        top = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
-        if top and not line.startswith((" ", "\t")):
+        started = top_level_key(line)
+        if started is not None:
             if key is not None:
                 fields[key] = unquote(" ".join(part.strip() for part in buf).strip())
-            key = top.group(1)
-            value = top.group(2).strip()
-            buf = [] if value in {"|", ">", "|-", ">-", "|+", ">+", ""} else [value]
+            key, buf = started
         elif key is not None:
             buf.append(line.strip())
     if key is not None:

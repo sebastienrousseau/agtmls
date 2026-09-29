@@ -96,6 +96,42 @@ class SyncCheckTests(unittest.TestCase):
         self.assertIn("AGT-EXEC-001", output)
         self.assertNotEqual(code, 0, output)
 
+    # A snapshot of the wrong shape raised instead of being refused; fuzzing
+    # 3,000 copies of rules.json found 1,574 that did.
+
+    def test_a_snapshot_of_the_wrong_shape_is_named_not_raised(self) -> None:
+        problems = self.module.problems
+        self.assertEqual(problems([]), ["snapshot is not a JSON object"])
+        self.assertEqual(problems({"rules": {}}), ["rules is not a list"])
+        self.assertIn("rule 0: not an object", problems({"rules": ["AGT-X"]}))
+
+    def test_rule_ids_that_are_not_strings_are_named_not_raised(self) -> None:
+        rules = json.loads(SNAPSHOT.read_text(encoding="utf-8"))["rules"]
+        found = self.module.problems({"rules": [{**rules[0], "id": ["x"]}, {**rules[1], "id": 7}, *rules[2:]]})
+        self.assertIn("rule 0: id is not a string", found)
+        self.assertIn("rule 1: id is not a string", found)
+
+    def test_a_pattern_or_example_of_the_wrong_type_is_named_not_raised(self) -> None:
+        rule = next(r for r in json.loads(SNAPSHOT.read_text(encoding="utf-8"))["rules"] if "pattern" in r)
+        rid = rule["id"]
+        check = self.module.rule_problems
+        self.assertIn(f"{rid}: pattern is not a string", check({**rule, "pattern": 7}))
+        for field in ("true_positive", "false_positive"):
+            with self.subTest(field=field):
+                for bad in ("text", [{"nope": 1}], [{"text": 7}], [["x"]]):
+                    self.assertIn(f"{rid}: {field} must be a list of {{\"text\": string}}", check({**rule, field: bad}))
+
+    def test_a_snapshot_that_is_not_json_is_refused_by_check(self) -> None:
+        path = self.tmp / "rules.json"
+        path.write_text("{ not json", encoding="utf-8")
+        self.module.SNAPSHOT = path
+        code, output = run_main(self.module, "--check")
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL: rules.json is not valid JSON:", output)
+
+    def test_drift_reads_rules_without_an_id_as_absent(self) -> None:
+        self.assertEqual(self.module.drift({"rules": [{"x": 1}, "junk"]}, {"rules": []}), [])
+
     @unittest.skipUnless(sys.version_info >= (3, 11), "tomllib is 3.11+")
     @unittest.skipUnless((SPEC / "rules").is_dir(), "no agtmls-spec checkout beside this repo")
     def test_a_snapshot_that_drifted_from_the_spec_is_caught(self) -> None:

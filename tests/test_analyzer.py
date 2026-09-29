@@ -26,6 +26,7 @@ from .support import ROOT
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from _lib import analyzer, foreign  # needs the scripts path first
+from _lib import policy as skill_policy  # a test's local `policy` is a dict
 
 
 class Workspace(unittest.TestCase):
@@ -643,10 +644,10 @@ class ReadCappedTests(Workspace):
 
 class FrontmatterToolsTests(Workspace):
     def test_no_frontmatter_declares_no_tools(self) -> None:
-        self.assertEqual(analyzer.frontmatter_tools(self.skill(body="# no frontmatter\n") / "SKILL.md"), [])
+        self.assertEqual(skill_policy.frontmatter_tools(self.skill(body="# no frontmatter\n") / "SKILL.md"), [])
 
     def test_frontmatter_without_allowed_tools_declares_none(self) -> None:
-        self.assertEqual(analyzer.frontmatter_tools(self.skill("name: x") / "SKILL.md"), [])
+        self.assertEqual(skill_policy.frontmatter_tools(self.skill("name: x") / "SKILL.md"), [])
 
     def test_the_space_separated_form_the_spec_uses_is_split(self) -> None:
         """Every skill in this registry writes `allowed-tools: "Read Glob Bash"`.
@@ -655,46 +656,46 @@ class FrontmatterToolsTests(Workspace):
         named "Read Glob Bash", which grants nothing -- and AGT-CAP-001 could
         not fire on any real skill.
         """
-        tools = analyzer.frontmatter_tools(self.skill('allowed-tools: "Read Glob Bash"') / "SKILL.md")
+        tools = skill_policy.frontmatter_tools(self.skill('allowed-tools: "Read Glob Bash"') / "SKILL.md")
         self.assertEqual(tools, ["Read", "Glob", "Bash"])
 
     def test_a_real_skill_that_grants_bash_against_its_policy_escalates(self) -> None:
         skill = self.skill('allowed-tools: "Read Grep Bash"', metadata={"safety_policy": {"executes_commands": False}})
-        self.assertEqual(self.rules(analyzer.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"])
+        self.assertEqual(self.rules(skill_policy.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"])
 
     def test_a_scoped_tool_keeps_its_specifier_and_still_counts_as_the_tool(self) -> None:
         skill = self.skill('allowed-tools: "Read Bash(git log:*)"')
-        self.assertEqual(analyzer.frontmatter_tools(skill / "SKILL.md"), ["Read", "Bash(git log:*)"])
+        self.assertEqual(skill_policy.frontmatter_tools(skill / "SKILL.md"), ["Read", "Bash(git log:*)"])
         self.assertEqual(
-            self.rules(analyzer.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"]
+            self.rules(skill_policy.check_capability_escalation(skill, {"executes_commands": False})), ["AGT-CAP-001"]
         )
 
     def test_a_bracketed_quoted_list_is_unwrapped(self) -> None:
-        tools = analyzer.frontmatter_tools(self.skill("allowed-tools: [Bash, 'Read']") / "SKILL.md")
+        tools = skill_policy.frontmatter_tools(self.skill("allowed-tools: [Bash, 'Read']") / "SKILL.md")
         self.assertEqual(tools, ["Bash", "Read"])
 
 
 class LoadPolicyTests(Workspace):
     def test_missing_metadata_fails_closed(self) -> None:
-        policy, findings = analyzer.load_policy(self.skill("name: x"))
+        policy, findings = skill_policy.load_policy(self.skill("name: x"))
         self.assertEqual((policy, self.rules(findings)), ({}, ["AGT-POLICY-001"]))
 
     def test_missing_metadata_without_a_skill_file_points_at_the_directory(self) -> None:
         empty = self.tmp / "empty"
         empty.mkdir()
-        _, findings = analyzer.load_policy(empty)
+        _, findings = skill_policy.load_policy(empty)
         self.assertEqual(findings[0].file_path, empty)
 
     def test_unparseable_metadata_fails_closed(self) -> None:
-        policy, findings = analyzer.load_policy(self.skill("name: x", metadata="{ not json"))
+        policy, findings = skill_policy.load_policy(self.skill("name: x", metadata="{ not json"))
         self.assertEqual((policy, self.rules(findings)), ({}, ["AGT-POLICY-002"]))
 
     def test_a_policy_that_is_not_an_object_fails_closed(self) -> None:
-        policy, findings = analyzer.load_policy(self.skill("name: x", metadata={"safety_policy": ["no"]}))
+        policy, findings = skill_policy.load_policy(self.skill("name: x", metadata={"safety_policy": ["no"]}))
         self.assertEqual((policy, self.rules(findings)), ({}, ["AGT-POLICY-003"]))
 
     def test_a_well_formed_policy_is_returned(self) -> None:
-        policy, findings = analyzer.load_policy(
+        policy, findings = skill_policy.load_policy(
             self.skill("name: x", metadata={"safety_policy": {"network_access": "none"}})
         )
         self.assertEqual((policy, findings), ({"network_access": "none"}, []))
@@ -702,10 +703,10 @@ class LoadPolicyTests(Workspace):
 
 class CapabilityEscalationTests(Workspace):
     def escalations(self, tools: str, policy: dict) -> list[str]:
-        return self.rules(analyzer.check_capability_escalation(self.skill(f"allowed-tools: [{tools}]"), policy))
+        return self.rules(skill_policy.check_capability_escalation(self.skill(f"allowed-tools: [{tools}]"), policy))
 
     def test_no_skill_file_means_nothing_to_escalate(self) -> None:
-        self.assertEqual(analyzer.check_capability_escalation(self.tmp, {}), [])
+        self.assertEqual(skill_policy.check_capability_escalation(self.tmp, {}), [])
 
     def test_a_tool_that_grants_no_capability_is_ignored(self) -> None:
         self.assertEqual(self.escalations("Read", {}), [])
@@ -720,7 +721,7 @@ class CapabilityEscalationTests(Workspace):
         """Claude Code pre-approves allowed-tools; Apache Maka treats the field
         as informational. "The runtime honours the frontmatter" was true of
         one and presented as true of all."""
-        (finding,) = analyzer.check_capability_escalation(
+        (finding,) = skill_policy.check_capability_escalation(
             self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
         )
         self.assertNotIn("the runtime honours", finding.message)
@@ -729,15 +730,15 @@ class CapabilityEscalationTests(Workspace):
     def test_the_message_names_the_targets_that_grant_and_those_that_declare(self) -> None:
         """Effective escalation is per target: providers.json says which
         runtimes grant allowed-tools and which only read it."""
-        (finding,) = analyzer.check_capability_escalation(
+        (finding,) = skill_policy.check_capability_escalation(
             self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
         )
         self.assertIn("grant it: claude", finding.message)
         self.assertIn("a declaration: aider, antigravity, codex", finding.message)
 
     def test_without_a_provider_table_the_message_stays_generic(self) -> None:
-        with mock.patch.object(analyzer, "PROVIDERS", self.tmp / "absent.json"):
-            (finding,) = analyzer.check_capability_escalation(
+        with mock.patch.object(skill_policy, "PROVIDERS", self.tmp / "absent.json"):
+            (finding,) = skill_policy.check_capability_escalation(
                 self.skill("allowed-tools: [Bash]"), {"executes_commands": False}
             )
         self.assertIn("runtimes that pre-approve allowed-tools", finding.message)
@@ -751,15 +752,15 @@ class CapabilityEscalationTests(Workspace):
             "deaf": {"allowed_tools_semantics": "ignored"},
             "odd": "not an object",
         }}), encoding="utf-8")
-        with mock.patch.object(analyzer, "PROVIDERS", table):
+        with mock.patch.object(skill_policy, "PROVIDERS", table):
             self.assertEqual(
-                analyzer.allowed_tools_semantics(), {"declaration": ["reader"], "ignored": ["deaf"]},
+                skill_policy.allowed_tools_semantics(), {"declaration": ["reader"], "ignored": ["deaf"]},
             )
-            rationale = analyzer.escalation_rationale()
+            rationale = skill_policy.escalation_rationale()
         self.assertEqual(rationale, "these read it as a declaration: reader; these ignore it: deaf")
         table.write_text(json.dumps({"native_agents": {"only": {"allowed_tools_semantics": "grant"}}}), encoding="utf-8")
-        with mock.patch.object(analyzer, "PROVIDERS", table):
-            self.assertEqual(analyzer.escalation_rationale(), "runtimes that pre-approve allowed-tools grant it: only")
+        with mock.patch.object(skill_policy, "PROVIDERS", table):
+            self.assertEqual(skill_policy.escalation_rationale(), "runtimes that pre-approve allowed-tools grant it: only")
 
     def test_web_fetch_needs_network_access_declared(self) -> None:
         self.assertEqual(self.escalations("WebFetch", {"network_access": "none"}), ["AGT-CAP-001"])
@@ -768,27 +769,27 @@ class CapabilityEscalationTests(Workspace):
 
 class SkillHonestyTests(Workspace):
     def test_a_directory_with_no_skill_file_is_not_judged(self) -> None:
-        self.assertEqual(analyzer.check_skill_honesty(self.tmp), [])
+        self.assertEqual(skill_policy.check_skill_honesty(self.tmp), [])
 
     def test_a_skill_that_denies_commands_but_says_run_them_is_caught(self) -> None:
         skill = self.skill(
             "name: x", body="Run the following script to begin.\n", metadata={"safety_policy": {"executes_commands": False}}
         )
-        self.assertIn("AGT-POLICY-004", self.rules(analyzer.check_skill_honesty(skill)))
+        self.assertIn("AGT-POLICY-004", self.rules(skill_policy.check_skill_honesty(skill)))
 
     def test_a_skill_that_denies_commands_and_keeps_its_word_is_clean(self) -> None:
         skill = self.skill("name: x", body="Read carefully.\n", metadata={"safety_policy": {"executes_commands": False}})
-        self.assertEqual(analyzer.check_skill_honesty(skill), [])
+        self.assertEqual(skill_policy.check_skill_honesty(skill), [])
 
     def test_a_skill_that_denies_network_but_fetches_is_caught(self) -> None:
         skill = self.skill(
             "name: x", body="Download https://example.com/x first.\n", metadata={"safety_policy": {"network_access": "none"}}
         )
-        self.assertIn("AGT-POLICY-005", self.rules(analyzer.check_skill_honesty(skill)))
+        self.assertIn("AGT-POLICY-005", self.rules(skill_policy.check_skill_honesty(skill)))
 
     def test_a_skill_that_denies_network_and_keeps_its_word_is_clean(self) -> None:
         skill = self.skill("name: x", body="Work offline.\n", metadata={"safety_policy": {"network_access": "none"}})
-        self.assertEqual(analyzer.check_skill_honesty(skill), [])
+        self.assertEqual(skill_policy.check_skill_honesty(skill), [])
 
 
 class AuditableFilesTests(Workspace):

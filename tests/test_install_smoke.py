@@ -11,8 +11,12 @@ faked here, so each case is about the smoke test's own reporting.
 
 from __future__ import annotations
 
+import io
 import json
+import shutil
 import subprocess
+import tarfile
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -113,3 +117,57 @@ class MakeInstallStatsTests(unittest.TestCase):
             (self.module.ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
         )["version"]
         self.assertEqual(self.stats(json.dumps({"registry_version": version, "skills": 3})), [])
+
+
+class ExportArchiveTests(unittest.TestCase):
+    """smoke-export.py reads each export's manifest out of its archive."""
+
+    def setUp(self) -> None:
+        self.module = load_script("smoke-export.py")
+        self.tmp = Path(tempfile.mkdtemp(prefix="agtmls-export-archive-"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def archive(self, manifest: str | None) -> list[str]:
+        members = {"agtmls/ADAPTERS.md": "x", "agtmls/skills/using-agtmls/SKILL.md": "x"}
+        if manifest is not None:
+            members["agtmls/export-manifest.json"] = manifest
+        with tarfile.open(self.tmp / "agtmls-openai-minimal.tar.gz", "w:gz") as tf:
+            for name, text in members.items():
+                data = text.encode()
+                info = tarfile.TarInfo(name)
+                info.size = len(data)
+                tf.addfile(info, io.BytesIO(data))
+        exported = subprocess.CompletedProcess([], 0, "")
+        errors: list[str] = []
+        with mock.patch.object(self.module.subprocess, "run", return_value=exported):
+            self.module.check_archive("openai", "minimal", [], self.tmp, errors)
+        return errors
+
+    def test_an_archive_without_its_manifest_is_reported_not_raised(self) -> None:
+        """extractfile raised KeyError for a member the archive does not have."""
+        errors = self.archive(None)
+        self.assertIn("openai/minimal archive missing agtmls/export-manifest.json", errors)
+        self.assertIn("openai/minimal cannot read export manifest", errors)
+
+    def test_a_manifest_that_is_not_a_json_object_is_reported_not_raised(self) -> None:
+        for text, reason in (("{nope", "is not valid JSON"), ("[]", "is not a JSON object")):
+            with self.subTest(manifest=text):
+                errors = self.archive(text)
+                self.assertTrue(any(e.startswith(f"openai/minimal export manifest {reason}") for e in errors), errors)
+
+
+class ScaffoldSmokeTests(unittest.TestCase):
+    """smoke-scaffold.py reads back what the scaffolder wrote."""
+
+    def setUp(self) -> None:
+        self.module = load_script("smoke-scaffold.py")
+        self.root = Path(tempfile.mkdtemp(prefix="agtmls-scaffold-test-"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+
+    def test_a_scaffolded_skill_that_is_not_utf8_is_reported_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError on a SKILL.md the scaffolder mangled."""
+        skill = self.root / "skills" / "sample-skill"
+        skill.mkdir(parents=True)
+        (skill / "SKILL.md").write_bytes(b"\xff\xfe not text")
+        (skill / "metadata.json").write_text("{}", encoding="utf-8")
+        self.assertIn("scaffolded SKILL.md is not UTF-8 text", self.module.scaffolded_problems(self.root))

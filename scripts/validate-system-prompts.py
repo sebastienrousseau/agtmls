@@ -13,23 +13,43 @@ PROMPTS = ROOT / "system-prompts"
 LANGUAGES = ["rust", "python", "go", "cpp", "swift", "typescript", "javascript", "ruby", "bash"]
 
 
-def main() -> int:
-    errors: list[str] = []
+def read_prompt(path: Path) -> str | None:
+    """The prompt's text, or None when it is not UTF-8."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
+def base_problems() -> list[str]:
     base = PROMPTS / "_base.md"
     if not base.exists():
-        errors.append("system-prompts/_base.md missing")
-    elif "# " not in base.read_text(encoding="utf-8"):
-        errors.append("system-prompts/_base.md missing top-level heading")
+        return ["system-prompts/_base.md missing"]
+    text = read_prompt(base)
+    if text is None:
+        return ["system-prompts/_base.md is not UTF-8 text"]
+    if "# " not in text:
+        return ["system-prompts/_base.md missing top-level heading"]
+    return []
+
+
+def language_problems(lang: str) -> list[str]:
+    path = PROMPTS / f"{lang}.md"
+    if not path.exists():
+        return [f"system-prompts/{lang}.md missing"]
+    text = read_prompt(path)
+    if text is None:
+        return [f"system-prompts/{lang}.md is not UTF-8 text"]
+    errors = [] if text.strip() else [f"system-prompts/{lang}.md is empty"]
+    if "# " not in text:
+        errors.append(f"system-prompts/{lang}.md missing top-level heading")
+    return errors
+
+
+def main() -> int:
+    errors = base_problems()
     for lang in LANGUAGES:
-        path = PROMPTS / f"{lang}.md"
-        if not path.exists():
-            errors.append(f"system-prompts/{lang}.md missing")
-            continue
-        text = path.read_text(encoding="utf-8")
-        if not text.strip():
-            errors.append(f"system-prompts/{lang}.md is empty")
-        if "# " not in text:
-            errors.append(f"system-prompts/{lang}.md missing top-level heading")
+        errors += language_problems(lang)
     extras = sorted(
         p.name for p in PROMPTS.glob("*.md")
         if p.stem not in set(LANGUAGES) | {"_base"}

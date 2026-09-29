@@ -535,6 +535,32 @@ class LifecycleBranchTests(BrokenTreeCase):
             "FAIL: proposal: missing exit_criteria",
         )
 
+    # A lifecycle of the wrong shape raised; fault injection over every
+    # single-field mutation of lifecycle.json found 80 such cases.
+
+    def test_a_lifecycle_that_is_not_a_json_object_is_refused_not_raised(self) -> None:
+        for text, reason in (("{ not json", "is not valid JSON"), ("[]", "must be a JSON object")):
+            with self.subTest(text=text):
+                self.overwrite(self.FILE, text)
+                self.assert_fails(self.SCRIPT, f"FAIL: lifecycle.json {reason}")
+                self.doCleanups()
+
+    def test_a_lifecycle_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        self.restore_later(self.FILE).write_bytes(b"\xff\xfe not text")
+        self.assert_fails(self.SCRIPT, "FAIL: lifecycle.json is not UTF-8 text")
+
+    def test_stages_of_the_wrong_shape_are_refused_not_raised(self) -> None:
+        self.edit_json(self.FILE, lambda data: data.__setitem__("stages", "proposal"))
+        self.assert_fails(self.SCRIPT, "FAIL: stages must be a list")
+        self.doCleanups()
+        self.edit_json(self.FILE, lambda data: data["stages"].__setitem__(0, "proposal"))
+        self.assert_fails(self.SCRIPT, "FAIL: stage 0 must be an object")
+
+    def test_non_negotiables_given_as_text_are_refused(self) -> None:
+        """A string would be searched by substring, and pass by accident."""
+        self.edit_json(self.FILE, lambda data: data.__setitem__("non_negotiables", " ".join(data["non_negotiables"])))
+        self.assert_fails(self.SCRIPT, "FAIL: non_negotiables must be a list")
+
     def test_a_dropped_non_negotiable_is_named(self) -> None:
         self.edit_json(
             self.FILE,

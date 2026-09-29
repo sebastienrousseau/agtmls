@@ -10,18 +10,18 @@ the floor. The rule data it applies lives in rules.py.
 
 from __future__ import annotations
 
-import json
 import re
 import stat
 import unicodedata
 from pathlib import Path
 from typing import NamedTuple
 
+from .findings import MAX_AUDIT_BYTES, Finding, read_capped
+from .policy import check_skill_honesty
 from .rules import (
     INVISIBLE_RE,
     INVISIBLE_UNICODE,
     RULES,
-    TOOL_CAPABILITIES,
 )
 
 # Everything an agent may read or a user may execute. Auditing only *.md was
@@ -35,20 +35,6 @@ AUDITABLE_SUFFIXES = {
     ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg",
 }
 SKIP_PARTS = {"__pycache__", ".git", "node_modules", "target", ".venv"}
-# Which runtimes grant a skill's allowed-tools and which only read them.
-PROVIDERS = Path(__file__).resolve().parents[2] / "providers.json"
-# A hostile skill should not be able to exhaust memory during its own audit.
-MAX_AUDIT_BYTES = 5 * 1024 * 1024
-
-
-class Finding(NamedTuple):
-    file_path: Path
-    line: int
-    severity: str  # "CRITICAL", "HIGH", "MEDIUM", "LOW"
-    category: str
-    message: str
-    rule: str = "AGT-UNKNOWN"  # stable id, e.g. AGT-EXEC-001
-    suppressed: str | None = None  # the justification of an in-source suppression
 
 
 def describe_invisible(char: str) -> str:
@@ -117,6 +103,17 @@ _STEG_RULE = next((rule for rule in RULES if rule.get("id") == "AGT-STEG-001"), 
 EMOJI_CONTEXT = emoji_context(_STEG_RULE.get("emoji_context", {}))
 
 
+def _flag_length(line: str, start: int, context: EmojiContext) -> int:
+    """Tags plus terminator of a well-formed flag whose base is at `start`, or 0."""
+    if line[start] != context.flag_base:
+        return 0
+    end = start + 1
+    while end < len(line) and context.is_tag(line[end]):
+        end += 1
+    well_formed = end > start + 1 and end < len(line) and line[end] == context.terminator
+    return end - start if well_formed else 0
+
+
 def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
     """Column of each well-formed flag's first tag, mapped to its tag count.
 
@@ -126,13 +123,10 @@ def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
     flags: dict[int, int] = {}
     i = 0
     while i < len(line):
-        if line[i] == context.flag_base:
-            j = i + 1
-            while j < len(line) and context.is_tag(line[j]):
-                j += 1
-            if j > i + 1 and j < len(line) and line[j] == context.terminator:
-                flags[i + 1] = j - i  # tags plus the terminator
-                i = j
+        length = _flag_length(line, i, context)
+        if length:
+            flags[i + 1] = length  # tags plus the terminator
+            i += length
         i += 1
     return flags
 
@@ -212,6 +206,35 @@ JSON_ESCAPE = re.compile(r'\\(?:u([0-9a-fA-F]{4})|(["\\/bfnrt]))')
 _SIMPLE = {'"': '"', "\\": "\\", "/": "/", "b": " ", "f": " ", "n": " ", "r": " ", "t": " "}
 
 
+class _EscapeDecoder:
+    """Decoded text, holding a high surrogate until its low half arrives."""
+
+    def __init__(self) -> None:
+        self.out: list[str] = []
+        self.pending_high: int | None = None
+
+    def flush(self) -> None:
+        """A high surrogate with no low half becomes U+FFFD."""
+        if self.pending_high is not None:
+            self.out.append("\ufffd")
+            self.pending_high = None
+
+    def code_point(self, code: int) -> None:
+        if 0xD800 <= code <= 0xDBFF:
+            self.flush()
+            self.pending_high = code
+        elif 0xDC00 <= code <= 0xDFFF:
+            if self.pending_high is None:
+                self.out.append("\ufffd")
+            else:
+                self.out.append(chr(0x10000 + ((self.pending_high - 0xD800) << 10) + (code - 0xDC00)))
+                self.pending_high = None
+        else:
+            self.flush()
+            char = chr(code)
+            self.out.append(" " if char in "\n\r\u2028\u2029\x85\x0b\x0c" else char)
+
+
 def decode_json_escapes(content: str) -> str:
     """JSON string escapes decoded, never creating a line (spec 4.3).
 
@@ -220,43 +243,21 @@ def decode_json_escapes(content: str) -> str:
     decoded line terminator become a space, so line numbers still point into
     the source; a surrogate pair is one code point, a lone one U+FFFD.
     """
-    out: list[str] = []
+    decoder = _EscapeDecoder()
     last = 0
-    pending_high: int | None = None
     for match in JSON_ESCAPE.finditer(content):
-        if match.start() != last and pending_high is not None:
-            out.append("�")
-            pending_high = None
-        out.append(content[last:match.start()])
+        if match.start() != last:
+            decoder.flush()
+        decoder.out.append(content[last:match.start()])
         last = match.end()
         if match.group(2) is not None:
-            if pending_high is not None:
-                out.append("�")
-                pending_high = None
-            out.append(_SIMPLE[match.group(2)])
-            continue
-        code = int(match.group(1), 16)
-        if 0xD800 <= code <= 0xDBFF:
-            if pending_high is not None:
-                out.append("�")
-            pending_high = code
-            continue
-        if 0xDC00 <= code <= 0xDFFF:
-            if pending_high is None:
-                out.append("�")
-            else:
-                out.append(chr(0x10000 + ((pending_high - 0xD800) << 10) + (code - 0xDC00)))
-                pending_high = None
-            continue
-        if pending_high is not None:
-            out.append("�")
-            pending_high = None
-        char = chr(code)
-        out.append(" " if char in "\n\r  \x85\x0b\x0c" else char)
-    if pending_high is not None:
-        out.append("�")
-    out.append(content[last:])
-    return "".join(out)
+            decoder.flush()
+            decoder.out.append(_SIMPLE[match.group(2)])
+        else:
+            decoder.code_point(int(match.group(1), 16))
+    decoder.flush()
+    decoder.out.append(content[last:])
+    return "".join(decoder.out)
 
 
 def flatten(content: str) -> str:
@@ -409,30 +410,44 @@ def applies(rule: PatternRule, path: Path, content: str) -> bool:
 PATTERN_RULES = compile_rules(RULES)
 
 
+class _ScanViews:
+    """The file as a rule reads it: raw, or decoded, normalised and
+    flattened, each built once and only when a rule needs it."""
+
+    def __init__(self, path: Path, content: str) -> None:
+        self.path, self.content = path, content
+        self.text: str | None = None
+        self.flat: str | None = None
+        self.line_of: list[int] | None = None
+
+    def haystack(self, scope: str) -> str:
+        if scope != "normalised":
+            return self.content
+        if self.flat is None:
+            source = decode_json_escapes(self.content) if self.path.name.lower().endswith(".json") else self.content
+            self.text = normalize(source)
+            self.flat = flatten(self.text)
+        return self.flat
+
+    def line(self, scope: str, offset: int) -> int:
+        """The 1-based source line of an offset into the rule's haystack."""
+        if scope != "normalised":
+            return self.content.count("\n", 0, offset) + 1
+        if self.line_of is None:
+            self.line_of = line_map(self.text or "")
+        return self.line_of[offset] if offset < len(self.line_of) else 1
+
+
 def scan_rules(path: Path, content: str, rules: list[PatternRule]) -> list[Finding]:
     """Run pattern rules over one file, each in the scope it declares."""
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()
-    text = flat = None
-    line_of: list[int] | None = None
+    views = _ScanViews(path, content)
     for rule in rules:
         if not applies(rule, path, content):
             continue
-        if rule.scope == "normalised":
-            if flat is None:
-                source = decode_json_escapes(content) if path.name.lower().endswith(".json") else content
-                text = normalize(source)
-                flat = flatten(text)
-            haystack = flat
-        else:
-            haystack = content
-        for match in rule.regex.finditer(haystack):
-            if rule.scope == "normalised":
-                if line_of is None:
-                    line_of = line_map(text or "")
-                line = line_of[match.start()] if match.start() < len(line_of) else 1
-            else:
-                line = content.count("\n", 0, match.start()) + 1
+        for match in rule.regex.finditer(views.haystack(rule.scope)):
+            line = views.line(rule.scope, match.start())
             if (line, rule.message) in seen:
                 continue
             seen.add((line, rule.message))
@@ -467,203 +482,6 @@ def check_dangerous_shell(path: Path, content: str) -> list[Finding]:
 
 def check_data_exfiltration(path: Path, content: str) -> list[Finding]:
     return pattern_findings(path, content, _category("data_exfiltration"))
-
-
-def read_capped(path: Path) -> str | None:
-    """Read a file, refusing anything large enough to be a resource attack."""
-    try:
-        if path.stat().st_size > MAX_AUDIT_BYTES:
-            return None
-        return path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return None
-
-
-# One tool: a name, optionally with a parenthesised specifier that may itself
-# contain spaces -- `Bash(git log:*)`.
-TOOL_TOKEN = re.compile(r"[^\s,()'\"\[\]]+(?:\([^)]*\))?")
-
-
-def frontmatter_tools(skill_md: Path) -> list[str]:
-    """allowed-tools declared in SKILL.md frontmatter, if any.
-
-    The Agent Skills spec writes the field space-separated, and every skill
-    here does: `allowed-tools: "Read Glob Bash"`. This split on commas only,
-    so that string came back as a single tool named "Read Glob Bash" that
-    granted nothing, and AGT-CAP-001 could not fire on a real skill. Commas
-    and YAML list brackets are still accepted.
-    """
-    text = read_capped(skill_md) or ""
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not match:
-        return []
-    field = re.search(r"^allowed-tools:[ \t]*(.*)$", match.group(1), re.MULTILINE)
-    if not field:
-        return []
-    return TOOL_TOKEN.findall(field.group(1))
-
-
-def load_policy(skill_dir: Path) -> tuple[dict, list[Finding]]:
-    """Return (safety_policy, findings).
-
-    Fail closed. A missing or unparseable metadata.json used to return no
-    findings at all, so the cheapest way to defeat every policy check was to
-    delete the file that declared the policy.
-    """
-    skill_md = skill_dir / "SKILL.md"
-    metadata_json = skill_dir / "metadata.json"
-
-    if not metadata_json.exists():
-        return {}, [
-            Finding(
-                file_path=skill_md if skill_md.exists() else skill_dir,
-                line=1,
-                severity="HIGH",
-                category="policy_honesty",
-                message=(
-                    "Skill declares no metadata.json, so its safety policy cannot be "
-                    "verified; an unattested skill is not a safe skill"
-                ),
-                rule="AGT-POLICY-001",
-            )
-        ]
-    try:
-        meta = json.loads(metadata_json.read_text(encoding="utf-8"))
-    except (OSError, ValueError) as exc:
-        return {}, [
-            Finding(
-                file_path=metadata_json,
-                line=1,
-                severity="HIGH",
-                category="policy_honesty",
-                message=f"metadata.json is unparseable, so its safety policy cannot be verified: {exc}",
-                rule="AGT-POLICY-002",
-            )
-        ]
-    policy = meta.get("safety_policy", {})
-    if not isinstance(policy, dict):
-        return {}, [
-            Finding(
-                file_path=metadata_json,
-                line=1,
-                severity="HIGH",
-                category="policy_honesty",
-                message="metadata.json safety_policy is not an object",
-                rule="AGT-POLICY-003",
-            )
-        ]
-    return policy, []
-
-
-def allowed_tools_semantics() -> dict[str, list[str]]:
-    """Native agents grouped by what allowed-tools means to them.
-
-    From providers.json: `grant` (the runtime pre-approves the tools, as
-    Claude Code does), `declaration` (read, granting nothing, as the Agent
-    Skills spec defines the field) or `ignored`. Without the table the
-    caller falls back to the generic wording.
-    """
-    try:
-        agents = json.loads(PROVIDERS.read_text(encoding="utf-8"))["native_agents"]
-    except (OSError, ValueError, KeyError, TypeError):
-        return {}
-    groups: dict[str, list[str]] = {}
-    for name in sorted(agents):
-        semantics = agents[name].get("allowed_tools_semantics") if isinstance(agents[name], dict) else None
-        if isinstance(semantics, str):
-            groups.setdefault(semantics, []).append(name)
-    return groups
-
-
-def escalation_rationale() -> str:
-    """Who grants a denied capability, per target, so the finding is about
-    effective escalation rather than a claim about every runtime."""
-    groups = allowed_tools_semantics()
-    if not groups:
-        return "runtimes that pre-approve allowed-tools, such as Claude Code, will grant it"
-    parts = []
-    if groups.get("grant"):
-        parts.append(f"runtimes that pre-approve allowed-tools grant it: {', '.join(groups['grant'])}")
-    if groups.get("declaration"):
-        parts.append(f"these read it as a declaration: {', '.join(groups['declaration'])}")
-    if groups.get("ignored"):
-        parts.append(f"these ignore it: {', '.join(groups['ignored'])}")
-    return "; ".join(parts)
-
-
-def check_capability_escalation(skill_dir: Path, policy: dict) -> list[Finding]:
-    """Frontmatter must not grant a capability the safety policy denies.
-
-    This is the capability the runtime actually honours: a skill can swear in
-    metadata.json that it never shells out while handing the agent Bash in its
-    own frontmatter, and nothing checked the two against each other.
-    """
-    skill_md = skill_dir / "SKILL.md"
-    if not skill_md.exists():
-        return []
-    findings: list[Finding] = []
-    rationale = escalation_rationale()
-    for tool in frontmatter_tools(skill_md):
-        # `Bash(git log:*)` narrows Bash; it still grants executes_commands.
-        capability = TOOL_CAPABILITIES.get(tool.split("(", 1)[0])
-        if capability is None:
-            continue
-        if capability == "network_access":
-            granted = policy.get("network_access") in {"optional", "required"}
-        else:
-            granted = bool(policy.get(capability))
-        if not granted:
-            findings.append(
-                Finding(
-                    file_path=skill_md,
-                    line=1,
-                    severity="HIGH",
-                    category="capability_escalation",
-                    message=f"Frontmatter grants '{tool}' but safety_policy denies {capability}; {rationale}",
-                    rule="AGT-CAP-001",
-                )
-            )
-    return findings
-
-
-def check_skill_honesty(skill_dir: Path) -> list[Finding]:
-    skill_md = skill_dir / "SKILL.md"
-    if not skill_md.exists():
-        return []
-
-    policy, findings = load_policy(skill_dir)
-    findings.extend(check_capability_escalation(skill_dir, policy))
-    body = read_capped(skill_md) or ""
-
-    if policy.get("executes_commands") is False and re.search(
-        r"(?i)\brun\s+(?:the\s+following|this)\s+(?:script|command|bash)", body
-    ):
-        findings.append(
-            Finding(
-                file_path=skill_md,
-                line=1,
-                severity="MEDIUM",
-                category="policy_honesty",
-                message="Skill claims executes_commands=false but text instructs agent to run commands",
-                rule="AGT-POLICY-004",
-            )
-        )
-
-    if policy.get("network_access") == "none" and re.search(
-        r"(?i)\b(?:fetch|download|curl|wget)\s+https?://", body
-    ):
-        findings.append(
-            Finding(
-                file_path=skill_md,
-                line=1,
-                severity="MEDIUM",
-                category="policy_honesty",
-                message="Skill claims network_access=none but text contains instructions to fetch URLs",
-                rule="AGT-POLICY-005",
-            )
-        )
-
-    return findings
 
 
 def has_shebang(path: Path) -> bool:

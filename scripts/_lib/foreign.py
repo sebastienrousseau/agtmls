@@ -20,16 +20,17 @@ from typing import NamedTuple
 from .analyzer import (
     AUDITABLE_SUFFIXES,
     SKIP_PARTS,
-    Finding,
     audit_file,
     auditable_files,
+)
+from .digest import skill_digest
+from .findings import Finding, read_capped
+from .policy import (
     check_capability_escalation,
     check_skill_honesty,
     frontmatter_tools,
     load_policy,
-    read_capped,
 )
-from .digest import skill_digest
 from .rules import TOOL_CAPABILITIES
 
 

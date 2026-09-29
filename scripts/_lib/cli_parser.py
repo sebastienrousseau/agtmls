@@ -51,17 +51,8 @@ def native_agents() -> list[str]:
     return sorted(data["native_agents"])
 
 
-def build_parser() -> argparse.ArgumentParser:
-    """Every subcommand agtmls accepts."""
-    parser = argparse.ArgumentParser(prog="agtmls")
-    # `agtmls --version` used to be a usage error.
-    parser.add_argument("--version", action=_Version, nargs=0, help="print the registry version and exit")
-    agents = native_agents()
-    # dest must not collide with any subparser option dest: `evidence --command`
-    # used to overwrite the subcommand name with its own (list) value, which made
-    # every dispatch comparison below fail. See CliDispatchTests.
-    sub = parser.add_subparsers(dest="subcommand", required=True)
-
+def _inspection_commands(sub, agents: list[str]) -> None:
+    """Inspecting the registry and a target: doctor, status, check, list, search, show, stats, profiles, providers."""
     doctor = sub.add_parser("doctor")
     doctor.add_argument("--target", type=Path)
     doctor.add_argument("--agent", choices=agents)
@@ -100,6 +91,9 @@ def build_parser() -> argparse.ArgumentParser:
     providers_cmd = sub.add_parser("providers")
     providers_cmd.add_argument("--json", action="store_true")
 
+
+def _generator_commands(sub) -> None:
+    """Exporting, and the release tooling: export, docs-site, release-pack, next-version, bump-version, release-dry-run, verify-release-assets."""
     export_cmd = sub.add_parser("export")
     export_cmd.add_argument("--provider", default="generic")
     export_cmd.add_argument("--profile")
@@ -135,6 +129,9 @@ def build_parser() -> argparse.ArgumentParser:
     verify_release_assets.add_argument("--repo")
     verify_release_assets.add_argument("--out-dir", type=Path)
 
+
+def _evolution_commands(sub) -> None:
+    """Skill evolution and the generated artifacts: evolve, evidence, mcp-resources, plugin-manifests, sbom, provenance, provider-install, bench, diff, release-check."""
     evolve = sub.add_parser("evolve")
     evolve.add_argument("transcript", type=Path)
     evolve.add_argument("--skill-name", required=True)
@@ -177,6 +174,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub.add_parser("release-check")
 
+
+def _audit_commands(sub) -> None:
+    """Auditing, importing and indexing: audit, import-skill, index."""
     audit_cmd = sub.add_parser("audit", help="statically audit skills for prompt injection, steganography, and security risks")
     audit_cmd.add_argument("path", nargs="?", type=Path, help="path to skill directory or markdown file")
     audit_cmd.add_argument("--all", action="store_true", help="audit all skills in registry")
@@ -197,6 +197,9 @@ def build_parser() -> argparse.ArgumentParser:
     index.add_argument("--write", action="store_true")
     index.add_argument("--check", action="store_true")
 
+
+def _install_commands(sub, agents: list[str]) -> None:
+    """Installing into a target and removing from it: install, verify, uninstall, propose-skill, scaffold-skill."""
     install = sub.add_parser("install")
     install.add_argument("language")
     install.add_argument("agent", choices=agents)
@@ -250,4 +253,22 @@ def build_parser() -> argparse.ArgumentParser:
     scaffold.add_argument("name")
     scaffold.add_argument("--bundle")
     scaffold.add_argument("--title")
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Every subcommand agtmls accepts."""
+    parser = argparse.ArgumentParser(prog="agtmls")
+    # `agtmls --version` used to be a usage error.
+    parser.add_argument("--version", action=_Version, nargs=0, help="print the registry version and exit")
+    agents = native_agents()
+    # dest must not collide with any subparser option dest: `evidence --command`
+    # used to overwrite the subcommand name with its own (list) value, which made
+    # every dispatch comparison below fail. See CliDispatchTests.
+    sub = parser.add_subparsers(dest="subcommand", required=True)
+
+    _inspection_commands(sub, agents)
+    _generator_commands(sub)
+    _evolution_commands(sub)
+    _audit_commands(sub)
+    _install_commands(sub, agents)
     return parser
