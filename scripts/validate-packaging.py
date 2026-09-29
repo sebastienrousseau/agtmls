@@ -150,35 +150,40 @@ def sdist_gaps(text: str) -> list[str]:
     return gaps
 
 
-def main() -> int:
-    errors: list[str] = []
-    if not PYPROJECT.exists():
-        print("FAIL: pyproject.toml missing")
-        return 1
-    text = PYPROJECT.read_text(encoding="utf-8")
+def _table(value: object) -> dict:
+    """A TOML table; any other value reads as an empty one, so the checks it fails report it."""
+    return value if isinstance(value, dict) else {}
 
-    if tomllib is not None:
-        data = tomllib.loads(text)
-        project = data.get("project", {})
-        include = (
-            data.get("tool", {})
-            .get("hatch", {})
-            .get("build", {})
-            .get("targets", {})
-            .get("wheel", {})
-            .get("force-include", {})
-        )
-    else:
-        project = parse_project(text)
-        include = parse_force_include(text)
-    version = str(project.get("version", ""))
+
+def load_project(text: str) -> tuple[dict, dict]:
+    """([project], the wheel's force-include table), with tomllib where there is one.
+
+    Raises tomllib.TOMLDecodeError for text that is not TOML.
+    """
+    if tomllib is None:
+        return parse_project(text), parse_force_include(text)
+    data = tomllib.loads(text)
+    table = data
+    for key in ("tool", "hatch", "build", "targets", "wheel", "force-include"):
+        table = _table(table.get(key))
+    return _table(data.get("project")), table
+
+
+def project_errors(project: object) -> list[str]:
+    project = _table(project)
+    errors = []
     if project.get("name") != "agtmls":
         errors.append("pyproject project.name must be agtmls")
-    if project.get("scripts", {}).get("agtmls") != ENTRY_POINT:
+    if _table(project.get("scripts")).get("agtmls") != ENTRY_POINT:
         errors.append(f"console script agtmls must be {ENTRY_POINT}")
     if project.get("dependencies"):
         errors.append("registry scripts are stdlib-only; dependencies must stay empty")
+    return errors
 
+
+def include_errors(include: dict) -> list[str]:
+    """Every runtime path is force-included under PREFIX, and every source exists."""
+    errors = []
     for rel in REQUIRED:
         if rel not in include:
             errors.append(f"force-include missing runtime path: {rel}")
@@ -191,25 +196,48 @@ def main() -> int:
     for source, target in include.items():
         if not (ROOT / source).exists():
             errors.append(f"force-include source does not exist: {source}")
-        if not target.startswith(f"{PREFIX}/"):
+        if not isinstance(target, str) or not target.startswith(f"{PREFIX}/"):
             errors.append(f"force-include target must live under {PREFIX}/: {target}")
+    return errors
 
-    errors += sdist_gaps(text)
 
-    plugin_version = str(json.loads(PLUGIN.read_text(encoding="utf-8")).get("version", ""))
+def version_errors(version: str) -> list[str]:
+    """pyproject, plugin.json and __version__ carry one version."""
+    errors = []
+    try:
+        plugin = json.loads(PLUGIN.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f".claude-plugin/plugin.json is not valid JSON: {exc}"]
+    if not isinstance(plugin, dict):
+        return [".claude-plugin/plugin.json must be a JSON object"]
+    plugin_version = str(plugin.get("version", ""))
     if version != plugin_version:
         errors.append(f"pyproject version {version} must match plugin.json {plugin_version}")
 
-    if INIT.exists():
-        match = re.search(r'^__version__\s*=\s*"([^"]+)"', INIT.read_text(encoding="utf-8"), re.MULTILINE)
-        if not match:
-            errors.append("src/agtmls/__init__.py must define __version__")
-        elif match.group(1) != plugin_version:
-            errors.append(
-                f"__version__ {match.group(1)} must match plugin.json {plugin_version}"
-            )
-    else:
-        errors.append("src/agtmls/__init__.py missing")
+    if not INIT.exists():
+        return errors + ["src/agtmls/__init__.py missing"]
+    match = re.search(r'^__version__\s*=\s*"([^"]+)"', INIT.read_text(encoding="utf-8"), re.MULTILINE)
+    if not match:
+        errors.append("src/agtmls/__init__.py must define __version__")
+    elif match.group(1) != plugin_version:
+        errors.append(
+            f"__version__ {match.group(1)} must match plugin.json {plugin_version}"
+        )
+    return errors
+
+
+def main() -> int:
+    if not PYPROJECT.exists():
+        print("FAIL: pyproject.toml missing")
+        return 1
+    text = PYPROJECT.read_text(encoding="utf-8")
+    try:
+        project, include = load_project(text)
+    except ValueError as exc:  # tomllib.TOMLDecodeError
+        print(f"FAIL: pyproject.toml is not valid TOML: {exc}")
+        return 1
+    errors = project_errors(project) + include_errors(include) + sdist_gaps(text)
+    errors += version_errors(str(project.get("version", "")))
 
     if errors:
         for error in errors:

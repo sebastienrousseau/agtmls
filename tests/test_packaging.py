@@ -5,15 +5,18 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from .support import (  # noqa: F401  (used by the cases below)
     CLI,
     ROOT,
     load_script,
+    run_main,
     skill_text,
 )
 
@@ -121,6 +124,52 @@ class PackagingTests(unittest.TestCase):
             """
         )
         self.assertEqual(self.mod.sdist_gaps(text), [])
+
+
+    # Invalid TOML, a table of the wrong type, a force-include target that is
+    # not a string and a malformed plugin.json each raised; fault injection
+    # over the three version and layout files found 19 such runs.
+
+    def run_main_with(self, pyproject: str) -> tuple[int, str]:
+        with tempfile.TemporaryDirectory() as raw:
+            path = Path(raw) / "pyproject.toml"
+            path.write_text(pyproject, encoding="utf-8")
+            with mock.patch.object(self.mod, "PYPROJECT", path):
+                return run_main(self.mod)
+
+    @unittest.skipIf(sys.version_info < (3, 11), "3.10 has no tomllib to reject the text")
+    def test_invalid_toml_is_reported_not_raised(self) -> None:
+        code, output = self.run_main_with("[project\nname =")
+        self.assertEqual(code, 1, output)
+        self.assertIn("FAIL: pyproject.toml is not valid TOML:", output)
+
+    def test_tables_of_the_wrong_type_read_as_empty(self) -> None:
+        self.assertEqual(
+            self.mod.project_errors({"name": "agtmls", "scripts": 7}),
+            [f"console script agtmls must be {self.mod.ENTRY_POINT}"],
+        )
+        self.assertEqual(self.mod.project_errors("agtmls")[0], "pyproject project.name must be agtmls")
+
+    @unittest.skipIf(sys.version_info < (3, 11), "the tomllib path only")
+    def test_a_non_table_tool_section_is_read_as_empty(self) -> None:
+        project, include = self.mod.load_project('[tool]\nhatch = 1\n[project]\nname = "agtmls"\n')
+        self.assertEqual((project["name"], include), ("agtmls", {}))
+
+    def test_a_force_include_target_that_is_not_a_string_is_refused(self) -> None:
+        include = {rel: f"{self.mod.PREFIX}/{rel}" for rel in self.mod.REQUIRED}
+        include["include"] = ["skills"]
+        with mock.patch.object(self.mod, "ROOT", ROOT):
+            errors = self.mod.include_errors(include)
+        self.assertIn(f"force-include target must live under {self.mod.PREFIX}/: ['skills']", errors)
+
+    def test_a_plugin_manifest_that_is_not_an_object_is_named(self) -> None:
+        for text, message in (("[]", "must be a JSON object"), ("{nope", "is not valid JSON")):
+            with self.subTest(text=text), tempfile.TemporaryDirectory() as raw:
+                plugin = Path(raw) / "plugin.json"
+                plugin.write_text(text, encoding="utf-8")
+                with mock.patch.object(self.mod, "PLUGIN", plugin):
+                    errors = self.mod.version_errors("0.0.1")
+                self.assertTrue(errors[0].startswith(".claude-plugin/plugin.json ") and message in errors[0], errors)
 
 
 class PluginManifestTests(unittest.TestCase):
