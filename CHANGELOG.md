@@ -22,6 +22,9 @@ All notable changes to AgtMLS are recorded here.
 - `generate-skill-manifests.py --write` now removes the attestations of a
   removed skill. `--check` refused them and said to run `--write`, which
   left them in place.
+- `run-uplift-evals.py --check` fails on a fixture file git ignores. A
+  run reads fixtures from the working tree, so an ignored file changed a
+  measured run without ever reaching the commit that run names.
 
 ### Added
 

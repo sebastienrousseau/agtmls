@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-29T21:19:18Z",
+    "created": "2026-09-29T21:32:48Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1514,22 +1514,6 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./evals/uplift/fixtures/acme-skills/skills/pretty-commits/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-platform-api-.claude-settings.local.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "faefdb97d56d9891481197bf20eef1d53fe05ef1"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "6d083d404f610b5023d801d4453152ae22988dac32453dedf0a6a5a54556c052"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/platform-api/.claude/settings.local.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -3521,11 +3505,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a6cccd99efb8ab934b035c977989a676ed611808"
+          "checksumValue": "c7358cb1287e91532ce855c43d26f6ce7db8e384"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8ba26da2ffa3862b35975ed118104021978812879e0bd3f4668bf49aef1c5942"
+          "checksumValue": "bf0c329edaf727effd62217a324f8f8f9e3f67eeb7f2a6430ad213e2cc5e0d2f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -6682,7 +6666,6 @@
         "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-setup.sh",
         "SPDXRef-File-evals-uplift-fixtures-acme-skills-hooks-sync.sh",
         "SPDXRef-File-evals-uplift-fixtures-acme-skills-skills-pretty-commits-SKILL.md",
-        "SPDXRef-File-evals-uplift-fixtures-platform-api-.claude-settings.local.json",
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-SKILL.md",
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-reference.md",
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-scripts-collect.sh",

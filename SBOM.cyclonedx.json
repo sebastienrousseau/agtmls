@@ -1036,17 +1036,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "evals/uplift/fixtures/platform-api/.claude/settings.local.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "6d083d404f610b5023d801d4453152ae22988dac32453dedf0a6a5a54556c052"
-        }
-      ],
-      "name": "evals/uplift/fixtures/platform-api/.claude/settings.local.json",
-      "type": "file"
-    },
-    {
       "bom-ref": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/SKILL.md",
       "hashes": [
         {
@@ -2415,7 +2404,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8ba26da2ffa3862b35975ed118104021978812879e0bd3f4668bf49aef1c5942"
+          "content": "bf0c329edaf727effd62217a324f8f8f9e3f67eeb7f2a6430ad213e2cc5e0d2f"
         }
       ],
       "name": "scripts/run-uplift-evals.py",
@@ -4530,7 +4519,7 @@
       "type": "application",
       "version": "0.0.18"
     },
-    "timestamp": "2026-09-29T21:19:18Z",
+    "timestamp": "2026-09-29T21:32:48Z",
     "tools": {
       "components": [
         {

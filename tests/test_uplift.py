@@ -306,6 +306,20 @@ class ScriptTests(FakeAgents):
         code, out = run_main(self.script, "--check")
         self.assertEqual((code, out.strip()), (0, "OK: 2 uplift case(s) valid"))
 
+    def test_a_fixture_file_git_ignores_fails_the_check(self) -> None:
+        # An ignored file never reaches the commit, so the run could not be reproduced from it.
+        ignored = "evals/uplift/fixtures/acme-skills/.claude/settings.local.json\n"
+        done = self.script.subprocess.CompletedProcess([], 0, stdout=ignored, stderr="")
+        with mock.patch.object(self.script.subprocess, "run", return_value=done) as run:
+            code, out = run_main(self.script, "--check")
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: evals/uplift/fixtures/acme-skills/.claude/settings.local.json is ignored by git", out)
+        self.assertIn("--ignored", run.call_args.args[0])
+
+    def test_no_git_skips_the_ignored_file_check(self) -> None:
+        with mock.patch.object(self.script.subprocess, "run", side_effect=FileNotFoundError):
+            self.assertEqual(run_main(self.script, "--check")[0], 0)
+
     def test_an_unknown_skill_fails(self) -> None:
         code, out = run_main(self.script, "--check", "--skill", "nope")
         self.assertEqual((code, out.strip()), (1, "FAIL: no uplift case for nope"))
