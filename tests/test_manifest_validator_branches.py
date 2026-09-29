@@ -545,6 +545,10 @@ class LifecycleBranchTests(BrokenTreeCase):
                 self.assert_fails(self.SCRIPT, f"FAIL: lifecycle.json {reason}")
                 self.doCleanups()
 
+    def test_a_lifecycle_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        self.restore_later(self.FILE).write_bytes(b"\xff\xfe not text")
+        self.assert_fails(self.SCRIPT, "FAIL: lifecycle.json is not UTF-8 text")
+
     def test_stages_of_the_wrong_shape_are_refused_not_raised(self) -> None:
         self.edit_json(self.FILE, lambda data: data.__setitem__("stages", "proposal"))
         self.assert_fails(self.SCRIPT, "FAIL: stages must be a list")
