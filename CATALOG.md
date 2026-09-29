@@ -5,7 +5,7 @@
 # AgtMLS Catalog
 
 Registry version: `0.0.18`
-Skills: `34`
+Skills: `33`
 Commands: `4`
 
 ## Skills
@@ -20,7 +20,6 @@ Commands: `4`
 | `cross-language-port` | `general` | porting | `skills/cross-language-port` |
 | `giving-code-review` | `general` | ci, review | `skills/giving-code-review` |
 | `handoff` | `general` | continuity, validation | `skills/handoff` |
-| `hardening-agent-config` | `general` | config, review | `skills/hardening-agent-config` |
 | `incident-response` | `general` | ci, debugging, incident | `skills/incident-response` |
 | `noyalib-architecture-contract` | `noyalib` | architecture, ci, incident, noyalib | `packs/noyalib/skills/noyalib-architecture-contract` |
 | `noyalib-build-and-env` | `noyalib` | coverage, diagnostics, noyalib, qa | `packs/noyalib/skills/noyalib-build-and-env` |

@@ -187,15 +187,44 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 |", text)
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 | no token data |", text)
         self.assertIn("| b | 0% | 50% |", text)
         with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
-        self.assertIn("| +0 pts | 3.00x |", uplift.render(with_tokens))
+        self.assertIn("| +0 pts | 3.00x | 100% | 0 | no gain |", uplift.render(with_tokens))
 
     def test_an_arm_with_only_errors_has_no_delta(self) -> None:
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
-        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 |", uplift.render([row]))
+        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
+
+
+class VerdictTests(unittest.TestCase):
+    """A skill helps on an agent when it gains, within the token ceiling:
+    at most 1.5x the tokens, unless it gains 20 points or more."""
+
+    @staticmethod
+    def row(delta: float | None, with_tokens: float | None, without_tokens: float | None = 100.0) -> dict:
+        return {"delta": delta, "with": {"tokens": with_tokens}, "without": {"tokens": without_tokens}}
+
+    def test_each_verdict(self) -> None:
+        cases = [
+            (self.row(0.1, 150.0), "helps"),            # exactly at the ceiling
+            (self.row(0.1, 151.0), "too costly"),       # over it, small gain
+            (self.row(0.2, 400.0), "helps"),            # over it, but a large gain pays
+            (self.row(0.19, 400.0), "too costly"),
+            (self.row(0.0, 90.0), "no gain"),
+            (self.row(-0.1, 90.0), "no gain"),
+            (self.row(None, 90.0), "no data"),
+            (self.row(0.1, None), "no token data"),
+            (self.row(0.1, 90.0, None), "no token data"),
+        ]
+        for row, expected in cases:
+            self.assertEqual(uplift.verdict(row), expected, row)
+
+    def test_hardened_needs_two_agents_that_help(self) -> None:
+        rows = [{"skill": "a", "verdict": "helps"}, {"skill": "a", "verdict": "helps"},
+                {"skill": "b", "verdict": "helps"}, {"skill": "b", "verdict": "too costly"}]
+        self.assertEqual(uplift.meets_hardened(rows), ["a"])
 
 
 class ParseTests(unittest.TestCase):
@@ -275,7 +304,21 @@ class ScriptTests(FakeAgents):
 
     def test_check_validates_the_real_cases(self) -> None:
         code, out = run_main(self.script, "--check")
-        self.assertEqual((code, out.strip()), (0, "OK: 3 uplift case(s) valid"))
+        self.assertEqual((code, out.strip()), (0, "OK: 2 uplift case(s) valid"))
+
+    def test_a_fixture_file_git_ignores_fails_the_check(self) -> None:
+        # An ignored file never reaches the commit, so the run could not be reproduced from it.
+        ignored = "evals/uplift/fixtures/acme-skills/.claude/settings.local.json\n"
+        done = self.script.subprocess.CompletedProcess([], 0, stdout=ignored, stderr="")
+        with mock.patch.object(self.script.subprocess, "run", return_value=done) as run:
+            code, out = run_main(self.script, "--check")
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: evals/uplift/fixtures/acme-skills/.claude/settings.local.json is ignored by git", out)
+        self.assertIn("--ignored", run.call_args.args[0])
+
+    def test_no_git_skips_the_ignored_file_check(self) -> None:
+        with mock.patch.object(self.script.subprocess, "run", side_effect=FileNotFoundError):
+            self.assertEqual(run_main(self.script, "--check")[0], 0)
 
     def test_an_unknown_skill_fails(self) -> None:
         code, out = run_main(self.script, "--check", "--skill", "nope")
@@ -299,7 +342,7 @@ class ScriptTests(FakeAgents):
     def test_a_run_without_transcripts_keeps_none(self) -> None:
         out = self.tmp / "one.json"
         code, _ = run_main(self.script, "--out", str(out), "--agent", "claude", "--trials", "1",
-                           "--skill", "hardening-agent-config", "--claude-model", "m")
+                           "--skill", "authoring-portable-skills", "--claude-model", "m")
         self.assertEqual(code, 0)
         results = json.loads(out.read_text(encoding="utf-8"))
         self.assertEqual((len(results["runs"]), results["meta"]["agents"]), (2, {"claude": "m"}))

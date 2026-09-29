@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-29T20:32:31Z",
+    "created": "2026-09-29T21:32:48Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -33,11 +33,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "db993516baaf9343b0783e9ebd89746444618884"
+          "checksumValue": "03f0b6c73b51f0be429998aa51834134a5309260"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "22d98dd0ab32123e07afe10de83d5f777125ef3d0fd5098e1d71ba2a15ea3f04"
+          "checksumValue": "53637d4546f2cf34d74d03005f528e62edfb8a46b7435d5c2264a6f90bc33e47"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -394,22 +394,6 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./evals/behavioral/cases/handoff.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-behavioral-cases-hardening-agent-config.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "c58abe6515e413d3af4254d8f2548103da217e7e"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "f56760092303fec37235c960163514cc96d4853bfde72753851eacafe99dcc9f"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/behavioral/cases/hardening-agent-config.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -941,22 +925,6 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-evals-cases-hardening-agent-config.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "79d79285b68714715d292d014140218b01aae7e3"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "971f6819d28e7197842eb3f0ab0a9919d5464f739f5c350bfdf60f333d3fa52a"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/cases/hardening-agent-config.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-evals-cases-incident-response.json",
       "checksums": [
         {
@@ -1393,11 +1361,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "abe68c10ee1bb3d3943d0200a2eabae5c69ad57e"
+          "checksumValue": "9c1ea12c918ea4d37e647c57da45a3d87ca4b71f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "310f43a9b041378de916a13e1191cc8ca01a51bb367206d9f451746c14f9b1f3"
+          "checksumValue": "a4a7f34b6e65ffe9db02b0be166532c223de2e4ebfbdc13cca0b3e43a0af4101"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1418,22 +1386,6 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./evals/uplift/cases/authoring-portable-skills.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-cases-hardening-agent-config.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "dcbc658d9c4a993010b05a8eeab551f4ed4aefd3"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "397bf5ff92aaa7e6da8b35993b90b3400daa01d2545d04a9fc692f84402fb5ae"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/cases/hardening-agent-config.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -1629,127 +1581,15 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-approve.sh",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "32d85f7a57fe8c1896f9484d455ebdf9b38205ba"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "ebded372a38445f4c8767e6a7d8f3a52cd69047a58196117efb485bca3f57bae"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/.claude/hooks/approve.sh",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-context.sh",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "b1287d41e4049f57a0708eced851fcf597692bf7"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "10e74bc446a75c15411068d5377e186396eaad6d37a1461560c8263103a3fc22"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/.claude/hooks/context.sh",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-settings.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "6ffa5e1a866154fe6c0de59bd9a2da6c31e8c6ee"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "a1b5e3d8158554b7cd126d5b51d053531f0b97c8b8df6d9ada34083b8851b7b0"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/.claude/settings.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.codex-config.toml",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "873e859bd9c2b06a1bd24b73eef9e796c86ea653"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "6b6a22e8b95d06bb71b7ed6f998cb7d56ec6bdde74f581c40f97deaf266e4d8e"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/.codex/config.toml",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-.mcp.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "d1cd117a3b5db19394c7a2bc805573b3ce2e85d2"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "8c83d8bbf6308c3c6616bdce9b81ce4ad64aa674464cf27c206aeb01dec91871"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/.mcp.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-README.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "75f49a27ff13bd172649ec0423c317d8cd08f1f4"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "2af059c4d97120c4776141c71f60eb92f5e641fe5809825a116ddedebaa639cf"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/README.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-evals-uplift-fixtures-team-service-src-app.py",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "7979b16f839fb55e11b6df019ec26eb47cef158c"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "04557aa95f4165fbff09ff38b287ea9e0e2ff43adfed4a11b88d227a196fd1b6"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./evals/uplift/fixtures/team-service/src/app.py",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-index.json",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "6f8713ac0c4d856e50a0831ffd9c34de34d5c9b6"
+          "checksumValue": "cb23a06106a4a23d40ef39e56530ca0607e9fae5"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a2fd25c7b92c745c717a89539cbef2a3306051e45652951f2e77808c7a0f6f8c"
+          "checksumValue": "fa1c3ecf0720e68e1719961cbb2a5f17ad330e2311c64e695d707a2f4c9fd7e6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1761,11 +1601,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c8ff937d4f74ec2057f3328c1680f688bbe40179"
+          "checksumValue": "9559982b1debae71a68f530aa0db95df005f38b2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "534c73aad60816ab97d2d7ee0f5f43b3a57269da6080dc368a2f5162f9685221"
+          "checksumValue": "1b66e544ac25cf44c92fa6f8ea107029df569aa6d52babad24e6508304608b45"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2961,11 +2801,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8ee97ba38b5a12341d3761eae27748a924a641e3"
+          "checksumValue": "484f058501830b2324c56b31822a2e87296a46df"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "fe503f7feb885c7141247207fa63cff42233dac81d517db4c640f66dd58cf304"
+          "checksumValue": "cbb869572a7912acaa6cae0cc6ddb4e968876af03eaab9558d1a2be02cb1a1ed"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3361,11 +3201,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "3eed88d8ab61c694e092e03d5ac440feede613f5"
+          "checksumValue": "362946cef24a7e23c913228cd75de0c2bd3a0374"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b4d050038cd71ae007674e6f3d0544b7d14eaf664599e9afda2059e764cf0954"
+          "checksumValue": "2fe188a749f0af6775c09324113a474a850dce0ecd9bed5f3da19679fb1c42d5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3665,11 +3505,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a6cccd99efb8ab934b035c977989a676ed611808"
+          "checksumValue": "c7358cb1287e91532ce855c43d26f6ce7db8e384"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "8ba26da2ffa3862b35975ed118104021978812879e0bd3f4668bf49aef1c5942"
+          "checksumValue": "bf0c329edaf727effd62217a324f8f8f9e3f67eeb7f2a6430ad213e2cc5e0d2f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4689,11 +4529,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b0c8e558b05f843f9026216240ec7761a3b23a98"
+          "checksumValue": "fa2f539861d94a8acb42c6815fb8abf49b4bfa7b"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7ecbd8f9e52b4da302a31f8fc0ac8a68108e8f460fa9f9c31e93b13eb82b5fd2"
+          "checksumValue": "40990372904e66475f0e77f98c37c8228f7c407cfd78cb3b779dccefc73d1033"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5885,54 +5725,6 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-SKILL.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "f16276c4a854af4d6c6257a64e613793e4726383"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "eb9038f8f3b4a268702d762bb5786f1b11a9c1b7f0a74ac0d5dceeb93dc1d96c"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/hardening-agent-config/SKILL.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-metadata.json",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "38c60fdefc99709a4e01f646feab54b5bf5d6850"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "5e424c4f1a325895c1497707fc6a374a13c69e1c034059a419d4b201d45adebd"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/hardening-agent-config/metadata.json",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-skills-hardening-agent-config-reference.md",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "e1a9a91a5ec6e15f097e3f08d3478ed79a3262e9"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "eb0559d4c11974e714a5eac30263fb3983f7d5e2174af3c9afb5ffd047ba65cd"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./skills/hardening-agent-config/reference.md",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-skills-incident-response-SKILL.md",
       "checksums": [
         {
@@ -6804,7 +6596,6 @@
         "SPDXRef-File-evals-behavioral-cases-cross-language-port.json",
         "SPDXRef-File-evals-behavioral-cases-giving-code-review.json",
         "SPDXRef-File-evals-behavioral-cases-handoff.json",
-        "SPDXRef-File-evals-behavioral-cases-hardening-agent-config.json",
         "SPDXRef-File-evals-behavioral-cases-incident-response.json",
         "SPDXRef-File-evals-behavioral-cases-noyalib-architecture-contract.json",
         "SPDXRef-File-evals-behavioral-cases-noyalib-build-and-env.json",
@@ -6838,7 +6629,6 @@
         "SPDXRef-File-evals-cases-cross-language-port.json",
         "SPDXRef-File-evals-cases-giving-code-review.json",
         "SPDXRef-File-evals-cases-handoff.json",
-        "SPDXRef-File-evals-cases-hardening-agent-config.json",
         "SPDXRef-File-evals-cases-incident-response.json",
         "SPDXRef-File-evals-cases-noyalib-architecture-contract.json",
         "SPDXRef-File-evals-cases-noyalib-build-and-env.json",
@@ -6868,7 +6658,6 @@
         "SPDXRef-File-evals-security-floor.json",
         "SPDXRef-File-evals-uplift-README.md",
         "SPDXRef-File-evals-uplift-cases-authoring-portable-skills.json",
-        "SPDXRef-File-evals-uplift-cases-hardening-agent-config.json",
         "SPDXRef-File-evals-uplift-cases-vetting-a-skill-before-install.json",
         "SPDXRef-File-evals-uplift-fixtures-acme-skills-.claude-plugin-plugin.json",
         "SPDXRef-File-evals-uplift-fixtures-acme-skills-.mcp.json",
@@ -6881,13 +6670,6 @@
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-reference.md",
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-scripts-collect.sh",
         "SPDXRef-File-evals-uplift-fixtures-release-notes-skill-skills-release-notes-writer-templates-notes.md",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-approve.sh",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-hooks-context.sh",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-.claude-settings.json",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-.codex-config.toml",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-.mcp.json",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-README.md",
-        "SPDXRef-File-evals-uplift-fixtures-team-service-src-app.py",
         "SPDXRef-File-index.json",
         "SPDXRef-File-lifecycle.json",
         "SPDXRef-File-packs-noyalib-skills-noyalib-architecture-contract-SKILL.md",
@@ -7147,9 +6929,6 @@
         "SPDXRef-File-skills-handoff-SKILL.md",
         "SPDXRef-File-skills-handoff-metadata.json",
         "SPDXRef-File-skills-handoff-reference.md",
-        "SPDXRef-File-skills-hardening-agent-config-SKILL.md",
-        "SPDXRef-File-skills-hardening-agent-config-metadata.json",
-        "SPDXRef-File-skills-hardening-agent-config-reference.md",
         "SPDXRef-File-skills-incident-response-SKILL.md",
         "SPDXRef-File-skills-incident-response-metadata.json",
         "SPDXRef-File-skills-incident-response-reference.md",

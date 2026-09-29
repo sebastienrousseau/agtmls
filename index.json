@@ -1,6 +1,6 @@
 {
   "bundles": {
-    "_general": 16,
+    "_general": 15,
     "engineering": 1,
     "loops": 1,
     "noyalib": 14,
@@ -32,12 +32,12 @@
   ],
   "coverage": {
     "behavioral": {
-      "covered": 34,
-      "total": 34
+      "covered": 33,
+      "total": 33
     },
     "routing": {
-      "covered": 34,
-      "total": 34
+      "covered": 33,
+      "total": 33
     }
   },
   "description": "Agent Multiple Listing Service skill registry",
@@ -45,11 +45,11 @@
   "name": "agtmls",
   "quality": {
     "average_score": 99,
-    "total": 34
+    "total": 33
   },
   "registry_version": "0.0.18",
   "schema_version": 1,
-  "skill_count": 34,
+  "skill_count": 33,
   "skills": [
     {
       "allowed_tools": [
@@ -259,9 +259,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:5665335bd31b4d73ab51f47d5c7ee26408a8c7bde5452475e10fa29ff09a14de",
+      "integrity": "sha256:ee863f705787f0294101dfefb31218fb6cd26f73396d031b4eb20540601a3f96",
       "kind": "general",
-      "last_changed_version": "0.0.16",
+      "last_changed_version": "0.0.18",
       "license": "MIT",
       "maturity": "draft",
       "metadata_path": "skills/authoring-portable-skills/metadata.json",
@@ -562,70 +562,6 @@
       "tags": [
         "continuity",
         "validation"
-      ]
-    },
-    {
-      "allowed_tools": [
-        "Read",
-        "Glob",
-        "Grep",
-        "Write",
-        "Edit",
-        "Bash"
-      ],
-      "assets": [],
-      "bundle": null,
-      "compatibility": "Tested with Claude Code, Codex, and Aider skill layouts",
-      "description": "Use when setting up or reviewing a coding agent's configuration in a repository or a home directory: approval modes, permission rules, hooks, MCP servers and where each setting lives, for Claude Code, Codex, Aider and Antigravity. Also when agtmls doctor warns that an agent runs tools without asking. Not for vetting a third-party skill (vetting-a-skill-before-install).",
-      "evals": {
-        "behavioral": true,
-        "routing": true
-      },
-      "integrity": "sha256:39bffe75e94c5b945d4ca9640368bdc7e5e2b9dcb1b50758246b14c1526c987e",
-      "kind": "general",
-      "last_changed_version": "0.0.16",
-      "license": "MIT",
-      "maturity": "draft",
-      "metadata_path": "skills/hardening-agent-config/metadata.json",
-      "name": "hardening-agent-config",
-      "owner": "Sebastien Rousseau",
-      "path": "skills/hardening-agent-config",
-      "quality": {
-        "checks": {
-          "behavioral_eval": true,
-          "description": true,
-          "maturity": false,
-          "metadata": true,
-          "references": true,
-          "routing_eval": true,
-          "safety_policy": true,
-          "supported_agents": true
-        },
-        "passed": 7,
-        "score": 88,
-        "total": 8
-      },
-      "references": [
-        "reference.md"
-      ],
-      "required_tools": [],
-      "safety_policy": {
-        "executes_commands": true,
-        "handles_secrets": false,
-        "network_access": "none",
-        "requires_human_review": true,
-        "risk_level": "medium",
-        "writes_files": true
-      },
-      "scripts": [],
-      "supported_agents": [
-        "claude",
-        "codex",
-        "aider"
-      ],
-      "tags": [
-        "config",
-        "review"
       ]
     },
     {

@@ -52,9 +52,23 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def ignored_fixture_files() -> list[str]:
+    """Fixture files git ignores. A run reads them from the working tree, but
+    they never reach the commit, so the run cannot be reproduced from it: a
+    global ignore rule once dropped a fixture's .claude/settings.local.json."""
+    argv = ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "--", uplift.FIXTURES.as_posix()]
+    try:
+        proc = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True, check=False)
+    except FileNotFoundError:
+        return []  # no git, as in a wheel install: nothing to compare against
+    return [f"{line} is ignored by git and would not be committed; force-add it or rename it"
+            for line in proc.stdout.splitlines() if line]
+
+
 def load(only: list[str] | None) -> tuple[list[uplift.Case], list[str]]:
     names = {path.name for path in skill_roots.skill_dirs(ROOT)}
     cases, errors = uplift.load_cases(ROOT, names)
+    errors += ignored_fixture_files()
     if only:
         unknown = sorted(set(only) - {case.skill for case in cases})
         errors += [f"no uplift case for {name}" for name in unknown]
