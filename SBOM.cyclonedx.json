@@ -2459,7 +2459,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c3bd12f541a0358151392a1b3c2f052dff43651d1d8f3fb13e5ed84720a8cacb"
+          "content": "9d24b077d349061f6113687a1546182657f8569f41fe422d0e22a5784d757885"
         }
       ],
       "name": "scripts/smoke-scaffold.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:31:00Z",
+    "timestamp": "2026-09-29T13:33:05Z",
     "tools": {
       "components": [
         {
