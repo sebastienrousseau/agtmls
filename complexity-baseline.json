@@ -84,11 +84,6 @@
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
     },
-    "scripts/smoke-make-install.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 16,
-      "lines": 63
-    },
     "scripts/smoke-scaffold.py::main": {
       "cyclomatic": 12,
       "lines": 61
