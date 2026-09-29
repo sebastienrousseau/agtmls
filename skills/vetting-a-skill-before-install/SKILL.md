@@ -14,100 +14,59 @@ metadata:
   agtmls-handles-secrets: "false"
   agtmls-requires-human-review: "true"
 ---
+---
 
 # Vetting a skill before install
 
 **Trigger.** Someone wants to add a skill, plugin, marketplace or skills
-repository that this registry did not produce: `/plugin install`, a
-`git clone` into `.claude/skills` or `.agents/skills`, `import-skill`, or
-"can I trust this repo?".
+repository this registry did not produce: `/plugin install`, a clone into
+`.claude/skills` or `.agents/skills`, `import-skill`, or "can I trust this
+repo?". A skill runs with your permissions: its text is read as
+instructions, its hooks run on events you did not trigger, its scripts run
+in your shell. Install counts are not a control.
 
-A skill is code the agent runs with your permissions. Its instructions are
-read as instructions, its hooks run on events you did not trigger, and its
-scripts run with your shell. Popularity is not a control: packs with
-hundreds of thousands of installs have shipped under names copied from
-better-known projects.
+Keep tool calls few. Every call re-sends the conversation so far, so read
+related files together rather than one at a time.
 
-## The loop
+## Steps
 
-### 1. Pin exactly what you would install
+1. **Pin.** For a git checkout or URL, resolve the source to a
+   **40-hex commit**; a branch or tag can move between the audit and the
+   install.
+   For anything else (no `.git`, no URL), say it cannot be pinned and count
+   that against it, without searching further. Check the owner and name
+   against the project you meant; note the licence.
+2. **Audit.** `agtmls audit --foreign <path, or url@commit>`, with
+   `--format json` to parse it. A CRITICAL or HIGH finding fails. Its
+   `NOT AUDITED` list names agent configuration it did not judge
+   (`hooks.json`, `settings.json`, `.mcp.json`, `plugin.json`, `CLAUDE.md`,
+   `AGENTS.md`); silence about a file is not a pass.
+3. **Read what runs unasked, in one pass.** Open every `NOT AUDITED` file,
+   the install scripts and the scripts hooks call, together. Look for hooks
+   that fetch and run code or send data out (`curl | sh`, a transcript
+   upload), MCP servers not pinned to a version or able to run any command,
+   and checksums fetched from the same place as the download. Say what
+   reading cannot show, such as what a download does when it runs.
+4. **Decide.**
+   - **Install**: no CRITICAL or HIGH finding, every `NOT AUDITED` file
+     read, nothing runs unasked that you would not run yourself. Install
+     the audited commit, not the branch.
+   - **Mirror**: worth having, but you want control of updates. Copy it at
+     the audited commit; re-audit before taking an upstream change.
+   - **Refuse**: a finding you cannot explain away, hooks or scripts you
+     have not read, or a source you cannot pin.
 
-- Resolve the source to a **40-hex commit**. A branch or tag can move
-  between the audit and the install, so it is not what you audited.
-- Check the owner and repository name against the project you meant.
-  A look-alike name with a large star count is the common squatting shape.
-- Note the licence. No licence means no permission to copy it.
-
-### 2. Audit every skill and what ships beside them
-
-```bash
-agtmls audit --foreign https://github.com/<owner>/<repo>@<commit>
-agtmls audit --foreign /path/to/checkout --format json   # the same, for a local copy
-```
-
-Read three parts of the report, not only the verdict:
-
-- **Findings**, by severity. CRITICAL or HIGH fails the audit. Read each
-  one against the file it names: a prompt injection quoted under an
-  "attack" heading is reported at MEDIUM, and a real one at HIGH.
-- **Policy.** A skill with no `metadata.json` is audited against a
-  *provisional* policy inferred from its `allowed-tools`. A skill that
-  declares a policy and grants more than it declares is an escalation.
-- **Coverage.** `NOT AUDITED` lists auditable files outside any skill, and
-  names agent configuration (`hooks.json`, `settings.json`, `.mcp.json`,
-  `plugin.json`, `CLAUDE.md`, `AGENTS.md`) one by one. `DIVERGENT` means
-  copies of one skill differ between agents. The audit's silence about a
-  file it did not read is not a pass.
-
-### 3. Read what the audit cannot judge
-
-Open, by hand, everything the coverage section names, and anything that
-runs without being asked:
-
-| Look at | Why |
-| --- | --- |
-| Hooks (`hooks.json`, `settings.json` `hooks`) | They run on lifecycle events, and their output can add context you never see |
-| Install and setup scripts | Download-then-execute, `curl \| sh`, `chmod +x`, checksums from the same place as the download |
-| MCP server entries | The command they launch, its version pin, and whether a tool runs shell commands |
-| `portability:` notes | Claude Code-only syntax that other agents show as text |
-
-Static analysis cannot see what a script fetches at run time, what a binary
-does, or an instruction phrased so that no rule matches it. Say so.
-
-### 4. Decide, and record why
-
-- **Install**: no CRITICAL or HIGH finding, every `NOT AUDITED` config read,
-  nothing runs unasked that you would not run yourself. Install the
-  audited commit, not the branch.
-- **Mirror**: worth having, but you want control of updates. Fork or copy it
-  at the audited commit and install from there; re-audit before taking an
-  upstream change.
-- **Refuse**: a finding you cannot explain away, hooks or scripts you have
-  not read, or a source you cannot pin.
-
-Record the source, the commit, the audit command and the decision where the
-team will find it (the PR that adds the skill, or the repository's
-decision log).
-
-### 5. After installing
-
-An install through `agtmls` is recorded in `.agtmls/manifest.json`, and
-`agtmls verify <agent> --target .` shows later drift. A plugin installed by
-an agent's own plugin manager is not: keep the commit you audited, and
-audit again before every update.
+An install through `agtmls` is recorded, and `agtmls verify` shows later
+drift. A plugin manager's install is not: audit again before each update.
 
 ## Report
 
-State the commit, the command, the counts, what you read by hand, what the
-audit could not cover, and the decision. For example:
-
-> `example-org/example-skills@3f1c…` audited with `agtmls audit --foreign`:
-> 12 skills, 0 findings; hooks.json read by hand (one `SessionStart` hook
-> printing a banner). Not covered: the `bin/` binary. Decision: mirror at
-> this commit.
+The commit (or why there is none), the audit command and its counts, what
+you read by hand, what could not be checked, and the decision with its
+reason. `reference.md` has worked outcomes and the red flags.
 
 ## When not to use
 
 - Auditing this registry's own skills: `agtmls audit --all`.
-- Reviewing ordinary code changes: that is code review, not supply-chain vetting.
-- The source is already mirrored and pinned, and nothing changed since its audit.
+- Reviewing ordinary code changes: that is code review.
+- The source is already mirrored and pinned, and unchanged since its audit.

@@ -2019,9 +2019,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:2319b3ac15789b8507683351ad198e70da7825ae1c4e84ec4cce1e007a7310b3",
+      "integrity": "sha256:c09eaf09b14ca5ba8ef1a7961f5b6f857cc5381e3ca8e02e233b3fbad1a47bd5",
       "kind": "general",
-      "last_changed_version": "0.0.16",
+      "last_changed_version": "0.0.19",
       "license": "MIT",
       "maturity": "draft",
       "metadata_path": "skills/vetting-a-skill-before-install/metadata.json",
