@@ -26,23 +26,27 @@ def string_list(value: object) -> bool:
     return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item for item in value)
 
 
-def load_case(cf: Path) -> tuple[object, list[str]]:
-    """(the parsed case, []), or (None, why it is not JSON)."""
+def load_case(cf: Path) -> tuple[dict, list[str]]:
+    """(the case, []), or ({}, why it is not a JSON object)."""
     try:
-        return json.loads(cf.read_text(encoding="utf-8")), []
+        case = json.loads(cf.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        return None, [f"{cf.relative_to(ROOT)}: invalid JSON: {exc}"]
+        return {}, [f"{cf.relative_to(ROOT)}: invalid JSON: {exc}"]
+    if not isinstance(case, dict):
+        return {}, [f"{cf.relative_to(ROOT)}: case must be a JSON object"]
+    return case, []
 
 
 def identity_problems(cf: Path, case: dict, kind: str, names: set[str], seen: set[str]) -> list[str]:
     """The case names a known skill, matches its filename, and is the only one; records it in `seen`."""
     errors = []
+    # A list or object is no skill name, and cannot be looked up in a set.
     skill = case.get("skill")
-    if skill not in names:
+    if not isinstance(skill, str) or skill not in names:
         errors.append(f"{cf.relative_to(ROOT)}: unknown skill {skill!r}")
     if cf.stem != skill:
         errors.append(f"{cf.relative_to(ROOT)}: filename must match skill")
-    if skill in seen:
+    if isinstance(skill, str) and skill in seen:
         errors.append(f"{cf.relative_to(ROOT)}: duplicate {kind} case for {skill}")
     seen.add(str(skill))
     return errors

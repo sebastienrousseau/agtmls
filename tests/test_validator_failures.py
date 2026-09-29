@@ -109,8 +109,9 @@ class EvalCaseFailureTests(unittest.TestCase):
     def setUp(self) -> None:
         self.mod = load_script("validate-eval-cases.py")
 
-    def routing(self, cases: dict[str, dict], names: set[str]) -> list[str]:
-        original_dir, original_root = self.mod.ROUTING_DIR, self.mod.ROOT
+    def routing(self, cases: dict[str, dict], names: set[str], kind: str = "routing") -> list[str]:
+        attribute = "ROUTING_DIR" if kind == "routing" else "BEHAVIORAL_DIR"
+        original_dir, original_root = getattr(self.mod, attribute), self.mod.ROOT
         with tempfile.TemporaryDirectory() as raw:
             directory = Path(raw) / "evals" / "cases"
             directory.mkdir(parents=True)
@@ -119,11 +120,14 @@ class EvalCaseFailureTests(unittest.TestCase):
                     payload if isinstance(payload, str) else json.dumps(payload),
                     encoding="utf-8",
                 )
-            self.mod.ROUTING_DIR, self.mod.ROOT = directory, Path(raw)
+            setattr(self.mod, attribute, directory)
+            self.mod.ROOT = Path(raw)
             try:
-                return self.mod.validate_routing(names)
+                check = self.mod.validate_routing if kind == "routing" else self.mod.validate_behavioral
+                return check(names)
             finally:
-                self.mod.ROUTING_DIR, self.mod.ROOT = original_dir, original_root
+                setattr(self.mod, attribute, original_dir)
+                self.mod.ROOT = original_root
 
     def case(self, skill: str = "alpha") -> dict:
         return {"skill": skill, "positive": ["do a thing"], "negative": ["do another"]}
@@ -159,6 +163,22 @@ class EvalCaseFailureTests(unittest.TestCase):
     def test_a_skill_with_no_case_at_all_is_caught(self) -> None:
         errors = self.routing({"alpha": self.case()}, {"alpha", "orphan"})
         self.assertTrue(any("missing routing cases: orphan" in e for e in errors), errors)
+
+    # A case of the wrong JSON shape raised AttributeError or TypeError in
+    # both validators; fault injection over both case kinds found 52.
+
+    def test_a_case_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        for kind in ("routing", "behavioral"):
+            with self.subTest(kind=kind):
+                errors = self.routing({"alpha": "[]"}, {"alpha"}, kind)
+                self.assertIn("evals/cases/alpha.json: case must be a JSON object", errors)
+
+    def test_a_skill_that_is_a_list_or_object_is_reported_not_raised(self) -> None:
+        for kind in ("routing", "behavioral"):
+            for skill in (["alpha"], {"name": "alpha"}):
+                with self.subTest(kind=kind, skill=skill):
+                    errors = self.routing({"alpha": {**self.case(), "skill": skill}}, {"alpha"}, kind)
+                    self.assertIn(f"evals/cases/alpha.json: unknown skill {skill!r}", errors)
 
     def test_string_list_rejects_what_is_not_one(self) -> None:
         self.assertTrue(self.mod.string_list(["a"]))
