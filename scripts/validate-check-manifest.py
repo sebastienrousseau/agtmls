@@ -113,10 +113,13 @@ def workflow_commands(workflow: str) -> set[str]:
 
 def runner_problems() -> list[str]:
     """run-all-checks.py reads checks.json and holds no list of its own."""
-    errors = [
-        f"run-all-checks.py re-declares the gate as {name}; it must read checks.json"
-        for name in redeclared_lists(RUNNER)
-    ]
+    try:
+        names = redeclared_lists(RUNNER)
+    except SyntaxError as exc:
+        names, errors = [], [f"run-all-checks.py does not parse: {exc.msg} (line {exc.lineno})"]
+    else:
+        errors = []
+    errors += [f"run-all-checks.py re-declares the gate as {name}; it must read checks.json" for name in names]
     if "checks.json" not in RUNNER.read_text(encoding="utf-8"):
         errors.append("run-all-checks.py never reads checks.json")
     return errors
@@ -155,10 +158,33 @@ def ci_problems(manifest: list) -> list[str]:
     return errors
 
 
+def load_manifest() -> dict | str:
+    """checks.json, or why it cannot be read as an object."""
+    try:
+        data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return f"checks.json is not valid JSON: {exc}"
+    return data if isinstance(data, dict) else "checks.json must be a JSON object"
+
+
+def manifest_checks(checks: object) -> tuple[list[str], list[str]]:
+    """(the command strings the manifest lists, what is wrong with the list)."""
+    if not isinstance(checks, list):
+        return [], ["checks.json checks must be a list of command strings"]
+    valid = [check for check in checks if isinstance(check, str) and check.split()]
+    errors = [
+        f"checks.json entry {index} must be a non-empty command string"
+        for index, check in enumerate(checks) if not (isinstance(check, str) and check.split())
+    ]
+    return valid, errors
+
+
 def main() -> int:
-    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    manifest = data.get("checks", [])
-    errors: list[str] = []
+    data = load_manifest()
+    if isinstance(data, str):
+        print(f"FAIL: {data}")
+        return 1
+    manifest, errors = manifest_checks(data.get("checks", []))
 
     if data.get("schema_version") != 1:
         errors.append("checks.json schema_version must be 1")
