@@ -103,6 +103,17 @@ _STEG_RULE = next((rule for rule in RULES if rule.get("id") == "AGT-STEG-001"), 
 EMOJI_CONTEXT = emoji_context(_STEG_RULE.get("emoji_context", {}))
 
 
+def _flag_length(line: str, start: int, context: EmojiContext) -> int:
+    """Tags plus terminator of a well-formed flag whose base is at `start`, or 0."""
+    if line[start] != context.flag_base:
+        return 0
+    end = start + 1
+    while end < len(line) and context.is_tag(line[end]):
+        end += 1
+    well_formed = end > start + 1 and end < len(line) and line[end] == context.terminator
+    return end - start if well_formed else 0
+
+
 def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
     """Column of each well-formed flag's first tag, mapped to its tag count.
 
@@ -112,13 +123,10 @@ def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
     flags: dict[int, int] = {}
     i = 0
     while i < len(line):
-        if line[i] == context.flag_base:
-            j = i + 1
-            while j < len(line) and context.is_tag(line[j]):
-                j += 1
-            if j > i + 1 and j < len(line) and line[j] == context.terminator:
-                flags[i + 1] = j - i  # tags plus the terminator
-                i = j
+        length = _flag_length(line, i, context)
+        if length:
+            flags[i + 1] = length  # tags plus the terminator
+            i += length
         i += 1
     return flags
 

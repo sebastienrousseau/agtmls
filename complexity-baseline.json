@@ -8,9 +8,6 @@
   },
   "files": {},
   "functions": {
-    "scripts/_lib/analyzer.py::subdivision_flags": {
-      "halstead": 36.4
-    },
     "scripts/_lib/cli_parser.py::build_parser": {
       "lines": 160
     },
