@@ -69,10 +69,6 @@
       "cognitive": 23,
       "cyclomatic": 14
     },
-    "scripts/run-trigger-evals.py::main": {
-      "cognitive": 29,
-      "cyclomatic": 14
-    },
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
     },

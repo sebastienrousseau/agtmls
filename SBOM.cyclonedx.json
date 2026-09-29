@@ -2206,7 +2206,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3ca97b71a03fd1122a86242d1f0508f9a4bdc3e5656fa93dafaf79feafb3e5d7"
+          "content": "6f0aca907d06cf6df2b3d29709fcf759a5273791a560a2a23af9c0fccace97c3"
         }
       ],
       "name": "scripts/run-trigger-evals.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:20:46Z",
+    "timestamp": "2026-09-29T11:27:13Z",
     "tools": {
       "components": [
         {
