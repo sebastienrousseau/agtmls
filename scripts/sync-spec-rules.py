@@ -67,6 +67,25 @@ def load_spec(spec: Path, commit: str | None) -> dict:
     }
 
 
+def rule_problems(rule: dict) -> list[str]:
+    """One rule's required fields, and its pattern against its own examples."""
+    rule_id = rule.get("id", "?")
+    errors = [f"{rule_id}: missing {key}" for key in ("category", "severity", "title", "description") if not rule.get(key)]
+    if "pattern" not in rule:
+        return errors
+    try:
+        regex = re.compile(rule["pattern"])
+    except re.error as exc:
+        return errors + [f"{rule_id}: pattern does not compile: {exc}"]
+    for example in rule.get("true_positive", []):
+        if not regex.search(example["text"]):
+            errors.append(f"{rule_id}: misses its own true positive {example['text']!r}")
+    for example in rule.get("false_positive", []):
+        if regex.search(example["text"]):
+            errors.append(f"{rule_id}: matches its own false positive {example['text']!r}")
+    return errors
+
+
 def problems(snapshot: dict) -> list[str]:
     """Everything the spec's own loader would refuse."""
     errors: list[str] = []
@@ -78,23 +97,7 @@ def problems(snapshot: dict) -> list[str]:
     if "AGT-STEG-001" not in ids:
         errors.append("AGT-STEG-001 (the invisible code point list) is missing")
     for rule in snapshot.get("rules", []):
-        rule_id = rule.get("id", "?")
-        for key in ("category", "severity", "title", "description"):
-            if not rule.get(key):
-                errors.append(f"{rule_id}: missing {key}")
-        if "pattern" not in rule:
-            continue
-        try:
-            regex = re.compile(rule["pattern"])
-        except re.error as exc:
-            errors.append(f"{rule_id}: pattern does not compile: {exc}")
-            continue
-        for example in rule.get("true_positive", []):
-            if not regex.search(example["text"]):
-                errors.append(f"{rule_id}: misses its own true positive {example['text']!r}")
-        for example in rule.get("false_positive", []):
-            if regex.search(example["text"]):
-                errors.append(f"{rule_id}: matches its own false positive {example['text']!r}")
+        errors += rule_problems(rule)
     return errors
 
 
@@ -113,6 +116,40 @@ def render(snapshot: dict) -> str:
     return json.dumps(snapshot, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
 
 
+def report(errors: list[str]) -> int:
+    for error in errors:
+        print(f"FAIL: {error}")
+    print()
+    print(f"FAIL: {len(errors)} rule snapshot issue(s)")
+    return 1
+
+
+def write_snapshot(spec: Path, commit: str | None) -> int:
+    """Record the spec's rules as the snapshot, if they pass their own examples."""
+    snapshot = load_spec(spec, commit)
+    errors = problems(snapshot)
+    if errors:
+        for error in errors:
+            print(f"FAIL: {error}")
+        return 1
+    SNAPSHOT.write_text(render(snapshot), encoding="utf-8")
+    print(f"wrote {SNAPSHOT.relative_to(ROOT)} ({len(snapshot['rules'])} rules at {snapshot['source']['commit'][:12]})")
+    return 0
+
+
+def check_snapshot(spec: Path | None, commit: str | None) -> int:
+    """The snapshot is self-consistent and, given a spec checkout, matches it."""
+    snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    errors = problems(snapshot)
+    if spec is not None:
+        errors += drift(snapshot, load_spec(spec, commit))
+    if errors:
+        return report(errors)
+    where = f" and matches {spec}" if spec else ""
+    print(f"OK: {len(snapshot['rules'])} rules, self-consistent{where}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--from", dest="spec", type=Path, help="an agtmls-spec checkout")
@@ -124,31 +161,9 @@ def main() -> int:
     if args.write:
         if args.spec is None:
             parser.error("--write needs --from <agtmls-spec checkout>")
-        snapshot = load_spec(args.spec, args.commit)
-        errors = problems(snapshot)
-        if errors:
-            for error in errors:
-                print(f"FAIL: {error}")
-            return 1
-        SNAPSHOT.write_text(render(snapshot), encoding="utf-8")
-        print(f"wrote {SNAPSHOT.relative_to(ROOT)} ({len(snapshot['rules'])} rules at {snapshot['source']['commit'][:12]})")
-        return 0
-
+        return write_snapshot(args.spec, args.commit)
     if args.check:
-        snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
-        errors = problems(snapshot)
-        if args.spec is not None:
-            errors += drift(snapshot, load_spec(args.spec, args.commit))
-        if errors:
-            for error in errors:
-                print(f"FAIL: {error}")
-            print()
-            print(f"FAIL: {len(errors)} rule snapshot issue(s)")
-            return 1
-        where = f" and matches {args.spec}" if args.spec else ""
-        print(f"OK: {len(snapshot['rules'])} rules, self-consistent{where}")
-        return 0
-
+        return check_snapshot(args.spec, args.commit)
     parser.print_help()
     return 2
 

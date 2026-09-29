@@ -72,13 +72,6 @@
       "cyclomatic": 12,
       "lines": 61
     },
-    "scripts/sync-spec-rules.py::main": {
-      "cognitive": 18
-    },
-    "scripts/sync-spec-rules.py::problems": {
-      "cognitive": 24,
-      "cyclomatic": 14
-    },
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
     },
