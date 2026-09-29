@@ -14,6 +14,7 @@ import json
 import os
 import re
 import stat
+import subprocess
 from pathlib import Path
 from typing import NamedTuple
 
@@ -327,6 +328,24 @@ def _divergent_copies(root: Path, reports: list[ForeignReport]) -> dict[str, lis
     return {name: sorted(where[name]) for name, digests in sorted(names.items()) if len(digests) > 1}
 
 
+def source_commit(root: Path) -> str | None:
+    """The commit of the git checkout whose top is `root`, or None.
+
+    Pinning is the first step of vetting, and an agent otherwise spends
+    turns probing for it. A directory inside some other checkout is not
+    pinned by that checkout's commit, so only the top of one counts.
+    """
+    argv = ["git", "-C", str(root), "rev-parse", "--show-toplevel", "HEAD"]
+    try:
+        proc = subprocess.run(argv, capture_output=True, text=True, timeout=30, check=False)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    lines = proc.stdout.split()
+    if proc.returncode != 0 or len(lines) != 2 or Path(lines[0]).resolve() != root.resolve():
+        return None
+    return lines[1]
+
+
 def foreign_coverage(root: Path, reports: list[ForeignReport]) -> dict:
     """What a foreign audit read, what it did not, and why.
 
@@ -345,8 +364,10 @@ def foreign_coverage(root: Path, reports: list[ForeignReport]) -> dict:
         "duplicate_copies": sum(len(r.copies) for r in reports),
         "files_audited": len(audited),
         "files_not_audited": len(outside),
+        "not_audited_files": sorted(outside),
         "not_audited_by_area": _by_area(outside),
         "agent_configs_not_audited": sorted(rel for rel in outside if rel.rsplit("/", 1)[-1] in AGENT_CONFIG_NAMES),
         "skipped_directories": dict(sorted(skipped.items())),
         "divergent_copies": _divergent_copies(root, reports),
+        "source_commit": source_commit(root),
     }

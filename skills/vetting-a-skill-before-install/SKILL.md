@@ -25,24 +25,25 @@ repo?". A skill runs with your permissions: its text is read as
 instructions, its hooks run on events you did not trigger, its scripts run
 in your shell. Install counts are not a control.
 
-Keep tool calls few. Every call re-sends the conversation so far, so read
-related files together rather than one at a time.
+Keep tool calls few: every call re-sends the conversation so far. Start
+with the audit, which answers the first questions for you.
 
 ## Steps
 
-1. **Pin.** For a git checkout or URL, resolve the source to a
-   **40-hex commit**; a branch or tag can move between the audit and the
-   install.
-   For anything else (no `.git`, no URL), say it cannot be pinned and count
-   that against it, without searching further. Check the owner and name
-   against the project you meant; note the licence.
-2. **Audit.** `agtmls audit --foreign <path, or url@commit>`, with
+1. **Audit.** `agtmls audit --foreign <path, or url@commit>`, with
    `--format json` to parse it. A CRITICAL or HIGH finding fails. Its
-   `NOT AUDITED` list names agent configuration it did not judge
-   (`hooks.json`, `settings.json`, `.mcp.json`, `plugin.json`, `CLAUDE.md`,
-   `AGENTS.md`); silence about a file is not a pass.
-3. **Read what runs unasked, in one pass.** Open every `NOT AUDITED` file,
-   the install scripts and the scripts hooks call, together. Look for hooks
+   coverage section states the source, and lists every `NOT AUDITED` file:
+   agent configuration it did not judge (`hooks.json`, `settings.json`,
+   `.mcp.json`, `plugin.json`, `CLAUDE.md`, `AGENTS.md`) and scripts outside
+   any skill. Silence about a file is not a pass.
+2. **Pin.** Take the **40-hex commit** from the audit's `source:` line; a
+   branch or tag can move between the audit and the install. If it says the
+   source is not a git checkout, it cannot be pinned: count that against it
+   rather than searching further. Check the owner and name against the
+   project you meant; note the licence.
+3. **Read what runs unasked, in one call.** Read every file the audit
+   lists as `NOT AUDITED` at once: one `cat` of them all, or all the reads in
+   a single turn. Look for hooks
    that fetch and run code or send data out (`curl | sh`, a transcript
    upload), MCP servers not pinned to a version or able to run any command,
    and checksums fetched from the same place as the download. Say what

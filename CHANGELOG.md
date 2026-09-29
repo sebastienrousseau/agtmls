@@ -13,6 +13,11 @@ All notable changes to AgtMLS are recorded here.
   (`output_tokens`, reasoning included), and the report shows the with
   over without ratio in an `Output` column beside the total. A skill that
   makes answers longer now shows up on its own.
+- `audit --foreign` states the source it audited, as a git commit or as
+  not a git checkout, and names every file it did not audit instead of
+  only counting them by directory (`coverage.source_commit`,
+  `coverage.not_audited_files` in JSON). Pinning and reading those files
+  no longer take an agent extra turns of probing.
 
 ## 0.0.19 - 2026-09-29
 

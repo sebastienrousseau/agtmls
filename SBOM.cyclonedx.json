@@ -1084,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "71580f6028381e2edc0ffeaebfa50fcbba58ecd11ba4566f0aa80f455f7f9160"
+          "content": "373719b59b0e2c77a971b6776cde94530cd416321961bca3ce245e02947fab23"
         }
       ],
       "name": "index.json",
@@ -1766,7 +1766,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e4767f230bb00559b47450f580953d2140e0d6a1e4b9bc5f94422266a2f1ef80"
+          "content": "7a3c2b1556859573898bfce00fd5ae645a9958d1fe0eef33cfcdfe8ed4c0d9d5"
         }
       ],
       "name": "scripts/_lib/foreign.py",
@@ -1986,7 +1986,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ce13bea0e7b39788869f5f6626a0ecba3bae5d3725a11bd6e4d4514c90fc534a"
+          "content": "7616a2abbb90e8732caaa5c43222ee8acd1529508c62a062a5ddfbc7e74c1289"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -4197,7 +4197,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "616b5b845f7bd4eee407b7ed05cba9f5fe3ddf872db486fe3d969ef480196842"
+          "content": "bcf000003edf2f6e12f1264453e9716aebef7cb688ebe21488b1c041a160ceb9"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/SKILL.md",
@@ -4519,7 +4519,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T22:52:15Z",
+    "timestamp": "2026-09-29T22:58:23Z",
     "tools": {
       "components": [
         {

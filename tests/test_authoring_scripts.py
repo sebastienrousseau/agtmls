@@ -521,6 +521,17 @@ class AuditCliTests(unittest.TestCase):
         self.assertNotIn("skipped directories", coverage)
         self.assertEqual(code, 0, output)
 
+    def test_foreign_states_the_source_and_names_each_unaudited_file(self) -> None:
+        tree = self._workspace / "foreign-listed"
+        (tree / "skills" / "one").mkdir(parents=True, exist_ok=True)
+        (tree / "skills" / "one" / "SKILL.md").write_text("---\nname: one\ndescription: Use when testing.\n---\n\n# One\n", encoding="utf-8")
+        for index in range(22):
+            (tree / f"extra{index:02d}.md").write_text("# x\n", encoding="utf-8")
+        _, output = self.audit("--foreign", str(tree))
+        self.assertIn("  source: not a git checkout, so it cannot be pinned to a commit", output)
+        self.assertIn("  NOT AUDITED files: extra00.md, extra01.md,", output)
+        self.assertIn("extra19.md, and 2 more (--format json lists every one)", output)
+
     def test_foreign_names_a_manifest_it_read_but_did_not_audit(self) -> None:
         _, output = self.audit("--foreign", str(self.foreign_tree()))
         self.assertIn("NOT AUDITED agent config: .claude-plugin/marketplace.json", output)

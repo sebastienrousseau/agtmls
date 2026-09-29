@@ -599,6 +599,28 @@ class ForeignCoverageTests(_ForeignTree):
         self.assertEqual(cov["agent_configs_not_audited"], [".claude/settings.json", "plugin/hooks/hooks.json"])
         self.assertEqual(cov["skipped_directories"], {"node_modules": 1})
 
+    def test_every_unaudited_file_is_listed_by_path(self) -> None:
+        self.write("skills/one/SKILL.md")
+        self.write("hooks/sync.sh", "echo\n")
+        self.write(".mcp.json", "{}")
+        self.assertEqual(self.coverage()["not_audited_files"], [".mcp.json", "hooks/sync.sh"])
+
+    def test_the_source_commit_is_reported_only_for_the_top_of_a_checkout(self) -> None:
+        import subprocess
+        self.write("skills/one/SKILL.md")
+        self.assertIsNone(self.coverage()["source_commit"])  # not a checkout at all
+        git = ["git", "-C", str(self.tmp), "-c", "user.name=t", "-c", "user.email=t@example.invalid",
+               "-c", "commit.gpgsign=false"]
+        subprocess.run(["git", "init", "-q", str(self.tmp)], check=True)
+        subprocess.run(git + ["add", "-A"], check=True)
+        subprocess.run(git + ["commit", "-q", "-m", "x"], check=True)
+        head = subprocess.run(git + ["rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+        self.assertEqual(self.coverage()["source_commit"], head)
+        # A directory inside a checkout is not that checkout's commit.
+        self.assertIsNone(foreign.source_commit(self.tmp / "skills"))
+        with mock.patch.object(foreign.subprocess, "run", side_effect=OSError("no git")):
+            self.assertIsNone(foreign.source_commit(self.tmp))
+
     def test_copies_that_differ_are_reported_as_divergent(self) -> None:
         self.write(".claude/skills/tool/SKILL.md", "---\nname: tool\ndescription: Use when a.\n---\n\n# A\n")
         self.write(".cursor/skills/tool/SKILL.md", "---\nname: 'tool'\ndescription: Use when b.\n---\n\n# B\n")
