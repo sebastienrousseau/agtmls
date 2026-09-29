@@ -8,14 +8,10 @@
   },
   "files": {
     "scripts/_lib/analyzer.py": {
-      "lines": 649
+      "lines": 637
     }
   },
   "functions": {
-    "scripts/_lib/analyzer.py::check_steganography": {
-      "cognitive": 40,
-      "cyclomatic": 18
-    },
     "scripts/_lib/analyzer.py::decode_json_escapes": {
       "cognitive": 25,
       "cyclomatic": 13,
