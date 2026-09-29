@@ -952,7 +952,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "310f43a9b041378de916a13e1191cc8ca01a51bb367206d9f451746c14f9b1f3"
+          "content": "a4a7f34b6e65ffe9db02b0be166532c223de2e4ebfbdc13cca0b3e43a0af4101"
         }
       ],
       "name": "evals/uplift/README.md",
@@ -1194,7 +1194,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a2fd25c7b92c745c717a89539cbef2a3306051e45652951f2e77808c7a0f6f8c"
+          "content": "4229ee281feaab5cd4bbcf4d6295965a710d04419d20707da36ac22adbdac62f"
         }
       ],
       "name": "index.json",
@@ -1205,7 +1205,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "534c73aad60816ab97d2d7ee0f5f43b3a57269da6080dc368a2f5162f9685221"
+          "content": "1b66e544ac25cf44c92fa6f8ea107029df569aa6d52babad24e6508304608b45"
         }
       ],
       "name": "lifecycle.json",
@@ -2030,7 +2030,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fe503f7feb885c7141247207fa63cff42233dac81d517db4c640f66dd58cf304"
+          "content": "cbb869572a7912acaa6cae0cc6ddb4e968876af03eaab9558d1a2be02cb1a1ed"
         }
       ],
       "name": "scripts/_lib/uplift.py",
@@ -3218,7 +3218,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7ecbd8f9e52b4da302a31f8fc0ac8a68108e8f460fa9f9c31e93b13eb82b5fd2"
+          "content": "40990372904e66475f0e77f98c37c8228f7c407cfd78cb3b779dccefc73d1033"
         }
       ],
       "name": "skills/authoring-portable-skills/SKILL.md",
@@ -4662,7 +4662,7 @@
       "type": "application",
       "version": "0.0.18"
     },
-    "timestamp": "2026-09-29T20:32:31Z",
+    "timestamp": "2026-09-29T20:55:52Z",
     "tools": {
       "components": [
         {

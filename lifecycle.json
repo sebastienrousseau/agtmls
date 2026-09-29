@@ -33,7 +33,8 @@
       "exit_criteria": [
         "behavioral eval passes",
         "index is regenerated",
-        "index metadata validates"
+        "index metadata validates",
+        "uplift run helps on at least two agents within the token ceiling (evals/uplift/README.md)"
       ]
     },
     {

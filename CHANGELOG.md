@@ -16,6 +16,12 @@ All notable changes to AgtMLS are recorded here.
   instructions and MCP servers. A run spends tokens, so the gate only
   validates the cases (`--check`). The first cases cover the three draft
   trust skills.
+- A token ceiling for `hardened`: on each agent a skill may use at most
+  1.5 times the tokens of the task without it, unless it gains 20 points
+  or more. `run-uplift-evals.py` reports a verdict per skill and agent
+  (`helps`, `too costly`, `no gain`) and names the skills that help on two
+  agents; `lifecycle.json` and `authoring-portable-skills` state the rule.
+  Applied to the first run, no skill meets the bar yet.
 
 ## 0.0.18 - 2026-09-29
 

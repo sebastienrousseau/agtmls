@@ -33,6 +33,12 @@ from typing import NamedTuple
 CASES = Path("evals/uplift/cases")
 FIXTURES = Path("evals/uplift/fixtures")
 ARMS = ("with", "without")
+# The bar for "hardened" (evals/uplift/README.md): help on two agents, each
+# within 1.5x the tokens of the task without the skill, unless the gain is
+# 20 points or more.
+TOKEN_CEILING = 1.5
+BIG_GAIN = 0.20
+HARDENED_AGENTS = 2
 FIELDS = ("id", "means", "pattern")
 
 
@@ -186,11 +192,39 @@ def _arm(runs: list[dict], ids: list[str]) -> dict:
     }
 
 
+def verdict(row: dict) -> str:
+    """Whether the skill helps on this agent, within the token ceiling.
+
+    A gain alone is not enough: a skill that doubles what a task costs for a
+    few points is a bad trade. It may cost at most TOKEN_CEILING times the
+    tokens of the task without it, unless it gains BIG_GAIN or more.
+    """
+    with_, without = row["with"]["tokens"], row["without"]["tokens"]
+    if row["delta"] is None:
+        return "no data"
+    if row["delta"] <= 0:
+        return "no gain"
+    if not (with_ and without):
+        return "no token data"
+    if with_ / without > TOKEN_CEILING and row["delta"] < BIG_GAIN:
+        return "too costly"
+    return "helps"
+
+
+def meets_hardened(summary: list[dict]) -> list[str]:
+    """Skills that help on at least HARDENED_AGENTS agents."""
+    helped: dict[str, int] = {}
+    for row in summary:
+        helped[row["skill"]] = helped.get(row["skill"], 0) + (row["verdict"] == "helps")
+    return [skill for skill, count in helped.items() if count >= HARDENED_AGENTS]
+
+
 def _row(skill: str, agent: str, runs: list[dict], ids: list[str]) -> dict:
     arms = {arm: _arm([run for run in runs if run["arm"] == arm], ids) for arm in ARMS}
     scores = (arms["with"]["score"], arms["without"]["score"])
     delta = None if None in scores else round(scores[0] - scores[1], 3)
-    return {"skill": skill, "agent": agent, "delta": delta, **arms}
+    row = {"skill": skill, "agent": agent, "delta": delta, **arms}
+    return {**row, "verdict": verdict(row)}
 
 
 def summarise(cases: list[Case], runs: list[dict]) -> list[dict]:
@@ -230,19 +264,23 @@ def _ratio(row: dict) -> str:
 def render(summary: list[dict]) -> str:
     """The summary as Markdown: one row per skill and agent, then each
     skill's planted flaws and how often each arm found them. `Tokens` is
-    what the skill cost: mean tokens with it over mean tokens without."""
+    what the skill cost: mean tokens with it over mean tokens without.
+    Verdicts are computed here, so results written before they existed
+    render the same way."""
     lines = [
-        "| Skill | Agent | Without | With | Delta | Tokens | Skill read | Errors |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Skill | Agent | Without | With | Delta | Tokens | Skill read | Errors | Verdict |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
-    for row in summary:
+    judged = [{**row, "verdict": verdict(row)} for row in summary]
+    for row in judged:
         without, with_ = row["without"], row["with"]
         delta = "n/a" if row["delta"] is None else f"{row['delta'] * 100:+.0f} pts"
         errors = without["errors"] + with_["errors"]
         lines.append(
             f"| {row['skill']} | {row['agent']} | {_pct(without['score'])} | {_pct(with_['score'])}"
-            f" | {delta} | {_ratio(row)} | {_pct(with_['skill_used'])} | {errors} |"
+            f" | {delta} | {_ratio(row)} | {_pct(with_['skill_used'])} | {errors} | {row['verdict']} |"
         )
+    lines += ["", f"Meets the hardened bar: {', '.join(meets_hardened(judged)) or 'none'}."]
     for skill in dict.fromkeys(row["skill"] for row in summary):
         lines += _flaw_table([row for row in summary if row["skill"] == skill])
     return "\n".join(lines) + "\n"

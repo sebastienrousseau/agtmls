@@ -14,6 +14,20 @@ A skill is `draft` until its uplift run on at least two agents (Claude Code
 and Codex) shows that it helps. A skill that shows no gain is retired, not
 kept (`authoring-portable-skills`, "Draft until measured").
 
+Helping includes what it costs. The runner gives each skill and agent a
+verdict:
+
+| Verdict | When |
+| --- | --- |
+| `helps` | The skill gains, and uses at most 1.5x the tokens of the task without it, or gains 20 points or more |
+| `too costly` | It gains under 20 points and uses more than 1.5x the tokens |
+| `no gain` | The score with the skill is not higher |
+| `no data`, `no token data` | An arm had no successful run, or an agent reported no tokens |
+
+A skill meets the `hardened` bar when it `helps` on at least two agents; the
+rendered report names those skills. The ceiling is `TOKEN_CEILING` and
+`BIG_GAIN` in `scripts/_lib/uplift.py`.
+
 ## Case format (`cases/<skill>.json`)
 
 ```json

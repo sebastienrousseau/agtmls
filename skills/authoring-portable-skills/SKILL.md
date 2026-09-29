@@ -94,9 +94,12 @@ fails naming any installed skill it does not list.
 ## Draft until measured
 
 A new skill ships as `draft`. It becomes `hardened` when a run of the same
-tasks with and without it, on at least two agents, shows it helps, and a
-skill that shows no gain is retired rather than kept. Passing the validators
-proves the file is well-formed, not that it helps.
+tasks with and without it, on at least two agents, shows it helps
+(`scripts/run-uplift-evals.py`), and a skill that shows no gain is retired
+rather than kept. Helping includes cost: on each agent the skill may use at
+most 1.5 times the tokens of the task without it, unless it gains 20 points
+or more. Passing the validators proves the file is well-formed, not that it
+helps.
 
 ## When not to use
 

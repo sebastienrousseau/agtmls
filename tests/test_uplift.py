@@ -187,15 +187,44 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 |", text)
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 | no token data |", text)
         self.assertIn("| b | 0% | 50% |", text)
         with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
-        self.assertIn("| +0 pts | 3.00x |", uplift.render(with_tokens))
+        self.assertIn("| +0 pts | 3.00x | 100% | 0 | no gain |", uplift.render(with_tokens))
 
     def test_an_arm_with_only_errors_has_no_delta(self) -> None:
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
-        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 |", uplift.render([row]))
+        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
+
+
+class VerdictTests(unittest.TestCase):
+    """A skill helps on an agent when it gains, within the token ceiling:
+    at most 1.5x the tokens, unless it gains 20 points or more."""
+
+    @staticmethod
+    def row(delta: float | None, with_tokens: float | None, without_tokens: float | None = 100.0) -> dict:
+        return {"delta": delta, "with": {"tokens": with_tokens}, "without": {"tokens": without_tokens}}
+
+    def test_each_verdict(self) -> None:
+        cases = [
+            (self.row(0.1, 150.0), "helps"),            # exactly at the ceiling
+            (self.row(0.1, 151.0), "too costly"),       # over it, small gain
+            (self.row(0.2, 400.0), "helps"),            # over it, but a large gain pays
+            (self.row(0.19, 400.0), "too costly"),
+            (self.row(0.0, 90.0), "no gain"),
+            (self.row(-0.1, 90.0), "no gain"),
+            (self.row(None, 90.0), "no data"),
+            (self.row(0.1, None), "no token data"),
+            (self.row(0.1, 90.0, None), "no token data"),
+        ]
+        for row, expected in cases:
+            self.assertEqual(uplift.verdict(row), expected, row)
+
+    def test_hardened_needs_two_agents_that_help(self) -> None:
+        rows = [{"skill": "a", "verdict": "helps"}, {"skill": "a", "verdict": "helps"},
+                {"skill": "b", "verdict": "helps"}, {"skill": "b", "verdict": "too costly"}]
+        self.assertEqual(uplift.meets_hardened(rows), ["a"])
 
 
 class ParseTests(unittest.TestCase):
