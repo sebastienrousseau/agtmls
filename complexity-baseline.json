@@ -126,11 +126,6 @@
     "scripts/validate-lifecycle.py::main": {
       "cyclomatic": 12
     },
-    "scripts/validate-packaging.py::main": {
-      "cognitive": 25,
-      "cyclomatic": 18,
-      "lines": 62
-    },
     "scripts/validate-readme.py::problems": {
       "cyclomatic": 13
     },

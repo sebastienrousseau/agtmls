@@ -2613,7 +2613,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "67a5aeb6ac2401d94504fb0b7e3bc28b98c1267af3d98abad28e18334dea856b"
+          "content": "5736eb0598b3272df7dff0b096a6c5344d613b3da06f91ae07d1ec7e66442d5c"
         }
       ],
       "name": "scripts/validate-packaging.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T09:23:00Z",
+    "timestamp": "2026-09-29T10:26:35Z",
     "tools": {
       "components": [
         {
