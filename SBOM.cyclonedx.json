@@ -1084,7 +1084,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "373719b59b0e2c77a971b6776cde94530cd416321961bca3ce245e02947fab23"
+          "content": "bf19983dbb1549aaafbc12d7229d3ac3e6b0c15c2f7a18c8a6a5668fa05df19c"
         }
       ],
       "name": "index.json",
@@ -4208,7 +4208,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bcf000003edf2f6e12f1264453e9716aebef7cb688ebe21488b1c041a160ceb9"
+          "content": "8345f8a0e4e02490d38316af31acb3bddb882470f5746a430c49dcf0d41426fb"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/SKILL.md",
@@ -4530,7 +4530,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T23:07:12Z",
+    "timestamp": "2026-09-29T23:14:00Z",
     "tools": {
       "components": [
         {

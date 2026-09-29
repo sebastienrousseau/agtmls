@@ -62,9 +62,10 @@ drift. A plugin manager's install is not: audit again before each update.
 
 ## Report
 
-The commit (or why there is none), the audit command and its counts, what
-you read by hand, what could not be checked, and the decision with its
-reason. `reference.md` has worked outcomes and the red flags.
+Open with the source: the commit you would install, or that it cannot be
+pinned and so cannot be installed as audited. Then the audit command and its
+counts, what you read by hand, what could not be checked, and the decision
+with its reason. `reference.md` has worked outcomes and the red flags.
 
 ## When not to use
 
