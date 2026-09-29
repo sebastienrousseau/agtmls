@@ -27,9 +27,6 @@
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
     },
-    "scripts/validate-gitignore.py::main": {
-      "cyclomatic": 12
-    },
     "scripts/validate-lifecycle.py::main": {
       "cyclomatic": 12
     },

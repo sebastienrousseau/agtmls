@@ -21,19 +21,20 @@ REQUIRED = [
 ]
 
 
+def patterns(text: str) -> list[str]:
+    """The .gitignore's patterns, blank lines and comments dropped."""
+    return [line.strip() for line in text.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+
+
+def policy_problems(lines: list[str]) -> list[str]:
+    """Required patterns that are missing, and patterns listed twice."""
+    errors = [f"missing required .gitignore pattern: {pattern}" for pattern in REQUIRED if pattern not in lines]
+    errors += [f"duplicate .gitignore pattern: {pattern}" for pattern in sorted({line for line in lines if lines.count(line) > 1})]
+    return errors
+
+
 def main() -> int:
-    lines = [
-        line.strip()
-        for line in GITIGNORE.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    ]
-    missing = [pattern for pattern in REQUIRED if pattern not in lines]
-    duplicates = sorted({line for line in lines if lines.count(line) > 1})
-    errors: list[str] = []
-    for pattern in missing:
-        errors.append(f"missing required .gitignore pattern: {pattern}")
-    for pattern in duplicates:
-        errors.append(f"duplicate .gitignore pattern: {pattern}")
+    errors = policy_problems(patterns(GITIGNORE.read_text(encoding="utf-8")))
     if errors:
         for error in errors:
             print(f"FAIL: {error}")
