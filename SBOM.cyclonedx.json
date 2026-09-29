@@ -2173,7 +2173,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f8b5a130e59bea36cffca23b9e71f6a797df9c4ddf12c393013b6a449c994a76"
+          "content": "01886a3cb7ade2c49d9b421d02cced2c47b8a9a0fe693e7eaa705aa92204220b"
         }
       ],
       "name": "scripts/release-preflight.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T12:59:38Z",
+    "timestamp": "2026-09-29T13:02:14Z",
     "tools": {
       "components": [
         {

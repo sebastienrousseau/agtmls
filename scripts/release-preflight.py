@@ -57,28 +57,42 @@ def versions_at(commit: str) -> dict[str, str]:
     return found
 
 
-def check_tag(tag: str, version: str, commit: str) -> list[str]:
-    errors: list[str] = []
-    kind = git("cat-file", "-t", tag)
-    if kind.returncode != 0:
-        return [f"tag {tag} does not exist locally; create it with `git tag -s {tag} <commit>`"]
-    if kind.stdout.strip() != "tag":
-        errors.append(f"{tag} is a lightweight tag; release tags must be annotated and signed (`git tag -s`)")
+def target_problems(tag: str, commit: str) -> tuple[list[str], str]:
+    """(whether the tag points at the intended commit, that commit's full id or "")."""
     target = git("rev-parse", f"{tag}^{{commit}}").stdout.strip()
     expected = git("rev-parse", f"{commit}^{{commit}}").stdout.strip()
     if not expected:
-        errors.append(f"expected commit {commit} does not exist")
-    elif target != expected:
-        errors.append(f"{tag} points at {target[:12]}, not the intended release commit {expected[:12]}")
+        return [f"expected commit {commit} does not exist"], expected
+    if target != expected:
+        return [f"{tag} points at {target[:12]}, not the intended release commit {expected[:12]}"], expected
+    return [], expected
+
+
+def annotation_problems(tag: str, version: str) -> list[str]:
+    """The tag's message names the release, and a key in KEYS.asc signed it."""
+    errors = []
     subject = git("for-each-ref", f"refs/tags/{tag}", "--format=%(contents:subject)").stdout.strip()
     if subject != f"{PROJECT} v{version}":
         errors.append(f"{tag} message is {subject!r}; it must be exactly '{PROJECT} v{version}'")
     verified = git("-c", f"gpg.ssh.allowedSignersFile={KEYS}", "verify-tag", tag)
     if verified.returncode != 0:
         errors.append(f"{tag} is not signed by a key in KEYS.asc: {verified.stderr.strip() or 'no signature'}")
-    for path, found in versions_at(expected or commit).items():
-        if found != version:
-            errors.append(f"{path} at the release commit says {found or 'nothing'}, not {version}")
+    return errors
+
+
+def check_tag(tag: str, version: str, commit: str) -> list[str]:
+    kind = git("cat-file", "-t", tag)
+    if kind.returncode != 0:
+        return [f"tag {tag} does not exist locally; create it with `git tag -s {tag} <commit>`"]
+    errors: list[str] = []
+    if kind.stdout.strip() != "tag":
+        errors.append(f"{tag} is a lightweight tag; release tags must be annotated and signed (`git tag -s`)")
+    targeted, expected = target_problems(tag, commit)
+    errors += targeted + annotation_problems(tag, version)
+    errors += [
+        f"{path} at the release commit says {found or 'nothing'}, not {version}"
+        for path, found in versions_at(expected or commit).items() if found != version
+    ]
     return errors
 
 
