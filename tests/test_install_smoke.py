@@ -11,6 +11,7 @@ faked here, so each case is about the smoke test's own reporting.
 
 from __future__ import annotations
 
+import json
 import subprocess
 import unittest
 from pathlib import Path
@@ -88,3 +89,27 @@ class DeletedPromptTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MakeInstallStatsTests(unittest.TestCase):
+    """smoke-make-install.py reads the installed binary's `stats --json`."""
+
+    def setUp(self) -> None:
+        self.module = load_script("smoke-make-install.py")
+
+    def stats(self, stdout: str) -> list[str]:
+        answer = subprocess.CompletedProcess([], 0, stdout)
+        with mock.patch.object(self.module.subprocess, "run", return_value=answer):
+            return self.module.stats_problems(Path("/opt/bin/agtmls"))
+
+    def test_a_stats_answer_that_is_not_an_object_is_reported_not_raised(self) -> None:
+        """payload.get() raised AttributeError on a JSON list or string."""
+        for stdout in ("[]", '"stats"', "7"):
+            with self.subTest(stdout=stdout):
+                self.assertEqual(self.stats(stdout), [f"installed binary's stats is not a JSON object:\n{stdout}"])
+
+    def test_a_good_stats_answer_passes(self) -> None:
+        version = self.module.json.loads(
+            (self.module.ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
+        )["version"]
+        self.assertEqual(self.stats(json.dumps({"registry_version": version, "skills": 3})), [])

@@ -45,6 +45,8 @@ def stats_problems(binary: Path) -> list[str]:
         payload = json.loads(stats.stdout)
     except json.JSONDecodeError as exc:
         return [f"installed binary emitted invalid JSON: {exc}\n{stats.stdout}"]
+    if not isinstance(payload, dict):
+        return [f"installed binary's stats is not a JSON object:\n{stats.stdout}"]
     errors = []
     expected = json.loads(
         (ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
