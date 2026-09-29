@@ -95,10 +95,6 @@
       "cognitive": 24,
       "cyclomatic": 14
     },
-    "scripts/validate-check-manifest.py::main": {
-      "cognitive": 22,
-      "cyclomatic": 16
-    },
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
     },

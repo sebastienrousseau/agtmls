@@ -2481,7 +2481,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5414ab1d8c7c1c30f830f60b9041707df24930f673c6cd61ffc63836da2a19d2"
+          "content": "4f58eba8ccf84ffda486f64be96446191db1f790ff4e0294b10aa2227aa52692"
         }
       ],
       "name": "scripts/validate-check-manifest.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:06:41Z",
+    "timestamp": "2026-09-29T11:10:32Z",
     "tools": {
       "components": [
         {

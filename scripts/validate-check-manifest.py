@@ -111,21 +111,20 @@ def workflow_commands(workflow: str) -> set[str]:
     return {" ".join(match.group(1).split()) for match in RUN_STEP.finditer(workflow)}
 
 
-def main() -> int:
-    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    manifest = data.get("checks", [])
-    errors: list[str] = []
-
-    if data.get("schema_version") != 1:
-        errors.append("checks.json schema_version must be 1")
-
-    for name in redeclared_lists(RUNNER):
-        errors.append(
-            f"run-all-checks.py re-declares the gate as {name}; it must read checks.json"
-        )
+def runner_problems() -> list[str]:
+    """run-all-checks.py reads checks.json and holds no list of its own."""
+    errors = [
+        f"run-all-checks.py re-declares the gate as {name}; it must read checks.json"
+        for name in redeclared_lists(RUNNER)
+    ]
     if "checks.json" not in RUNNER.read_text(encoding="utf-8"):
         errors.append("run-all-checks.py never reads checks.json")
+    return errors
 
+
+def count_problems(manifest: list) -> list[str]:
+    """Every count stated in a counted document equals the manifest's."""
+    errors = []
     for relative in COUNTED:
         path = ROOT / relative
         if not path.exists():
@@ -137,10 +136,13 @@ def main() -> int:
                     f"{relative}:{line}: claims {number} checks; "
                     f"checks.json has {len(manifest)}"
                 )
+    return errors
 
+
+def ci_problems(manifest: list) -> list[str]:
+    """Each manifest check has its script, and is a step in the workflow."""
     workflow = WORKFLOW.read_text(encoding="utf-8") if WORKFLOW.exists() else ""
-    if not workflow:
-        errors.append(f"CI workflow missing: {WORKFLOW.relative_to(ROOT)}")
+    errors = [] if workflow else [f"CI workflow missing: {WORKFLOW.relative_to(ROOT)}"]
     commands = workflow_commands(workflow)
     for check in manifest:
         script = check.split()[0]
@@ -150,6 +152,17 @@ def main() -> int:
         # a step in the workflow, or CI is weaker than `agtmls check`.
         if workflow and " ".join(check.split()) not in commands:
             errors.append(f"check not run by validate.yml: {check}")
+    return errors
+
+
+def main() -> int:
+    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest = data.get("checks", [])
+    errors: list[str] = []
+
+    if data.get("schema_version") != 1:
+        errors.append("checks.json schema_version must be 1")
+    errors += runner_problems() + count_problems(manifest) + ci_problems(manifest)
 
     if errors:
         for error in errors:
