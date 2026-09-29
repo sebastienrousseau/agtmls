@@ -2811,7 +2811,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7d2206fc6f10833aa21ccb06e7c18b95b257def28c88a3b72ab7220f6f2ef57b"
+          "content": "ffae840f91a6b616e3d34c7d6d235015bda178e571322db0633e431e86830ac7"
         }
       ],
       "name": "scripts/validate-templates.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:08:26Z",
+    "timestamp": "2026-09-29T13:11:07Z",
     "tools": {
       "components": [
         {

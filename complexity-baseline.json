@@ -32,9 +32,6 @@
     },
     "scripts/validate-system-prompts.py::main": {
       "cyclomatic": 12
-    },
-    "scripts/validate-templates.py::main": {
-      "cyclomatic": 11
     }
   },
   "generated_by": "scripts/check-complexity.py --write",
