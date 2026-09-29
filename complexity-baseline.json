@@ -39,10 +39,6 @@
       "cognitive": 18,
       "cyclomatic": 15
     },
-    "scripts/generate-benchmarks-doc.py::main": {
-      "cognitive": 25,
-      "cyclomatic": 15
-    },
     "scripts/generate-plugin-manifests.py::main": {
       "cognitive": 17,
       "cyclomatic": 13
