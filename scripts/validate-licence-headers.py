@@ -75,6 +75,20 @@ def markdown_problems(path: Path, rel: Path, text: str) -> list[str]:
     return errors
 
 
+def file_problems(path: Path) -> list[str]:
+    """One file's licence declaration, in the form its format allows."""
+    rel = path.relative_to(ROOT)
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return [f"{rel}: not UTF-8 text"]
+    if path.suffix == ".md":
+        return markdown_problems(path, rel, text)
+    errors: list[str] = []
+    check_identifier(rel, declared(text, HEADER_LINES), errors)
+    return errors
+
+
 def ours(pattern: str) -> list[Path]:
     """Files matching `pattern`, sorted, outside the directories that are not ours."""
     return [
@@ -86,15 +100,10 @@ def ours(pattern: str) -> list[Path]:
 def main() -> int:
     errors: list[str] = []
     checked = 0
-    for path in ours("*.md"):
-        checked += 1
-        errors += markdown_problems(path, path.relative_to(ROOT), path.read_text(encoding="utf-8"))
-
-    for suffix in (".py", ".sh"):
-        for path in ours(f"*{suffix}"):
+    for pattern in ("*.md", "*.py", "*.sh"):
+        for path in ours(pattern):
             checked += 1
-            text = path.read_text(encoding="utf-8")
-            check_identifier(path.relative_to(ROOT), declared(text, HEADER_LINES), errors)
+            errors += file_problems(path)
 
     if errors:
         for error in errors:

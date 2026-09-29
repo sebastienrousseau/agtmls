@@ -106,6 +106,14 @@ class LicenceHeaderBranchTests(BrokenTreeCase):
         self.overwrite("scripts/__pycache__/cached.py", "x = 1\n")
         self.assert_clean(self.SCRIPT)
 
+    def test_a_file_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError, so one stray binary stopped the check."""
+        for name in ("docs/binary.md", "scripts/binary.py", "scripts/binary.sh"):
+            with self.subTest(name=name):
+                self.restore_later(name).write_bytes(b"\xff\xfe not text")
+                self.assert_fails(self.SCRIPT, f"FAIL: {name}: not UTF-8 text")
+                self.doCleanups()
+
     def test_the_same_files_outside_a_skipped_directory_are_refused(self) -> None:
         """The control for the test above: these contents do fail when they count."""
         self.overwrite("docs/unheadered.md", "# Ours\n")

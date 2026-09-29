@@ -2591,7 +2591,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "53418f7214016234187e58567b8cd0a7366f98188b9a1bd39a5d0424ecbfa8df"
+          "content": "71affd6efa1d8e1a3d672484e53fb7347372a5b4c0460f17d83fc07deb53176a"
         }
       ],
       "name": "scripts/validate-licence-headers.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:46:02Z",
+    "timestamp": "2026-09-29T11:49:09Z",
     "tools": {
       "components": [
         {
