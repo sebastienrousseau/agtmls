@@ -2624,7 +2624,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7b281c73aa0cb4b4f42991ed33fc53e03a50924af0eb0a699bb5222d148c363a"
+          "content": "6c7fbe40449c08029cba39be1d1d425af95b30d0021e93e8fb61bccdebe3b4db"
         }
       ],
       "name": "scripts/validate-lifecycle.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:24:15Z",
+    "timestamp": "2026-09-29T13:28:10Z",
     "tools": {
       "components": [
         {
