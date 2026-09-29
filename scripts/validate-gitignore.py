@@ -33,8 +33,19 @@ def policy_problems(lines: list[str]) -> list[str]:
     return errors
 
 
+def read_policy() -> str | list[str]:
+    """The .gitignore's text, or the problem that stops it being read."""
+    try:
+        return GITIGNORE.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return [".gitignore is missing"]
+    except UnicodeDecodeError:
+        return [".gitignore is not UTF-8 text"]
+
+
 def main() -> int:
-    errors = policy_problems(patterns(GITIGNORE.read_text(encoding="utf-8")))
+    text = read_policy()
+    errors = text if isinstance(text, list) else policy_problems(patterns(text))
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

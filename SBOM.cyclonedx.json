@@ -2580,7 +2580,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eea66af38e1e7d9f7a01273fba469fd71623623bdca74d865cfa796b3a3b48d7"
+          "content": "818e608a4e56752ff455fad1c88302663c1552648fa3c7f27063e3e0bbcaedd8"
         }
       ],
       "name": "scripts/validate-gitignore.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:05:27Z",
+    "timestamp": "2026-09-29T13:08:26Z",
     "tools": {
       "components": [
         {
