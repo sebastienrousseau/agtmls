@@ -26,6 +26,35 @@ def cases() -> list[tuple[str, str, list[str]]]:
     return items
 
 
+def manifest_problems(payload: dict, provider: str, profile: str, adapters: list[str]) -> list[str]:
+    """The export manifest names this provider and profile, and every adapter file."""
+    errors = []
+    if payload.get("provider") != provider or payload.get("profile") != profile:
+        errors.append(f"wrong export manifest: {payload}")
+    expected = [adapter.replace("agtmls/", "") for adapter in adapters]
+    for adapter in expected:
+        if adapter not in payload.get("adapter_files", []):
+            errors.append(f"manifest missing adapter file {adapter}: {payload}")
+    return errors
+
+
+def archive_problems(tf: tarfile.TarFile, provider: str, profile: str, adapters: list[str]) -> list[str]:
+    """Every required member is in the archive, and its export manifest agrees."""
+    names = set(tf.getnames())
+    errors = [
+        f"{provider}/{profile} archive missing {required}"
+        for required in ["agtmls/export-manifest.json", "agtmls/ADAPTERS.md", *adapters]
+        if required not in names
+    ]
+    if "agtmls/skills/using-agtmls/SKILL.md" not in names:
+        errors.append(f"{provider}/{profile} archive missing using-agtmls")
+    member = tf.extractfile("agtmls/export-manifest.json")
+    if member is None:
+        return errors + [f"{provider}/{profile} cannot read export manifest"]
+    payload = json.loads(member.read().decode("utf-8"))
+    return errors + manifest_problems(payload, provider, profile, adapters)
+
+
 def check_archive(provider: str, profile: str, adapters: list[str], out_dir: Path, errors: list[str]) -> None:
     proc = subprocess.run(
         [sys.executable, str(CLI), "export", "--provider", provider, "--profile", profile, "--out-dir", str(out_dir)],
@@ -43,23 +72,7 @@ def check_archive(provider: str, profile: str, adapters: list[str], out_dir: Pat
         errors.append(f"missing or invalid archive: {archive}")
         return
     with tarfile.open(archive, "r:gz") as tf:
-        names = set(tf.getnames())
-        for required in ["agtmls/export-manifest.json", "agtmls/ADAPTERS.md", *adapters]:
-            if required not in names:
-                errors.append(f"{provider}/{profile} archive missing {required}")
-        if "agtmls/skills/using-agtmls/SKILL.md" not in names:
-            errors.append(f"{provider}/{profile} archive missing using-agtmls")
-        member = tf.extractfile("agtmls/export-manifest.json")
-        if member is None:
-            errors.append(f"{provider}/{profile} cannot read export manifest")
-            return
-        payload = json.loads(member.read().decode("utf-8"))
-        if payload.get("provider") != provider or payload.get("profile") != profile:
-            errors.append(f"wrong export manifest: {payload}")
-        expected = [adapter.replace("agtmls/", "") for adapter in adapters]
-        for adapter in expected:
-            if adapter not in payload.get("adapter_files", []):
-                errors.append(f"manifest missing adapter file {adapter}: {payload}")
+        errors.extend(archive_problems(tf, provider, profile, adapters))
 
 
 def main() -> int:

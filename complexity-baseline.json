@@ -29,9 +29,6 @@
       "cyclomatic": 11,
       "lines": 61
     },
-    "scripts/smoke-export.py::check_archive": {
-      "cyclomatic": 13
-    },
     "scripts/smoke-scaffold.py::main": {
       "cyclomatic": 12,
       "lines": 61
