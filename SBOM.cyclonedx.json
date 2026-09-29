@@ -1865,7 +1865,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fec3795fa25b684cfe128089350dd6caf9f4a931a8933b0f4b3722e649d991ef"
+          "content": "ceff5a74087301026ae3b0438945336fdbd9073bd44d0dc78de8358feafa7528"
         }
       ],
       "name": "scripts/check-skill-collisions.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:15:21Z",
+    "timestamp": "2026-09-29T11:18:25Z",
     "tools": {
       "components": [
         {

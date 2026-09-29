@@ -35,10 +35,6 @@
     "scripts/check-publishing-readiness.py::check": {
       "cyclomatic": 12
     },
-    "scripts/check-skill-collisions.py::main": {
-      "cognitive": 18,
-      "cyclomatic": 15
-    },
     "scripts/generate-plugin-manifests.py::main": {
       "cognitive": 17,
       "cyclomatic": 13
