@@ -137,6 +137,40 @@ def subdivision_flags(line: str, context: EmojiContext) -> dict[int, int]:
     return flags
 
 
+def _emoji_presentation(context, line: str, column: int) -> bool:
+    """A variation selector directly after an emoji base, and not itself
+    followed by another selector: an emoji as written."""
+    previous = line[column - 1] if column else ""
+    following = line[column + 1] if column + 1 < len(line) else ""
+    return bool(previous) and context.is_base(previous) and not (following and context.is_selector(following))
+
+
+def _steg(path: Path, line_idx: int, severity: str, message: str, rule: str) -> Finding:
+    return Finding(path, line_idx, severity, "steganography", message, rule)
+
+
+def _match_finding(path: Path, line_idx: int, line: str, match: re.Match, context, flags: dict[int, int],
+                   covered: set[int], pedantic: bool) -> Finding | None:
+    """One invisible code point's finding, or None where it is part of an emoji as written."""
+    char, column = match.group(0), match.start()
+    if context and context.is_selector(char) and _emoji_presentation(context, line, column):
+        return _steg(path, line_idx, "LOW", f"{describe_invisible(char)} after an emoji base at column "
+                     f"{column + 1}: emoji presentation, not a channel", "AGT-STEG-002") if pedantic else None
+    if context and column in covered:
+        return _steg(path, line_idx, "LOW", f"Tag sequence forming a subdivision flag at column {column + 1} "
+                     f"({flags[column] - 1} tag character(s), terminated)", "AGT-STEG-002") if column in flags else None
+    return _steg(path, line_idx, "CRITICAL", "Invisible unicode character detected: "
+                 f"{describe_invisible(char)} at column {column + 1}", "AGT-STEG-001")
+
+
+def _line_steganography(path: Path, line_idx: int, line: str, context, pedantic: bool) -> list[Finding]:
+    """One line's invisible code points, judged against the emoji context."""
+    flags = subdivision_flags(line, context) if context else {}
+    covered: set[int] = {start + k for start, count in flags.items() for k in range(count)}
+    found = (_match_finding(path, line_idx, line, m, context, flags, covered, pedantic) for m in INVISIBLE_RE.finditer(line))
+    return [finding for finding in found if finding is not None]
+
+
 def check_steganography(path: Path, content: str, pedantic: bool = False) -> list[Finding]:
     """Flag code points that render as nothing but survive into the prompt.
 
@@ -153,45 +187,7 @@ def check_steganography(path: Path, content: str, pedantic: bool = False) -> lis
     findings: list[Finding] = []
     context = EMOJI_CONTEXT
     for line_idx, line in enumerate(content.splitlines(), start=1):
-        flags = subdivision_flags(line, context) if context else {}
-        covered: set[int] = {start + k for start, count in flags.items() for k in range(count)}
-        for match in INVISIBLE_RE.finditer(line):
-            char = match.group(0)
-            column = match.start()
-            if context and context.is_selector(char):
-                previous = line[column - 1] if column else ""
-                following = line[column + 1] if column + 1 < len(line) else ""
-                if previous and context.is_base(previous) and not (following and context.is_selector(following)):
-                    if pedantic:
-                        findings.append(Finding(
-                            path, line_idx, "LOW", "steganography",
-                            f"{describe_invisible(char)} after an emoji base at column {column + 1}: "
-                            "emoji presentation, not a channel",
-                            "AGT-STEG-002",
-                        ))
-                    continue
-            if context and column in covered:
-                if column in flags:
-                    findings.append(Finding(
-                        path, line_idx, "LOW", "steganography",
-                        f"Tag sequence forming a subdivision flag at column {column + 1} "
-                        f"({flags[column] - 1} tag character(s), terminated)",
-                        "AGT-STEG-002",
-                    ))
-                continue
-            findings.append(
-                Finding(
-                    file_path=path,
-                    line=line_idx,
-                    severity="CRITICAL",
-                    category="steganography",
-                    message=(
-                        f"Invisible unicode character detected: "
-                        f"{describe_invisible(char)} at column {column + 1}"
-                    ),
-                    rule="AGT-STEG-001",
-                )
-            )
+        findings += _line_steganography(path, line_idx, line, context, pedantic)
     return findings
 
 
