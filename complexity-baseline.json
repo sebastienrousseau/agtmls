@@ -10,11 +10,6 @@
   "functions": {
     "scripts/_lib/cli_parser.py::build_parser": {
       "lines": 160
-    },
-    "scripts/run-all-checks.py::main": {
-      "cognitive": 17,
-      "cyclomatic": 11,
-      "lines": 61
     }
   },
   "generated_by": "scripts/check-complexity.py --write",
