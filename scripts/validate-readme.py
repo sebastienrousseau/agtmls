@@ -59,15 +59,18 @@ def problems(text: str) -> list[str]:
         return ["centered project h1 missing"]
     project = title.group(1).strip()
     required = [heading.format(project=project) for heading in HEADINGS]
-    actual = H2.findall(text)
-    found: list[str] = []
-    if actual != required:
-        found += [f"missing heading: {h}" for h in required if h not in actual]
-        found += [f"unexpected heading: {h}" for h in actual if h not in required]
-        if not found:
-            found.append("required headings are out of order")
+    found = heading_problems(required, H2.findall(text))
     found += [f"missing structure: {signal}" for signal in STRUCTURE if signal not in text]
     return found
+
+
+def heading_problems(required: list[str], actual: list[str]) -> list[str]:
+    """Missing and unexpected h2 headings, or that the right ones are out of order."""
+    if actual == required:
+        return []
+    found = [f"missing heading: {h}" for h in required if h not in actual]
+    found += [f"unexpected heading: {h}" for h in actual if h not in required]
+    return found or ["required headings are out of order"]
 
 
 def main() -> int:
