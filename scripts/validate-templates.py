@@ -21,7 +21,10 @@ JSON_TEMPLATES = ["skill/metadata.json", "evals/routing.json", "evals/behavioral
 def skill_template_problems() -> list[str]:
     """The skill template opens with frontmatter and carries the placeholder name."""
     path = TEMPLATES / "skill" / "SKILL.md"
-    skill = path.read_text(encoding="utf-8") if path.exists() else ""
+    try:
+        skill = path.read_text(encoding="utf-8") if path.exists() else ""
+    except UnicodeDecodeError:
+        return [f"{path.relative_to(ROOT)} is not UTF-8 text"]
     errors = [] if re.match(r"^---[ \t]*\n", skill) else ["skill template must start with frontmatter"]
     if "example-skill" not in skill:
         errors.append("skill template must contain example-skill placeholder")
@@ -34,6 +37,8 @@ def json_problems() -> list[str]:
         if path.exists():
             try:
                 json.loads(path.read_text(encoding="utf-8"))
+            except UnicodeDecodeError:
+                errors.append(f"{path.relative_to(ROOT)} is not UTF-8 text")
             except json.JSONDecodeError as exc:
                 errors.append(f"{path.relative_to(ROOT)} invalid JSON: {exc}")
     return errors

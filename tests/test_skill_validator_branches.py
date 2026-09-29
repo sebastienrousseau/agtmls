@@ -475,6 +475,14 @@ class TemplateBranchTests(BrokenTreeCase):
         )
         self.assertNotIn("metadata.json invalid JSON", output)
 
+    def test_a_template_that_is_not_utf8_is_refused_not_raised(self) -> None:
+        """read_text raised UnicodeDecodeError on the skill and JSON templates."""
+        for rel in ("templates/skill/SKILL.md", "templates/evals/routing.json"):
+            with self.subTest(template=rel):
+                self.restore_later(rel).write_bytes(b"\xff\xfe not text")
+                self.assert_fails(self.SCRIPT, f"FAIL: {rel} is not UTF-8 text")
+                self.doCleanups()
+
     def test_a_malformed_json_template_is_refused(self) -> None:
         self.overwrite("templates/evals/routing.json", "{ not json")
         self.assert_fails(self.SCRIPT, "FAIL: templates/evals/routing.json invalid JSON")
