@@ -116,10 +116,6 @@
       "cognitive": 23,
       "cyclomatic": 16
     },
-    "scripts/validate-eval-cases.py::validate_behavioral": {
-      "cognitive": 36,
-      "cyclomatic": 19
-    },
     "scripts/validate-gitignore.py::main": {
       "cyclomatic": 12
     },
