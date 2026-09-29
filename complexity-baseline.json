@@ -11,10 +11,6 @@
     "scripts/_lib/cli_parser.py::build_parser": {
       "lines": 160
     },
-    "scripts/generate-skill-index.py::parse_frontmatter": {
-      "cognitive": 19,
-      "cyclomatic": 11
-    },
     "scripts/run-all-checks.py::main": {
       "cognitive": 17,
       "cyclomatic": 11,
