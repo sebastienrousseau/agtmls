@@ -8,10 +8,6 @@
   },
   "files": {},
   "functions": {
-    "scripts/_lib/analyzer.py::scan_rules": {
-      "cognitive": 31,
-      "cyclomatic": 12
-    },
     "scripts/_lib/analyzer.py::subdivision_flags": {
       "halstead": 36.4
     },

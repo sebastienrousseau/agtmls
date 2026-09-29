@@ -402,30 +402,44 @@ def applies(rule: PatternRule, path: Path, content: str) -> bool:
 PATTERN_RULES = compile_rules(RULES)
 
 
+class _ScanViews:
+    """The file as a rule reads it: raw, or decoded, normalised and
+    flattened, each built once and only when a rule needs it."""
+
+    def __init__(self, path: Path, content: str) -> None:
+        self.path, self.content = path, content
+        self.text: str | None = None
+        self.flat: str | None = None
+        self.line_of: list[int] | None = None
+
+    def haystack(self, scope: str) -> str:
+        if scope != "normalised":
+            return self.content
+        if self.flat is None:
+            source = decode_json_escapes(self.content) if self.path.name.lower().endswith(".json") else self.content
+            self.text = normalize(source)
+            self.flat = flatten(self.text)
+        return self.flat
+
+    def line(self, scope: str, offset: int) -> int:
+        """The 1-based source line of an offset into the rule's haystack."""
+        if scope != "normalised":
+            return self.content.count("\n", 0, offset) + 1
+        if self.line_of is None:
+            self.line_of = line_map(self.text or "")
+        return self.line_of[offset] if offset < len(self.line_of) else 1
+
+
 def scan_rules(path: Path, content: str, rules: list[PatternRule]) -> list[Finding]:
     """Run pattern rules over one file, each in the scope it declares."""
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()
-    text = flat = None
-    line_of: list[int] | None = None
+    views = _ScanViews(path, content)
     for rule in rules:
         if not applies(rule, path, content):
             continue
-        if rule.scope == "normalised":
-            if flat is None:
-                source = decode_json_escapes(content) if path.name.lower().endswith(".json") else content
-                text = normalize(source)
-                flat = flatten(text)
-            haystack = flat
-        else:
-            haystack = content
-        for match in rule.regex.finditer(haystack):
-            if rule.scope == "normalised":
-                if line_of is None:
-                    line_of = line_map(text or "")
-                line = line_of[match.start()] if match.start() < len(line_of) else 1
-            else:
-                line = content.count("\n", 0, match.start()) + 1
+        for match in rule.regex.finditer(views.haystack(rule.scope)):
+            line = views.line(rule.scope, match.start())
             if (line, rule.message) in seen:
                 continue
             seen.add((line, rule.message))
