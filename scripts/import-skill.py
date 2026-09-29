@@ -109,7 +109,7 @@ def safe_copy(source: Path, target: Path, skill_md: Path) -> None:
             shutil.copy2(item, dst)
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.split("\n", maxsplit=1)[0])
     parser.add_argument("source", type=Path)
     parser.add_argument("--name")
@@ -122,44 +122,40 @@ def main() -> int:
         help="import despite CRITICAL/HIGH findings; the findings are recorded in metadata.json",
     )
     parser.add_argument("--skip-audit", action="store_true", help=argparse.SUPPRESS)
-    args = parser.parse_args()
+    return parser
 
-    skill_md = source_skill_md(args.source)
-    text = skill_md.read_text(encoding="utf-8", errors="replace")
-    name = slugify(args.name or title_from(text, skill_md.stem))
-    out_root = args.out_root.resolve()
-    target = out_root / "skills" / name
-    if target.exists():
-        raise SystemExit(f"target skill already exists: {target}")
 
-    findings: list[dict] = []
-    if not args.skip_audit:
-        findings, _report = audit(args.source)
-        blocking = [
-            f for f in findings
-            if f["severity"] in BLOCKING_SEVERITIES
-            and f.get("rule") not in NOT_APPLICABLE_TO_IMPORT
-        ]
-        if blocking:
-            print(f"Refusing to import {name}: {len(blocking)} blocking finding(s).", file=sys.stderr)
-            for finding in blocking:
-                print(
-                    f"  [{finding['severity']}] {finding['file']}:{finding['line']} "
-                    f"({finding['category']}): {finding['message']}",
-                    file=sys.stderr,
-                )
-            if not args.force_unsafe:
-                print(
-                    "\nReview the source, or re-run with --force-unsafe to import it "
-                    "quarantined with these findings recorded.",
-                    file=sys.stderr,
-                )
-                return 1
-            print("\n--force-unsafe: importing anyway; findings recorded in metadata.json", file=sys.stderr)
+def refused(name: str, findings: list[dict], force_unsafe: bool) -> bool:
+    """Whether the audit's blocking findings stop the import; prints them either way."""
+    blocking = [
+        f for f in findings
+        if f["severity"] in BLOCKING_SEVERITIES
+        and f.get("rule") not in NOT_APPLICABLE_TO_IMPORT
+    ]
+    if not blocking:
+        return False
+    print(f"Refusing to import {name}: {len(blocking)} blocking finding(s).", file=sys.stderr)
+    for finding in blocking:
+        print(
+            f"  [{finding['severity']}] {finding['file']}:{finding['line']} "
+            f"({finding['category']}): {finding['message']}",
+            file=sys.stderr,
+        )
+    if not force_unsafe:
+        print(
+            "\nReview the source, or re-run with --force-unsafe to import it "
+            "quarantined with these findings recorded.",
+            file=sys.stderr,
+        )
+        return True
+    print("\n--force-unsafe: importing anyway; findings recorded in metadata.json", file=sys.stderr)
+    return False
 
+
+def copy_skill(source: Path, target: Path, skill_md: Path, name: str) -> None:
     target.mkdir(parents=True)
-    if args.source.is_dir():
-        safe_copy(args.source, target, skill_md)
+    if source.is_dir():
+        safe_copy(source, target, skill_md)
     else:
         shutil.copy2(skill_md, target / "SKILL.md")
     if not (target / "reference.md").exists():
@@ -168,8 +164,10 @@ def main() -> int:
             encoding="utf-8",
         )
 
-    meta = {
-        "bundle": args.bundle,
+
+def import_metadata(source: Path, target: Path, bundle: str, findings: list[dict]) -> dict:
+    return {
+        "bundle": bundle,
         "version": registry_version(),
         "owner": "unassigned",
         "maturity": "draft",
@@ -188,7 +186,7 @@ def main() -> int:
             "risk_level": "high",
         },
         "provenance": {
-            "imported_from": str(args.source),
+            "imported_from": str(source),
             "attested": False,
             "audit_findings": findings,
             "source_metadata": "metadata.source.json" if (target / "metadata.source.json").exists() else None,
@@ -198,6 +196,26 @@ def main() -> int:
             ),
         },
     }
+
+def main() -> int:
+    args = build_parser().parse_args()
+
+    skill_md = source_skill_md(args.source)
+    text = skill_md.read_text(encoding="utf-8", errors="replace")
+    name = slugify(args.name or title_from(text, skill_md.stem))
+    out_root = args.out_root.resolve()
+    target = out_root / "skills" / name
+    if target.exists():
+        raise SystemExit(f"target skill already exists: {target}")
+
+    findings: list[dict] = []
+    if not args.skip_audit:
+        findings, _report = audit(args.source)
+        if refused(name, findings, args.force_unsafe):
+            return 1
+
+    copy_skill(args.source, target, skill_md, name)
+    meta = import_metadata(args.source, target, args.bundle, findings)
     (target / "metadata.json").write_text(
         json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )

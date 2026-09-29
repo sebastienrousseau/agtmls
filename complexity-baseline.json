@@ -28,11 +28,6 @@
     "scripts/generate-skill-manifests.py::main": {
       "cyclomatic": 12
     },
-    "scripts/import-skill.py::main": {
-      "cognitive": 19,
-      "cyclomatic": 13,
-      "lines": 86
-    },
     "scripts/release-preflight.py::check_tag": {
       "cyclomatic": 12
     },
