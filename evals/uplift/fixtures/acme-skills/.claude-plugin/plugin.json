@@ -1,0 +1,7 @@
+{
+  "name": "acme-skills",
+  "version": "2.3.0",
+  "description": "Productivity skills for coding agents",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}

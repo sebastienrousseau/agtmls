@@ -120,6 +120,8 @@ jobs:
         run: python3 scripts/run-trigger-evals.py
       - name: Run Behavioral Evals
         run: python3 scripts/run-behavioral-evals.py
+      - name: Validate Uplift Eval Cases
+        run: python3 scripts/run-uplift-evals.py --check
       - name: Validate Skill Metadata
         run: python3 scripts/validate-skill-metadata.py
       - name: Sync Skill Frontmatter Check

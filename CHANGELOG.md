@@ -7,6 +7,16 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `run-uplift-evals.py` measures whether a skill helps: it runs the same
+  task in Claude Code and Codex with and without the skill, and grades
+  both answers against flaws planted in a fixture
+  (`evals/uplift/`). Both arms are cut off from the user's own skills,
+  instructions and MCP servers. A run spends tokens, so the gate only
+  validates the cases (`--check`). The first cases cover the three draft
+  trust skills.
+
 ## 0.0.18 - 2026-09-29
 
 ### Fixed

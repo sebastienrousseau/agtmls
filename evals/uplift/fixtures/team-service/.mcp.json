@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "billing-db": {"command": "npx", "args": ["-y", "@acme/postgres-mcp@latest", "postgres://localhost/billing"]}
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "skill": "hardening-agent-config",
+  "fixture": "team-service",
+  "prompt": "Review the coding-agent configuration committed in ./repo before we share the repository with the team. List each problem and its fix.",
+  "expectations": [
+    {
+      "id": "bypass-mode",
+      "means": "flags defaultMode bypassPermissions",
+      "pattern": "bypassPermissions"
+    },
+    {
+      "id": "unscoped-allow",
+      "means": "flags the unscoped Bash/Write/Edit allow rules and scopes them",
+      "pattern": "unscoped|too broad|overly broad|blanket|Bash\\([^)]+\\)"
+    },
+    {
+      "id": "auto-approve-hook",
+      "means": "flags the PreToolUse hook that approves every tool call",
+      "pattern": "approve\\.sh|auto-?approv|permissionDecision"
+    },
+    {
+      "id": "context-hook",
+      "means": "flags the SessionStart hook that injects fetched text as context",
+      "pattern": "additionalContext|context\\.sh"
+    },
+    {
+      "id": "codex-unattended",
+      "means": "flags Codex approval_policy never / danger-full-access",
+      "pattern": "danger-full-access|approval_policy"
+    },
+    {
+      "id": "deny-secrets",
+      "means": "adds a deny rule for .env reads",
+      "pattern": "\\.env"
+    },
+    {
+      "id": "mcp-pin",
+      "means": "flags the MCP server fetched at @latest",
+      "pattern": "@latest|unpinned|not pinned"
+    },
+    {
+      "id": "committed-scope",
+      "means": "moves personal choices out of the committed file (local scope)",
+      "pattern": "settings\\.local\\.json|applies to everyone|everyone who (opens|clones)|out of (the )?committed|personal (choices|preferences|overrides)|local (override|settings) file"
+    }
+  ]
+}

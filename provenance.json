@@ -29,6 +29,7 @@
       "audit-skill.py --all --strict",
       "run-trigger-evals.py",
       "run-behavioral-evals.py",
+      "run-uplift-evals.py --check",
       "validate-skill-metadata.py",
       "sync-skill-frontmatter.py --check",
       "generate-plugin-manifests.py --check",
@@ -94,7 +95,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "sha256": "b60334ee0f6070cffe8ccd3f5dd5273402aab74d7def4eb533712bfdfdcd15f1"
+            "sha256": "fce40cba05705401168ab8860112381a89b02fc43cac99862ac432600be51a92"
           },
           "name": "SBOM.spdx.json",
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
@@ -106,9 +107,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-29T15:12:53Z",
+        "finishedOn": "2026-09-29T20:32:31Z",
         "invocationId": "local",
-        "startedOn": "2026-09-29T15:12:53Z"
+        "startedOn": "2026-09-29T20:32:31Z"
       }
     }
   },
@@ -116,7 +117,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "ba2fe7cf97ec81c0e63398b0ab5e85a4907ed875c80c5b649a9e6fc1fccfb19f"
+        "sha256": "73d379405833dcf4d5b0a52f71cc8f8c2e7883f1680c065ff8e3b787149fba08"
       },
       "name": "agtmls-0.0.18"
     }

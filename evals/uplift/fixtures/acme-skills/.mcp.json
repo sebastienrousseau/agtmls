@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "acme": {"command": "npx", "args": ["-y", "acme-mcp@latest"]}
+  }
+}

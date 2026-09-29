@@ -28,6 +28,7 @@
     "audit-skill.py --all --strict",
     "run-trigger-evals.py",
     "run-behavioral-evals.py",
+    "run-uplift-evals.py --check",
     "validate-skill-metadata.py",
     "sync-skill-frontmatter.py --check",
     "generate-plugin-manifests.py --check",

@@ -94,7 +94,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aeb0c7ff32ae573673d93e1af961d6795176d0500deb0cc0a70705cf04157780"
+          "content": "78d8fb6eb0069db08b6f24c3b7d5096e4effce27accb9e907eab61526546d76c"
         }
       ],
       "name": "checks.json",
@@ -948,6 +948,248 @@
       "type": "file"
     },
     {
+      "bom-ref": "evals/uplift/README.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "310f43a9b041378de916a13e1191cc8ca01a51bb367206d9f451746c14f9b1f3"
+        }
+      ],
+      "name": "evals/uplift/README.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/cases/authoring-portable-skills.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6d03e715776f96c769d6c22d49d793157544f88086c0d2dc6402e44ffde546dc"
+        }
+      ],
+      "name": "evals/uplift/cases/authoring-portable-skills.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/cases/hardening-agent-config.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "397bf5ff92aaa7e6da8b35993b90b3400daa01d2545d04a9fc692f84402fb5ae"
+        }
+      ],
+      "name": "evals/uplift/cases/hardening-agent-config.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/cases/vetting-a-skill-before-install.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fe260fcc3fcc834bfbdf030eae7192bd365f89ee57624f8718ce4255ac67c45f"
+        }
+      ],
+      "name": "evals/uplift/cases/vetting-a-skill-before-install.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/.claude-plugin/plugin.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "385eb2d513cf0b28a1f25a7fb65036077d6a0a87a19d8174ad3531a6d34096ee"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/.claude-plugin/plugin.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/.mcp.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0d9e119d357c2e42b4d3b4d81cd45f05b1b831a53389e813bb66b977a4f9acc1"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/.mcp.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/README.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a84327c04b32d7ee702809d02e21a1e3284c343fc3d6b4a8e2bc6b213c07e9db"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/README.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/hooks/hooks.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "39c786891ab86e16b66862b048dd9e2381fe9e940577e4aa3ee8c50b6fb73efa"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/hooks/hooks.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/hooks/setup.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "12d76f3a1ba0d535ffd92c550b4680237ca97adc1b2d16495a64124ec5c55120"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/hooks/setup.sh",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/hooks/sync.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "21a80c3c1df4bfb45a99ba01ec857fa8186f86c9f29419cbc477d736ccf7a03a"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/hooks/sync.sh",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/acme-skills/skills/pretty-commits/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cf10efabbf3918a3702edb2e32ccb773893576084ba32e83275ff9d4b022c0db"
+        }
+      ],
+      "name": "evals/uplift/fixtures/acme-skills/skills/pretty-commits/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/SKILL.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7545f9ecb63cc35c6a9d7f409f14c676332c28ae2c3458efeeb874fec66630d4"
+        }
+      ],
+      "name": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/SKILL.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/reference.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e331cf80cde7642f4a7647d6028ab1ff88bc0a499639e2afe47030701ece125e"
+        }
+      ],
+      "name": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/reference.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/scripts/collect.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "903e25aff9a43bd274b68a7b0004a390fda047e96a9d83eb58485daeecd62903"
+        }
+      ],
+      "name": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/scripts/collect.sh",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/templates/notes.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f3fec08eddd5ce1508be5571b37ce5d9e3112990ea5ba8310a5eca157d0f65be"
+        }
+      ],
+      "name": "evals/uplift/fixtures/release-notes-skill/skills/release-notes-writer/templates/notes.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/.claude/hooks/approve.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ebded372a38445f4c8767e6a7d8f3a52cd69047a58196117efb485bca3f57bae"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/.claude/hooks/approve.sh",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/.claude/hooks/context.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "10e74bc446a75c15411068d5377e186396eaad6d37a1461560c8263103a3fc22"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/.claude/hooks/context.sh",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/.claude/settings.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a1b5e3d8158554b7cd126d5b51d053531f0b97c8b8df6d9ada34083b8851b7b0"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/.claude/settings.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/.codex/config.toml",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6b6a22e8b95d06bb71b7ed6f998cb7d56ec6bdde74f581c40f97deaf266e4d8e"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/.codex/config.toml",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/.mcp.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8c83d8bbf6308c3c6616bdce9b81ce4ad64aa674464cf27c206aeb01dec91871"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/.mcp.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/README.md",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2af059c4d97120c4776141c71f60eb92f5e641fe5809825a116ddedebaa639cf"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/README.md",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/uplift/fixtures/team-service/src/app.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "04557aa95f4165fbff09ff38b287ea9e0e2ff43adfed4a11b88d227a196fd1b6"
+        }
+      ],
+      "name": "evals/uplift/fixtures/team-service/src/app.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "index.json",
       "hashes": [
         {
@@ -1784,6 +2026,28 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/uplift.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fe503f7feb885c7141247207fa63cff42233dac81d517db4c640f66dd58cf304"
+        }
+      ],
+      "name": "scripts/_lib/uplift.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/uplift_agents.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1da2632ca83b34e71d578e9c52dc8bdc908e8ca32f85c2c0ef4b5d52c0e86748"
+        }
+      ],
+      "name": "scripts/_lib/uplift_agents.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/verify_report.py",
       "hashes": [
         {
@@ -2243,6 +2507,17 @@
         }
       ],
       "name": "scripts/run-unit-tests.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/run-uplift-evals.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ba26da2ffa3862b35975ed118104021978812879e0bd3f4668bf49aef1c5942"
+        }
+      ],
+      "name": "scripts/run-uplift-evals.py",
       "type": "file"
     },
     {
@@ -4387,7 +4662,7 @@
       "type": "application",
       "version": "0.0.18"
     },
-    "timestamp": "2026-09-29T15:12:53Z",
+    "timestamp": "2026-09-29T20:32:31Z",
     "tools": {
       "components": [
         {

@@ -44,6 +44,7 @@ python3 scripts/run-security-evals.py
 python3 scripts/audit-skill.py --all --strict
 python3 scripts/run-trigger-evals.py
 python3 scripts/run-behavioral-evals.py
+python3 scripts/run-uplift-evals.py --check
 python3 scripts/validate-skill-metadata.py
 python3 scripts/sync-skill-frontmatter.py --check
 python3 scripts/generate-plugin-manifests.py --check

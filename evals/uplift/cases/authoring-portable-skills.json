@@ -1,0 +1,42 @@
+{
+  "skill": "authoring-portable-skills",
+  "fixture": "release-notes-skill",
+  "prompt": "We want the skill in ./repo/skills/release-notes-writer to work in Codex and Cursor as well as Claude Code. Review it and list every change it needs.",
+  "expectations": [
+    {
+      "id": "name-matches-dir",
+      "means": "name must equal the directory name",
+      "pattern": "name[^\\n]{0,80}(director|folder)|(director|folder)[^\\n]{0,80}name"
+    },
+    {
+      "id": "bang-command",
+      "means": "flags the Claude-only !`cmd` line",
+      "pattern": "!`|\\bbang\\b|exclamation"
+    },
+    {
+      "id": "skill-dir-variable",
+      "means": "flags the ${CLAUDE_SKILL_DIR} path",
+      "pattern": "CLAUDE_SKILL_DIR"
+    },
+    {
+      "id": "agent-only-fields",
+      "means": "moves allowed-tools / context: fork out of the shared frontmatter",
+      "pattern": "allowed-tools|context:\\s*fork"
+    },
+    {
+      "id": "one-level-references",
+      "means": "flags reference.md sending the agent on to a third file",
+      "pattern": "one level|nested reference|reference chain|two levels|second[- ]level|indirection|templates/notes\\.md"
+    },
+    {
+      "id": "trigger-description",
+      "means": "rewrites the description to say when to use it",
+      "pattern": "use when|trigger"
+    },
+    {
+      "id": "when-not-to-use",
+      "means": "adds when not to use it",
+      "pattern": "when not to use|when \\*\\*not\\*\\*|scope boundar|out of scope|not (be )?used for"
+    }
+  ]
+}
