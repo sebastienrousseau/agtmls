@@ -13,11 +13,22 @@ PROMPTS = ROOT / "system-prompts"
 LANGUAGES = ["rust", "python", "go", "cpp", "swift", "typescript", "javascript", "ruby", "bash"]
 
 
+def read_prompt(path: Path) -> str | None:
+    """The prompt's text, or None when it is not UTF-8."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
 def base_problems() -> list[str]:
     base = PROMPTS / "_base.md"
     if not base.exists():
         return ["system-prompts/_base.md missing"]
-    if "# " not in base.read_text(encoding="utf-8"):
+    text = read_prompt(base)
+    if text is None:
+        return ["system-prompts/_base.md is not UTF-8 text"]
+    if "# " not in text:
         return ["system-prompts/_base.md missing top-level heading"]
     return []
 
@@ -26,7 +37,9 @@ def language_problems(lang: str) -> list[str]:
     path = PROMPTS / f"{lang}.md"
     if not path.exists():
         return [f"system-prompts/{lang}.md missing"]
-    text = path.read_text(encoding="utf-8")
+    text = read_prompt(path)
+    if text is None:
+        return [f"system-prompts/{lang}.md is not UTF-8 text"]
     errors = [] if text.strip() else [f"system-prompts/{lang}.md is empty"]
     if "# " not in text:
         errors.append(f"system-prompts/{lang}.md missing top-level heading")

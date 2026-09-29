@@ -2800,7 +2800,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1bd822ea98a9672fb1080d6136973be3edabfe1d3623f33701b5937048cbdcb9"
+          "content": "dc291132dfd41b1bf28a049f9012eb11fe3704cc3d2786e9bfaf2e9a19104ac8"
         }
       ],
       "name": "scripts/validate-system-prompts.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T13:17:30Z",
+    "timestamp": "2026-09-29T13:21:17Z",
     "tools": {
       "components": [
         {
