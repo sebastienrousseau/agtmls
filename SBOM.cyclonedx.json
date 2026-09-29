@@ -2459,7 +2459,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "aa4167c360c7fe422912fb9cfc037d689b9e7736e1854c8997fbb8a6aae472d3"
+          "content": "44ba58866fb5e8ffc8a4480f896c7d4e2bd3e1dc419110f51e4782c3c9b37472"
         }
       ],
       "name": "scripts/sync-spec-rules.py",
@@ -4365,7 +4365,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T11:51:56Z",
+    "timestamp": "2026-09-29T11:59:46Z",
     "tools": {
       "components": [
         {

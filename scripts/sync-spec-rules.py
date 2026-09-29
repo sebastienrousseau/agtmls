@@ -67,43 +67,80 @@ def load_spec(spec: Path, commit: str | None) -> dict:
     }
 
 
+def examples(rule: dict, field: str) -> list[str] | None:
+    """The texts of a rule's true or false positives, or None when they are
+    not a list of {"text": string} objects."""
+    value = rule.get(field, [])
+    if isinstance(value, list) and all(isinstance(e, dict) and isinstance(e.get("text"), str) for e in value):
+        return [e["text"] for e in value]
+    return None
+
+
 def rule_problems(rule: dict) -> list[str]:
     """One rule's required fields, and its pattern against its own examples."""
     rule_id = rule.get("id", "?")
     errors = [f"{rule_id}: missing {key}" for key in ("category", "severity", "title", "description") if not rule.get(key)]
     if "pattern" not in rule:
         return errors
+    return errors + pattern_problems(rule_id, rule)
+
+
+def compiled(rule_id: str, pattern: object) -> tuple[re.Pattern | None, list[str]]:
+    """(the compiled pattern, []), or (None, why it is not one)."""
+    if not isinstance(pattern, str):
+        return None, [f"{rule_id}: pattern is not a string"]
     try:
-        regex = re.compile(rule["pattern"])
+        return re.compile(pattern), []
     except re.error as exc:
-        return errors + [f"{rule_id}: pattern does not compile: {exc}"]
-    for example in rule.get("true_positive", []):
-        if not regex.search(example["text"]):
-            errors.append(f"{rule_id}: misses its own true positive {example['text']!r}")
-    for example in rule.get("false_positive", []):
-        if regex.search(example["text"]):
-            errors.append(f"{rule_id}: matches its own false positive {example['text']!r}")
+        return None, [f"{rule_id}: pattern does not compile: {exc}"]
+
+
+def pattern_problems(rule_id: str, rule: dict) -> list[str]:
+    """The rule's pattern compiles, finds each true positive and no false positive."""
+    regex, errors = compiled(rule_id, rule["pattern"])
+    if regex is None:
+        return errors
+    positives, negatives = examples(rule, "true_positive"), examples(rule, "false_positive")
+    errors = [f'{rule_id}: {field} must be a list of {{"text": string}}'
+              for field, texts in (("true_positive", positives), ("false_positive", negatives)) if texts is None]
+    errors += [f"{rule_id}: misses its own true positive {text!r}" for text in positives or [] if not regex.search(text)]
+    errors += [f"{rule_id}: matches its own false positive {text!r}" for text in negatives or [] if regex.search(text)]
     return errors
 
 
-def problems(snapshot: dict) -> list[str]:
-    """Everything the spec's own loader would refuse."""
-    errors: list[str] = []
-    ids = [rule.get("id") for rule in snapshot.get("rules", [])]
+def id_problems(ids: list[str]) -> list[str]:
+    errors = []
     if len(ids) != len(set(ids)):
         errors.append("rule ids are not unique")
     if ids != sorted(ids):
         errors.append("rules are not sorted by id")
     if "AGT-STEG-001" not in ids:
         errors.append("AGT-STEG-001 (the invisible code point list) is missing")
-    for rule in snapshot.get("rules", []):
-        errors += rule_problems(rule)
+    return errors
+
+
+def problems(snapshot: object) -> list[str]:
+    """Everything the spec's own loader would refuse, whatever shape the snapshot has."""
+    if not isinstance(snapshot, dict):
+        return ["snapshot is not a JSON object"]
+    rules = snapshot.get("rules", [])
+    if not isinstance(rules, list):
+        return ["rules is not a list"]
+    ids = [rule["id"] for rule in rules if isinstance(rule, dict) and isinstance(rule.get("id"), str)]
+    errors = id_problems(ids)
+    for index, rule in enumerate(rules):
+        if not isinstance(rule, dict):
+            errors.append(f"rule {index}: not an object")
+        elif not isinstance(rule.get("id"), str):
+            errors.append(f"rule {index}: id is not a string")
+        else:
+            errors += rule_problems(rule)
     return errors
 
 
 def drift(snapshot: dict, spec: dict) -> list[str]:
     """Rule ids whose definition differs between the snapshot and the spec."""
-    ours = {rule["id"]: rule for rule in snapshot.get("rules", [])}
+    ours = {rule["id"]: rule for rule in snapshot.get("rules", []) if isinstance(rule, dict) and "id" in rule}
     theirs = {rule["id"]: rule for rule in spec["rules"]}
     return [
         f"{rule_id}: snapshot and spec disagree"
@@ -139,7 +176,10 @@ def write_snapshot(spec: Path, commit: str | None) -> int:
 
 def check_snapshot(spec: Path | None, commit: str | None) -> int:
     """The snapshot is self-consistent and, given a spec checkout, matches it."""
-    snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    try:
+        snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return report([f"{SNAPSHOT.name} is not valid JSON: {exc}"])
     errors = problems(snapshot)
     if spec is not None:
         errors += drift(snapshot, load_spec(spec, commit))
