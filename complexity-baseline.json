@@ -7,11 +7,7 @@
     "lines": 60
   },
   "files": {},
-  "functions": {
-    "scripts/_lib/cli_parser.py::build_parser": {
-      "lines": 160
-    }
-  },
+  "functions": {},
   "generated_by": "scripts/check-complexity.py --write",
   "schema_version": 1
 }
