@@ -1,0 +1,534 @@
+{
+  "meta": {
+    "date": "2026-09-29T21:12:23Z",
+    "commit": "ce4487fcca2928edf1f640d2876152c2c4064fa8",
+    "trials": 5,
+    "agents": {
+      "claude": null,
+      "codex": "gpt-6-astra"
+    },
+    "skills": {
+      "hardening-agent-config": "sha256:39bffe75e94c5b945d4ca9640368bdc7e5e2b9dcb1b50758246b14c1526c987e"
+    }
+  },
+  "summary": [
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "delta": -0.033,
+      "with": {
+        "runs": 5,
+        "errors": 0,
+        "score": 0.967,
+        "found": {
+          "local-bypass": 1.0,
+          "enable-all-mcp": 1.0,
+          "shell-mcp": 1.0,
+          "hook-package-runner": 0.8,
+          "aider-yes-always": 1.0,
+          "deny-secrets": 1.0
+        },
+        "skill_used": 1.0,
+        "tokens": 141540.4,
+        "cost_usd": 0.161,
+        "seconds": 152.96
+      },
+      "without": {
+        "runs": 5,
+        "errors": 0,
+        "score": 1.0,
+        "found": {
+          "local-bypass": 1.0,
+          "enable-all-mcp": 1.0,
+          "shell-mcp": 1.0,
+          "hook-package-runner": 1.0,
+          "aider-yes-always": 1.0,
+          "deny-secrets": 1.0
+        },
+        "skill_used": 0.0,
+        "tokens": 80593.6,
+        "cost_usd": 0.145,
+        "seconds": 36.86
+      },
+      "verdict": "no gain"
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "delta": 0.034,
+      "with": {
+        "runs": 5,
+        "errors": 0,
+        "score": 0.967,
+        "found": {
+          "local-bypass": 1.0,
+          "enable-all-mcp": 1.0,
+          "shell-mcp": 1.0,
+          "hook-package-runner": 0.8,
+          "aider-yes-always": 1.0,
+          "deny-secrets": 1.0
+        },
+        "skill_used": 1.0,
+        "tokens": 293408.4,
+        "cost_usd": null,
+        "seconds": 127.54
+      },
+      "without": {
+        "runs": 5,
+        "errors": 0,
+        "score": 0.933,
+        "found": {
+          "local-bypass": 1.0,
+          "enable-all-mcp": 1.0,
+          "shell-mcp": 1.0,
+          "hook-package-runner": 0.6,
+          "aider-yes-always": 1.0,
+          "deny-secrets": 1.0
+        },
+        "skill_used": 0.0,
+        "tokens": 238709.0,
+        "cost_usd": null,
+        "seconds": 83.16
+      },
+      "verdict": "helps"
+    }
+  ],
+  "runs": [
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "with",
+      "trial": 0,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 140837,
+      "cost_usd": 0.1529372,
+      "seconds": 151.2,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found six problems in the agent configuration in `./repo`, and four of them need fixing before you share it. I read each file by hand because `agtmls doctor` hung without printing anything and I stopped it. That means neither `doctor` nor `audit --foreign` checked these files. I haven't changed any files.\n\n## Problems and fixes\n\n**1. `.claude/settings.local.json` turns off Claude Code's approval prompts, and it's set to be shared.**\n- It sets `\"defaultMode\": \"bypassPermissions\"`, so Claude runs every tool without asking. That setting overrides the project settings.\n- `.gitignore` doesn't list the file, and the README says everything in `.claude/` is committed, so everyone on the team would get it.\n- **Fix:** delete the file (or remove `defaultMode`) and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can turn it on for a session.\n\n**2. `.mcp.json` shares a shell server that allows everything.**\n- `acme-shell-mcp` runs with `SHELL_MCP_ALLOW: \"*\"`, which lets the agent run any command through MCP. Claude's `permissions.allow` list doesn't restrict it.\n- **Fix:** remove the `shell` server. If you really need it, limit `SHELL_MCP_ALLOW` to named commands (e.g. `npm test,npm run lint`).\n\n**3. `.claude/settings.json` starts all project MCP servers without asking.**\n- `\"enableAllProjectMcpServers\": true` starts every server in `.mcp.json`, including the shell server above and any added later, without anyone approving it.\n- **Fix:** remove it, or replace it with `\"enabledMcpjsonServers\": [\"docs\"]`.\n\n**4. The Claude hook downloads and runs unpinned code on every edit.**\n- The `PostToolUse` hook runs `npx -y @acme/format-on-save` after each Edit or Write. It installs whatever version is newest at that moment and runs it with your permissions.\n- **Fix:** pin the formatter as a dev dependency in `package.json` and call the installed copy (e.g. `npx --no-install format-on-save`), or point to a script in the repo. Have someone read it before it's committed.\n\n**5. `.aider.conf.yml` makes Aider run without asking.**\n- `yes-always: true` confirms every Aider prompt automatically.\n- `auto-commits: true` commits the agent's edits without review.\n- **Fix:** remove `yes-always`. Consider setting `auto-commits: false`, or leave it as a personal setting in `~/.aider.conf.yml`.\n\n**6. Nothing stops agents from reading secrets.**\n- The README says local secrets are in `.env`. Being in `.gitignore` keeps `.env` out of git, but it doesn't stop an agent from reading it.\n- **Fix:** add a deny list to `.claude/settings.json`:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\", \"Read(./**/*.pem)\", \"Read(./**/*.key)\", \"Read(~/.aws/**)\", \"Read(~/.ssh/**)\"]\n  ```\n  For Aider, add `.env` to a committed `.aiderignore`.\n\n## Files that look fine\n- **`.codex/config.toml`:** `approval_policy = \"on-request\"` with `sandbox_mode = \"workspace-write\"` is a safe combination.\n- **`.claude/settings.json` permissions:** the allow list names specific commands (`npm test`, `npm run lint`, `Edit(src/**)`), and `git push` still asks.\n- **`.mcp.json` versions:** both servers are pinned to exact versions.\n\n## What I couldn't check\n- **MCP tool descriptions:** I didn't read what `acme-docs-mcp` and `acme-shell-mcp` tell the model about their tools, because that would mean installing or running them.\n- **User-level settings:** each teammate's `~/.claude`, `~/.codex` and `~/.aider.conf.yml` settings also apply, and I didn't look at them.\n- **Antigravity:** there's no config for it here, so assume it may not ask before running tools.\n- **Automated checks:** after the fixes, run `agtmls doctor` and `agtmls audit --foreign .` again. They timed out this time.\n\nI can apply these fixes if you'd like."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "without",
+      "trial": 0,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 74008,
+      "cost_usd": 0.14980740000000003,
+      "seconds": 37.4,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found 8 problems. Four are serious: together they would let the agents run commands with no approval prompts at all. There's no `.git` directory in `./repo`, so I couldn't check what is actually committed. I went by the README, which says all of these files are.\n\n## Critical\n\n**1. `.claude/settings.local.json` is committed and turns off all permission checks**\nIt sets `\"defaultMode\": \"bypassPermissions\"`. Local settings override project settings, so everyone who clones the repo gets Claude Code with no approval prompts. That includes `git push`, even though `settings.json` lists it under `ask`. This file is meant to hold one person's own settings and shouldn't be shared.\n- **Fix:** Delete it from the repo (`git rm --cached .claude/settings.local.json`) and add `.claude/settings.local.json` to `.gitignore`. Anyone who really wants bypass mode can set it on their own machine.\n\n**2. The `shell` MCP server allows every command**\nIn `.mcp.json`, `acme-shell-mcp` has `SHELL_MCP_ALLOW: \"*\"`. That gives the agent a shell that runs anything, outside Claude Code's `Bash(...)` permission rules. The `git push` ask rule can be bypassed this way too.\n- **Fix:** Remove the `shell` server; the built-in Bash tool already covers this and respects permissions. If you need to keep it, replace `*` with a short list of allowed commands.\n\n**3. `enableAllProjectMcpServers: true` approves MCP servers without asking**\nEvery server in `.mcp.json` starts without the per-user approval prompt. That includes any server someone adds to the file later, which means a one-line PR could run arbitrary code on every teammate's machine.\n- **Fix:** Remove that line and name the approved servers instead: `\"enabledMcpServers\": [\"docs\"]`.\n\n**4. The format hook downloads an unpinned package on every edit**\n`npx -y @acme/format-on-save` runs after every Edit or Write. `-y` skips npx's install prompt, and with no version it fetches whatever is newest on the registry each time. If that package is compromised, the code runs on everyone's machine automatically. It's also slow and needs the network on every edit.\n- **Fix:** Add the formatter as a pinned devDependency and call the local copy: `npx --no-install format-on-save`. If you can't do that, at least pin the version (`@acme/format-on-save@1.2.3`).\n\n## Medium\n\n**5. Aider accepts every prompt automatically**\n`.aider.conf.yml` has `yes-always: true`, which says yes to everything Aider asks, including running shell commands and adding files. `auto-commits: true` then commits whatever the model changed without review. That's a style choice each person should make, not a team default.\n- **Fix:** Remove `yes-always` and set `auto-commits: false`, or leave it out so people choose in their own `~/.aider.conf.yml`. Consider removing `model: sonnet` too; the model is also a personal or account-level choice.\n\n**6. Nothing stops the agents from reading `.env`**\nThe README says local secrets live in `.env`. Being gitignored keeps it out of commits, but agents can still read it.\n- **Fix:** Add a deny rule to `.claude/settings.json`: `\"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]`.\n\n**7. `.gitignore` is missing the agents' local and generated files**\n- **Fix:** Add these:\n  ```\n  .claude/settings.local.json\n  .aider.chat.history.md\n  .aider.input.history\n  .aider.tags.cache.v*/\n  ```\n  List them individually rather than using `.aider*`, which would also ignore the shared `.aider.conf.yml`.\n\n## Low\n\n**8. The README and the npm rules don't match the repo**\n- The README says all agent configuration is committed \"so everyone gets the same setup\". Change it to say `settings.local.json` is personal and not committed.\n- `settings.json` pre-approves `npm test` and `npm run lint`, and the hook uses npx, but there's no `package.json`; the only code is Python (`src/app.py`). Either add the Node tooling or change these to the Python equivalents, for example `Bash(pytest)` and `Bash(ruff check:*)`.\n\n## No change needed\n- `.codex/config.toml` (`approval_policy = \"on-request\"`, `sandbox_mode = \"workspace-write\"`) is a sensible shared default.\n- The `docs` MCP server is pinned (`acme-docs-mcp==0.9.0`), which is good.\n- `Edit(src/**)` and the `git push` ask rule are reasonable once items 1 and 2 are fixed.\n\nI can make all of these changes if you want. It would also be worth running `git init` in `repo` first so you can check that `settings.local.json` is left out of the commit."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "without",
+      "trial": 1,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 72254,
+      "cost_usd": 0.1246988,
+      "seconds": 34.9,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I reviewed all eight files. There's no `.git` directory yet, so I treated everything in `./repo` as what you plan to commit. I found three serious problems that together would let an agent run any command without asking, plus a few smaller ones.\n\n## Critical\n\n**1. `.claude/settings.local.json` turns off all permission checks and shouldn't be shared**\n- **Problem:** It sets `\"defaultMode\": \"bypassPermissions\"`. That skips every permission prompt, including the `ask` rule on `git push` in `settings.json`. The `.local.json` file is meant for one person's own overrides, not the team. Also, `.gitignore` doesn't exclude it, so it would be committed.\n- **Fix:** Delete it from the repo and add `.claude/settings.local.json` to `.gitignore`. If you want to set a team default, put `\"defaultMode\": \"default\"` (or `\"acceptEdits\"`) in `settings.json`.\n\n**2. The `shell` MCP server in `.mcp.json` can run any command**\n- **Problem:** `acme-shell-mcp` with `SHELL_MCP_ALLOW: \"*\"` lets the agent run any shell command. These calls go through the MCP tool, so your `Bash(...)` allow and ask rules don't apply to them. For example, it could push to git without asking.\n- **Fix:** Remove the `shell` server, since the built-in Bash tool plus permission rules already covers this. If you do need it, replace `\"*\"` with an explicit list of allowed commands.\n\n**3. `enableAllProjectMcpServers: true` in `.claude/settings.json` skips the MCP approval step**\n- **Problem:** Every server in `.mcp.json`, including the shell server above and any server someone adds later in a PR, starts automatically for every teammate. Nobody gets asked to approve it first.\n- **Fix:** Remove that setting and approve servers by name instead: `\"enabledMcpServers\": [\"docs\"]`.\n\n## High\n\n**4. The formatter hook downloads the latest npm package on every edit**\n- **Problem:** `npx -y @acme/format-on-save` runs after each Edit/Write. It has no version pinned, and `-y` installs it without asking. If that package ever gets a bad release, it runs on every teammate's machine with their credentials.\n- **Fix:** Pin the formatter in `devDependencies` (in the lockfile) and call the installed copy with `npx --no-install @acme/format-on-save`. You could also switch to a Python formatter that's already in the toolchain (see item 8).\n\n**5. `.aider.conf.yml` auto-confirms everything**\n- **Problem:** `yes-always: true` answers \"yes\" to every aider prompt, including running shell commands and adding files. On top of that, `auto-commits: true` commits changes nobody has reviewed.\n- **Fix:** Remove `yes-always`. Set `auto-commits: false`, or leave it on only if the team really wants agent-authored commits.\n\n## Medium\n\n**6. Nothing stops agents from reading `.env`**\n- **Problem:** The README says local secrets live in `.env`. Ignoring it in git keeps it out of commits, but agents can still read it.\n- **Fix:** Add a deny rule to `.claude/settings.json`: `\"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]`. Also widen `.gitignore` to cover `.env.*`.\n\n**7. `.gitignore` doesn't exclude files that belong to one person**\n- **Fix:** Add:\n  ```\n  .claude/settings.local.json\n  .env.*\n  .aider*\n  !.aider.conf.yml\n  ```\n  (`.aider*` covers aider's chat history and cache files.)\n\n## Low\n\n**8. The config assumes a Node project, but the repo is Python**\n- **Problem:** The only code is `src/app.py` and there's no `package.json`. So the allowed `npm test` and `npm run lint` commands and the npx formatter hook won't work.\n- **Fix:** Use the real commands, for example `Bash(pytest:*)` and `Bash(ruff check:*)`, and a hook such as `ruff format`.\n\n## No change needed\n- **`.codex/config.toml`:** `approval_policy = \"on-request\"` and `sandbox_mode = \"workspace-write\"` are sensible defaults.\n- **`docs` MCP server:** it's pinned to an exact version (`==0.9.0`).\n- **`Edit(src/**)` allow rule and `git push` ask rule:** both are sensible, and the `git push` rule will work once items 1 and 2 are fixed.\n\nI haven't changed any files. I can apply these fixes if you'd like."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "with",
+      "trial": 1,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 141445,
+      "cost_usd": 0.16162559999999998,
+      "seconds": 152.2,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found six problems that should be fixed before the team gets this repo: three would let an agent act without asking, and three would run unpinned or unreviewed code. I read all six config files myself because `agtmls doctor` hung without printing anything and I stopped it, so neither it nor `agtmls audit --foreign` has checked these results. I haven't changed any files.\n\n## Problems and fixes\n\n**1. `.claude/settings.local.json` turns off all prompts: `\"defaultMode\": \"bypassPermissions\"`**\nWith this setting Claude runs every tool without asking, and your `allow`/`ask` rules stop mattering. That includes the `ask` on `git push`. This file is meant to be personal, but `.gitignore` doesn't exclude it, and the README says `.claude/` is committed, so everyone would get it.\n- **Fix:** Delete the file from the repo and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can turn it on for one session.\n\n**2. `.aider.conf.yml` has `yes-always: true` together with `auto-commits: true`**\nAider accepts every prompt without asking, including running shell commands, and then commits the result.\n- **Fix:** Remove `yes-always` or set it to `false`. Keeping `auto-commits` is a team choice, but it's riskier without confirmation.\n\n**3. `.mcp.json` ships an MCP server that runs arbitrary shell commands with no restriction (`SHELL_MCP_ALLOW: \"*\"`)**\nThis gives every agent an unscoped shell that bypasses the narrow `Bash(npm test)`-style rules in `settings.json`.\n- **Fix:** Remove the `shell` server. If the team really needs it, limit `SHELL_MCP_ALLOW` to named commands and keep tool calls on ask. Also read the tool descriptions of `acme-docs-mcp` and `acme-shell-mcp` before trusting them, since the model follows those descriptions as instructions.\n\n**4. `.claude/settings.json` has `\"enableAllProjectMcpServers\": true`**\nEvery server in `.mcp.json`, including the shell server above and any added later, starts without anyone approving it.\n- **Fix:** Remove this line so each person approves project MCP servers themselves. If you want a list, use `enabledMcpjsonServers: [\"docs\"]`.\n\n**5. `.claude/settings.json` hook runs `npx -y @acme/format-on-save` after every Edit/Write**\nThe version isn't pinned, so `npx -y` downloads and runs whatever the newest release is, with no prompt, each time the agent edits a file. That's a supply-chain risk.\n- **Fix:** Pin an exact version, installed from a lockfile in `devDependencies`, and run it without `-y`, e.g. `npx --no-install format-on-save`. Or point the hook at a reviewed script in the repo, e.g. `./scripts/format.sh`. Have someone review the hook before it's committed.\n\n**6. No rule blocks the agent from reading secrets**\nThe README says secrets live in `.env`. Keeping it out of git doesn't stop an agent from reading it.\n- **Fix:** Add a deny list to `.claude/settings.json`:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\", \"Read(**/*.pem)\", \"Read(**/*.key)\", \"Read(~/.aws/**)\", \"Read(~/.ssh/**)\"]\n  ```\n\n## Already fine\n- **`.codex/config.toml`:** `approval_policy = \"on-request\"` with `sandbox_mode = \"workspace-write\"` keeps Codex asking and inside the project.\n- **`.claude/settings.json` permissions:** the allow rules name specific commands (`npm test`, `npm run lint`, `Edit(src/**)`), and `git push` asks first. They'll only work as intended once #1 is fixed.\n- **MCP versions:** both servers are pinned (`==0.9.0`, `==1.4.2`).\n\n## Not checked\n- **Home-directory settings:** I only read the repo's files. Each teammate's `~/.claude/settings.json`, `~/.codex/config.toml` and `~/.aider.conf.yml` also apply to them.\n- **Antigravity:** I don't know where its settings live, so I can't say whether it asks before running tools.\n- **Git tracking:** `repo` isn't a git repository here, so I couldn't see what is actually tracked.\n- **agtmls:** once the fixes are in, try `agtmls doctor --target . --agent <agent>` and `agtmls audit --foreign .` again.\n\nI can apply fixes 1\u20136 if you'd like."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "with",
+      "trial": 2,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 141979,
+      "cost_usd": 0.16544999999999999,
+      "seconds": 152.6,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found 8 problems in the agent configuration in `./repo`. The worst is that two agents are set to run tools without asking anyone, and that setting would reach everyone who clones the repo. I haven't changed any files.\n\n`agtmls doctor` stalled with no output for over two minutes, so I stopped it and checked every file by hand; `agtmls audit --foreign` never ran. `./repo` isn't a git repository, so I couldn't see what is actually committed. I went by the README, which says all of the agent config is committed, and by `.gitignore`.\n\n## Critical\n\n**1. `.claude/settings.local.json` turns off every Claude Code permission prompt.**\n- **Problem:** It sets `\"defaultMode\": \"bypassPermissions\"`, so Claude runs every tool without asking. The file is meant to be personal, but `.gitignore` doesn't exclude it, so it will be committed. That means everyone who clones the repo gets no prompts, and the `ask` rule on `git push` in `.claude/settings.json` stops doing anything.\n- **Fix:** Delete the file from the repo and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can turn it on for a single session.\n\n**2. `.aider.conf.yml` has `yes-always: true`.**\n- **Problem:** Aider accepts every action without asking, and `auto-commits: true` then commits the result. Because this file is committed, it applies to the whole team.\n- **Fix:** Remove `yes-always` so Aider asks again. Whether to keep `auto-commits` is a personal choice, so it belongs in each person's `~/.aider.conf.yml`.\n\n**3. `.mcp.json` includes a \"shell\" MCP server with `SHELL_MCP_ALLOW: \"*\"`.**\n- **Problem:** This server can run any command. Combined with problem 4, it starts automatically, and the Claude permission rules don't limit it.\n- **Fix:** Remove the `shell` server. The existing `Bash(...)` permission rules already cover the commands the team needs. If you do keep it, replace `*` with a short list of named commands.\n\n**4. `.claude/settings.json` has `\"enableAllProjectMcpServers\": true`.**\n- **Problem:** Every server in `.mcp.json` starts without asking, including any server someone adds in a later commit.\n- **Fix:** Remove the setting so each person approves servers themselves. Alternatively, replace it with `\"enabledMcpjsonServers\": [\"docs\"]`.\n\n## High\n\n**5. The `PostToolUse` hook runs `npx -y @acme/format-on-save`.**\n- **Problem:** The package isn't pinned to a version, so every edit downloads and runs whatever release is newest, with your permissions. `-y` skips npx's install prompt, and a change on the registry takes effect without any commit.\n- **Fix:** Pin the version and add it to `devDependencies` so it's in the lockfile. Then call it from a script in the repo, for example `\"command\": \"./scripts/format.sh\"`. Have someone read the hook before the repo is shared.\n\n**6. Nothing stops agents from reading secrets.**\n- **Problem:** The README says secrets live in `.env`. That file is gitignored, but agents can still read it from disk.\n- **Fix:** Add a deny list to `.claude/settings.json`:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\", \"Read(**/*.pem)\", \"Read(**/*.key)\", \"Read(~/.aws/**)\", \"Read(~/.ssh/**)\"]\n  ```\n\n## Medium\n\n**7. `Edit(src/**)` is allowed but `Write` isn't mentioned.**\n- **Problem:** The rule is correctly limited to `src/`, but nothing covers creating new files. Unlisted tools still ask by default, so this is only a problem if someone later adds a broad `Write` rule.\n- **Fix:** If agents should create files in `src/` without asking, add `Write(src/**)`. Never add plain `Write` or `Bash` with no path or command.\n\n**8. `.mcp.json` servers need a quick check.**\n- **Problem:** `acme-docs-mcp==0.9.0` is pinned to a version, which is right. But the text describing each tool is read by the model as instructions, so a malicious description is an attack route.\n- **Fix:** Read the `acme-docs-mcp` tool descriptions once, and again whenever you change the pinned version.\n\n## No change needed\n- **`.codex/config.toml`:** `approval_policy = \"on-request\"` with `sandbox_mode = \"workspace-write\"` is a safe setup.\n- **`Bash(npm test)`, `Bash(npm run lint)`, and `ask: Bash(git push:*)`:** these rules are well limited. The `git push` rule will only work once problem 1 is fixed.\n\n## Not checked\n- **User-level settings:** `~/.claude/settings.json`, `~/.codex/config.toml` and `~/.aider.conf.yml` combine with the project files on each teammate's machine, so each person should check their own.\n- **Antigravity:** there's no Antigravity config in the repo and I don't know where its settings live, so don't assume it asks before acting.\n\nOnce these are fixed, run `agtmls doctor --target . --agent claude|codex|aider` and `agtmls audit --foreign .` again before sharing. If the doctor stalls again, run it on its own to see where it gets stuck. I can make these changes if you'd like."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "without",
+      "trial": 2,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 108559,
+      "cost_usd": 0.14981299999999997,
+      "seconds": 36.0,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I've read all eight files and am writing up the findings. I couldn't run `git ls-files` because it was blocked, so this is based on the README, which says all of this config is committed.\n\n## Problems and fixes\n\n### 1. `.claude/settings.local.json` is committed and sets `bypassPermissions` (critical)\n- **Problem:** `settings.local.json` is meant for one person's machine and should never be committed. Its `\"defaultMode\": \"bypassPermissions\"` turns off every permission prompt for anyone who clones the repo. That cancels your `ask` rule for `git push` and makes the allowlist in `settings.json` pointless.\n- **Fix:** Delete it from the repo with `git rm --cached .claude/settings.local.json` and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can turn it on locally.\n\n### 2. The `shell` MCP server gives unrestricted shell access (critical)\n- **Problem:** In `.mcp.json`, `acme-shell-mcp` runs with `SHELL_MCP_ALLOW: \"*\"`. MCP tools don't go through Claude Code's `Bash(...)` permission rules, so this is a second route to run any command, including `git push`, with no check.\n- **Fix:** Remove the server. If the team really needs it, set `SHELL_MCP_ALLOW` to a short list of specific commands.\n\n### 3. `enableAllProjectMcpServers: true` approves MCP servers automatically (high)\n- **Problem:** In `.claude/settings.json`, this approves every server in `.mcp.json` with no prompt. That includes the `shell` server now and any server someone adds in a later commit.\n- **Fix:** Remove the setting. Either let each person approve servers themselves, or list the vetted ones explicitly: `\"enabledMcpjsonServers\": [\"docs\"]`.\n\n### 4. The PostToolUse hook runs an unpinned package from the registry (high, supply chain)\n- **Problem:** `npx -y @acme/format-on-save` runs after every Edit or Write. It fetches whatever version is newest, installs it without asking, and runs it on every developer's machine. If that package or its publisher is ever compromised, the code runs automatically on the whole team's machines.\n- **Fix:** Pin an exact version in `devDependencies` with a lockfile and call the local copy (`npx --no-install format-on-save` or `./node_modules/.bin/...`). At a minimum, pin the version: `@acme/format-on-save@1.2.3`.\n\n### 5. The npm tooling doesn't match the project (medium)\n- **Problem:** The only code is Python (`src/app.py`) and there's no `package.json`. So the `Bash(npm test)` and `Bash(npm run lint)` allow rules do nothing. The formatter hook can't use a local install, so it downloads the package every time, which makes #4 worse.\n- **Fix:** Replace these with the project's real Python commands, for example `Bash(pytest)` and `Bash(ruff check)`, and a Python formatter such as `ruff format`. Or add a proper `package.json` if Node tooling is intended.\n\n### 6. Aider is set to auto-confirm everything and auto-commit (high)\n- **Problem:** In `.aider.conf.yml`, `yes-always: true` answers \"yes\" to every Aider prompt, including running shell commands. `auto-commits: true` makes a commit for every change without review. Forcing both on the whole team is risky.\n- **Fix:** Remove `yes-always`. Either set `auto-commits: false` or leave both settings out and let each person choose.\n\n### 7. Nothing stops agents from reading secrets in `.env` (medium)\n- **Problem:** The README says local secrets live in `.env`. `.gitignore` keeps that file out of git, but it doesn't stop an agent from reading it and sending the contents to a model provider or an MCP server.\n- **Fix:** Add deny rules to `.claude/settings.json`: `\"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]`. Tell the team the same risk applies to Codex and Aider.\n\n### 8. `.gitignore` doesn't cover local or personal agent files (low)\n- **Fix:** Add these lines:\n  ```\n  .claude/settings.local.json\n  CLAUDE.local.md\n  .aider*\n  !.aider.conf.yml\n  ```\n  The last two lines ignore Aider's history and cache files but keep the shared config.\n\n### 9. Update the README (low)\n- **Fix:** Once the above is fixed, say which files are shared (`.claude/settings.json`, `.mcp.json`, `.codex/config.toml`, `.aider.conf.yml`) and which are personal (`settings.local.json`).\n\n### Nothing to change\n- `.codex/config.toml`: `approval_policy = \"on-request\"` with `sandbox_mode = \"workspace-write\"` is a sensible shared default.\n- The `docs` MCP server is pinned to an exact version (`==0.9.0`).\n- `Edit(src/**)` is a reasonably narrow allow rule.\n- The `ask` rule on `git push` is correct once #1 and #2 are fixed.\n\n**Before sharing:** fix #1\u2013#4 at minimum. Because the README says these files are already committed, `settings.local.json` is also in git history. Removing it now keeps it out of future clones, but anyone who checks out an older commit will still get bypass mode."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "without",
+      "trial": 3,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 74040,
+      "cost_usd": 0.1504474,
+      "seconds": 36.7,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I reviewed the eight files in `./repo`. There are **six problems to fix before sharing** and two smaller cleanups. The most urgent are #1 through #3: together they would let an agent run any shell command on a teammate's machine without asking. The Codex config (`.codex/config.toml`: `on-request` approvals with a `workspace-write` sandbox) is fine as is.\n\n### Critical\n\n**1. A personal settings file is committed and turns off all permission prompts**\n`.claude/settings.local.json:3` sets `\"defaultMode\": \"bypassPermissions\"`. The `.local.json` file is meant to be personal and untracked. Committed, it makes everyone who clones the repo run Claude Code with no permission prompts. That overrides the careful rules in `settings.json`, including the `ask` rule for `git push`.\n- **Fix:** Delete the file from the repo (`git rm --cached .claude/settings.local.json`) and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can set it in their own untracked copy.\n\n**2. An MCP server with unrestricted shell access**\n`.mcp.json:4` sets up `acme-shell-mcp` with `SHELL_MCP_ALLOW: \"*\"`. That runs any command, and it doesn't go through Claude Code's `Bash(...)` allow/ask rules, so it gets around the `git push` protection too.\n- **Fix:** Remove the `shell` server; the built-in Bash tool with permission rules already covers this. If you really need it, replace `*` with a short list of specific commands.\n\n**3. Every project MCP server is approved automatically**\n`.claude/settings.json:6` has `\"enableAllProjectMcpServers\": true`. Teammates never get asked whether to trust the servers in `.mcp.json`, including the shell server from #2, and any server added to `.mcp.json` later would also start without asking.\n- **Fix:** Remove the line so each person approves servers on first use, or list approved servers explicitly with `\"enabledMcpjsonServers\": [\"docs\"]`.\n\n### High\n\n**4. The formatting hook downloads the latest package from npm on every edit**\n`.claude/settings.json:9` runs `npx -y @acme/format-on-save` after every Edit or Write. The version isn't pinned and `-y` skips the install prompt, so whatever version is newest on npm runs on everyone's machine, with their permissions, without any prompt. If that package were ever compromised, every teammate would run the compromised version.\n- **Fix:** Pin it as a dev dependency (`\"@acme/format-on-save\": \"x.y.z\"` in `package.json`, with a lockfile committed) and change the hook to run the local copy: `npx --no-install format-on-save`. Also see #7.\n\n**5. Aider approves everything automatically**\n`.aider.conf.yml:5` sets `yes-always: true`. Aider will say yes to every prompt, including running shell commands the model suggests and adding files. Line 4, `auto-commits: true`, also commits AI edits straight to people's branches without review.\n- **Fix:** Remove `yes-always` (it defaults to false). Consider `auto-commits: false` so people review changes before committing.\n\n**6. Nothing stops the agent from reading `.env`**\nThe README says secrets live in `.env`. Keeping that file out of git doesn't stop an agent from reading it and passing the contents to a tool or MCP server.\n- **Fix:** Add deny rules to `.claude/settings.json`:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]\n  ```\n\n### Cleanups\n\n**7. The npm-based settings don't match this Python project**\n`src/app.py` is Python and there's no `package.json`. So the allowed `npm test` and `npm run lint` will just fail, and an npm formatter is an odd choice for Python code.\n- **Fix:** Point the allow rules at the real tooling (for example `Bash(pytest:*)`, `Bash(ruff check:*)`). Use a Python formatter in the hook, such as `ruff format` with a pinned version.\n\n**8. `.gitignore` is incomplete, and the README is now inaccurate**\n`.gitignore` only covers `.env`, not variants like `.env.local`. The README says everything in `.claude/` is committed.\n- **Fix:** Add `.env.*` and `.claude/settings.local.json` to `.gitignore`. Update the README to say `settings.local.json` is personal and stays out of git.\n\nAfter these fixes, the shared setup keeps the prompts in place, asks each person before starting any MCP server, runs only pinned tools, and keeps secrets out of the agent's reach. I haven't changed any files; I can apply these fixes if you want."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "with",
+      "trial": 3,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 141681,
+      "cost_usd": 0.16595379999999998,
+      "seconds": 159.7,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found six problems that need fixing before you share the repository. Two of them let the agent run tools without asking anyone, and between them they cover Claude Code and Aider. Codex is set up correctly. I haven't changed any files. `agtmls doctor` stalled with no output for over two minutes, so I stopped it and read every file myself.\n\n## Problems and fixes\n\n**1. `.claude/settings.local.json` turns off all permission prompts, for everyone.** (Critical)\nIt sets `\"defaultMode\": \"bypassPermissions\"`. This local file takes priority over the other settings files, so anyone who clones the repo gets a Claude Code that never asks. That includes the `ask` rule for `git push` in `settings.json`.\n- **Fix:** Remove the file from the repo and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants that mode can set it for their own session.\n\n**2. `.aider.conf.yml` sets `yes-always: true`.** (Critical)\nAider accepts every action without asking, for anyone using this repo.\n- **Fix:** Delete that line. `auto-commits: true` and `model: sonnet` are personal preferences, so move them to each person's `~/.aider.conf.yml`.\n\n**3. `.mcp.json` includes a shell server that can run any command.** (High)\nThe `shell` server (`acme-shell-mcp`) has `SHELL_MCP_ALLOW: \"*\"`. The agent could run any command through it, and your Claude Code permission rules wouldn't apply.\n- **Fix:** Remove the server. If the team really needs it, replace `*` with a list of specific commands and read the tool descriptions in `acme-shell-mcp==1.4.2` first.\n\n**4. `enableAllProjectMcpServers: true` in `.claude/settings.json`.** (High)\nEvery server in `.mcp.json`, including the shell server, starts without asking for approval. Anything added to `.mcp.json` later would also start automatically.\n- **Fix:** Remove this setting. If you want `docs` to start automatically, use `\"enabledMcpjsonServers\": [\"docs\"]` instead.\n\n**5. The formatting hook downloads and runs whatever version is newest.** (High)\nThe hook runs `npx -y @acme/format-on-save` after every Edit or Write. With no version pinned, it fetches the latest release each time and runs it with your permissions.\n- **Fix:** Add the formatter as a pinned devDependency and run it with `npx --no-install @acme/format-on-save`, or call a script checked into the repo, such as `./scripts/format.sh`. Have a reviewer read what it runs.\n\n**6. Nothing stops the agent from reading secrets.** (Medium)\nThe README says local secrets live in `.env`, but no rule blocks the agent from reading it.\n- **Fix:** Add a `deny` list to `.claude/settings.json`, for example:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\", \"Read(./**/*.pem)\", \"Read(./**/*.key)\"]\n  ```\n  Also add `.env.*` to `.gitignore`, which currently only covers `.env`.\n\n## Settings that are fine\n- **Claude Code allow rules:** `Bash(npm test)`, `Bash(npm run lint)` and `Edit(src/**)` are each limited to a specific command or folder.\n- **The `ask` rule on `git push`:** fine once problem 1 is fixed.\n- **Codex:** `approval_policy = \"on-request\"` with `sandbox_mode = \"workspace-write\"`.\n- **`docs` MCP server:** pinned to `==0.9.0`.\n\n## What I couldn't check\n- **`agtmls doctor` and `audit --foreign`:** didn't finish. Run them again after the fixes.\n- **The folder isn't a git repository:** I can't confirm which files are actually tracked. I assumed everything shown is committed.\n- **Each person's own settings:** each teammate's `~/.claude/settings.json`, `~/.codex/config.toml` and `~/.aider.conf.yml` can still turn off prompts on their machine.\n- **Antigravity:** I don't know where its settings live, so I can't say whether it asks before running tools.\n- **MCP tool descriptions:** I didn't read the tool descriptions in either MCP package.\n\nI can make fixes 1\u20136 if you want."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "with",
+      "trial": 4,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 0.833,
+      "skill_used": true,
+      "tokens": 141760,
+      "cost_usd": 0.15802739999999998,
+      "seconds": 149.1,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "I found six problems in the repo's agent configuration. Three of them let an agent act with no approval at all. I haven't changed any files.\n\n`agtmls doctor` hung on the first check (Claude) and produced no output, so I stopped it and reviewed every file by hand. `agtmls audit --foreign .` never got to run.\n\n## Problems and fixes\n\n**1. `.claude/settings.local.json:3`: `\"defaultMode\": \"bypassPermissions\"` (critical)**\nClaude Code never asks before running a tool. This file is meant to be personal, but `.gitignore` doesn't exclude it, so it would reach everyone. It also takes precedence over the committed `settings.json`, which cancels that file's careful allow/ask list.\n- **Fix:** delete the file from the repo and add `.claude/settings.local.json` to `.gitignore`. Anyone who wants bypass mode can turn it on for one session.\n\n**2. `.aider.conf.yml:5`: `yes-always: true` (critical)**\nAider accepts every prompt without asking, including running shell commands. Combined with `auto-commits: true` (line 4), its edits are committed without review.\n- **Fix:** remove `yes-always`. Also set `auto-commits: false`, or leave that choice to each person's `~/.aider.conf.yml`.\n\n**3. `.mcp.json:4`: the `shell` MCP server with `SHELL_MCP_ALLOW: \"*\"` (critical)**\nThis gives any agent a tool that runs any command. MCP tool calls don't go through Claude's `Bash(...)` allow rules, so it's a way around the narrow permissions in `settings.json`.\n- **Fix:** remove the `shell` server. If you really need it, restrict `SHELL_MCP_ALLOW` to named commands. Keep `docs`, which is already pinned to `==0.9.0`.\n\n**4. `.claude/settings.json:6`: `\"enableAllProjectMcpServers\": true` (high)**\nEvery server in `.mcp.json`, including ones added later, starts without asking each developer.\n- **Fix:** remove the line, so each person approves the project's MCP servers themselves.\n\n**5. `.claude/settings.json:9`: hook runs `npx -y @acme/format-on-save` (high)**\nThis runs after every edit. It fetches whatever version of the package is newest at that moment and installs it without asking (`-y`), with the developer's permissions. No commit is needed for the code it runs to change.\n- **Fix:** add the formatter as a pinned devDependency (exact version, with a lockfile) and call the local binary, e.g. `\"command\": \"npx --no-install format-on-save\"`. Alternatively, call a script committed in the repo, and have someone review it.\n\n**6. No rule blocks reading secrets (medium)**\nThe README says `.env` holds local secrets. `.gitignore` keeps it out of git, but nothing stops an agent from reading it.\n- **Fix:** add deny rules to `.claude/settings.json`:\n  ```json\n  \"deny\": [\"Read(./.env)\", \"Read(./.env.*)\", \"Read(**/*.pem)\", \"Read(**/*.key)\", \"Read(~/.aws/**)\", \"Read(~/.ssh/**)\"]\n  ```\n\n## Already fine\n- **`.codex/config.toml`:** `approval_policy = \"on-request\"` with a `workspace-write` sandbox is the right setup.\n- **`.claude/settings.json` permissions:** `Bash(npm test)`, `Bash(npm run lint)` and `Edit(src/**)` each name a specific command or path, and `git push` still asks.\n\n## What I couldn't check\n- **The `agtmls` tools:** neither the doctor nor the audit produced results, as above.\n- **Personal settings:** I didn't look at `~/.claude`, `~/.codex` or `~/.aider.conf.yml`. They're per person, but a teammate's own bypass setting would still apply.\n- **Antigravity:** there's no config file for it that I know of, so don't assume it asks before acting.\n- **The MCP tools themselves:** I didn't install `acme-docs-mcp` or `acme-shell-mcp`, so I haven't read their tool descriptions.\n- **Git:** `./repo` isn't a git repository, so I can't confirm what has actually been committed.\n\nI can make these changes if you want. Once the doctor is fixed, it's worth running it again to confirm."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "claude",
+      "arm": "without",
+      "trial": 4,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 74107,
+      "cost_usd": 0.15120840000000002,
+      "seconds": 39.3,
+      "model": "claude-opus-5-5",
+      "error": null,
+      "answer": "The biggest problem is that `.claude/settings.local.json` is committed with `bypassPermissions`. Anyone who clones the repo would run Claude Code with no permission prompts at all. Several other settings make that worse, so fix these before sharing.\n\n### High severity\n\n**1. A personal settings file is committed and turns off all permission checks**\n`.claude/settings.local.json:3` sets `\"defaultMode\": \"bypassPermissions\"`. This file is meant to be personal and kept out of git. As committed, it overrides the team settings and skips every prompt, including the `ask` rule for `git push` in `settings.json:4`.\n**Fix:** Delete it from the repo and add `.claude/settings.local.json` to `.gitignore`. To stop anyone re-enabling bypass mode, add this to `.claude/settings.json`:\n```json\n\"permissions\": { \"disableBypassPermissionsMode\": \"disable\", ... }\n```\n\n**2. Every MCP server in the repo is approved automatically**\n`.claude/settings.json:6` has `\"enableAllProjectMcpServers\": true`. Any server someone adds to `.mcp.json` later, in any PR, starts without anyone approving it.\n**Fix:** Remove that line. Either let each person approve servers when prompted, or name the allowed ones: `\"enabledMcpjsonServers\": [\"docs\"]`.\n\n**3. The `shell` MCP server can run any command**\n`.mcp.json:4` sets `SHELL_MCP_ALLOW: \"*\"`, which means unrestricted command execution through MCP. It gets around the Bash allow/ask rules completely, so the `git push` ask rule can be skipped this way. Combined with finding 2, it's on without anyone approving it.\n**Fix:** Remove the `shell` server. Claude Code's own Bash tool with permission rules already covers this. If you really need it, limit `SHELL_MCP_ALLOW` to a short list of commands and make each person approve it.\n\n**4. The format hook downloads and runs an unpinned package on every edit**\n`.claude/settings.json:9` runs `npx -y @acme/format-on-save` after every Edit or Write. `-y` installs whatever version is current on the registry, with no prompt, on every team member's machine. That's a supply-chain risk: a compromised or typosquatted release would run automatically.\n**Fix:** Pin the package in `devDependencies` (with a lockfile) and call the local copy, e.g. `\"command\": \"npx --no-install format-on-save\"` or `./node_modules/.bin/format-on-save`.\n\n**5. Aider confirms every prompt automatically**\n`.aider.conf.yml:5` sets `yes-always: true`, which answers \"yes\" to everything, including running shell commands the model suggests. `auto-commits: true` (line 4) then commits the results without review.\n**Fix:** Remove `yes-always`. Set `auto-commits: false` in the shared file and let people turn it on in their own `~/.aider.conf.yml` if they want it.\n\n### Medium severity\n\n**6. Nothing stops an agent from reading `.env`**\nThe README says secrets live in `.env`. The file is gitignored, but no agent setting blocks reading it, so Claude or the MCP servers can read it and send its contents to the model.\n**Fix:** Add deny rules to `.claude/settings.json`:\n```json\n\"deny\": [\"Read(./.env)\", \"Read(./.env.*)\"]\n```\nAlso add `.env` to a `.aiderignore` file.\n\n**7. `.gitignore` is missing agent-generated files**\nIt only lists `.env` and `node_modules/`.\n**Fix:** Add:\n```\n.env.*\n.claude/settings.local.json\n.aider*\n!.aider.conf.yml\n```\nThe `.aider*` pattern covers chat and input history and the tags cache, which can contain secrets or code snippets. The `!` line keeps the shared Aider config tracked.\n\n**8. The README says all agent configuration is shared**\n`README.md:7-8` says everything in `.claude/` is committed \"so everyone gets the same setup\". That's how finding 1 happened.\n**Fix:** Say that `.claude/settings.local.json` is personal and gitignored, and that permission-loosening settings belong in each person's own settings, not in the repo.\n\n### OK as-is\n- The `.codex/config.toml` settings (`on-request` approval, `workspace-write` sandbox) are reasonable defaults for a team.\n- The MCP server versions are pinned (`==0.9.0`, `==1.4.2`).\n- The allow list in `settings.json` (`npm test`, `npm run lint`, `Edit(src/**)`) is appropriately narrow.\n\nThe repo isn't a git repository in this directory, so I couldn't check whether any of this has already been pushed. If `settings.local.json` is in shared history, removing it in a new commit won't take it out of that history. I haven't changed any files; I can apply these fixes if you want."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "with",
+      "trial": 0,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 0.833,
+      "skill_used": true,
+      "tokens": 259125,
+      "cost_usd": null,
+      "seconds": 142.4,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found **six problems to fix before sharing**. No files were changed.\n\n| Problem | Fix |\n|---|---|\n| **High \u2014 Claude bypasses permission prompts.** [`.claude/settings.local.json:3`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.claude/settings.local.json:3) sets `bypassPermissions`, overriding the shared configuration\u2019s intended approval posture. | Remove the bypass and set `permissions.defaultMode` to `\"default\"` in shared settings. Add `.claude/settings.local.json` to `.gitignore`; if tracked, remove it from Git\u2019s index. Local settings override shared settings. [Claude documentation](https://code.claude.com/docs/en/settings) |\n| **High \u2014 The formatting hook executes an unpinned package.** [`.claude/settings.json:9`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.claude/settings.json:9) runs `npx -y @acme/format-on-save` after edits and writes. Package code can change without a repository commit, and execution may fetch dependencies. | Replace it with a reviewed repository script using a locally installed, version-pinned formatter and committed dependency lockfile. Keep installation and network access out of the hook. |\n| **High \u2014 A shell MCP server is configured with unrestricted access.** [`.mcp.json:4`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.mcp.json:4) sets `SHELL_MCP_ALLOW=\"*\"`. Native `Bash(...)` rules do not constrain a separate MCP tool. | Remove this server unless needed. Otherwise, review its implementation and tool descriptions, configure a documented command allowlist, and restrict filesystem access and credentials. The exact meaning and enforcement of this custom variable need verification. |\n| **High \u2014 Project MCP servers receive blanket approval.** [`.claude/settings.json:6`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.claude/settings.json:6) enables all project MCP servers, including future additions. | Remove `enableAllProjectMcpServers: true` or set it to `false`; require individual server review and approval. Server approval is distinct from tool-call permission. [MCP documentation](https://code.claude.com/docs/en/mcp) |\n| **High \u2014 Aider automatically answers confirmations.** [`.aider.conf.yml:5`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.aider.conf.yml:5) sets `yes-always: true`. | Remove it or set `yes-always: false`. `auto-commits: true` is a separate workflow choice, not itself a permission bypass. [Aider documentation](https://aider.chat/docs/config/aider_conf.html) |\n| **Medium \u2014 Secrets lack explicit read restrictions.** [`.claude/settings.json:2`](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.claude/settings.json:2) has no deny rules, although the README says secrets live in `.env`. Gitignore does not prevent agent reads. | Add deny rules for `.env`, secret variants, private keys, and credential directories\u2014for example, `Read(**/.env)` and `Read(~/.aws/**)`. Also isolate secrets from hooks, shell subprocesses, and MCP servers; file-tool rules alone do not constrain every access route. [Permission documentation](https://code.claude.com/docs/en/permissions) |\n\nThe scoped Claude allow rules are reasonable. Both MCP packages already have explicit versions. [Codex\u2019s configuration](/private/var/folders/q0/lqf1w91j7nx2pml0b226g_6w0000gn/T/agtmls-uplift-97feu64i/work/repo/.codex/config.toml:3) uses `on-request` with `workspace-write`; I found no approval/sandbox issue there. [Official OpenAI documentation](https://developers.openai.com/codex/config-reference/)\n\n**Review limits:** I checked all supplied agent configuration files and relevant home-scope settings. Home Claude uses `auto`, which delegates approvals to a classifier. No Antigravity configuration was present. This snapshot lacks Git metadata, so tracking status is unverified. Automated checks were inconclusive: doctor was interrupted, and foreign audit rejected the directory because it contains no skills. The findings above come from manual inspection."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "without",
+      "trial": 0,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 0.833,
+      "skill_used": false,
+      "tokens": 250239,
+      "cost_usd": null,
+      "seconds": 81.7,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found six issues to address before sharing. No files were changed. This copy has no `.git` directory, so I could not verify commit history.\n\n1. **High \u2014 Personal permission bypass is distributed to teammates.**  \n   [`.claude/settings.local.json:3`](repo/.claude/settings.local.json#L3) sets `bypassPermissions`. Claude Code versions before v2.1.257 honor this from project files; newer versions ignore it, making behavior version-dependent. **Fix:** remove this file from tracking, add `.claude/settings.local.json` to `.gitignore`, and use normal permission defaults in shared settings. [Settings documentation](https://code.claude.com/docs/en/settings)\n\n2. **High \u2014 Every project MCP server is automatically approved.**  \n   [`.claude/settings.json:6`](repo/.claude/settings.json#L6) enables all project servers after workspace trust, including future additions. **Fix:** remove `enableAllProjectMcpServers` and require explicit approval of reviewed servers. Server approval and tool-call approval are separate controls. [MCP documentation](https://code.claude.com/docs/en/mcp)\n\n3. **High \u2014 The shell MCP requests unrestricted command access.**  \n   [`.mcp.json:4`](repo/.mcp.json#L4) sets `SHELL_MCP_ALLOW=\"*\"`. A `Bash(git push:*)` rule does not govern commands executed through a separate MCP tool. **Fix:** remove the shell server unless required; otherwise verify its policy implementation, restrict commands, and isolate its filesystem, credentials, and network access. The package source is absent, so the wildcard\u2019s actual enforcement cannot be verified.\n\n4. **High \u2014 Every edit can execute an unpinned downloaded package.**  \n   [`.claude/settings.json:9`](repo/.claude/settings.json#L9) runs `npx -y @acme/format-on-save` after `Edit` or `Write`. Package updates can change executable behavior without a repository change; hooks run with the user\u2019s permissions. **Fix:** install a reviewed, pinned formatter through a lockfile and invoke its local executable without runtime downloads. [Hook security documentation](https://code.claude.com/docs/en/hooks#security-considerations)\n\n5. **Medium \u2014 Aider automatically accepts every confirmation.**  \n   [`.aider.conf.yml:5`](repo/.aider.conf.yml#L5) sets `yes-always: true`, removing interactive review for all teammates. **Fix:** remove it or set it to `false`. `auto-commits: true` is a separate workflow choice; disable that too if commits must receive prior human review. [Aider options](https://aider.chat/docs/config/options.html#--yes-always)\n\n6. **High \u2014 Local secrets have no agent-access boundary.**  \n   [`README.md:6`](repo/README.md#L6) places secrets in `.env`, but `.gitignore` only prevents ordinary Git tracking. The supplied configuration does not prevent agents, hooks, or MCP processes from reading that file. **Fix:** keep real secrets outside the agent environment and inject narrowly scoped credentials only where needed. Add Claude `Read`/`Edit` deny rules for secret paths as additional protection, while enforcing filesystem isolation for shell and MCP access. Codex\u2019s `workspace-write` mode permits workspace reads. [Codex security documentation](https://learn.chatgpt.com/docs/agent-approvals-security)\n\nThe Codex configuration itself\u2014`on-request` with `workspace-write`\u2014is a reasonable baseline. It does not constrain Claude Code, Aider, or their subprocesses."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "without",
+      "trial": 1,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 0.833,
+      "skill_used": false,
+      "tokens": 267336,
+      "cost_usd": null,
+      "seconds": 83.6,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found six issues to address before sharing. No files were changed. The supplied `repo` has no Git metadata, so I could not verify tracking or history.\n\n1. **High \u2014 Personal permission bypass is included in the shared setup.**  \n   [`.claude/settings.local.json:3`](repo/.claude/settings.local.json#L3) sets `bypassPermissions`. Older Claude Code versions honor this and skip permission prompts; versions \u22652.1.257 ignore it in project/local settings, making behavior version-dependent. **Fix:** remove this file from version control, add it to `.gitignore`, and use `\"defaultMode\": \"default\"` in shared settings. [Settings documentation](https://code.claude.com/docs/en/settings#troubleshoot-a-setting-that-doesnt-apply).\n\n2. **High \u2014 All project MCP servers are automatically enabled.**  \n   [`.claude/settings.json:6`](repo/.claude/settings.json#L6) enables every server, including future additions, once workspace trust permits it. **Fix:** remove `enableAllProjectMcpServers` or set it to `false`; approve reviewed servers individually. Server enablement and tool-call approval are separate controls. [MCP documentation](https://code.claude.com/docs/en/mcp).\n\n3. **High \u2014 A general-purpose shell MCP has unrestricted configuration.**  \n   [`.mcp.json:4`](repo/.mcp.json#L4) supplies `SHELL_MCP_ALLOW=\"*\"`. The package implementation is unavailable here, but this configuration expresses unrestricted access. The `Bash(git push:*)` rule does not cover a separate MCP tool. **Fix:** remove the shell server unless needed; otherwise verify its restriction mechanism, restrict commands and filesystem/network access, and require approval for its tools.\n\n4. **High \u2014 Every edit can trigger downloaded, unpinned code.**  \n   [`.claude/settings.json:9`](repo/.claude/settings.json#L9) runs `npx -y @acme/format-on-save` after `Edit` or `Write`. Package updates can therefore change executable behavior without a repository change. Hooks run with the user\u2019s permissions. **Fix:** use a reviewed local formatter installed through a committed lockfile, and scope it to intended files. [Hook security documentation](https://code.claude.com/docs/en/hooks#security-considerations).\n\n5. **High \u2014 Aider automatically accepts confirmations.**  \n   [`.aider.conf.yml:5`](repo/.aider.conf.yml#L5) sets `yes-always: true`, removing confirmation checkpoints. **Fix:** remove it or set it to `false`. `auto-commits: true` is a separate workflow choice; disable it too if the team requires review before commits. [Aider options](https://aider.chat/docs/config/options.html#--yes-always).\n\n6. **Medium \u2014 Git-ignoring secrets does not prevent agent access.**  \n   [README.md:6](repo/README.md#L6) places secrets in `.env`, but the configuration provides no corresponding read restriction. **Fix:** add Claude `Read` deny rules for `.env` and secret variants, and keep secrets unavailable to shell commands, hooks, and MCP processes through filesystem isolation. File-tool rules alone do not cover every access route. [Permission documentation](https://code.claude.com/docs/en/permissions).\n\nThe Codex settings\u2014`on-request` and `workspace-write`\u2014are a reasonable baseline; they do not govern Claude, Aider, or their subprocesses. [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "with",
+      "trial": 1,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 262091,
+      "cost_usd": null,
+      "seconds": 114.5,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found **six issues to fix before sharing**. No files were changed.\n\n| Location, relative to `repo/` | Problem | Fix |\n|---|---|---|\n| `.claude/settings.local.json:3` | `bypassPermissions` disables permission checks on older Claude versions, undermining the shared approval rules. Recent versions ignore this value at project/local scope. | Remove it; explicitly use `\"defaultMode\": \"default\"` in shared settings. Remove the local file from version control and add it to `.gitignore`. [Claude settings behavior](https://code.claude.com/docs/en/settings) |\n| `.claude/settings.json:9` | Every Edit/Write triggers `npx -y @acme/format-on-save`. The unpinned package can change without a repository commit and may be downloaded and executed automatically. | Replace it with a reviewed repository script invoking a locally installed formatter with a pinned, locked dependency. The hook should not download packages. |\n| `.claude/settings.json:6` | `enableAllProjectMcpServers: true` blanket-enables project MCP servers, including future additions. | Set it to `false` and require explicit review and approval for each server. |\n| `.mcp.json:4` | The shell server specifies `SHELL_MCP_ALLOW: \"*\"`, expressing unrestricted command access. Claude\u2019s `Bash(git push:*)` approval rule does not govern a separate MCP shell tool. | Remove the shell server, or replace it with narrowly scoped tools and a documented command allowlist. Review its implementation and tool descriptions before enabling it. |\n| `.claude/settings.json:2`; `.gitignore:1` | There are no explicit secret-read denials. Gitignoring `.env` prevents ordinary tracking; it does not prevent agent access. | Add denials such as `Read(.env)`, `Read(.env.*)`, and rules for actual key/credential paths. Also isolate secrets from shell commands, hooks, and MCP processes; file-tool rules alone are insufficient. |\n| `.aider.conf.yml:5` | `yes-always: true` automatically accepts confirmations for everyone using this configuration. | Set `yes-always: false`. Keep unattended operation an explicit individual/session choice. [Aider configuration](https://aider.chat/docs/config/aider_conf.html) |\n\nThe project\u2019s `.codex/config.toml:3\u20134` already pairs `on-request` approvals with `workspace-write`; keep that baseline. It permits routine workspace operations without prompting, so it is not a secret-read barrier. [OpenAI approval documentation](https://developers.openai.com/codex/sandbox)\n\nBoth MCP package versions are pinned, and Claude\u2019s existing allow rules are scoped. Aider\u2019s `auto-commits: true` is not itself an approval bypass.\n\n**Review limits:** I inspected all five agent configuration files plus README and `.gitignore`. This snapshot has no Git metadata, so tracked status could not be verified. The installed `agtmls doctor` ran unrelated tool self-checks and was interrupted; no successful repository audit is claimed. User/managed overrides and MCP package implementations remain unverified."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "with",
+      "trial": 2,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 243798,
+      "cost_usd": null,
+      "seconds": 115.3,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "Found **six problems to fix before sharing**. Files were left unchanged.\n\n| Problem | Fix |\n|---|---|\n| **High \u2014 Claude bypasses approvals.** `.claude/settings.local.json:3` sets `defaultMode: \"bypassPermissions\"`, overriding the shared default. | Remove this setting, set shared `permissions.defaultMode` to `\"default\"`, and untrack the local file if committed. Add `.claude/settings.local.json` to `.gitignore`. Local settings take precedence over shared settings. [Documentation](https://code.claude.com/docs/en/settings) |\n| **High \u2014 Hook executes unpinned external code.** `.claude/settings.json:9` runs `npx -y @acme/format-on-save` after edits/writes. This can fetch a changing package and execute it automatically. | Replace it with a reviewed repository script using a locally installed, version-pinned formatter and committed lockfile. Hooks execute commands automatically. [Documentation](https://code.claude.com/docs/en/hooks) |\n| **High \u2014 Unrestricted shell MCP.** `.mcp.json:4` configures a shell server with `SHELL_MCP_ALLOW: \"*\"`. Pinning its version does not constrain its capabilities. | Remove the shell server, or replace unrestricted access with a verified command allowlist and restricted filesystem/network access. Review its implementation and tool descriptions before enabling it. |\n| **High \u2014 Blanket project MCP approval.** `.claude/settings.json:6` sets `enableAllProjectMcpServers: true`, covering the shell server and future additions once workspace trust applies. | Remove the setting or set it to `false`; require individual server approval. This setting does not bypass the initial workspace-trust check. [Documentation](https://code.claude.com/docs/en/mcp) |\n| **High \u2014 Aider automatically accepts confirmations.** `.aider.conf.yml:5` sets `yes-always: true`. | Remove it or set it to `false`. Keep unattended behavior as an explicit session choice. `auto-commits: true` is a separate workflow preference, not itself an approval bypass. [Documentation](https://aider.chat/docs/config/options.html#--yes-always) |\n| **Medium \u2014 Secrets are gitignored but not access-protected.** `README.md:6` places secrets in `.env`; `.gitignore:1` prevents ordinary tracking, not agent reads. | Add Claude deny rules such as `Read(.env)` and `Read(.env.*)`, plus rules for relevant keys and credentials. These are tool-specific controls; protect secrets from shell commands and MCP servers using filesystem isolation or keep them outside the agent environment. [Permission rules](https://code.claude.com/docs/en/permissions) |\n\nThe scoped Claude allow rules are reasonable. Both MCP packages already have explicit versions. `.codex/config.toml:3\u20134` uses the reasonable combination `on-request` and `workspace-write`; it still permits routine operations inside the sandbox without prompting. [Official OpenAI documentation](https://learn.chatgpt.com/docs/agent-approvals-security)\n\n**Review limits:** I inspected all supplied project configuration and relevant user-scope approval settings. The folder has no Git metadata, so tracking status cannot be verified. The installed `agtmls doctor` unexpectedly ran its own repository checks; I stopped it, and no successful automated audit of `./repo` is claimed. MCP implementations and teammates\u2019 effective settings remain unverified."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "without",
+      "trial": 2,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 205230,
+      "cost_usd": null,
+      "seconds": 81.0,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found seven issues to address before sharing. This snapshot has no `.git` directory, so I reviewed the supplied files; I couldn\u2019t verify tracked status or history. No files were changed.\n\n| Priority | Location | Problem and fix |\n|---|---|---|\n| High | [.claude/settings.local.json:3](repo/.claude/settings.local.json:3) | **A personal override requests `bypassPermissions`.** Older Claude Code versions honor this from local settings and skip permission prompts; current versions ignore it here. Remove this file from version control, add `.claude/settings.local.json` to `.gitignore`, and use `default` in shared settings. Document the supported Claude version. [Settings behavior](https://code.claude.com/docs/en/settings). |\n| High | [.claude/settings.json:6](repo/.claude/settings.json:6) | **Every project MCP server is automatically approved after workspace trust**, including future additions. Remove `enableAllProjectMcpServers: true`; require individual approval or explicitly list only reviewed servers. Server approval is separate from tool-call permission. [MCP trust behavior](https://code.claude.com/docs/en/mcp#project-server-approvals-and-workspace-trust). |\n| High | [.mcp.json:4](repo/.mcp.json:4) | **The shell server is configured with `SHELL_MCP_ALLOW: \"*\"`.** This appears to grant unrestricted shell execution through a separate tool surface; `Bash(git push:*)` does not govern MCP calls. Remove this server from shared defaults, or verify its implementation and enforce a narrow command allowlist and process isolation. The server\u2019s source is absent, so its exact enforcement remains unverified. |\n| High | [.claude/settings.json:9](repo/.claude/settings.json:9) | **Every successful Edit/Write triggers an unpinned package through `npx -y`.** Package updates can change executable behavior without a repository review. Hooks run with the user\u2019s permissions. Replace this with a reviewed local formatter installed at a fixed version with a lockfile; avoid runtime package downloads. [Hook security](https://code.claude.com/docs/en/hooks#security-considerations). |\n| High | [.aider.conf.yml:5](repo/.aider.conf.yml:5) | **`yes-always: true` automatically answers confirmations for everyone.** Remove it or set it to `false`, preserving deliberate approval for individual sessions. [Aider option](https://aider.chat/docs/config/options.html#--yes-always). |\n| Medium | [.aider.conf.yml:4](repo/.aider.conf.yml:4) | **Automatic commits use Aider\u2019s default of skipping Git hooks.** Team validation or secret-scanning hooks would not run on those commits. Set `git-commit-verify: true`, or disable automatic commits and use the normal reviewed commit workflow. [Aider Git behavior](https://aider.chat/docs/git.html). |\n| High | [README.md:6](repo/README.md:6), [.gitignore:1](repo/.gitignore:1) | **Ignoring `.env` does not prevent agents, hooks, or MCP subprocesses from reading it.** Add Claude read-deny rules for secret files as defense in depth, and keep real secrets outside the agent-accessible environment. Shell/MCP/hook access requires filesystem or process isolation; a read-tool deny rule alone is insufficient. |\n\nThe settings in [.codex/config.toml](repo/.codex/config.toml:3)\u2014`on-request` with `workspace-write`\u2014are reasonable defaults. They do **not** protect secrets from reads or constrain Claude, Aider, or their subprocesses. [OpenAI sandbox documentation](https://learn.chatgpt.com/docs/sandboxing)."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "without",
+      "trial": 3,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 190147,
+      "cost_usd": null,
+      "seconds": 80.7,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found six issues to address before sharing. `./repo` has no Git metadata, so I reviewed the supplied files; I couldn\u2019t verify commits or history.\n\n1. **High \u2014 A personal permission-bypass setting is included.**  \n   [`.claude/settings.local.json:3`](repo/.claude/settings.local.json#L3) sets `bypassPermissions`. Claude Code versions before v2.1.257 honor this from local settings, skipping normal permission prompts; newer versions ignore it there. **Fix:** remove the bypass setting, untrack the local file, and add `.claude/settings.local.json` to `.gitignore`. Keep shared defaults in `settings.json`. [Claude settings documentation](https://code.claude.com/docs/en/settings)\n\n2. **High \u2014 Editing files triggers unpinned executable code.**  \n   [`.claude/settings.json:9`](repo/.claude/settings.json#L9) runs `npx -y @acme/format-on-save` after every matching edit. Without a pinned local dependency, this can download and execute a changing package. Hooks run with the user\u2019s permissions. **Fix:** install a reviewed formatter at an exact version with a committed lockfile, and invoke its local executable without automatic downloads. [Hook security documentation](https://code.claude.com/docs/en/hooks#security-considerations)\n\n3. **High \u2014 The shell MCP server is configured for unrestricted access.**  \n   [`.mcp.json:4`](repo/.mcp.json#L4) passes `SHELL_MCP_ALLOW=\"*\"`. The server\u2019s implementation isn\u2019t supplied, so its exact enforcement cannot be verified, but this explicitly requests a wildcard allowance. Claude\u2019s `Bash(...)` rules don\u2019t constrain a separate MCP execution tool. **Fix:** remove this server unless necessary; otherwise verify its policy, restrict commands and working directories, and isolate its process. [MCP permission documentation](https://code.claude.com/docs/en/permissions)\n\n4. **Medium \u2014 All project MCP servers are automatically enabled.**  \n   [`.claude/settings.json:6`](repo/.claude/settings.json#L6) enables every project server, including future additions. Current Claude Code still requires workspace trust, but afterward this removes selective server approval. **Fix:** remove `enableAllProjectMcpServers`, or set it to `false`, and approve only reviewed servers individually. [Project MCP approval documentation](https://code.claude.com/docs/en/mcp#project-server-approvals-and-workspace-trust)\n\n5. **Medium \u2014 Aider automatically accepts confirmations.**  \n   [`.aider.conf.yml:5`](repo/.aider.conf.yml#L5) sets `yes-always: true`, removing confirmation opportunities for every teammate. **Fix:** remove it or set it to `false`. `auto-commits: true` is a normal Aider default, not independently a defect; disable it too if the team requires review before local commits. [Aider options](https://aider.chat/docs/config/options.html#--yes-always)\n\n6. **Medium \u2014 Gitignored secrets remain accessible to execution tools.**  \n   [`README.md:6`](repo/README.md#L6) places secrets in `.env`, but `.gitignore` only prevents ordinary Git tracking. It doesn\u2019t stop hooks, shell commands, or MCP processes from reading that file. **Fix:** keep real credentials outside the agent execution environment and use scoped development credentials where needed. Add Claude `Read`/`Edit` deny rules for secret files as an additional guard; those rules alone cannot constrain external processes. [File permission documentation](https://code.claude.com/docs/en/permissions)\n\n[`.codex/config.toml`](repo/.codex/config.toml) uses supported, reasonable defaults: `on-request` approvals and `workspace-write` sandboxing. Those settings govern Codex, not the other agents. [OpenAI configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)\n\nNo files were changed or configured hooks/MCP servers executed."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "with",
+      "trial": 3,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 351202,
+      "cost_usd": null,
+      "seconds": 132.0,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found **six issues to fix before sharing**. No files were changed.\n\n| Location in `repo/` | Problem | Fix |\n|---|---|---|\n| `.claude/settings.local.json:3` | `bypassPermissions` disables normal permission prompts. Shipping this personal override undermines the shared permission rules. | Remove it from version control and add `.claude/settings.local.json` to `.gitignore`. Remove the bypass from existing copies and set shared `permissions.defaultMode` to `\"default\"`. [Claude settings](https://code.claude.com/docs/en/settings) |\n| `.aider.conf.yml:5` | `yes-always: true` automatically answers confirmation prompts for every teammate. | Remove it or set it to `false`. `auto-commits: true` is a separate preference, not itself an approval bypass. [Aider reference](https://aider.chat/docs/config/aider_conf.html) |\n| `.claude/settings.json:9` | Every matching edit triggers `npx -y @acme/format-on-save`. The hook can download and execute an unpinned package without a separate tool approval. | Replace it with a reviewed repository script invoking an already-installed formatter pinned in a lockfile. Keep package installation out of the hook. [Hook behavior](https://code.claude.com/docs/en/hooks) |\n| `.claude/settings.json:6` | `enableAllProjectMcpServers: true` grants blanket project-server approval after workspace trust, including future additions. | Set it to `false` and require individual server review and approval. Workspace trust still applies; this does not execute servers merely on cloning. [MCP approvals](https://code.claude.com/docs/en/mcp#project-server-approvals-and-workspace-trust) |\n| `.mcp.json:4` | The shell server is configured with `SHELL_MCP_ALLOW: \"*\"`, indicating unrestricted shell access. Claude\u2019s `Bash(...)` rules do not constrain a separate MCP shell tool. | Remove the shell server, or replace it with narrowly scoped tools. If retained, verify its supported allowlist syntax and restrict commands, filesystem access, and credentials. Its implementation was unavailable for verification. |\n| `.claude/settings.json:2\u20135`; `.gitignore:1` | The README says secrets live in `.env`, but there are no secret-read deny rules. Gitignore prevents tracking, not agent access. | Add `Read` deny rules for `.env`, secret variants, private keys, and credential directories. Also isolate secrets from hooks, MCP servers, and arbitrary subprocesses; file-tool rules alone cannot enforce that boundary. [Permission limits](https://code.claude.com/docs/en/permissions#read-and-edit) |\n\nThe committed Codex settings\u2014`on-request` with `workspace-write`\u2014are a reasonable baseline; approval is not required for every action inside the sandbox. Both MCP package versions are already pinned, and Claude\u2019s existing allow rules are scoped. [Codex security](https://learn.chatgpt.com/docs/security)\n\nI checked all five agent configuration files, the README, and `.gitignore`, plus relevant home-level approval settings. Home-level Claude uses `auto`, so explicitly setting the shared default matters. Teammates\u2019 overrides and managed policies remain unverified.\n\nValidation limits: this copy has no Git metadata, so tracked status could not be confirmed. `agtmls doctor` did not complete, and `audit --foreign` rejected the directory layout. These findings come from manual review; MCP implementations and tool descriptions were not inspected."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "with",
+      "trial": 4,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": true,
+      "tokens": 350826,
+      "cost_usd": null,
+      "seconds": 133.5,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found **six problems to fix before sharing**. No repository files were changed.\n\n| Location | Problem | Fix |\n|---|---|---|\n| `.claude/settings.local.json:3` | **High:** `bypassPermissions` disables normal permission prompts. The local override undermines the shared settings\u2019 approval posture. | Remove the bypass; set shared `permissions.defaultMode` to `\"default\"`. Stop tracking the local file and add `.claude/settings.local.json` to `.gitignore`. [Claude settings](https://code.claude.com/docs/en/settings), [permissions](https://code.claude.com/docs/en/permissions). |\n| `.aider.conf.yml:5` | **High:** `yes-always: true` automatically accepts confirmations for every teammate. | Remove it or set `yes-always: false`. `auto-commits: true` is a separate workflow choice, not itself an approval bypass. [Aider reference](https://aider.chat/docs/config/options.html#--yes-always). |\n| `.claude/settings.json:9` | **High:** The edit/write hook runs `npx -y @acme/format-on-save` without a version pin. It can download and execute changing package code automatically. | Replace it with a reviewed repository script invoking a locally installed formatter pinned through a lockfile. Avoid package downloads when the hook fires. [Hook execution](https://code.claude.com/docs/en/hooks). |\n| `.claude/settings.json:6` | **High:** `enableAllProjectMcpServers: true` broadly approves project MCP servers once workspace trust permits it, including future additions. | Remove it or set it to `false`; require individual server review and approval. Current Claude versions ignore repository-provided approvals in untrusted folders, but that does not make blanket approval appropriate after trust. [MCP approval behavior](https://code.claude.com/docs/en/mcp). |\n| `.mcp.json:4` | **High:** The shell server is configured with `SHELL_MCP_ALLOW=\"*\"`, indicating unrestricted command access. Version pinning does not constrain its capabilities. | Remove the shell server unless needed. Otherwise verify its supported restrictions and allow only necessary commands and directories. Review its implementation and tool descriptions before enabling it; these were not supplied. |\n| `.claude/settings.json:2`, `.gitignore:1` | **Medium:** Secrets are gitignored but have no explicit agent read restrictions. Git ignore rules are not an access-control boundary. | Add Claude deny rules such as `Read(./.env)`, `Read(./.env.*)`, and rules for relevant key/cloud-credential paths. Use filesystem isolation for shell, hook, and MCP processes; file-tool rules alone cannot block arbitrary subprocess access. [Read restrictions](https://code.claude.com/docs/en/permissions). |\n\nThe Codex configuration is reasonable: `on-request` with `workspace-write` retains approval support and sandboxing. It does **not** require approval for every in-sandbox action. Both MCP package versions are already pinned, and Claude\u2019s existing allow rules are scoped. [Codex reference](https://developers.openai.com/codex/config-reference).\n\n**Review limits:** I inspected all supplied project configuration, including the local override. There is no Git metadata to verify tracking, and teammates\u2019 user/managed settings remain unchecked. The installed `agtmls` ran unrelated self-checks instead of producing a usable repository audit; I stopped it and based these findings on manual inspection."
+    },
+    {
+      "skill": "hardening-agent-config",
+      "agent": "codex",
+      "arm": "without",
+      "trial": 4,
+      "hits": [
+        "local-bypass",
+        "enable-all-mcp",
+        "shell-mcp",
+        "hook-package-runner",
+        "aider-yes-always",
+        "deny-secrets"
+      ],
+      "score": 1.0,
+      "skill_used": false,
+      "tokens": 280593,
+      "cost_usd": null,
+      "seconds": 88.8,
+      "model": "gpt-6-astra",
+      "error": null,
+      "answer": "I found six issues to address before sharing. No files were changed. This copy has no `.git` metadata, so I could not verify tracked files or history.\n\n1. **High \u2014 Shared local settings request permission bypass** \u2014 `.claude/settings.local.json:3`  \n   `bypassPermissions` requests skipping permission prompts on versions that honor it from this scope. Local settings also override shared settings and should not be distributed. **Fix:** remove this file from tracking, add `.claude/settings.local.json` to `.gitignore`, and use `\"defaultMode\": \"default\"` in shared settings. Verify effective settings on the team\u2019s supported version. [Claude settings documentation](https://code.claude.com/docs/en/settings)\n\n2. **High \u2014 Unpinned code executes after edits** \u2014 `.claude/settings.json:9`  \n   `npx -y @acme/format-on-save` can download and execute a changing package without an installation prompt whenever the hook fires. Hook commands run outside normal tool permission checks. **Fix:** install a reviewed formatter with a pinned version and lockfile, then invoke its local executable without runtime downloads. [Hook documentation](https://code.claude.com/docs/en/hooks)\n\n3. **High \u2014 Shell MCP is configured for unrestricted access** \u2014 `.mcp.json:4`  \n   `SHELL_MCP_ALLOW: \"*\"` appears intended to allow all commands; the server implementation is absent, so its precise enforcement cannot be verified. Claude\u2019s `Bash(git push:*)` rule does not govern commands executed through an MCP tool. **Fix:** remove the shell server unless required; otherwise verify its policy, restrict commands and filesystem/network access, and require approval for its MCP tools. [Permission documentation](https://code.claude.com/docs/en/permissions)\n\n4. **High \u2014 All project MCP servers are automatically approved** \u2014 `.claude/settings.json:6`  \n   `enableAllProjectMcpServers: true` removes individual server approval, including for future additions to `.mcp.json`. Server approval is distinct from tool-call permission. **Fix:** remove this setting or set it to `false`; approve only reviewed servers individually. [MCP documentation](https://code.claude.com/docs/en/mcp)\n\n5. **High \u2014 Aider automatically answers confirmation prompts** \u2014 `.aider.conf.yml:5`  \n   `yes-always: true` removes the opportunity to review actions requiring confirmation. **Fix:** remove it or set it to `false`. `auto-commits: true` is separately a workflow choice, not inherently a vulnerability; set it to `false` if the team requires review before local commits. [Aider options](https://aider.chat/docs/config/options.html)\n\n6. **Medium \u2014 Git-ignored secrets remain accessible to agents** \u2014 `.gitignore:1`, `README.md:6`, `.claude/settings.json:2`  \n   Ignoring `.env` prevents ordinary Git inclusion; it does not prevent agents, hooks, or shell servers from reading it. **Fix:** add Claude deny rules such as `Read(./.env)` and `Read(./.env.*)`, and keep real secrets outside environments accessible to agent subprocesses. Read rules alone cannot constrain hooks or MCP servers. [Permission documentation](https://code.claude.com/docs/en/permissions)\n\nThe Codex configuration uses reasonable defaults: `approval_policy = \"on-request\"` and `sandbox_mode = \"workspace-write\"`. Those settings apply to Codex; they do not protect Claude, Aider, or their subprocesses. [Official OpenAI documentation](https://learn.chatgpt.com/docs/config-file/config-reference)"
+    }
+  ]
+}
