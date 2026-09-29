@@ -30,6 +30,45 @@ def contains_none(label: str, text: str, needles: list[str], case_name: str) -> 
     return [f"{case_name}: {label} contains forbidden {needle!r}" for needle in needles if needle in text]
 
 
+def expectation_results(cf: Path, sdir: Path, case: dict) -> tuple[list[str], int]:
+    """(problems, checks) for one skill's requires and forbids."""
+    skill_text = (sdir / "SKILL.md").read_text(encoding="utf-8")
+    ref_text = "\n".join(
+        p.read_text(encoding="utf-8") for p in sorted(sdir.glob("reference*.md"))
+    )
+    requires = case.get("requires", {})
+    forbids = case.get("forbids", {})
+    errors: list[str] = []
+    checks = 0
+    for rel in requires.get("files_exist", []):
+        checks += 1
+        if not (sdir / rel).exists():
+            errors.append(f"{cf.name}: required file missing: {rel}")
+    for needle in requires.get("skill_contains", []):
+        checks += 1
+        errors.extend(contains_all("SKILL.md", skill_text, [needle], cf.name))
+    for needle in requires.get("reference_contains", []):
+        checks += 1
+        errors.extend(contains_all("reference.md", ref_text, [needle], cf.name))
+    for needle in forbids.get("skill_contains", []):
+        checks += 1
+        errors.extend(contains_none("SKILL.md", skill_text, [needle], cf.name))
+    for needle in forbids.get("reference_contains", []):
+        checks += 1
+        errors.extend(contains_none("reference.md", ref_text, [needle], cf.name))
+    return errors, checks
+
+
+def case_results(cf: Path) -> tuple[list[str], int]:
+    """(problems, checks) for one case file."""
+    case = json.loads(cf.read_text(encoding="utf-8"))
+    name = case["skill"]
+    sdir = skill_dir(name)
+    if sdir is None:
+        return [f"{cf.name}: unknown skill {name!r}"], 0
+    return expectation_results(cf, sdir, case)
+
+
 def main() -> int:
     case_files = sorted(CASES_DIR.glob("*.json")) if CASES_DIR.exists() else []
     if not case_files:
@@ -39,36 +78,9 @@ def main() -> int:
     errors: list[str] = []
     checks = 0
     for cf in case_files:
-        case = json.loads(cf.read_text(encoding="utf-8"))
-        name = case["skill"]
-        sdir = skill_dir(name)
-        if sdir is None:
-            errors.append(f"{cf.name}: unknown skill {name!r}")
-            continue
-
-        skill_text = (sdir / "SKILL.md").read_text(encoding="utf-8")
-        ref_text = "\n".join(
-            p.read_text(encoding="utf-8") for p in sorted(sdir.glob("reference*.md"))
-        )
-        requires = case.get("requires", {})
-        forbids = case.get("forbids", {})
-
-        for rel in requires.get("files_exist", []):
-            checks += 1
-            if not (sdir / rel).exists():
-                errors.append(f"{cf.name}: required file missing: {rel}")
-        for needle in requires.get("skill_contains", []):
-            checks += 1
-            errors.extend(contains_all("SKILL.md", skill_text, [needle], cf.name))
-        for needle in requires.get("reference_contains", []):
-            checks += 1
-            errors.extend(contains_all("reference.md", ref_text, [needle], cf.name))
-        for needle in forbids.get("skill_contains", []):
-            checks += 1
-            errors.extend(contains_none("SKILL.md", skill_text, [needle], cf.name))
-        for needle in forbids.get("reference_contains", []):
-            checks += 1
-            errors.extend(contains_none("reference.md", ref_text, [needle], cf.name))
+        found, checked = case_results(cf)
+        errors += found
+        checks += checked
 
     if errors:
         for error in errors:

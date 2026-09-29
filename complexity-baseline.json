@@ -65,10 +65,6 @@
       "cyclomatic": 11,
       "lines": 61
     },
-    "scripts/run-behavioral-evals.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 14
-    },
     "scripts/smoke-export.py::check_archive": {
       "cyclomatic": 13
     },
