@@ -260,6 +260,35 @@ class TriggerEvalTests(RegistryBase):
         self.assertEqual(code, 1)
         self.assertIn("ghost.json: unknown skill 'ghost'", output)
 
+    # A malformed case raised a traceback out of the runner, and a prompt
+    # list given as a string was run one character at a time; fault
+    # injection over one routing case found 65 such runs.
+
+    def test_a_case_file_that_is_not_an_object_is_a_failure_not_a_crash(self) -> None:
+        for text, reason in (("{nope", "invalid JSON"), ("[]", "not a JSON object")):
+            with self.subTest(case=text):
+                self.write_json("evals/cases/ghost.json", text)
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"✗ ghost.json: {reason}", output)
+
+    def test_a_skill_that_is_missing_or_not_a_string_is_unknown(self) -> None:
+        for skill in (None, ["rust-port"]):
+            with self.subTest(skill=skill):
+                case = {"positive": ["x"]} if skill is None else {"skill": skill, "positive": ["x"]}
+                self.write_json("evals/cases/ghost.json", case)
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"✗ ghost.json: unknown skill {skill!r}", output)
+
+    def test_prompts_that_are_not_a_list_of_strings_are_a_failure(self) -> None:
+        for prompts in ("parse yaml anchors", [7], None):
+            with self.subTest(prompts=prompts):
+                self.write_json("evals/cases/rust-port.json", {"skill": "rust-port", "positive": prompts})
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn("✗ [rust-port] positive must be a list of prompts", output)
+
     def test_a_folded_description_is_read_across_its_continuation_lines(self) -> None:
         """The second line of a `>-` value carries half the routing vocabulary."""
         module = self.module()

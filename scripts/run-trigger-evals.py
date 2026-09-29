@@ -91,21 +91,48 @@ class Router:
         return [nm for _, nm in sims]
 
 
+def load_case(cf: Path) -> dict | None:
+    """The case, or None after printing why it cannot be read as an object."""
+    try:
+        case = json.loads(cf.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        print(f"✗ {cf.name}: invalid JSON: {exc}")
+        return None
+    if not isinstance(case, dict):
+        print(f"✗ {cf.name}: not a JSON object")
+        return None
+    return case
+
+
+def prompts(case: dict, skill: str, kind: str) -> list[str] | None:
+    """The case's positive or negative prompts, or None after printing that
+    they are not a list of strings (a string would run letter by letter)."""
+    value = case.get(kind, [])
+    if isinstance(value, list) and all(isinstance(p, str) for p in value):
+        return value
+    print(f"✗ [{skill}] {kind} must be a list of prompts")
+    return None
+
+
 def case_results(cf: Path, router: Router) -> tuple[int, int]:
     """(failures, checks) for one case file, printing each failure."""
-    case = json.loads(cf.read_text(encoding="utf-8"))
-    skill = case["skill"]
-    if skill not in router.names:
+    case = load_case(cf)
+    if case is None:
+        return 1, 0
+    skill = case.get("skill")
+    if not isinstance(skill, str) or skill not in router.names:
         print(f"✗ {cf.name}: unknown skill {skill!r}")
         return 1, 0
-    fails = checks = 0
-    for p in case.get("positive", []):
+    positive, negative = prompts(case, skill, "positive"), prompts(case, skill, "negative")
+    fails = (positive is None) + (negative is None)
+    checks = 0
+    for p in positive or []:
         checks += 1
         top = router.rank(p)[:TOP_K]
         if skill not in top:
             print(f"✗ [{skill}] positive not in top-{TOP_K}: {p!r} -> {top[:3]}…")
             fails += 1
-    for p in case.get("negative", []):
+    for p in negative or []:
         checks += 1
         if router.rank(p)[0] == skill:
             print(f"✗ [{skill}] negative ranked #1: {p!r}")
