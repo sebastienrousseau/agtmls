@@ -102,10 +102,6 @@
     "scripts/validate-cli-surface.py::main": {
       "lines": 62
     },
-    "scripts/validate-commands.py::main": {
-      "cognitive": 23,
-      "cyclomatic": 16
-    },
     "scripts/validate-gitignore.py::main": {
       "cyclomatic": 12
     },
