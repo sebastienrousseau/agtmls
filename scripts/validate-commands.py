@@ -31,7 +31,12 @@ def manifest_problems() -> list[str]:
     """The plugin manifest points its commands at ./commands, which exists."""
     if not PLUGIN.exists():
         return [".claude-plugin/plugin.json missing"]
-    manifest = json.loads(PLUGIN.read_text(encoding="utf-8"))
+    try:
+        manifest = json.loads(PLUGIN.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f".claude-plugin/plugin.json is not valid JSON: {exc}"]
+    if not isinstance(manifest, dict):
+        return [".claude-plugin/plugin.json must be a JSON object"]
     commands_path = manifest.get("commands")
     if commands_path != "./commands":
         return ["plugin manifest commands path must be ./commands"]
@@ -41,7 +46,10 @@ def manifest_problems() -> list[str]:
 
 
 def command_problems(cmd: Path) -> list[str]:
-    text = cmd.read_text(encoding="utf-8")
+    try:
+        text = cmd.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return [f"{cmd.relative_to(ROOT)}: not UTF-8 text"]
     fields = frontmatter(text)
     if fields is None:
         return [f"{cmd.relative_to(ROOT)}: missing YAML frontmatter"]
