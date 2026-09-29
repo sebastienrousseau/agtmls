@@ -85,10 +85,6 @@
     "scripts/validate-gitignore.py::main": {
       "cyclomatic": 12
     },
-    "scripts/validate-licence-headers.py::main": {
-      "cognitive": 25,
-      "cyclomatic": 14
-    },
     "scripts/validate-lifecycle.py::main": {
       "cyclomatic": 12
     },

@@ -59,35 +59,42 @@ def check_identifier(rel: Path, expression: str | None, errors: list[str]) -> No
         errors.append(f"{rel}: declares {expression}, which this repository does not offer")
 
 
+def markdown_problems(path: Path, rel: Path, text: str) -> list[str]:
+    errors: list[str] = []
+    if wants_frontmatter(path):
+        # Checked first: a leading comment stops the frontmatter parsing,
+        # so behind frontmatter_licence() this could never be reached.
+        if text.lstrip().startswith("<!--"):
+            errors.append(f"{rel}: frontmatter must start at byte 0; move the licence into `license:`")
+        elif not frontmatter_licence(text):
+            errors.append(f"{rel}: must declare `license:` in frontmatter")
+    elif SPDX not in text:
+        errors.append(f"{rel}: missing an {SPDX} header")
+    else:
+        check_identifier(rel, declared(text, HEADER_LINES), errors)
+    return errors
+
+
+def ours(pattern: str) -> list[Path]:
+    """Files matching `pattern`, sorted, outside the directories that are not ours."""
+    return [
+        path for path in sorted(ROOT.rglob(pattern))
+        if not any(part in SKIP_DIRS for part in path.relative_to(ROOT).parts)
+    ]
+
+
 def main() -> int:
     errors: list[str] = []
     checked = 0
-    for path in sorted(ROOT.rglob("*.md")):
-        rel = path.relative_to(ROOT)
-        if any(part in SKIP_DIRS for part in rel.parts):
-            continue
+    for path in ours("*.md"):
         checked += 1
-        text = path.read_text(encoding="utf-8")
-        if wants_frontmatter(path):
-            # Checked first: a leading comment stops the frontmatter parsing,
-            # so behind frontmatter_licence() this could never be reached.
-            if text.lstrip().startswith("<!--"):
-                errors.append(f"{rel}: frontmatter must start at byte 0; move the licence into `license:`")
-            elif not frontmatter_licence(text):
-                errors.append(f"{rel}: must declare `license:` in frontmatter")
-        elif SPDX not in text:
-            errors.append(f"{rel}: missing an {SPDX} header")
-        else:
-            check_identifier(rel, declared(text, HEADER_LINES), errors)
+        errors += markdown_problems(path, path.relative_to(ROOT), path.read_text(encoding="utf-8"))
 
     for suffix in (".py", ".sh"):
-        for path in sorted(ROOT.rglob(f"*{suffix}")):
-            rel = path.relative_to(ROOT)
-            if any(part in SKIP_DIRS for part in rel.parts):
-                continue
+        for path in ours(f"*{suffix}"):
             checked += 1
             text = path.read_text(encoding="utf-8")
-            check_identifier(rel, declared(text, HEADER_LINES), errors)
+            check_identifier(path.relative_to(ROOT), declared(text, HEADER_LINES), errors)
 
     if errors:
         for error in errors:
