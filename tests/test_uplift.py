@@ -187,13 +187,15 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | 100% | 1 |", text)
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | 100% | 1 |", text)
         self.assertIn("| b | 0% | 50% |", text)
+        with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
+        self.assertIn("| +0 pts | 3.00x |", uplift.render(with_tokens))
 
     def test_an_arm_with_only_errors_has_no_delta(self) -> None:
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
-        self.assertIn("| s | claude | n/a | 50% | n/a | 100% | 1 |", uplift.render([row]))
+        self.assertIn("| s | claude | n/a | 50% | n/a | n/a | 100% | 1 |", uplift.render([row]))
 
 
 class ParseTests(unittest.TestCase):

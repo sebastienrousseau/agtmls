@@ -221,12 +221,19 @@ def _flaw_table(rows: list[dict]) -> list[str]:
     return lines
 
 
+def _ratio(row: dict) -> str:
+    """Mean tokens with the skill over mean tokens without it."""
+    with_, without = row["with"]["tokens"], row["without"]["tokens"]
+    return "n/a" if not (with_ and without) else f"{with_ / without:.2f}x"
+
+
 def render(summary: list[dict]) -> str:
     """The summary as Markdown: one row per skill and agent, then each
-    skill's planted flaws and how often each arm found them."""
+    skill's planted flaws and how often each arm found them. `Tokens` is
+    what the skill cost: mean tokens with it over mean tokens without."""
     lines = [
-        "| Skill | Agent | Without | With | Delta | Skill read | Errors |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+        "| Skill | Agent | Without | With | Delta | Tokens | Skill read | Errors |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in summary:
         without, with_ = row["without"], row["with"]
@@ -234,7 +241,7 @@ def render(summary: list[dict]) -> str:
         errors = without["errors"] + with_["errors"]
         lines.append(
             f"| {row['skill']} | {row['agent']} | {_pct(without['score'])} | {_pct(with_['score'])}"
-            f" | {delta} | {_pct(with_['skill_used'])} | {errors} |"
+            f" | {delta} | {_ratio(row)} | {_pct(with_['skill_used'])} | {errors} |"
         )
     for skill in dict.fromkeys(row["skill"] for row in summary):
         lines += _flaw_table([row for row in summary if row["skill"] == skill])
