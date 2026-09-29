@@ -1997,7 +1997,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d31bc16c58a70056bc426ce057274dd8349be9f1146b779e660e2e0e31f8d771"
+          "content": "638d344ecbc2069845d2e28f134da7321bbe61fc3138ba0f6bf10ca3e5f3e3c7"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -4387,7 +4387,7 @@
       "type": "application",
       "version": "0.0.17"
     },
-    "timestamp": "2026-09-29T12:44:16Z",
+    "timestamp": "2026-09-29T12:48:14Z",
     "tools": {
       "components": [
         {
