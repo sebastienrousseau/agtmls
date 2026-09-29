@@ -39,6 +39,25 @@ def expected() -> dict[Path, str]:
     return rendered
 
 
+def write_all(want: dict[Path, str]) -> None:
+    for path, text in want.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    print(f"wrote {len(want)} attestation(s) for {len(want) // 2} skill(s)")
+
+
+def stale(want: dict[Path, str]) -> list[str]:
+    """Attestations that differ from what the skills produce, or belong to no skill."""
+    errors = [
+        f"{path.relative_to(ROOT).as_posix()} is stale"
+        for path, text in want.items()
+        if not path.exists() or path.read_text(encoding="utf-8") != text
+    ]
+    present = set(OUT.rglob("*.json")) if OUT.exists() else set()
+    errors += [f"{path.relative_to(ROOT).as_posix()} belongs to no current skill" for path in sorted(present - set(want))]
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
@@ -49,18 +68,9 @@ def main() -> int:
         return 2
     want = expected()
     if args.write:
-        for path, text in want.items():
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(text, encoding="utf-8")
-        print(f"wrote {len(want)} attestation(s) for {len(want) // 2} skill(s)")
+        write_all(want)
         return 0
-    errors = []
-    for path, text in want.items():
-        if not path.exists() or path.read_text(encoding="utf-8") != text:
-            errors.append(f"{path.relative_to(ROOT).as_posix()} is stale")
-    present = set(OUT.rglob("*.json")) if OUT.exists() else set()
-    for path in sorted(present - set(want)):
-        errors.append(f"{path.relative_to(ROOT).as_posix()} belongs to no current skill")
+    errors = stale(want)
     for error in errors:
         print(f"FAIL: {error}; run generate-skill-manifests.py --write")
     if errors:

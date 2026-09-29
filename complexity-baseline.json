@@ -15,9 +15,6 @@
       "cognitive": 19,
       "cyclomatic": 11
     },
-    "scripts/generate-skill-manifests.py::main": {
-      "cyclomatic": 12
-    },
     "scripts/release-preflight.py::check_tag": {
       "cyclomatic": 12
     },
