@@ -209,6 +209,38 @@ class BehavioralEvalTests(RegistryBase):
         self.assertIn("reference.md contains forbidden 'anchor table'", output)
 
 
+    # A malformed case raised a traceback out of the runner, and a needle
+    # list given as a string was checked one character at a time; fault
+    # injection over one behavioral case found the crashes.
+
+    def test_a_case_file_that_is_not_an_object_is_a_failure_not_a_crash(self) -> None:
+        for text, reason in (("{nope", "invalid JSON"), ("[]", "not a JSON object")):
+            with self.subTest(case=text):
+                self.write_json(self.CASE, text)
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"FAIL: yaml-anchors.json: {reason}", output)
+
+    def test_a_skill_that_is_missing_or_not_a_string_is_unknown(self) -> None:
+        for skill in (None, ["yaml-anchors"]):
+            with self.subTest(skill=skill):
+                case = dict(BEHAVIORAL["yaml-anchors"]) if skill is None else {**BEHAVIORAL["yaml-anchors"], "skill": skill}
+                self.write_json(self.CASE, case)
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn(f"FAIL: yaml-anchors.json: unknown skill {skill!r}", output)
+
+    def test_sections_that_are_not_objects_are_a_failure(self) -> None:
+        output = self.break_case(requires=["skill_contains"])
+        self.assertIn("FAIL: yaml-anchors.json: requires must be an object", output)
+
+    def test_needles_that_are_not_a_list_of_strings_are_a_failure(self) -> None:
+        for needles in ("Resolve", [7], None):
+            with self.subTest(needles=needles):
+                output = self.break_case(forbids={"skill_contains": needles})
+                self.assertIn("FAIL: yaml-anchors.json: forbids.skill_contains must be a list of strings", output)
+
+
 class TriggerEvalTests(RegistryBase):
     """run-trigger-evals.py -- does each description still attract its prompts?
 

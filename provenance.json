@@ -94,7 +94,7 @@
       "resolvedDependencies": [
         {
           "digest": {
-            "sha256": "21ee2e6fbda7221c42da9271d21ed913143dc774691c0201d364acf6a1b2a123"
+            "sha256": "86ef67141ebf203707d51e475d0ce3295a71dedae170b556dc4030d06e3b36ac"
           },
           "name": "SBOM.spdx.json",
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
@@ -106,9 +106,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-09-29T11:32:51Z",
+        "finishedOn": "2026-09-29T11:37:56Z",
         "invocationId": "local",
-        "startedOn": "2026-09-29T11:32:51Z"
+        "startedOn": "2026-09-29T11:37:56Z"
       }
     }
   },
@@ -116,7 +116,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "ea588939443abb6771ad4019893829c41ee9f9cb3fd07a15928a51fcc5ff2d61"
+        "sha256": "5224bda21a88caa48511e6aa80dd2907ea992dcef47bb489f479df80da3ae5a3"
       },
       "name": "agtmls-0.0.17"
     }
