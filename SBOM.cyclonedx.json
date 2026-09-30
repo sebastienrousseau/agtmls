@@ -897,7 +897,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c5c0b1ba8106658a7f48ff76ae309b0c90ff96e83a704989d60c0b49ed92e00a"
+          "content": "5861cc34149194e78e40dda9c349acd355d0ef35d288c85ed9c89beb9d9787fc"
         }
       ],
       "name": "evals/README.md",
@@ -1282,7 +1282,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "706eebd1f16536d1426d6ee7141c3e5e5abee8eecee16203a656f8a0499e4ee4"
+          "content": "92e6ad819d733e2f6de29ecff19f761fc5d936ebdfc209275afe2ce681e61652"
         }
       ],
       "name": "evals/cases/agent-loop-design.json",
@@ -1293,7 +1293,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "90273de4fe329e63db8beec93359e893634835ec7e77079feeeaf2c1690a71f2"
+          "content": "2829c22f39e0777e0ac5512ab72d625e3eb660ca160dcd91669651e2d46ed3f6"
         }
       ],
       "name": "evals/cases/ai-supply-chain-security.json",
@@ -1304,7 +1304,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "13b0337585f119050da3c796a95e1725ff881c6ee163a8e06b398173875f4306"
+          "content": "7b3e634e013419923cec40e9740b655097ed211aa3749db02ef1f5ee4e2b7616"
         }
       ],
       "name": "evals/cases/anti-slop-pr-and-writing.json",
@@ -1315,7 +1315,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ed1c4bb1fb91bf0bd1710162c7870c19642ca520849a326a2f350687bb4ce208"
+          "content": "5aa992d8624900f45590cb1ce7673611d3c8abfdcede0494dd2b5a36d330f933"
         }
       ],
       "name": "evals/cases/authoring-portable-skills.json",
@@ -1326,7 +1326,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "adaa11d2de08a38aad5aebc0a138da87a210c462d5bed9dcd578346ac13c5e94"
+          "content": "23da4d0ed2e08e39450f5f29e7382558e8f5ebb2ff27eee4f56fcbc44a1de31e"
         }
       ],
       "name": "evals/cases/brainstorming.json",
@@ -1337,7 +1337,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "456018363700131e25b0facbe0f103f31b486b12cb34d632729279cabd865d84"
+          "content": "c24507c232436ee3d6d05b005814c5307cabeadf108ea685a914f4a25f5b13ad"
         }
       ],
       "name": "evals/cases/cross-language-port.json",
@@ -1348,7 +1348,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cd1c90affd2e0afea49c0f3799a885e16525edba55190e432d1091a01a520468"
+          "content": "36270864f4500a81219ea5d4fe8b1e28b7a9c0616fe7e550bcbe84b50bb5a2d7"
         }
       ],
       "name": "evals/cases/giving-code-review.json",
@@ -1359,7 +1359,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c2e59455ae2ca88aa2444f62194cc7c901ac3825cb78d9ec32043d85dd796dae"
+          "content": "bbf4b1ff3ef426316925eb7c2587158a123365212d0d63cacbba0f879ede27c1"
         }
       ],
       "name": "evals/cases/handoff.json",
@@ -1370,7 +1370,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d3545b2c9d077795f41920aff1a3913410a53131c113ee0a1ec3de36fb4f9896"
+          "content": "8f25680080a68b46c2ad6eb3111c19eaff087687e6105c58ed3c1fcef50c71a0"
         }
       ],
       "name": "evals/cases/incident-response.json",
@@ -1381,7 +1381,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "660943f8776e8803b8211c48b74903bd9e6607d84e015d1abd3a4d545f893d90"
+          "content": "6a43fb33253463bc8cd7c5d08adf032d8352321e2784330ed5acf1958e5cec9f"
         }
       ],
       "name": "evals/cases/noyalib-architecture-contract.json",
@@ -1392,7 +1392,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7aa72c4140e651d2697648081cbcd4acdf6a4acf7d49457e586789fd15451104"
+          "content": "af60c4784acd92406b792995ebd464d655fa264f72c15e66ce384d236aa2d74a"
         }
       ],
       "name": "evals/cases/noyalib-build-and-env.json",
@@ -1403,7 +1403,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c26d48799ceff81d458f4376e496a2ecb8bc8fd5a7aa50ea6409564c83471cd7"
+          "content": "652adc968235b64cd7aa800c1d372471bb3c8e49f453eb486fb040a4448a83fe"
         }
       ],
       "name": "evals/cases/noyalib-change-control.json",
@@ -1414,7 +1414,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f8a4e3ede1e2cf110d09e3d9b4853bbc3a5edf8cab7c755efaa30afd11f31084"
+          "content": "cfffe43e7844288f28f8d35225d139b6270bb5b1578dfbccd5d82b1b98ede4bd"
         }
       ],
       "name": "evals/cases/noyalib-ci-and-release.json",
@@ -1425,7 +1425,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0c0f54dd51b86731b72c5c07c94906d95277ae6fbcf378df54f462302d243587"
+          "content": "b4d59f98cb00d4b60fc358d9675320bff82ae2db16892cd816433586c452cb85"
         }
       ],
       "name": "evals/cases/noyalib-config-and-flags.json",
@@ -1436,7 +1436,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6f705f83a792acc31201ddf6195495016bd8258fb05f3211026836800e456caa"
+          "content": "1a792646e46215f14c12ed08da5a1f11353d1e5cafeb332bd768d26d2a0256de"
         }
       ],
       "name": "evals/cases/noyalib-coverage-campaign.json",
@@ -1447,7 +1447,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ce426f1a0fb2b5223a70985c2808ff74371537bd3e4a1df8c8c4eb8ebee98f7e"
+          "content": "9cd36f41fcc8113ce5b414d711d353bd109e260ee4c872b6b491ec668c04df45"
         }
       ],
       "name": "evals/cases/noyalib-debugging-playbook.json",
@@ -1458,7 +1458,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "090babc854fa8889549d71691b34995ae73d595886195d09f417fe5006e85f84"
+          "content": "21504c8f852b2d6f698b23c48131e5a8a032ae2c9b635c79fcd8033fb959cb7b"
         }
       ],
       "name": "evals/cases/noyalib-diagnostics-and-tooling.json",
@@ -1469,7 +1469,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d71a0250604c69d67bdff1ad3f22b771dc41997f2f2878ebad7ceb1cef260058"
+          "content": "4f0333c3a38ea4e788f69aaad0b86a8e5e71bd4aba98b0ac15113243060e7745"
         }
       ],
       "name": "evals/cases/noyalib-docs-and-writing.json",
@@ -1480,7 +1480,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "09c9d681d4e0dc10f3ccc9c16ad30a5cbfbdc85db0d139cd8caecca011719315"
+          "content": "cc6c91d4cee9dd45648ff9d4edd8b8e3ed34cae3561faedafcc11b179ff4e247"
         }
       ],
       "name": "evals/cases/noyalib-external-positioning.json",
@@ -1491,7 +1491,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cf389e0465babd898a62e8f5b868031aa287496449eeafac65e26285615c6f6d"
+          "content": "de53039c8da670a583324b8c62921a68eaf6a8ff312be8aba18643f0f301d3d1"
         }
       ],
       "name": "evals/cases/noyalib-failure-archaeology.json",
@@ -1502,7 +1502,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4eb483aea7e47345ab666ffb13978d381f8e5560761a4dd28378f1afe4f0afd3"
+          "content": "a602716d38d679706061c1ae4d1f4a08c0063088c11526abddd450a42a109094"
         }
       ],
       "name": "evals/cases/noyalib-research-frontier.json",
@@ -1513,7 +1513,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1c788348ea9492bf67055dfec0c7cc1194034207026ef7aa0473a9d5311382f3"
+          "content": "dc0a9b98a0168fa13723e53f2e91e6cca906ce3a398a0f07dc811dbae613903f"
         }
       ],
       "name": "evals/cases/noyalib-validation-and-qa.json",
@@ -1524,7 +1524,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0ffb3920feffeab3d5fdbf20f791be9dd226c3b2e7d3c9f81f5ea55d8b401ecc"
+          "content": "b3e661fdcde761178d4c4e5c25f28dd6f2e839267c2ec78a50e2f9c89e82c4e1"
         }
       ],
       "name": "evals/cases/pr-review-and-release.json",
@@ -1535,7 +1535,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a8977ad11e612684ff6e48f0bbc3fef4a5eb4acc4ac3419c634c12c58161b211"
+          "content": "1959af255367fb753321016e43c48e1454f150a5670cd7ac3f07d464d33c432d"
         }
       ],
       "name": "evals/cases/receiving-code-review.json",
@@ -1546,7 +1546,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eba7b3211a3c48b9a161a731a000566e5fd5794f0a3ae16ccc4279745c7e1873"
+          "content": "cff3bb47490f81f72183ddb7c87b964bfa5561403c07b6da68eeb13b80353952"
         }
       ],
       "name": "evals/cases/refactoring-safely.json",
@@ -1557,7 +1557,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "60c0d6c628b7aa7b0862c0a8c83e54550f4a6410cf9607646a334edc62c6b268"
+          "content": "46d0cb756c637d0512b1b3b806d75a044409d3e652ce033d541dd092e7e3ac58"
         }
       ],
       "name": "evals/cases/systematic-debugging.json",
@@ -1568,7 +1568,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "efd7477ae39c7eb4cabbf0a6b3b8a7c9b67498cf7c8d7a25dd19032e7b200c7d"
+          "content": "f89682a9fe525e8c2aa6e4ffce8f6e0b698e0178515f74e7b61ebe2f33127926"
         }
       ],
       "name": "evals/cases/test-driven-development.json",
@@ -1579,7 +1579,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a4d3117fa5cb1654ac8126aea51a792d35323eb0790665b8fb853ae8a707fb5"
+          "content": "0b29da718e759916349d7aed5a9c8d00175e01e0d40192fc153b45d0042481e6"
         }
       ],
       "name": "evals/cases/using-agtmls.json",
@@ -1590,7 +1590,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f31e8cb4816b7b44345d793bfe80f0feead6e057055a3fee90ba4f7fab78cb67"
+          "content": "69b00b0dc13b8b756970ff60e4bb08818d7742498104ba73b2401a5856adc6ba"
         }
       ],
       "name": "evals/cases/verification-before-completion.json",
@@ -1601,7 +1601,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0b5c55513c49cf8c9be5590c34498e29fb6d9be7116facfc881852fbcf14d916"
+          "content": "a3b12503d68274a27e701cb285b71a109a553dcf465f82c1cd42ac183c543210"
         }
       ],
       "name": "evals/cases/vetting-a-skill-before-install.json",
@@ -1612,7 +1612,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "172af6d812158e917f2757b67765c6d68c45f5d4df4b8e75265c8668a1f74613"
+          "content": "5c37ae85fa9097da28ac8590b357195ba061353016e0b42333a6809d4cf7d9cb"
         }
       ],
       "name": "evals/cases/web-research-and-source-triage.json",
@@ -1623,7 +1623,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f867fd15e0ce14c5cdaf48746f55d97fd3c3d40fd3a539d9ba293eff0f54a4b1"
+          "content": "93a8f8ecdb55bdb3c71a956582a3fe2ecbc8054afef59e9fd00bf692694e7443"
         }
       ],
       "name": "evals/cases/writing-plans.json",
@@ -1634,10 +1634,21 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "086007f9c3488870ae9db9a0fdb8f99355e6edff8dbdac618ed9f3d88a26ca15"
+          "content": "8dce706059eab6a2c13dec6329ab5a7aec46945af6d1be277cdf65d0b69d560a"
         }
       ],
       "name": "evals/cases/yaml-domain-reference.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/routing-floor.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "17f51c7be38dfa2a2833105b793c9a6f38023d56f80484642805f3503f251cb8"
+        }
+      ],
+      "name": "evals/routing-floor.json",
       "type": "file"
     },
     {
@@ -3163,7 +3174,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "04a37cc0c5e3b84b03b50962ac80e254e5b9b0d7626dee3c76a318240287ac6a"
+          "content": "969fa7b95a4c30772f2e8d54f4f320c4d969f196d9f16ca8d60cd4ff8f1f54d2"
         }
       ],
       "name": "scripts/run-trigger-evals.py",
@@ -3526,7 +3537,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2248d326d058e2000e3e9116f96326fe56d0aeb0f713c0b06647e732a26aa935"
+          "content": "ee5904c72545a0c639dc1bf9b6af670643798ca4eb42ab35a085c0e1737d6498"
         }
       ],
       "name": "scripts/validate-eval-cases.py",
@@ -5275,7 +5286,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2af77216afa360bf3de12f7214855f5a1ea4cc1fcc10da2a0e21537060549e27"
+          "content": "66b7b814e623a98f8278db525aad8aa392078f5d3d6b49feb40b21a19018a0b8"
         }
       ],
       "name": "templates/evals/routing.json",
@@ -5333,7 +5344,7 @@
       "type": "application",
       "version": "0.0.20"
     },
-    "timestamp": "2026-09-30T06:13:53Z",
+    "timestamp": "2026-09-30T16:30:41Z",
     "tools": {
       "components": [
         {

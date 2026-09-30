@@ -7,7 +7,13 @@
     "I wrote the code already do I still need a red test"
   ],
   "negative": [
-    "draft a release note",
-    "how do I add a Cargo feature"
+    {
+      "prompt": "draft a release note",
+      "owner": "pr-review-and-release"
+    },
+    {
+      "prompt": "how do I add a Cargo feature",
+      "owner": "noyalib-config-and-flags"
+    }
   ]
 }

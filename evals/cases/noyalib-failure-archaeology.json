@@ -7,7 +7,13 @@
     "was the BOM column desync ever fixed"
   ],
   "negative": [
-    "how do I install cargo llvm cov",
-    "explain YAML tags"
+    {
+      "prompt": "how do I install cargo llvm cov",
+      "owner": "noyalib-diagnostics-and-tooling"
+    },
+    {
+      "prompt": "explain YAML tags",
+      "owner": "yaml-domain-reference"
+    }
   ]
 }

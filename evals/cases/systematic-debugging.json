@@ -7,7 +7,13 @@
     "help me bisect this regression"
   ],
   "negative": [
-    "write public launch copy",
-    "raise line coverage to 98 percent"
+    {
+      "prompt": "write public launch copy",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "raise line coverage to 98 percent",
+      "owner": "noyalib-coverage-campaign"
+    }
   ]
 }

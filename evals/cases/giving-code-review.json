@@ -7,7 +7,13 @@
     "what should I look for reviewing this change"
   ],
   "negative": [
-    "port this code to Rust",
-    "raise line coverage to 98 percent"
+    {
+      "prompt": "port this code to Rust",
+      "owner": "cross-language-port"
+    },
+    {
+      "prompt": "raise line coverage to 98 percent",
+      "owner": "noyalib-coverage-campaign"
+    }
   ]
 }

@@ -8,7 +8,13 @@
     "the satellite didn't publish after the tag push"
   ],
   "negative": [
-    "explain YAML block scalar chomping",
-    "why does from_str::<Value> disagree with my struct"
+    {
+      "prompt": "explain YAML block scalar chomping",
+      "owner": "yaml-domain-reference"
+    },
+    {
+      "prompt": "why does from_str::<Value> disagree with my struct",
+      "owner": "noyalib-debugging-playbook"
+    }
   ]
 }

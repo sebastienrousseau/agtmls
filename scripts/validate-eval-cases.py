@@ -52,6 +52,39 @@ def identity_problems(cf: Path, case: dict, kind: str, names: set[str], seen: se
     return errors
 
 
+MIN_POSITIVE = 3
+MIN_NEGATIVE = 2
+
+
+def owner_problems(label: str, case: dict, names: set[str]) -> list[str]:
+    """Each negative's owner is a known skill, and not the case's own."""
+    errors = []
+    for index, entry in enumerate(case.get("negative") or []):
+        owner = entry.get("owner") if isinstance(entry, dict) else None
+        if isinstance(owner, str) and owner not in names:
+            errors.append(f"{label}: negative[{index}] owner {owner!r} is not a skill")
+        elif owner is not None and owner == case.get("skill"):
+            errors.append(f"{label}: negative[{index}] owner is the case's own skill")
+    return errors
+
+
+def prompt_problems(cf: Path, case: dict, names: set[str]) -> list[str]:
+    """At least three positive prompts, and at least two negatives that name
+    the skill which should win them."""
+    label = cf.relative_to(ROOT)
+    errors = []
+    positive = case.get("positive")
+    if not string_list(positive) or len(positive) < MIN_POSITIVE:
+        errors.append(f"{label}: positive needs at least {MIN_POSITIVE} prompts")
+    negative = case.get("negative")
+    pairs = isinstance(negative, list) and all(
+        isinstance(n, dict) and string_list([n.get("prompt")]) and isinstance(n.get("owner"), str) for n in negative
+    )
+    if not pairs or len(negative) < MIN_NEGATIVE:
+        errors.append(f"{label}: negative needs at least {MIN_NEGATIVE} {{prompt, owner}} entries")
+    return errors + owner_problems(str(label), case, names)
+
+
 def validate_routing(names: set[str]) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
@@ -61,10 +94,7 @@ def validate_routing(names: set[str]) -> list[str]:
         if problems:
             continue
         errors += identity_problems(cf, case, "routing", names, seen)
-        if not string_list(case.get("positive")):
-            errors.append(f"{cf.relative_to(ROOT)}: positive must be a non-empty string list")
-        if not string_list(case.get("negative")):
-            errors.append(f"{cf.relative_to(ROOT)}: negative must be a non-empty string list")
+        errors += prompt_problems(cf, case, names)
     missing = sorted(names - seen)
     if missing:
         errors.append(f"missing routing cases: {', '.join(missing)}")

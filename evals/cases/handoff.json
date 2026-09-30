@@ -7,7 +7,13 @@
     "where are we with this and what is the next step"
   ],
   "negative": [
-    "raise line coverage to 98 percent",
-    "how do I tag a release"
+    {
+      "prompt": "raise line coverage to 98 percent",
+      "owner": "noyalib-coverage-campaign"
+    },
+    {
+      "prompt": "how do I tag a release",
+      "owner": "pr-review-and-release"
+    }
   ]
 }

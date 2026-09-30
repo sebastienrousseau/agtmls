@@ -2,10 +2,11 @@
   "skill": "example-skill",
   "positive": [
     "use the example workflow for this task",
-    "run the reusable example playbook"
+    "run the reusable example playbook",
+    "follow the example procedure step by step"
   ],
   "negative": [
-    "port this code to Rust",
-    "CI is red on noyalib"
+    {"prompt": "port this code to Rust", "owner": "cross-language-port"},
+    {"prompt": "find the root cause of this crash", "owner": "systematic-debugging"}
   ]
 }

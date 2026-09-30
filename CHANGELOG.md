@@ -7,6 +7,22 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- Routing evals are sharper. Each negative prompt names the skill that
+  should win it (`{"prompt", "owner"}`), and that skill must rank above the
+  case's own; every skill has at least 3 positive and 2 negative prompts;
+  and the share of prompts whose intended skill ranks first is held to a
+  committed floor, `evals/routing-floor.json` (82.6%), that only rises.
+  Negatives no skill owns ("write a short poem") were replaced with prompts
+  a neighbouring skill owns.
+- The routing proxy stems words (plural, -ing, -ed), so "crash" meets
+  "crashes" and "write" meets "writing", and it ignores "am" as it did
+  "is" and "are". The owner check found both gaps: "why does this crash"
+  ranked writing-plans above systematic-debugging, and "write a new
+  skill" ranked vetting-a-skill-before-install above
+  authoring-portable-skills.
+
 ### Fixed
 
 - Two unit tests planted `index.json.sig` and a `.coverage` file in the

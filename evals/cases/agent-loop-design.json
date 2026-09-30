@@ -1,11 +1,18 @@
 {
   "negative": [
-    "write a short poem",
-    "format this JSON only"
+    {
+      "prompt": "write an implementation plan for this feature",
+      "owner": "writing-plans"
+    },
+    {
+      "prompt": "write the handoff note for the next session",
+      "owner": "handoff"
+    }
   ],
   "positive": [
     "Use when turning repeated agent work into a loop with trigger conditions",
-    "use agent loop design for this task"
+    "use agent loop design for this task",
+    "set up a recurring agent loop that stops once its checks pass"
   ],
   "skill": "agent-loop-design"
 }

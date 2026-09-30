@@ -7,7 +7,13 @@
     "no_std build broke despite green CI, triage it"
   ],
   "negative": [
-    "how do I position noyalib versus serde_yaml in the README",
-    "draft the release notes for v0.0.15"
+    {
+      "prompt": "how do I position noyalib versus serde_yaml in the README",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "draft the release notes for v0.0.15",
+      "owner": "pr-review-and-release"
+    }
   ]
 }

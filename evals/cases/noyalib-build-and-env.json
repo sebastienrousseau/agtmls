@@ -7,7 +7,13 @@
     "bootstrap a noyalib dev environment from scratch"
   ],
   "negative": [
-    "is noyalib faster than serde_yaml",
-    "explain merge keys"
+    {
+      "prompt": "is noyalib faster than serde_yaml",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "explain merge keys",
+      "owner": "yaml-domain-reference"
+    }
   ]
 }

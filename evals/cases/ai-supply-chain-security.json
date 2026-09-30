@@ -1,11 +1,18 @@
 {
   "negative": [
-    "write a short poem",
-    "format this JSON only"
+    {
+      "prompt": "can I trust this third-party plugin before installing it",
+      "owner": "vetting-a-skill-before-install"
+    },
+    {
+      "prompt": "review this pull request diff for bugs",
+      "owner": "giving-code-review"
+    }
   ],
   "positive": [
     "Use when auditing AI-agent supply chain risk",
-    "use ai supply chain security for this task"
+    "use ai supply chain security for this task",
+    "check our MCP servers for tool poisoning before the release"
   ],
   "skill": "ai-supply-chain-security"
 }

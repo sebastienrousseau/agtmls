@@ -7,7 +7,13 @@
     "convert this Ruby function to JavaScript and preserve error semantics"
   ],
   "negative": [
-    "explain YAML block scalar chomping",
-    "which noyalib CI gate failed"
+    {
+      "prompt": "explain YAML block scalar chomping",
+      "owner": "yaml-domain-reference"
+    },
+    {
+      "prompt": "which noyalib CI gate failed",
+      "owner": "noyalib-ci-and-release"
+    }
   ]
 }

@@ -7,7 +7,13 @@
     "we have an outage and I need to mitigate"
   ],
   "negative": [
-    "explain YAML tags",
-    "how do I add a Cargo feature"
+    {
+      "prompt": "explain YAML tags",
+      "owner": "yaml-domain-reference"
+    },
+    {
+      "prompt": "how do I add a Cargo feature",
+      "owner": "noyalib-config-and-flags"
+    }
   ]
 }

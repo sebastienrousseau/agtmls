@@ -7,7 +7,13 @@
     "does this noyalib change need a doctest"
   ],
   "negative": [
-    "interpret criterion throughput",
-    "compare noyalib to saphyr"
+    {
+      "prompt": "interpret criterion throughput",
+      "owner": "noyalib-diagnostics-and-tooling"
+    },
+    {
+      "prompt": "compare noyalib to saphyr",
+      "owner": "noyalib-external-positioning"
+    }
   ]
 }

@@ -7,7 +7,13 @@
     "edit the noyalib README and rustdoc examples"
   ],
   "negative": [
-    "position noyalib against serde_yml publicly",
-    "which loader enforces max_depth"
+    {
+      "prompt": "position noyalib against serde_yml publicly",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "which loader enforces max_depth",
+      "owner": "noyalib-architecture-contract"
+    }
   ]
 }

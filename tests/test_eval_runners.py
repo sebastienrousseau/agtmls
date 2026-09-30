@@ -55,13 +55,24 @@ NAMES = sorted(
 # Negatives are prompts that clearly belong to a *different* skill, so the
 # owner can never rank first. A prompt with no vocabulary at all would tie
 # every skill at zero and put the alphabetically last one on top.
+def _neg(prompt: str, owner: str) -> dict:
+    return {"prompt": prompt, "owner": owner}
+
+
 ROUTING = {
-    "yaml-anchors": {"positive": ["parse yaml anchors"], "negative": ["port rust code"]},
-    "rust-port": {"positive": ["port rust to python"], "negative": ["yaml aliases"]},
-    "release-notes": {"positive": ["write changelog notes"], "negative": ["yaml anchors"]},
-    "no-frontmatter": {"positive": ["anything"], "negative": ["yaml anchors"]},
-    "no-description": {"positive": ["anything"], "negative": ["yaml anchors"]},
+    "yaml-anchors": {"positive": ["parse yaml anchors", "resolve yaml aliases", "anchors and aliases in a yaml document"],
+                     "negative": [_neg("port rust code", "rust-port"), _neg("write changelog notes", "release-notes")]},
+    "rust-port": {"positive": ["port rust to python", "port rust code with a golden harness", "rust to python port"],
+                  "negative": [_neg("yaml aliases", "yaml-anchors"), _neg("release notes for tags", "release-notes")]},
+    "release-notes": {"positive": ["write changelog notes", "release notes for a tag", "changelog entries"],
+                      "negative": [_neg("yaml anchors", "yaml-anchors"), _neg("port rust to python", "rust-port")]},
+    "no-frontmatter": {"positive": ["anything", "something", "whatever"],
+                       "negative": [_neg("yaml anchors", "yaml-anchors"), _neg("port rust code", "rust-port")]},
+    "no-description": {"positive": ["anything", "something", "whatever"],
+                       "negative": [_neg("yaml anchors", "yaml-anchors"), _neg("port rust code", "rust-port")]},
 }
+# The share of prompts whose intended skill ranks first may only rise.
+ROUTING_FLOOR = {"rank1": 0.5}
 
 BEHAVIORAL = {
     "yaml-anchors": {
@@ -90,6 +101,7 @@ def build_registry(root: Path) -> Path:
     behavioral.mkdir(parents=True)
     for name, case in ROUTING.items():
         (routing / f"{name}.json").write_text(json.dumps({"skill": name, **case}), encoding="utf-8")
+    (root / "evals" / "routing-floor.json").write_text(json.dumps(ROUTING_FLOOR), encoding="utf-8")
     for name, case in BEHAVIORAL.items():
         (behavioral / f"{name}.json").write_text(json.dumps({"skill": name, **case}), encoding="utf-8")
     return root
@@ -254,7 +266,10 @@ class TriggerEvalTests(RegistryBase):
     def test_a_registry_whose_prompts_route_correctly_passes(self) -> None:
         code, output = self.run_script()
         self.assertEqual(code, 0, output)
-        self.assertIn("OK: 10 routing checks passed across 5 case file(s)", output)
+        self.assertIn("OK: 25 routing checks passed across 5 case file(s)", output)
+        # The six prompts of the two description-less skills can never rank first.
+        self.assertIn("rank-1: 19/25 (76.0%), floor 50.0%", output)
+        self.assertIn("the floor could rise to 76.0% (run with --update)", output)
 
     def test_no_cases_directory_is_reported_rather_than_passed_silently(self) -> None:
         self.hide_directory("evals/cases")
@@ -268,23 +283,78 @@ class TriggerEvalTests(RegistryBase):
         # a skill with no description can never be ranked first on merit.
         self.write_json(
             "evals/cases/rust-port.json",
-            {"skill": "rust-port", "positive": ["parse yaml anchors"], "negative": ["yaml aliases"]},
+            {"skill": "rust-port", "positive": ["parse yaml anchors"], "negative": [_neg("yaml aliases", "yaml-anchors")]},
         )
         module = self.module()
         module.TOP_K = 1
         code, output = self.run_script(module=module)
         self.assertEqual(code, 1)
         self.assertIn("[rust-port] positive not in top-1: 'parse yaml anchors'", output)
-        self.assertIn("FAIL: 3/10 routing checks failed across 5 case file(s)", output)
+        self.assertIn("FAIL: 7/22 routing checks failed across 5 case file(s)", output)
 
-    def test_a_negative_prompt_the_skill_wins_is_caught(self) -> None:
+    def test_a_negative_whose_owner_does_not_outrank_the_skill_is_caught(self) -> None:
         self.write_json(
             "evals/cases/yaml-anchors.json",
-            {"skill": "yaml-anchors", "positive": ["yaml"], "negative": ["yaml anchors and aliases"]},
+            {"skill": "yaml-anchors", "positive": ["yaml"],
+             "negative": [_neg("yaml anchors and aliases", "rust-port")]},
         )
         code, output = self.run_script()
         self.assertEqual(code, 1)
-        self.assertIn("[yaml-anchors] negative ranked #1", output)
+        self.assertIn("[yaml-anchors] negative's owner rust-port ranks below yaml-anchors: 'yaml anchors and aliases'",
+                      output)
+
+    def test_negatives_that_are_not_prompt_owner_pairs_are_a_failure(self) -> None:
+        for negative in (["port rust code"], [{"prompt": "port rust code"}], [{"prompt": 3, "owner": "rust-port"}]):
+            with self.subTest(negative=negative):
+                self.write_json("evals/cases/yaml-anchors.json",
+                                {"skill": "yaml-anchors", "positive": ["yaml anchors"], "negative": negative})
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn("✗ [yaml-anchors] negative must be a list of {prompt, owner}", output)
+
+    def test_an_owner_that_is_not_a_skill_is_caught(self) -> None:
+        self.write_json("evals/cases/yaml-anchors.json",
+                        {"skill": "yaml-anchors", "positive": ["yaml anchors"], "negative": [_neg("x", "ghost")]})
+        code, output = self.run_script()
+        self.assertEqual(code, 1)
+        self.assertIn("[yaml-anchors] negative's owner 'ghost' is not a skill", output)
+
+    def test_a_rank1_share_below_the_floor_fails(self) -> None:
+        self.write_json("evals/routing-floor.json", {"rank1": 0.9})
+        code, output = self.run_script()
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL: rank-1 share 76.0% is below the floor of 90.0%", output)
+
+    def test_a_share_at_the_floor_passes_quietly(self) -> None:
+        """The usual state once the floor is recorded: nothing to raise."""
+        self.write_json("evals/routing-floor.json", {"rank1": 0.76})
+        code, output = self.run_script()
+        self.assertEqual(code, 0, output)
+        self.assertIn("rank-1: 19/25 (76.0%), floor 76.0%", output)
+        self.assertNotIn("could rise", output)
+
+    def test_update_raises_the_floor_and_never_lowers_it(self) -> None:
+        self.restore_later("evals/routing-floor.json")
+        code, output = self.run_script("--update")
+        self.assertEqual(code, 0, output)
+        self.assertIn("recorded the rank-1 floor at 76.0%", output)
+        self.assertEqual(json.loads((self.fixture / "evals/routing-floor.json").read_text())["rank1"], 0.76)
+        self.write_json("evals/routing-floor.json", {"rank1": 0.8})
+        code, output = self.run_script("--update")
+        self.assertEqual(code, 1)
+        self.assertEqual(json.loads((self.fixture / "evals/routing-floor.json").read_text())["rank1"], 0.8)
+
+    def test_a_missing_or_malformed_floor_is_reported(self) -> None:
+        for text in ("{nope", "[]", '{"rank1": "high"}'):
+            with self.subTest(floor=text):
+                self.write_json("evals/routing-floor.json", text)
+                code, output = self.run_script()
+                self.assertEqual(code, 1, output)
+                self.assertIn("evals/routing-floor.json must be {\"rank1\": <share from 0 to 1>}", output)
+        self.restore_later("evals/routing-floor.json").unlink()
+        code, output = self.run_script()
+        self.assertEqual(code, 1)
+        self.assertIn("evals/routing-floor.json must be", output)
 
     def test_a_case_for_an_unknown_skill_is_caught(self) -> None:
         self.write_json("evals/cases/ghost.json", {"skill": "ghost", "positive": ["x"]})
@@ -320,6 +390,14 @@ class TriggerEvalTests(RegistryBase):
                 code, output = self.run_script()
                 self.assertEqual(code, 1, output)
                 self.assertIn("✗ [rust-port] positive must be a list of prompts", output)
+
+    def test_word_forms_share_a_token(self) -> None:
+        """A model reads "crash" and "crashes" as one word; the proxy must too,
+        or a debugging skill that "crashes" names never wins "why does this crash"."""
+        module = self.module()
+        for a, b in (("crash", "crashes"), ("write", "writing"), ("release", "releases"), ("test", "tested")):
+            self.assertEqual(module.toks(a), module.toks(b), (a, b))
+        self.assertEqual(module.toks("CI is red"), ["ci", "red"])  # short words are not cut down
 
     def test_a_folded_description_is_read_across_its_continuation_lines(self) -> None:
         """The second line of a `>-` value carries half the routing vocabulary."""
@@ -367,10 +445,26 @@ class EvalSchemaTests(RegistryBase):
         output = self.failures()
         self.assertIn("evals/cases/yaml-anchors.json: invalid JSON", output)
         self.assertIn("evals/cases/ghost.json: unknown skill 'ghost'", output)
-        self.assertIn("ghost.json: positive must be a non-empty string list", output)
-        self.assertIn("ghost.json: negative must be a non-empty string list", output)
+        self.assertIn("ghost.json: positive needs at least 3 prompts", output)
+        self.assertIn("ghost.json: negative needs at least 2 {prompt, owner} entries", output)
         # The unparseable file no longer counts as yaml-anchors' case.
         self.assertIn("missing routing cases: yaml-anchors", output)
+
+    def test_too_few_prompts_are_caught(self) -> None:
+        self.write_json("evals/cases/yaml-anchors.json",
+                        {"skill": "yaml-anchors", "positive": ["a", "b"], "negative": [_neg("port rust code", "rust-port")]})
+        output = self.failures()
+        self.assertIn("yaml-anchors.json: positive needs at least 3 prompts", output)
+        self.assertIn("yaml-anchors.json: negative needs at least 2 {prompt, owner} entries", output)
+
+    def test_an_owner_must_be_another_known_skill(self) -> None:
+        case = {"skill": "yaml-anchors", "positive": ["a", "b", "c"],
+                "negative": [_neg("x", "ghost"), _neg("y", "yaml-anchors"), {"prompt": "", "owner": "rust-port"}]}
+        self.write_json("evals/cases/yaml-anchors.json", case)
+        output = self.failures()
+        self.assertIn("yaml-anchors.json: negative[0] owner 'ghost' is not a skill", output)
+        self.assertIn("yaml-anchors.json: negative[1] owner is the case's own skill", output)
+        self.assertIn("yaml-anchors.json: negative needs at least 2 {prompt, owner} entries", output)
 
     def test_a_skill_without_a_behavioral_case_is_caught(self) -> None:
         self.restore_later("evals/behavioral/cases/rust-port.json").unlink()

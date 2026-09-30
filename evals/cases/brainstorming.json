@@ -7,7 +7,13 @@
     "what questions should I ask before starting"
   ],
   "negative": [
-    "why does this crash",
-    "how do I tag a release"
+    {
+      "prompt": "why does this crash",
+      "owner": "systematic-debugging"
+    },
+    {
+      "prompt": "how do I tag a release",
+      "owner": "pr-review-and-release"
+    }
   ]
 }

@@ -7,7 +7,13 @@
     "what would justify claiming the tests pass"
   ],
   "negative": [
-    "port this code to Rust",
-    "explain YAML merge keys"
+    {
+      "prompt": "port this code to Rust",
+      "owner": "cross-language-port"
+    },
+    {
+      "prompt": "explain YAML merge keys",
+      "owner": "yaml-domain-reference"
+    }
   ]
 }

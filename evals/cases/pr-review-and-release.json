@@ -1,11 +1,18 @@
 {
   "negative": [
-    "write a short poem",
-    "format this JSON only"
+    {
+      "prompt": "respond to the reviewer's comments on my pull request",
+      "owner": "receiving-code-review"
+    },
+    {
+      "prompt": "write the handoff note for the next session",
+      "owner": "handoff"
+    }
   ],
   "positive": [
     "pr-review-and-release skill for release readiness and review discipline",
-    "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship."
+    "Use when preparing a pull request, reviewing implementation risk, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship.",
+    "is this repository ready to ship a release"
   ],
   "skill": "pr-review-and-release"
 }

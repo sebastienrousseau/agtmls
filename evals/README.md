@@ -13,14 +13,25 @@ in CI.
 ```json
 {
   "skill": "noyalib-ci-and-release",
-  "positive": ["prompts that SHOULD route to this skill"],
-  "negative": ["prompts that should NOT rank this skill #1"]
+  "positive": ["at least three prompts that SHOULD route to this skill"],
+  "negative": [
+    {"prompt": "a prompt another skill owns", "owner": "the skill that should win it"}
+  ]
 }
 ```
 
-- **positive** — each prompt must rank the owning skill in the top-K
-  (TF-IDF cosine of the prompt against every skill description).
-- **negative** — each prompt must NOT rank the owning skill #1.
+- **positive** — at least three prompts, each ranking the case's skill in
+  the top-K (TF-IDF cosine of the prompt against every skill description).
+- **negative** — at least two prompts, each naming the skill that should win
+  it (`owner`); the owner must rank above the case's skill. A prompt no
+  skill should win has no owner, so it cannot be a negative.
+- **rank-1 floor** — the share of prompts whose intended skill ranks first
+  (the case's skill for a positive, the owner for a negative) is held to
+  `routing-floor.json`. It may only rise: `run-trigger-evals.py --update`
+  records a better share.
+
+Words are compared after light stemming, so "crash" meets "crashes" and
+"write" meets "writing", as a model would read them.
 
 This is a cheap *proxy* for the model's real routing judgment; it catches a
 description that has stopped matching its own obvious prompts, not subtle
