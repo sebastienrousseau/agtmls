@@ -44,7 +44,7 @@
   "generated_by": "scripts/generate-skill-index.py",
   "name": "agtmls",
   "quality": {
-    "average_score": 99,
+    "average_score": 100,
     "total": 33
   },
   "registry_version": "0.0.19",
@@ -2019,11 +2019,11 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:512a58517fa173a8a9ea351e5f51cafc89d908237b9e690dbb22f8f30c1ff723",
+      "integrity": "sha256:771bbbe79c47713897b90ad65f06b9a8d26dfc22bedac0688c2c6d9396bc2696",
       "kind": "general",
       "last_changed_version": "0.0.19",
       "license": "MIT",
-      "maturity": "draft",
+      "maturity": "hardened",
       "metadata_path": "skills/vetting-a-skill-before-install/metadata.json",
       "name": "vetting-a-skill-before-install",
       "owner": "Sebastien Rousseau",
@@ -2032,15 +2032,15 @@
         "checks": {
           "behavioral_eval": true,
           "description": true,
-          "maturity": false,
+          "maturity": true,
           "metadata": true,
           "references": true,
           "routing_eval": true,
           "safety_policy": true,
           "supported_agents": true
         },
-        "passed": 7,
-        "score": 88,
+        "passed": 8,
+        "score": 100,
         "total": 8
       },
       "references": [

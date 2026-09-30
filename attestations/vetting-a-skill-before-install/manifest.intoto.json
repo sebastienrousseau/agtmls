@@ -5,13 +5,13 @@
     "files": [
       {
         "digest": {
-          "sha256": "8345f8a0e4e02490d38316af31acb3bddb882470f5746a430c49dcf0d41426fb"
+          "sha256": "beef13b2765233d1dffdb7c9ff3bcf886133b1d85f3847948e738a62ecf9e482"
         },
         "path": "SKILL.md"
       },
       {
         "digest": {
-          "sha256": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+          "sha256": "99c73bb1a2298870dce588d803a33f1b61a4b24175120a2c84d276888f47b6ba"
         },
         "path": "metadata.json"
       },
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "512a58517fa173a8a9ea351e5f51cafc89d908237b9e690dbb22f8f30c1ff723"
+        "sha256": "771bbbe79c47713897b90ad65f06b9a8d26dfc22bedac0688c2c6d9396bc2696"
       },
       "name": "vetting-a-skill-before-install"
     }

@@ -6,7 +6,7 @@ compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Bash WebFetch WebSearch"
 metadata:
   agtmls-owner: "Sebastien Rousseau"
-  agtmls-maturity: "draft"
+  agtmls-maturity: "hardened"
   agtmls-risk-level: "medium"
   agtmls-network-access: "optional"
   agtmls-writes-files: "false"

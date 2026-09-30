@@ -181,6 +181,22 @@ jobs:
               )
           PY
 
+  release-signing:
+    name: release signing works end to end, with a throwaway key
+    # The release key signs only on a tag, in the protected environment.
+    # This runs the same signing script, the same sdist-then-wheel build and
+    # the same pre-publish wheel check with a throwaway key, so a change that
+    # would lose a signature fails here rather than during a release.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
+      - run: scripts/rehearse-release-signing.sh
+
   api-diff:
     name: the public API has not broken since the last release
     runs-on: ubuntu-latest

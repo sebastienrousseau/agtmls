@@ -1,6 +1,6 @@
 {
   "bundle": null,
-  "maturity": "draft",
+  "maturity": "hardened",
   "owner": "Sebastien Rousseau",
   "required_tools": [],
   "safety_policy": {

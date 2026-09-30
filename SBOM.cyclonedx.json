@@ -732,7 +732,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "83060438d9d63e9ae743b3f82fd109a2e3f020a4853e8d7f6554aeaa5f3b044d"
+          "content": "8353bd0b06b24fe7b88398c54beaac0189dfb1e278ad84b74521f3b0f07ecce4"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/capabilities.intoto.json",
@@ -743,7 +743,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5be8279d6e09d565e197308cc11dd3c3c06f131340bc6d5dc7548b5305d82086"
+          "content": "5aae41401a39313d48c7f7be3992e579a2cff7c50ec2b3a35ed2d3a9dc887543"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
@@ -754,7 +754,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "624dd956ac4a875d58708ff95b31171272e8a4d9351a63b09de771f73a091aa3"
+          "content": "bdb206b0d32140f8a51481e891d5b59e4c43f297e1be45174dc37fad3c838dd0"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/manifest.intoto.json",
@@ -1821,7 +1821,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf19983dbb1549aaafbc12d7229d3ac3e6b0c15c2f7a18c8a6a5668fa05df19c"
+          "content": "6637ca2fc2088eabd96512f3c5aa5db7760cb8a06f3e7913d0a67282ae1f5194"
         }
       ],
       "name": "index.json",
@@ -2635,7 +2635,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a2722f1025df4e5a97977238d56885c44f31e663551be49748346ef337c3a47f"
+          "content": "ac62586e9954a75abe44c5daa6692e0e6581d80df1e8945f0c7a77b80defdfe6"
         }
       ],
       "name": "scripts/_lib/signatures.py",
@@ -2705,6 +2705,17 @@
         }
       ],
       "name": "scripts/_lib/verify_report.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/wheel_signatures.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bca5d197c9ba4f3c53d0adbf97328230939a4f3e1409359882a950311fef424c"
+        }
+      ],
+      "name": "scripts/_lib/wheel_signatures.py",
       "type": "file"
     },
     {
@@ -3027,11 +3038,22 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/rehearse-release-signing.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "baabe0eddad808aa0d797c7a2ba1cc582483936f330b759a369ef5273fa26d05"
+        }
+      ],
+      "name": "scripts/rehearse-release-signing.sh",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/release-audit.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "41a54db59b9f98a2ec550c8d21b25fd71e2bd3b11d0643393ceaee79a4dbf9be"
+          "content": "366ef4c4e6a6df48b7c8b3b01e189ea37e56d87e1015bfa76b345c9db387086f"
         }
       ],
       "name": "scripts/release-audit.py",
@@ -3200,6 +3222,17 @@
         }
       ],
       "name": "scripts/sign-attestations.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/sign-release.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8946a4cc3d9fbf644d36634190953dfe2a2d142a7b300c7241d51c01b532fd83"
+        }
+      ],
+      "name": "scripts/sign-release.sh",
       "type": "file"
     },
     {
@@ -3772,6 +3805,17 @@
         }
       ],
       "name": "scripts/verify-release-assets.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/verify-wheel-signatures.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a2a10bdd3ce7f2977b8fc3c5218fa7a2b8cd9978698254b498e09ee4edc2ce91"
+        }
+      ],
+      "name": "scripts/verify-wheel-signatures.py",
       "type": "file"
     },
     {
@@ -4967,7 +5011,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8345f8a0e4e02490d38316af31acb3bddb882470f5746a430c49dcf0d41426fb"
+          "content": "beef13b2765233d1dffdb7c9ff3bcf886133b1d85f3847948e738a62ecf9e482"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/SKILL.md",
@@ -4978,7 +5022,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+          "content": "99c73bb1a2298870dce588d803a33f1b61a4b24175120a2c84d276888f47b6ba"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/metadata.json",
@@ -5289,7 +5333,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T23:25:13Z",
+    "timestamp": "2026-09-30T03:09:34Z",
     "tools": {
       "components": [
         {
