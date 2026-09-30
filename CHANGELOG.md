@@ -7,6 +7,14 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- Two unit tests planted `index.json.sig` and a `.coverage` file in the
+  real checkout and removed them on cleanup. A killed test run left the
+  fake signature behind, gitignored and unseen, and every local build
+  then shipped it, so `verify --signatures` failed on a local install.
+  The tests now copy from a small temporary tree instead.
+
 ## 0.0.20 - 2026-09-30
 
 ### Added

@@ -46,7 +46,7 @@ def skill_text(frontmatter: str, body: str = "# Heading\n\ncontent\n") -> str:
     return f"---\n{frontmatter.strip()}\n---\n\n{body}"
 
 
-def registry_fixture(destination: Path) -> Path:
+def registry_fixture(destination: Path, source: Path = ROOT) -> Path:
     """A working copy of the registry's *data*, without its scripts.
 
     Validators resolve their paths from ROOT at import time, so a test that
@@ -61,7 +61,7 @@ def registry_fixture(destination: Path) -> Path:
     # /var onto /private/var. An unresolved root makes every link in the tree
     # look like it escapes the repository.
     destination = destination.resolve()
-    for path in ROOT.iterdir():
+    for path in source.iterdir():
         # The coverage gate runs checks in parallel and writes `.coverage.*`
         # data files beside the tree; one vanished between this listing and
         # its copy and took a whole test module down with it.
