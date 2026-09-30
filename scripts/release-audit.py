@@ -37,7 +37,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import signatures  # noqa: E402  (same)
+from _lib import signatures, wheel_signatures  # noqa: E402  (same)
 from _lib.checksums import parse_sums  # noqa: E402  (needs the scripts path first)
 from _lib.release_notes import notes_problems, title  # noqa: E402  (same)
 
@@ -147,24 +147,11 @@ def audit_signature(commit: str, repo: str, assets: list[dict]) -> list[str]:
     return []
 
 
-REGISTRY = "agtmls/_registry/"
-
-
 def _commit_attestations(commit: str) -> dict[str, bytes]:
     """The release commit's attestations, by path."""
     listed = fetch_bytes("git", "ls-tree", "-r", "--name-only", commit, "attestations/") or b""
     paths = [line for line in listed.decode().splitlines() if line.endswith(".intoto.json")]
     return {path: fetch_bytes("git", "show", f"{commit}:{path}") or b"" for path in paths}
-
-
-def _wheel_registry(data: bytes, into: Path) -> Path:
-    """Unpack the wheel's attestations into `into`; the registry root."""
-    import io
-    import zipfile
-    with zipfile.ZipFile(io.BytesIO(data)) as wheel:
-        members = [name for name in wheel.namelist() if name.startswith(REGISTRY + "attestations/")]
-        wheel.extractall(into, members=members)
-    return into / REGISTRY
 
 
 def _matches(expected: dict[str, bytes], registry: Path) -> list[str]:
@@ -198,8 +185,8 @@ def audit_attestations(commit: str, repo: str, assets: list[dict]) -> list[str]:
         return ["the wheel or ALLOWED_SIGNERS could not be read back to check the attestations"]
     expected = _commit_attestations(commit)
     with tempfile.TemporaryDirectory(prefix="agtmls-audit-att-") as raw:
-        registry = _wheel_registry(data, Path(raw))
-        (registry / "ALLOWED_SIGNERS").write_bytes(signers)
+        registry = wheel_signatures.extract_registry(data, Path(raw))
+        (registry / "ALLOWED_SIGNERS").write_bytes(signers)  # the commit's keys, not the release's
         errors = _matches(expected, registry)
         errors += [f"{problem} in the wheel" for problem in signatures.unverified_attestations(registry)]
     if not errors:

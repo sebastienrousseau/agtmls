@@ -38,6 +38,17 @@ All notable changes to AgtMLS are recorded here.
   `release-audit.py` refuses a release whose attestations are not the
   commit's or do not verify. `sign-attestations.py --verify` checks them
   offline.
+- Release signing is rehearsed on every pull request.
+  `scripts/sign-release.sh` holds the signing the release runs (the index
+  and every attestation, then verification), and the conformance workflow
+  runs `rehearse-release-signing.sh`: the same script with a throwaway
+  key, the sdist-then-wheel build, and `verify-wheel-signatures.py`. The
+  release now runs that same wheel check before publishing, since the
+  signatures reach the wheel only through the sdist.
+- vetting-a-skill-before-install is `hardened`, on an efficacy
+  attestation of its promoted bytes (Claude Code +20 points at 1.31x the
+  tokens, Codex +8 at 1.17x).
+- The unit coverage floor is 100% of lines and branches, up from 98%.
 
 ### Changed
 

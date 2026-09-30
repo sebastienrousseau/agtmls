@@ -63,10 +63,10 @@ def attestation_signature(path: Path) -> Path:
     return path.with_name(path.name + ".sig")
 
 
-def unverified_attestations(root: Path) -> list[str]:
+def unverified_attestations(root: Path, signers: Path | None = None) -> list[str]:
     """Each attestation under `root` whose sibling .sig is missing or does
-    not verify against `root`/ALLOWED_SIGNERS (spec 10.7)."""
-    signers = root / "ALLOWED_SIGNERS"
+    not verify against `signers`, by default `root`/ALLOWED_SIGNERS (spec 10.7)."""
+    signers = root / "ALLOWED_SIGNERS" if signers is None else signers
     problems = []
     for path in attestation_files(root):
         status = verify(path, attestation_signature(path), signers, ATTESTATION_NAMESPACE)

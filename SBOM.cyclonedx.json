@@ -2635,7 +2635,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a2722f1025df4e5a97977238d56885c44f31e663551be49748346ef337c3a47f"
+          "content": "ac62586e9954a75abe44c5daa6692e0e6581d80df1e8945f0c7a77b80defdfe6"
         }
       ],
       "name": "scripts/_lib/signatures.py",
@@ -2705,6 +2705,17 @@
         }
       ],
       "name": "scripts/_lib/verify_report.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/wheel_signatures.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bca5d197c9ba4f3c53d0adbf97328230939a4f3e1409359882a950311fef424c"
+        }
+      ],
+      "name": "scripts/_lib/wheel_signatures.py",
       "type": "file"
     },
     {
@@ -3027,11 +3038,22 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/rehearse-release-signing.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "baabe0eddad808aa0d797c7a2ba1cc582483936f330b759a369ef5273fa26d05"
+        }
+      ],
+      "name": "scripts/rehearse-release-signing.sh",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/release-audit.py",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "41a54db59b9f98a2ec550c8d21b25fd71e2bd3b11d0643393ceaee79a4dbf9be"
+          "content": "366ef4c4e6a6df48b7c8b3b01e189ea37e56d87e1015bfa76b345c9db387086f"
         }
       ],
       "name": "scripts/release-audit.py",
@@ -3200,6 +3222,17 @@
         }
       ],
       "name": "scripts/sign-attestations.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/sign-release.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8946a4cc3d9fbf644d36634190953dfe2a2d142a7b300c7241d51c01b532fd83"
+        }
+      ],
+      "name": "scripts/sign-release.sh",
       "type": "file"
     },
     {
@@ -3772,6 +3805,17 @@
         }
       ],
       "name": "scripts/verify-release-assets.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/verify-wheel-signatures.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a2a10bdd3ce7f2977b8fc3c5218fa7a2b8cd9978698254b498e09ee4edc2ce91"
+        }
+      ],
+      "name": "scripts/verify-wheel-signatures.py",
       "type": "file"
     },
     {
@@ -5289,7 +5333,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-30T03:04:12Z",
+    "timestamp": "2026-09-30T03:09:34Z",
     "tools": {
       "components": [
         {

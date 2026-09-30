@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-30T03:04:12Z",
+    "created": "2026-09-30T03:09:33Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -3841,11 +3841,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a89a6fc3e40b3d5ca741423acfa2b1adb007b19f"
+          "checksumValue": "4cda462a52a128b182c23279195c00db9879f92e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "a2722f1025df4e5a97977238d56885c44f31e663551be49748346ef337c3a47f"
+          "checksumValue": "ac62586e9954a75abe44c5daa6692e0e6581d80df1e8945f0c7a77b80defdfe6"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3946,6 +3946,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/verify_report.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-wheel-signatures.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b477f1e393b38437bdfc5cd4fe504b08e406f6f6"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bca5d197c9ba4f3c53d0adbf97328230939a4f3e1409359882a950311fef424c"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/wheel_signatures.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -4413,15 +4429,31 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-rehearse-release-signing.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "bde9e1ca422f80773a0a925f10aec959f17502f9"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "baabe0eddad808aa0d797c7a2ba1cc582483936f330b759a369ef5273fa26d05"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/rehearse-release-signing.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-release-audit.py",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4aa5e10ed2a6cc9a09fbc16ea5f8dbe29b951394"
+          "checksumValue": "d391d5defaa8e6b7bf870aeb0c91f05cfb7c2249"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "41a54db59b9f98a2ec550c8d21b25fd71e2bd3b11d0643393ceaee79a4dbf9be"
+          "checksumValue": "366ef4c4e6a6df48b7c8b3b01e189ea37e56d87e1015bfa76b345c9db387086f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4666,6 +4698,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/sign-attestations.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-sign-release.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4c11083dd45c6a27c202740355b46039ae222004"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8946a4cc3d9fbf644d36634190953dfe2a2d142a7b300c7241d51c01b532fd83"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/sign-release.sh",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -5498,6 +5546,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/verify-release-assets.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-verify-wheel-signatures.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "1a479b8e25ab9957e3539a12d482666b48c261aa"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a2a10bdd3ce7f2977b8fc3c5218fa7a2b8cd9978698254b498e09ee4edc2ce91"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/verify-wheel-signatures.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -7938,6 +8002,7 @@
         "SPDXRef-File-scripts--lib-uplift.py",
         "SPDXRef-File-scripts--lib-uplift-agents.py",
         "SPDXRef-File-scripts--lib-verify-report.py",
+        "SPDXRef-File-scripts--lib-wheel-signatures.py",
         "SPDXRef-File-scripts--lib-workloads.py",
         "SPDXRef-File-scripts-agtmls-doctor.py",
         "SPDXRef-File-scripts-agtmls.py",
@@ -7967,6 +8032,7 @@
         "SPDXRef-File-scripts-provider-install.py",
         "SPDXRef-File-scripts-record-evidence.py",
         "SPDXRef-File-scripts-registry-diff.py",
+        "SPDXRef-File-scripts-rehearse-release-signing.sh",
         "SPDXRef-File-scripts-release-audit.py",
         "SPDXRef-File-scripts-release-body.py",
         "SPDXRef-File-scripts-release-check.py",
@@ -7983,6 +8049,7 @@
         "SPDXRef-File-scripts-scaffold-skill.py",
         "SPDXRef-File-scripts-setup-workspace.sh",
         "SPDXRef-File-scripts-sign-attestations.py",
+        "SPDXRef-File-scripts-sign-release.sh",
         "SPDXRef-File-scripts-smoke-bump-version-check.py",
         "SPDXRef-File-scripts-smoke-cli.py",
         "SPDXRef-File-scripts-smoke-evolve-evidence.py",
@@ -8035,6 +8102,7 @@
         "SPDXRef-File-scripts-validate-templates.py",
         "SPDXRef-File-scripts-validate-version-policy.py",
         "SPDXRef-File-scripts-verify-release-assets.py",
+        "SPDXRef-File-scripts-verify-wheel-signatures.py",
         "SPDXRef-File-skills-agent-loop-design-SKILL.md",
         "SPDXRef-File-skills-agent-loop-design-metadata.json",
         "SPDXRef-File-skills-agent-loop-design-reference.md",
