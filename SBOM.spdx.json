@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-09-30T00:04:08Z",
+    "created": "2026-09-30T03:04:12Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1082,6 +1082,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./attestations/vetting-a-skill-before-install/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "864a3443d9fc453ad418c5b4f5b23e80002d1bc7"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5aae41401a39313d48c7f7be3992e579a2cff7c50ec2b3a35ed2d3a9dc887543"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -7743,6 +7759,7 @@
         "SPDXRef-File-attestations-verification-before-completion-capabilities.intoto.json",
         "SPDXRef-File-attestations-verification-before-completion-manifest.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-capabilities.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-manifest.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-capabilities.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-manifest.intoto.json",

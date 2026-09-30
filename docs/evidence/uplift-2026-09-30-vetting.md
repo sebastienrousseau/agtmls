@@ -37,6 +37,12 @@ none), and its own 5,191-character body rode along in each of them.
    the commit to install, or that there is none. Claude Code found it in
    every run again, at the lower cost.
 
+Promoted to `hardened` (`72e1aee`), which changes the skill's bytes, it was
+measured again: Claude Code +20 points at 1.31x, Codex +8 at 1.17x, both
+`helps` ([`uplift-2026-09-30-vetting-5.json`](uplift-2026-09-30-vetting-5.json)).
+Its efficacy attestation is built from that run. Codex found the pin point
+in 2 of 5 runs, against 3 of 5 before.
+
 Codex's token ratio moved between 1.08x and 1.33x across the last three
 runs with the same kind of skill: with five trials that spread is noise, so
 none of these numbers is precise.

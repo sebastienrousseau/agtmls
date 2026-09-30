@@ -739,6 +739,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5aae41401a39313d48c7f7be3992e579a2cff7c50ec2b3a35ed2d3a9dc887543"
+        }
+      ],
+      "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "attestations/vetting-a-skill-before-install/manifest.intoto.json",
       "hashes": [
         {
@@ -5278,7 +5289,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-30T00:04:09Z",
+    "timestamp": "2026-09-30T03:04:12Z",
     "tools": {
       "components": [
         {

@@ -1,0 +1,49 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "agents": [
+      {
+        "agent": "claude",
+        "delta": 0.2,
+        "model": "claude-opus-5-5",
+        "score_with": 1.0,
+        "score_without": 0.8,
+        "token_ratio": 1.31,
+        "verdict": "helps"
+      },
+      {
+        "agent": "codex",
+        "delta": 0.08,
+        "model": "gpt-6-astra",
+        "score_with": 0.88,
+        "score_without": 0.8,
+        "token_ratio": 1.17,
+        "verdict": "helps"
+      }
+    ],
+    "bar": {
+      "agents": 2,
+      "big_gain": 0.2,
+      "token_ceiling": 1.5
+    },
+    "evidence": {
+      "commit": "72e1aeed6089095ede24e21503b3e72ed81c552e",
+      "date": "2026-09-30T03:03:32Z",
+      "digest": {
+        "sha256": "3088ea626a12445c51ee9ef36216947cc682151e810cc40a0b1c1551a8d06ba8"
+      },
+      "path": "docs/evidence/uplift-2026-09-30-vetting-5.json",
+      "trials": 5
+    },
+    "meets_bar": true
+  },
+  "predicateType": "https://agtmls.dev/efficacy/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "771bbbe79c47713897b90ad65f06b9a8d26dfc22bedac0688c2c6d9396bc2696"
+      },
+      "name": "vetting-a-skill-before-install"
+    }
+  ]
+}
