@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.20 - 2026-09-30
+
 ### Added
 
 - `run-uplift-evals.py` records the tokens each agent wrote per run
