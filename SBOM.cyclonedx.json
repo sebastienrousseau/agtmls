@@ -732,21 +732,10 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "83060438d9d63e9ae743b3f82fd109a2e3f020a4853e8d7f6554aeaa5f3b044d"
+          "content": "8353bd0b06b24fe7b88398c54beaac0189dfb1e278ad84b74521f3b0f07ecce4"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/capabilities.intoto.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "5be8279d6e09d565e197308cc11dd3c3c06f131340bc6d5dc7548b5305d82086"
-        }
-      ],
-      "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "type": "file"
     },
     {
@@ -754,7 +743,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "624dd956ac4a875d58708ff95b31171272e8a4d9351a63b09de771f73a091aa3"
+          "content": "bdb206b0d32140f8a51481e891d5b59e4c43f297e1be45174dc37fad3c838dd0"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/manifest.intoto.json",
@@ -1821,7 +1810,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf19983dbb1549aaafbc12d7229d3ac3e6b0c15c2f7a18c8a6a5668fa05df19c"
+          "content": "6637ca2fc2088eabd96512f3c5aa5db7760cb8a06f3e7913d0a67282ae1f5194"
         }
       ],
       "name": "index.json",
@@ -4967,7 +4956,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8345f8a0e4e02490d38316af31acb3bddb882470f5746a430c49dcf0d41426fb"
+          "content": "beef13b2765233d1dffdb7c9ff3bcf886133b1d85f3847948e738a62ecf9e482"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/SKILL.md",
@@ -4978,7 +4967,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c21266ab65a3e761d4a62fa1d460b1fb69dde3eefdbe15cc99312759607a2d59"
+          "content": "99c73bb1a2298870dce588d803a33f1b61a4b24175120a2c84d276888f47b6ba"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/metadata.json",
@@ -5289,7 +5278,7 @@
       "type": "application",
       "version": "0.0.19"
     },
-    "timestamp": "2026-09-29T23:25:13Z",
+    "timestamp": "2026-09-30T00:04:09Z",
     "tools": {
       "components": [
         {
