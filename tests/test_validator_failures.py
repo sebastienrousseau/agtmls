@@ -129,11 +129,13 @@ class EvalCaseFailureTests(unittest.TestCase):
                 setattr(self.mod, attribute, original_dir)
                 self.mod.ROOT = original_root
 
-    def case(self, skill: str = "alpha") -> dict:
-        return {"skill": skill, "positive": ["do a thing"], "negative": ["do another"]}
+    def case(self, skill: str = "alpha", owner: str = "beta") -> dict:
+        return {"skill": skill, "positive": ["do a thing", "do it again", "do it once more"],
+                "negative": [{"prompt": "do another", "owner": owner}, {"prompt": "do something else", "owner": owner}]}
 
     def test_a_well_formed_case_passes(self) -> None:
-        self.assertEqual(self.routing({"alpha": self.case()}, {"alpha"}), [])
+        cases = {"alpha": self.case(), "beta": self.case("beta", owner="alpha")}
+        self.assertEqual(self.routing(cases, {"alpha", "beta"}), [])
 
     def test_a_case_for_a_skill_that_does_not_exist_is_caught(self) -> None:
         errors = self.routing({"ghost": self.case("ghost")}, {"alpha"})
@@ -147,14 +149,14 @@ class EvalCaseFailureTests(unittest.TestCase):
         case = self.case()
         case["positive"] = []
         errors = self.routing({"alpha": case}, {"alpha"})
-        self.assertTrue(any("positive must be" in e for e in errors), errors)
+        self.assertTrue(any("positive needs at least 3" in e for e in errors), errors)
 
     def test_a_missing_negative_list_is_caught(self) -> None:
         """Without negatives a case cannot show the skill repels anything."""
         case = self.case()
         del case["negative"]
         errors = self.routing({"alpha": case}, {"alpha"})
-        self.assertTrue(any("negative must be" in e for e in errors), errors)
+        self.assertTrue(any("negative needs at least 2" in e for e in errors), errors)
 
     def test_invalid_json_is_reported_rather_than_raised(self) -> None:
         errors = self.routing({"alpha": "{not json"}, {"alpha"})

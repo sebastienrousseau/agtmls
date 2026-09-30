@@ -2,12 +2,18 @@
   "skill": "anti-slop-pr-and-writing",
   "positive": [
     "remove AI slop from this PR description",
-    "clean up robotic clich\u00e9s in my commit message",
+    "clean up robotic clichés in my commit message",
     "make this documentation sound human and concise",
     "strip conversational filler and binary contrasts from this draft"
   ],
   "negative": [
-    "fuzz test the YAML parser",
-    "benchmark release pack throughput"
+    {
+      "prompt": "fuzz test the YAML parser",
+      "owner": "noyalib-diagnostics-and-tooling"
+    },
+    {
+      "prompt": "port this module to Go",
+      "owner": "cross-language-port"
+    }
   ]
 }

@@ -7,7 +7,13 @@
     "help me choose between the noyalib skills"
   ],
   "negative": [
-    "port this code to Rust",
-    "CI is red on noyalib"
+    {
+      "prompt": "port this code to Rust",
+      "owner": "cross-language-port"
+    },
+    {
+      "prompt": "CI is red on noyalib",
+      "owner": "noyalib-ci-and-release"
+    }
   ]
 }

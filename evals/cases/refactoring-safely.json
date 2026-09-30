@@ -7,7 +7,13 @@
     "is it safe to deduplicate these three blocks"
   ],
   "negative": [
-    "write public launch copy",
-    "explain YAML merge keys"
+    {
+      "prompt": "write public launch copy",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "explain YAML merge keys",
+      "owner": "yaml-domain-reference"
+    }
   ]
 }

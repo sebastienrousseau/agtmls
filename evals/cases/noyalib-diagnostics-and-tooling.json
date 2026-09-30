@@ -7,7 +7,13 @@
     "what does llvm-cov regions percentage mean"
   ],
   "negative": [
-    "what public claim can we make versus serde_yaml",
-    "how do I add a Cargo feature"
+    {
+      "prompt": "what public claim can we make versus serde_yaml",
+      "owner": "noyalib-external-positioning"
+    },
+    {
+      "prompt": "how do I add a Cargo feature",
+      "owner": "noyalib-config-and-flags"
+    }
   ]
 }

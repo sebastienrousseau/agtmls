@@ -7,7 +7,13 @@
     "ratchet the fail-under coverage numbers"
   ],
   "negative": [
-    "explain YAML anchors and aliases",
-    "how do I tag a release"
+    {
+      "prompt": "explain YAML anchors and aliases",
+      "owner": "yaml-domain-reference"
+    },
+    {
+      "prompt": "how do I tag a release",
+      "owner": "pr-review-and-release"
+    }
   ]
 }

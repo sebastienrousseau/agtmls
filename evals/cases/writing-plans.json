@@ -7,7 +7,13 @@
     "plan this migration before writing code"
   ],
   "negative": [
-    "why does this crash",
-    "compare noyalib to saphyr"
+    {
+      "prompt": "why does this crash",
+      "owner": "systematic-debugging"
+    },
+    {
+      "prompt": "compare noyalib to saphyr",
+      "owner": "noyalib-external-positioning"
+    }
   ]
 }

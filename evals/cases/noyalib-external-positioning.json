@@ -7,7 +7,13 @@
     "build a COMPARISON matrix against Rust YAML crates"
   ],
   "negative": [
-    "fix cargo-vet in CI",
-    "write a cross-loader parity regression test"
+    {
+      "prompt": "fix cargo-vet in CI",
+      "owner": "noyalib-ci-and-release"
+    },
+    {
+      "prompt": "write a cross-loader parity regression test",
+      "owner": "noyalib-validation-and-qa"
+    }
   ]
 }

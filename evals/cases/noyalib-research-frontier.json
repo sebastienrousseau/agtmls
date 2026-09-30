@@ -7,7 +7,13 @@
     "what research direction is open after v0.0.14"
   ],
   "negative": [
-    "what is the cargo release tag flow",
-    "debug wrong byte spans"
+    {
+      "prompt": "what is the cargo release tag flow",
+      "owner": "noyalib-ci-and-release"
+    },
+    {
+      "prompt": "debug wrong byte spans",
+      "owner": "noyalib-debugging-playbook"
+    }
   ]
 }

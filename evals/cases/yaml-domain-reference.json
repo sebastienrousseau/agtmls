@@ -7,7 +7,13 @@
     "does noyalib accept nan or octal 0o7 scalars"
   ],
   "negative": [
-    "CI is red on my release PR",
-    "raise the test coverage to 98 percent"
+    {
+      "prompt": "CI is red on my release PR",
+      "owner": "pr-review-and-release"
+    },
+    {
+      "prompt": "raise the test coverage to 98 percent",
+      "owner": "noyalib-coverage-campaign"
+    }
   ]
 }

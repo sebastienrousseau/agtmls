@@ -7,7 +7,13 @@
     "does strict reject duplicate YAML keys"
   ],
   "negative": [
-    "CI is red after tag push",
-    "draft a release note"
+    {
+      "prompt": "CI is red after tag push",
+      "owner": "noyalib-ci-and-release"
+    },
+    {
+      "prompt": "draft a release note",
+      "owner": "pr-review-and-release"
+    }
   ]
 }
