@@ -32,22 +32,26 @@ class RegistryFixtureTests(unittest.TestCase):
             self.assertFalse((fixture / "README.md").exists())
         self.assertEqual(vanished, ["README.md"])
 
+    def source(self, raw: str, *names: str) -> Path:
+        """A small tree to copy from. These tests once planted their files in
+        the real checkout and removed them on cleanup; a killed run left a fake
+        index.json.sig there, and every local build then shipped it."""
+        source = Path(raw) / "source"
+        source.mkdir()
+        for name in ("index.json", *names):
+            (source / name).write_text("{}\n", encoding="utf-8")
+        return source
+
     def test_a_release_signature_in_the_tree_is_never_copied(self) -> None:
         """The release job runs the gate with index.json.sig present."""
-        sig = support.ROOT / "index.json.sig"
-        created = not sig.exists()
-        if created:
-            sig.write_text("signature\n", encoding="utf-8")
-            self.addCleanup(lambda: sig.unlink(missing_ok=True))
         with tempfile.TemporaryDirectory() as raw:
-            fixture = support.registry_fixture(Path(raw) / "tree")
+            fixture = support.registry_fixture(Path(raw) / "tree", self.source(raw, "index.json.sig"))
             self.assertFalse((fixture / "index.json.sig").exists())
             self.assertTrue((fixture / "index.json").exists())
 
     def test_coverage_data_files_are_never_copied(self) -> None:
-        stray = support.ROOT / ".coverage.test-host.pid1.abc"
-        stray.write_text("", encoding="utf-8")
-        self.addCleanup(lambda: stray.unlink(missing_ok=True))
+        stray = ".coverage.test-host.pid1.abc"
         with tempfile.TemporaryDirectory() as raw:
-            fixture = support.registry_fixture(Path(raw) / "tree")
-            self.assertFalse((fixture / stray.name).exists())
+            fixture = support.registry_fixture(Path(raw) / "tree", self.source(raw, stray))
+            self.assertFalse((fixture / stray).exists())
+            self.assertTrue((fixture / "index.json").exists())
