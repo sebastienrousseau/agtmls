@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from _lib.binary_identity import (  # noqa: E402
+from _lib.binary_identity import (
     RuntimeIdentity,
     current_runtime_identity,
     detect_virtual_env,
@@ -54,15 +54,35 @@ class HashFileTests(unittest.TestCase):
 
 class VirtualEnvDetectionTests(unittest.TestCase):
     def test_detect_virtual_env_from_env_var(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            with patch.dict(os.environ, {"VIRTUAL_ENV": tmpdir}):
-                self.assertEqual(detect_virtual_env(), str(Path(tmpdir).resolve()))
+        with (
+            tempfile.TemporaryDirectory() as tmpdir,
+            patch.dict(os.environ, {"VIRTUAL_ENV": tmpdir}),
+        ):
+            self.assertEqual(detect_virtual_env(), str(Path(tmpdir).resolve()))
 
     def test_detect_virtual_env_none_when_empty_and_matching(self) -> None:
-        with patch.dict(os.environ, {}, clear=True):
-            with patch.object(sys, "prefix", "/usr"):
-                with patch.object(sys, "base_prefix", "/usr"):
-                    self.assertIsNone(detect_virtual_env())
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch.object(sys, "prefix", "/usr"),
+            patch.object(sys, "base_prefix", "/usr"),
+        ):
+            self.assertIsNone(detect_virtual_env())
+
+    def test_detect_virtual_env_from_prefix_fallback(self) -> None:
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch.object(sys, "prefix", "/env/path"),
+            patch.object(sys, "base_prefix", "/usr"),
+        ):
+            self.assertEqual(detect_virtual_env(), "/env/path")
+
+    def test_detect_virtual_env_nonexistent_env_var(self) -> None:
+        with (
+            patch.dict(os.environ, {"VIRTUAL_ENV": "/nonexistent/venv"}),
+            patch.object(sys, "prefix", "/usr"),
+            patch.object(sys, "base_prefix", "/usr"),
+        ):
+            self.assertIsNone(detect_virtual_env())
 
 
 class CurrentRuntimeIdentityTests(unittest.TestCase):

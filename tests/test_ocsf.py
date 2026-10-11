@@ -9,11 +9,12 @@ import sys
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from _lib.findings import Finding  # noqa: E402
-from _lib.ocsf import (  # noqa: E402
+from _lib.findings import Finding
+from _lib.ocsf import (
     export_ocsf_json,
     finding_to_ocsf,
     generate_finding_uid,
@@ -78,6 +79,14 @@ class OCSFMappingTests(unittest.TestCase):
         self.assertEqual(record["status_id"], 4)
         self.assertEqual(record["status"], "Suppressed")
         self.assertEqual(record["resources"][0]["data"]["suppressed"], "Verified internal script")
+        self.assertEqual(record["resources"][0]["name"], "script.sh")
+
+    def test_finding_to_ocsf_dict_defaults(self) -> None:
+        minimal_dict: dict[str, Any] = {}
+        record = finding_to_ocsf(minimal_dict)
+        self.assertEqual(record["severity"], "Low")
+        self.assertEqual(record["finding_info"]["title"], "AgtMLS Rule AGT-UNKNOWN")
+        self.assertEqual(record["resources"][0]["name"], "")
 
     def test_batch_and_json_export(self) -> None:
         findings = [

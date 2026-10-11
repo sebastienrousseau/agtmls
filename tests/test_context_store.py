@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from _lib.context_store import ContextStore, SearchResult, sanitize_query  # noqa: E402
+from _lib.context_store import ContextStore, SearchResult, sanitize_query
 
 
 class ContextStoreTests(unittest.TestCase):
@@ -103,14 +103,30 @@ class ContextStoreTests(unittest.TestCase):
         self.assertIn("score", as_dict)
         self.assertIn("snippet", as_dict)
 
+    def test_search_empty_or_special_chars_query(self) -> None:
+        self.assertEqual(self.store.search(""), [])
+        self.assertEqual(self.store.search("!@#$%^&*()"), [])
+
+    def test_search_skill_with_empty_tags(self) -> None:
+        self.store.index_skill(
+            id="notags",
+            name="untagged-skill",
+            description="No tags attached",
+            tags=[],
+            path="skills/notags",
+            content="Simple untagged content",
+        )
+        results = self.store.search("untagged")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].tags, [])
+
     def test_context_manager(self) -> None:
-        with tempfile.NamedTemporaryFile() as tmp:
-            with ContextStore(tmp.name) as store:
-                store.index_skill(
-                    id="x",
-                    name="test",
-                    description="desc",
-                    tags=[],
-                    path="p",
-                )
-                self.assertEqual(store.count(), 1)
+        with tempfile.NamedTemporaryFile() as tmp, ContextStore(tmp.name) as store:
+            store.index_skill(
+                id="x",
+                name="test",
+                description="desc",
+                tags=[],
+                path="p",
+            )
+            self.assertEqual(store.count(), 1)

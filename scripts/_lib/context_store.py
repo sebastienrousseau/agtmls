@@ -10,10 +10,16 @@ from __future__ import annotations
 
 import re
 import sqlite3
+import types
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+try:  # 3.11+
+    from typing import Self
+except ImportError:  # pragma: no cover - exercised on 3.10 only
+    Self = Any  # type: ignore[assignment,misc]
 
 SAFE_FTS_CHARS = re.compile(r'[^a-zA-Z0-9\s]')
 
@@ -176,8 +182,13 @@ class ContextStore:
         """Close SQLite connection."""
         self.conn.close()
 
-    def __enter__(self) -> ContextStore:
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
+    ) -> None:
         self.close()
