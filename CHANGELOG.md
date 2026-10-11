@@ -7,8 +7,27 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.21 - 2026-10-11
+
+### Added
+
+- Native cross-platform workspace installer (`scripts/_lib/installer.py`)
+  supporting shell-free agent environment configuration with automatic
+  copy fallback when symlinks are unavailable.
+- Deterministic archive packaging in `scripts/export-registry.py` with
+  normalized tar metadata (uid 0, gid 0, mtime 0) ensuring bit-for-bit
+  reproducible distribution bundles.
+
 ### Changed
 
+- Streamed file digest calculation in `scripts/_lib/digest.py` in bounded
+  64 KiB chunks, preventing memory spikes during checksum generation.
+- Hardened `scripts/import-skill.py` to recursively reject symlinks during
+  skill import, eliminating path traversal risks.
+- Modularized uninstallation routines in `scripts/_lib/uninstall_steps.py`,
+  reducing `scripts/agtmls.py` complexity well below the 500-line ceiling.
+- Configured repository-wide LF line endings in `.gitattributes` to prevent
+  Windows CRLF digest drift.
 - Routing evals are sharper. Each negative prompt names the skill that
   should win it (`{"prompt", "owner"}`), and that skill must rank above the
   case's own; every skill has at least 3 positive and 2 negative prompts;
@@ -25,6 +44,8 @@ All notable changes to AgtMLS are recorded here.
 
 ### Fixed
 
+- Handled `OSError` during gate history writes in `scripts/run-all-checks.py`,
+  allowing validation to succeed in read-only and sandboxed environments.
 - Two unit tests planted `index.json.sig` and a `.coverage` file in the
   real checkout and removed them on cleanup. A killed test run left the
   fake signature behind, gitignored and unseen, and every local build
