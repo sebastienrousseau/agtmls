@@ -2,38 +2,37 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 #
-# Push the release branch feat/v0.0.21 and open the pull request targeting main.
+# Push the release branch feat/v0.0.22 and open the pull request targeting main.
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
-echo "Pushing branch feat/v0.0.21 to origin..."
-git push origin feat/v0.0.21
+echo "Pushing branch feat/v0.0.22 to origin..."
+git push origin feat/v0.0.22
 
 echo "Opening release pull request..."
-gh pr create --base main --head feat/v0.0.21 --title "chore: bump AgtMLS to 0.0.21" --body-file - <<'EOF'
-This PR bumps AgtMLS to 0.0.21 and adds cross-platform portability enhancements and security hardening.
+gh pr create --base main --head feat/v0.0.22 --title "chore: bump AgtMLS to 0.0.22" --body-file - <<'EOF'
+This PR bumps AgtMLS to 0.0.22, adds binary provenance identity and OCSF export, and introduces a local SQLite context store.
 
-Once merged, the squash commit is what the signed v0.0.21 tag points at, establishing shell-free workspace setup and bounded memory execution.
+Once merged, the squash commit is what the signed v0.0.22 tag points at, establishing cryptographic environment validation and SIEM integration.
 
 ## Highlights ⭐️
 
-* **Native cross-platform workspace installer**: Pure Python installer module replaces dependency on bash and handles environments lacking symlink privileges with automatic copy fallbacks.
-* **Bounded streaming digest calculation**: File hashing streams in 64 KiB chunks, preventing memory spikes on large skill artifacts and embedded targets.
-* **Supply chain and traversal hardening**: Bit-for-bit reproducible packaging with normalized tar metadata, recursive symlink rejection during skill imports, and resilient gate diagnostic persistence.
-* **Complexity ceiling headroom**: Uninstallation prompt and lockfile routines extracted from scripts/agtmls.py into scripts/_lib/uninstall_steps.py, bringing file complexity well below the 500-line ceiling.
+* **Cryptographic binary and runtime identity**: Bounded SHA-256 verification of Python host binaries and execution environments, protecting against tampering and hostile execution wrappers.
+* **Open Cybersecurity Schema Framework (OCSF) export**: Maps static skill analysis findings to OCSF v1.3.0 Security Finding schema (Class UID 2001) for SIEM, SOAR, and data lake ingestion.
+* **Local SQLite context and full-text search store**: Zero-dependency SQLite FTS5 store with BM25 relevance ranking for agent context indexing and fast skill retrieval.
+* **Prompt statusline utility**: Pure shell statusline script supporting plain, tmux, and JSON output modes for shell prompts and multiplexers.
 
 ## What's Changed
 
-* `chore: bump AgtMLS to 0.0.21` by @sebastienrousseau
-* `refactor: harden portability and cross-platform I/O` by @sebastienrousseau
+* `chore: bump AgtMLS to 0.0.22` by @sebastienrousseau
+* `feat: add binary identity and OCSF export` by @sebastienrousseau
+* `feat: add SQLite context store and statusline` by @sebastienrousseau
 
 ## Validation
 
-* `python3 scripts/release-dry-run.py --version 0.0.21`: passes with 2 artifacts.
+* `python3 scripts/release-dry-run.py --version 0.0.22`: passes with 2 artifacts.
 * `python3 scripts/run-all-checks.py`: 72 of 72 passed with 0 failures and 0 warnings.
-* `python3 scripts/run-coverage.py --scope core`: 100.0% (2559 statements, 848 branches).
-* `python3 scripts/run-coverage.py --scope unit`: 100.0% (8768 statements, 2928 branches).
 * `python3 scripts/check-complexity.py`: 0 functions and 0 files over ceilings.
 * `ruff check .`: all checks passed.
 
@@ -42,9 +41,9 @@ Once merged, the squash commit is what the signed v0.0.21 tag points at, establi
 SHA-256 of the artifacts produced on this branch:
 
 ```text
-c9d29e417eb1a354722827df0499a6721e190655db686e60f0eb5b0bc56a5f14  dist/agtmls-0.0.21.tar.gz
-2b2cd6650b09779155021c651006c00b0f7ccfd5f75df01171ba116f15728b01  dist/agtmls-0.0.21-py3-none-any.whl
+094a40687c44b7161cdac000bda8430cb1840d0258b43ad6b52f0c1b5139040d  dist/agtmls-0.0.22.tar.gz
+c251934daf27b788e8e52a8551f5690910c3ad287bd2c7355e67515f31fa5f95  dist/agtmls-0.0.22-py3-none-any.whl
 ```
 
-**Full Changelog**: https://github.com/sebastienrousseau/agtmls/compare/v0.0.20...feat/v0.0.21
+**Full Changelog**: https://github.com/sebastienrousseau/agtmls/compare/v0.0.21...feat/v0.0.22
 EOF

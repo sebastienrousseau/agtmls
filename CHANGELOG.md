@@ -7,6 +7,25 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.22 - 2026-10-11
+
+### Added
+
+- Cryptographic binary and runtime environment verification
+  (`scripts/_lib/binary_identity.py`) for host binary identity and
+  execution environment validation.
+- Open Cybersecurity Schema Framework (OCSF) v1.3.0 Security Finding
+  exporter (`scripts/_lib/ocsf.py`) for SIEM and SOAR integration.
+- SQLite-backed full-text search and BM25 relevance ranking store
+  (`scripts/_lib/context_store.py`) for agent context and skills indexing.
+- Compact prompt statusline utility (`scripts/agtmls-statusline.sh`)
+  supporting plain, tmux, and JSON output modes.
+
+### Changed
+
+- Bumped release metadata through the guarded patch-line release flow.
+- Enforced uniform 28px badge row height and shields.io status badges.
+
 ## 0.0.21 - 2026-10-11
 
 ### Added

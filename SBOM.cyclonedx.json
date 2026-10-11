@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dda891edfeaff0bb1c3aac41592768f54d3d4346309de1449ff996bf30284622"
+          "content": "f72e0937f8217ba720934f9446460e22ddf6a0c06c75db4f5e7d32c35ff17cb7"
         }
       ],
       "name": "CATALOG.md",
@@ -1832,7 +1832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1db15273b90f4d2745f8129bc047b46eb5d2ad19c1e87b0b784c1381e33e6130"
+          "content": "79c147b15c497501a84af358cbe514d6a8bc9bc1369c37a88a48536a9df03571"
         }
       ],
       "name": "index.json",
@@ -2433,6 +2433,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/binary_identity.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "108a99c72dfa9f9e759d7d0db3b23682260c960dc2b0393fc5db680b248bb688"
+        }
+      ],
+      "name": "scripts/_lib/binary_identity.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/checksums.py",
       "hashes": [
         {
@@ -2485,6 +2496,17 @@
         }
       ],
       "name": "scripts/_lib/context_cost.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/context_store.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2e21a7dc4c395bcdcd1d8dadc335a4333fe415abf202e0ca7b4bdf7e08bac96b"
+        }
+      ],
+      "name": "scripts/_lib/context_store.py",
       "type": "file"
     },
     {
@@ -2573,6 +2595,17 @@
         }
       ],
       "name": "scripts/_lib/lockfile.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/ocsf.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "474b7e2aedd60e6013a000564b1cbc0be176d3c74ce33d66d2087b4949717534"
+        }
+      ],
+      "name": "scripts/_lib/ocsf.py",
       "type": "file"
     },
     {
@@ -2763,6 +2796,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/agtmls-statusline.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f6820ebfa689668f6da57f76e72f1ffecb5991c29d71153f56c966c711dc52f9"
+        }
+      ],
+      "name": "scripts/agtmls-statusline.sh",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/agtmls.py",
       "hashes": [
         {
@@ -2844,7 +2888,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ed0e0a4ea40c5974481acad247de497821d0cd8aa9adf536d3262dce96a73f35"
+          "content": "9144847c83efda904ea680756aa285a02a7f48cd4a668a2def51439613a2661e"
         }
       ],
       "name": "scripts/create-release-pr.sh",
@@ -5143,7 +5187,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b75e23fa1ac03d36d856653b8c4c47dd21c9c176c15abb83e80d1f75bc65628d"
+          "content": "7d9c05d65197ee7b149378cdb4ada6f2faeb6add026e2658622d8ab9600072e2"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -5355,24 +5399,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.21",
+      "bom-ref": "pkg:pypi/agtmls@0.0.22",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.21",
+      "purl": "pkg:pypi/agtmls@0.0.22",
       "type": "application",
-      "version": "0.0.21"
+      "version": "0.0.22"
     },
-    "timestamp": "2026-10-11T17:24:07Z",
+    "timestamp": "2026-10-11T20:06:09Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.21"
+          "version": "0.0.22"
         }
       ]
     }
