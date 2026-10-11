@@ -7,3 +7,14 @@
 tests/fixtures/spec-signatures/** -text
 tests/fixtures/spec-advisories/** -text
 tests/fixtures/spec-attestations/** -text
+
+# Enforce LF endings across all platforms so raw SHA-256 digests and
+# signatures remain valid regardless of Git core.autocrlf settings.
+* text=auto eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+

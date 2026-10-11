@@ -48,6 +48,15 @@ def copytree(src: Path, dst: Path) -> None:
     shutil.copytree(src, dst, ignore=ignore)
 
 
+def _reproducible_filter(tarinfo: tarfile.TarInfo) -> tarfile.TarInfo:
+    tarinfo.uid = 0
+    tarinfo.gid = 0
+    tarinfo.uname = ""
+    tarinfo.gname = ""
+    tarinfo.mtime = 0
+    return tarinfo
+
+
 def adapter_text(provider: str, profile: str | None, skill_count: int) -> str:
     title = f"AgtMLS {provider} adapter"
     profile_line = profile or "custom/all"
@@ -122,7 +131,7 @@ def build(out_dir: Path, provider: str, profile: str | None, bundle: list[str]) 
         }
         (staging / "export-manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         with tarfile.open(archive, "w:gz") as tf:
-            tf.add(staging, arcname="agtmls")
+            tf.add(staging, arcname="agtmls", filter=_reproducible_filter)
     print(archive)
     return archive
 

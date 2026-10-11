@@ -318,6 +318,13 @@ class RunnerMainTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIs(json.loads(self.mod.RECORD.read_text(encoding="utf-8"))["passed"], True)
 
+    def test_gate_proceeds_when_record_fails_with_oserror(self) -> None:
+        """A read-only filesystem or restricted sandbox must not fail the gate."""
+        with mock.patch.object(self.mod, "record", side_effect=OSError("read-only")):
+            code, out = self.drive()
+            self.assertEqual(code, 0, out)
+            self.assertIn("Notice: gate history could not be written", out)
+
 
 class UnitRunnerTests(unittest.TestCase):
     """run-unit-tests.py, with discovery and the runner replaced.

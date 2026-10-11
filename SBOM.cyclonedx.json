@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "06e3be7edf415b195aba53605132383a4f78f1c7b900333fa318102c83e92d42"
+          "content": "dda891edfeaff0bb1c3aac41592768f54d3d4346309de1449ff996bf30284622"
         }
       ],
       "name": "CATALOG.md",
@@ -1832,7 +1832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2fe11ae817dc314270b72078be7ffa324d079800cb98829b3a7c5a32cbce0fe5"
+          "content": "1db15273b90f4d2745f8129bc047b46eb5d2ad19c1e87b0b784c1381e33e6130"
         }
       ],
       "name": "index.json",
@@ -2503,7 +2503,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8ed514b3c34e362bd4da9301db0a8e2f9753ad26b405dd836593f9b59393e537"
+          "content": "54e0122b4031309f1c18b7ba81b301b3e2e201c9d1f7ddce9f0f45214b0302f0"
         }
       ],
       "name": "scripts/_lib/digest.py",
@@ -2540,6 +2540,17 @@
         }
       ],
       "name": "scripts/_lib/foreign.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/installer.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "55629f75315cb2a048c1b7f358b6eec054c9f8d834c6efceaf069bfdca02514b"
+        }
+      ],
+      "name": "scripts/_lib/installer.py",
       "type": "file"
     },
     {
@@ -2679,7 +2690,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "32242004c74f531ca6449b4b60f94fcc0e855ae5f6f55f7a55ef2a475fd07076"
+          "content": "fc065d9ad8ba0969e7d6a8d2261ef6282d26495ad3249e6260676f5dd8f11453"
         }
       ],
       "name": "scripts/_lib/uninstall_steps.py",
@@ -2756,7 +2767,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "23710ddd2f55ba8848dc0d50158e827683e17da6e242bd60f356dec82ecc430b"
+          "content": "7731e9cd4f77e5d5a6548fe8580354dd990695b6006308e1a3d9d22443fb7eb1"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -2829,6 +2840,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/create-release-pr.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ed0e0a4ea40c5974481acad247de497821d0cd8aa9adf536d3262dce96a73f35"
+        }
+      ],
+      "name": "scripts/create-release-pr.sh",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/evolve-session.py",
       "hashes": [
         {
@@ -2844,7 +2866,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b0ef5e9fd2a385be3534f7ff50b5b1abd14c7a0e893ca973516f1d5959b7fed5"
+          "content": "838dc5a9bece1b6eb92a59da9b8f4bb759169b70d35d1e5a3a7e023928f23238"
         }
       ],
       "name": "scripts/export-registry.py",
@@ -2932,7 +2954,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "638d344ecbc2069845d2e28f134da7321bbe61fc3138ba0f6bf10ca3e5f3e3c7"
+          "content": "d77a737fafec6ae356a55e4b7cd2959c974e9bd7660ce424aa5b746e1ef854ed"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -2987,7 +3009,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e66da9e969184f4b95aa15e32d1639e931e2808b434eb6d249b3bb68af34d593"
+          "content": "7b0a1176715153a8c4c4cb875668b404c587ffe92c25415e4cd6408709e4cc6c"
         }
       ],
       "name": "scripts/import-skill.py",
@@ -3130,7 +3152,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3283ad310c837c1ae5601a709a99e82b1be76b981a03919ab9df1a3cbe17b8fb"
+          "content": "5610ba7b1b8a1b1f57e4adf4e34fa1e94aa059017241b190cbc2fa22ad4c64b3"
         }
       ],
       "name": "scripts/run-all-checks.py",
@@ -5121,7 +5143,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "72b6b44802939e416adb444b1859ad2f3fd8769d9901896b0db8958cb5466968"
+          "content": "b75e23fa1ac03d36d856653b8c4c47dd21c9c176c15abb83e80d1f75bc65628d"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -5333,24 +5355,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.20",
+      "bom-ref": "pkg:pypi/agtmls@0.0.21",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.20",
+      "purl": "pkg:pypi/agtmls@0.0.21",
       "type": "application",
-      "version": "0.0.20"
+      "version": "0.0.21"
     },
-    "timestamp": "2026-09-30T16:30:41Z",
+    "timestamp": "2026-10-11T17:24:07Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.20"
+          "version": "0.0.21"
         }
       ]
     }

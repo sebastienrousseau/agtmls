@@ -77,6 +77,16 @@ def audit(source: Path) -> tuple[list[dict], str]:
         raise SystemExit(f"could not audit {source}: {proc.stdout}\n{proc.stderr}")
 
 
+def _ignore_symlinks(directory: str, contents: list[str]) -> list[str]:
+    ignored: list[str] = []
+    for name in contents:
+        path = Path(directory) / name
+        if path.is_symlink():
+            print(f"   skipped symlink: {name}", file=sys.stderr)
+            ignored.append(name)
+    return ignored
+
+
 def safe_copy(source: Path, target: Path, skill_md: Path) -> None:
     """Copy the source tree without following symlinks out of it.
 
@@ -93,7 +103,7 @@ def safe_copy(source: Path, target: Path, skill_md: Path) -> None:
             continue
         dst = target / ("SKILL.md" if item == skill_md else item.name)
         if item.is_dir():
-            shutil.copytree(item, dst, symlinks=True, ignore_dangling_symlinks=True)
+            shutil.copytree(item, dst, symlinks=False, ignore=_ignore_symlinks)
         elif item.is_file():
             shutil.copy2(item, dst)
 

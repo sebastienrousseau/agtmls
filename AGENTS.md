@@ -5,7 +5,14 @@
 
 Invariants for AI-assisted contributions to AgtMLS. Read this before changing anything.
 
-Everything here also applies to humans. It is addressed to agents because agents are fast enough to violate all of it before anyone notices.
+## Master Standards & Authoritative Sources of Truth
+
+All contributions to AgtMLS MUST comply with the global standards located at `/Users/seb/Code/`:
+- `/Users/seb/Code/AGENTS.md` (Code Repositories Standard)
+- `/Users/seb/Code/GEMINI.md` (Global Standard & Conventions)
+- `/Users/seb/Code/PR-TEMPLATE.md` (Pull Request Specification)
+- `/Users/seb/Code/README-TEMPLATE.md` (Canonical README Standard)
+- `/Users/seb/Code/REPO-STANDARD.md` (Repository Gold Standard)
 
 ## The core invariants
 

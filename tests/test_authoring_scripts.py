@@ -87,13 +87,16 @@ class ImportSkillTests(ScriptCase):
         secret = self.out / "id_ed25519"
         secret.write_text("PRIVATE KEY\n", encoding="utf-8")
         (source / "notes.md").symlink_to(secret)
+        (source / "examples" / "secret.txt").symlink_to(secret)
 
         code, output = self.run_import(source)
         self.assertEqual(code, 0, output)
         self.assertTrue(output.rstrip().endswith("skills/incoming-tool"), output)
         self.assertIn("skipped symlink: notes.md", output)
+        self.assertIn("skipped symlink: secret.txt", output)
         skill = self.imported("incoming-tool")
         self.assertFalse((skill / "notes.md").exists(), "a symlinked file was imported")
+        self.assertFalse((skill / "examples" / "secret.txt").exists(), "a nested symlink was imported")
         self.assertNotIn("PRIVATE KEY", "".join(p.read_text(encoding="utf-8") for p in skill.rglob("*") if p.is_file()))
         self.assertEqual((skill / "examples" / "usage.txt").read_text(encoding="utf-8"), "example\n")
         # The source's own claims survive as evidence, never as the registry's metadata.
@@ -273,6 +276,19 @@ class ExportTests(ScriptCase):
                 written = self.module.write_adapter_files(staging, "odd", None, 0, {"odd": spec})
                 self.assertEqual(written, ["ADAPTERS.md"])
                 self.assertIn("Profile: `custom/all`", (staging / "ADAPTERS.md").read_text(encoding="utf-8"))
+
+    def test_export_archive_headers_are_reproducible(self) -> None:
+        code, output, _ = self.export("--provider", "generic")
+        self.assertEqual(code, 0, output)
+        archives = list(self.out.glob("*.tar.gz"))
+        self.assertEqual(len(archives), 1)
+        with tarfile.open(archives[0]) as tf:
+            for member in tf.getmembers():
+                self.assertEqual(member.uid, 0, f"{member.name} uid is not 0")
+                self.assertEqual(member.gid, 0, f"{member.name} gid is not 0")
+                self.assertEqual(member.uname, "", f"{member.name} uname is not empty")
+                self.assertEqual(member.gname, "", f"{member.name} gname is not empty")
+                self.assertEqual(member.mtime, 0, f"{member.name} mtime is not 0")
 
 
 class ScaffoldTests(ScriptCase):

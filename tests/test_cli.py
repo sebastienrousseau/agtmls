@@ -13,6 +13,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from typing import ClassVar
+from unittest import mock
 
 from .support import (  # noqa: F401  (used by the cases below)
     CLI,
@@ -137,6 +138,14 @@ class NativeAgentParityTests(unittest.TestCase):
             if "claude" in line and "compgen -W" in line:
                 offered.update(line.split('"')[1].split())
         self.assertEqual(offered, self.native())
+
+    def test_run_delegates_to_installer_on_windows(self) -> None:
+        module = load_script("agtmls.py")
+        with mock.patch.object(module.sys, "platform", "win32"), \
+             mock.patch.object(module.installer, "run_argv", return_value=42) as mock_installer:
+            rc = module.run(["/path/to/setup-workspace.sh", "rust", "claude"])
+            self.assertEqual(rc, 42)
+            mock_installer.assert_called_once_with(["rust", "claude"], cwd=ROOT, root=ROOT)
 
 
 class PackagedCliTests(unittest.TestCase):
