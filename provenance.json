@@ -89,13 +89,13 @@
     "buildDefinition": {
       "buildType": "https://github.com/sebastienrousseau/agtmls/registry-state/v1",
       "externalParameters": {
-        "registryVersion": "0.0.22",
+        "registryVersion": "0.0.23",
         "repository": "https://github.com/sebastienrousseau/agtmls"
       },
       "resolvedDependencies": [
         {
           "digest": {
-            "sha256": "c82b08368f7ad12956eeef86c3c5014c1d618a5aa5b8e388e94df3d6247ff20f"
+            "sha256": "a980385ced190d1b3b891d25f71fe8cbb56acee4453317cbf1f49434bc5a7172"
           },
           "name": "SBOM.spdx.json",
           "uri": "git+https://github.com/sebastienrousseau/agtmls"
@@ -107,9 +107,9 @@
         "id": "https://github.com/sebastienrousseau/agtmls/.github/workflows/validate.yml"
       },
       "metadata": {
-        "finishedOn": "2026-10-11T20:06:09Z",
+        "finishedOn": "2026-10-11T20:18:30Z",
         "invocationId": "local",
-        "startedOn": "2026-10-11T20:06:09Z"
+        "startedOn": "2026-10-11T20:18:30Z"
       }
     }
   },
@@ -117,9 +117,9 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a319f2036a2591de0ada3cc48ec6b875a8136082ee8dd6866326f1cdf6cb48ac"
+        "sha256": "a05d60d930b8099fc1b644262d4f6328bbf26f0b51d8d264e2bc39523a248a98"
       },
-      "name": "agtmls-0.0.22"
+      "name": "agtmls-0.0.23"
     }
   ]
 }
