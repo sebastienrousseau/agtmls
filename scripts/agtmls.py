@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib import (  # noqa: E402  (needs ROOT on the path first)
     cli_args,
+    installer,
     lockfile,
     uninstall_steps,
     verify_report,
@@ -23,6 +24,8 @@ from _lib.cli_parser import build_parser  # noqa: E402  (same path insertion abo
 
 
 def run(argv: list[str], cwd: Path = ROOT) -> int:
+    if sys.platform == "win32" and argv and argv[0].endswith("setup-workspace.sh"):
+        return installer.run_argv(argv[1:], cwd=cwd, root=ROOT)
     return subprocess.call(argv, cwd=cwd)
 
 

@@ -2503,7 +2503,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8ed514b3c34e362bd4da9301db0a8e2f9753ad26b405dd836593f9b59393e537"
+          "content": "54e0122b4031309f1c18b7ba81b301b3e2e201c9d1f7ddce9f0f45214b0302f0"
         }
       ],
       "name": "scripts/_lib/digest.py",
@@ -2540,6 +2540,17 @@
         }
       ],
       "name": "scripts/_lib/foreign.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/installer.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "55629f75315cb2a048c1b7f358b6eec054c9f8d834c6efceaf069bfdca02514b"
+        }
+      ],
+      "name": "scripts/_lib/installer.py",
       "type": "file"
     },
     {
@@ -2756,7 +2767,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "23710ddd2f55ba8848dc0d50158e827683e17da6e242bd60f356dec82ecc430b"
+          "content": "2dda2fdb1887551dc34d35dc8f8caa0b739ead29d6888a53f2c4697818d68928"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -2844,7 +2855,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b0ef5e9fd2a385be3534f7ff50b5b1abd14c7a0e893ca973516f1d5959b7fed5"
+          "content": "838dc5a9bece1b6eb92a59da9b8f4bb759169b70d35d1e5a3a7e023928f23238"
         }
       ],
       "name": "scripts/export-registry.py",
@@ -2987,7 +2998,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e66da9e969184f4b95aa15e32d1639e931e2808b434eb6d249b3bb68af34d593"
+          "content": "7b0a1176715153a8c4c4cb875668b404c587ffe92c25415e4cd6408709e4cc6c"
         }
       ],
       "name": "scripts/import-skill.py",
@@ -3130,7 +3141,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3283ad310c837c1ae5601a709a99e82b1be76b981a03919ab9df1a3cbe17b8fb"
+          "content": "5610ba7b1b8a1b1f57e4adf4e34fa1e94aa059017241b190cbc2fa22ad4c64b3"
         }
       ],
       "name": "scripts/run-all-checks.py",
@@ -5344,7 +5355,7 @@
       "type": "application",
       "version": "0.0.20"
     },
-    "timestamp": "2026-09-30T16:30:41Z",
+    "timestamp": "2026-10-11T15:46:53Z",
     "tools": {
       "components": [
         {

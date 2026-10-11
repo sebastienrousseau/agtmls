@@ -48,6 +48,14 @@ def is_included(path: Path, root: Path) -> bool:
     return path.name not in EXCLUDED_NAMES and path.suffix not in EXCLUDED_SUFFIXES
 
 
+def _file_hash(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(65536), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
 def manifest(root: Path) -> list[tuple[str, str]]:
     """The (path, content-hash) pairs the digest is taken over.
 
@@ -59,7 +67,7 @@ def manifest(root: Path) -> list[tuple[str, str]]:
         if not is_included(path, root):
             continue
         relative = path.relative_to(root).as_posix()
-        entries.append((relative, hashlib.sha256(path.read_bytes()).hexdigest()))
+        entries.append((relative, _file_hash(path)))
     # Sort on the encoded path so ordering is byte-wise and locale-independent.
     entries.sort(key=lambda item: item[0].encode("utf-8"))
     return entries

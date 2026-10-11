@@ -246,14 +246,18 @@ def main() -> int:
     results = run_checks(checks, jobs=args.jobs)
     wall = time.perf_counter() - started
 
-    path = record(results, wall, args.jobs)
+    try:
+        path = record(results, wall, args.jobs)
+    except OSError as exc:
+        print(f"Notice: gate history could not be written ({exc})", file=sys.stderr)
+        path = None
     if args.record:
         RECORD.parent.mkdir(parents=True, exist_ok=True)
         RECORD.write_text(json.dumps(gate_record(results, wall, args.jobs), indent=2) + "\n", encoding="utf-8")
         print(f"recorded {RECORD.relative_to(ROOT)}")
     if args.format == "json":
         print(json.dumps(
-            {"run": str(path.relative_to(ROOT)),
+            {"run": str(path.relative_to(ROOT)) if path else None,
              "results": [asdict(r) for r in results]},
             indent=2,
         ))
