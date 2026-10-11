@@ -2840,6 +2840,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/create-release-pr.sh",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ed0e0a4ea40c5974481acad247de497821d0cd8aa9adf536d3262dce96a73f35"
+        }
+      ],
+      "name": "scripts/create-release-pr.sh",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/evolve-session.py",
       "hashes": [
         {
@@ -5355,7 +5366,7 @@
       "type": "application",
       "version": "0.0.21"
     },
-    "timestamp": "2026-10-11T16:46:11Z",
+    "timestamp": "2026-10-11T16:52:43Z",
     "tools": {
       "components": [
         {

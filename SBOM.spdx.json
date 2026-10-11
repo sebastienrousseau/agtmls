@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-10-11T16:46:10Z",
+    "created": "2026-10-11T16:52:43Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -4141,6 +4141,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts-create-release-pr.sh",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "95b618f22e9d308ef0726d5be2816e340bf9dbaf"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed0e0a4ea40c5974481acad247de497821d0cd8aa9adf536d3262dce96a73f35"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/create-release-pr.sh",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts-evolve-session.py",
       "checksums": [
         {
@@ -8046,6 +8062,7 @@
         "SPDXRef-File-scripts-check-complexity.py",
         "SPDXRef-File-scripts-check-publishing-readiness.py",
         "SPDXRef-File-scripts-check-skill-collisions.py",
+        "SPDXRef-File-scripts-create-release-pr.sh",
         "SPDXRef-File-scripts-evolve-session.py",
         "SPDXRef-File-scripts-export-registry.py",
         "SPDXRef-File-scripts-generate-benchmarks-doc.py",
