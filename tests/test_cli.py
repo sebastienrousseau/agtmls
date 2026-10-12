@@ -505,6 +505,15 @@ class ContextOptimizerCliTests(unittest.TestCase):
         ):
             self.assertEqual(self.module.main(), 0)
 
+        fake_skills = empty_dir / "skills"
+        fake_skills.mkdir()
+        (fake_skills / "no_skill_md").mkdir()
+        with (
+            mock.patch.object(self.module, "ROOT", empty_dir),
+            mock.patch("sys.argv", ["agtmls", "pack"]),
+        ):
+            self.assertEqual(self.module.main(), 0)
+
 
 
 def main() -> int:
