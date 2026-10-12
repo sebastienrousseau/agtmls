@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-10-11T20:18:29Z",
+    "created": "2026-10-12T10:38:54Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -3802,6 +3802,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/ocsf.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-otlp.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "46f9e86a663345f7efdb725301f07cea011431d8"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a8e3ce5b0aa86ab063e91d43b31c97c5fde9f36f73847ca3243bb889d5aa1e70"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/otlp.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -8105,6 +8121,7 @@
         "SPDXRef-File-scripts--lib-liveness.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
         "SPDXRef-File-scripts--lib-ocsf.py",
+        "SPDXRef-File-scripts--lib-otlp.py",
         "SPDXRef-File-scripts--lib-policy.py",
         "SPDXRef-File-scripts--lib-portability.py",
         "SPDXRef-File-scripts--lib-posture.py",

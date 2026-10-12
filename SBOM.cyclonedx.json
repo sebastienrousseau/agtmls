@@ -2609,6 +2609,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/otlp.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a8e3ce5b0aa86ab063e91d43b31c97c5fde9f36f73847ca3243bb889d5aa1e70"
+        }
+      ],
+      "name": "scripts/_lib/otlp.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/policy.py",
       "hashes": [
         {
@@ -5410,7 +5421,7 @@
       "type": "application",
       "version": "0.0.23"
     },
-    "timestamp": "2026-10-11T20:18:30Z",
+    "timestamp": "2026-10-12T10:38:54Z",
     "tools": {
       "components": [
         {

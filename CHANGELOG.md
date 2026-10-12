@@ -9,6 +9,13 @@ All notable changes to AgtMLS are recorded here.
 
 ## 0.0.23 - 2026-10-11
 
+### Added
+
+- OpenTelemetry OTLP trace and span exporter (`scripts/_lib/otlp.py`)
+  enabling W3C traceparent context propagation, millisecond-precision nanosecond
+  timestamps, resource attributes, and HTTP JSON trace export with zero
+  external dependencies.
+
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
