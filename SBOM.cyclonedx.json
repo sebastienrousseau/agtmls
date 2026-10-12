@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f72e0937f8217ba720934f9446460e22ddf6a0c06c75db4f5e7d32c35ff17cb7"
+          "content": "f2a0a1fcea847a94666387a7007bbd89eeba9ecb12574ab0ec8d95d4bdd6ea9f"
         }
       ],
       "name": "CATALOG.md",
@@ -1832,7 +1832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "79c147b15c497501a84af358cbe514d6a8bc9bc1369c37a88a48536a9df03571"
+          "content": "fa89d972986fc2a99d18307b456e9ba5c8b4fb3220ed5b7ae32f64e58dd7ef0f"
         }
       ],
       "name": "index.json",
@@ -2606,6 +2606,17 @@
         }
       ],
       "name": "scripts/_lib/ocsf.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/otlp.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a8e3ce5b0aa86ab063e91d43b31c97c5fde9f36f73847ca3243bb889d5aa1e70"
+        }
+      ],
+      "name": "scripts/_lib/otlp.py",
       "type": "file"
     },
     {
@@ -5187,7 +5198,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7d9c05d65197ee7b149378cdb4ada6f2faeb6add026e2658622d8ab9600072e2"
+          "content": "3cb6a89b847ece92708e52988e8c4ff61b3b9caa39a5c92963f21ff1c3e11152"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -5399,24 +5410,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.22",
+      "bom-ref": "pkg:pypi/agtmls@0.0.23",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.22",
+      "purl": "pkg:pypi/agtmls@0.0.23",
       "type": "application",
-      "version": "0.0.22"
+      "version": "0.0.23"
     },
-    "timestamp": "2026-10-11T20:06:09Z",
+    "timestamp": "2026-10-12T10:38:54Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.22"
+          "version": "0.0.23"
         }
       ]
     }

@@ -63,7 +63,7 @@ jobs:
           # Signs and then verifies both; the conformance workflow rehearses
           # this same script with a throwaway key on every pull request.
           scripts/sign-release.sh "$key"
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: index-signature
           path: |
@@ -116,7 +116,7 @@ jobs:
           python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
       - name: Take the index signature
         if: needs.sign-index.result == 'success'
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: index-signature
           path: .
@@ -178,7 +178,7 @@ jobs:
           ssh-keygen -Y verify -f "$registry/ALLOWED_SIGNERS" -I agtmls-release \
             -n agtmls-index@v1 -s "$registry/index.json.sig" < "$registry/index.json"
       - name: Keep the exact files for the publish job
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-assets
           path: dist/assets/
@@ -303,7 +303,7 @@ jobs:
         run: |
           python3 scripts/release-audit.py --tag "${{ inputs.tag }}" \
             --commit "$(git rev-parse "${{ inputs.tag }}^{commit}")" --before-pypi
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-assets
           path: dist/assets/
@@ -330,7 +330,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: release-assets
           path: dist/assets
