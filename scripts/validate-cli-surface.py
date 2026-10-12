@@ -69,6 +69,8 @@ EXPECTED = {
     "verify",
     "propose-skill",
     "scaffold-skill",
+    "optimize",
+    "pack",
 }
 
 

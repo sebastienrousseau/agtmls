@@ -197,6 +197,16 @@ def _audit_commands(sub) -> None:
     index.add_argument("--write", action="store_true")
     index.add_argument("--check", action="store_true")
 
+    optimize_cmd = sub.add_parser("optimize", help="audit and optimize markdown context files for token efficiency")
+    optimize_cmd.add_argument("file", nargs="?", type=Path, help="path to markdown file (default: AGENTS.md)")
+    optimize_cmd.add_argument("--check", action="store_true", help="fail if file contains conversational boilerplate or un-cached prefix")
+    optimize_cmd.add_argument("--write", action="store_true", help="write optimized markdown in-place")
+
+    pack_cmd = sub.add_parser("pack", help="pack skills and context into a token-bounded Repomix XML block")
+    pack_cmd.add_argument("skills", nargs="*", help="names of skills to pack (default: all)")
+    pack_cmd.add_argument("--max-tokens", type=int, help="maximum token budget")
+    pack_cmd.add_argument("--output", type=Path, help="write packed context to file")
+
 
 def _install_commands(sub, agents: list[str]) -> None:
     """Installing into a target and removing from it: install, verify, uninstall, propose-skill, scaffold-skill."""

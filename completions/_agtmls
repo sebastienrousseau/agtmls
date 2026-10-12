@@ -21,6 +21,8 @@ _agtmls() {
         'list:list command'
         'mcp-resources:mcp-resources command'
         'next-version:next-version command'
+        'optimize:optimize command'
+        'pack:pack command'
         'plugin-manifests:plugin-manifests command'
         'profiles:profiles command'
         'propose-skill:propose-skill command'

@@ -242,12 +242,14 @@ class CliDispatchTests(unittest.TestCase):
         "uninstall": ["claude"],
         "verify": ["claude"],
         "verify-release-assets": ["--tag", "v0.0.1"],
+        "optimize": ["--check"],
+        "pack": ["--max-tokens", "1000"],
     }
 
     # Handlers that answer from index.json in-process instead of shelling out.
     LOCAL_HANDLERS: ClassVar[set[str]] = {
         "list", "search", "show", "stats", "profiles", "providers", "uninstall",
-        "verify",
+        "verify", "optimize", "pack",
     }
 
     def setUp(self) -> None:
@@ -292,8 +294,8 @@ class CliDispatchTests(unittest.TestCase):
                 out.append([flag])
             elif action.choices:
                 out.append([flag, str(min(action.choices))])
-            elif "dir" in action.dest or "target" in action.dest:
-                out.append([flag, self.tmp.name])
+            elif "dir" in action.dest or "target" in action.dest or "output" in action.dest:
+                out.append([flag, str(Path(self.tmp.name) / "probe")])
             else:
                 out.append([flag, "probe"])
         return out
@@ -447,6 +449,71 @@ class CliDispatchTests(unittest.TestCase):
         forwarded = self.calls[0]
         self.assertIn("--skill", forwarded)
         self.assertIn("make test", forwarded)
+
+
+class ContextOptimizerCliTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.module = load_script("agtmls.py")
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+
+    def test_optimize_missing_file_fails(self) -> None:
+        missing = Path(self.tmp.name) / "NONEXISTENT.md"
+        with mock.patch("sys.argv", ["agtmls", "optimize", str(missing)]):
+            self.assertEqual(self.module.main(), 1)
+
+    def test_optimize_dirty_check_and_write(self) -> None:
+        target = Path(self.tmp.name) / "AGENTS.md"
+        target.write_text("Please make sure to follow instructions.\n\n\n\nTask list.\n", encoding="utf-8")
+        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--check"]):
+            self.assertEqual(self.module.main(), 1)
+
+        with mock.patch("sys.argv", ["agtmls", "optimize", str(target)]):
+            self.assertEqual(self.module.main(), 0)
+
+        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--write"]):
+            self.assertEqual(self.module.main(), 0)
+        self.assertNotIn("Please make sure to", target.read_text(encoding="utf-8"))
+
+        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--check"]):
+            self.assertEqual(self.module.main(), 0)
+
+    def test_pack_subcommand_with_filter_and_output(self) -> None:
+        out_file = Path(self.tmp.name) / "packed.xml"
+        with mock.patch(
+            "sys.argv",
+            [
+                "agtmls",
+                "pack",
+                "cross-language-port",
+                "--output",
+                str(out_file),
+                "--max-tokens",
+                "1000",
+            ],
+        ):
+            self.assertEqual(self.module.main(), 0)
+        self.assertTrue(out_file.is_file())
+        self.assertIn("<context_pack", out_file.read_text(encoding="utf-8"))
+
+    def test_pack_when_paths_do_not_exist(self) -> None:
+        empty_dir = Path(self.tmp.name) / "empty"
+        empty_dir.mkdir()
+        with (
+            mock.patch.object(self.module, "ROOT", empty_dir),
+            mock.patch("sys.argv", ["agtmls", "pack"]),
+        ):
+            self.assertEqual(self.module.main(), 0)
+
+        fake_skills = empty_dir / "skills"
+        fake_skills.mkdir()
+        (fake_skills / "no_skill_md").mkdir()
+        with (
+            mock.patch.object(self.module, "ROOT", empty_dir),
+            mock.patch("sys.argv", ["agtmls", "pack"]),
+        ):
+            self.assertEqual(self.module.main(), 0)
+
 
 
 def main() -> int:
