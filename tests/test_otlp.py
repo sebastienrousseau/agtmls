@@ -122,7 +122,7 @@ class OTLPTraceTests(unittest.TestCase):
         span = build_span(name="test", trace_id="0" * 32, span_id="0" * 16)
         res = send_otlp_http(
             "http://localhost:4318",
-            {"resourceSpans": []},
+            {"resourceSpans": [{"scopeSpans": [{"spans": [span]}]}]},
             headers={"Authorization": "Bearer token"},
         )
         self.assertTrue(res)
