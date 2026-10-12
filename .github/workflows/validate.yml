@@ -102,6 +102,8 @@ jobs:
         run: python3 scripts/validate-cli-surface.py
       - name: Validate System Prompts
         run: python3 scripts/validate-system-prompts.py
+      - name: Validate Context Density
+        run: python3 scripts/validate-context-density.py
       - name: Check Skill Collisions
         run: python3 scripts/check-skill-collisions.py
       - name: Check Complexity

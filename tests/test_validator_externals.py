@@ -35,7 +35,7 @@ class CliSurfaceValidatorTests(SliceFixture):
     PARSER = "scripts/_lib/cli_parser.py"
 
     def test_the_shipped_surface_passes(self) -> None:
-        self.assertIn("OK: CLI surface valid with 34 subcommand(s)", self.assert_clean())
+        self.assertIn("OK: CLI surface valid with 36 subcommand(s)", self.assert_clean())
 
     def test_a_subcommand_the_parser_no_longer_declares_is_caught(self) -> None:
         """Dropping `check` from the parser would break every script calling it."""

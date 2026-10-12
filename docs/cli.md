@@ -55,6 +55,8 @@ python3 scripts/agtmls.py verify claude --target /path/to/repo --json
 python3 scripts/agtmls.py uninstall claude --target /path/to/repo --remove-prompt
 python3 scripts/agtmls.py propose-skill transcript.txt --skill-name candidate-skill
 python3 scripts/agtmls.py scaffold-skill candidate-skill
+python3 scripts/agtmls.py optimize AGENTS.md
+python3 scripts/agtmls.py pack --max-tokens 8000
 ```
 
 ## Installing into a repository that already has a prompt file

@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-10-12T22:35:16Z",
+    "created": "2026-10-12T22:46:15Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1217,11 +1217,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4fd0f6445397ff8999c5e8aec4c8b7efddf7d75a"
+          "checksumValue": "2c3119caba942336ab2f60c1694bdea0019004b7"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "78d8fb6eb0069db08b6f24c3b7d5096e4effce27accb9e907eab61526546d76c"
+          "checksumValue": "3c5598a544af1b288f62f7c9e0916fb6163af0da954014c05f9b056d31408f02"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3601,11 +3601,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "b2f027cf99fd51de368d5a2be23589e6470485f8"
+          "checksumValue": "fa1305b3f8abf2085ea320b6b368415ad6c3cc47"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c94851c4c422e28a2dc17d3003835907b4b70eb407eb9e0edf44bdd14a9fe449"
+          "checksumValue": "1135446c91e26f970259a24b2cefaa081d42a4a3902ed7b78cfd21c3e70eceaa"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3642,6 +3642,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/context_cost.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts--lib-context-optimizer.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "8071d636210ca3e8b8842db078d1b2e3de6ebe06"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "211bcd14fcbbfe15e8dcbbd1fa49ac17d31bcc1111006f4a970f20da8d6498e4"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/context_optimizer.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -4113,11 +4129,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "031d07d5f502c0e1c5ac5b45308ed4759988b8c2"
+          "checksumValue": "abc9a3cb5c29fd73c0d67b8ef2cf4eb2b836426f"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "7731e9cd4f77e5d5a6548fe8580354dd990695b6006308e1a3d9d22443fb7eb1"
+          "checksumValue": "9726dc75c0522d1471952e645f14540953fa1beda56763a667cdbb25c362a1d9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5201,11 +5217,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a9f57380c892c8960bd8d8d739c6131ee4250f5d"
+          "checksumValue": "97f5ef2e2d8c0a467aec5f96c3657929affff6b1"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "c4d60ff51f662d02b310c7d7b2ff9cc8d4fdb840ee46a1cade14073c959718d9"
+          "checksumValue": "315444b189625bca904ea94c4535f5a032a97fddd8fccaaa7ef94fe29e4e7bab"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -5226,6 +5242,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/validate-commands.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-validate-context-density.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6be85128ad3bdddd3ffcae39ff2fbdd6339dd831"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a41fedb4585aa644a25815655a507638e63c29b11da4e11a0cea83da739a2c3f"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/validate-context-density.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -8111,6 +8143,7 @@
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-complexity.py",
         "SPDXRef-File-scripts--lib-context-cost.py",
+        "SPDXRef-File-scripts--lib-context-optimizer.py",
         "SPDXRef-File-scripts--lib-context-store.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
@@ -8210,6 +8243,7 @@
         "SPDXRef-File-scripts-validate-check-manifest.py",
         "SPDXRef-File-scripts-validate-cli-surface.py",
         "SPDXRef-File-scripts-validate-commands.py",
+        "SPDXRef-File-scripts-validate-context-density.py",
         "SPDXRef-File-scripts-validate-doc-links.py",
         "SPDXRef-File-scripts-validate-docs-site.py",
         "SPDXRef-File-scripts-validate-eval-cases.py",

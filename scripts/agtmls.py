@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib import (  # noqa: E402  (needs ROOT on the path first)
     cli_args,
+    context_optimizer,
     installer,
     lockfile,
     uninstall_steps,
@@ -499,6 +500,54 @@ def scaffold_skill_command(args) -> int:
     return run(cmd)
 
 
+def optimize_command(args) -> int:
+    target = (args.file or (ROOT / "AGENTS.md")).resolve()
+    if not target.is_file():
+        print(f"FAIL: {target} not found")
+        return 1
+    text = target.read_text(encoding="utf-8")
+    pruned = context_optimizer.prune_boilerplate(text)
+    clean = context_optimizer.enforce_cache_friendly_prefix(pruned)
+    tokens_before = context_optimizer.estimate_tokens(text)
+    tokens_after = context_optimizer.estimate_tokens(clean)
+    density = context_optimizer.instruction_density(clean)
+    if args.check:
+        if clean != text:
+            print(f"FAIL: {target.name} can be optimized ({tokens_before} -> {tokens_after} tokens)")
+            return 1
+        print(f"OK: {target.name} is optimal ({tokens_after} tokens, {density}% density)")
+        return 0
+    if args.write:
+        target.write_text(clean, encoding="utf-8")
+        print(f"OK: optimized {target.name}: {tokens_before} -> {tokens_after} tokens")
+    else:
+        print(clean)
+    return 0
+
+
+def pack_command(args) -> int:
+    skills_dir = ROOT / "skills"
+    requested = set(args.skills) if args.skills else None
+    items: list[tuple[str, str]] = []
+    agents_md = ROOT / "AGENTS.md"
+    if agents_md.exists():
+        items.append(("AGENTS.md", agents_md.read_text(encoding="utf-8")))
+    if skills_dir.exists():
+        for sdir in sorted(skills_dir.iterdir()):
+            if requested and sdir.name not in requested:
+                continue
+            sm = sdir / "SKILL.md"
+            if sm.is_file():
+                items.append((f"skills/{sdir.name}/SKILL.md", sm.read_text(encoding="utf-8")))
+    xml = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
+    if args.output:
+        args.output.write_text(xml, encoding="utf-8")
+        print(f"OK: wrote context pack to {args.output}")
+    else:
+        print(xml)
+    return 0
+
+
 HANDLERS = {
     "doctor": doctor_command,
     "status": doctor_command,
@@ -534,6 +583,8 @@ HANDLERS = {
     "uninstall": lambda args: uninstall(args.target, args.agent, args.remove_prompt),
     "propose-skill": lambda args: run(script("propose-skill-from-session.py", str(args.transcript), "--skill-name", args.skill_name)),
     "scaffold-skill": scaffold_skill_command,
+    "optimize": optimize_command,
+    "pack": pack_command,
 }
 
 

@@ -19,6 +19,7 @@
     "validate-gitignore.py",
     "validate-cli-surface.py",
     "validate-system-prompts.py",
+    "validate-context-density.py",
     "check-skill-collisions.py",
     "check-complexity.py",
     "validate-eval-cases.py",

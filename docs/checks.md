@@ -35,6 +35,7 @@ python3 scripts/validate-secrets.py
 python3 scripts/validate-gitignore.py
 python3 scripts/validate-cli-surface.py
 python3 scripts/validate-system-prompts.py
+python3 scripts/validate-context-density.py
 python3 scripts/check-skill-collisions.py
 python3 scripts/check-complexity.py
 python3 scripts/validate-eval-cases.py
