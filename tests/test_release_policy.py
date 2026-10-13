@@ -293,6 +293,26 @@ class ReleaseMetadataTests(FixtureCase):
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py index --write", "make index")
         self.assertRefused("RELEASE.md must require index regeneration")
 
+    def test_a_missing_release_notes_file_is_refused(self) -> None:
+        notes = FIXTURE / "docs" / "release-notes" / f"v{self.version()}.md"
+        backup = notes.read_text(encoding="utf-8")
+        notes.unlink()
+        try:
+            self.assertRefused(f"docs/release-notes/v{self.version()}.md must exist before releasing")
+        finally:
+            notes.write_text(backup, encoding="utf-8")
+
+    def test_a_malformed_release_notes_file_is_refused(self) -> None:
+        notes = FIXTURE / "docs" / "release-notes" / f"v{self.version()}.md"
+        backup = notes.read_text(encoding="utf-8")
+        notes.write_text("# Invalid notes without sections\n", encoding="utf-8")
+        try:
+            code, output = self.check()
+            self.assertEqual(code, 1, output)
+            self.assertIn("needs a `## Highlights ⭐️` section", output)
+        finally:
+            notes.write_text(backup, encoding="utf-8")
+
 
 class SequencingRuleTests(unittest.TestCase):
     """The 0.0.x runway, as a pure function of the version and the tags."""
