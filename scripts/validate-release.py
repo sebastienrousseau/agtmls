@@ -11,6 +11,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from _lib.release_notes import notes_problems  # noqa: E402
+
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 
 
@@ -21,8 +25,17 @@ def main() -> int:
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     release = (ROOT / "RELEASE.md").read_text(encoding="utf-8")
 
-    if not SEMVER.match(str(plugin.get("version", ""))):
+    version = str(plugin.get("version", ""))
+    if not SEMVER.match(version):
         errors.append("plugin version must be semver X.Y.Z")
+    else:
+        notes_file = ROOT / "docs" / "release-notes" / f"v{version}.md"
+        if not notes_file.is_file():
+            errors.append(f"docs/release-notes/v{version}.md must exist before releasing")
+        else:
+            text = notes_file.read_text(encoding="utf-8")
+            errors.extend(notes_problems(notes_file.name, text, sums=None, pending=True))
+
     if index.get("registry_version") != plugin.get("version"):
         errors.append("index registry_version must match plugin version")
     if index.get("name") != plugin.get("name"):
