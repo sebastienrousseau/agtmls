@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-10-18T10:46:04Z",
+    "created": "2026-10-18T12:17:43Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -10,7 +10,7 @@
     "licenseListVersion": "3.24"
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://github.com/sebastienrousseau/agtmls/spdx/0.0.25/6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88",
+  "documentNamespace": "https://github.com/sebastienrousseau/agtmls/spdx/0.0.26/6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88",
   "files": [
     {
       "SPDXID": "SPDXRef-File-ALLOWED-SIGNERS",
@@ -33,11 +33,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "54afb76062bf2d387f761e318f0006c8f4fd6d41"
+          "checksumValue": "27b2e8f647d662afce18d52ea47c6d9213972982"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bc08f26cf863ff499e0c53aa7586e0362ed8930469f714521df4ec36b4391a5e"
+          "checksumValue": "c70c5cf379faf7cb59149d9aaff3abe1857d90bf7c1bef74f09342df46b2bcb9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2673,11 +2673,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c50a7453083da8d5967c13ac13c6ce319112d312"
+          "checksumValue": "2957696bc65ab941b3551ba9c5aff4ae349b60c8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "617517654000b26a052b173deda355a842f76855d7648793437f93b52624fbe9"
+          "checksumValue": "f6d12fd8e007fce1b4bad226fe0a77a7237ccde7f25439e76cb2b7ecc6a63d5f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7601,11 +7601,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "a66601b3c0ff4784bc49bfe2f7d8690674589e19"
+          "checksumValue": "5d080dbb3cc38d03222ca70dd0217b759139a445"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "fa1fc017a026f19ce5993e680c59bb4eb5e64f0691147b76378e14025b3632fe"
+          "checksumValue": "93ecaa109554d4fdea17eeea84c054652122402ed8a8122b2f0c1ef1433d92ce"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7901,7 +7901,7 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     }
   ],
-  "name": "agtmls-0.0.25",
+  "name": "agtmls-0.0.26",
   "packages": [
     {
       "SPDXID": "SPDXRef-Package-agtmls",
@@ -7910,7 +7910,7 @@
       "externalRefs": [
         {
           "referenceCategory": "PACKAGE-MANAGER",
-          "referenceLocator": "pkg:pypi/agtmls@0.0.25",
+          "referenceLocator": "pkg:pypi/agtmls@0.0.26",
           "referenceType": "purl"
         }
       ],
@@ -8414,7 +8414,7 @@
       "licenseDeclared": "Apache-2.0 OR MIT",
       "name": "agtmls",
       "supplier": "Person: Sebastien Rousseau",
-      "versionInfo": "0.0.25"
+      "versionInfo": "0.0.26"
     }
   ],
   "relationships": [

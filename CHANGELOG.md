@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.26 - 2026-10-18
+
 ### Added
 
 - Session and prompt-cache discipline in the global system prompt
