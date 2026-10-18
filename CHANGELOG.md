@@ -7,6 +7,17 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- Session and prompt-cache discipline in the global system prompt
+  (`system-prompts/_base.md`, section 8): pick the model and effort at
+  session start, rewind rather than compact mid-task, leave the tool set
+  alone mid-task, expect instruction-file edits to apply only at the next
+  session, and keep always-loaded text stable.
+- `authoring-portable-skills`: leave out a skill's `model` field unless it
+  is needed, because naming another model makes that turn an uncached model
+  switch in Claude Code.
+
 ## 0.0.25 - 2026-10-13
 
 ### Changed

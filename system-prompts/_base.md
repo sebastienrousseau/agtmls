@@ -110,4 +110,41 @@ sections where adherence is load-bearing — several already do (e.g.
 floor beneath them; the shared Definition of Done in `references/` is the
 cross-skill checklist a skill's Verification should point to.
 
+## 8. Session and prompt-cache discipline
+
+Every turn re-sends the whole conversation, and the provider's prompt cache
+reuses only the unchanged start of it (the prefix). One change anywhere in the
+prefix makes everything after it bill and run as uncached input. Treat the
+prefix as append-only.
+
+- **Pick the model once, at session start.** Each model has its own cache, so
+  a mid-task model switch re-reads the entire history with no cache hits. That
+  includes a skill or command whose frontmatter names a different model, and
+  a mode that changes model when toggled. Switch only between tasks.
+- **Pick effort at the start too.** Whether an effort change keeps the cache
+  depends on the model and provider, so settle it before the work begins.
+- **Rewind instead of compacting mid-task.** Rewinding to an earlier turn
+  returns to a prefix that is already cached. Compacting builds a new one, so
+  keep it for natural breaks between tasks, and abandon a dead-end path by
+  rewinding rather than summarising it.
+- **Leave the tool set alone mid-task.** Adding or removing tool definitions
+  (an MCP server whose tools load upfront, a plugin that provides one, a bare
+  tool-name deny rule) can change the system-prompt layer and invalidate
+  everything after it. Configure tools before the session starts.
+- **Instruction files apply at the next session.** An edit to a project or
+  user instruction file mid-session keeps the cache but does not take effect
+  until the context is rebuilt (cleared, compacted or restarted). Don't expect
+  a mid-session edit to change behaviour; restart when the change must apply.
+- **Keep always-loaded text stable.** Dates, version numbers and other values
+  that change between releases do not belong in system prompts or instruction
+  files read every session; `validate-system-prompts.py` rejects them for
+  this reason.
+- **Measure, don't guess.** Read the cache-read and cache-creation token counts
+  the agent reports. A creation count that stays high turn after turn means
+  something keeps changing the prefix.
+
+These are conditions, not rituals: a model or tool change that the task
+genuinely needs is fine. Make it once, at a boundary, knowing the next turn
+re-reads everything.
+
 ---

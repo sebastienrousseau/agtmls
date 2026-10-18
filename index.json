@@ -259,9 +259,9 @@
         "behavioral": true,
         "routing": true
       },
-      "integrity": "sha256:ee863f705787f0294101dfefb31218fb6cd26f73396d031b4eb20540601a3f96",
+      "integrity": "sha256:564781e49054e165f61d0d87d99dc6921673da6dc0112b1de95b76eb0c07126d",
       "kind": "general",
-      "last_changed_version": "0.0.18",
+      "last_changed_version": "0.0.25",
       "license": "MIT",
       "maturity": "draft",
       "metadata_path": "skills/authoring-portable-skills/metadata.json",

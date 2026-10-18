@@ -160,7 +160,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e4b5d70cb2b132e64df1b1ff1ef8f0d7afe5c26b1b1c98a0622d5f469b9e5081"
+          "content": "8f4d3237fc360ca1ddc1dd781dfc4a9efb4f8f8d562ac3a5182f69068dc2bcfa"
         }
       ],
       "name": "attestations/authoring-portable-skills/capabilities.intoto.json",
@@ -171,7 +171,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "299f8d8fe67cf026ecdb694c363a07765b06c4aa2c29ad3d6aac3c0527f3eb02"
+          "content": "6066874ae6f2b8189199ab78c17e9327116c53f8ab6560ba3c38b573000e951a"
         }
       ],
       "name": "attestations/authoring-portable-skills/manifest.intoto.json",
@@ -1832,7 +1832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "73be93e88c8d719e860aa2624f7feafb1691bf9d0cbde65070815fc04e7685cb"
+          "content": "617517654000b26a052b173deda355a842f76855d7648793437f93b52624fbe9"
         }
       ],
       "name": "index.json",
@@ -4032,7 +4032,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "40990372904e66475f0e77f98c37c8228f7c407cfd78cb3b779dccefc73d1033"
+          "content": "ebde338ff671b585cb421fae0b3222e759c05b6ffce1a1cfb5e2b5ac3b26946a"
         }
       ],
       "name": "skills/authoring-portable-skills/SKILL.md",
@@ -5253,7 +5253,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "35e3de48d123500a4c4d0deb40a215ca66ee1d78d74305d32d1425206fef3c4a"
+          "content": "584bfa561c07bb23bf09151b6f1895338307ad3e7a767a462b6d59315797c35e"
         }
       ],
       "name": "system-prompts/_base.md",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.25"
     },
-    "timestamp": "2026-10-13T06:26:43Z",
+    "timestamp": "2026-10-18T10:46:04Z",
     "tools": {
       "components": [
         {
