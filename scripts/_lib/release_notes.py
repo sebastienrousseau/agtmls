@@ -23,6 +23,9 @@ HIGHLIGHTS = "Highlights ⭐️"
 CHANGED = "What's Changed"
 CONTRIBUTORS = "New Contributors"
 CHECKSUMS = "Checksums"
+# The Release Page Format (AGENTS.md section 3) opens the Checksums section
+# with this line, then a ```text block of every asset's SHA-256.
+SUMS_INTRO = "SHA-256 of every asset attached to this release:"
 HIGHLIGHT = re.compile(r"^\* \*\*[^*\n]+\*\*: \S")
 CHANGE = re.compile(r"^\* .+ by @\S+ in https://\S+$")
 FULL_CHANGELOG = re.compile(r"^\*\*Full Changelog\*\*: https://\S+$")
@@ -58,6 +61,14 @@ def highlight_problems(name: str, text: str) -> list[str]:
     return errors
 
 
+def checksum_format_problems(name: str, text: str) -> list[str]:
+    """The Checksums section opens with SUMS_INTRO and a ```text block."""
+    checksums = (section(text, CHECKSUMS) or "").strip()
+    if checksums and not checksums.startswith(f"{SUMS_INTRO}\n\n```text\n"):
+        return [f"{name}: Checksums must open with `{SUMS_INTRO}` and a ```text block"]
+    return []
+
+
 def page_problems(name: str, text: str) -> list[str]:
     """The generated parts of a published page, and the order of all of them."""
     errors = []
@@ -68,6 +79,7 @@ def page_problems(name: str, text: str) -> list[str]:
     expected = [HIGHLIGHTS, CHANGED, *([CONTRIBUTORS] if CONTRIBUTORS in headings else []), CHECKSUMS]
     if headings != expected:
         errors.append(f"{name}: sections are {headings}, not {expected}")
+    errors += checksum_format_problems(name, text)
     lines = text.strip().splitlines()
     if not lines or not FULL_CHANGELOG.match(lines[-1]):
         errors.append(f"{name}: last line must be `**Full Changelog**: <compare URL>`")

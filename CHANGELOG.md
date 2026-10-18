@@ -7,6 +7,14 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- Release pages open the Checksums section with `SHA-256 of every asset
+  attached to this release:` and a `text` fence, as the Release Page Format
+  requires; `release-body.py` emitted a bare fence with no intro line (seen on
+  the 0.0.25 and 0.0.26 pages). `release-audit.py` now refuses a page without
+  them.
+
 ## 0.0.26 - 2026-10-18
 
 ### Added

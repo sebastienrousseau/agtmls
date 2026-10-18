@@ -61,7 +61,7 @@ class ReleaseBodyTests(unittest.TestCase):
         self.assertEqual(
             self.out.read_text(encoding="utf-8"),
             f"## Highlights ⭐️\n\n{HIGHLIGHTS.rstrip()}\n\n## What's Changed\n\n{CHANGE}\n\n"
-            f"## Checksums\n\n```\n{SUMS}```\n\n{COMPARE}\n",
+            f"## Checksums\n\nSHA-256 of every asset attached to this release:\n\n```text\n{SUMS}```\n\n{COMPARE}\n",
         )
 
     def test_the_result_passes_the_audits_rules(self) -> None:

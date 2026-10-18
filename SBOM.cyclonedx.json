@@ -2668,7 +2668,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ea5f15caa4a8ba2906fc97e4ffa33e28681af17ce87d8af68be5824f74161954"
+          "content": "2aad236ecddca2f9111f5e5e4a51e971601624d4c07b2c06b339537675c1235c"
         }
       ],
       "name": "scripts/_lib/release_notes.py",
@@ -3163,7 +3163,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "23fb3c67ab8bf9c4c098d00fe9a776ed4d26882951f1858f5c4dc036d63b13d4"
+          "content": "6abd410f6c104e0d68f235ed945d539a19e41b514860de80e35890236fbcd7b5"
         }
       ],
       "name": "scripts/release-body.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.26"
     },
-    "timestamp": "2026-10-18T12:17:43Z",
+    "timestamp": "2026-10-18T13:00:13Z",
     "tools": {
       "components": [
         {

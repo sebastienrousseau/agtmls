@@ -31,7 +31,7 @@ def page(sums: str) -> str:
     return (
         "## Highlights ⭐️\n\n* **A change**: people notice it.\n* **Another change**: also noticed.\n\n"
         "## What's Changed\n\n* feat: a change by @someone in https://github.com/o/r/pull/1\n\n"
-        f"## Checksums\n\n```\n{sums}```\n\n"
+        f"## Checksums\n\nSHA-256 of every asset attached to this release:\n\n```text\n{sums}```\n\n"
         "**Full Changelog**: https://github.com/o/r/compare/v0.0.8...v0.0.9\n"
     )
 
@@ -169,6 +169,17 @@ class AuditTests(unittest.TestCase):
         _, failures, _ = self.audit(FakeWorld(release=release))
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Highlights ⭐️` section of user-visible changes", failures)
         self.assertIn("FAIL: v0.0.9 release body: needs a `## Checksums` section", failures)
+
+    def test_checksums_without_the_intro_and_text_fence_are_refused(self) -> None:
+        """The v0.0.25 and v0.0.26 pages shipped a bare fence with no intro line."""
+        bare = BODY.replace("SHA-256 of every asset attached to this release:\n\n```text\n", "```\n")
+        release = {**FakeWorld().state["release"], "body": bare}
+        _, failures, _ = self.audit(FakeWorld(release=release))
+        self.assertIn(
+            "FAIL: v0.0.9 release body: Checksums must open with "
+            "`SHA-256 of every asset attached to this release:` and a ```text block",
+            failures,
+        )
 
     def test_a_page_out_of_the_release_page_format_is_refused(self) -> None:
         """The old v0.0.10-v0.0.14 layout: a Summary, no generated PR list,

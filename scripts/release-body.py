@@ -38,6 +38,7 @@ from _lib.release_notes import (
     CONTRIBUTORS,
     FULL_CHANGELOG,
     HIGHLIGHTS,
+    SUMS_INTRO,
     highlight_problems,
     section,
 )
@@ -69,7 +70,7 @@ def body(notes: str, sums: str, generated: str, commits: list[dict] | None = Non
     contributors = section(generated, CONTRIBUTORS)
     if (contributors or "").strip():
         parts.append(f"## {CONTRIBUTORS}\n\n{contributors.strip()}")
-    parts.append(f"## {CHECKSUMS}\n\n```\n{sums.rstrip()}\n```")
+    parts.append(f"## {CHECKSUMS}\n\n{SUMS_INTRO}\n\n```text\n{sums.rstrip()}\n```")
     parts.append(full.strip())
     return "\n\n".join(parts) + "\n"
 
