@@ -41,6 +41,13 @@ Codex `agents/openai.yaml`) belong to that agent's install, not to the
 shared text. In this registry `allowed-tools` is generated from
 `metadata.json` by `sync-skill-frontmatter.py`; never write it by hand.
 
+Leave out a `model` field unless the skill cannot work on the session's
+model. In Claude Code a skill that names another model makes that turn a
+model switch, so the next request re-reads the whole conversation with no
+prompt-cache hits. If the skill needs a different model, run it as a forked
+subagent instead (`context: fork`), which leaves the main conversation's
+cache intact.
+
 **Body.**
 
 - Under about 5,000 tokens and 500 lines. The body loads whole on
