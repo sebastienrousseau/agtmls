@@ -172,6 +172,13 @@ tokens. These print as `portability:` notes, grouped by rule with a count and
 a few examples, and in full as a `portability` list in JSON. They are not
 security findings and never change the exit code.
 
+Suppressions, baselines and every `--format` work as in any other audit.
+Suppressed findings are listed with their reasons (in JSON, under each
+skill's `suppressed`); in a foreign tree those comments were written by the
+tree's author, so read each reason before trusting it. A foreign fingerprint
+uses the file's path inside the audited tree, so a baseline written for one
+checkout or clone matches the next.
+
 `--foreign <git-url>@<sha>` clones and audits a commit. Network fetch is
 opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
 or tag can move between the audit and the install.
