@@ -164,7 +164,7 @@ def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline:
     layout = foreign_layout(root)
     coverage = foreign_coverage(root, reports)
     found = classify([f for report in reports for f in report.findings], baseline)
-    suppressed, active, known, new = found
+    suppressed, active, _, _ = found
     # Notes, not findings: a skill that works in one agent only is not a
     # security risk, so portability never changes the exit code.
     notes = {r.path: portability.problems(r.path) for r in reports}
