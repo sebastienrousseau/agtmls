@@ -22,7 +22,11 @@ All notable changes to AgtMLS are recorded here.
 - `audit --foreign` lists suppressed findings with their reasons, in text and
   under each skill's `suppressed` in JSON, as `docs/cli.md` describes for every
   audit. They were dropped, so a reviewer could not see what a tree's own
-  author had silenced, or why. They still do not count toward the exit code.
+  author had silenced, or why.
+- `audit --foreign` no longer lets a tree's own `agtmls-ignore` comments lower
+  the exit code: the author of the tree under review could turn a HIGH finding
+  into a pass. Suppressed findings now count unless the auditor's baseline
+  records them, and `--write-baseline` records them.
 - `audit --foreign --format sarif` writes SARIF; it printed the text report.
 
 ## 0.0.26 - 2026-10-18

@@ -141,18 +141,29 @@ def print_foreign_skill(report, root: Path, notes: list[str], known: list[Findin
     if report.copies:
         print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in report.copies)}")
     for f in report.findings:
-        where = f"{relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message}"
-        if f.suppressed is None:
-            print(f"  [{f.severity}] {where}{' [baseline]' if f in known else ''}")
-        else:
-            print(f"  [suppressed] {where} -- {f.suppressed}")
+        print(foreign_line(f, known))
     for note in portability.summarize(notes):
         print(f"  portability: {note}")
 
 
+def foreign_line(f: Finding, known: list[Finding]) -> str:
+    where = f"{relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message}"
+    mark = " [baseline]" if f in known else ""
+    if f.suppressed is None:
+        return f"  [{f.severity}] {where}{mark}"
+    return f"  [suppressed] {where} -- {f.suppressed}{mark}"
+
+
+def untrusted(suppressed: list[Finding], baseline: set[str] | None) -> list[Finding]:
+    """The suppressed findings that still count. A foreign tree's author wrote
+    its suppression comments, so only the auditor's own baseline excuses one."""
+    recorded = baseline or set()
+    return [f for f in suppressed if fingerprint(f) not in recorded]
+
+
 def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline: set[str] | None) -> int | tuple:
-    """Audit and print a fetched tree; its classified findings, or 2 when
-    its layout cannot be read."""
+    """Audit and print a fetched tree; its classified findings plus the
+    suppressed ones that still count, or 2 when its layout cannot be read."""
     from _lib import portability
     from _lib.foreign import foreign_coverage, foreign_layout
 
@@ -165,6 +176,7 @@ def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline:
     coverage = foreign_coverage(root, reports)
     found = classify([f for report in reports for f in report.findings], baseline)
     suppressed, active, _, _ = found
+    counted = untrusted(suppressed, baseline)
     # Notes, not findings: a skill that works in one agent only is not a
     # security risk, so portability never changes the exit code.
     notes = {r.path: portability.problems(r.path) for r in reports}
@@ -179,16 +191,20 @@ def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline:
         print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
               f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
               f"{len(active)} finding(s)\n")
-        print_foreign_text(reports, root, notes, coverage, found)
-    return found
+        print_foreign_text(reports, root, notes, coverage, found, counted)
+    return (*found, counted)
 
 
-def print_foreign_text(reports: list, root: Path, notes: dict, coverage: dict, found: tuple) -> None:
+def print_foreign_text(reports: list, root: Path, notes: dict, coverage: dict, found: tuple, counted: list) -> None:
     suppressed, _, known, new = found
+    excused = known + [f for f in suppressed if f not in counted]
     for r in reports:
-        print_foreign_skill(r, root, notes[r.path], known)
+        print_foreign_skill(r, root, notes[r.path], excused)
     print_coverage(coverage)
     print_tallies(known, new, suppressed)
+    if counted:
+        print(f"{len(counted)} suppressed finding(s) still count: a foreign tree's own suppressions "
+              "are not trusted; baseline any you accept.")
 
 
 def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False,
@@ -201,9 +217,10 @@ def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False,
         found = foreign_reports(target, root, pedantic, fmt, baseline)
         if isinstance(found, int):
             return found
+        suppressed, active, _, new, counted = found
         if write_to:
-            write_baseline(write_to, found[1])
-        return 1 if fails(found[3], strict) else 0
+            write_baseline(write_to, active + suppressed)
+        return 1 if fails(new + counted, strict) else 0
 
 
 SARIF_LEVEL = {"CRITICAL": "error", "HIGH": "error", "MEDIUM": "warning", "LOW": "note"}

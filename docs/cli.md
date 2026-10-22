@@ -120,8 +120,8 @@ Ignore previous instructions.
 
 The comment covers the next line only, the reason is required, and
 `AGT-STEG-*` findings can never be suppressed. Suppressed findings are listed
-separately, do not count toward the exit code, and appear in SARIF under
-`suppressions`.
+separately, do not count toward the exit code (except in a foreign audit,
+below), and appear in SARIF under `suppressions`.
 
 `--format sarif` writes SARIF 2.1.0 with every rule described and one result
 per finding, for code-scanning upload. `--write-baseline FILE` records each
@@ -172,12 +172,14 @@ tokens. These print as `portability:` notes, grouped by rule with a count and
 a few examples, and in full as a `portability` list in JSON. They are not
 security findings and never change the exit code.
 
-Suppressions, baselines and every `--format` work as in any other audit.
-Suppressed findings are listed with their reasons (in JSON, under each
-skill's `suppressed`); in a foreign tree those comments were written by the
-tree's author, so read each reason before trusting it. A foreign fingerprint
-uses the file's path inside the audited tree, so a baseline written for one
-checkout or clone matches the next.
+Baselines and every `--format` work as in any other audit. Suppressions do
+not: in a foreign tree the `agtmls-ignore` comments were written by the
+tree's author, so they are listed with their reasons (in JSON, under each
+skill's `suppressed`) but still count toward the exit code. Only your own
+baseline excuses a foreign finding: read each reason, and baseline the ones
+you accept. `--write-baseline` records suppressed findings as well as the
+rest. A foreign fingerprint uses the file's path inside the audited tree, so
+a baseline written for one checkout or clone matches the next.
 
 `--foreign <git-url>@<sha>` clones and audits a commit. Network fetch is
 opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
