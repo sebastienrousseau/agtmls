@@ -9,6 +9,13 @@ All notable changes to AgtMLS are recorded here.
 
 ## 0.0.27 - 2026-10-23
 
+### Changed
+
+- `KEYS.asc` trusts a second maintainer signing key,
+  `SHA256:kIOPAavp1TCEauTr1tTIN3cv+tSs6F9m/4lZjuM9tqk`, so release tags can
+  be signed on either maintainer machine. Each key line now carries its
+  fingerprint for out-of-band checks.
+
 ### Fixed
 
 - Release pages open the Checksums section with `SHA-256 of every asset
