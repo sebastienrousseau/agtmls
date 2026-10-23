@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.27 - 2026-10-23
+
 ### Fixed
 
 - Release pages open the Checksums section with `SHA-256 of every asset
