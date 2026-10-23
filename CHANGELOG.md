@@ -14,6 +14,20 @@ All notable changes to AgtMLS are recorded here.
   requires; `release-body.py` emitted a bare fence with no intro line (seen on
   the 0.0.25 and 0.0.26 pages). `release-audit.py` now refuses a page without
   them.
+- `audit --foreign` honours `--baseline` and `--write-baseline`; both were
+  accepted and ignored, so a baselined finding still failed `--strict` and no
+  baseline file was written. Foreign fingerprints use the path inside the
+  audited tree, so a baseline matches wherever the tree sits, including a
+  `<git-url>@<sha>` target cloned into a fresh temporary directory.
+- `audit --foreign` lists suppressed findings with their reasons, in text and
+  under each skill's `suppressed` in JSON, as `docs/cli.md` describes for every
+  audit. They were dropped, so a reviewer could not see what a tree's own
+  author had silenced, or why.
+- `audit --foreign` no longer lets a tree's own `agtmls-ignore` comments lower
+  the exit code: the author of the tree under review could turn a HIGH finding
+  into a pass. Suppressed findings now count unless the auditor's baseline
+  records them, and `--write-baseline` records them.
+- `audit --foreign --format sarif` writes SARIF; it printed the text report.
 
 ## 0.0.26 - 2026-10-18
 

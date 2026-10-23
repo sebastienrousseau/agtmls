@@ -108,23 +108,31 @@ def fails(findings: list[Finding], strict: bool) -> bool:
     )
 
 
-def foreign_skill_json(report, root: Path, notes: list[str]) -> dict:
+def rebased(report, root: Path):
+    """The report with each finding's path relative to the audited tree. A
+    git target is cloned into a fresh temporary directory on every run, so a
+    fingerprint that held the absolute path would never match a baseline."""
+    return report._replace(findings=[
+        f._replace(file_path=f.file_path.relative_to(root)) if f.file_path.is_relative_to(root) else f
+        for f in report.findings
+    ])
+
+
+def foreign_skill_json(report, root: Path, notes: list[str], baseline: set[str] | None) -> dict:
     return {
         "plugin": report.plugin,
         "path": report.path.relative_to(root).as_posix(),
         "digest": report.digest,
         "copies": [c.relative_to(root).as_posix() for c in report.copies],
         "policy": report.policy,
-        "findings": [{
-            "file": f.file_path.relative_to(root).as_posix(),
-            "line": f.line, "severity": f.severity, "category": f.category,
-            "rule": f.rule, "message": f.message,
-        } for f in report.findings if f.suppressed is None],
+        "findings": [finding_record(f, baseline) for f in report.findings if f.suppressed is None],
+        "suppressed": [{**finding_record(f, baseline), "justification": f.suppressed}
+                       for f in report.findings if f.suppressed is not None],
         "portability": notes,
     }
 
 
-def print_foreign_skill(report, root: Path, notes: list[str]) -> None:
+def print_foreign_skill(report, root: Path, notes: list[str], known: list[Finding]) -> None:
     from _lib import portability
 
     policy = ", ".join(f"{k}={str(v).lower()}" for k, v in report.policy.items() if k != "provisional")
@@ -133,54 +141,86 @@ def print_foreign_skill(report, root: Path, notes: list[str]) -> None:
     if report.copies:
         print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in report.copies)}")
     for f in report.findings:
-        if f.suppressed is None:
-            print(f"  [{f.severity}] {f.file_path.relative_to(root).as_posix()}:{f.line} ({f.rule} {f.category}): {f.message}")
+        print(foreign_line(f, known))
     for note in portability.summarize(notes):
         print(f"  portability: {note}")
 
 
-def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str) -> int | list[Finding]:
-    """Audit and print a fetched tree; the unsuppressed findings, or 2 when
-    its layout cannot be read."""
+def foreign_line(f: Finding, known: list[Finding]) -> str:
+    where = f"{relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message}"
+    mark = " [baseline]" if f in known else ""
+    if f.suppressed is None:
+        return f"  [{f.severity}] {where}{mark}"
+    return f"  [suppressed] {where} -- {f.suppressed}{mark}"
+
+
+def untrusted(suppressed: list[Finding], baseline: set[str] | None) -> list[Finding]:
+    """The suppressed findings that still count. A foreign tree's author wrote
+    its suppression comments, so only the auditor's own baseline excuses one."""
+    recorded = baseline or set()
+    return [f for f in suppressed if fingerprint(f) not in recorded]
+
+
+def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline: set[str] | None) -> int | tuple:
+    """Audit and print a fetched tree; its classified findings plus the
+    suppressed ones that still count, or 2 when its layout cannot be read."""
     from _lib import portability
     from _lib.foreign import foreign_coverage, foreign_layout
 
     try:
-        reports = audit_foreign(root, pedantic)
+        reports = [rebased(r, root) for r in audit_foreign(root, pedantic)]
     except ForeignLayoutError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     layout = foreign_layout(root)
     coverage = foreign_coverage(root, reports)
-    every = [f for report in reports for f in report.findings if f.suppressed is None]
+    found = classify([f for report in reports for f in report.findings], baseline)
+    suppressed, active, _, _ = found
+    counted = untrusted(suppressed, baseline)
     # Notes, not findings: a skill that works in one agent only is not a
     # security risk, so portability never changes the exit code.
     notes = {r.path: portability.problems(r.path) for r in reports}
-    if fmt == "json":
+    if fmt == "sarif":
+        print(json.dumps(sarif_log(active, suppressed, baseline), indent=2))
+    elif fmt == "json":
         print(json.dumps({
             "target": target, "layout": layout, "coverage": coverage,
-            "skills": [foreign_skill_json(r, root, notes[r.path]) for r in reports],
+            "skills": [foreign_skill_json(r, root, notes[r.path], baseline) for r in reports],
         }, indent=2))
-        return every
-    print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
-          f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
-          f"{len(every)} finding(s)\n")
+    else:
+        print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
+              f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
+              f"{len(active)} finding(s)\n")
+        print_foreign_text(reports, root, notes, coverage, found, counted)
+    return (*found, counted)
+
+
+def print_foreign_text(reports: list, root: Path, notes: dict, coverage: dict, found: tuple, counted: list) -> None:
+    suppressed, _, known, new = found
+    excused = known + [f for f in suppressed if f not in counted]
     for r in reports:
-        print_foreign_skill(r, root, notes[r.path])
+        print_foreign_skill(r, root, notes[r.path], excused)
     print_coverage(coverage)
-    return every
+    print_tallies(known, new, suppressed)
+    if counted:
+        print(f"{len(counted)} suppressed finding(s) still count: a foreign tree's own suppressions "
+              "are not trusted; baseline any you accept.")
 
 
-def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False) -> int:
+def foreign_audit(target: str, fmt: str, strict: bool, pedantic: bool = False,
+                  baseline: set[str] | None = None, write_to: Path | None = None) -> int:
     with tempfile.TemporaryDirectory(prefix="agtmls-foreign-") as raw:
         root = fetch_foreign(target, Path(raw))
         if isinstance(root, str):
             print(f"error: {root}", file=sys.stderr)
             return 2
-        every = foreign_reports(target, root, pedantic, fmt)
-        if isinstance(every, int):
-            return every
-        return 1 if fails(every, strict) else 0
+        found = foreign_reports(target, root, pedantic, fmt, baseline)
+        if isinstance(found, int):
+            return found
+        suppressed, active, _, new, counted = found
+        if write_to:
+            write_baseline(write_to, active + suppressed)
+        return 1 if fails(new + counted, strict) else 0
 
 
 SARIF_LEVEL = {"CRITICAL": "error", "HIGH": "error", "MEDIUM": "warning", "LOW": "note"}
@@ -210,7 +250,7 @@ def sarif_log(active: list[Finding], suppressed: list[Finding], baseline: set[st
     results = []
     for finding in [*active, *suppressed]:
         location = finding.file_path
-        uri = relative(location) if location.is_relative_to(ROOT) else location.resolve().as_uri()
+        uri = relative(location) if location.is_relative_to(ROOT) or not location.is_absolute() else location.resolve().as_uri()
         result: dict = {
             "ruleId": finding.rule,
             "level": SARIF_LEVEL[finding.severity],
@@ -315,6 +355,10 @@ def print_text_report(scanned: int, active: list[Finding], suppressed: list[Find
         print(f"[suppressed] {relative(f.file_path)}:{f.line} ({f.rule} {f.category}): {f.message} -- {f.suppressed}")
     counts = severity_counts(active)
     print(f"\nSummary: {counts['critical']} critical, {counts['high']} high, {counts['medium']} medium, {counts['low']} low.")
+    print_tallies(known, new, suppressed)
+
+
+def print_tallies(known: list[Finding], new: list[Finding], suppressed: list[Finding]) -> None:
     if known:
         print(f"{len(known)} finding(s) in the baseline; {len(new)} new.")
     if suppressed:
@@ -363,14 +407,14 @@ def report(fmt: str, scanned: int, found: tuple[list, list, list, list], baselin
 
 def main() -> int:
     parser, args = parse_args()
-    if args.foreign:
-        return foreign_audit(args.foreign, "json" if args.format == "json" else "text", args.strict, args.pedantic)
-    if not args.path and not args.all:
+    if not (args.foreign or args.path or args.all):
         parser.print_help(sys.stderr)
         return 2
     baseline, readable = load_baseline(args.baseline)
     if not readable:
         return 2
+    if args.foreign:
+        return foreign_audit(args.foreign, args.format, args.strict, args.pedantic, baseline, args.write_baseline)
     targets = audit_targets(args)
     found = classify([f for target in targets for f in audit_skill_target(target, args.pedantic)], baseline)
     if args.write_baseline:
