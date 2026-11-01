@@ -222,6 +222,22 @@ jobs:
         # leg of the matrix.
         run: python3 scripts/agtmls-doctor.py --skip-gate
 
+  checks-all:
+    # Branch protection requires this check by name. It stands for every
+    # leg of the checks matrix, so adding or dropping a version never
+    # renames a required check.
+    name: checks (all)
+    if: always()
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Every leg of the matrix passed
+        env:
+          RESULT: ${{ needs.checks.result }}
+        run: test "$RESULT" = success
+
   # Branch protection requires a status check literally named
   # "validate-skills". Matrix legs report as "checks (os, version)", which
   # would never satisfy it, so this job carries the name and passes only when
