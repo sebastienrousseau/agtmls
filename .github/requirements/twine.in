@@ -1,3 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 twine
+# certifi < 2026.10.19: GHSA-6q48-6c7w-9gw2 and PYSEC-2026-4320 (Dependabot alerts #3, #4).
+certifi>=2026.10.19
