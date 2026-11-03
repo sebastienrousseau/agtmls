@@ -7,6 +7,13 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Security
+
+- The release tooling's twine environment (`.github/requirements/twine.in`)
+  floors `certifi >= 2026.10.19` (GHSA-6q48-6c7w-9gw2, PYSEC-2026-4320; it
+  pinned 2026.7.22). `twine.txt` is regenerated with `compile.sh`'s command,
+  which resolves fresh, so its other pins move to current releases too.
+
 ## 0.0.27 - 2026-10-23
 
 ### Changed
