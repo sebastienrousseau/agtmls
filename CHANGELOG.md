@@ -35,6 +35,11 @@ All notable changes to AgtMLS are recorded here.
   commit, in audit mode: it records each job's network egress and processes
   and blocks nothing. In audit mode the action reports those events to
   StepSecurity's service; it allows turning that off only in block mode.
+- Dependabot now proposes updates for the hash-pinned CI tool requirements in
+  `.github/requirements`, grouped into one PR a week. Its `pip` entry watched
+  the repository root, which pins nothing, so these files changed only after a
+  security alert (certifi above), although the README said Dependabot
+  watched the Python tooling.
 - A `--copy` install carries only the files a skill's digest covers. It copied
   the whole directory, so a `__pycache__`, `node_modules`, `.venv` or editor
   file planted in a registry skill landed in the target without being hashed,
