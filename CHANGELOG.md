@@ -7,6 +7,21 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- `pack --max-tokens` budgets the whole rendered pack: the XML wrapper, file
+  paths, indentation, escaping and the note naming omitted files. It counted
+  each file's raw text only, so a 140-token budget could produce a
+  294-token pack. Counts stay approximate (characters / 4, rounded up), and
+  each file's `tokens` attribute is still its own content estimate.
+- `AGENTS.md` is never left out of a pack: when it does not fit, no pack is
+  produced. It was skipped like any other file, leaving skills without the
+  instructions they assume.
+- An over-budget `pack` writes nothing and exits 1; `--allow-partial` writes
+  the pack without the files that do not fit, named in it, and exits 0 with a
+  warning. In 0.0.28 a failed pack still replaced `--output` with the partial
+  pack. `--output` is now written atomically, keeping the file's mode.
+
 ## 0.0.28 - 2026-11-15
 
 ### Security

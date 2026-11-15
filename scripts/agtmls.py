@@ -518,27 +518,39 @@ def optimize_command(args) -> int:
     return code
 
 
-def pack_command(args) -> int:
+def pack_items(names: list[str]) -> list[tuple[str, str]] | None:
+    """(path, text) for AGENTS.md and the named skills (all when none), or None
+    for an unknown name."""
     from _lib import skill_roots
 
     files = {path.parent.name: path for path in skill_roots.skill_files(ROOT)}
-    unknown = sorted(set(args.skills) - files.keys())
+    unknown = sorted(set(names) - files.keys())
     if unknown:
         print(f"FAIL: unknown skill(s): {', '.join(unknown)}", file=sys.stderr)
-        return 1
-    chosen = [files[name] for name in sorted(args.skills or files)]
+        return None
+    chosen = [files[name] for name in sorted(names or files)]
     paths = ([ROOT / "AGENTS.md"] if (ROOT / "AGENTS.md").exists() else []) + chosen
-    items = [(path.relative_to(ROOT).as_posix(), path.read_text(encoding="utf-8")) for path in paths]
-    xml, omitted = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
+    return [(path.relative_to(ROOT).as_posix(), path.read_text(encoding="utf-8")) for path in paths]
+
+
+def pack_command(args) -> int:
+    items = pack_items(args.skills)
+    if items is None:
+        return 1
+    # The repository's instructions are what the skills assume: never optional.
+    required = frozenset({"AGENTS.md"}) & {name for name, _ in items}
+    pack = context_optimizer.build_pack(items, args.max_tokens, required)
+    code, notes = context_optimizer.pack_verdict(pack, args.max_tokens, args.allow_partial)
+    for note in notes:
+        print(note, file=sys.stderr)
+    if code:
+        return code
     if args.output:
-        args.output.write_text(xml, encoding="utf-8")
-        print(f"OK: wrote context pack to {args.output}")
+        context_optimizer.write_text_atomic(args.output, pack.xml)
+        print(f"OK: wrote context pack to {args.output} (about {pack.tokens} tokens)")
     else:
-        print(xml)
-    if omitted:
-        print(f"FAIL: {len(omitted)} file(s) left out over the {args.max_tokens}-token budget: "
-              f"{', '.join(omitted)}", file=sys.stderr)
-    return 1 if omitted else 0
+        print(pack.xml)
+    return 0
 
 
 HANDLERS = {

@@ -13,8 +13,11 @@ collapsing runs of blank lines, which carries no meaning.
 
 from __future__ import annotations
 
+import os
 import re
 from collections.abc import Sequence
+from pathlib import Path
+from typing import NamedTuple
 
 from _lib.context_cost import approx_tokens
 
@@ -96,31 +99,138 @@ def quoteattr(text: str) -> str:
     return '"' + text.replace("\n", "&#10;").replace("\r", "&#13;").replace("\t", "&#9;") + '"'
 
 
-def pack_repomix_xml(
-    items: Sequence[tuple[str, str]],
-    max_tokens: int | None = None,
-) -> tuple[str, list[str]]:
-    """Pack file items into a Repomix-compatible XML block, and name the files
-    left out because they did not fit `max_tokens`.
+class Pack(NamedTuple):
+    """A context pack and what did not fit it. Token counts are the registry's
+    approximate estimate (`estimate_tokens`), never a tokenizer count."""
 
-    Content and paths are escaped: skill text is untrusted, and a `</file>` in
-    it must not end the element and let what follows pose as packer output.
-    A file that does not fit is skipped, never cut, and named in the pack.
+    xml: str            # "" when no pack can be produced
+    omitted: list[str]  # optional files left out, in input order
+    missing: list[str]  # required files that did not fit
+    tokens: int         # estimated tokens of `xml` as rendered
+    error: str = ""     # why no pack was produced, when not a missing file
+
+
+_HEAD = '<context_pack version="1.0" generator="agtmls">'
+_TAIL = "</context_pack>"
+
+
+def _block(name: str, content: str) -> str:
+    """One file as it appears in the pack. `tokens` is the file's own content
+    estimate; the budget is measured on the rendered block."""
+    lines = [f'  <file path={quoteattr(name)} tokens="{estimate_tokens(content)}">']
+    lines += [f"    {escape(line)}" for line in content.splitlines()]
+    lines.append("  </file>")
+    return "\n".join(lines)
+
+
+def _note(max_tokens: int, omitted: list[str]) -> str:
+    names = escape(", ".join(omitted)).replace("--", "- -")
+    return f"  <!-- omitted over the {max_tokens}-token budget: {names} -->"
+
+
+def _cost(part: str) -> int:
+    """A rendered part with its line break. Summed over the parts this bounds
+    the whole pack's estimate from above, since each part rounds up."""
+    return estimate_tokens(part + "\n")
+
+
+def _render(blocks: list[tuple[int, str, str]], omitted: list[str], max_tokens: int | None) -> Pack:
+    parts = [_HEAD, *(block for _, _, block in blocks)]
+    parts += [_note(max_tokens, omitted)] if omitted else []
+    xml = "\n".join([*parts, _TAIL])
+    return Pack(xml, omitted, [], estimate_tokens(xml))
+
+
+def _select(blocks: list[tuple[int, str, str]], budget: int, required: frozenset[str]):
+    """(kept, omitted, missing, used): each file whole, in order, while it fits."""
+    kept, omitted, missing, used = [], [], [], 0
+    for index, name, block in blocks:
+        cost = _cost(block)
+        if used + cost <= budget:
+            kept.append((index, name, block))
+            used += cost
+        else:
+            (missing if name in required else omitted).append((index, name))
+    return kept, omitted, missing, used
+
+
+def _names(entries) -> list[str]:
+    return [entry[1] for entry in entries]
+
+
+def _fit_note(kept: list, left: list, used: int, budget: int, max_tokens: int,
+              required: frozenset[str]) -> list | None:
+    """Leave out optional files, last first, until the note naming every
+    omitted file fits too; None when only required files are left."""
+    while left and used + _cost(_note(max_tokens, _names(left))) > budget:
+        optional = [entry for entry in kept if entry[1] not in required]
+        if not optional:
+            return None
+        kept.remove(optional[-1])
+        used -= _cost(optional[-1][2])
+        left = sorted([*left, optional[-1][:2]])
+    return left
+
+
+def build_pack(items: Sequence[tuple[str, str]], max_tokens: int | None = None,
+               required: frozenset[str] = frozenset()) -> Pack:
+    """Pack files into a Repomix-compatible XML block within `max_tokens`.
+
+    The budget covers the whole rendered pack: wrapper, paths, escaping,
+    indentation and the note naming omitted files. A file that does not fit is
+    left out whole, never cut. A `required` file that does not fit means no
+    pack at all, since a pack without its instructions is not a smaller pack
+    but a different one. Content and paths are escaped: skill text is
+    untrusted, and a `</file>` in it must not end its element.
     """
-    out = ['<context_pack version="1.0" generator="agtmls">']
-    used_tokens = 0
-    omitted: list[str] = []
-    for name, content in items:
-        est = estimate_tokens(content)
-        if max_tokens is not None and used_tokens + est > max_tokens:
-            omitted.append(name)
-            continue
-        used_tokens += est
-        out.append(f"  <file path={quoteattr(name)} tokens=\"{est}\">")
-        out.extend(f"    {escape(line)}" for line in content.splitlines())
-        out.append("  </file>")
-    if omitted:
-        names = escape(", ".join(omitted)).replace("--", "- -")
-        out.append(f"  <!-- omitted over the {max_tokens}-token budget: {names} -->")
-    out.append("</context_pack>")
-    return "\n".join(out), omitted
+    blocks = [(index, name, _block(name, content)) for index, (name, content) in enumerate(items)]
+    if max_tokens is None:
+        return _render(blocks, [], None)
+    budget = max_tokens - _cost(_HEAD) - _cost(_TAIL)
+    kept, left, missing, used = _select(blocks, budget, required)
+    if missing:
+        return Pack("", _names(left), _names(missing), 0)
+    fitted = _fit_note(kept, left, used, budget, max_tokens, required)
+    if fitted is None:
+        return Pack("", _names(left), [], 0,
+                    f"the {max_tokens}-token budget fits the required file(s) but not the note naming "
+                    f"the {len(left)} file(s) left out")
+    return _render(kept, _names(fitted), max_tokens)
+
+
+def pack_verdict(pack: Pack, max_tokens: int | None, allow_partial: bool) -> tuple[int, list[str]]:
+    """(exit code, stderr lines) for a pack: nothing is written on failure."""
+    if pack.error:
+        return 1, [f"FAIL: {pack.error}; nothing written"]
+    if pack.missing:
+        return 1, [(f"FAIL: required file(s) do not fit the {max_tokens}-token budget: "
+                    f"{', '.join(pack.missing)}; nothing written")]
+    left = f"{len(pack.omitted)} file(s) do not fit the {max_tokens}-token budget: {', '.join(pack.omitted)}"
+    if pack.omitted and not allow_partial:
+        return 1, [f"FAIL: {left}; nothing written (--allow-partial writes the pack without them)"]
+    return 0, [f"WARN: partial pack, {left}"] if pack.omitted else []
+
+
+def write_text_atomic(path: Path, text: str) -> None:
+    """Replace `path` with `text` in one step: a reader sees the old file or
+    the new one, never half of either, and a failure leaves the old file."""
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(text)
+        os.chmod(tmp, _mode_for(path))
+        os.replace(tmp, path)
+    except BaseException:
+        Path(tmp).unlink(missing_ok=True)
+        raise
+
+
+def _mode_for(path: Path) -> int:
+    """The existing file's mode, or what a plain write would create."""
+    if path.exists():
+        return path.stat().st_mode & 0o777
+    umask = os.umask(0)
+    os.umask(umask)
+    return 0o666 & ~umask
