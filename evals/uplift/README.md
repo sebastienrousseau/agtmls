@@ -29,7 +29,9 @@ Scores, finds and token counts are over the runs that finished. Each arm
 also records `completed`, the share of its runs that finished, and the cost
 of every attempt: `cost_usd_total` sums each run's reported cost, failed
 runs included, and `cost_usd_per_completed` divides it by the runs that
-finished. A cost no run reported is `null`, never zero.
+finished. `cost_usd_runs` counts the runs that reported a cost, so a
+total over fewer than all of them shows as partial, and
+`cost_usd_per_completed` is `null` unless every run reported one.
 
 Each run also records `usage`, its tokens by kind: `input` (not from the
 cache), `cache_read`, `cache_write`, `output`, `reasoning` (counted inside

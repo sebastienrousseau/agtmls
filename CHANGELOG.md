@@ -35,16 +35,18 @@ All notable changes to AgtMLS are recorded here.
   averaged over the runs that finished, and the verdict never looked at
   errors, so a skill arm that failed most of its runs could still `help` on
   the rest. A skill arm that finishes a smaller share of its runs than the
-  arm without it is now `less reliable`, and each arm records `completed`,
-  `cost_usd_total` (every attempt, failed ones included) and
-  `cost_usd_per_completed`. Every committed result had no failed run, so no
+  arm without it is now `less reliable` (an arm whose every run failed
+  included), and each arm records `completed`, `cost_usd_total` (every
+  attempt that reported a cost, failed ones included), `cost_usd_runs` (how
+  many did) and `cost_usd_per_completed` (only when every run did). Every committed result had no failed run, so no
   verdict or efficacy attestation changes.
 - Uplift runs record token usage by kind (`input`, `cache_read`,
   `cache_write`, `output`, `reasoning`, `total`), with each agent's overlaps
   handled explicitly: Codex counts cached input inside input and reasoning
   inside output. Claude's total summed every usage field ending in `tokens`,
   so a new subtotal field would have been counted twice; it now sums the four
-  named counts. Totals for today's usage shapes are unchanged.
+  named counts. Totals for today's usage shapes are unchanged; a Codex cached count
+  larger than its input leaves the uncached input unknown, not negative.
 - `optimize --write` keeps blank lines inside fenced code (``` or ~~~),
   where they can be part of an example; it collapsed them everywhere.
 - The early-timestamp finding says what it knows: a timestamp stops the

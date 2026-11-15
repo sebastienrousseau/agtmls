@@ -215,9 +215,16 @@ class AttemptEconomicsTests(unittest.TestCase):
                 _run("with", [], error="crash", cost_usd=None), _run("without", ["a"], cost_usd=0.2)]
         (row,) = uplift.summarise([case], runs)
         self.assertEqual(row["with"]["completed"], 0.333)
-        self.assertEqual(row["with"]["cost_usd_total"], 0.7)
-        self.assertEqual(row["with"]["cost_usd_per_completed"], 0.7)
+        # The crashed run reported no cost: 0.7 covers 2 of the 3 runs, and
+        # says so, and no per-run figure is claimed from a partial sum.
+        self.assertEqual((row["with"]["cost_usd_total"], row["with"]["cost_usd_runs"]), (0.7, 2))
+        self.assertIsNone(row["with"]["cost_usd_per_completed"])
         self.assertEqual((row["without"]["completed"], row["without"]["cost_usd_per_completed"]), (1.0, 0.2))
+        partial = [_run("with", ["a"], cost_usd=0.4), _run("with", ["a"], cost_usd=None), _run("without", ["a"])]
+        (row2,) = uplift.summarise([case], partial)
+        # One run reported no cost: no per-run figure from a partial sum.
+        self.assertEqual((row2["with"]["cost_usd_total"], row2["with"]["cost_usd_runs"],
+                          row2["with"]["cost_usd_per_completed"]), (0.4, 1, None))
         (none,) = uplift.summarise([case], [_run("with", [], error="x", cost_usd=None), _run("without", ["a"])])
         self.assertEqual((none["with"]["completed"], none["with"]["cost_usd_total"],
                           none["with"]["cost_usd_per_completed"]), (0.0, None, None))
@@ -258,6 +265,17 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(uplift.verdict(row), "helps")
         row["without"]["errors"] = 1  # the skill arm is the more reliable one
         self.assertEqual(uplift.verdict(row), "helps")
+
+    def test_a_skill_arm_with_no_finished_run_is_less_reliable_not_no_data(self) -> None:
+        """Every skill run failing left its score None, so the delta was None
+        and the verdict said `no data`: the worst reliability case escaped
+        the reliability check."""
+        row = self.row(None, None)
+        row["with"].update(runs=2, errors=2)
+        row["without"].update(runs=2, errors=0)
+        self.assertEqual(uplift.verdict(row), "less reliable")
+        row["with"]["errors"] = 0  # nothing failed, nothing scored: still no data
+        self.assertEqual(uplift.verdict(row), "no data")
 
     def test_hardened_needs_two_agents_that_help(self) -> None:
         rows = [{"skill": "a", "verdict": "helps"}, {"skill": "a", "verdict": "helps"},
@@ -308,6 +326,11 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(out.tokens, 1050)
         self.assertEqual(out.usage, {"input": 100, "cache_read": 900, "cache_write": None, "output": 50,
                                      "reasoning": 30, "total": 1050})
+
+    def test_codex_cache_larger_than_input_is_not_a_negative_count(self) -> None:
+        out = uplift_agents.codex_usage({"input_tokens": 5, "cached_input_tokens": 9, "output_tokens": 1})
+        self.assertIsNone(out["input"])
+        self.assertEqual((out["cache_read"], out["total"]), (9, 6))
 
     def test_claude_without_a_result(self) -> None:
         self.assertEqual(uplift_agents.AGENTS["claude"].parse("", "s", self.OPTIONS).error, "claude printed no result")

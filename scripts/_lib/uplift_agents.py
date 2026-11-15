@@ -137,7 +137,10 @@ def codex_usage(usage: object) -> dict | None:
     if not isinstance(usage, dict):
         return None
     inp, cached = _int(usage, "input_tokens"), _int(usage, "cached_input_tokens")
-    out = {"input": inp - cached if inp is not None and cached is not None else inp, "cache_read": cached,
+    # A cached count larger than the input it is part of is not a count to
+    # subtract from: the uncached input is then unknown, not negative.
+    uncached = inp - cached if inp is not None and cached is not None and cached <= inp else None
+    out = {"input": uncached if cached is not None else inp, "cache_read": cached,
            "cache_write": _int(usage, "cache_write_input_tokens"), "output": _int(usage, "output_tokens"),
            "reasoning": _int(usage, "reasoning_output_tokens")}
     out["total"] = _sum(inp, out["output"])

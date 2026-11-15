@@ -182,11 +182,13 @@ def _mean_of(runs: list[dict], key: str) -> float | None:
 USAGE_KINDS = ("input", "cache_read", "cache_write", "output", "reasoning", "total")
 
 
-def _total(runs: list[dict], key: str) -> float | None:
-    """The sum of a numeric field over every run that reported it, failed
-    runs included; None when none did, never 0."""
+def _total(runs: list[dict], key: str) -> tuple[float | None, int]:
+    """(sum of a numeric field over the runs that reported it, failed ones
+    included, or None when none did; how many runs reported it). The count
+    makes a partial sum visible: it covers every run only when it equals
+    the number of runs."""
     values = [run[key] for run in runs if run.get(key) is not None]
-    return round(sum(values), 4) if values else None
+    return (round(sum(values), 4) if values else None), len(values)
 
 
 def _usage_means(ok: list[dict]) -> dict:
@@ -198,11 +200,14 @@ def _usage_means(ok: list[dict]) -> dict:
 def _attempts(runs: list[dict], ok: list[dict]) -> dict:
     """What every attempt came to: the share that finished, and the cost of
     all of them, failed ones included, in total and per finished run."""
-    total = _total(runs, "cost_usd")
+    total, reported = _total(runs, "cost_usd")
+    every = total is not None and reported == len(runs)
     return {
         "completed": round(len(ok) / len(runs), 3) if runs else None,
         "cost_usd_total": total,
-        "cost_usd_per_completed": round(total / len(ok), 4) if total is not None and ok else None,
+        "cost_usd_runs": reported,
+        # Per finished run only when every run's cost is known.
+        "cost_usd_per_completed": round(total / len(ok), 4) if every and ok else None,
     }
 
 
@@ -244,10 +249,12 @@ def verdict(row: dict) -> str:
     tokens of the task without it, unless it gains BIG_GAIN or more.
     """
     with_, without = row["with"]["tokens"], row["without"]["tokens"]
-    if row["delta"] is None:
-        return "no data"
+    # Before `no data`: a skill arm whose every run failed has no score, and
+    # is the least reliable case of all.
     if _completed(row["with"]) < _completed(row["without"]):
         return "less reliable"
+    if row["delta"] is None:
+        return "no data"
     if row["delta"] <= 0:
         return "no gain"
     if not (with_ and without):
