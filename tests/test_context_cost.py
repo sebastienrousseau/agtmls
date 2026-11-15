@@ -46,6 +46,22 @@ class DescriptionTests(unittest.TestCase):
         for index, (line, expected) in enumerate(cases.items()):
             self.assertEqual(context_cost.description(_skill(self.root, f"s{index}", line)), expected, line)
 
+    def test_block_scalars_are_read_whole(self) -> None:
+        """`description: >` returned ">", so cost and shortened-description
+        reports measured one character where an agent reads the paragraph."""
+        cases = {
+            "description: >\n  Validate payment messages\n  and explain failures.\nlicense: MIT":
+                "Validate payment messages and explain failures.\n",
+            "description: >-\n  Folded, stripped.\n\n  Second paragraph.":
+                "Folded, stripped.\nSecond paragraph.",
+            "description: |\n  Line one.\n  Line two.\nlicense: MIT": "Line one.\nLine two.\n",
+            "description: |-\n  Literal, stripped.": "Literal, stripped.",
+            "description: >+\n  Kept.\n": "Kept.\n\n",
+            "description: |\nlicense: MIT": "",
+        }
+        for index, (field, expected) in enumerate(cases.items()):
+            self.assertEqual(context_cost.description(_skill(self.root, f"b{index}", field)), expected, field)
+
     def test_nothing_to_read_is_empty(self) -> None:
         self.assertEqual(context_cost.description(self.root / "absent" / "SKILL.md"), "")
         no_field = _skill(self.root, "bare", "license: MIT")

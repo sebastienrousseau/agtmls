@@ -25,6 +25,8 @@ from typing import NamedTuple
 CHARS_PER_TOKEN = 4
 FRONTMATTER = re.compile(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", re.DOTALL)
 DESCRIPTION = re.compile(r"^description:[ \t]*(.*)$", re.MULTILINE)
+# A block scalar header: `|` or `>`, with an optional chomping indicator.
+BLOCK_HEADER = re.compile(r"^[|>][+-]?$")
 
 
 class Cost(NamedTuple):
@@ -57,7 +59,47 @@ def description(skill_md: Path) -> str:
         return ""
     block = FRONTMATTER.match(text)
     field = DESCRIPTION.search(block.group(1)) if block else None
-    return _unquote(field.group(1).strip()) if field else ""
+    if not field:
+        return ""
+    value = field.group(1).strip()
+    if BLOCK_HEADER.match(value):
+        return _block_scalar(value, block.group(1)[field.end():].split("\n")[1:])
+    return _unquote(value)
+
+
+def _block_body(lines: list[str]) -> list[str]:
+    """The indented lines of a block scalar, dedented; blank lines kept."""
+    body: list[str] = []
+    for line in lines:
+        if line.strip() and not line.startswith((" ", "\t")):
+            break
+        body.append(line)
+    indent = min((len(line) - len(line.lstrip()) for line in body if line.strip()), default=0)
+    return [line[indent:] if line.strip() else "" for line in body]
+
+
+def _fold(lines: list[str]) -> str:
+    """YAML folding: lines join with a space, each blank line is a newline."""
+    text, pending = "", ""
+    for line in lines:
+        if not line:
+            pending += "\n"
+        else:
+            text += (pending or (" " if text else "")) + line
+            pending = ""
+    return text
+
+
+def _block_scalar(header: str, lines: list[str]) -> str:
+    """A `|` (literal) or `>` (folded) description, with its chomping
+    indicator: `-` strips the final newline, `+` keeps every trailing blank
+    line, none keeps one. More-indented lines are not treated specially."""
+    body = _block_body(lines)
+    content = body[: max((i + 1 for i, line in enumerate(body) if line), default=0)]
+    text = "\n".join(content) if header[0] == "|" else _fold(content)
+    if not text or header[1:] == "-":
+        return text
+    return text + "\n" * (1 + (len(body) - len(content) if header[1:] == "+" else 0))
 
 
 def install_cost(skills_dir: Path, names: list[str], prompt: Path | None) -> Cost:

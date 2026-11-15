@@ -22,6 +22,16 @@ All notable changes to AgtMLS are recorded here.
   warning. In 0.0.28 a failed pack still replaced `--output` with the partial
   pack. `--output` is now written atomically, keeping the file's mode.
 
+### Fixed
+
+- `doctor`'s context cost and `verify --live`'s shortened-description check
+  read a block-scalar description (`description: >` or `|`, with any
+  chomping indicator) as the single character `>` or `|`. They now read it
+  as YAML does: folded or literal, checked against PyYAML on ten forms.
+- `validate-release.py` accepts recorded SHA256SUMS in the current
+  version's release notes. It required `pending` until the next bump, so
+  recording a published release's checksums failed the gate.
+
 ## 0.0.28 - 2026-11-15
 
 ### Security
