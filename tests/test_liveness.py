@@ -96,6 +96,24 @@ class ProbeTests(unittest.TestCase):
             self.assertEqual(liveness.loaded_skills({"live_probe": "claude-init"}, Path(".")), {"using-agtmls", "debug"})
         proc.kill.assert_called_once()
 
+    def test_a_claude_that_never_answers_is_stopped_at_the_timeout(self) -> None:
+        """The Claude probe read stdout with no time limit, so an agent that
+        hung (a hook waiting on input, a stalled login) hung verify --live."""
+        import time
+
+        real = subprocess.Popen
+
+        def silent(argv, **kwargs):
+            return real([sys.executable, "-c", "import time; time.sleep(30)"], **kwargs)
+
+        started = time.monotonic()
+        with mock.patch.object(liveness.shutil, "which", return_value="/bin/claude"), \
+                mock.patch.object(liveness.subprocess, "Popen", side_effect=silent), \
+                mock.patch.object(liveness, "PROBE_TIMEOUT", 0.5), \
+                self.assertRaisesRegex(liveness.ProbeError, "no init event within 0.5 s"):
+            liveness.loaded_skills({"live_probe": "claude-init"}, Path("."))
+        self.assertLess(time.monotonic() - started, 10)
+
     def test_claude_without_an_init_event_is_an_error(self) -> None:
         patch, _ = self.fake_claude(["{}"])
         with mock.patch.object(liveness.shutil, "which", return_value="/bin/claude"), patch, \

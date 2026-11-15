@@ -90,6 +90,10 @@ All notable changes to AgtMLS are recorded here.
   `--max-tokens`, files that do not fit are skipped whole, named in the pack
   and on stderr, and `pack` exits 1; it stopped at the first file that did not
   fit and still exited 0.
+- `verify --live` stops the Claude probe after 120 seconds, as it already
+  did for Codex; a Claude session that never printed its init event hung
+  `verify`. `docs/cli.md` now says both probes run in the target, under its
+  own agent settings and hooks.
 
 ## 0.0.27 - 2026-10-23
 

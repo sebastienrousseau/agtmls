@@ -293,6 +293,10 @@ list, or saying why the agent could not be asked:
 - `codex`: renders the prompt Codex would send (`codex debug prompt-input`)
   without calling the model, and reads its skill list.
 
+Both run in the target directory, so the target's own agent settings and
+hooks apply to that session: run `--live` only in a repository whose agent
+configuration you trust. Either probe is stopped after 120 seconds.
+
 `doctor` also checks each agent's user-level skill directories
 (`~/.claude/skills`, `~/.codex/skills`), which no lockfile covers: a link
 there that no longer resolves is a `WARN` naming it, because the agent skips
