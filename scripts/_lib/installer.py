@@ -15,7 +15,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from _lib import aider_conf, skill_roots
+from _lib import aider_conf, digest, skill_roots
 
 AGENT_CONFIGS: dict[str, tuple[str, str]] = {
     "claude": (".claude", "CLAUDE.md"),
@@ -139,6 +139,12 @@ def update_git_exclude(
         exclude.write_text("\n".join(combined) + "\n", encoding="utf-8")
 
 
+def _copy(src: Path, dst: Path) -> None:
+    """A directory carries only what its digest covers (no debris, no
+    symlink targets); a file is copied as it is."""
+    digest.copy_tree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+
+
 def link_or_copy(src: Path, dst: Path, copy: bool, dry_run: bool) -> None:
     """Link source to destination with automatic copy fallback on Windows/privilege errors."""
     if dry_run:
@@ -150,12 +156,12 @@ def link_or_copy(src: Path, dst: Path, copy: bool, dry_run: bool) -> None:
     elif dst.is_dir():
         shutil.rmtree(dst)
     if copy:
-        shutil.copytree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+        _copy(src, dst)
     else:
         try:
             dst.symlink_to(src, target_is_directory=src.is_dir())
         except OSError:
-            shutil.copytree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+            _copy(src, dst)
 
 
 def install_skills(

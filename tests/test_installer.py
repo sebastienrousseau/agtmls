@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import io
 import json
 import shutil
@@ -175,6 +176,24 @@ class InstallerTests(unittest.TestCase):
             installer.link_or_copy(src_dir, dst_dir, copy=False, dry_run=False)
             self.assertTrue(dst_dir.is_dir())
             self.assertFalse(dst_dir.is_symlink())
+
+    def test_a_copied_directory_carries_only_digested_files(self) -> None:
+        src = self.tmp / "skill"
+        (src / "__pycache__").mkdir(parents=True)
+        (src / "SKILL.md").write_text("# s\n", encoding="utf-8")
+        (src / "__pycache__" / "x.pyc").write_text("debris", encoding="utf-8")
+        outside = self.tmp / "outside"
+        outside.mkdir()
+        (outside / "secret").write_text("x", encoding="utf-8")
+        (src / "elsewhere").symlink_to(outside)
+        for copy, failing in ((True, False), (False, True)):
+            dst = self.target / f"skill-{copy}"
+            with mock.patch.object(Path, "symlink_to", side_effect=OSError("no")) if failing \
+                    else contextlib.nullcontext():
+                installer.link_or_copy(src, dst, copy=copy, dry_run=False)
+            self.assertTrue((dst / "SKILL.md").is_file())
+            self.assertFalse((dst / "__pycache__").exists(), "undigested debris was copied")
+            self.assertFalse((dst / "elsewhere").exists(), "a symlink was followed")
 
     def test_install_workspace_lifecycle(self) -> None:
         # Full install

@@ -25,6 +25,10 @@ All notable changes to AgtMLS are recorded here.
   whoever replaced the skills could also replace; the signature was checked
   only by `verify --signatures`, after the copy. With no signature (a
   development checkout) or no `ssh-keygen`, install warns and continues.
+- A `--copy` install carries only the files a skill's digest covers. It copied
+  the whole directory, so a `__pycache__`, `node_modules`, `.venv` or editor
+  file planted in a registry skill landed in the target without being hashed,
+  and the Windows installer followed symlinks into whatever they pointed at.
 
 ## 0.0.27 - 2026-10-23
 

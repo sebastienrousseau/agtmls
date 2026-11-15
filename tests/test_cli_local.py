@@ -17,6 +17,7 @@ import io
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -24,7 +25,7 @@ from pathlib import Path
 from unittest import mock
 
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
-from .support import load_script, retarget, run_main
+from .support import ROOT, load_script, retarget, run_main
 
 EXIT_ERROR = 1
 EXIT_INTEGRITY_FAILURE = 3
@@ -410,6 +411,27 @@ class InstallLifecycleTests(CliFixture):
         code, output = self.verify()
         self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
         self.assertIn("NO-LOCKFILE", output)
+
+
+class ShellCopyTests(unittest.TestCase):
+    """The real setup-workspace.sh, --copy: only what the digest covers lands."""
+
+    def test_a_copy_install_leaves_undigested_debris_behind(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shcopy-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        planted = registry / "skills" / GENERAL[0] / "__pycache__" / "payload.pyc"
+        planted.parent.mkdir()
+        planted.write_text("not hashed", encoding="utf-8")
+        target = tmp / "target"
+        target.mkdir()
+        proc = subprocess.run(["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude",
+                               "--skills-only", "--copy"], cwd=target, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        installed = target / ".claude" / "skills" / GENERAL[0]
+        self.assertTrue((installed / "SKILL.md").is_file(), proc.stdout)
+        self.assertFalse((installed / "__pycache__").exists(), "undigested debris was installed")
 
 
 class UninstallTests(CliFixture):

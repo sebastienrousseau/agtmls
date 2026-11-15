@@ -96,6 +96,42 @@ class DigestTests(unittest.TestCase):
         self.assertEqual(digest.skill_digest(self.tmp), before)
 
 
+class CopyTreeTests(unittest.TestCase):
+    """A copy install carries exactly the files the digest covers: anything
+    the digest leaves out would travel into the target unhashed."""
+
+    def setUp(self) -> None:
+        self.tmp = Path(tempfile.mkdtemp(prefix="agtmls-copy-"))
+        self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, ignore_errors=True))
+        self.src = self.tmp / "skill"
+        for relative in ("SKILL.md", "scripts/run.sh", "__pycache__/x.cpython.pyc",
+                         "lib/node_modules/p/index.js", "notes.swp", ".DS_Store"):
+            path = self.src / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(relative, encoding="utf-8")
+        (self.src / "scripts" / "run.sh").chmod(0o755)
+        elsewhere = self.tmp / "elsewhere"
+        elsewhere.mkdir()
+        (elsewhere / "secret").write_text("x", encoding="utf-8")
+        (self.src / "outside").symlink_to(elsewhere)
+
+    def test_only_digested_files_are_copied_with_their_mode(self) -> None:
+        dst = self.tmp / "copy"
+        digest.copy_tree(self.src, dst)
+        copied = sorted(p.relative_to(dst).as_posix() for p in dst.rglob("*") if p.is_file())
+        self.assertEqual(copied, ["SKILL.md", "scripts/run.sh"])
+        self.assertFalse((dst / "outside").exists(), "a symlink was followed or copied")
+        self.assertTrue(os.access(dst / "scripts" / "run.sh", os.X_OK))
+        self.assertEqual(digest.skill_digest(dst), digest.skill_digest(self.src))
+
+    def test_the_command_line_copies_and_rejects_bad_usage(self) -> None:
+        dst = self.tmp / "cli-copy"
+        self.assertEqual(digest.main(["digest.py", "copy", str(self.src), str(dst)]), 0)
+        self.assertTrue((dst / "SKILL.md").is_file())
+        self.assertFalse((dst / "__pycache__").exists())
+        self.assertEqual(digest.main(["digest.py", "copy", str(self.src)]), 2)
+
+
 class LockfileTests(unittest.TestCase):
     """What turns a digest from a number in a file into a control."""
 

@@ -247,7 +247,10 @@ link_or_copy() {
   fi
   if $COPY; then
     rm -rf "$dst"
-    cp -R "$src" "$dst"
+    # A directory carries only the files its digest covers: no __pycache__,
+    # node_modules or symlink targets that nothing vouches for.
+    if [[ -d "$src" ]]; then python3 "$AGTMLS_DIR/scripts/_lib/digest.py" copy "$src" "$dst"
+    else cp "$src" "$dst"; fi
   else
     ln -sfn "$src" "$dst"
   fi
