@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.28 - 2026-11-15
+
 ### Security
 
 - The release tooling's twine environment (`.github/requirements/twine.in`)
