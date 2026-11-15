@@ -178,11 +178,25 @@ def _mean_of(runs: list[dict], key: str) -> float | None:
     return _mean([run[key] for run in runs if run.get(key) is not None])
 
 
+def _total(runs: list[dict], key: str) -> float | None:
+    """The sum of a numeric field over every run that reported it, failed
+    runs included; None when none did, never 0."""
+    values = [run[key] for run in runs if run.get(key) is not None]
+    return round(sum(values), 4) if values else None
+
+
 def _arm(runs: list[dict], ids: list[str]) -> dict:
+    """One arm's results. Quality (score, finds, tokens) is over the runs that
+    finished; `completed` and the cost of every attempt cover them all, so a
+    failed run's spend does not vanish."""
     ok = [run for run in runs if not run["error"]]
+    total = _total(runs, "cost_usd")
     return {
         "runs": len(runs),
         "errors": len(runs) - len(ok),
+        "completed": round(len(ok) / len(runs), 3) if runs else None,
+        "cost_usd_total": total,
+        "cost_usd_per_completed": round(total / len(ok), 4) if total is not None and ok else None,
         "score": _mean_of(ok, "score"),
         "found": {key: _mean([float(key in run["hits"]) for run in ok]) for key in ids},
         "skill_used": _mean([float(run["skill_used"]) for run in ok]),
@@ -193,8 +207,18 @@ def _arm(runs: list[dict], ids: list[str]) -> dict:
     }
 
 
+def _completed(arm: dict) -> float:
+    """The share of an arm's runs that finished. Read from runs and errors,
+    which every results file records, so older results judge the same way."""
+    runs = arm.get("runs") or 0
+    return (runs - arm.get("errors", 0)) / runs if runs else 1.0
+
+
 def verdict(row: dict) -> str:
     """Whether the skill helps on this agent, within the token ceiling.
+
+    A skill arm that finished fewer of its runs than the arm without it is
+    `less reliable`, whatever it scored: its scores are over fewer runs.
 
     A gain alone is not enough: a skill that doubles what a task costs for a
     few points is a bad trade. It may cost at most TOKEN_CEILING times the
@@ -203,6 +227,8 @@ def verdict(row: dict) -> str:
     with_, without = row["with"]["tokens"], row["without"]["tokens"]
     if row["delta"] is None:
         return "no data"
+    if _completed(row["with"]) < _completed(row["without"]):
+        return "less reliable"
     if row["delta"] <= 0:
         return "no gain"
     if not (with_ and without):

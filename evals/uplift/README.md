@@ -21,8 +21,15 @@ verdict:
 | --- | --- |
 | `helps` | The skill gains, and uses at most 1.5x the tokens of the task without it, or gains 20 points or more |
 | `too costly` | It gains under 20 points and uses more than 1.5x the tokens |
+| `less reliable` | The skill arm finished a smaller share of its runs than the arm without it; its scores cover fewer runs |
 | `no gain` | The score with the skill is not higher |
 | `no data`, `no token data` | An arm had no successful run, or an agent reported no tokens |
+
+Scores, finds and token counts are over the runs that finished. Each arm
+also records `completed`, the share of its runs that finished, and the cost
+of every attempt: `cost_usd_total` sums each run's reported cost, failed
+runs included, and `cost_usd_per_completed` divides it by the runs that
+finished. A cost no run reported is `null`, never zero.
 
 A skill meets the `hardened` bar when it `helps` on at least two agents; the
 rendered report names those skills. The ceiling is `TOKEN_CEILING` and

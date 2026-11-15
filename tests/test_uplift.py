@@ -187,7 +187,8 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | n/a | 100% | 1 | no token data |", text)
+        # The skill arm lost a run the other did not: its gain is over fewer runs.
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | n/a | 100% | 1 | less reliable |", text)
         self.assertIn("| b | 0% | 50% |", text)
         with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
         self.assertIn("| +0 pts | 3.00x | n/a | 100% | 0 | no gain |", uplift.render(with_tokens))
@@ -203,6 +204,23 @@ class SummaryTests(unittest.TestCase):
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
         self.assertIn("| s | claude | n/a | 50% | n/a | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
+
+
+class AttemptEconomicsTests(unittest.TestCase):
+    def test_completion_and_the_cost_of_every_attempt(self) -> None:
+        """Cost was the mean over finished runs, so a failed run's spend
+        vanished; each arm now also records what every attempt cost."""
+        case = SummaryTests.CASE
+        runs = [_run("with", ["a"], cost_usd=0.4), _run("with", [], error="timeout", cost_usd=0.3),
+                _run("with", [], error="crash", cost_usd=None), _run("without", ["a"], cost_usd=0.2)]
+        (row,) = uplift.summarise([case], runs)
+        self.assertEqual(row["with"]["completed"], 0.333)
+        self.assertEqual(row["with"]["cost_usd_total"], 0.7)
+        self.assertEqual(row["with"]["cost_usd_per_completed"], 0.7)
+        self.assertEqual((row["without"]["completed"], row["without"]["cost_usd_per_completed"]), (1.0, 0.2))
+        (none,) = uplift.summarise([case], [_run("with", [], error="x", cost_usd=None), _run("without", ["a"])])
+        self.assertEqual((none["with"]["completed"], none["with"]["cost_usd_total"],
+                          none["with"]["cost_usd_per_completed"]), (0.0, None, None))
 
 
 class VerdictTests(unittest.TestCase):
@@ -227,6 +245,19 @@ class VerdictTests(unittest.TestCase):
         ]
         for row, expected in cases:
             self.assertEqual(uplift.verdict(row), expected, row)
+
+    def test_an_arm_that_fails_more_often_does_not_help(self) -> None:
+        """Scores were averaged over the runs that finished, and the verdict
+        never looked at errors: an arm that failed 4 of 5 runs could still
+        "help" on the one that finished."""
+        row = self.row(0.5, 100.0)
+        row["with"].update(runs=5, errors=4)
+        row["without"].update(runs=5, errors=0)
+        self.assertEqual(uplift.verdict(row), "less reliable")
+        row["with"]["errors"] = 0
+        self.assertEqual(uplift.verdict(row), "helps")
+        row["without"]["errors"] = 1  # the skill arm is the more reliable one
+        self.assertEqual(uplift.verdict(row), "helps")
 
     def test_hardened_needs_two_agents_that_help(self) -> None:
         rows = [{"skill": "a", "verdict": "helps"}, {"skill": "a", "verdict": "helps"},

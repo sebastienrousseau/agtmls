@@ -31,6 +31,14 @@ All notable changes to AgtMLS are recorded here.
 - `validate-release.py` accepts recorded SHA256SUMS in the current
   version's release notes. It required `pending` until the next bump, so
   recording a published release's checksums failed the gate.
+- Uplift verdicts account for failed runs. Scores, cost and time were
+  averaged over the runs that finished, and the verdict never looked at
+  errors, so a skill arm that failed most of its runs could still `help` on
+  the rest. A skill arm that finishes a smaller share of its runs than the
+  arm without it is now `less reliable`, and each arm records `completed`,
+  `cost_usd_total` (every attempt, failed ones included) and
+  `cost_usd_per_completed`. Every committed result had no failed run, so no
+  verdict or efficacy attestation changes.
 
 ## 0.0.28 - 2026-11-15
 
