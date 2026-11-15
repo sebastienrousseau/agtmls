@@ -289,6 +289,18 @@ class ReleaseMetadataTests(FixtureCase):
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py check", "make check")
         self.assertRefused("RELEASE.md must require python3 scripts/agtmls.py check")
 
+    def test_recorded_checksums_are_accepted_and_garbage_is_not(self) -> None:
+        """Once a release is published its notes record the real SHA256SUMS;
+        this check demanded `pending` for the current version forever, so
+        recording them failed the gate until the next bump."""
+        notes = f"docs/release-notes/v{self.version()}.md"
+        text = (FIXTURE / notes).read_text(encoding="utf-8")
+        self.assertNotIn("pending", text.split("## Checksums")[1], "the fixture should record real sums")
+        first = next(line for line in text.splitlines() if line[:64].strip() and len(line.split()) == 2
+                     and len(line.split()[0]) == 64)
+        self.edit_text(notes, first, "not a checksum line")
+        self.assertRefused(f"v{self.version()}.md: pending checksums must be marked `pending` in the Checksums section")
+
     def test_a_release_procedure_that_skips_the_index_is_refused(self) -> None:
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py index --write", "make index")
         self.assertRefused("RELEASE.md must require index regeneration")
