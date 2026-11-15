@@ -5,6 +5,8 @@
 from __future__ import annotations
 
 import ast
+import contextlib
+import io
 import json
 import os
 import subprocess
@@ -489,12 +491,35 @@ class ContextOptimizerCliTests(unittest.TestCase):
                 "--output",
                 str(out_file),
                 "--max-tokens",
-                "1000",
+                "100000",
             ],
         ):
             self.assertEqual(self.module.main(), 0)
         self.assertTrue(out_file.is_file())
         self.assertIn("<context_pack", out_file.read_text(encoding="utf-8"))
+
+    def pack(self, *argv: str) -> tuple[int, str, str]:
+        out, err = io.StringIO(), io.StringIO()
+        with mock.patch("sys.argv", ["agtmls", "pack", *argv]), \
+                contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = self.module.main()
+        return code, out.getvalue(), err.getvalue()
+
+    def test_pack_finds_pack_skills_and_refuses_unknown_names(self) -> None:
+        """pack walked skills/ only, so a packs/<bundle> skill was silently missing."""
+        code, out, _ = self.pack("noyalib-config-and-flags")
+        self.assertEqual(code, 0)
+        self.assertIn('path="packs/noyalib/skills/noyalib-config-and-flags/SKILL.md"', out)
+        code, _, err = self.pack("no-such-skill")
+        self.assertEqual(code, 1)
+        self.assertIn("unknown skill(s): no-such-skill", err)
+
+    def test_pack_over_budget_names_what_it_left_out_and_fails(self) -> None:
+        code, out, err = self.pack("cross-language-port", "--max-tokens", "10")
+        self.assertEqual(code, 1)
+        self.assertIn("left out over the 10-token budget", err)
+        self.assertIn("skills/cross-language-port/SKILL.md", err)
+        self.assertIn("omitted over the 10-token budget", out)
 
     def test_pack_when_paths_do_not_exist(self) -> None:
         empty_dir = Path(self.tmp.name) / "empty"

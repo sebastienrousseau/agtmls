@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Sequence
+from xml.sax.saxutils import escape, quoteattr
 
 from _lib.context_cost import approx_tokens
 
@@ -71,19 +72,28 @@ def enforce_cache_friendly_prefix(markdown_text: str) -> str:
 def pack_repomix_xml(
     items: Sequence[tuple[str, str]],
     max_tokens: int | None = None,
-) -> str:
-    """Pack file items into a structured Repomix-compatible XML context block."""
+) -> tuple[str, list[str]]:
+    """Pack file items into a Repomix-compatible XML block, and name the files
+    left out because they did not fit `max_tokens`.
+
+    Content and paths are escaped: skill text is untrusted, and a `</file>` in
+    it must not end the element and let what follows pose as packer output.
+    A file that does not fit is skipped, never cut, and named in the pack.
+    """
     out = ['<context_pack version="1.0" generator="agtmls">']
     used_tokens = 0
+    omitted: list[str] = []
     for name, content in items:
         est = estimate_tokens(content)
-        if max_tokens is not None and (used_tokens + est) > max_tokens:
-            out.append(f'  <!-- Truncated: {name} exceeds budget of {max_tokens} tokens -->')
-            break
+        if max_tokens is not None and used_tokens + est > max_tokens:
+            omitted.append(name)
+            continue
         used_tokens += est
-        out.append(f'  <file path="{name}" tokens="{est}">')
-        for line in content.splitlines():
-            out.append(f"    {line}")
+        out.append(f"  <file path={quoteattr(name)} tokens=\"{est}\">")
+        out.extend(f"    {escape(line)}" for line in content.splitlines())
         out.append("  </file>")
+    if omitted:
+        names = escape(", ".join(omitted)).replace("--", "- -")
+        out.append(f"  <!-- omitted over the {max_tokens}-token budget: {names} -->")
     out.append("</context_pack>")
-    return "\n".join(out)
+    return "\n".join(out), omitted

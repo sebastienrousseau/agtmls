@@ -529,26 +529,26 @@ def optimize_command(args) -> int:
 
 
 def pack_command(args) -> int:
-    skills_dir = ROOT / "skills"
-    requested = set(args.skills) if args.skills else None
-    items: list[tuple[str, str]] = []
-    agents_md = ROOT / "AGENTS.md"
-    if agents_md.exists():
-        items.append(("AGENTS.md", agents_md.read_text(encoding="utf-8")))
-    if skills_dir.exists():
-        for sdir in sorted(skills_dir.iterdir()):
-            if requested and sdir.name not in requested:
-                continue
-            sm = sdir / "SKILL.md"
-            if sm.is_file():
-                items.append((f"skills/{sdir.name}/SKILL.md", sm.read_text(encoding="utf-8")))
-    xml = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
+    from _lib import skill_roots
+
+    files = {path.parent.name: path for path in skill_roots.skill_files(ROOT)}
+    unknown = sorted(set(args.skills) - files.keys())
+    if unknown:
+        print(f"FAIL: unknown skill(s): {', '.join(unknown)}", file=sys.stderr)
+        return 1
+    chosen = [files[name] for name in sorted(args.skills or files)]
+    paths = ([ROOT / "AGENTS.md"] if (ROOT / "AGENTS.md").exists() else []) + chosen
+    items = [(path.relative_to(ROOT).as_posix(), path.read_text(encoding="utf-8")) for path in paths]
+    xml, omitted = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
     if args.output:
         args.output.write_text(xml, encoding="utf-8")
         print(f"OK: wrote context pack to {args.output}")
     else:
         print(xml)
-    return 0
+    if omitted:
+        print(f"FAIL: {len(omitted)} file(s) left out over the {args.max_tokens}-token budget: "
+              f"{', '.join(omitted)}", file=sys.stderr)
+    return 1 if omitted else 0
 
 
 HANDLERS = {

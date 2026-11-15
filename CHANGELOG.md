@@ -37,6 +37,13 @@ All notable changes to AgtMLS are recorded here.
   check divided by 3.8, and the skill body limit rounded down, so `doctor` and
   `optimize` gave one file two counts, and a 20,001-character body passed a
   5,000-token limit that `doctor` would have reported it over.
+- `pack` finds skills through the same discovery as every other command, so
+  `packs/<bundle>` skills are packed and an unknown skill name is an error
+  rather than an empty pack. Content and paths are XML-escaped: a `</file>` in
+  a skill ended its element, letting the rest pose as packer output. Over
+  `--max-tokens`, files that do not fit are skipped whole, named in the pack
+  and on stderr, and `pack` exits 1; it stopped at the first file that did not
+  fit and still exited 0.
 
 ## 0.0.27 - 2026-10-23
 
