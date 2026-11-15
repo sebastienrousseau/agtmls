@@ -2492,7 +2492,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bf0e6a3807b40a6cecb56df74e752f070aaaca5ccf01938d0c4420a21ee28590"
+          "content": "7a2a8b5a7588e78f819ca829396958552182b1da170a0596540abb1c46fbe230"
         }
       ],
       "name": "scripts/_lib/context_optimizer.py",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:48:45Z",
+    "timestamp": "2026-11-15T15:07:23Z",
     "tools": {
       "components": [
         {

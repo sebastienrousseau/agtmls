@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import re
 from collections.abc import Sequence
-from xml.sax.saxutils import escape, quoteattr
 
 from _lib.context_cost import approx_tokens
 
@@ -81,6 +80,20 @@ def instruction_density(markdown_text: str) -> float:
         return 0.0
     directives = len(re.findall(r"^(?:[-*]|\d+\.|\s*\|)\s+\S+", markdown_text, re.MULTILINE))
     return round((directives * 100) / tokens, 2)
+
+
+def escape(text: str) -> str:
+    """XML character data: `&`, `<` and `>` escaped. Written out rather than
+    imported: xml.sax.saxutils loads urllib.request and http.client, about
+    27 ms on every CLI start, since agtmls.py imports this module."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def quoteattr(text: str) -> str:
+    """A double-quoted XML attribute value, as xml.sax.saxutils.quoteattr
+    writes one when the value holds a double quote."""
+    text = escape(text).replace('"', "&quot;")
+    return '"' + text.replace("\n", "&#10;").replace("\r", "&#13;").replace("\t", "&#9;") + '"'
 
 
 def pack_repomix_xml(

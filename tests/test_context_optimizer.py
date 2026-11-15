@@ -95,5 +95,18 @@ class TestContextOptimizer(unittest.TestCase):
         self.assertEqual([line.strip() for line in files[0].text.strip().splitlines()],
                          [line.strip() for line in hostile.splitlines()])
 
+class ImportCostTests(unittest.TestCase):
+    def test_the_cli_path_does_not_load_the_http_stack(self) -> None:
+        """agtmls.py imports this module at start-up. xml.sax.saxutils pulled
+        in urllib.request, http.client and ssl, about 27 ms, and CI's bench
+        failed on cli-list at +50%."""
+        import subprocess
+
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        code = (f"import sys; sys.path.insert(0, {str(scripts)!r}); import _lib.context_optimizer; "
+                "print(sorted(m for m in ('urllib.request', 'http.client', 'xml.sax') if m in sys.modules))")
+        out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True).stdout
+        self.assertEqual(out.strip(), "[]")
+
 if __name__ == "__main__":
     unittest.main()
