@@ -365,9 +365,9 @@ importlib-metadata==9.0.1 ; python_full_version < '3.11' and platform_machine !=
     --hash=sha256:ab830580bc0ef3db61ce8fae716389e5462b67e033018bab6d8f80ef17172f99 \
     --hash=sha256:bba5600596a7e21f3eef53281cf28d6a5195634d2f2b78ff9501a3272c6eaab0
     # via keyring
-importlib-metadata==10.1.0 ; python_full_version == '3.11.*' and platform_machine != 'ppc64le' and platform_machine != 's390x' \
-    --hash=sha256:82b04047fa09792c1a8cfeddfe08bec79e4b13c29c8469b0d3949860f61017e8 \
-    --hash=sha256:cf45ce66a929c64e994185a809c04840d0501db17e663810d993d0f4829265c7
+importlib-metadata==10.2.0 ; python_full_version == '3.11.*' and platform_machine != 'ppc64le' and platform_machine != 's390x' \
+    --hash=sha256:9413a2029fd9ca5669d27f1386071bbfe3c7ebca0545692ec975088241fe1d79 \
+    --hash=sha256:c7a4bf1c7479601f6b8e437cfc14f4f77028ba62a8f34ae95cd93d9774dfba51
     # via keyring
 jaraco-classes==3.4.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' \
     --hash=sha256:47a024b51d0239c0dd8c8540c6c7f484be3b8fcf0b2d85c13825780d3b3f3acd \
@@ -391,9 +391,13 @@ keyring==25.7.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' 
     --hash=sha256:be4a0b195f149690c166e850609a477c532ddbfbaed96a404d4e43f8d5e2689f \
     --hash=sha256:fe01bd85eb3f8fb3dd0405defdeac9a5b4f6f0439edbb3149577f244a2e8245b
     # via twine
-markdown-it-py==4.2.0 \
-    --hash=sha256:04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49 \
-    --hash=sha256:9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a
+lazy-importer==0.1.0 ; python_full_version == '3.11.*' and platform_machine != 'ppc64le' and platform_machine != 's390x' \
+    --hash=sha256:b2e296716ce015c0cd80e57b940e52727c5b934b34b8656d5ce06bdd0ee5fbdd \
+    --hash=sha256:bd93fab7bef18e842eea02b839410954d37889140dc64ca4d9680aec6880c739
+    # via importlib-metadata
+markdown-it-py==4.3.0 \
+    --hash=sha256:7aa1511a46c39138de78d9eba92ce47e63124d8003fc98b3a351909e04239efa \
+    --hash=sha256:91a58fa5b72c71a40cf7177250fd767480d7a2bb3ac426ccfb76fb90305fdaaa
     # via rich
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
