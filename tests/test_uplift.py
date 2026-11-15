@@ -278,6 +278,37 @@ class ParseTests(unittest.TestCase):
         self.assertEqual((out.answer, out.skill_used, out.tokens, out.model), ("", True, None, "m"))
         self.assertEqual(out.error, "claude: error_max_turns")
 
+    def claude_usage(self, usage: dict):
+        result = {"type": "result", "result": "ok", "total_cost_usd": 0.01, "usage": usage}
+        return uplift_agents.AGENTS["claude"].parse(json.dumps(result), "s", self.OPTIONS)
+
+    def test_claude_usage_is_broken_down_and_unknown_fields_are_not_summed(self) -> None:
+        """Claude's total summed every field ending in `tokens`, so any new
+        `*tokens` subtotal in its usage would have been counted twice."""
+        out = self.claude_usage({"input_tokens": 2, "cache_creation_input_tokens": 888,
+                                 "cache_read_input_tokens": 697639, "output_tokens": 344,
+                                 "output_tokens_details": {"thinking_tokens": 40},
+                                 "some_future_tokens": 1000, "service_tier": "standard"})
+        self.assertEqual(out.tokens, 2 + 888 + 697639 + 344)
+        self.assertEqual(out.usage, {"input": 2, "cache_read": 697639, "cache_write": 888, "output": 344,
+                                     "reasoning": 40, "total": 698873})
+        self.assertEqual(out.output_tokens, 344)
+        partial = self.claude_usage({"output_tokens": 5})
+        self.assertEqual(partial.usage, {"input": None, "cache_read": None, "cache_write": None, "output": 5,
+                                         "reasoning": None, "total": 5})
+        self.assertIsNone(self.claude_usage({"service_tier": "x"}).usage)
+
+    def test_codex_cached_input_is_part_of_input(self) -> None:
+        """Codex counts cached input inside input_tokens, and reasoning inside
+        output_tokens, so neither is added again."""
+        events = [{"type": "item.completed", "item": {"type": "agent_message", "text": "a"}},
+                  {"type": "turn.completed", "usage": {"input_tokens": 1000, "cached_input_tokens": 900,
+                                                       "output_tokens": 50, "reasoning_output_tokens": 30}}]
+        out = uplift_agents.AGENTS["codex"].parse("\n".join(map(json.dumps, events)), "s", self.OPTIONS)
+        self.assertEqual(out.tokens, 1050)
+        self.assertEqual(out.usage, {"input": 100, "cache_read": 900, "cache_write": None, "output": 50,
+                                     "reasoning": 30, "total": 1050})
+
     def test_claude_without_a_result(self) -> None:
         self.assertEqual(uplift_agents.AGENTS["claude"].parse("", "s", self.OPTIONS).error, "claude printed no result")
 
@@ -371,6 +402,8 @@ class ScriptTests(FakeAgents):
         results = json.loads(out.read_text(encoding="utf-8"))
         self.assertEqual(len(results["runs"]), 8)
         self.assertEqual({run["output_tokens"] for run in results["runs"]}, {5, 3})
+        self.assertEqual({run["usage"]["total"] for run in results["runs"]}, {15, 10})
+        self.assertEqual({row["with"]["usage"]["input"] for row in results["summary"]}, {10.0, 7.0})
         self.assertEqual(set(results["meta"]["agents"]), {"claude", "codex"})
         self.assertRegex(results["meta"]["skills"]["vetting-a-skill-before-install"], r"^sha256:")
         by_arm = {(row["agent"]): row for row in results["summary"]}

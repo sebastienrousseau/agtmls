@@ -31,6 +31,15 @@ of every attempt: `cost_usd_total` sums each run's reported cost, failed
 runs included, and `cost_usd_per_completed` divides it by the runs that
 finished. A cost no run reported is `null`, never zero.
 
+Each run also records `usage`, its tokens by kind: `input` (not from the
+cache), `cache_read`, `cache_write`, `output`, `reasoning` (counted inside
+`output`) and `total`. Claude Code reports these four counts separately;
+Codex counts cached input inside `input_tokens` and reasoning inside
+`output_tokens`, so its cached part is moved out of `input` rather than
+added. A kind an agent did not report is `null`. `tokens` is `total`: for
+Claude, input + cache reads + cache writes + output; for Codex, input +
+output, its own `total_tokens`. Each arm averages every kind under `usage`.
+
 A skill meets the `hardened` bar when it `helps` on at least two agents; the
 rendered report names those skills. The ceiling is `TOKEN_CEILING` and
 `BIG_GAIN` in `scripts/_lib/uplift.py`.

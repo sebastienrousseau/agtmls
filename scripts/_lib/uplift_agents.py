@@ -52,6 +52,7 @@ class Outcome(NamedTuple):
     model: str | None
     error: str | None
     output_tokens: int | None = None  # what the agent wrote, reasoning included
+    usage: dict | None = None  # normalize_usage(): the run's tokens by kind
 
 
 class Agent(NamedTuple):
@@ -99,12 +100,48 @@ def _claude_used(events: list[dict], skill: str) -> bool:
     return False
 
 
-def _tokens(usage: object, keys: tuple[str, ...] | None = None) -> int | None:
-    """Tokens a run reported: the named fields, or every `*tokens` field."""
+def _int(usage: dict, key: str) -> int | None:
+    value = usage.get(key)
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
+
+
+def _sum(*values: int | None) -> int | None:
+    """The sum of the values reported; None when none was, never 0."""
+    present = [value for value in values if value is not None]
+    return sum(present) if present else None
+
+
+def _totals(usage: dict | None) -> tuple[int | None, int | None]:
+    """(total, output) tokens of a normalized usage, None when unreported."""
+    return (usage["total"], usage["output"]) if usage else (None, None)
+
+
+def claude_usage(usage: object) -> dict | None:
+    """Claude Code's `result.usage` by kind. Its four counts are disjoint:
+    `input_tokens` excludes the cache reads and writes, and thinking tokens
+    are part of `output_tokens`. A count it did not report is None."""
     if not isinstance(usage, dict):
         return None
-    chosen = keys or tuple(key for key in usage if key.endswith("tokens"))
-    return sum(value for key in chosen if isinstance(value := usage.get(key), int)) or None
+    details = usage.get("output_tokens_details")
+    out = {"input": _int(usage, "input_tokens"), "cache_read": _int(usage, "cache_read_input_tokens"),
+           "cache_write": _int(usage, "cache_creation_input_tokens"), "output": _int(usage, "output_tokens"),
+           "reasoning": _int(details, "thinking_tokens") if isinstance(details, dict) else None}
+    out["total"] = _sum(out["input"], out["cache_read"], out["cache_write"], out["output"])
+    return out if out["total"] is not None else None
+
+
+def codex_usage(usage: object) -> dict | None:
+    """`codex exec` usage by kind. `input_tokens` includes the cached input,
+    and `output_tokens` the reasoning (input + output is Codex's own
+    `total_tokens`), so the cached part is moved out of input, not added."""
+    if not isinstance(usage, dict):
+        return None
+    inp, cached = _int(usage, "input_tokens"), _int(usage, "cached_input_tokens")
+    out = {"input": inp - cached if inp is not None and cached is not None else inp, "cache_read": cached,
+           "cache_write": _int(usage, "cache_write_input_tokens"), "output": _int(usage, "output_tokens"),
+           "reasoning": _int(usage, "reasoning_output_tokens")}
+    out["total"] = _sum(inp, out["output"])
+    return out if out["total"] is not None else None
 
 
 def _claude_parse(stdout: str, skill: str, options: Options) -> Outcome:
@@ -115,8 +152,10 @@ def _claude_parse(stdout: str, skill: str, options: Options) -> Outcome:
     if result is None:
         return Outcome("", False, None, None, model, "claude printed no result")
     error = f"claude: {result.get('subtype')}" if result.get("is_error") else None
-    return Outcome(str(result.get("result") or ""), _claude_used(events, skill), _tokens(result.get("usage")),
-                   result.get("total_cost_usd"), model, error, _tokens(result.get("usage"), ("output_tokens",)))
+    usage = claude_usage(result.get("usage"))
+    total, output = _totals(usage)
+    return Outcome(str(result.get("result") or ""), _claude_used(events, skill), total,
+                   result.get("total_cost_usd"), model, error, output, usage)
 
 
 def codex_auth() -> Path:
@@ -146,20 +185,20 @@ def _codex_event(event: dict, skill: str, state: dict) -> None:
     elif item.get("type") == "command_execution":
         state["used"] = state["used"] or f"{skill}/SKILL.md" in str(item.get("command", ""))
     elif kind == "turn.completed":
-        state["tokens"] = _tokens(event.get("usage"), ("input_tokens", "output_tokens"))
-        state["output_tokens"] = _tokens(event.get("usage"), ("output_tokens",))
+        state["usage"] = codex_usage(event.get("usage"))
     elif kind in ("error", "turn.failed"):
         state["error"] = f"codex: {_codex_message(event)}"
 
 
 def _codex_parse(stdout: str, skill: str, options: Options) -> Outcome:
-    state: dict = {"answer": "", "used": False, "tokens": None, "error": None, "output_tokens": None}
+    state: dict = {"answer": "", "used": False, "usage": None, "error": None}
     for event in _events(stdout):
         _codex_event(event, skill, state)
     if not state["answer"] and state["error"] is None:
         state["error"] = "codex printed no answer"
-    return Outcome(state["answer"], state["used"], state["tokens"], None,
-                   options.model or "codex default", state["error"], state["output_tokens"])
+    total, output = _totals(state["usage"])
+    return Outcome(state["answer"], state["used"], total, None,
+                   options.model or "codex default", state["error"], output, state["usage"])
 
 
 AGENTS = {

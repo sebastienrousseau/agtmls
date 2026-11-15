@@ -39,6 +39,12 @@ All notable changes to AgtMLS are recorded here.
   `cost_usd_total` (every attempt, failed ones included) and
   `cost_usd_per_completed`. Every committed result had no failed run, so no
   verdict or efficacy attestation changes.
+- Uplift runs record token usage by kind (`input`, `cache_read`,
+  `cache_write`, `output`, `reasoning`, `total`), with each agent's overlaps
+  handled explicitly: Codex counts cached input inside input and reasoning
+  inside output. Claude's total summed every usage field ending in `tokens`,
+  so a new subtotal field would have been counted twice; it now sums the four
+  named counts. Totals for today's usage shapes are unchanged.
 
 ## 0.0.28 - 2026-11-15
 

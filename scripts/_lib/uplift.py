@@ -178,6 +178,10 @@ def _mean_of(runs: list[dict], key: str) -> float | None:
     return _mean([run[key] for run in runs if run.get(key) is not None])
 
 
+# The kinds uplift_agents.*_usage() report; each arm averages them.
+USAGE_KINDS = ("input", "cache_read", "cache_write", "output", "reasoning", "total")
+
+
 def _total(runs: list[dict], key: str) -> float | None:
     """The sum of a numeric field over every run that reported it, failed
     runs included; None when none did, never 0."""
@@ -185,18 +189,32 @@ def _total(runs: list[dict], key: str) -> float | None:
     return round(sum(values), 4) if values else None
 
 
-def _arm(runs: list[dict], ids: list[str]) -> dict:
-    """One arm's results. Quality (score, finds, tokens) is over the runs that
-    finished; `completed` and the cost of every attempt cover them all, so a
-    failed run's spend does not vanish."""
-    ok = [run for run in runs if not run["error"]]
+def _usage_means(ok: list[dict]) -> dict:
+    """Mean tokens of each kind over the finished runs that reported it."""
+    return {kind: _mean([run["usage"][kind] for run in ok if (run.get("usage") or {}).get(kind) is not None])
+            for kind in USAGE_KINDS}
+
+
+def _attempts(runs: list[dict], ok: list[dict]) -> dict:
+    """What every attempt came to: the share that finished, and the cost of
+    all of them, failed ones included, in total and per finished run."""
     total = _total(runs, "cost_usd")
     return {
-        "runs": len(runs),
-        "errors": len(runs) - len(ok),
         "completed": round(len(ok) / len(runs), 3) if runs else None,
         "cost_usd_total": total,
         "cost_usd_per_completed": round(total / len(ok), 4) if total is not None and ok else None,
+    }
+
+
+def _arm(runs: list[dict], ids: list[str]) -> dict:
+    """One arm's results. Quality (score, finds, tokens) is over the runs that
+    finished; `_attempts` covers them all, so a failed run's spend does not
+    vanish."""
+    ok = [run for run in runs if not run["error"]]
+    return {
+        "runs": len(runs),
+        "errors": len(runs) - len(ok),
+        **_attempts(runs, ok),
         "score": _mean_of(ok, "score"),
         "found": {key: _mean([float(key in run["hits"]) for run in ok]) for key in ids},
         "skill_used": _mean([float(run["skill_used"]) for run in ok]),
@@ -204,6 +222,7 @@ def _arm(runs: list[dict], ids: list[str]) -> dict:
         "output_tokens": _mean_of(ok, "output_tokens"),
         "cost_usd": _mean_of(ok, "cost_usd"),
         "seconds": _mean_of(ok, "seconds"),
+        "usage": _usage_means(ok),
     }
 
 
