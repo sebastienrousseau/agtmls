@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.29 - 2026-11-15
+
 ### Changed
 
 - `pack --max-tokens` budgets the whole rendered pack: the XML wrapper, file
