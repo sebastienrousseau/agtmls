@@ -295,10 +295,18 @@ class ReleaseMetadataTests(FixtureCase):
         recording them failed the gate until the next bump."""
         notes = f"docs/release-notes/v{self.version()}.md"
         text = (FIXTURE / notes).read_text(encoding="utf-8")
-        self.assertNotIn("pending", text.split("## Checksums")[1], "the fixture should record real sums")
-        first = next(line for line in text.splitlines() if line[:64].strip() and len(line.split()) == 2
-                     and len(line.split()[0]) == 64)
-        self.edit_text(notes, first, "not a checksum line")
+        # The notes say `pending` until the release is published and its sums
+        # are recorded, so record some here rather than depend on where the
+        # checkout is in that cycle.
+        recorded = f"{'a' * 64}  agtmls-{self.version()}.tar.gz"
+        if "pending-release-pack" in text:
+            self.edit_text(notes, "pending-release-pack", recorded)
+        else:
+            recorded = next(line for line in text.splitlines() if len(line.split()) == 2
+                            and len(line.split()[0]) == 64)
+        code, output = self.check()
+        self.assertEqual(code, 0, output)
+        self.edit_text(notes, recorded, "not a checksum line")
         self.assertRefused(f"v{self.version()}.md: the Checksums section must say `pending` or list "
                            "well-formed SHA256SUMS lines")
 
