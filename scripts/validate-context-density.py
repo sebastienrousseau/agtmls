@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate instruction density and cache-friendly prefixes in context files.
 
-Audits AGENTS.md, GEMINI.md, and system prompt markdown files to ensure
-volatile timestamps are excluded from prefix lines and instruction density
-meets threshold standards.
+Audits AGENTS.md and GEMINI.md: an estimated token budget, an instruction
+density floor, and no timestamp in the first 50 lines. The system prompts
+are checked for volatile text by validate-system-prompts.py.
 """
 
 from __future__ import annotations

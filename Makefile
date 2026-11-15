@@ -30,7 +30,7 @@ check: ## Run every check in checks.json
 test: ## Run the unit test suite
 	$(PYTHON) scripts/run-unit-tests.py
 
-bench: ## Run behavioral and routing benchmarks
+bench: ## Measure CLI latency against the committed baseline
 	$(PYTHON) scripts/bench.py
 
 doctor: ## Run the agtmls-doctor health check

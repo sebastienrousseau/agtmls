@@ -38,6 +38,9 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- CI's CodeQL actions (`init`, `analyze`, `upload-sarif`) move from 4.39.1 to
+  4.39.3 (Dependabot #148).
+
 - `install --profile` installs the profile's skills, as `export --profile`
   does: the general skills its `skills` list names, plus its bundles. It read
   only the bundles, so `--profile minimal` installed all 15 general skills
@@ -55,6 +58,14 @@ All notable changes to AgtMLS are recorded here.
   `<file>:<line>: <what>`; `--check` fails on any finding or on runs of blank
   lines, and `--write` only collapses blank-line runs. The context-density
   check names the line of a timestamp it finds.
+
+### Documentation
+
+- README: 33 skills, not 34; the wheel and sdist are described as not yet
+  byte-reproducible, as `RELEASE.md` says, where the README claimed they were;
+  the "As a Python library" install says there is no importable API.
+  `docs/cli.md` no longer says the registry is unsigned. `make bench` is
+  described as the CLI latency benchmark it is.
 
 ### Removed
 

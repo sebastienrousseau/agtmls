@@ -3570,7 +3570,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8250f8837a37d645ee9854ba5627894ff91271a6e79e322615dfaf1da49e9f96"
+          "content": "f7790d7b7ff5b1e4c1950f6d56107e2f0659235f2d9e9176f74bebbc1f301ebb"
         }
       ],
       "name": "scripts/validate-context-density.py",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:26:01Z",
+    "timestamp": "2026-11-15T14:31:33Z",
     "tools": {
       "components": [
         {

@@ -63,7 +63,7 @@
 dependencies = ["agtmls"]
 ```
 
-The wheel has no dependencies: every script, validator, generator and CLI command uses the Python standard library only.
+Declaring the dependency pins the `agtmls` command for a project; the package has no importable Python API, only the CLI. The wheel has no dependencies: every script, validator, generator and CLI command uses the Python standard library only.
 
 ### As a CLI tool
 
@@ -170,7 +170,7 @@ Agent skills are instructions a model will follow. Copied between repositories b
 
 | Area | Capability | Status |
 | :--- | :--- | :--- |
-| Registry | 34 skills conforming to the [Agent Skills specification](https://agentskills.io), in [`skills/`](skills/) and the noyalib pack in [`packs/`](packs/) | Shipped |
+| Registry | 33 skills conforming to the [Agent Skills specification](https://agentskills.io), in [`skills/`](skills/) and the noyalib pack in [`packs/`](packs/) | Shipped |
 | Registry | 10 system prompts: `_base.md` plus Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, Bash, in [`system-prompts/`](system-prompts/) | Shipped |
 | Registry | 4 slash commands (`agtmls`, `agtmls-audit`, `agtmls-new-skill`, `agtmls-release`), in [`commands/`](commands/) | Shipped |
 | Registry | 4 subagents (`anti-slop-editor`, `security-sentinel`, `skill-author`, `registry-auditor`), in [`agents/`](agents/) | Shipped |
@@ -475,7 +475,7 @@ Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
 ## Stability guarantees
 
 - **SemVer axis**: public releases stay on the `0.0.x` line and move by exactly `0.0.1` (`v0.0.1` → `v0.0.999` → `v0.1.0`), per [`VERSIONING.md`](VERSIONING.md). Until `1.0`, any release may change the CLI or the registry format; [`CHANGELOG.md`](CHANGELOG.md) marks breaking changes under **Breaking**, and CI checks the public Python API against the last release.
-- **Output stability**: every generated artifact is deterministic and checked in CI with `--check`; the wheel and sdist are byte-reproducible from the same commit.
+- **Output stability**: every generated artifact is deterministic and checked in CI with `--check`. The wheel and sdist are not yet byte-reproducible ([`RELEASE.md`](RELEASE.md)); build provenance and `SHA256SUMS` tie each release asset to the commit that built it.
 - **Minimum toolchain**: Python 3.10 is the floor. It is raised only when 3.10 reaches upstream end of life ([`docs/POLICIES.md`](docs/POLICIES.md)).
 
 ---
