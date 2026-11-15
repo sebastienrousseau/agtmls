@@ -13,6 +13,98 @@ All notable changes to AgtMLS are recorded here.
   floors `certifi >= 2026.10.19` (GHSA-6q48-6c7w-9gw2, PYSEC-2026-4320; it
   pinned 2026.7.22). `twine.txt` is regenerated with `compile.sh`'s command,
   which resolves fresh, so its other pins move to current releases too.
+- `uninstall`, `verify` and `doctor` refuse a lockfile entry whose `name` or
+  `path` is not a single directory name (`..`, `/`, `\`, `:` or NUL). The
+  lockfile lives in the target repository, so a cloned repository could point
+  an entry at `../../<dir>` with that directory's digest, and `uninstall`
+  removed it. Such a lockfile, or one that is not JSON or not the expected
+  shape, is unreadable: exit 3 as agtmls-spec 6.5 requires, reported by
+  `verify` as `UNREADABLE-LOCKFILE` (in `--json` too) instead of a
+  traceback.
+- `install` checks `index.json.sig` against `ALLOWED_SIGNERS` when it is
+  present and refuses with exit 5 if it does not verify. The digest check only
+  proved that the skills match an `index.json` from the same tree, which
+  whoever replaced the skills could also replace; the signature was checked
+  only by `verify --signatures`, after the copy. With no signature (a
+  development checkout) or no `ssh-keygen`, install warns and continues.
+- Release CI runs the full gate in its own job with read-only permissions;
+  it ran in the job that holds `contents: write` and `id-token: write`, so
+  every repository script ran with the right to publish. Every workflow
+  checkout sets `persist-credentials: false`, and `inputs.tag` and the step
+  outputs derived from it reach `run:` scripts through `env:` rather than
+  being expanded into the script text.
+- Every CI job starts with StepSecurity Harden-Runner v2.22.3, pinned by
+  commit, in audit mode: it records each job's network egress and processes
+  and blocks nothing. In audit mode the action reports those events to
+  StepSecurity's service; it allows turning that off only in block mode.
+- Dependabot now proposes updates for the hash-pinned CI tool requirements in
+  `.github/requirements`, grouped into one PR a week. Its `pip` entry watched
+  the repository root, which pins nothing, so these files changed only after a
+  security alert (certifi above), although the README said Dependabot
+  watched the Python tooling.
+- A `--copy` install carries only the files a skill's digest covers. It copied
+  the whole directory, so a `__pycache__`, `node_modules`, `.venv` or editor
+  file planted in a registry skill landed in the target without being hashed,
+  and the Windows installer followed symlinks into whatever they pointed at.
+
+### Changed
+
+- CI's CodeQL actions (`init`, `analyze`, `upload-sarif`) move from 4.39.1 to
+  4.39.3 (Dependabot #148).
+
+- `install --profile` installs the profile's skills, as `export --profile`
+  does: the general skills its `skills` list names, plus its bundles. It read
+  only the bundles, so `--profile minimal` installed all 15 general skills
+  where export carried one, and every session loaded 14 descriptions the
+  profile left out. Both commands now share `scripts/_lib/selection.py`; the
+  shell and Windows installers take `--listed-only --skill <name>`. `doctor`
+  expects the skills the lockfile records rather than every general skill.
+  Reinstalling with a narrower profile does not remove skills an earlier
+  install linked; `uninstall` first.
+
+- `optimize` reports and no longer rewrites prose. It printed a rewritten
+  file and `--write` deleted filler phrases ("in order to", "please make sure
+  to") and every line in the first 50 holding a timestamp, which could drop or
+  change an instruction along with the date. It now lists each finding as
+  `<file>:<line>: <what>`; `--check` fails on any finding or on runs of blank
+  lines, and `--write` only collapses blank-line runs. The context-density
+  check names the line of a timestamp it finds.
+
+### Documentation
+
+- README: 33 skills, not 34; the wheel and sdist are described as not yet
+  byte-reproducible, as `RELEASE.md` says, where the README claimed they were;
+  the "As a Python library" install says there is no importable API.
+  `docs/cli.md` no longer says the registry is unsigned. `make bench` is
+  described as the CLI latency benchmark it is.
+
+### Removed
+
+- `scripts/_lib/context_store.py` (SQLite FTS5/BM25 store),
+  `scripts/_lib/otlp.py` (OTLP trace exporter), `scripts/_lib/ocsf.py` (OCSF
+  finding exporter) and `scripts/_lib/binary_identity.py`. No command, script
+  or check called them; only their own tests did. The 0.0.22 and 0.0.23
+  entries listed them as features, but no user could reach them. Each can
+  come back with the command that uses it.
+
+### Fixed
+
+- Every token estimate is the same one: characters / 4, rounded up
+  (`context_cost.approx_tokens`). `optimize`, `pack` and the context-density
+  check divided by 3.8, and the skill body limit rounded down, so `doctor` and
+  `optimize` gave one file two counts, and a 20,001-character body passed a
+  5,000-token limit that `doctor` would have reported it over.
+- `pack` finds skills through the same discovery as every other command, so
+  `packs/<bundle>` skills are packed and an unknown skill name is an error
+  rather than an empty pack. Content and paths are XML-escaped: a `</file>` in
+  a skill ended its element, letting the rest pose as packer output. Over
+  `--max-tokens`, files that do not fit are skipped whole, named in the pack
+  and on stderr, and `pack` exits 1; it stopped at the first file that did not
+  fit and still exited 0.
+- `verify --live` stops the Claude probe after 120 seconds, as it already
+  did for Codex; a Claude session that never printed its init event hung
+  `verify`. `docs/cli.md` now says both probes run in the target, under its
+  own agent settings and hooks.
 
 ## 0.0.27 - 2026-10-23
 

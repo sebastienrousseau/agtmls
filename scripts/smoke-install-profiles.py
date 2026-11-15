@@ -41,6 +41,16 @@ def check_agent(agent: str, tmp: Path, errors: list[str]) -> None:
     expect(not (target / prompt).exists(), f"{agent} skills-only profile wrote {prompt}", errors)
 
 
+def check_minimal(tmp: Path, errors: list[str]) -> None:
+    """A profile's `skills` list limits the general skills, as export does."""
+    target = tmp / "claude-minimal"
+    target.mkdir()
+    proc = run(["install", "rust", "claude", "--target", str(target), "--skills-only", "--profile", "minimal"], ROOT)
+    expect(proc.returncode == 0, f"minimal profile install failed:\n{proc.stdout}", errors)
+    installed = sorted(p.name for p in (target / ".claude" / "skills").iterdir()) if proc.returncode == 0 else []
+    expect(installed == ["using-agtmls"], f"minimal profile installed {installed}", errors)
+
+
 def check_unknown_profile(tmp: Path, errors: list[str]) -> None:
     target = tmp / "unknown"
     target.mkdir()
@@ -55,6 +65,7 @@ def main() -> int:
         tmp = Path(td)
         for agent in AGENTS:
             check_agent(agent, tmp, errors)
+        check_minimal(tmp, errors)
         check_unknown_profile(tmp, errors)
     if errors:
         for error in errors:

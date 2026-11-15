@@ -31,12 +31,17 @@ AGENT_CLI=${2:-}
 #                    also cleans up a prompt left by an earlier normal run.
 #   --copy           copy skills instead of symlinking, for hubs that do not
 #                    persist (an installed wheel under uvx/pipx).
+#   --listed-only    link only the general skills named by --skill (a profile's
+#                    `skills` list); without it every general skill is linked.
+#   --skill <name>   a general skill to link under --listed-only. Repeatable.
 #   --bundle <name>  additionally link skills whose metadata.json declares
 #                    `"bundle": "<name>"` (e.g. `noyalib`). Repeatable. By
 #                    default only GENERAL skills (bundle: null) are linked —
 #                    a project's skills never land in an unrelated repo.
 SKILLS_ONLY=false
 BUNDLES=()
+LISTED_ONLY=false
+LISTED=()
 # The prompt file lives at the target's repo root and may be the user's own
 # hand-authored CLAUDE.md / AGENTS.md / CONVENTIONS.md. Overwriting it used to
 # be unconditional and silent; it now requires --force, which takes a backup.
@@ -59,16 +64,22 @@ while [[ $_i -lt ${#_args[@]} ]]; do
       _i=$((_i + 1))
       [[ $_i -lt ${#_args[@]} ]] && BUNDLES+=("${_args[$_i]}")
       ;;
+    --listed-only) LISTED_ONLY=true ;;
+    --skill)
+      _i=$((_i + 1))
+      [[ $_i -lt ${#_args[@]} ]] && LISTED+=("${_args[$_i]}")
+      ;;
   esac
   _i=$((_i + 1))
 done
 
 if [[ -z "$LANGUAGE" || -z "$AGENT_CLI" ]]; then
-  echo "Usage: $0 <language> <agent-cli> [--skills-only] [--copy] [--force] [--dry-run] [--bundle <name>]..."
+  echo "Usage: $0 <language> <agent-cli> [--skills-only] [--copy] [--force] [--dry-run] [--bundle <name>]... [--listed-only --skill <name>...]"
   echo "  language:      rust | python | go | cpp | swift | typescript | javascript | ruby | bash"
   echo "  agent-cli:     claude | aider | codex | antigravity (agy)"
   echo "  --skills-only: link skills only; do not write a system prompt"
   echo "  --bundle NAME: also link the NAME project skill bundle (e.g. noyalib); repeatable"
+  echo "  --listed-only --skill NAME: link only the named general skills (a profile's list); repeatable"
   echo "  --copy:        copy skills instead of symlinking (for non-persistent hubs)"
   echo "  --force:       back up and overwrite an existing non-AgtMLS prompt file"
   echo "  --dry-run:     print every planned change and exit without touching disk"
@@ -247,7 +258,10 @@ link_or_copy() {
   fi
   if $COPY; then
     rm -rf "$dst"
-    cp -R "$src" "$dst"
+    # A directory carries only the files its digest covers: no __pycache__,
+    # node_modules or symlink targets that nothing vouches for.
+    if [[ -d "$src" ]]; then python3 "$AGTMLS_DIR/scripts/_lib/digest.py" copy "$src" "$dst"
+    else cp "$src" "$dst"; fi
   else
     ln -sfn "$src" "$dst"
   fi
@@ -264,11 +278,16 @@ linked=0
 while IFS=$'\t' read -r name rel bundle; do
   [[ -n "$name" ]] || continue
   entry="$AGTMLS_DIR/$rel"
-  if [[ -z "$bundle" ]]; then
-    want=true
-  else
-    want=false
+  # The rule of scripts/_lib/selection.py: a named bundle's skills, then
+  # every general skill, or with --listed-only only the skills --skill names.
+  want=false
+  if [[ -n "$bundle" ]]; then
     for b in "${BUNDLES[@]:-}"; do [[ "$b" == "$bundle" ]] && want=true; done
+  fi
+  if ! $want && $LISTED_ONLY; then
+    for s in "${LISTED[@]:-}"; do [[ "$s" == "$name" ]] && want=true; done
+  elif ! $want && [[ -z "$bundle" ]]; then
+    want=true
   fi
   if $want; then
     link_or_copy "$entry" "$TARGET_DIR/$CLI_DIR/skills/$name"

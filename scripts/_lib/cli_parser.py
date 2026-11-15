@@ -197,14 +197,15 @@ def _audit_commands(sub) -> None:
     index.add_argument("--write", action="store_true")
     index.add_argument("--check", action="store_true")
 
-    optimize_cmd = sub.add_parser("optimize", help="audit and optimize markdown context files for token efficiency")
+    optimize_cmd = sub.add_parser("optimize", help="report filler and volatile lines in an always-loaded markdown file")
     optimize_cmd.add_argument("file", nargs="?", type=Path, help="path to markdown file (default: AGENTS.md)")
-    optimize_cmd.add_argument("--check", action="store_true", help="fail if file contains conversational boilerplate or un-cached prefix")
-    optimize_cmd.add_argument("--write", action="store_true", help="write optimized markdown in-place")
+    optimize_cmd.add_argument("--check", action="store_true", help="fail if the file has a finding or runs of blank lines")
+    optimize_cmd.add_argument("--write", action="store_true", help="collapse runs of blank lines in place; findings are left for you to edit")
 
     pack_cmd = sub.add_parser("pack", help="pack skills and context into a token-bounded Repomix XML block")
     pack_cmd.add_argument("skills", nargs="*", help="names of skills to pack (default: all)")
-    pack_cmd.add_argument("--max-tokens", type=int, help="maximum token budget")
+    pack_cmd.add_argument("--max-tokens", type=int,
+                          help="token budget; files that do not fit are left out, named, and exit 1")
     pack_cmd.add_argument("--output", type=Path, help="write packed context to file")
 
 

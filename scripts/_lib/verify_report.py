@@ -36,6 +36,29 @@ def trust_statuses(root: Path, require_signed: bool) -> tuple[str, str]:
     return index_status, feed_status
 
 
+def index_signature_refusal(root: Path) -> int | None:
+    """Exit 5 before an install when `index.json.sig` is there and fails;
+    None otherwise. The drift check proves the skills match index.json, not
+    that index.json came from the publisher, so a signature that is present
+    is checked. One that is absent, or that cannot be checked without
+    ssh-keygen, is a warning: a development checkout is never signed."""
+    from _lib import signatures
+
+    try:
+        status = signatures.verify(root / "index.json", root / "index.json.sig", root / "ALLOWED_SIGNERS",
+                                   signatures.INDEX_NAMESPACE)
+    except signatures.ToolMissing as error:
+        print(f"warning: cannot check index.json.sig ({error}); installing on the digest check alone",
+              file=sys.stderr)
+        return None
+    if status == "bad_signature":
+        print("refusing to install: index.json.sig does not verify against ALLOWED_SIGNERS", file=sys.stderr)
+        return lockfile.EXIT_BAD_SIGNATURE
+    if status == "unsigned":
+        print("warning: index.json is not signed; installing on the digest check alone", file=sys.stderr)
+    return None
+
+
 def revocations(root: Path, target: Path, feed_status: str) -> tuple[list[tuple[str, str, list[str]]], list[str]]:
     """(installed skills a verified feed revokes, notes). An unsigned feed is
     not consulted, and says so."""
@@ -43,7 +66,11 @@ def revocations(root: Path, target: Path, feed_status: str) -> tuple[list[tuple[
 
     if feed_status == "verified":
         feed = json.loads((root / "advisories.json").read_text(encoding="utf-8"))
-        return advisories.revoked(feed, lockfile.read(target) or {}), []
+        try:
+            lock = lockfile.read(target) or {}
+        except lockfile.LockfileError:
+            lock = {}  # already reported as unreadable-lockfile, exit 3
+        return advisories.revoked(feed, lock), []
     if feed_status == "unsigned":
         return [], ["advisories.json is not signed; not consulted"]
     return [], []

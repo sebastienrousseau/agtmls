@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Validate instruction density and cache-friendly prefixes in context files.
 
-Audits AGENTS.md, GEMINI.md, and system prompt markdown files to ensure
-volatile timestamps are excluded from prefix lines and instruction density
-meets threshold standards.
+Audits AGENTS.md and GEMINI.md: an estimated token budget, an instruction
+density floor, and no timestamp in the first 50 lines. The system prompts
+are checked for volatile text by validate-system-prompts.py.
 """
 
 from __future__ import annotations
@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from _lib.context_optimizer import (  # noqa: E402
-    enforce_cache_friendly_prefix,
     estimate_tokens,
+    findings,
     instruction_density,
 )
 
@@ -41,9 +41,7 @@ def audit_file(path: Path) -> list[str]:
     if density < MIN_DENSITY:
         issues.append(f"{path.name} instruction density too low ({density} < {MIN_DENSITY})")
 
-    clean_prefix = enforce_cache_friendly_prefix(text)
-    if clean_prefix != text:
-        issues.append(f"{path.name} contains volatile timestamps in the top 50 lines")
+    issues += [f"{path.name}:{note}" for note in findings(text) if "timestamp" in note]
 
     return issues
 

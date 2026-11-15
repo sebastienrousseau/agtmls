@@ -28,6 +28,8 @@ Rules that matter, and why:
 from __future__ import annotations
 
 import hashlib
+import shutil
+import sys
 from pathlib import Path
 
 # Never part of a skill's identity: build caches, VCS internals, editor and
@@ -95,3 +97,31 @@ def digest_from_manifest(entries: list[tuple[str, str]]) -> str:
 def skill_digest(root: Path) -> str:
     """Stable content address for the skill directory at `root`."""
     return digest_from_manifest(manifest(root))
+
+
+def copy_tree(src: Path, dst: Path) -> None:
+    """Copy the files the digest covers, and nothing else, keeping modes.
+
+    A copy install that carried a `__pycache__`, `node_modules` or a
+    symlink's target would put bytes in the target that no digest vouches
+    for. Symlinks are neither followed nor copied, as in `manifest`.
+    """
+    dst.mkdir(parents=True, exist_ok=True)
+    for path in sorted(src.rglob("*")):
+        if is_included(path, src):
+            target = dst / path.relative_to(src)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, target)
+
+
+def main(argv: list[str]) -> int:
+    """`digest.py copy <src> <dst>`: the shell installer's copy."""
+    if len(argv) != 4 or argv[1] != "copy":
+        print("usage: digest.py copy <src> <dst>", file=sys.stderr)
+        return 2
+    copy_tree(Path(argv[2]), Path(argv[3]))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

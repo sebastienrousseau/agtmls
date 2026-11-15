@@ -149,6 +149,18 @@ class DoctorTests(unittest.TestCase):
                       captured(doctor.check_context, reporter, root / "empty", ".claude", "CLAUDE.md"))
 
 
+    def test_doctor_fails_a_lockfile_it_cannot_trust(self) -> None:
+        doctor = load_script("agtmls-doctor.py")
+        root = Path(tempfile.mkdtemp(prefix="agtmls-ctx-lock-"))
+        self.addCleanup(shutil.rmtree, root, True)
+        lock = root / ".agtmls" / "manifest.json"
+        lock.parent.mkdir()
+        lock.write_text('{"skills": [{"name": "x", "integrity": "s", "path": "../x"}]}', encoding="utf-8")
+        reporter = doctor.Reporter()
+        out = captured(doctor.check_skill_links, reporter, root, root / ".claude" / "skills", "claude", [])
+        self.assertIn("FAIL lockfile refused:", out)
+        self.assertEqual(reporter.failures, 1)
+
 
 class CacheTests(unittest.TestCase):
     """A provider caches a repeated prompt prefix; text that changes every

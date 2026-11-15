@@ -43,7 +43,7 @@ and can be evaded. Knowing which is which is the point of this section.
 | Protection | Kind | What it establishes |
 | :--- | :--- | :--- |
 | `integrity` digest per skill in `index.json` | Boundary | The installed files are byte-for-byte the files this registry published |
-| `install` verifying the source before copying (exit `3`) | Boundary | A tampered registry is refused before anything reaches your repository |
+| `install` verifying the source before copying (exit `3`), and `index.json.sig` when present (exit `5`) | Boundary | A tampered registry, or an index the release key did not sign, is refused before anything reaches your repository |
 | `verify` against `.agtmls/manifest.json` | Boundary | Drift after install — modified, missing or unmanaged files — is reported |
 | Signed commits and tags (`KEYS.asc`) | Boundary | Which maintainer key produced a given revision |
 | `verify --signatures` against the shipped `ALLOWED_SIGNERS` (exit `4` unsigned, `5` bad signature) | Boundary | `index.json` was signed by the `agtmls-release` key, held only in a protected release environment (agtmls-spec chapter 9) |

@@ -238,6 +238,7 @@ OK: 16 skill(s) match the lockfile in /path/to/repo
 | *(clean)* | Every recorded skill is byte-identical to what was installed | `0` |
 | `MODIFIED` | Content changed since install — a local edit, or tampering | `3` |
 | `MISSING` | Recorded in the lockfile but no longer present | `3` |
+| `UNREADABLE-LOCKFILE` | The lockfile is not JSON, not the expected shape, or names a skill `name` or `path` that is not a single directory name (`..`, `/`, `\`, `:`), which could reach outside the skills directory. Nothing is read or removed on its account | `3` |
 | `UNMANAGED` | Present but not installed by AgtMLS. Reported, never deleted | `0` |
 | `UNSIGNED` | `--signatures` was given and `index.json` or the advisory feed has no signature (or there is no `ALLOWED_SIGNERS`) | `4` |
 | `BAD_SIGNATURE` | A signature exists and does not verify: tampered bytes, unknown signer, wrong namespace, or a key outside its window | `5` |
@@ -246,9 +247,9 @@ OK: 16 skill(s) match the lockfile in /path/to/repo
 When several apply, the exit code is the first of `5`, `3`, `6`, `4` (agtmls-spec
 11.4): nothing is concluded from a source that does not verify. Signatures are
 checked with `ssh-keygen -Y verify` against `ALLOWED_SIGNERS`; an advisory feed
-(`advisories.json`) that is not signed is never consulted. The registry is not
-signed yet, so `verify --signatures` reports `UNSIGNED` until releases carry
-`index.json.sig`.
+(`advisories.json`) that is not signed is never consulted. Releases from
+v0.0.10 carry `index.json.sig`; a development checkout does not, so
+`verify --signatures` reports `UNSIGNED` there.
 
 Exit `3` is `INTEGRITY_FAILURE`, distinct from `1` (error) and `2` (usage), so
 a calling script can branch on it.
@@ -273,7 +274,12 @@ the file too if nothing else is in it.
 `install` also verifies the **source** registry against `index.json` before
 copying anything, and refuses with exit `3` if they disagree — checking after
 copying a tampered skill into someone's repository would not be a control.
-Use `--no-verify` to skip it, which is not recommended.
+When `index.json.sig` is present, `install` also checks it against
+`ALLOWED_SIGNERS` and refuses with exit `5` if it does not verify: the digest
+check alone proves the skills match `index.json`, not that `index.json` is the
+publisher's. With no signature (a checkout), or no `ssh-keygen` to check one,
+it warns and installs on the digest check. Use `--no-verify` to skip both,
+which is not recommended.
 
 ### Does the agent actually read the skills?
 
@@ -287,6 +293,10 @@ list, or saying why the agent could not be asked:
   one short request is started.
 - `codex`: renders the prompt Codex would send (`codex debug prompt-input`)
   without calling the model, and reads its skill list.
+
+Both run in the target directory, so the target's own agent settings and
+hooks apply to that session: run `--live` only in a repository whose agent
+configuration you trust. Either probe is stopped after 120 seconds.
 
 `doctor` also checks each agent's user-level skill directories
 (`~/.claude/skills`, `~/.codex/skills`), which no lockfile covers: a link

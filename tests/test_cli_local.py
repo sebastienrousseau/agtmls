@@ -17,6 +17,7 @@ import io
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -24,7 +25,7 @@ from pathlib import Path
 from unittest import mock
 
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
-from .support import load_script, retarget, run_main
+from .support import ROOT, load_script, retarget, run_main
 
 EXIT_INTEGRITY_FAILURE = 3
 
@@ -96,10 +97,12 @@ class InstallLifecycleTests(CliFixture):
         self.calls.append(list(argv))
         agent = argv[2]
         bundles = {argv[i + 1] for i, arg in enumerate(argv) if arg == "--bundle"}
+        listed = {argv[i + 1] for i, arg in enumerate(argv) if arg == "--skill"} if "--listed-only" in argv else None
         skills = Path(cwd) / f".{agent}" / "skills"
         skills.mkdir(parents=True, exist_ok=True)
         for skill in self.index()["skills"]:
-            if skill["bundle"] is None or skill["bundle"] in bundles:
+            general = skill["bundle"] is None and (listed is None or skill["name"] in listed)
+            if general or skill["bundle"] in bundles or skill["name"] in (listed or ()):
                 source = self.fixture / skill["path"]
                 if "--copy" in argv:
                     shutil.copytree(source, skills / skill["name"])
@@ -139,6 +142,16 @@ class InstallLifecycleTests(CliFixture):
         self.assertEqual(self.calls[0].count("noyalib"), 1, self.calls[0])
         self.assertIn("noyalib-config-and-flags", [e["name"] for e in self.lock()["skills"]])
 
+    def test_a_profile_installs_only_its_own_skills(self) -> None:
+        """--profile minimal installed every general skill; export honoured
+        the profile's `skills` list and install ignored it."""
+        code, output = self.install("--profile", "minimal", "--copy")
+        self.assertEqual(code, 0, output)
+        listed = [self.calls[0][i + 1] for i, arg in enumerate(self.calls[0]) if arg == "--skill"]
+        self.assertEqual(listed, ["using-agtmls"])
+        self.assertIn("--listed-only", self.calls[0])
+        self.assertEqual([e["name"] for e in self.lock()["skills"]], ["using-agtmls"])
+
     def test_an_unknown_profile_is_refused_before_anything_runs(self) -> None:
         code, output = self.install("--profile", "no-such-profile")
         self.assertEqual(code, 1)
@@ -161,6 +174,50 @@ class InstallLifecycleTests(CliFixture):
         self.assertIn("on disk  sha256:", output)
         self.assertEqual(self.calls, [], "the installer ran despite the drift")
         self.assertFalse((self.target / ".claude").exists())
+
+    def install_signed(self, outcome, *flags: str) -> tuple[int, str]:
+        """Install with the index signature check answering `outcome`, a
+        status string or an exception to raise."""
+        from _lib import signatures
+
+        def fake(*_args, **_kwargs):
+            if isinstance(outcome, Exception):
+                raise outcome
+            return outcome
+
+        with mock.patch.object(signatures, "verify", fake):
+            return self.install("--copy", *flags)
+
+    def test_a_bad_index_signature_is_refused_before_anything_runs(self) -> None:
+        """The drift check proves the skills match index.json, not that
+        index.json came from the publisher; a signature that fails says it did not."""
+        code, output = self.install_signed("bad_signature")
+        self.assertEqual(code, 5, output)
+        self.assertIn("refusing to install: index.json.sig does not verify", output)
+        self.assertEqual(self.calls, [], "the installer ran despite a bad signature")
+
+    def test_an_unsigned_or_unverifiable_index_installs_with_a_warning(self) -> None:
+        from _lib import signatures
+
+        for outcome, said in (("unsigned", "index.json is not signed"),
+                              (signatures.ToolMissing("no ssh-keygen"), "cannot check index.json.sig")):
+            with self.subTest(outcome=outcome):
+                self.calls.clear()
+                shutil.rmtree(self.target / ".claude", ignore_errors=True)
+                code, output = self.install_signed(outcome)
+                self.assertEqual(code, 0, output)
+                self.assertIn(f"warning: {said}", output)
+                self.assertEqual(len(self.calls), 1)
+
+    def test_a_verified_index_installs_quietly(self) -> None:
+        code, output = self.install_signed("verified")
+        self.assertEqual(code, 0, output)
+        self.assertNotIn("warning:", output)
+
+    def test_no_verify_skips_the_signature_check_too(self) -> None:
+        code, output = self.install_signed("bad_signature", "--no-verify")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(len(self.calls), 1)
 
     def test_a_skill_missing_from_disk_is_drift_too(self) -> None:
         source = self.fixture / "skills" / "systematic-debugging"
@@ -214,6 +271,29 @@ class InstallLifecycleTests(CliFixture):
 
     def verify(self, json_output: bool = False, agent: str = "claude") -> tuple[int, str]:
         return capture(self.cli.verify_install, self.target, agent, json_output)
+
+    def test_verify_refuses_a_lockfile_that_is_not_json(self) -> None:
+        lock = self.target / ".agtmls" / "manifest.json"
+        lock.parent.mkdir(parents=True)
+        lock.write_text("{", encoding="utf-8")
+        code, output = self.verify()
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
+        self.assertIn("UNREADABLE-LOCKFILE", output)
+        self.assertIn("not valid JSON", output)
+
+    def test_an_unsafe_lockfile_is_an_integrity_failure_reported_as_json(self) -> None:
+        """agtmls-spec 6.5: an unreadable lockfile is exit 3, and the
+        conformance runner reads verify's JSON, so the refusal is a problem
+        in that JSON rather than a message on stderr."""
+        lock = self.target / ".agtmls" / "manifest.json"
+        lock.parent.mkdir(parents=True)
+        lock.write_text(json.dumps({"skills": [{"name": "x", "integrity": "sha256:0", "path": "/"}]}),
+                        encoding="utf-8")
+        code, output = self.verify(json_output=True)
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
+        report = json.loads(output)
+        self.assertEqual([p["status"] for p in report["problems"]], ["unreadable-lockfile"])
+        self.assertIn("single directory name", report["problems"][0]["detail"])
 
     def verify_live(self, loaded=None, error=None, json_output: bool = False) -> tuple[int, str]:
         from _lib import liveness
@@ -358,6 +438,45 @@ class InstallLifecycleTests(CliFixture):
         self.assertIn("NO-LOCKFILE", output)
 
 
+class ShellCopyTests(unittest.TestCase):
+    """The real setup-workspace.sh, --copy: only what the digest covers lands."""
+
+    def test_a_copy_install_leaves_undigested_debris_behind(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shcopy-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        planted = registry / "skills" / GENERAL[0] / "__pycache__" / "payload.pyc"
+        planted.parent.mkdir()
+        planted.write_text("not hashed", encoding="utf-8")
+        target = tmp / "target"
+        target.mkdir()
+        proc = subprocess.run(["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude",
+                               "--skills-only", "--copy"], cwd=target, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        installed = target / ".claude" / "skills" / GENERAL[0]
+        self.assertTrue((installed / "SKILL.md").is_file(), proc.stdout)
+        self.assertFalse((installed / "__pycache__").exists(), "undigested debris was installed")
+
+
+class ShellProfileTests(unittest.TestCase):
+    """The real setup-workspace.sh with --skill: only the listed general skills."""
+
+    def test_a_skill_list_limits_what_the_shell_installer_links(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shprof-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        target = tmp / "target"
+        target.mkdir()
+        proc = subprocess.run(["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude",
+                               "--skills-only", "--listed-only", "--skill", "using-agtmls", "--bundle", "noyalib"],
+                              cwd=target, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        installed = sorted(p.name for p in (target / ".claude" / "skills").iterdir())
+        self.assertEqual(installed, ["noyalib-config-and-flags", "using-agtmls"], proc.stdout)
+
+
 class UninstallTests(CliFixture):
     """uninstall may only remove what this registry put there."""
 
@@ -436,6 +555,20 @@ class UninstallTests(CliFixture):
         self.assertIn(f"{name}: modified since install; left in place", output)
         self.assertIn("removed 0 AgtMLS-managed item(s)", output)
         self.assertTrue(lock.exists())
+
+    def test_a_lockfile_path_outside_the_skills_directory_is_refused(self) -> None:
+        """A cloned repo writes its own `.agtmls/manifest.json`. An entry whose
+        `path` climbs out of the skills directory, carrying the digest of the
+        directory it names, used to have that directory removed."""
+        victim = self.target / "victim"
+        shutil.copytree(self.fixture / "skills" / GENERAL[0], victim)
+        payload = self.cli.lockfile.build(self.target, self.fixture, [GENERAL[0]], "copy", "0.0.0", "claude")
+        payload["skills"][0]["path"] = "../../victim"
+        self.cli.lockfile.write(self.target, payload)
+        code, output = self.uninstall()
+        self.assertTrue(victim.is_dir(), "uninstall removed a directory outside the skills directory")
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
+        self.assertIn("single directory name", output)
 
     def test_a_recorded_copy_already_gone_is_skipped_and_the_lockfile_dir_is_shared(self) -> None:
         """Nothing to remove for a skill the user deleted by hand; and .agtmls

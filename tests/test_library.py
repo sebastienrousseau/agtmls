@@ -96,6 +96,69 @@ class DigestTests(unittest.TestCase):
         self.assertEqual(digest.skill_digest(self.tmp), before)
 
 
+class CopyTreeTests(unittest.TestCase):
+    """A copy install carries exactly the files the digest covers: anything
+    the digest leaves out would travel into the target unhashed."""
+
+    def setUp(self) -> None:
+        self.tmp = Path(tempfile.mkdtemp(prefix="agtmls-copy-"))
+        self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, ignore_errors=True))
+        self.src = self.tmp / "skill"
+        for relative in ("SKILL.md", "scripts/run.sh", "__pycache__/x.cpython.pyc",
+                         "lib/node_modules/p/index.js", "notes.swp", ".DS_Store"):
+            path = self.src / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(relative, encoding="utf-8")
+        (self.src / "scripts" / "run.sh").chmod(0o755)
+        elsewhere = self.tmp / "elsewhere"
+        elsewhere.mkdir()
+        (elsewhere / "secret").write_text("x", encoding="utf-8")
+        (self.src / "outside").symlink_to(elsewhere)
+
+    def test_only_digested_files_are_copied_with_their_mode(self) -> None:
+        dst = self.tmp / "copy"
+        digest.copy_tree(self.src, dst)
+        copied = sorted(p.relative_to(dst).as_posix() for p in dst.rglob("*") if p.is_file())
+        self.assertEqual(copied, ["SKILL.md", "scripts/run.sh"])
+        self.assertFalse((dst / "outside").exists(), "a symlink was followed or copied")
+        self.assertTrue(os.access(dst / "scripts" / "run.sh", os.X_OK))
+        self.assertEqual(digest.skill_digest(dst), digest.skill_digest(self.src))
+
+    def test_the_command_line_copies_and_rejects_bad_usage(self) -> None:
+        dst = self.tmp / "cli-copy"
+        self.assertEqual(digest.main(["digest.py", "copy", str(self.src), str(dst)]), 0)
+        self.assertTrue((dst / "SKILL.md").is_file())
+        self.assertFalse((dst / "__pycache__").exists())
+        self.assertEqual(digest.main(["digest.py", "copy", str(self.src)]), 2)
+
+
+class SelectionTests(unittest.TestCase):
+    """One rule for which skills install and export carry."""
+
+    def test_without_a_profile_general_skills_and_named_bundles_are_wanted(self) -> None:
+        from _lib import selection
+
+        self.assertTrue(selection.wanted("g", None, None, set()))
+        self.assertFalse(selection.wanted("p", "pack", None, set()))
+        self.assertTrue(selection.wanted("p", "pack", None, {"pack"}))
+
+    def test_a_profile_list_limits_the_general_skills(self) -> None:
+        from _lib import selection
+
+        self.assertTrue(selection.wanted("g", None, {"g"}, set()))
+        self.assertFalse(selection.wanted("other", None, {"g"}, set()))
+        self.assertTrue(selection.wanted("p", "pack", set(), {"pack"}))
+
+    def test_a_profile_resolves_to_its_skills_plus_bundles(self) -> None:
+        from _lib import selection
+
+        skills, bundles = selection.resolve(ROOT, "minimal", ["extra"])
+        self.assertEqual((skills, bundles), ({"using-agtmls"}, {"extra"}))
+        self.assertEqual(selection.resolve(ROOT, None, ["b"]), (None, {"b"}))
+        with self.assertRaisesRegex(selection.UnknownProfile, "nope"):
+            selection.resolve(ROOT, "nope", [])
+
+
 class LockfileTests(unittest.TestCase):
     """What turns a digest from a number in a file into a control."""
 
@@ -148,6 +211,41 @@ class LockfileTests(unittest.TestCase):
         payload = self.lock()
         self.assertEqual(lockfile.read(self.target), payload)
         self.assertTrue(lockfile.lockfile_path(self.target).exists())
+
+    def write_raw(self, text: str) -> None:
+        path = lockfile.lockfile_path(self.target)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+
+    def test_a_lockfile_that_is_not_json_is_refused_by_name(self) -> None:
+        self.write_raw("{not json")
+        with self.assertRaisesRegex(lockfile.LockfileError, "not valid JSON"):
+            lockfile.read(self.target)
+
+    def test_a_lockfile_of_the_wrong_shape_is_refused(self) -> None:
+        for text in ('[]', '{"skills": {}}', '{"skills": [{"name": "alpha"}]}',
+                     '{"skills": [{"name": 3, "integrity": "x"}]}'):
+            with self.subTest(text=text):
+                self.write_raw(text)
+                with self.assertRaises(lockfile.LockfileError):
+                    lockfile.read(self.target)
+
+    def test_an_entry_that_points_outside_the_skills_directory_is_refused(self) -> None:
+        """The lockfile sits in the target repo, so whoever wrote the repo
+        wrote it: a `path` of `../x` or `/x` must not reach uninstall's rmtree."""
+        for field, value in (("path", "../outside"), ("path", "/etc"), ("name", "../x"),
+                             ("path", "a/b"), ("path", ".."), ("path", "a\\b"), ("path", ""),
+                             ("path", "C:x"), ("path", "a\x00b")):
+            with self.subTest(field=field, value=value):
+                entry = {"name": "alpha", "integrity": "sha256:0", field: value}
+                self.write_raw(json.dumps({"skills": [entry]}))
+                with self.assertRaisesRegex(lockfile.LockfileError, "single directory name"):
+                    lockfile.read(self.target)
+
+    def test_entry_path_stays_inside_the_skills_directory(self) -> None:
+        self.assertEqual(lockfile.entry_path(self.skills_dir, {"name": "alpha"}), self.skills_dir / "alpha")
+        with self.assertRaises(lockfile.LockfileError):
+            lockfile.entry_path(self.skills_dir, {"name": "alpha", "path": "../alpha"})
 
     def test_reading_where_there_is_none_returns_none(self) -> None:
         self.assertIsNone(lockfile.read(self.target))

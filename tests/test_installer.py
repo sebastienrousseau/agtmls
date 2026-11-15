@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import io
 import json
 import shutil
@@ -176,6 +177,24 @@ class InstallerTests(unittest.TestCase):
             self.assertTrue(dst_dir.is_dir())
             self.assertFalse(dst_dir.is_symlink())
 
+    def test_a_copied_directory_carries_only_digested_files(self) -> None:
+        src = self.tmp / "skill"
+        (src / "__pycache__").mkdir(parents=True)
+        (src / "SKILL.md").write_text("# s\n", encoding="utf-8")
+        (src / "__pycache__" / "x.pyc").write_text("debris", encoding="utf-8")
+        outside = self.tmp / "outside"
+        outside.mkdir()
+        (outside / "secret").write_text("x", encoding="utf-8")
+        (src / "elsewhere").symlink_to(outside)
+        for copy, failing in ((True, False), (False, True)):
+            dst = self.target / f"skill-{copy}"
+            with mock.patch.object(Path, "symlink_to", side_effect=OSError("no")) if failing \
+                    else contextlib.nullcontext():
+                installer.link_or_copy(src, dst, copy=copy, dry_run=False)
+            self.assertTrue((dst / "SKILL.md").is_file())
+            self.assertFalse((dst / "__pycache__").exists(), "undigested debris was copied")
+            self.assertFalse((dst / "elsewhere").exists(), "a symlink was followed")
+
     def test_install_workspace_lifecycle(self) -> None:
         # Full install
         rc = installer.install_workspace(
@@ -329,6 +348,21 @@ class InstallerTests(unittest.TestCase):
         dst_file.write_text("old file", encoding="utf-8")
         installer.link_or_copy(src, dst_file, copy=True, dry_run=False)
         self.assertEqual(dst_file.read_text(encoding="utf-8"), "data")
+
+    def test_a_skill_list_limits_the_general_skills(self) -> None:
+        """install --profile minimal installed every general skill: the
+        profile's `skills` list was never passed to the installer."""
+        skills_dir = self.root / "skills"
+        for name in ("kept", "dropped"):
+            (skills_dir / name).mkdir(parents=True, exist_ok=True)
+            (skills_dir / name / "SKILL.md").write_text(f"# {name}\n", encoding="utf-8")
+        target_skills = self.target / ".claude" / "skills"
+        target_skills.mkdir(parents=True)
+        installer.install_skills(self.root, target_skills, copy=True, dry_run=False, bundles=set(),
+                                 skills={"kept"})
+        self.assertEqual(sorted(p.name for p in target_skills.iterdir()), ["kept"])
+        args = installer.build_parser().parse_args(["rust", "claude", "--listed-only", "--skill", "kept"])
+        self.assertEqual((args.listed_only, args.skill), (True, ["kept"]))
 
     def test_skill_bundle_filtering_and_bad_metadata(self) -> None:
         skills_dir = self.root / "skills"

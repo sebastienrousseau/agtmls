@@ -15,7 +15,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from _lib import aider_conf, skill_roots
+from _lib import aider_conf, digest, selection, skill_roots
 
 AGENT_CONFIGS: dict[str, tuple[str, str]] = {
     "claude": (".claude", "CLAUDE.md"),
@@ -139,6 +139,12 @@ def update_git_exclude(
         exclude.write_text("\n".join(combined) + "\n", encoding="utf-8")
 
 
+def _copy(src: Path, dst: Path) -> None:
+    """A directory carries only what its digest covers (no debris, no
+    symlink targets); a file is copied as it is."""
+    digest.copy_tree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+
+
 def link_or_copy(src: Path, dst: Path, copy: bool, dry_run: bool) -> None:
     """Link source to destination with automatic copy fallback on Windows/privilege errors."""
     if dry_run:
@@ -150,12 +156,12 @@ def link_or_copy(src: Path, dst: Path, copy: bool, dry_run: bool) -> None:
     elif dst.is_dir():
         shutil.rmtree(dst)
     if copy:
-        shutil.copytree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+        _copy(src, dst)
     else:
         try:
             dst.symlink_to(src, target_is_directory=src.is_dir())
         except OSError:
-            shutil.copytree(src, dst) if src.is_dir() else shutil.copy2(src, dst)
+            _copy(src, dst)
 
 
 def install_skills(
@@ -164,8 +170,10 @@ def install_skills(
     copy: bool,
     dry_run: bool,
     bundles: set[str],
+    skills: set[str] | None = None,
 ) -> int:
-    """Install general and requested bundle skills into skills directory."""
+    """Install the selected skills (`selection.wanted`) into skills directory:
+    general ones, or only those in `skills` when given, plus bundled ones."""
     linked = 0
     for skill_path in skill_roots.skill_dirs(root):
         meta_file = skill_path / "metadata.json"
@@ -175,7 +183,7 @@ def install_skills(
                 bundle = json.loads(meta_file.read_text(encoding="utf-8")).get("bundle")
             except (json.JSONDecodeError, OSError):
                 pass
-        if bundle is None or bundle in bundles:
+        if selection.wanted(skill_path.name, bundle, skills, bundles):
             link_or_copy(skill_path, skills_dir / skill_path.name, copy, dry_run)
             linked += 1
     return linked
@@ -305,8 +313,10 @@ def install_workspace(
     force: bool = False,
     dry_run: bool = False,
     bundles: list[str] | None = None,
+    skills: list[str] | None = None,
 ) -> int:
-    """Execute complete workspace setup for specified language and agent."""
+    """Execute complete workspace setup for specified language and agent.
+    `skills`, when not None, limits the general skills to that list."""
     try:
         cli_dir, prompt_file = agent_config(agent)
     except ValueError as exc:
@@ -335,7 +345,8 @@ def install_workspace(
     update_git_exclude(target, cli_dir, prompt_file, agent, skills_only, dry_run)
     bundle_set = set(bundles or [])
 
-    linked_skills = install_skills(root, skills_dir, copy, dry_run, bundle_set)
+    listed = set(skills) if skills is not None else None
+    linked_skills = install_skills(root, skills_dir, copy, dry_run, bundle_set, listed)
     linked_agents = install_agents(root, agents_dir, copy, dry_run)
     install_commands(root, commands_dir, copy, dry_run)
 
@@ -383,6 +394,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--bundle", action="append", default=[], help="Include project skill bundle"
     )
+    parser.add_argument("--listed-only", action="store_true",
+                        help="Install only the general skills named by --skill")
+    parser.add_argument("--skill", action="append", default=[], help="A general skill to install")
     return parser
 
 
@@ -400,4 +414,5 @@ def run_argv(argv: list[str], cwd: Path, root: Path) -> int:
         force=args.force,
         dry_run=args.dry_run,
         bundles=args.bundle,
+        skills=args.skill if args.listed_only else None,
     )

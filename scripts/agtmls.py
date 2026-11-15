@@ -50,6 +50,7 @@ remove_prompt_file = uninstall_steps.remove_prompt_file
 settle_lockfile = uninstall_steps.settle_lockfile
 
 
+@lockfile.refusing
 def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
     target = target.resolve()
     dot, prompt = agent_paths(agent)
@@ -273,6 +274,7 @@ def live_check(target: Path, agent: str) -> dict:
             "shortened": [list(entry) for entry in cut]}
 
 
+@lockfile.refusing
 def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False,
                    live: bool = False) -> int:
     """Check an installed tree against its lockfile, the index signature and
@@ -430,25 +432,29 @@ def import_skill_command(args) -> int:
     return run(cmd)
 
 
-def install_bundles(args) -> list[str] | None:
-    """The bundles to install: the named ones plus a profile's, or None for
-    an unknown profile."""
-    bundles = list(args.bundle)
-    if args.profile:
-        profile = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"].get(args.profile)
-        if profile is None:
-            print(f"unknown profile: {args.profile}", file=sys.stderr)
-            return None
-        bundles.extend(profile.get("bundles", []))
-    return sorted(set(bundles))
+def install_selection(args, cmd: list[str]) -> bool:
+    """Add the profile's skill list and the bundles to the installer's argv;
+    False for an unknown profile."""
+    from _lib import selection
+
+    try:
+        skills, bundles = selection.resolve(ROOT, args.profile, list(args.bundle))
+    except selection.UnknownProfile:
+        print(f"unknown profile: {args.profile}", file=sys.stderr)
+        return False
+    if skills is not None:
+        cmd.append("--listed-only")
+        cli_args.repeated(cmd, "--skill", sorted(skills))
+    cli_args.repeated(cmd, "--bundle", sorted(bundles))
+    return True
 
 
 def refuse_drift() -> int | None:
     """Exit 3 before copying anything when the registry no longer matches
-    index.json; None when it does."""
+    index.json, 5 when index.json.sig is there and fails; None otherwise."""
     drift = verify_registry()
     if not drift:
-        return None
+        return verify_report.index_signature_refusal(ROOT)
     print(f"refusing to install: {len(drift)} skill(s) do not match index.json", file=sys.stderr)
     for name, expected, actual in drift:
         print(f"  {name}\n    index    {expected}\n    on disk  {actual}", file=sys.stderr)
@@ -460,6 +466,7 @@ def refuse_drift() -> int | None:
     return lockfile.EXIT_INTEGRITY_FAILURE
 
 
+@lockfile.refusing
 def record_install(args, target: Path) -> int:
     """Record what landed, so `agtmls verify` has something to check against."""
     installed = installed_skill_names(target, args.agent)
@@ -479,10 +486,8 @@ def install_command(args) -> int:
     for flag, on in (("--skills-only", args.skills_only), ("--copy", args.copy),
                      ("--force", args.force), ("--dry-run", args.dry_run)):
         cli_args.switch(cmd, flag, on)
-    bundles = install_bundles(args)
-    if bundles is None:
+    if not install_selection(args, cmd):
         return 1
-    cli_args.repeated(cmd, "--bundle", bundles)
     target = args.target.resolve()
     refused = None if args.no_verify or args.dry_run else refuse_drift()
     if refused is not None:
@@ -505,47 +510,35 @@ def optimize_command(args) -> int:
     if not target.is_file():
         print(f"FAIL: {target} not found")
         return 1
-    text = target.read_text(encoding="utf-8")
-    pruned = context_optimizer.prune_boilerplate(text)
-    clean = context_optimizer.enforce_cache_friendly_prefix(pruned)
-    tokens_before = context_optimizer.estimate_tokens(text)
-    tokens_after = context_optimizer.estimate_tokens(clean)
-    density = context_optimizer.instruction_density(clean)
-    if args.check:
-        if clean != text:
-            print(f"FAIL: {target.name} can be optimized ({tokens_before} -> {tokens_after} tokens)")
-            return 1
-        print(f"OK: {target.name} is optimal ({tokens_after} tokens, {density}% density)")
-        return 0
-    if args.write:
-        target.write_text(clean, encoding="utf-8")
-        print(f"OK: optimized {target.name}: {tokens_before} -> {tokens_after} tokens")
-    else:
-        print(clean)
-    return 0
+    mode = "check" if args.check else "write" if args.write else "report"
+    code, lines, rewrite = context_optimizer.optimize(target.name, target.read_text(encoding="utf-8"), mode)
+    if rewrite is not None:
+        target.write_text(rewrite, encoding="utf-8")
+    print("\n".join(lines))
+    return code
 
 
 def pack_command(args) -> int:
-    skills_dir = ROOT / "skills"
-    requested = set(args.skills) if args.skills else None
-    items: list[tuple[str, str]] = []
-    agents_md = ROOT / "AGENTS.md"
-    if agents_md.exists():
-        items.append(("AGENTS.md", agents_md.read_text(encoding="utf-8")))
-    if skills_dir.exists():
-        for sdir in sorted(skills_dir.iterdir()):
-            if requested and sdir.name not in requested:
-                continue
-            sm = sdir / "SKILL.md"
-            if sm.is_file():
-                items.append((f"skills/{sdir.name}/SKILL.md", sm.read_text(encoding="utf-8")))
-    xml = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
+    from _lib import skill_roots
+
+    files = {path.parent.name: path for path in skill_roots.skill_files(ROOT)}
+    unknown = sorted(set(args.skills) - files.keys())
+    if unknown:
+        print(f"FAIL: unknown skill(s): {', '.join(unknown)}", file=sys.stderr)
+        return 1
+    chosen = [files[name] for name in sorted(args.skills or files)]
+    paths = ([ROOT / "AGENTS.md"] if (ROOT / "AGENTS.md").exists() else []) + chosen
+    items = [(path.relative_to(ROOT).as_posix(), path.read_text(encoding="utf-8")) for path in paths]
+    xml, omitted = context_optimizer.pack_repomix_xml(items, max_tokens=args.max_tokens)
     if args.output:
         args.output.write_text(xml, encoding="utf-8")
         print(f"OK: wrote context pack to {args.output}")
     else:
         print(xml)
-    return 0
+    if omitted:
+        print(f"FAIL: {len(omitted)} file(s) left out over the {args.max_tokens}-token budget: "
+              f"{', '.join(omitted)}", file=sys.stderr)
+    return 1 if omitted else 0
 
 
 HANDLERS = {

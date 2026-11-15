@@ -43,3 +43,27 @@ updates:
     labels:
       - dependencies
       - python
+
+  # ── CI tool requirements (pip, hash-pinned) ──────────────────────
+  # The .txt files are what CI installs with --require-hashes; compile.sh
+  # writes them from the .in files. Dependabot bumps a pin and its hashes in
+  # place; CI then installs the result, so a bump whose dependencies changed
+  # fails there rather than shipping. One grouped PR a week, not one per pin.
+  - package-ecosystem: pip
+    directory: /.github/requirements
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(deps)"
+      include: scope
+    labels:
+      - dependencies
+      - python
+    groups:
+      ci-tooling:
+        patterns:
+          - "*"

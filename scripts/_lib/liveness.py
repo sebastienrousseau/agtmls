@@ -24,6 +24,7 @@ import os
 import re
 import shutil
 import subprocess
+import threading
 from pathlib import Path
 from typing import NamedTuple
 
@@ -69,10 +70,14 @@ def _claude_init(cwd: Path) -> dict[str, str | None]:
     """Skills from Claude Code's init event.
 
     The event arrives before the model is called; the process is stopped as
-    soon as it has been read, so at most one short request is started.
+    soon as it has been read, so at most one short request is started. It runs
+    in the target, whose own settings and hooks apply; one that never prints
+    the event is stopped after PROBE_TIMEOUT seconds rather than waited on.
     """
     argv = ["claude", "-p", "Reply OK.", "--output-format", "stream-json", "--verbose", "--max-turns", "1"]
     with subprocess.Popen(argv, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True) as proc:
+        timer = threading.Timer(PROBE_TIMEOUT, proc.kill)
+        timer.start()
         try:
             for line in proc.stdout:  # type: ignore[union-attr]  # stdout is PIPE
                 try:
@@ -83,8 +88,9 @@ def _claude_init(cwd: Path) -> dict[str, str | None]:
                     # The init event names skills but does not show their descriptions.
                     return {(s if isinstance(s, str) else str(s.get("name"))): None for s in event.get("skills", [])}
         finally:
+            timer.cancel()
             proc.kill()
-    raise ProbeError("claude printed no init event")
+    raise ProbeError(f"claude printed no init event within {PROBE_TIMEOUT} s")
 
 
 _CODEX_ENTRY = re.compile(r"^- (\S+?): (.*?) ?\(file: r\d+/([^/]+)/SKILL\.md\)", re.MULTILINE)
