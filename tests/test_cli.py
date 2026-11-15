@@ -464,21 +464,37 @@ class ContextOptimizerCliTests(unittest.TestCase):
         with mock.patch("sys.argv", ["agtmls", "optimize", str(missing)]):
             self.assertEqual(self.module.main(), 1)
 
-    def test_optimize_dirty_check_and_write(self) -> None:
+    def optimize(self, *argv: str) -> tuple[int, str]:
+        out = io.StringIO()
+        with mock.patch("sys.argv", ["agtmls", "optimize", *argv]), contextlib.redirect_stdout(out):
+            code = self.module.main()
+        return code, out.getvalue()
+
+    def test_optimize_reports_and_write_changes_only_blank_lines(self) -> None:
         target = Path(self.tmp.name) / "AGENTS.md"
-        target.write_text("Please make sure to follow instructions.\n\n\n\nTask list.\n", encoding="utf-8")
-        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--check"]):
-            self.assertEqual(self.module.main(), 1)
+        original = "Please make sure to follow instructions.\n\n\n\nTask list.\n"
+        target.write_text(original, encoding="utf-8")
+        code, out = self.optimize(str(target), "--check")
+        self.assertEqual(code, 1)
+        self.assertIn("1: filler phrase 'Please make sure to '", out)
 
-        with mock.patch("sys.argv", ["agtmls", "optimize", str(target)]):
-            self.assertEqual(self.module.main(), 0)
+        code, out = self.optimize(str(target))
+        self.assertEqual(code, 0)
+        self.assertIn("1: filler phrase", out)
+        self.assertEqual(target.read_text(encoding="utf-8"), original, "a report wrote the file")
 
-        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--write"]):
-            self.assertEqual(self.module.main(), 0)
-        self.assertNotIn("Please make sure to", target.read_text(encoding="utf-8"))
+        code, out = self.optimize(str(target), "--write")
+        self.assertEqual(code, 0)
+        self.assertEqual(target.read_text(encoding="utf-8"),
+                         "Please make sure to follow instructions.\n\nTask list.\n")
+        self.assertIn("left for you to edit", out)
 
-        with mock.patch("sys.argv", ["agtmls", "optimize", str(target), "--check"]):
-            self.assertEqual(self.module.main(), 0)
+        target.write_text("- rule\n", encoding="utf-8")
+        code, out = self.optimize(str(target), "--check")
+        self.assertEqual(code, 0, out)
+        code, out = self.optimize(str(target), "--write")
+        self.assertEqual(code, 0, out)
+        self.assertIn("nothing to rewrite", out)
 
     def test_pack_subcommand_with_filter_and_output(self) -> None:
         out_file = Path(self.tmp.name) / "packed.xml"

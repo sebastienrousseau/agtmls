@@ -12,31 +12,34 @@ from xml.etree import ElementTree
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from _lib.context_optimizer import (
-    enforce_cache_friendly_prefix,
+    collapse_blank_lines,
     estimate_tokens,
+    findings,
     instruction_density,
     pack_repomix_xml,
-    prune_boilerplate,
 )
 
 
 class TestContextOptimizer(unittest.TestCase):
-    def test_prune_boilerplate(self) -> None:
-        raw = (
-            "Please make sure to check the code.\n\n\n\n"
-            "It is important to run tests.\n"
-            "Always remember to sign commits.\n"
-            "As an AI coding assistant, I write clean code.\n"
-            "In order to pass, run the gate."
-        )
-        pruned = prune_boilerplate(raw)
-        self.assertNotIn("Please make sure to", pruned)
-        self.assertNotIn("It is important to", pruned)
-        self.assertNotIn("Always remember to", pruned)
-        self.assertNotIn("As an AI coding assistant,", pruned)
-        self.assertNotIn("In order to", pruned)
-        self.assertNotIn("\n\n\n", pruned)
-        self.assertEqual(prune_boilerplate("Please make sure to\n"), "\n")
+    def test_findings_name_filler_and_volatile_lines_without_changing_them(self) -> None:
+        """optimize --write deleted "in order to" and every timestamped line,
+        which can drop an instruction ("never edit by hand") with the date."""
+        text = ("# Rules\n"
+                "In order to pass, run the gate.\n"
+                "Generated 2026-10-12T22:00:00Z; never edit by hand.\n"
+                "As an AI coding assistant, sign commits.\n")
+        self.assertEqual(findings(text), [
+            "2: filler phrase 'In order to '",
+            "3: timestamp in the first 50 lines breaks the cached prompt prefix",
+            "4: filler phrase 'As an AI coding assistant, '",
+        ])
+        long_lines = [f"Line {i}" for i in range(55)]
+        long_lines[52] = "Log at 2026-10-12T22:00:00Z"
+        self.assertEqual(findings("\n".join(long_lines)), [])
+
+    def test_only_blank_line_runs_are_rewritten(self) -> None:
+        self.assertEqual(collapse_blank_lines("a\n\n\n\nb\n"), "a\n\nb\n")
+        self.assertEqual(collapse_blank_lines("In order to x\n"), "In order to x\n")
 
     def test_estimate_tokens(self) -> None:
         self.assertEqual(estimate_tokens(""), 0)
@@ -61,19 +64,6 @@ class TestContextOptimizer(unittest.TestCase):
         )
         density = instruction_density(sample)
         self.assertGreater(density, 0.0)
-
-    def test_enforce_cache_friendly_prefix(self) -> None:
-        lines = ["# Invariants", "Generated at 2026-10-12T22:00:00Z", "Rule A"]
-        text = "\n".join(lines)
-        res = enforce_cache_friendly_prefix(text)
-        self.assertNotIn("2026-10-12T22:00:00", res)
-        self.assertIn("Rule A", res)
-
-        # Timestamps beyond line 50 should be preserved
-        long_lines = [f"Line {i}" for i in range(55)]
-        long_lines[52] = "Log at 2026-10-12T22:00:00Z"
-        res_long = enforce_cache_friendly_prefix("\n".join(long_lines))
-        self.assertIn("2026-10-12T22:00:00Z", res_long)
 
     def test_pack_repomix_xml(self) -> None:
         items = [

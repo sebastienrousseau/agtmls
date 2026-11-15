@@ -30,6 +30,16 @@ All notable changes to AgtMLS are recorded here.
   file planted in a registry skill landed in the target without being hashed,
   and the Windows installer followed symlinks into whatever they pointed at.
 
+### Changed
+
+- `optimize` reports and no longer rewrites prose. It printed a rewritten
+  file and `--write` deleted filler phrases ("in order to", "please make sure
+  to") and every line in the first 50 holding a timestamp, which could drop or
+  change an instruction along with the date. It now lists each finding as
+  `<file>:<line>: <what>`; `--check` fails on any finding or on runs of blank
+  lines, and `--write` only collapses blank-line runs. The context-density
+  check names the line of a timestamp it finds.
+
 ### Fixed
 
 - Every token estimate is the same one: characters / 4, rounded up

@@ -508,24 +508,12 @@ def optimize_command(args) -> int:
     if not target.is_file():
         print(f"FAIL: {target} not found")
         return 1
-    text = target.read_text(encoding="utf-8")
-    pruned = context_optimizer.prune_boilerplate(text)
-    clean = context_optimizer.enforce_cache_friendly_prefix(pruned)
-    tokens_before = context_optimizer.estimate_tokens(text)
-    tokens_after = context_optimizer.estimate_tokens(clean)
-    density = context_optimizer.instruction_density(clean)
-    if args.check:
-        if clean != text:
-            print(f"FAIL: {target.name} can be optimized ({tokens_before} -> {tokens_after} tokens)")
-            return 1
-        print(f"OK: {target.name} is optimal ({tokens_after} tokens, {density}% density)")
-        return 0
-    if args.write:
-        target.write_text(clean, encoding="utf-8")
-        print(f"OK: optimized {target.name}: {tokens_before} -> {tokens_after} tokens")
-    else:
-        print(clean)
-    return 0
+    mode = "check" if args.check else "write" if args.write else "report"
+    code, lines, rewrite = context_optimizer.optimize(target.name, target.read_text(encoding="utf-8"), mode)
+    if rewrite is not None:
+        target.write_text(rewrite, encoding="utf-8")
+    print("\n".join(lines))
+    return code
 
 
 def pack_command(args) -> int:

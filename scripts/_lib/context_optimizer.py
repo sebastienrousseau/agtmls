@@ -2,9 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Agent context and markdown optimizer for AgtMLS.
 
-Prunes conversational noise, measures instruction density, enforces static
-cache-friendly prefixes, and formats Repomix-compatible context packs
-without third-party dependencies.
+Finds conversational filler and volatile timestamps in always-loaded
+instructions, measures instruction density, and formats Repomix-compatible
+context packs, without third-party dependencies.
+
+It reports and never rewrites prose: deleting "in order to" or a whole
+timestamped line can drop or change an instruction. The one rewrite is
+collapsing runs of blank lines, which carries no meaning.
 """
 
 from __future__ import annotations
@@ -15,7 +19,7 @@ from xml.sax.saxutils import escape, quoteattr
 
 from _lib.context_cost import approx_tokens
 
-# Conversational boilerplate patterns to prune
+# Conversational filler worth a second look; reported, never removed.
 PADDING_PATTERNS = (
     re.compile(r"(?i)\bplease\s+(?:make\s+sure\s+to|ensure\s+that\s+you|note\s+that)\b\s*"),
     re.compile(r"(?i)\bit\s+is\s+(?:very\s+)?important\s+to\b\s*"),
@@ -28,15 +32,40 @@ MULTI_NEWLINES = re.compile(r"\n{3,}")
 TIMESTAMP_PATTERN = re.compile(r"\b202[4-9]-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
 
 
-def prune_boilerplate(markdown_text: str) -> str:
-    """Strip conversational filler while preserving technical rules."""
-    text = markdown_text
-    for pat in PADDING_PATTERNS:
-        text = pat.sub("", text)
-    res = MULTI_NEWLINES.sub("\n\n", text)
-    if markdown_text.endswith("\n") and not res.endswith("\n"):
-        res += "\n"
-    return res
+def collapse_blank_lines(markdown_text: str) -> str:
+    """Runs of blank lines collapsed to one: the only rewrite optimize makes."""
+    return MULTI_NEWLINES.sub("\n\n", markdown_text)
+
+
+def findings(markdown_text: str) -> list[str]:
+    """`<line>: <what>` for each filler phrase, and each timestamp in the
+    first 50 lines (it changes every build, so the provider's prompt cache
+    can never reuse the prefix after it). Sorted by line."""
+    found: list[tuple[int, str]] = []
+    for number, line in enumerate(markdown_text.splitlines(), start=1):
+        found += [(number, f"filler phrase {m.group()!r}") for pat in PADDING_PATTERNS for m in pat.finditer(line)]
+        if number <= 50 and TIMESTAMP_PATTERN.search(line):
+            found.append((number, "timestamp in the first 50 lines breaks the cached prompt prefix"))
+    return [f"{number}: {what}" for number, what in sorted(found)]
+
+
+def optimize(name: str, text: str, mode: str) -> tuple[int, list[str], str | None]:
+    """What `optimize` says and does for a file: (exit code, lines to print,
+    new text to write or None). `mode` is report, check or write; only write
+    rewrites, and only runs of blank lines, since rewriting prose can change
+    what an instruction says."""
+    notes = findings(text)
+    clean = collapse_blank_lines(text)
+    lines = [f"{name}:{note}" for note in notes]
+    tail = f"; {len(notes)} finding(s) left for you to edit" if notes else ""
+    if mode == "check":
+        ok = not notes and clean == text
+        return (0 if ok else 1), [*lines, f"{'OK' if ok else 'FAIL'}: {name}{tail}"], None
+    if mode == "write":
+        done = "collapsed blank lines" if clean != text else "nothing to rewrite"
+        return 0, [*lines, f"OK: {name}: {done}{tail}"], (clean if clean != text else None)
+    summary = f"{estimate_tokens(text)} tokens, {instruction_density(text)}% density"
+    return 0, [*lines, f"OK: {name}: {summary}{tail}"], None
 
 
 def estimate_tokens(text: str) -> int:
@@ -52,21 +81,6 @@ def instruction_density(markdown_text: str) -> float:
         return 0.0
     directives = len(re.findall(r"^(?:[-*]|\d+\.|\s*\|)\s+\S+", markdown_text, re.MULTILINE))
     return round((directives * 100) / tokens, 2)
-
-
-def enforce_cache_friendly_prefix(markdown_text: str) -> str:
-    """Ensure no volatile ISO timestamps exist in the top 50 lines."""
-    lines = markdown_text.splitlines()
-    prefix_lines = []
-    for line in lines[:50]:
-        if TIMESTAMP_PATTERN.search(line):
-            continue
-        prefix_lines.append(line)
-    prefix_lines.extend(lines[50:])
-    res = "\n".join(prefix_lines)
-    if markdown_text.endswith("\n") and not res.endswith("\n"):
-        res += "\n"
-    return res
 
 
 def pack_repomix_xml(

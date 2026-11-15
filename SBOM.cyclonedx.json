@@ -2470,7 +2470,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a265ff617abf28863e5f76aee1b50f1fac4e157d09c2611651b331b08b6837b9"
+          "content": "204e4a0ab08d2ba7173902e5662b9bcd0f0cd8c9ab74451a212228a14a585e0e"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -2503,7 +2503,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9cfc50653ac7356df34eef0fb0da25b68363f9e97c053583472c93b265cd415b"
+          "content": "bf0e6a3807b40a6cecb56df74e752f070aaaca5ccf01938d0c4420a21ee28590"
         }
       ],
       "name": "scripts/_lib/context_optimizer.py",
@@ -2833,7 +2833,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ebe3fd3342292c290f0bca625c8ca399209b1b31b1a77f8e8f7fc966c3549c4c"
+          "content": "8a47d663ccc46609f391db9375402223abdcdd7a86cc2ddb6463b475429fb805"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -3603,7 +3603,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a41fedb4585aa644a25815655a507638e63c29b11da4e11a0cea83da739a2c3f"
+          "content": "8250f8837a37d645ee9854ba5627894ff91271a6e79e322615dfaf1da49e9f96"
         }
       ],
       "name": "scripts/validate-context-density.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:03:17Z",
+    "timestamp": "2026-11-15T14:12:15Z",
     "tools": {
       "components": [
         {

@@ -37,7 +37,8 @@ class TestValidateContextDensity(unittest.TestCase):
             f.write("# Rules\nGenerated at 2026-10-12T22:00:00Z\n- Item 1\n")
             f.flush()
             issues = vcd.audit_file(Path(f.name))
-            self.assertTrue(any("volatile timestamps" in i for i in issues))
+            self.assertIn(f"{Path(f.name).name}:2: timestamp in the first 50 lines breaks the cached prompt prefix",
+                          issues)
 
     def test_audit_file_low_density(self) -> None:
         with tempfile.NamedTemporaryFile("w+", encoding="utf-8") as f:
