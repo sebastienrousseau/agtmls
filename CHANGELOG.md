@@ -50,6 +50,15 @@ All notable changes to AgtMLS are recorded here.
   lines, and `--write` only collapses blank-line runs. The context-density
   check names the line of a timestamp it finds.
 
+### Removed
+
+- `scripts/_lib/context_store.py` (SQLite FTS5/BM25 store),
+  `scripts/_lib/otlp.py` (OTLP trace exporter), `scripts/_lib/ocsf.py` (OCSF
+  finding exporter) and `scripts/_lib/binary_identity.py`. No command, script
+  or check called them; only their own tests did. The 0.0.22 and 0.0.23
+  entries listed them as features, but no user could reach them. Each can
+  come back with the command that uses it.
+
 ### Fixed
 
 - Every token estimate is the same one: characters / 4, rounded up

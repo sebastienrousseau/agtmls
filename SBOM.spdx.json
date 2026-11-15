@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-15T14:22:29Z",
+    "created": "2026-11-15T14:26:01Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -3549,22 +3549,6 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
-      "SPDXID": "SPDXRef-File-scripts--lib-binary-identity.py",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "0d7ca3b468374e489b2204b77e40466912cfa452"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "108a99c72dfa9f9e759d7d0db3b23682260c960dc2b0393fc5db680b248bb688"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./scripts/_lib/binary_identity.py",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
       "SPDXID": "SPDXRef-File-scripts--lib-checksums.py",
       "checksums": [
         {
@@ -3658,22 +3642,6 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/context_optimizer.py",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-scripts--lib-context-store.py",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "61dfed6c446505af1f6e387fbdfb0a0236053102"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "2e21a7dc4c395bcdcd1d8dadc335a4333fe415abf202e0ca7b4bdf7e08bac96b"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./scripts/_lib/context_store.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -3802,38 +3770,6 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/_lib/lockfile.py",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-scripts--lib-ocsf.py",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "09a5b1cde8e918126cbf85ebe3b41774974149c4"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "474b7e2aedd60e6013a000564b1cbc0be176d3c74ce33d66d2087b4949717534"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./scripts/_lib/ocsf.py",
-      "licenseConcluded": "Apache-2.0 OR MIT"
-    },
-    {
-      "SPDXID": "SPDXRef-File-scripts--lib-otlp.py",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "46f9e86a663345f7efdb725301f07cea011431d8"
-        },
-        {
-          "algorithm": "SHA256",
-          "checksumValue": "a8e3ce5b0aa86ab063e91d43b31c97c5fde9f36f73847ca3243bb889d5aa1e70"
-        }
-      ],
-      "copyrightText": "Copyright 2026 Sebastien Rousseau",
-      "fileName": "./scripts/_lib/otlp.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -8153,14 +8089,12 @@
         "SPDXRef-File-scripts--lib-aider-conf.py",
         "SPDXRef-File-scripts--lib-analyzer.py",
         "SPDXRef-File-scripts--lib-attestations.py",
-        "SPDXRef-File-scripts--lib-binary-identity.py",
         "SPDXRef-File-scripts--lib-checksums.py",
         "SPDXRef-File-scripts--lib-cli-args.py",
         "SPDXRef-File-scripts--lib-cli-parser.py",
         "SPDXRef-File-scripts--lib-complexity.py",
         "SPDXRef-File-scripts--lib-context-cost.py",
         "SPDXRef-File-scripts--lib-context-optimizer.py",
-        "SPDXRef-File-scripts--lib-context-store.py",
         "SPDXRef-File-scripts--lib-covered.py",
         "SPDXRef-File-scripts--lib-digest.py",
         "SPDXRef-File-scripts--lib-efficacy.py",
@@ -8169,8 +8103,6 @@
         "SPDXRef-File-scripts--lib-installer.py",
         "SPDXRef-File-scripts--lib-liveness.py",
         "SPDXRef-File-scripts--lib-lockfile.py",
-        "SPDXRef-File-scripts--lib-ocsf.py",
-        "SPDXRef-File-scripts--lib-otlp.py",
         "SPDXRef-File-scripts--lib-policy.py",
         "SPDXRef-File-scripts--lib-portability.py",
         "SPDXRef-File-scripts--lib-posture.py",

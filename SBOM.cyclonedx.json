@@ -2433,17 +2433,6 @@
       "type": "file"
     },
     {
-      "bom-ref": "scripts/_lib/binary_identity.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "108a99c72dfa9f9e759d7d0db3b23682260c960dc2b0393fc5db680b248bb688"
-        }
-      ],
-      "name": "scripts/_lib/binary_identity.py",
-      "type": "file"
-    },
-    {
       "bom-ref": "scripts/_lib/checksums.py",
       "hashes": [
         {
@@ -2507,17 +2496,6 @@
         }
       ],
       "name": "scripts/_lib/context_optimizer.py",
-      "type": "file"
-    },
-    {
-      "bom-ref": "scripts/_lib/context_store.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "2e21a7dc4c395bcdcd1d8dadc335a4333fe415abf202e0ca7b4bdf7e08bac96b"
-        }
-      ],
-      "name": "scripts/_lib/context_store.py",
       "type": "file"
     },
     {
@@ -2606,28 +2584,6 @@
         }
       ],
       "name": "scripts/_lib/lockfile.py",
-      "type": "file"
-    },
-    {
-      "bom-ref": "scripts/_lib/ocsf.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "474b7e2aedd60e6013a000564b1cbc0be176d3c74ce33d66d2087b4949717534"
-        }
-      ],
-      "name": "scripts/_lib/ocsf.py",
-      "type": "file"
-    },
-    {
-      "bom-ref": "scripts/_lib/otlp.py",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "a8e3ce5b0aa86ab063e91d43b31c97c5fde9f36f73847ca3243bb889d5aa1e70"
-        }
-      ],
-      "name": "scripts/_lib/otlp.py",
       "type": "file"
     },
     {
@@ -5454,7 +5410,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:22:29Z",
+    "timestamp": "2026-11-15T14:26:01Z",
     "tools": {
       "components": [
         {
