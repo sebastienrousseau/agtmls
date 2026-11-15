@@ -98,10 +98,12 @@ class InstallLifecycleTests(CliFixture):
         self.calls.append(list(argv))
         agent = argv[2]
         bundles = {argv[i + 1] for i, arg in enumerate(argv) if arg == "--bundle"}
+        listed = {argv[i + 1] for i, arg in enumerate(argv) if arg == "--skill"} if "--listed-only" in argv else None
         skills = Path(cwd) / f".{agent}" / "skills"
         skills.mkdir(parents=True, exist_ok=True)
         for skill in self.index()["skills"]:
-            if skill["bundle"] is None or skill["bundle"] in bundles:
+            general = skill["bundle"] is None and (listed is None or skill["name"] in listed)
+            if general or skill["bundle"] in bundles or skill["name"] in (listed or ()):
                 source = self.fixture / skill["path"]
                 if "--copy" in argv:
                     shutil.copytree(source, skills / skill["name"])
@@ -140,6 +142,16 @@ class InstallLifecycleTests(CliFixture):
         self.assertEqual(code, 0, output)
         self.assertEqual(self.calls[0].count("noyalib"), 1, self.calls[0])
         self.assertIn("noyalib-config-and-flags", [e["name"] for e in self.lock()["skills"]])
+
+    def test_a_profile_installs_only_its_own_skills(self) -> None:
+        """--profile minimal installed every general skill; export honoured
+        the profile's `skills` list and install ignored it."""
+        code, output = self.install("--profile", "minimal", "--copy")
+        self.assertEqual(code, 0, output)
+        listed = [self.calls[0][i + 1] for i, arg in enumerate(self.calls[0]) if arg == "--skill"]
+        self.assertEqual(listed, ["using-agtmls"])
+        self.assertIn("--listed-only", self.calls[0])
+        self.assertEqual([e["name"] for e in self.lock()["skills"]], ["using-agtmls"])
 
     def test_an_unknown_profile_is_refused_before_anything_runs(self) -> None:
         code, output = self.install("--profile", "no-such-profile")
@@ -432,6 +444,24 @@ class ShellCopyTests(unittest.TestCase):
         installed = target / ".claude" / "skills" / GENERAL[0]
         self.assertTrue((installed / "SKILL.md").is_file(), proc.stdout)
         self.assertFalse((installed / "__pycache__").exists(), "undigested debris was installed")
+
+
+class ShellProfileTests(unittest.TestCase):
+    """The real setup-workspace.sh with --skill: only the listed general skills."""
+
+    def test_a_skill_list_limits_what_the_shell_installer_links(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shprof-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        target = tmp / "target"
+        target.mkdir()
+        proc = subprocess.run(["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude",
+                               "--skills-only", "--listed-only", "--skill", "using-agtmls", "--bundle", "noyalib"],
+                              cwd=target, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        installed = sorted(p.name for p in (target / ".claude" / "skills").iterdir())
+        self.assertEqual(installed, ["noyalib-config-and-flags", "using-agtmls"], proc.stdout)
 
 
 class UninstallTests(CliFixture):

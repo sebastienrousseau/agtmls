@@ -432,17 +432,21 @@ def import_skill_command(args) -> int:
     return run(cmd)
 
 
-def install_bundles(args) -> list[str] | None:
-    """The bundles to install: the named ones plus a profile's, or None for
-    an unknown profile."""
-    bundles = list(args.bundle)
-    if args.profile:
-        profile = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))["profiles"].get(args.profile)
-        if profile is None:
-            print(f"unknown profile: {args.profile}", file=sys.stderr)
-            return None
-        bundles.extend(profile.get("bundles", []))
-    return sorted(set(bundles))
+def install_selection(args, cmd: list[str]) -> bool:
+    """Add the profile's skill list and the bundles to the installer's argv;
+    False for an unknown profile."""
+    from _lib import selection
+
+    try:
+        skills, bundles = selection.resolve(ROOT, args.profile, list(args.bundle))
+    except selection.UnknownProfile:
+        print(f"unknown profile: {args.profile}", file=sys.stderr)
+        return False
+    if skills is not None:
+        cmd.append("--listed-only")
+        cli_args.repeated(cmd, "--skill", sorted(skills))
+    cli_args.repeated(cmd, "--bundle", sorted(bundles))
+    return True
 
 
 def refuse_drift() -> int | None:
@@ -482,10 +486,8 @@ def install_command(args) -> int:
     for flag, on in (("--skills-only", args.skills_only), ("--copy", args.copy),
                      ("--force", args.force), ("--dry-run", args.dry_run)):
         cli_args.switch(cmd, flag, on)
-    bundles = install_bundles(args)
-    if bundles is None:
+    if not install_selection(args, cmd):
         return 1
-    cli_args.repeated(cmd, "--bundle", bundles)
     target = args.target.resolve()
     refused = None if args.no_verify or args.dry_run else refuse_drift()
     if refused is not None:

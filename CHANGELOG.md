@@ -32,6 +32,16 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- `install --profile` installs the profile's skills, as `export --profile`
+  does: the general skills its `skills` list names, plus its bundles. It read
+  only the bundles, so `--profile minimal` installed all 15 general skills
+  where export carried one, and every session loaded 14 descriptions the
+  profile left out. Both commands now share `scripts/_lib/selection.py`; the
+  shell and Windows installers take `--listed-only --skill <name>`. `doctor`
+  expects the skills the lockfile records rather than every general skill.
+  Reinstalling with a narrower profile does not remove skills an earlier
+  install linked; `uninstall` first.
+
 - `optimize` reports and no longer rewrites prose. It printed a rewritten
   file and `--write` deleted filler phrases ("in order to", "please make sure
   to") and every line in the first 50 holding a timestamp, which could drop or

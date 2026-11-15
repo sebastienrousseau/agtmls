@@ -132,6 +132,33 @@ class CopyTreeTests(unittest.TestCase):
         self.assertEqual(digest.main(["digest.py", "copy", str(self.src)]), 2)
 
 
+class SelectionTests(unittest.TestCase):
+    """One rule for which skills install and export carry."""
+
+    def test_without_a_profile_general_skills_and_named_bundles_are_wanted(self) -> None:
+        from _lib import selection
+
+        self.assertTrue(selection.wanted("g", None, None, set()))
+        self.assertFalse(selection.wanted("p", "pack", None, set()))
+        self.assertTrue(selection.wanted("p", "pack", None, {"pack"}))
+
+    def test_a_profile_list_limits_the_general_skills(self) -> None:
+        from _lib import selection
+
+        self.assertTrue(selection.wanted("g", None, {"g"}, set()))
+        self.assertFalse(selection.wanted("other", None, {"g"}, set()))
+        self.assertTrue(selection.wanted("p", "pack", set(), {"pack"}))
+
+    def test_a_profile_resolves_to_its_skills_plus_bundles(self) -> None:
+        from _lib import selection
+
+        skills, bundles = selection.resolve(ROOT, "minimal", ["extra"])
+        self.assertEqual((skills, bundles), ({"using-agtmls"}, {"extra"}))
+        self.assertEqual(selection.resolve(ROOT, None, ["b"]), (None, {"b"}))
+        with self.assertRaisesRegex(selection.UnknownProfile, "nope"):
+            selection.resolve(ROOT, "nope", [])
+
+
 class LockfileTests(unittest.TestCase):
     """What turns a digest from a number in a file into a control."""
 

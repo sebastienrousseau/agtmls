@@ -327,9 +327,13 @@ agtmls install rust claude --skills-only --bundle noyalib     # plus the noyalib
 | **Plugin targets** | Antigravity, Codex, Cursor, Gemini CLI, Kimi Code, OpenCode | The runtime's own plugin manifest |
 | **Export targets** | Anthropic, Continue, Cursor, DeepSeek, generic, GitHub Copilot, Google Gemini, Mistral, Ollama, OpenAI, Qwen, Windsurf, Zed | Provider-adapted Markdown bundles |
 
-[`profiles.json`](profiles.json) names curated subsets for export:
+[`profiles.json`](profiles.json) names curated subsets. `install` and
+`export` select the same skills from a profile: the general skills its list
+names, plus its bundles. Fewer installed skills means fewer descriptions loaded
+in every session.
 
 ```bash
+agtmls install rust claude --target /path/to/repo --profile minimal
 agtmls export --provider openai --profile polyglot --out-dir dist
 agtmls export --provider anthropic --profile noyalib --out-dir dist
 ```

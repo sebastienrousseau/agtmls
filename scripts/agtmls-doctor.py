@@ -248,7 +248,11 @@ def check_skill_links(r: Reporter, target: Path, skills_dir: Path, agent: str, b
         r.fail(f"lockfile refused: {error}")
         return
     copied = {entry["name"] for entry in lockfile.entries_for(lock, agent)} if lock is not None else set()
-    missing = [name for name in expected_skill_names(bundles) if not installed_here(skills_dir / name, copied)]
+    # What the install recorded is what it chose (a profile installs a subset);
+    # without a record, every general skill plus the bundles named here.
+    named = set(expected_skill_names(bundles)) - set(expected_skill_names([]))
+    expected = sorted(copied | named) if copied else expected_skill_names(bundles)
+    missing = [name for name in expected if not installed_here(skills_dir / name, copied)]
     if missing:
         r.warn(f"target missing expected AgtMLS skill links: {', '.join(missing)}")
     elif copied:

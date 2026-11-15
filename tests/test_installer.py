@@ -349,6 +349,21 @@ class InstallerTests(unittest.TestCase):
         installer.link_or_copy(src, dst_file, copy=True, dry_run=False)
         self.assertEqual(dst_file.read_text(encoding="utf-8"), "data")
 
+    def test_a_skill_list_limits_the_general_skills(self) -> None:
+        """install --profile minimal installed every general skill: the
+        profile's `skills` list was never passed to the installer."""
+        skills_dir = self.root / "skills"
+        for name in ("kept", "dropped"):
+            (skills_dir / name).mkdir(parents=True, exist_ok=True)
+            (skills_dir / name / "SKILL.md").write_text(f"# {name}\n", encoding="utf-8")
+        target_skills = self.target / ".claude" / "skills"
+        target_skills.mkdir(parents=True)
+        installer.install_skills(self.root, target_skills, copy=True, dry_run=False, bundles=set(),
+                                 skills={"kept"})
+        self.assertEqual(sorted(p.name for p in target_skills.iterdir()), ["kept"])
+        args = installer.build_parser().parse_args(["rust", "claude", "--listed-only", "--skill", "kept"])
+        self.assertEqual((args.listed_only, args.skill), (True, ["kept"]))
+
     def test_skill_bundle_filtering_and_bad_metadata(self) -> None:
         skills_dir = self.root / "skills"
         special = skills_dir / "special-skill"

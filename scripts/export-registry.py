@@ -20,27 +20,18 @@ def load_json(name: str) -> dict[str, object]:
 
 
 def selected_skill_paths(profile_name: str | None, bundle: list[str]) -> list[Path]:
+    """The skill directories to export, chosen as `install` chooses them."""
+    from _lib import selection
+
+    try:
+        skills, bundles = selection.resolve(ROOT, profile_name, bundle)
+    except selection.UnknownProfile:
+        raise SystemExit(f"unknown profile: {profile_name}") from None
     index = load_json("index.json")
-    profiles = load_json("profiles.json").get("profiles", {})
-    wanted_skills: set[str] | None = None
-    wanted_bundles = set(bundle)
-    if profile_name:
-        profile = profiles.get(profile_name)
-        if not isinstance(profile, dict):
-            raise SystemExit(f"unknown profile: {profile_name}")
-        wanted_skills = set(profile.get("skills", []))
-        wanted_bundles.update(profile.get("bundles", []))
-    paths = []
-    for skill in index.get("skills", []):
-        # Without a profile, selection matches `install`: the general skills,
-        # plus any bundle asked for by name. An unfiltered export used to
-        # carry every bundle, and --bundle exported that bundle alone.
-        general = wanted_skills is None and not skill.get("bundle")
-        include = general or skill.get("name") in (wanted_skills or set())
-        include = include or skill.get("bundle") in wanted_bundles
-        if include:
-            paths.append(ROOT / str(skill["path"]))
-    return sorted(set(paths))
+    return sorted({
+        ROOT / str(skill["path"]) for skill in index.get("skills", [])
+        if selection.wanted(str(skill.get("name")), skill.get("bundle"), skills, bundles)
+    })
 
 
 def copytree(src: Path, dst: Path) -> None:

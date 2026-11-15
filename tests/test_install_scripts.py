@@ -294,6 +294,22 @@ class DoctorTargetTests(ScriptCase):
         self.assertIn("OK   target expected AgtMLS skills are present (copied, per the lockfile)", output)
         self.assertIn("OK: doctor passed with 0 warning(s)", output)
 
+    def test_a_profile_install_is_judged_by_what_its_lockfile_records(self) -> None:
+        """After install --profile minimal, the doctor still expected every
+        general skill and called the rest missing."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        self.addCleanup(lambda: sys.path.remove(str(ROOT / "scripts")))
+        from _lib import lockfile
+
+        self.install(names=GENERAL[1:])
+        lockfile.write(self.target, lockfile.build(self.target, self.fixture, list(GENERAL[1:]), "symlink",
+                                                   "0.0.0", "claude"))
+        code, output = self.doctor()
+        self.assertEqual(code, 0, output)
+        self.assertNotIn("missing expected", output)
+        code, output = self.doctor("--bundle", "noyalib")
+        self.assertIn("WARN target missing expected AgtMLS skill links: noyalib-config-and-flags\n", output)
+
     def test_only_general_skills_are_expected_unless_their_bundle_is_named(self) -> None:
         """A plain install lands the general skills; the doctor asked for every
         bundled one too and called eighteen of them missing."""

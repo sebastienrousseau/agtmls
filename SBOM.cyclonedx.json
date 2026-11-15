@@ -2580,7 +2580,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a84c8a49e1e0d01adaf1102c948f6854f9a9b2e82957405cb82e264defb3770c"
+          "content": "ccfabacbab3dd52b095bd3c46d894124e93d5a6c60e39fa0cbc8446d637c0f81"
         }
       ],
       "name": "scripts/_lib/installer.py",
@@ -2708,6 +2708,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/selection.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "aaedc3b05a2e0ef1522b55ca8669a952bdc9c7d1ebe535d6e297e92ea047d822"
+        }
+      ],
+      "name": "scripts/_lib/selection.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/signatures.py",
       "hashes": [
         {
@@ -2811,7 +2822,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "923bf3a3d73006c3e5ca68c8efad27cc2c27f28ff966d79f22a462aad7738c59"
+          "content": "7a7539f34e57855e75d3732ab225761dc8712bfebffc4cacc569405516683137"
         }
       ],
       "name": "scripts/agtmls-doctor.py",
@@ -2833,7 +2844,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8a47d663ccc46609f391db9375402223abdcdd7a86cc2ddb6463b475429fb805"
+          "content": "7632a0227fd078bc1366fc76927eb6356e21035247ce78b1c42f9febe129518b"
         }
       ],
       "name": "scripts/agtmls.py",
@@ -2932,7 +2943,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "838dc5a9bece1b6eb92a59da9b8f4bb759169b70d35d1e5a3a7e023928f23238"
+          "content": "09cc7b4ebb707eed67505dd4c4a16136d90819686f44b49ffa30108327059cc5"
         }
       ],
       "name": "scripts/export-registry.py",
@@ -3306,7 +3317,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bd339d8b83194f2635fa69afb38af8cb7afccbf3cbad36eaf8692b604206c4f0"
+          "content": "38edd231e53e1a7a7e257354c925ef6e99608b7215effb589dc2e400a93401b5"
         }
       ],
       "name": "scripts/setup-workspace.sh",
@@ -3394,7 +3405,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bec3a26c3c248f51acf1305c5c6a47d491f56aa6d1b9a02aece993df2fb2ae82"
+          "content": "023a06a1803763c3b2c6e725179ada1f606aaac30e56b81973342c17a9d7b866"
         }
       ],
       "name": "scripts/smoke-install-profiles.py",
@@ -5443,7 +5454,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:12:15Z",
+    "timestamp": "2026-11-15T14:22:29Z",
     "tools": {
       "components": [
         {
