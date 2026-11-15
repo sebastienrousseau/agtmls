@@ -14,9 +14,9 @@ six==1.17.0 \
     --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274 \
     --hash=sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
     # via python-dateutil
-skills-ref==0.1.0 \
-    --hash=sha256:2362ac5a5bb874ff2f39c6ddc229b0c4c0e79b6b94cfb0f71f423b75f1d3f7fd \
-    --hash=sha256:fd59cef5faca469797ef45b5de84258996decae8a65238db48656537687d30d5
+skills-ref==0.1.1 \
+    --hash=sha256:6b400ca6e0049be62dca0167ff943ba2745fd67efb37fbba4d0ee341fccd2695 \
+    --hash=sha256:d35db5bb8de71ae301daf5ca9cb71f8a555e8c6f83a6d40e46a5bc09f8f461b5
     # via -r skills-ref.in
 strictyaml==1.7.3 \
     --hash=sha256:22f854a5fcab42b5ddba8030a0e4be51ca89af0267961c8d6cfa86395586c407 \
