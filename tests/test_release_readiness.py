@@ -96,14 +96,14 @@ class PublishingReadinessCheckTests(unittest.TestCase):
         broken = self.repo(READY.replace("id-token: write", ""))
         packages = [
             ("agtmls", ready, "PyPI", "pypi"),
-            ("@agtmls/wasm", broken, "npmjs", "pypi"),
+            ("@sebastienrousseau/agtmls-wasm", broken, "npmjs", "pypi"),
             ("ghost", self.base / "absent", "crates.io", "crates-io"),
         ]
         with mock.patch.object(self.mod, "PACKAGES", packages):
             code, output = run_main(self.mod)
         self.assertEqual(code, 1)
         self.assertIn("ok    agtmls", output)
-        self.assertIn("FAIL  @agtmls/wasm", output)
+        self.assertIn("FAIL  @sebastienrousseau/agtmls-wasm", output)
         self.assertIn(f"repository not found at {self.base / 'absent'}", output)
         self.assertIn("[ ] crates.io  trusted publisher for ghost, environment crates-io", output)
         self.assertIn("FAIL: 2 repository-side issue(s)", output)

@@ -2855,7 +2855,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fde75d9af76e495bee2acc07a483fbeab125d4af7b4bdb688e01aad4b10309b3"
+          "content": "af8865809c3a713d49d48447dc579532346fd04a736a91a5ccf1cc3a715680a9"
         }
       ],
       "name": "scripts/check-publishing-readiness.py",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.28"
     },
-    "timestamp": "2026-11-15T19:19:17Z",
+    "timestamp": "2026-11-15T20:58:53Z",
     "tools": {
       "components": [
         {

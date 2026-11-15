@@ -159,7 +159,7 @@ Agent skills are instructions a model will follow. Copied between repositories b
 | [`agtmls`](https://github.com/sebastienrousseau/agtmls) | The registry, CLI and reference implementation (Python) | Install, verify and audit skills |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | Normative documents, rules as data, schemas, conformance corpus | Implement a conforming tool |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | Rust engine: digest, rules, analyzers, lockfile | Embed verification in a Rust tool |
-| [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `@agtmls/wasm`, the engine compiled to WebAssembly | Run the analyzer in Node or a browser |
+| [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `@sebastienrousseau/agtmls-wasm`, the engine compiled to WebAssembly | Run the analyzer in Node or a browser |
 | [`agtmls-action`](https://github.com/sebastienrousseau/agtmls-action) | GitHub Action emitting SARIF to code scanning | Audit skills in pull requests |
 | [`agtmls-mcp`](https://github.com/sebastienrousseau/agtmls-mcp) | Model Context Protocol server over stdio | Give an agent registry tools and resources |
 | [`agtmls-lsp`](https://github.com/sebastienrousseau/agtmls-lsp) | Language server: diagnostics, frontmatter completion, code actions | Author skills in an editor |
