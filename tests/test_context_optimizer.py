@@ -139,7 +139,9 @@ class TestContextOptimizer(unittest.TestCase):
         items = [("AGENTS.md", "r" * 40), ("a-very-long-optional-file-name.md", "o" * 4000)]
         required = frozenset({"AGENTS.md"})
         # The smallest budget the required file fits: too small for the note.
-        budget = next(b for b in range(1, 200) if not build_pack(items, max_tokens=b, required=required).missing)
+        budget = next(b for b in range(1, 200)
+                      if not (p := build_pack(items, max_tokens=b, required=required)).missing
+                      and "empty pack" not in p.error)
         pack = build_pack(items, max_tokens=budget, required=required)
         self.assertEqual(pack.xml, "")
         self.assertIn("fits the required file(s) but not the note naming the 1 file(s) left out", pack.error)
@@ -155,6 +157,27 @@ class TestContextOptimizer(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn("WARN: partial pack, 1 file(s) do not fit the 60-token budget: big.md", notes[0])
         self.assertEqual(pack_verdict(build_pack([("a.md", "a")], 40), 40, False), (0, []))
+
+    def test_a_budget_smaller_than_the_empty_pack_produces_none(self) -> None:
+        pack = build_pack([], max_tokens=5)
+        self.assertEqual(pack.xml, "")
+        self.assertIn("smaller than an empty pack", pack.error)
+        self.assertEqual(pack_verdict(pack, 5, allow_partial=True)[0], 1)
+
+    def test_a_late_required_file_is_kept_before_earlier_optional_ones(self) -> None:
+        """Files were taken greedily in input order, so optional files listed
+        first could spend the budget a later required file needed."""
+        items = [("opt.md", "x" * 200), ("AGENTS.md", "y" * 40)]
+        pack = build_pack(items, max_tokens=80, required=frozenset({"AGENTS.md"}))
+        self.assertEqual((pack.missing, pack.omitted, pack.error), ([], ["opt.md"], ""))
+        self.assertIn('<file path="AGENTS.md"', pack.xml)
+        self.assertLessEqual(estimate_tokens(pack.xml), 80)
+
+    def test_with_nothing_required_the_error_does_not_mention_required_files(self) -> None:
+        pack = build_pack([("a.md", "x" * 400)], max_tokens=20)
+        self.assertEqual(pack.xml, "")
+        self.assertNotIn("required", pack.error)
+        self.assertIn("leaves no room for the note naming the 1 file(s) left out", pack.error)
 
     def test_packing_is_deterministic(self) -> None:
         items = [("a.md", "<x> & y\n" * 9), ("b.md", "z" * 90)]
@@ -186,6 +209,25 @@ class AtomicWriteTests(unittest.TestCase):
         write_text_atomic(self.path, "two")
         self.assertEqual((self.path.read_text(encoding="utf-8"), self.path.stat().st_mode & 0o777), ("two", 0o640))
         self.assertEqual(sorted(p.name for p in self.dir.iterdir()), ["pack.xml"])
+
+    def test_a_symlink_is_written_through_not_replaced(self) -> None:
+        """os.replace swapped the link for a regular file and left its target
+        stale; `pack --output link` used to write through the link."""
+        target = self.dir / "target.xml"
+        target.write_text("old", encoding="utf-8")
+        link = self.dir / "link.xml"
+        link.symlink_to(target)
+        write_text_atomic(link, "new")
+        self.assertTrue(link.is_symlink())
+        self.assertEqual(target.read_text(encoding="utf-8"), "new")
+
+    def test_a_read_only_file_is_refused_as_a_plain_write_would(self) -> None:
+        self.path.write_text("keep", encoding="utf-8")
+        self.path.chmod(0o444)
+        self.addCleanup(self.path.chmod, 0o644)
+        with self.assertRaises(PermissionError):
+            write_text_atomic(self.path, "new")
+        self.assertEqual(self.path.read_text(encoding="utf-8"), "keep")
 
     def test_a_failed_write_leaves_the_old_file_and_no_temporary(self) -> None:
         from unittest import mock

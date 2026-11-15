@@ -152,16 +152,18 @@ def _render(blocks: list[tuple[int, str, str]], omitted: list[str], max_tokens: 
 
 
 def _select(blocks: list[tuple[int, str, str]], budget: int, required: frozenset[str]):
-    """(kept, omitted, missing, used): each file whole, in order, while it fits."""
+    """(kept, omitted, missing, used): each file whole while it fits, required
+    files first so an optional file listed earlier cannot spend their budget;
+    kept and omitted stay in input order."""
     kept, omitted, missing, used = [], [], [], 0
-    for index, name, block in blocks:
+    for index, name, block in sorted(blocks, key=lambda entry: entry[1] not in required):
         cost = _cost(block)
         if used + cost <= budget:
             kept.append((index, name, block))
             used += cost
         else:
             (missing if name in required else omitted).append((index, name))
-    return kept, omitted, missing, used
+    return sorted(kept), sorted(omitted), sorted(missing), used
 
 
 def _names(entries) -> list[str]:
@@ -197,14 +199,17 @@ def build_pack(items: Sequence[tuple[str, str]], max_tokens: int | None = None,
     if max_tokens is None:
         return _render(blocks, [], None)
     budget = max_tokens - _cost(_HEAD) - _cost(_TAIL)
+    if budget < 0:
+        return Pack("", [name for _, name, _ in blocks], [], 0,
+                    f"the {max_tokens}-token budget is smaller than an empty pack")
     kept, left, missing, used = _select(blocks, budget, required)
     if missing:
         return Pack("", _names(left), _names(missing), 0)
     fitted = _fit_note(kept, left, used, budget, max_tokens, required)
     if fitted is None:
+        what = "fits the required file(s) but not" if required & set(_names(kept)) else "leaves no room for"
         return Pack("", _names(left), [], 0,
-                    f"the {max_tokens}-token budget fits the required file(s) but not the note naming "
-                    f"the {len(left)} file(s) left out")
+                    f"the {max_tokens}-token budget {what} the note naming the {len(left)} file(s) left out")
     return _render(kept, _names(fitted), max_tokens)
 
 
@@ -226,6 +231,11 @@ def write_text_atomic(path: Path, text: str) -> None:
     the new one, never half of either, and a failure leaves the old file."""
     import tempfile
 
+    # Through a symlink to its target, as a plain write goes; and a file a
+    # plain write could not open is refused rather than replaced.
+    path = path.resolve() if path.is_symlink() else path
+    if path.exists() and not os.access(path, os.W_OK):
+        raise PermissionError(f"{path} is not writable")
     fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as handle:

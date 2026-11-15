@@ -20,7 +20,11 @@ All notable changes to AgtMLS are recorded here.
 - An over-budget `pack` writes nothing and exits 1; `--allow-partial` writes
   the pack without the files that do not fit, named in it, and exits 0 with a
   warning. In 0.0.28 a failed pack still replaced `--output` with the partial
-  pack. `--output` is now written atomically, keeping the file's mode.
+  pack. `--output` is now written atomically, keeping the file's mode,
+  through a symlink to its target, and never over a read-only file.
+  Required files are placed before optional ones, so an optional file
+  listed first cannot spend a required file's budget; a budget smaller
+  than an empty pack is an error.
 
 ### Fixed
 

@@ -209,7 +209,7 @@ def _audit_commands(sub) -> None:
                                "if a file does not fit, nothing is written and the exit is 1")
     pack_cmd.add_argument("--allow-partial", action="store_true",
                           help="write the pack without the files that do not fit, named in it; "
-                               "AGENTS.md is never left out")
+                               "AGENTS.md is never left out, and the note naming them must fit too")
     pack_cmd.add_argument("--output", type=Path, help="write packed context to file")
 
 
