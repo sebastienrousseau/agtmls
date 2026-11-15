@@ -51,8 +51,10 @@ All notable changes to AgtMLS are recorded here.
   so a new subtotal field would have been counted twice; it now sums the four
   named counts. Totals for today's usage shapes are unchanged; a Codex cached count
   larger than its input leaves the uncached input unknown, not negative.
-- `optimize --write` keeps blank lines inside fenced code (``` or ~~~),
-  where they can be part of an example; it collapsed them everywhere.
+- `optimize --write` keeps blank lines inside fenced code, where they can be
+  part of an example; it collapsed them everywhere. Fences open and close as
+  CommonMark's do: ``` or ~~~, indented up to three spaces, closed by the same
+  character at least as long.
 - The early-timestamp finding says what it knows: a timestamp stops the
   provider reusing the cached prompt prefix only if it changes between
   sessions. It said every timestamp "breaks" the cache.

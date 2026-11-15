@@ -66,6 +66,21 @@ class TestContextOptimizer(unittest.TestCase):
         for text in ("a", "a" * 41, "a" * 4000, "é" * 7):
             self.assertEqual(estimate_tokens(text), context_cost.approx_tokens(len(text)), len(text))
 
+    def test_fences_close_as_commonmark_closes_them(self) -> None:
+        """A ``` block closed on ~~~, indented fences were not seen, and fence
+        length was ignored, so blank lines inside some fences collapsed."""
+        kept = [
+            "```\na\n~~~\n\n\n\nb\n```\n",          # ~~~ does not close ```
+            "- item\n\n  ```\n  x\n\n\n\n  y\n  ```\n",  # indented, in a list item
+            "````\n```\n\n\n\nx\n````\n",             # a shorter fence inside a longer one
+        ]
+        for text in kept:
+            self.assertEqual(collapse_blank_lines(text), text, text)
+        # A longer closing fence closes; what follows it is outside again.
+        self.assertEqual(collapse_blank_lines("```\nx\n\n\n\n````\n\n\n\ny\n"), "```\nx\n\n\n\n````\n\ny\n")
+        # Four spaces of indent is code, not a fence, so its blank lines collapse.
+        self.assertEqual(collapse_blank_lines("    ```\nx\n\n\n\ny\n"), "    ```\nx\n\ny\n")
+
     def test_structured_line_density_counts_list_and_table_lines(self) -> None:
         """A formatting measure, not a judgement of what the lines say: list
         and table lines per 100 estimated tokens."""

@@ -30,21 +30,41 @@ PADDING_PATTERNS = (
     re.compile(r"(?i)\bin\s+order\s+to\b\s*"),
 )
 
-MULTI_NEWLINES = re.compile(r"\n{3,}")
 # A date-time is volatile only if it changes; this cannot tell, so it says so.
 VOLATILE_NOTE = ("timestamp in the first 50 lines: if it changes between sessions, "
                  "the provider cannot reuse the cached prompt prefix after it")
-# A fenced code block, opening to closing fence, or to the end when unclosed.
-FENCED = re.compile(r"(^(?:```|~~~)[^\n]*\n.*?(?:^(?:```|~~~)[ \t]*$|\Z))", re.MULTILINE | re.DOTALL)
+# A code fence (CommonMark): up to three spaces, then three or more ` or ~.
+# A backtick fence's info string may not hold a backtick.
+FENCE_OPEN = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+FENCE_CLOSE = re.compile(r"^ {0,3}(`{3,}|~{3,})[ \t]*$")
 TIMESTAMP_PATTERN = re.compile(r"\b202[4-9]-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
 
 
+def _closes(line: str, fence: str) -> bool:
+    """Whether `line` closes a block opened by `fence`: the same character,
+    at least as many, up to three spaces of indent, nothing after."""
+    match = FENCE_CLOSE.match(line)
+    return bool(match) and match.group(1)[0] == fence[0] and len(match.group(1)) >= len(fence)
+
+
 def collapse_blank_lines(markdown_text: str) -> str:
-    """Runs of blank lines collapsed to one, outside fenced code (``` or ~~~),
-    where a blank line can be part of what an example shows: the only
-    rewrite optimize makes. An unclosed fence keeps the rest as it is."""
-    parts = FENCED.split(markdown_text)
-    return "".join(part if index % 2 else MULTI_NEWLINES.sub("\n\n", part) for index, part in enumerate(parts))
+    """Runs of empty lines collapsed to one, outside fenced code, where an
+    empty line can be part of what an example shows: the only rewrite
+    optimize makes. Fences open and close as CommonMark's do (``` or ~~~,
+    three or more, up to three spaces of indent, closed by the same character
+    at least as long); an unclosed fence keeps the rest as it is."""
+    out, fence, blank = [], None, False
+    for line in markdown_text.splitlines(keepends=True):
+        bare = line.rstrip("\r\n")
+        if fence is not None:
+            fence = None if _closes(bare, fence) else fence
+        elif (match := FENCE_OPEN.match(bare)) and not (match.group(1)[0] == "`" and "`" in match.group(2)):
+            fence = match.group(1)
+        elif not bare and blank:
+            continue
+        out.append(line)
+        blank = not bare and fence is None
+    return "".join(out)
 
 
 def findings(markdown_text: str) -> list[str]:
