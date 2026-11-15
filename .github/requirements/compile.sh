@@ -11,10 +11,11 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 # The lowest Python each file must install on. skills-ref needs 3.11, and
-# the jobs that install it skip 3.10.
+# the jobs that install it skip 3.10; griffe needs 3.11 from 2.4, and its one
+# job (the API check in conformance.yml) runs 3.12.
 floor() {
   case "$1" in
-    skills-ref|coverage) echo 3.11 ;;
+    skills-ref|coverage|griffe) echo 3.11 ;;
     fuzz) echo 3.12 ;;
     *) echo 3.10 ;;
   esac
