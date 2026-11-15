@@ -45,6 +45,15 @@ All notable changes to AgtMLS are recorded here.
   inside output. Claude's total summed every usage field ending in `tokens`,
   so a new subtotal field would have been counted twice; it now sums the four
   named counts. Totals for today's usage shapes are unchanged.
+- `optimize --write` keeps blank lines inside fenced code (``` or ~~~),
+  where they can be part of an example; it collapsed them everywhere.
+- The early-timestamp finding says what it knows: a timestamp stops the
+  provider reusing the cached prompt prefix only if it changes between
+  sessions. It said every timestamp "breaks" the cache.
+- "Instruction density" is reported as what it measures, list and table
+  lines per 100 estimated tokens (`structured_line_density`): a formatting
+  measure, not a judgement of the instructions. The context-density check
+  keeps its threshold.
 
 ## 0.0.28 - 2026-11-15
 

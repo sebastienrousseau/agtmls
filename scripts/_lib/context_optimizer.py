@@ -3,7 +3,7 @@
 """Agent context and markdown optimizer for AgtMLS.
 
 Finds conversational filler and volatile timestamps in always-loaded
-instructions, measures instruction density, and formats Repomix-compatible
+instructions, counts list and table lines, and formats Repomix-compatible
 context packs, without third-party dependencies.
 
 It reports and never rewrites prose: deleting "in order to" or a whole
@@ -31,12 +31,20 @@ PADDING_PATTERNS = (
 )
 
 MULTI_NEWLINES = re.compile(r"\n{3,}")
+# A date-time is volatile only if it changes; this cannot tell, so it says so.
+VOLATILE_NOTE = ("timestamp in the first 50 lines: if it changes between sessions, "
+                 "the provider cannot reuse the cached prompt prefix after it")
+# A fenced code block, opening to closing fence, or to the end when unclosed.
+FENCED = re.compile(r"(^(?:```|~~~)[^\n]*\n.*?(?:^(?:```|~~~)[ \t]*$|\Z))", re.MULTILINE | re.DOTALL)
 TIMESTAMP_PATTERN = re.compile(r"\b202[4-9]-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
 
 
 def collapse_blank_lines(markdown_text: str) -> str:
-    """Runs of blank lines collapsed to one: the only rewrite optimize makes."""
-    return MULTI_NEWLINES.sub("\n\n", markdown_text)
+    """Runs of blank lines collapsed to one, outside fenced code (``` or ~~~),
+    where a blank line can be part of what an example shows: the only
+    rewrite optimize makes. An unclosed fence keeps the rest as it is."""
+    parts = FENCED.split(markdown_text)
+    return "".join(part if index % 2 else MULTI_NEWLINES.sub("\n\n", part) for index, part in enumerate(parts))
 
 
 def findings(markdown_text: str) -> list[str]:
@@ -47,7 +55,7 @@ def findings(markdown_text: str) -> list[str]:
     for number, line in enumerate(markdown_text.splitlines(), start=1):
         found += [(number, f"filler phrase {m.group()!r}") for pat in PADDING_PATTERNS for m in pat.finditer(line)]
         if number <= 50 and TIMESTAMP_PATTERN.search(line):
-            found.append((number, "timestamp in the first 50 lines breaks the cached prompt prefix"))
+            found.append((number, VOLATILE_NOTE))
     return [f"{number}: {what}" for number, what in sorted(found)]
 
 
@@ -66,7 +74,7 @@ def optimize(name: str, text: str, mode: str) -> tuple[int, list[str], str | Non
     if mode == "write":
         done = "collapsed blank lines" if clean != text else "nothing to rewrite"
         return 0, [*lines, f"OK: {name}: {done}{tail}"], (clean if clean != text else None)
-    summary = f"{estimate_tokens(text)} tokens, {instruction_density(text)}% density"
+    summary = f"{estimate_tokens(text)} tokens, {structured_line_density(text)} list/table lines per 100 tokens"
     return 0, [*lines, f"OK: {name}: {summary}{tail}"], None
 
 
@@ -76,8 +84,10 @@ def estimate_tokens(text: str) -> int:
     return approx_tokens(len(text))
 
 
-def instruction_density(markdown_text: str) -> float:
-    """Calculate the ratio of bulleted/table constraints to total tokens."""
+def structured_line_density(markdown_text: str) -> float:
+    """List and table lines per 100 estimated tokens. A formatting measure:
+    it counts lines shaped like rules, not whether they are rules, correct,
+    or useful. Measured uplift says whether a skill helps; this does not."""
     tokens = estimate_tokens(markdown_text)
     if tokens == 0:
         return 0.0

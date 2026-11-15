@@ -16,8 +16,8 @@ from _lib.context_optimizer import (
     collapse_blank_lines,
     estimate_tokens,
     findings,
-    instruction_density,
     pack_verdict,
+    structured_line_density,
     write_text_atomic,
 )
 
@@ -32,7 +32,8 @@ class TestContextOptimizer(unittest.TestCase):
                 "As an AI coding assistant, sign commits.\n")
         self.assertEqual(findings(text), [
             "2: filler phrase 'In order to '",
-            "3: timestamp in the first 50 lines breaks the cached prompt prefix",
+            ("3: timestamp in the first 50 lines: if it changes between sessions, the provider "
+             "cannot reuse the cached prompt prefix after it"),
             "4: filler phrase 'As an AI coding assistant, '",
         ])
         long_lines = [f"Line {i}" for i in range(55)]
@@ -42,6 +43,15 @@ class TestContextOptimizer(unittest.TestCase):
     def test_only_blank_line_runs_are_rewritten(self) -> None:
         self.assertEqual(collapse_blank_lines("a\n\n\n\nb\n"), "a\n\nb\n")
         self.assertEqual(collapse_blank_lines("In order to x\n"), "In order to x\n")
+
+    def test_blank_lines_inside_a_code_fence_are_kept(self) -> None:
+        """A blank-line run inside a fenced example can be part of what the
+        example shows; --write collapsed it anyway."""
+        text = "a\n\n\n\n```text\nline\n\n\n\nmore\n```\n\n\n\nb\n~~~\nx\n\n\ny\n~~~\n"
+        self.assertEqual(collapse_blank_lines(text),
+                         "a\n\n```text\nline\n\n\n\nmore\n```\n\nb\n~~~\nx\n\n\ny\n~~~\n")
+        unclosed = "```\nx\n\n\n\ny\n"
+        self.assertEqual(collapse_blank_lines(unclosed), unclosed)
 
     def test_estimate_tokens(self) -> None:
         self.assertEqual(estimate_tokens(""), 0)
@@ -56,15 +66,18 @@ class TestContextOptimizer(unittest.TestCase):
         for text in ("a", "a" * 41, "a" * 4000, "é" * 7):
             self.assertEqual(estimate_tokens(text), context_cost.approx_tokens(len(text)), len(text))
 
-    def test_instruction_density(self) -> None:
-        self.assertEqual(instruction_density(""), 0.0)
+    def test_structured_line_density_counts_list_and_table_lines(self) -> None:
+        """A formatting measure, not a judgement of what the lines say: list
+        and table lines per 100 estimated tokens."""
+        self.assertEqual(structured_line_density(""), 0.0)
+        self.assertEqual(structured_line_density("- a\n- b\n" + "x" * 392), 2.0)
         sample = (
             "- rule one\n"
             "* rule two\n"
             "1. rule three\n"
             "| col1 | col2 |\n"
         )
-        density = instruction_density(sample)
+        density = structured_line_density(sample)
         self.assertGreater(density, 0.0)
 
     def test_pack_repomix_xml(self) -> None:

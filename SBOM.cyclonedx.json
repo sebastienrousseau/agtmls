@@ -1678,7 +1678,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5706aba4c998d8ef301e687e5ac327e6bf0240048e687c8d4a7b5c41b97691e8"
+          "content": "f17fa5dd41a171a7d204e1cb5e3304c271a006a7a10fb12b79a387bb5811bb3a"
         }
       ],
       "name": "evals/uplift/README.md",
@@ -2481,7 +2481,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "99a83f222aef7782d1445d67ad90fe51a9630f1b85688a23542a12e78824c66b"
+          "content": "e26a696603e9714f88618d12be4410b4755329184ab1004c4e2729453524e17a"
         }
       ],
       "name": "scripts/_lib/context_cost.py",
@@ -2492,7 +2492,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c0e6fc44d6e173cd17107874ae8142e0f353bd6388b2b312d008cbcec22ba5f3"
+          "content": "8b5a756073bcdea1e052ceab802cc201294553299b9047672ef7cc0c82a856b0"
         }
       ],
       "name": "scripts/_lib/context_optimizer.py",
@@ -2723,7 +2723,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1eb7401fbb01ccd990b577b85209519fc3d21169508a8caceb968d10dd44a3b6"
+          "content": "506379be0c5d8479c82b904ccb3669d7f85234a9100e3cd195d35bdcb4b7a55c"
         }
       ],
       "name": "scripts/_lib/uplift.py",
@@ -2734,7 +2734,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b2ca628ee52d1a041ddc81b45a85bddac24f0554b5b6430b47566dbfacfe91dd"
+          "content": "d27783a8842ce19fa72f281550ec4e1fb3c31f13a9d4763d64856b9eb8e44ec0"
         }
       ],
       "name": "scripts/_lib/uplift_agents.py",
@@ -3251,7 +3251,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "59d44425da32f0719bd97178e19c9988daca5bb63ec202bff3862142c638050d"
+          "content": "a6ee65cdc5f5ca20050c64de3cb4cbd0b8d4dbea9dd13becf02eb535cf2e229f"
         }
       ],
       "name": "scripts/run-uplift-evals.py",
@@ -3570,7 +3570,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f7790d7b7ff5b1e4c1950f6d56107e2f0659235f2d9e9176f74bebbc1f301ebb"
+          "content": "74f2326d24e4fc9c185db6a507bc024d64a1a567f71893da316b47b361ad3fe4"
         }
       ],
       "name": "scripts/validate-context-density.py",
@@ -3746,7 +3746,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3400601a57ee91e0614e9ec04d9e4064a5aa2ec63ae2f3142817e754417a89ed"
+          "content": "7efbd052728b90ac0c23db19eb15f31c429676d4bb58f002f4f04a0e965549a8"
         }
       ],
       "name": "scripts/validate-release.py",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.28"
     },
-    "timestamp": "2026-11-15T17:37:15Z",
+    "timestamp": "2026-11-15T19:19:17Z",
     "tools": {
       "components": [
         {
