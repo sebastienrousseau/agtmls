@@ -50,6 +50,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Sign index.json and every attestation
         env:
           SIGNING_KEY: ${{ secrets.AGTMLS_RELEASE_SIGNING_KEY }}
@@ -71,10 +73,43 @@ jobs:
             attestations/**/*.sig
           if-no-files-found: error
 
-  release:
+  # The full gate runs every repository script, so it runs here, with read
+  # access only, rather than in the job holding contents: write and id-token.
+  gate:
     needs: sign-index
     if: >-
       ${{ !cancelled() && (needs.sign-index.result == 'success' || needs.sign-index.result == 'skipped')
+      && (startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      # The gate checks what ships, signature included.
+      - name: Take the index signature
+        if: needs.sign-index.result == 'success'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: index-signature
+          path: .
+      - name: Install reference validator
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/skills-ref.txt
+      - name: Full release gate
+        run: python3 scripts/agtmls.py check
+
+  release:
+    needs: [sign-index, gate]
+    if: >-
+      ${{ !cancelled() && (needs.sign-index.result == 'success' || needs.sign-index.result == 'skipped')
+      && needs.gate.result == 'success'
       && (startsWith(github.ref, 'refs/tags/v0.0.') || (github.event_name == 'workflow_dispatch' && !inputs.publish_existing)) }}
     runs-on: ubuntu-latest
     permissions:
@@ -87,6 +122,7 @@ jobs:
       # The release content: the tagged commit.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
@@ -109,11 +145,13 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
       - name: Validate release tag
+        env:
+          TAG_VERSION: ${{ steps.version.outputs.version }}
         run: |
           VERSION="$(python3 -c 'import json; print(json.load(open(".claude-plugin/plugin.json"))["version"])')"
-          test "$VERSION" = "${{ steps.version.outputs.version }}"
+          test "$VERSION" = "$TAG_VERSION"
           python3 scripts/validate-version-policy.py
-          python3 scripts/release-dry-run.py --version "${{ steps.version.outputs.version }}" --skip-check --profile minimal --provider generic
+          python3 scripts/release-dry-run.py --version "$TAG_VERSION" --skip-check --profile minimal --provider generic
       - name: Take the index signature
         if: needs.sign-index.result == 'success'
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -126,10 +164,6 @@ jobs:
           ssh-keygen -Y verify -f ALLOWED_SIGNERS -I agtmls-release \
             -n agtmls-index@v1 -s index.json.sig < index.json
           python3 scripts/sign-attestations.py --verify
-      - name: Install reference validator
-        run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/skills-ref.txt
-      - name: Full release gate
-        run: python3 scripts/agtmls.py check
       - name: Build release assets
         run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
       - name: Build Python distributions
@@ -166,11 +200,13 @@ jobs:
           (cd dist/assets && sha256sum -- * > ../SHA256SUMS && mv ../SHA256SUMS SHA256SUMS)
           cat dist/assets/SHA256SUMS
       - name: Verify the wheel installs and runs
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           python3 -m venv /tmp/verify
           /tmp/verify/bin/pip install --disable-pip-version-check dist/assets/*.whl
           test "$(/tmp/verify/bin/agtmls stats --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["registry_version"])')" \
-            = "${{ steps.version.outputs.version }}"
+            = "$VERSION"
       - name: The installed wheel carries a verifying signature
         if: needs.sign-index.result == 'success'
         run: |
@@ -190,6 +226,7 @@ jobs:
       # and packed as if it were the release.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
           fetch-tags: true
           ref: ${{ github.sha }}
@@ -258,8 +295,9 @@ jobs:
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          python3 tooling/scripts/release-audit.py --tag "${{ steps.version.outputs.tag }}" \
+          python3 tooling/scripts/release-audit.py --tag "$TAG" \
             --commit "$(git rev-parse HEAD)" --before-pypi
 
   # For a release that is already public: its attached files are the release,
@@ -273,6 +311,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
           fetch-tags: true
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
@@ -300,9 +339,10 @@ jobs:
       - name: Audit the release before handing it on
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
         run: |
-          python3 scripts/release-audit.py --tag "${{ inputs.tag }}" \
-            --commit "$(git rev-parse "${{ inputs.tag }}^{commit}")" --before-pypi
+          python3 scripts/release-audit.py --tag "$TAG" \
+            --commit "$(git rev-parse "$TAG^{commit}")" --before-pypi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-assets

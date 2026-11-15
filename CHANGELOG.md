@@ -25,6 +25,12 @@ All notable changes to AgtMLS are recorded here.
   whoever replaced the skills could also replace; the signature was checked
   only by `verify --signatures`, after the copy. With no signature (a
   development checkout) or no `ssh-keygen`, install warns and continues.
+- Release CI runs the full gate in its own job with read-only permissions;
+  it ran in the job that holds `contents: write` and `id-token: write`, so
+  every repository script ran with the right to publish. Every workflow
+  checkout sets `persist-credentials: false`, and `inputs.tag` and the step
+  outputs derived from it reach `run:` scripts through `env:` rather than
+  being expanded into the script text.
 - A `--copy` install carries only the files a skill's digest covers. It copied
   the whole directory, so a `__pycache__`, `node_modules`, `.venv` or editor
   file planted in a registry skill landed in the target without being hashed,
