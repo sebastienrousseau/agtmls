@@ -21,8 +21,26 @@ verdict:
 | --- | --- |
 | `helps` | The skill gains, and uses at most 1.5x the tokens of the task without it, or gains 20 points or more |
 | `too costly` | It gains under 20 points and uses more than 1.5x the tokens |
+| `less reliable` | The skill arm finished a smaller share of its runs than the arm without it; its scores cover fewer runs |
 | `no gain` | The score with the skill is not higher |
 | `no data`, `no token data` | An arm had no successful run, or an agent reported no tokens |
+
+Scores, finds and token counts are over the runs that finished. Each arm
+also records `completed`, the share of its runs that finished, and the cost
+of every attempt: `cost_usd_total` sums each run's reported cost, failed
+runs included, and `cost_usd_per_completed` divides it by the runs that
+finished. `cost_usd_runs` counts the runs that reported a cost, so a
+total over fewer than all of them shows as partial, and
+`cost_usd_per_completed` is `null` unless every run reported one.
+
+Each run also records `usage`, its tokens by kind: `input` (not from the
+cache), `cache_read`, `cache_write`, `output`, `reasoning` (counted inside
+`output`) and `total`. Claude Code reports these four counts separately;
+Codex counts cached input inside `input_tokens` and reasoning inside
+`output_tokens`, so its cached part is moved out of `input` rather than
+added. A kind an agent did not report is `null`. `tokens` is `total`: for
+Claude, input + cache reads + cache writes + output; for Codex, input +
+output, its own `total_tokens`. Each arm averages every kind under `usage`.
 
 A skill meets the `hardened` bar when it `helps` on at least two agents; the
 rendered report names those skills. The ceiling is `TOKEN_CEILING` and

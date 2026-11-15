@@ -17,7 +17,7 @@ be scripted, and nothing publishes until it is done.
 | :--- | :--- | :--- | :--- |
 | `agtmls` | PyPI | `agtmls/.github/workflows/release.yml` | `pypi` |
 | `agtmls-core`, `agtmls-cli` | crates.io | `agtmls-core/.github/workflows/release.yml` | `crates-io` |
-| `@agtmls/wasm` | npmjs | `agtmls-wasm/.github/workflows/release.yml` | `npm` |
+| `@sebastienrousseau/agtmls-wasm` | npmjs | `agtmls-wasm/.github/workflows/release.yml` | `npm` |
 
 Each job already declares `permissions: id-token: write`, which is what mints
 the OIDC identity the registry exchanges for a short-lived token.
@@ -55,7 +55,10 @@ Workflow:     release.yml
 Environment:  crates-io
 ```
 
-**npmjs** — npmjs.com → `@agtmls/wasm` → *Settings* → *Trusted publisher*.
+**npmjs** — npmjs.com → `@sebastienrousseau/agtmls-wasm` → *Settings* → *Trusted publisher*.
+npm offers this only for a package that already exists, so the first version
+is published by hand; tick *Allow npm publish*, or only a staged publish is
+permitted.
 
 ```
 Repository:   sebastienrousseau/agtmls-wasm

@@ -530,12 +530,39 @@ class ContextOptimizerCliTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("unknown skill(s): no-such-skill", err)
 
-    def test_pack_over_budget_names_what_it_left_out_and_fails(self) -> None:
-        code, out, err = self.pack("cross-language-port", "--max-tokens", "10")
-        self.assertEqual(code, 1)
-        self.assertIn("left out over the 10-token budget", err)
-        self.assertIn("skills/cross-language-port/SKILL.md", err)
-        self.assertIn("omitted over the 10-token budget", out)
+    def test_an_over_budget_pack_writes_nothing_unless_partial_is_allowed(self) -> None:
+        """A failed pack exited 1 but still replaced --output with the partial
+        pack, so a pipeline reading the file got less than it asked for."""
+        target = Path(self.tmp.name) / "pack.xml"
+        target.write_text("previous", encoding="utf-8")
+        budget = str(self.full_pack_tokens("cross-language-port") - 1)
+        code, out, err = self.pack("cross-language-port", "--max-tokens", budget, "--output", str(target))
+        self.assertEqual((code, out), (1, ""))
+        self.assertIn("skills/cross-language-port/SKILL.md; nothing written (--allow-partial", err)
+        self.assertEqual(target.read_text(encoding="utf-8"), "previous")
+
+        code, out, err = self.pack("cross-language-port", "--max-tokens", budget, "--output", str(target),
+                                   "--allow-partial")
+        self.assertEqual(code, 0, err)
+        self.assertIn("WARN: partial pack", err)
+        written = target.read_text(encoding="utf-8")
+        self.assertIn("omitted over the", written)
+        self.assertIn('path="AGENTS.md"', written)
+        from _lib.context_optimizer import estimate_tokens
+
+        self.assertLessEqual(estimate_tokens(written), int(budget))
+
+    def test_agents_md_is_never_left_out(self) -> None:
+        code, out, err = self.pack("using-agtmls", "--max-tokens", "200", "--allow-partial")
+        self.assertEqual((code, out), (1, ""))
+        self.assertIn("required file(s) do not fit the 200-token budget: AGENTS.md; nothing written", err)
+
+    def full_pack_tokens(self, *skills: str) -> int:
+        code, out, _ = self.pack(*skills)
+        self.assertEqual(code, 0)
+        from _lib.context_optimizer import estimate_tokens
+
+        return estimate_tokens(out.rstrip("\n"))
 
     def test_pack_when_paths_do_not_exist(self) -> None:
         empty_dir = Path(self.tmp.name) / "empty"

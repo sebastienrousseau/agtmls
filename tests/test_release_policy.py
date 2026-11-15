@@ -289,6 +289,27 @@ class ReleaseMetadataTests(FixtureCase):
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py check", "make check")
         self.assertRefused("RELEASE.md must require python3 scripts/agtmls.py check")
 
+    def test_recorded_checksums_are_accepted_and_garbage_is_not(self) -> None:
+        """Once a release is published its notes record the real SHA256SUMS;
+        this check demanded `pending` for the current version forever, so
+        recording them failed the gate until the next bump."""
+        notes = f"docs/release-notes/v{self.version()}.md"
+        text = (FIXTURE / notes).read_text(encoding="utf-8")
+        # The notes say `pending` until the release is published and its sums
+        # are recorded, so record some here rather than depend on where the
+        # checkout is in that cycle.
+        recorded = f"{'a' * 64}  agtmls-{self.version()}.tar.gz"
+        if "pending-release-pack" in text:
+            self.edit_text(notes, "pending-release-pack", recorded)
+        else:
+            recorded = next(line for line in text.splitlines() if len(line.split()) == 2
+                            and len(line.split()[0]) == 64)
+        code, output = self.check()
+        self.assertEqual(code, 0, output)
+        self.edit_text(notes, recorded, "not a checksum line")
+        self.assertRefused(f"v{self.version()}.md: the Checksums section must say `pending` or list "
+                           "well-formed SHA256SUMS lines")
+
     def test_a_release_procedure_that_skips_the_index_is_refused(self) -> None:
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py index --write", "make index")
         self.assertRefused("RELEASE.md must require index regeneration")

@@ -27,7 +27,7 @@ SIBLINGS = ROOT.parent.parent
 PACKAGES = [
     ("agtmls", ROOT, "PyPI", "pypi"),
     ("agtmls-core + agtmls-cli", SIBLINGS / "Rust" / "agtmls-core", "crates.io", "crates-io"),
-    ("@agtmls/wasm", SIBLINGS / "Rust" / "agtmls-wasm", "npmjs", "npm"),
+    ("@sebastienrousseau/agtmls-wasm", SIBLINGS / "Rust" / "agtmls-wasm", "npmjs", "npm"),
 ]
 
 

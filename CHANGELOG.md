@@ -7,6 +7,69 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.29 - 2026-11-15
+
+### Changed
+
+- `pack --max-tokens` budgets the whole rendered pack: the XML wrapper, file
+  paths, indentation, escaping and the note naming omitted files. It counted
+  each file's raw text only, so a 140-token budget could produce a
+  294-token pack. Counts stay approximate (characters / 4, rounded up), and
+  each file's `tokens` attribute is still its own content estimate.
+- `AGENTS.md` is never left out of a pack: when it does not fit, no pack is
+  produced. It was skipped like any other file, leaving skills without the
+  instructions they assume.
+- An over-budget `pack` writes nothing and exits 1; `--allow-partial` writes
+  the pack without the files that do not fit, named in it, and exits 0 with a
+  warning. In 0.0.28 a failed pack still replaced `--output` with the partial
+  pack. `--output` is now written atomically, keeping the file's mode,
+  through a symlink to its target, and never over a read-only file.
+  Required files are placed before optional ones, so an optional file
+  listed first cannot spend a required file's budget; a budget smaller
+  than an empty pack is an error.
+
+### Fixed
+
+- `doctor`'s context cost and `verify --live`'s shortened-description check
+  read a block-scalar description (`description: >` or `|`, with any
+  chomping indicator) as the single character `>` or `|`. They now read it
+  as YAML does, including chomping and indentation indicators, a comment
+  after the header and more-indented lines in a folded scalar: 4,553 random
+  block scalars read exactly as PyYAML reads them.
+- `validate-release.py` accepts recorded SHA256SUMS in the current
+  version's release notes. It required `pending` until the next bump, so
+  recording a published release's checksums failed the gate.
+  A malformed listing is named as such rather than told to say `pending`;
+  the check is of form only, and the preflight and audit compare the sums
+  with the release's own.
+- Uplift verdicts account for failed runs. Scores, cost and time were
+  averaged over the runs that finished, and the verdict never looked at
+  errors, so a skill arm that failed most of its runs could still `help` on
+  the rest. A skill arm that finishes a smaller share of its runs than the
+  arm without it is now `less reliable` (an arm whose every run failed
+  included), and each arm records `completed`, `cost_usd_total` (every
+  attempt that reported a cost, failed ones included), `cost_usd_runs` (how
+  many did) and `cost_usd_per_completed` (only when every run did). Every committed result had no failed run, so no
+  verdict or efficacy attestation changes.
+- Uplift runs record token usage by kind (`input`, `cache_read`,
+  `cache_write`, `output`, `reasoning`, `total`), with each agent's overlaps
+  handled explicitly: Codex counts cached input inside input and reasoning
+  inside output. Claude's total summed every usage field ending in `tokens`,
+  so a new subtotal field would have been counted twice; it now sums the four
+  named counts. Totals for today's usage shapes are unchanged; a Codex cached count
+  larger than its input leaves the uncached input unknown, not negative.
+- `optimize --write` keeps blank lines inside fenced code, where they can be
+  part of an example; it collapsed them everywhere. Fences open and close as
+  CommonMark's do: ``` or ~~~, indented up to three spaces, closed by the same
+  character at least as long.
+- The early-timestamp finding says what it knows: a timestamp stops the
+  provider reusing the cached prompt prefix only if it changes between
+  sessions. It said every timestamp "breaks" the cache.
+- "Instruction density" is reported as what it measures, list and table
+  lines per 100 estimated tokens (`structured_line_density`): a formatting
+  measure, not a judgement of the instructions. The context-density check
+  keeps its threshold.
+
 ## 0.0.28 - 2026-11-15
 
 ### Security

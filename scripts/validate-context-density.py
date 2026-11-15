@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
 # SPDX-License-Identifier: Apache-2.0 OR MIT
-"""Validate instruction density and cache-friendly prefixes in context files.
+"""Validate structure density and cache-friendly prefixes in context files.
 
 Audits AGENTS.md and GEMINI.md: an estimated token budget, an instruction
 density floor, and no timestamp in the first 50 lines. The system prompts
@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from _lib.context_optimizer import (  # noqa: E402
     estimate_tokens,
     findings,
-    instruction_density,
+    structured_line_density,
 )
 
 MIN_DENSITY = 0.5
@@ -37,9 +37,9 @@ def audit_file(path: Path) -> list[str]:
     if tokens > MAX_TOKENS:
         issues.append(f"{path.name} exceeds max token budget ({tokens} > {MAX_TOKENS})")
 
-    density = instruction_density(text)
+    density = structured_line_density(text)
     if density < MIN_DENSITY:
-        issues.append(f"{path.name} instruction density too low ({density} < {MIN_DENSITY})")
+        issues.append(f"{path.name} density too low: {density} list/table lines per 100 tokens (< {MIN_DENSITY})")
 
     issues += [f"{path.name}:{note}" for note in findings(text) if "timestamp" in note]
 

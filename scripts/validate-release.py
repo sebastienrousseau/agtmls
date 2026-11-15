@@ -13,9 +13,32 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from _lib.release_notes import notes_problems  # noqa: E402
+from _lib.checksums import parse_sums  # noqa: E402
+from _lib.release_notes import CHECKSUMS, notes_problems, section  # noqa: E402
 
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
+# The fenced block a Checksums section lists its sums in.
+FENCE = re.compile(r"^```[a-z]*\n(.*?)^```", re.MULTILINE | re.DOTALL)
+
+
+def recorded_sums(text: str) -> str | None:
+    """The Checksums section when it records a well-formed SHA256SUMS listing,
+    else None. Before its tag a release's notes say `pending`; once it is
+    published they record the real sums, which must not fail this check.
+    This checks their form only: release-preflight.py --sums and
+    release-audit.py compare them with the release's real SHA256SUMS."""
+    fence = FENCE.search(section(text, CHECKSUMS) or "")
+    listing = fence.group(1) if fence else ""
+    sums, problems = parse_sums(listing)
+    return listing if sums and not problems else None
+
+
+def checksums_problems(name: str, text: str) -> list[str]:
+    """Release-notes problems for the current version: recorded sums, or a
+    Checksums section that says `pending`, and a clear message for neither."""
+    errors = notes_problems(name, text, sums=recorded_sums(text), pending=True)
+    clearer = f"{name}: the Checksums section must say `pending` or list well-formed SHA256SUMS lines"
+    return [clearer if "must be marked `pending`" in error else error for error in errors]
 
 
 def main() -> int:
@@ -34,7 +57,7 @@ def main() -> int:
             errors.append(f"docs/release-notes/v{version}.md must exist before releasing")
         else:
             text = notes_file.read_text(encoding="utf-8")
-            errors.extend(notes_problems(notes_file.name, text, sums=None, pending=True))
+            errors.extend(checksums_problems(notes_file.name, text))
 
     if index.get("registry_version") != plugin.get("version"):
         errors.append("index registry_version must match plugin version")

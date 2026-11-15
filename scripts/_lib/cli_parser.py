@@ -205,7 +205,11 @@ def _audit_commands(sub) -> None:
     pack_cmd = sub.add_parser("pack", help="pack skills and context into a token-bounded Repomix XML block")
     pack_cmd.add_argument("skills", nargs="*", help="names of skills to pack (default: all)")
     pack_cmd.add_argument("--max-tokens", type=int,
-                          help="token budget; files that do not fit are left out, named, and exit 1")
+                          help="approximate token budget for the whole rendered pack; "
+                               "if a file does not fit, nothing is written and the exit is 1")
+    pack_cmd.add_argument("--allow-partial", action="store_true",
+                          help="write the pack without the files that do not fit, named in it; "
+                               "AGENTS.md is never left out, and the note naming them must fit too")
     pack_cmd.add_argument("--output", type=Path, help="write packed context to file")
 
 

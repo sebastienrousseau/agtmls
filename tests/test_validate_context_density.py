@@ -37,7 +37,8 @@ class TestValidateContextDensity(unittest.TestCase):
             f.write("# Rules\nGenerated at 2026-10-12T22:00:00Z\n- Item 1\n")
             f.flush()
             issues = vcd.audit_file(Path(f.name))
-            self.assertIn(f"{Path(f.name).name}:2: timestamp in the first 50 lines breaks the cached prompt prefix",
+            self.assertIn(f"{Path(f.name).name}:2: timestamp in the first 50 lines: if it changes "
+                          "between sessions, the provider cannot reuse the cached prompt prefix after it",
                           issues)
 
     def test_audit_file_low_density(self) -> None:

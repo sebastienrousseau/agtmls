@@ -102,21 +102,23 @@ All seven repositories exist and are public.
 | [`agtmls`](https://github.com/sebastienrousseau/agtmls) | `Public/Python/agtmls` | Phase 2 complete; phase 0 repairs landing in 0.0.7. Check gate from `checks.json` (timing in `benchmarks/results/gate.json`). Per-skill `integrity`; install verifies and writes a lockfile |
 | [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) | `Public/Python/agtmls-spec` | 8 documents (5 normative), 19 rules as data, 3 schemas, 44 corpus cases, a 4-level conformance runner |
 | [`agtmls-core`](https://github.com/sebastienrousseau/agtmls-core) | `Public/Rust/agtmls-core` | **L4 verified.** Digest, rules, analyzers, lockfile. 0 clippy warnings under `pedantic` |
-| [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@agtmls/wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
+| [`agtmls-wasm`](https://github.com/sebastienrousseau/agtmls-wasm) | `Public/Rust/agtmls-wasm` | `@sebastienrousseau/agtmls-wasm`. 410 KB gzipped against a 500 KB budget. Rules embedded at compile time |
 | [`agtmls-action`](https://github.com/sebastienrousseau/agtmls-action) | `Public/JavaScript/agtmls-action` | SARIF to code scanning. Vendors the WASM module; no Rust toolchain at run time |
 | [`agtmls-mcp`](https://github.com/sebastienrousseau/agtmls-mcp) | `Public/Rust/agtmls-mcp` | JSON-RPC over stdio, MCP `2025-06-18`. 5 tools, 2 resource families, 2 prompts |
 | [`agtmls-lsp`](https://github.com/sebastienrousseau/agtmls-lsp) | `Public/Rust/agtmls-lsp` | Live diagnostics, frontmatter completion, capability-narrowing code actions |
 
 ### Publishing
 
-Release workflows exist for crates.io (`agtmls-core`), npm (`agtmls-wasm`) and
-PyPI (`agtmls`), all via Trusted Publishing, so no long-lived token exists to
-leak. **None has run yet**: PyPI carries 0.0.3–0.0.5, uploaded by hand before
-the workflow existed, and neither `agtmls-core` on crates.io nor
-`@agtmls/wasm` on npm is published (checked 2026-09-22). `agtmls` has its
-trusted publisher registered on PyPI and a `pypi` environment with a required
-reviewer (set up 2026-09-23); `agtmls-core` and `@agtmls/wasm` still need
-theirs, which cannot be done from a checkout.
+Release workflows publish `agtmls` and `agtmls-scorecard` to PyPI,
+`agtmls-core` and `agtmls-cli` to crates.io, and `agtmls-wasm` to npm, all
+via Trusted Publishing, so no long-lived token exists to leak. As of
+2026-11-15: `agtmls` 0.0.28 and `agtmls-scorecard` 0.0.3 are on PyPI, and
+`agtmls-core` and `agtmls-cli` 0.0.4 on crates.io, each published by its
+workflow. The npm package is `@sebastienrousseau/agtmls-wasm`: the `@agtmls` scope
+was never created on npm, so `@agtmls/wasm` never published. 0.0.4 was
+published by hand, because npm accepts a trusted publisher only for a
+package that exists; its trusted publisher is registered and becomes active
+with the first workflow publish.
 
 ### What the second implementation proved
 
@@ -169,7 +171,7 @@ agtmls-spec          normative schemas + conformance corpus.   no code
    └── agtmls-core   Rust engine: parse · digest · audit · resolve
           ├── agtmls-mcp    MCP server (stdio + streamable HTTP)
           ├── agtmls-lsp    LSP server + VS Code / Zed / Neovim clients
-          ├── agtmls-wasm   @agtmls/wasm + browser playground
+          ├── agtmls-wasm   @sebastienrousseau/agtmls-wasm + browser playground
           └── agtmls-action GitHub Action → SARIF → code scanning
 ```
 
@@ -490,7 +492,8 @@ Incremental sync, debounced 150ms. Enforced by criterion benchmarks
 
 ## 6. `agtmls-wasm` — reach and trust
 
-`agtmls-core` compiled with `wasm-bindgen`, published as `@agtmls/wasm`.
+`agtmls-core` compiled with `wasm-bindgen`, published on npm as
+`@sebastienrousseau/agtmls-wasm`.
 
 Three things it unlocks:
 
@@ -508,7 +511,7 @@ Size budget: **< 500 KB** gzipped, enforced in CI. `wasm-opt -Oz`,
 API surface deliberately tiny:
 
 ```ts
-import init, { audit, digest, parseSkill } from "@agtmls/wasm";
+import init, { audit, audit_skill, skill_digest, rule_count } from "@sebastienrousseau/agtmls-wasm";
 await init();
 const findings = audit("SKILL.md", content);   // Finding[]
 ```
@@ -533,7 +536,7 @@ registry follows. Ship the malicious-fixture corpus publicly alongside it as
 the reference benchmark for skill-security tooling — being the group that
 defines the benchmark is worth more than being the group with the most rules.
 
-Implementation: composite action over `@agtmls/wasm` under Node 20. No
+Implementation: composite action over `@sebastienrousseau/agtmls-wasm` under Node 20. No
 platform matrix, no compilation, sub-second cold start.
 
 ---

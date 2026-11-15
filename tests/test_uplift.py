@@ -187,7 +187,8 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(row["with"]["found"], {"a": 1.0, "b": 0.5})
         self.assertEqual(row["without"]["tokens"], None)
         text = uplift.render([row])
-        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | n/a | 100% | 1 | no token data |", text)
+        # The skill arm lost a run the other did not: its gain is over fewer runs.
+        self.assertIn("| s | claude | 50% | 75% | +25 pts | n/a | n/a | 100% | 1 | less reliable |", text)
         self.assertIn("| b | 0% | 50% |", text)
         with_tokens = uplift.summarise([self.CASE], [_run("with", ["a"], tokens=300), _run("without", ["a"])])
         self.assertIn("| +0 pts | 3.00x | n/a | 100% | 0 | no gain |", uplift.render(with_tokens))
@@ -203,6 +204,30 @@ class SummaryTests(unittest.TestCase):
         (row,) = uplift.summarise([self.CASE], [_run("with", ["a"]), _run("without", [], error="x")])
         self.assertIsNone(row["delta"])
         self.assertIn("| s | claude | n/a | 50% | n/a | n/a | n/a | 100% | 1 | no data |", uplift.render([row]))
+
+
+class AttemptEconomicsTests(unittest.TestCase):
+    def test_completion_and_the_cost_of_every_attempt(self) -> None:
+        """Cost was the mean over finished runs, so a failed run's spend
+        vanished; each arm now also records what every attempt cost."""
+        case = SummaryTests.CASE
+        runs = [_run("with", ["a"], cost_usd=0.4), _run("with", [], error="timeout", cost_usd=0.3),
+                _run("with", [], error="crash", cost_usd=None), _run("without", ["a"], cost_usd=0.2)]
+        (row,) = uplift.summarise([case], runs)
+        self.assertEqual(row["with"]["completed"], 0.333)
+        # The crashed run reported no cost: 0.7 covers 2 of the 3 runs, and
+        # says so, and no per-run figure is claimed from a partial sum.
+        self.assertEqual((row["with"]["cost_usd_total"], row["with"]["cost_usd_runs"]), (0.7, 2))
+        self.assertIsNone(row["with"]["cost_usd_per_completed"])
+        self.assertEqual((row["without"]["completed"], row["without"]["cost_usd_per_completed"]), (1.0, 0.2))
+        partial = [_run("with", ["a"], cost_usd=0.4), _run("with", ["a"], cost_usd=None), _run("without", ["a"])]
+        (row2,) = uplift.summarise([case], partial)
+        # One run reported no cost: no per-run figure from a partial sum.
+        self.assertEqual((row2["with"]["cost_usd_total"], row2["with"]["cost_usd_runs"],
+                          row2["with"]["cost_usd_per_completed"]), (0.4, 1, None))
+        (none,) = uplift.summarise([case], [_run("with", [], error="x", cost_usd=None), _run("without", ["a"])])
+        self.assertEqual((none["with"]["completed"], none["with"]["cost_usd_total"],
+                          none["with"]["cost_usd_per_completed"]), (0.0, None, None))
 
 
 class VerdictTests(unittest.TestCase):
@@ -228,6 +253,30 @@ class VerdictTests(unittest.TestCase):
         for row, expected in cases:
             self.assertEqual(uplift.verdict(row), expected, row)
 
+    def test_an_arm_that_fails_more_often_does_not_help(self) -> None:
+        """Scores were averaged over the runs that finished, and the verdict
+        never looked at errors: an arm that failed 4 of 5 runs could still
+        "help" on the one that finished."""
+        row = self.row(0.5, 100.0)
+        row["with"].update(runs=5, errors=4)
+        row["without"].update(runs=5, errors=0)
+        self.assertEqual(uplift.verdict(row), "less reliable")
+        row["with"]["errors"] = 0
+        self.assertEqual(uplift.verdict(row), "helps")
+        row["without"]["errors"] = 1  # the skill arm is the more reliable one
+        self.assertEqual(uplift.verdict(row), "helps")
+
+    def test_a_skill_arm_with_no_finished_run_is_less_reliable_not_no_data(self) -> None:
+        """Every skill run failing left its score None, so the delta was None
+        and the verdict said `no data`: the worst reliability case escaped
+        the reliability check."""
+        row = self.row(None, None)
+        row["with"].update(runs=2, errors=2)
+        row["without"].update(runs=2, errors=0)
+        self.assertEqual(uplift.verdict(row), "less reliable")
+        row["with"]["errors"] = 0  # nothing failed, nothing scored: still no data
+        self.assertEqual(uplift.verdict(row), "no data")
+
     def test_hardened_needs_two_agents_that_help(self) -> None:
         rows = [{"skill": "a", "verdict": "helps"}, {"skill": "a", "verdict": "helps"},
                 {"skill": "b", "verdict": "helps"}, {"skill": "b", "verdict": "too costly"}]
@@ -246,6 +295,42 @@ class ParseTests(unittest.TestCase):
         out = uplift_agents.AGENTS["claude"].parse("\n".join(map(json.dumps, events)) + "\n[1]", "s", self.OPTIONS)
         self.assertEqual((out.answer, out.skill_used, out.tokens, out.model), ("", True, None, "m"))
         self.assertEqual(out.error, "claude: error_max_turns")
+
+    def claude_usage(self, usage: dict):
+        result = {"type": "result", "result": "ok", "total_cost_usd": 0.01, "usage": usage}
+        return uplift_agents.AGENTS["claude"].parse(json.dumps(result), "s", self.OPTIONS)
+
+    def test_claude_usage_is_broken_down_and_unknown_fields_are_not_summed(self) -> None:
+        """Claude's total summed every field ending in `tokens`, so any new
+        `*tokens` subtotal in its usage would have been counted twice."""
+        out = self.claude_usage({"input_tokens": 2, "cache_creation_input_tokens": 888,
+                                 "cache_read_input_tokens": 697639, "output_tokens": 344,
+                                 "output_tokens_details": {"thinking_tokens": 40},
+                                 "some_future_tokens": 1000, "service_tier": "standard"})
+        self.assertEqual(out.tokens, 2 + 888 + 697639 + 344)
+        self.assertEqual(out.usage, {"input": 2, "cache_read": 697639, "cache_write": 888, "output": 344,
+                                     "reasoning": 40, "total": 698873})
+        self.assertEqual(out.output_tokens, 344)
+        partial = self.claude_usage({"output_tokens": 5})
+        self.assertEqual(partial.usage, {"input": None, "cache_read": None, "cache_write": None, "output": 5,
+                                         "reasoning": None, "total": 5})
+        self.assertIsNone(self.claude_usage({"service_tier": "x"}).usage)
+
+    def test_codex_cached_input_is_part_of_input(self) -> None:
+        """Codex counts cached input inside input_tokens, and reasoning inside
+        output_tokens, so neither is added again."""
+        events = [{"type": "item.completed", "item": {"type": "agent_message", "text": "a"}},
+                  {"type": "turn.completed", "usage": {"input_tokens": 1000, "cached_input_tokens": 900,
+                                                       "output_tokens": 50, "reasoning_output_tokens": 30}}]
+        out = uplift_agents.AGENTS["codex"].parse("\n".join(map(json.dumps, events)), "s", self.OPTIONS)
+        self.assertEqual(out.tokens, 1050)
+        self.assertEqual(out.usage, {"input": 100, "cache_read": 900, "cache_write": None, "output": 50,
+                                     "reasoning": 30, "total": 1050})
+
+    def test_codex_cache_larger_than_input_is_not_a_negative_count(self) -> None:
+        out = uplift_agents.codex_usage({"input_tokens": 5, "cached_input_tokens": 9, "output_tokens": 1})
+        self.assertIsNone(out["input"])
+        self.assertEqual((out["cache_read"], out["total"]), (9, 6))
 
     def test_claude_without_a_result(self) -> None:
         self.assertEqual(uplift_agents.AGENTS["claude"].parse("", "s", self.OPTIONS).error, "claude printed no result")
@@ -340,6 +425,8 @@ class ScriptTests(FakeAgents):
         results = json.loads(out.read_text(encoding="utf-8"))
         self.assertEqual(len(results["runs"]), 8)
         self.assertEqual({run["output_tokens"] for run in results["runs"]}, {5, 3})
+        self.assertEqual({run["usage"]["total"] for run in results["runs"]}, {15, 10})
+        self.assertEqual({row["with"]["usage"]["input"] for row in results["summary"]}, {10.0, 7.0})
         self.assertEqual(set(results["meta"]["agents"]), {"claude", "codex"})
         self.assertRegex(results["meta"]["skills"]["vetting-a-skill-before-install"], r"^sha256:")
         by_arm = {(row["agent"]): row for row in results["summary"]}
