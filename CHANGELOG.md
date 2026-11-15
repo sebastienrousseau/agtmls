@@ -37,6 +37,9 @@ All notable changes to AgtMLS are recorded here.
 - `validate-release.py` accepts recorded SHA256SUMS in the current
   version's release notes. It required `pending` until the next bump, so
   recording a published release's checksums failed the gate.
+  A malformed listing is named as such rather than told to say `pending`;
+  the check is of form only, and the preflight and audit compare the sums
+  with the release's own.
 - Uplift verdicts account for failed runs. Scores, cost and time were
   averaged over the runs that finished, and the verdict never looked at
   errors, so a skill arm that failed most of its runs could still `help` on

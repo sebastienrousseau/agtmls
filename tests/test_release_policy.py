@@ -299,7 +299,8 @@ class ReleaseMetadataTests(FixtureCase):
         first = next(line for line in text.splitlines() if line[:64].strip() and len(line.split()) == 2
                      and len(line.split()[0]) == 64)
         self.edit_text(notes, first, "not a checksum line")
-        self.assertRefused(f"v{self.version()}.md: pending checksums must be marked `pending` in the Checksums section")
+        self.assertRefused(f"v{self.version()}.md: the Checksums section must say `pending` or list "
+                           "well-formed SHA256SUMS lines")
 
     def test_a_release_procedure_that_skips_the_index_is_refused(self) -> None:
         self.edit_text("RELEASE.md", "python3 scripts/agtmls.py index --write", "make index")

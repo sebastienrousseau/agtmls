@@ -118,8 +118,10 @@ def _totals(usage: dict | None) -> tuple[int | None, int | None]:
 
 def claude_usage(usage: object) -> dict | None:
     """Claude Code's `result.usage` by kind. Its four counts are disjoint:
-    `input_tokens` excludes the cache reads and writes, and thinking tokens
-    are part of `output_tokens`. A count it did not report is None."""
+    `input_tokens` excludes the cache reads and writes. `reasoning` is
+    `output_tokens_details.thinking_tokens`, taken as part of `output_tokens`
+    because Anthropic bills thinking as output; that is not checked against
+    a transcript here. A count it did not report is None."""
     if not isinstance(usage, dict):
         return None
     details = usage.get("output_tokens_details")
@@ -132,8 +134,10 @@ def claude_usage(usage: object) -> dict | None:
 
 def codex_usage(usage: object) -> dict | None:
     """`codex exec` usage by kind. `input_tokens` includes the cached input,
-    and `output_tokens` the reasoning (input + output is Codex's own
-    `total_tokens`), so the cached part is moved out of input, not added."""
+    and `output_tokens` the reasoning: in a Codex rollout's
+    `total_token_usage`, input + output equals `total_tokens` with cached and
+    reasoning counts reported beside them. So the cached part is moved out
+    of input, not added."""
     if not isinstance(usage, dict):
         return None
     inp, cached = _int(usage, "input_tokens"), _int(usage, "cached_input_tokens")
