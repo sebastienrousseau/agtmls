@@ -19,6 +19,12 @@ All notable changes to AgtMLS are recorded here.
   with that directory's digest, and `uninstall` removed it. A lockfile that
   is not JSON, or not the expected shape, now fails with exit 1 and a message
   naming the problem instead of a traceback.
+- `install` checks `index.json.sig` against `ALLOWED_SIGNERS` when it is
+  present and refuses with exit 5 if it does not verify. The digest check only
+  proved that the skills match an `index.json` from the same tree, which
+  whoever replaced the skills could also replace; the signature was checked
+  only by `verify --signatures`, after the copy. With no signature (a
+  development checkout) or no `ssh-keygen`, install warns and continues.
 
 ## 0.0.27 - 2026-10-23
 

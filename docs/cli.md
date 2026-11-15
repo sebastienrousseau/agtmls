@@ -246,9 +246,9 @@ OK: 16 skill(s) match the lockfile in /path/to/repo
 When several apply, the exit code is the first of `5`, `3`, `6`, `4` (agtmls-spec
 11.4): nothing is concluded from a source that does not verify. Signatures are
 checked with `ssh-keygen -Y verify` against `ALLOWED_SIGNERS`; an advisory feed
-(`advisories.json`) that is not signed is never consulted. The registry is not
-signed yet, so `verify --signatures` reports `UNSIGNED` until releases carry
-`index.json.sig`.
+(`advisories.json`) that is not signed is never consulted. Releases from
+v0.0.10 carry `index.json.sig`; a development checkout does not, so
+`verify --signatures` reports `UNSIGNED` there.
 
 Exit `3` is `INTEGRITY_FAILURE`, distinct from `1` (error) and `2` (usage), so
 a calling script can branch on it.
@@ -273,7 +273,12 @@ the file too if nothing else is in it.
 `install` also verifies the **source** registry against `index.json` before
 copying anything, and refuses with exit `3` if they disagree — checking after
 copying a tampered skill into someone's repository would not be a control.
-Use `--no-verify` to skip it, which is not recommended.
+When `index.json.sig` is present, `install` also checks it against
+`ALLOWED_SIGNERS` and refuses with exit `5` if it does not verify: the digest
+check alone proves the skills match `index.json`, not that `index.json` is the
+publisher's. With no signature (a checkout), or no `ssh-keygen` to check one,
+it warns and installs on the digest check. Use `--no-verify` to skip both,
+which is not recommended.
 
 ### Does the agent actually read the skills?
 

@@ -163,6 +163,50 @@ class InstallLifecycleTests(CliFixture):
         self.assertEqual(self.calls, [], "the installer ran despite the drift")
         self.assertFalse((self.target / ".claude").exists())
 
+    def install_signed(self, outcome, *flags: str) -> tuple[int, str]:
+        """Install with the index signature check answering `outcome`, a
+        status string or an exception to raise."""
+        from _lib import signatures
+
+        def fake(*_args, **_kwargs):
+            if isinstance(outcome, Exception):
+                raise outcome
+            return outcome
+
+        with mock.patch.object(signatures, "verify", fake):
+            return self.install("--copy", *flags)
+
+    def test_a_bad_index_signature_is_refused_before_anything_runs(self) -> None:
+        """The drift check proves the skills match index.json, not that
+        index.json came from the publisher; a signature that fails says it did not."""
+        code, output = self.install_signed("bad_signature")
+        self.assertEqual(code, 5, output)
+        self.assertIn("refusing to install: index.json.sig does not verify", output)
+        self.assertEqual(self.calls, [], "the installer ran despite a bad signature")
+
+    def test_an_unsigned_or_unverifiable_index_installs_with_a_warning(self) -> None:
+        from _lib import signatures
+
+        for outcome, said in (("unsigned", "index.json is not signed"),
+                              (signatures.ToolMissing("no ssh-keygen"), "cannot check index.json.sig")):
+            with self.subTest(outcome=outcome):
+                self.calls.clear()
+                shutil.rmtree(self.target / ".claude", ignore_errors=True)
+                code, output = self.install_signed(outcome)
+                self.assertEqual(code, 0, output)
+                self.assertIn(f"warning: {said}", output)
+                self.assertEqual(len(self.calls), 1)
+
+    def test_a_verified_index_installs_quietly(self) -> None:
+        code, output = self.install_signed("verified")
+        self.assertEqual(code, 0, output)
+        self.assertNotIn("warning:", output)
+
+    def test_no_verify_skips_the_signature_check_too(self) -> None:
+        code, output = self.install_signed("bad_signature", "--no-verify")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(len(self.calls), 1)
+
     def test_a_skill_missing_from_disk_is_drift_too(self) -> None:
         source = self.fixture / "skills" / "systematic-debugging"
         parked = self.fixture / "parked-systematic-debugging"

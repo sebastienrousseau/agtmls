@@ -447,10 +447,10 @@ def install_bundles(args) -> list[str] | None:
 
 def refuse_drift() -> int | None:
     """Exit 3 before copying anything when the registry no longer matches
-    index.json; None when it does."""
+    index.json, 5 when index.json.sig is there and fails; None otherwise."""
     drift = verify_registry()
     if not drift:
-        return None
+        return verify_report.index_signature_refusal(ROOT)
     print(f"refusing to install: {len(drift)} skill(s) do not match index.json", file=sys.stderr)
     for name, expected, actual in drift:
         print(f"  {name}\n    index    {expected}\n    on disk  {actual}", file=sys.stderr)
