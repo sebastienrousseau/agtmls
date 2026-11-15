@@ -46,7 +46,7 @@ def remove_recorded_copies(lock: dict, agent: str, skills_dir: Path, kept: set[s
 
     removed = 0
     for entry in lockfile.entries_for(lock, agent):
-        installed = skills_dir / entry.get("path", entry["name"])
+        installed = lockfile.entry_path(skills_dir, entry)
         if installed.is_symlink() or not installed.is_dir():
             continue
         if skill_digest(installed) != entry["integrity"]:

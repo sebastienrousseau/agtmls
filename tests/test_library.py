@@ -149,6 +149,40 @@ class LockfileTests(unittest.TestCase):
         self.assertEqual(lockfile.read(self.target), payload)
         self.assertTrue(lockfile.lockfile_path(self.target).exists())
 
+    def write_raw(self, text: str) -> None:
+        path = lockfile.lockfile_path(self.target)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+
+    def test_a_lockfile_that_is_not_json_is_refused_by_name(self) -> None:
+        self.write_raw("{not json")
+        with self.assertRaisesRegex(lockfile.LockfileError, "not valid JSON"):
+            lockfile.read(self.target)
+
+    def test_a_lockfile_of_the_wrong_shape_is_refused(self) -> None:
+        for text in ('[]', '{"skills": {}}', '{"skills": [{"name": "alpha"}]}',
+                     '{"skills": [{"name": 3, "integrity": "x"}]}'):
+            with self.subTest(text=text):
+                self.write_raw(text)
+                with self.assertRaises(lockfile.LockfileError):
+                    lockfile.read(self.target)
+
+    def test_an_entry_that_points_outside_the_skills_directory_is_refused(self) -> None:
+        """The lockfile sits in the target repo, so whoever wrote the repo
+        wrote it: a `path` of `../x` or `/x` must not reach uninstall's rmtree."""
+        for field, value in (("path", "../outside"), ("path", "/etc"), ("name", "../x"),
+                             ("path", "a/b"), ("path", ".."), ("path", "a\\b"), ("path", "")):
+            with self.subTest(field=field, value=value):
+                entry = {"name": "alpha", "integrity": "sha256:0", field: value}
+                self.write_raw(json.dumps({"skills": [entry]}))
+                with self.assertRaisesRegex(lockfile.LockfileError, "single directory name"):
+                    lockfile.read(self.target)
+
+    def test_entry_path_stays_inside_the_skills_directory(self) -> None:
+        self.assertEqual(lockfile.entry_path(self.skills_dir, {"name": "alpha"}), self.skills_dir / "alpha")
+        with self.assertRaises(lockfile.LockfileError):
+            lockfile.entry_path(self.skills_dir, {"name": "alpha", "path": "../alpha"})
+
     def test_reading_where_there_is_none_returns_none(self) -> None:
         self.assertIsNone(lockfile.read(self.target))
 

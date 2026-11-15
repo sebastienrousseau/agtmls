@@ -13,6 +13,12 @@ All notable changes to AgtMLS are recorded here.
   floors `certifi >= 2026.10.19` (GHSA-6q48-6c7w-9gw2, PYSEC-2026-4320; it
   pinned 2026.7.22). `twine.txt` is regenerated with `compile.sh`'s command,
   which resolves fresh, so its other pins move to current releases too.
+- `uninstall`, `verify` and `doctor` refuse a lockfile entry whose `name` or
+  `path` is not a single directory name. The lockfile lives in the target
+  repository, so a cloned repository could point an entry at `../../<dir>`
+  with that directory's digest, and `uninstall` removed it. A lockfile that
+  is not JSON, or not the expected shape, now fails with exit 1 and a message
+  naming the problem instead of a traceback.
 
 ## 0.0.27 - 2026-10-23
 

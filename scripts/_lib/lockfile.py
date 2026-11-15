@@ -15,8 +15,10 @@ installed.
 
 from __future__ import annotations
 
+import functools
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,8 +42,60 @@ EXIT_BAD_SIGNATURE = 5
 EXIT_REVOKED = 6
 
 
+class LockfileError(ValueError):
+    """A lockfile that cannot be trusted to name what to verify or remove."""
+
+
 def lockfile_path(target: Path) -> Path:
     return target / LOCKFILE_RELATIVE
+
+
+def _single_name(value: object) -> bool:
+    """One directory name: no separator, no `..`, nothing absolute."""
+    return (isinstance(value, str) and value not in {"", ".", ".."}
+            and "/" not in value and "\\" not in value and not Path(value).is_absolute())
+
+
+def _check_entry(entry: object) -> None:
+    if not isinstance(entry, dict) or not isinstance(entry.get("integrity"), str):
+        raise LockfileError(f"entry {entry!r} needs a string `name` and `integrity`")
+    for field in ("name", "path"):
+        if (field in entry or field == "name") and not _single_name(entry.get(field)):
+            raise LockfileError(f"entry `{field}` {entry.get(field)!r} is not a single directory name")
+
+
+def _check(lock: object, path: Path) -> dict[str, object]:
+    """The lockfile is in the target repo, so whoever wrote the repo wrote it:
+    every `name` and `path` must stay inside the skills directory."""
+    if not isinstance(lock, dict) or not isinstance(lock.get("skills", []), list):
+        raise LockfileError(f"{path}: expected an object with a `skills` list")
+    try:
+        for entry in lock.get("skills", []):
+            _check_entry(entry)
+    except LockfileError as error:
+        raise LockfileError(f"{path}: {error}") from None
+    return lock
+
+
+def refusing(function):
+    """A command that reads the lockfile, refusing one it cannot trust by
+    name rather than following it or showing a traceback."""
+    @functools.wraps(function)
+    def guarded(*args, **kwargs) -> int:
+        try:
+            return function(*args, **kwargs)
+        except LockfileError as error:
+            print(f"FAIL: refusing the lockfile: {error}", file=sys.stderr)
+            return EXIT_ERROR
+    return guarded
+
+
+def entry_path(skills_dir: Path, entry: dict[str, object]) -> Path:
+    """Where `entry` is installed under `skills_dir`, refusing any other place."""
+    name = entry.get("path", entry.get("name"))
+    if not _single_name(name):
+        raise LockfileError(f"entry path {name!r} is not a single directory name")
+    return skills_dir / str(name)
 
 
 def executable_files(skill_dir: Path) -> list[str]:
@@ -110,7 +164,7 @@ def resolve_agents(lock: dict[str, object], skills_dirs: dict[str, Path]) -> dic
         if "agents" not in entry:
             entry["agents"] = sorted(
                 agent for agent, directory in skills_dirs.items()
-                if (directory / entry.get("path", entry["name"])).exists()
+                if entry_path(directory, entry).exists()
             )
     return lock
 
@@ -182,7 +236,11 @@ def read(target: Path) -> dict[str, object] | None:
     path = lockfile_path(target)
     if not path.exists():
         return None
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        lock = json.loads(path.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise LockfileError(f"{path}: not valid JSON ({error})") from None
+    return _check(lock, path)
 
 
 def verify(target: Path, skills_dir: Path, agent: str | None = None) -> list[tuple[str, str, str]]:
@@ -205,7 +263,7 @@ def verify(target: Path, skills_dir: Path, agent: str | None = None) -> list[tup
     for entry in entries_for(lock, agent):
         name = entry["name"]
         recorded.add(name)
-        installed = skills_dir / entry.get("path", name)
+        installed = entry_path(skills_dir, entry)
         if not installed.exists():
             problems.append((name, "missing", "recorded in the lockfile but not installed"))
             continue

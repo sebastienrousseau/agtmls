@@ -242,7 +242,11 @@ def check_skill_links(r: Reporter, target: Path, skills_dir: Path, agent: str, b
     # directories are ours, so they are not "missing links".
     # This agent's entries, whatever `mode` the last install
     # of any agent wrote.
-    lock = lockfile.read(target)
+    try:
+        lock = lockfile.read(target)
+    except lockfile.LockfileError as error:
+        r.fail(f"lockfile refused: {error}")
+        return
     copied = {entry["name"] for entry in lockfile.entries_for(lock, agent)} if lock is not None else set()
     missing = [name for name in expected_skill_names(bundles) if not installed_here(skills_dir / name, copied)]
     if missing:

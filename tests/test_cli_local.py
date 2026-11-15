@@ -26,6 +26,7 @@ from unittest import mock
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
 from .support import load_script, retarget, run_main
 
+EXIT_ERROR = 1
 EXIT_INTEGRITY_FAILURE = 3
 
 
@@ -214,6 +215,15 @@ class InstallLifecycleTests(CliFixture):
 
     def verify(self, json_output: bool = False, agent: str = "claude") -> tuple[int, str]:
         return capture(self.cli.verify_install, self.target, agent, json_output)
+
+    def test_verify_refuses_a_lockfile_that_is_not_json(self) -> None:
+        lock = self.target / ".agtmls" / "manifest.json"
+        lock.parent.mkdir(parents=True)
+        lock.write_text("{", encoding="utf-8")
+        code, output = self.verify()
+        self.assertEqual(code, EXIT_ERROR, output)
+        self.assertIn("FAIL: refusing the lockfile:", output)
+        self.assertIn("not valid JSON", output)
 
     def verify_live(self, loaded=None, error=None, json_output: bool = False) -> tuple[int, str]:
         from _lib import liveness
@@ -436,6 +446,20 @@ class UninstallTests(CliFixture):
         self.assertIn(f"{name}: modified since install; left in place", output)
         self.assertIn("removed 0 AgtMLS-managed item(s)", output)
         self.assertTrue(lock.exists())
+
+    def test_a_lockfile_path_outside_the_skills_directory_is_refused(self) -> None:
+        """A cloned repo writes its own `.agtmls/manifest.json`. An entry whose
+        `path` climbs out of the skills directory, carrying the digest of the
+        directory it names, used to have that directory removed."""
+        victim = self.target / "victim"
+        shutil.copytree(self.fixture / "skills" / GENERAL[0], victim)
+        payload = self.cli.lockfile.build(self.target, self.fixture, [GENERAL[0]], "copy", "0.0.0", "claude")
+        payload["skills"][0]["path"] = "../../victim"
+        self.cli.lockfile.write(self.target, payload)
+        code, output = self.uninstall()
+        self.assertTrue(victim.is_dir(), "uninstall removed a directory outside the skills directory")
+        self.assertEqual(code, EXIT_ERROR, output)
+        self.assertIn("single directory name", output)
 
     def test_a_recorded_copy_already_gone_is_skipped_and_the_lockfile_dir_is_shared(self) -> None:
         """Nothing to remove for a skill the user deleted by hand; and .agtmls

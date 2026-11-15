@@ -50,6 +50,7 @@ remove_prompt_file = uninstall_steps.remove_prompt_file
 settle_lockfile = uninstall_steps.settle_lockfile
 
 
+@lockfile.refusing
 def uninstall(target: Path, agent: str, remove_prompt: bool) -> int:
     target = target.resolve()
     dot, prompt = agent_paths(agent)
@@ -273,6 +274,7 @@ def live_check(target: Path, agent: str) -> dict:
             "shortened": [list(entry) for entry in cut]}
 
 
+@lockfile.refusing
 def verify_install(target: Path, agent: str, json_output: bool, require_signed: bool = False,
                    live: bool = False) -> int:
     """Check an installed tree against its lockfile, the index signature and
@@ -460,6 +462,7 @@ def refuse_drift() -> int | None:
     return lockfile.EXIT_INTEGRITY_FAILURE
 
 
+@lockfile.refusing
 def record_install(args, target: Path) -> int:
     """Record what landed, so `agtmls verify` has something to check against."""
     installed = installed_skill_names(target, args.agent)
