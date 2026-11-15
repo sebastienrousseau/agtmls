@@ -12,6 +12,8 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 
+from _lib.context_cost import approx_tokens
+
 # Conversational boilerplate patterns to prune
 PADDING_PATTERNS = (
     re.compile(r"(?i)\bplease\s+(?:make\s+sure\s+to|ensure\s+that\s+you|note\s+that)\b\s*"),
@@ -37,10 +39,9 @@ def prune_boilerplate(markdown_text: str) -> str:
 
 
 def estimate_tokens(text: str) -> int:
-    """Deterministic token estimation (approx 3.8 characters per token)."""
-    if not text:
-        return 0
-    return max(1, int(len(text) / 3.8))
+    """The registry's one token estimate, `context_cost.approx_tokens`
+    (characters / 4, rounded up): approximate, never a tokenizer count."""
+    return approx_tokens(len(text))
 
 
 def instruction_density(markdown_text: str) -> float:

@@ -30,6 +30,14 @@ All notable changes to AgtMLS are recorded here.
   file planted in a registry skill landed in the target without being hashed,
   and the Windows installer followed symlinks into whatever they pointed at.
 
+### Fixed
+
+- Every token estimate is the same one: characters / 4, rounded up
+  (`context_cost.approx_tokens`). `optimize`, `pack` and the context-density
+  check divided by 3.8, and the skill body limit rounded down, so `doctor` and
+  `optimize` gave one file two counts, and a 20,001-character body passed a
+  5,000-token limit that `doctor` would have reported it over.
+
 ## 0.0.27 - 2026-10-23
 
 ### Changed

@@ -42,6 +42,14 @@ class TestContextOptimizer(unittest.TestCase):
         self.assertGreaterEqual(estimate_tokens("Hello world"), 1)
         self.assertEqual(estimate_tokens("a" * 38), 10)
 
+    def test_every_estimate_is_the_one_doctor_reports(self) -> None:
+        """optimize, pack and the density check used chars/3.8 while doctor and
+        the body limit used chars/4, so one file had two token counts."""
+        from _lib import context_cost
+
+        for text in ("a", "a" * 41, "a" * 4000, "é" * 7):
+            self.assertEqual(estimate_tokens(text), context_cost.approx_tokens(len(text)), len(text))
+
     def test_instruction_density(self) -> None:
         self.assertEqual(instruction_density(""), 0.0)
         sample = (

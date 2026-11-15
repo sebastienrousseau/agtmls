@@ -69,8 +69,14 @@ class ProblemTests(unittest.TestCase):
     def test_an_oversized_body_is_named_with_its_estimate(self) -> None:
         self.write("SKILL.md", FRONT + "# One\n" + "x" * 20_100)
         self.assertEqual(portability.problems(self.skill), [
-            "SKILL.md body is about 5026 tokens; keep it under 5000 and move detail into a reference file",
+            "SKILL.md body is about 5027 tokens; keep it under 5000 and move detail into a reference file",
         ])
+
+    def test_the_body_limit_rounds_like_every_other_estimate(self) -> None:
+        """20,001 characters is 5001 tokens to doctor (rounded up); the body
+        limit rounded down to 5000 and let it through."""
+        self.write("SKILL.md", FRONT + "x" * 20_001)
+        self.assertEqual(len(portability.problems(self.skill)), 1)
 
     def test_a_reference_chain_and_claude_only_text_in_a_reference_are_named(self) -> None:
         self.write("SKILL.md", FRONT + "# One\n\nSee [a](docs/a.md).\n")

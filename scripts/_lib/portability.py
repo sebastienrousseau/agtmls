@@ -26,8 +26,9 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from _lib.context_cost import approx_tokens
+
 MAX_BODY_TOKENS = 5000
-CHARS_PER_TOKEN = 4
 SPAN = re.compile(r"`[^`\n]+`")
 FENCE = re.compile(r"^[ \t]*```!", re.MULTILINE)
 CLAUDE_VAR = re.compile(r"\$\{?CLAUDE_[A-Z_]+\}?")
@@ -65,7 +66,7 @@ def claude_only(text: str) -> list[tuple[int, str]]:
 
 
 def _body_problem(text: str) -> list[str]:
-    tokens = len(body(text)) // CHARS_PER_TOKEN
+    tokens = approx_tokens(len(body(text)))
     if tokens <= MAX_BODY_TOKENS:
         return []
     return [(f"SKILL.md body is about {tokens} tokens; keep it under {MAX_BODY_TOKENS} "
