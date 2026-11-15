@@ -26,6 +26,11 @@ jobs:
         # PRs run the supported floor and ceiling; main and tags run all five.
         python-version: ${{ (github.event_name == 'pull_request' && fromJSON('["3.10","3.14"]')) || fromJSON('["3.10","3.11","3.12","3.13","3.14"]') }}
     steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -234,6 +239,11 @@ jobs:
     timeout-minutes: 5
     permissions: {}
     steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
       - name: Every leg of the matrix passed
         env:
           RESULT: ${{ needs.checks.result }}
@@ -248,6 +258,11 @@ jobs:
     needs: checks
     runs-on: ubuntu-latest
     steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
       - name: Confirm every matrix leg passed
         run: |
           echo "checks result: ${{ needs.checks.result }}"

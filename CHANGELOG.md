@@ -31,6 +31,10 @@ All notable changes to AgtMLS are recorded here.
   checkout sets `persist-credentials: false`, and `inputs.tag` and the step
   outputs derived from it reach `run:` scripts through `env:` rather than
   being expanded into the script text.
+- Every CI job starts with StepSecurity Harden-Runner v2.22.3, pinned by
+  commit, in audit mode: it records each job's network egress and processes
+  and blocks nothing. In audit mode the action reports those events to
+  StepSecurity's service; it allows turning that off only in block mode.
 - A `--copy` install carries only the files a skill's digest covers. It copied
   the whole directory, so a `__pycache__`, `node_modules`, `.venv` or editor
   file planted in a registry skill landed in the target without being hashed,
