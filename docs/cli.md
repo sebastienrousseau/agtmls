@@ -238,6 +238,7 @@ OK: 16 skill(s) match the lockfile in /path/to/repo
 | *(clean)* | Every recorded skill is byte-identical to what was installed | `0` |
 | `MODIFIED` | Content changed since install — a local edit, or tampering | `3` |
 | `MISSING` | Recorded in the lockfile but no longer present | `3` |
+| `UNREADABLE-LOCKFILE` | The lockfile is not JSON, not the expected shape, or names a skill `name` or `path` that is not a single directory name (`..`, `/`, `\`, `:`), which could reach outside the skills directory. Nothing is read or removed on its account | `3` |
 | `UNMANAGED` | Present but not installed by AgtMLS. Reported, never deleted | `0` |
 | `UNSIGNED` | `--signatures` was given and `index.json` or the advisory feed has no signature (or there is no `ALLOWED_SIGNERS`) | `4` |
 | `BAD_SIGNATURE` | A signature exists and does not verify: tampered bytes, unknown signer, wrong namespace, or a key outside its window | `5` |

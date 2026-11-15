@@ -50,10 +50,16 @@ def lockfile_path(target: Path) -> Path:
     return target / LOCKFILE_RELATIVE
 
 
+# A separator, a drive (`C:x` joins as another drive on Windows) or a NUL
+# would let a name leave the directory it is joined onto.
+_UNSAFE = ("/", "\\", ":", "\x00")
+
+
 def _single_name(value: object) -> bool:
-    """One directory name: no separator, no `..`, nothing absolute."""
+    """One directory name (agtmls-spec 6.2): not empty, `.` or `..`, and
+    holding no separator, drive or NUL."""
     return (isinstance(value, str) and value not in {"", ".", ".."}
-            and "/" not in value and "\\" not in value and not Path(value).is_absolute())
+            and not any(char in value for char in _UNSAFE))
 
 
 def _check_entry(entry: object) -> None:
@@ -79,14 +85,15 @@ def _check(lock: object, path: Path) -> dict[str, object]:
 
 def refusing(function):
     """A command that reads the lockfile, refusing one it cannot trust by
-    name rather than following it or showing a traceback."""
+    name rather than following it or showing a traceback. An unreadable
+    lockfile is an integrity failure (agtmls-spec 6.5): exit 3."""
     @functools.wraps(function)
     def guarded(*args, **kwargs) -> int:
         try:
             return function(*args, **kwargs)
         except LockfileError as error:
             print(f"FAIL: refusing the lockfile: {error}", file=sys.stderr)
-            return EXIT_ERROR
+            return EXIT_INTEGRITY_FAILURE
     return guarded
 
 
@@ -253,7 +260,10 @@ def verify(target: Path, skills_dir: Path, agent: str | None = None) -> list[tup
     digest moved would destroy a local edit, and would hide tampering behind
     the same behaviour.
     """
-    lock = read(target)
+    try:
+        lock = read(target)
+    except LockfileError as error:
+        return [("", "unreadable-lockfile", str(error))]
     if lock is None:
         return [("", "no-lockfile", f"no {LOCKFILE_RELATIVE} in {target}")]
 

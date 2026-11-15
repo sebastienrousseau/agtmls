@@ -14,11 +14,13 @@ All notable changes to AgtMLS are recorded here.
   pinned 2026.7.22). `twine.txt` is regenerated with `compile.sh`'s command,
   which resolves fresh, so its other pins move to current releases too.
 - `uninstall`, `verify` and `doctor` refuse a lockfile entry whose `name` or
-  `path` is not a single directory name. The lockfile lives in the target
-  repository, so a cloned repository could point an entry at `../../<dir>`
-  with that directory's digest, and `uninstall` removed it. A lockfile that
-  is not JSON, or not the expected shape, now fails with exit 1 and a message
-  naming the problem instead of a traceback.
+  `path` is not a single directory name (`..`, `/`, `\`, `:` or NUL). The
+  lockfile lives in the target repository, so a cloned repository could point
+  an entry at `../../<dir>` with that directory's digest, and `uninstall`
+  removed it. Such a lockfile, or one that is not JSON or not the expected
+  shape, is unreadable: exit 3 as agtmls-spec 6.5 requires, reported by
+  `verify` as `UNREADABLE-LOCKFILE` (in `--json` too) instead of a
+  traceback.
 - `install` checks `index.json.sig` against `ALLOWED_SIGNERS` when it is
   present and refuses with exit 5 if it does not verify. The digest check only
   proved that the skills match an `index.json` from the same tree, which

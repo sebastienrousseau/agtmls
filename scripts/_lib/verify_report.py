@@ -66,7 +66,11 @@ def revocations(root: Path, target: Path, feed_status: str) -> tuple[list[tuple[
 
     if feed_status == "verified":
         feed = json.loads((root / "advisories.json").read_text(encoding="utf-8"))
-        return advisories.revoked(feed, lockfile.read(target) or {}), []
+        try:
+            lock = lockfile.read(target) or {}
+        except lockfile.LockfileError:
+            lock = {}  # already reported as unreadable-lockfile, exit 3
+        return advisories.revoked(feed, lock), []
     if feed_status == "unsigned":
         return [], ["advisories.json is not signed; not consulted"]
     return [], []

@@ -234,7 +234,8 @@ class LockfileTests(unittest.TestCase):
         """The lockfile sits in the target repo, so whoever wrote the repo
         wrote it: a `path` of `../x` or `/x` must not reach uninstall's rmtree."""
         for field, value in (("path", "../outside"), ("path", "/etc"), ("name", "../x"),
-                             ("path", "a/b"), ("path", ".."), ("path", "a\\b"), ("path", "")):
+                             ("path", "a/b"), ("path", ".."), ("path", "a\\b"), ("path", ""),
+                             ("path", "C:x"), ("path", "a\x00b")):
             with self.subTest(field=field, value=value):
                 entry = {"name": "alpha", "integrity": "sha256:0", field: value}
                 self.write_raw(json.dumps({"skills": [entry]}))

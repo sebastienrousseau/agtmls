@@ -2580,7 +2580,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3e578e2d2626872ad2d90891e102d176fa7b783ba44f7deabbe89d4e365b98cc"
+          "content": "93569e8e9f6782fb66f770ccb03be3cd9d37b33cf6f7690bf4a3f1428a7b0c03"
         }
       ],
       "name": "scripts/_lib/lockfile.py",
@@ -2745,7 +2745,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d8ac535b675d1619040f6119504ffd9dcdcff85645cebb9929d145e1f1439d42"
+          "content": "b63cdd05203f293f383dca9ba26616838174650446e9e461e8ca67b97cd08fd4"
         }
       ],
       "name": "scripts/_lib/verify_report.py",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.27"
     },
-    "timestamp": "2026-11-15T14:34:34Z",
+    "timestamp": "2026-11-15T14:48:45Z",
     "tools": {
       "components": [
         {

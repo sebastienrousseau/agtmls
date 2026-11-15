@@ -27,7 +27,6 @@ from unittest import mock
 from .mini_registry import GENERAL, SKILLS, mini_registry, replace_file
 from .support import ROOT, load_script, retarget, run_main
 
-EXIT_ERROR = 1
 EXIT_INTEGRITY_FAILURE = 3
 
 
@@ -278,9 +277,23 @@ class InstallLifecycleTests(CliFixture):
         lock.parent.mkdir(parents=True)
         lock.write_text("{", encoding="utf-8")
         code, output = self.verify()
-        self.assertEqual(code, EXIT_ERROR, output)
-        self.assertIn("FAIL: refusing the lockfile:", output)
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
+        self.assertIn("UNREADABLE-LOCKFILE", output)
         self.assertIn("not valid JSON", output)
+
+    def test_an_unsafe_lockfile_is_an_integrity_failure_reported_as_json(self) -> None:
+        """agtmls-spec 6.5: an unreadable lockfile is exit 3, and the
+        conformance runner reads verify's JSON, so the refusal is a problem
+        in that JSON rather than a message on stderr."""
+        lock = self.target / ".agtmls" / "manifest.json"
+        lock.parent.mkdir(parents=True)
+        lock.write_text(json.dumps({"skills": [{"name": "x", "integrity": "sha256:0", "path": "/"}]}),
+                        encoding="utf-8")
+        code, output = self.verify(json_output=True)
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
+        report = json.loads(output)
+        self.assertEqual([p["status"] for p in report["problems"]], ["unreadable-lockfile"])
+        self.assertIn("single directory name", report["problems"][0]["detail"])
 
     def verify_live(self, loaded=None, error=None, json_output: bool = False) -> tuple[int, str]:
         from _lib import liveness
@@ -554,7 +567,7 @@ class UninstallTests(CliFixture):
         self.cli.lockfile.write(self.target, payload)
         code, output = self.uninstall()
         self.assertTrue(victim.is_dir(), "uninstall removed a directory outside the skills directory")
-        self.assertEqual(code, EXIT_ERROR, output)
+        self.assertEqual(code, EXIT_INTEGRITY_FAILURE, output)
         self.assertIn("single directory name", output)
 
     def test_a_recorded_copy_already_gone_is_skipped_and_the_lockfile_dir_is_shared(self) -> None:

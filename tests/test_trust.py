@@ -213,6 +213,23 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class UnreadableLockfileRevocationTests(unittest.TestCase):
+    def test_a_verified_feed_over_an_unreadable_lockfile_revokes_nothing_and_does_not_raise(self) -> None:
+        """The unreadable lockfile is already verify's exit-3 problem; the feed
+        check must not turn it into a traceback."""
+        from _lib import verify_report
+
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-revoke-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        (tmp / "advisories.json").write_text(json.dumps({"advisories": []}), encoding="utf-8")
+        lock = tmp / ".agtmls" / "manifest.json"
+        lock.parent.mkdir()
+        lock.write_text("{", encoding="utf-8")
+        with mock.patch.object(advisories, "revoked", return_value=[]) as revoked:
+            self.assertEqual(verify_report.revocations(tmp, tmp, "verified"), ([], []))
+        revoked.assert_called_once_with({"advisories": []}, {})
+
+
 class TrustCheckTests(unittest.TestCase):
     """trust-check.py: one judgement per call, for the spec's conformance runner."""
 
