@@ -62,6 +62,23 @@ class DescriptionTests(unittest.TestCase):
         for index, (field, expected) in enumerate(cases.items()):
             self.assertEqual(context_cost.description(_skill(self.root, f"b{index}", field)), expected, field)
 
+    def test_block_scalar_headers_and_indentation_match_yaml(self) -> None:
+        """A comment after the header, an indentation indicator, a more-indented
+        line inside `>` and a whitespace-only line in `|` were all read
+        differently from YAML. Expected values are PyYAML 6.0.3's."""
+        cases = {
+            "description: > # note\n  a\n  b": "a b\n",
+            "description: |2\n    indented two more\n  base": "  indented two more\nbase\n",
+            "description: >-2\n  x\n  y": "x y",
+            "description: >\n  a\n    code\n  b": "a\n  code\nb\n",
+            "description: >\n  a\n\n    code\n\n  b": "a\n\n  code\n\nb\n",
+            "description: |\n  x\n    \n  y": "x\n  \ny\n",
+            "description: >\n\n  a": "\na\n",
+            "description: |-2 # c\n  p\n   q": "p\n q",
+        }
+        for index, (field, expected) in enumerate(cases.items()):
+            self.assertEqual(context_cost.description(_skill(self.root, f"y{index}", field)), expected, field)
+
     def test_nothing_to_read_is_empty(self) -> None:
         self.assertEqual(context_cost.description(self.root / "absent" / "SKILL.md"), "")
         no_field = _skill(self.root, "bare", "license: MIT")

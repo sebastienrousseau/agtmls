@@ -25,8 +25,9 @@ from typing import NamedTuple
 CHARS_PER_TOKEN = 4
 FRONTMATTER = re.compile(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", re.DOTALL)
 DESCRIPTION = re.compile(r"^description:[ \t]*(.*)$", re.MULTILINE)
-# A block scalar header: `|` or `>`, with an optional chomping indicator.
-BLOCK_HEADER = re.compile(r"^[|>][+-]?$")
+# A block scalar header: `|` or `>`, then a chomping (`+`/`-`) and an
+# indentation (1-9) indicator in either order, then an optional comment.
+BLOCK_HEADER = re.compile(r"^([|>])(?:([+-])([1-9])?|([1-9])([+-])?)?[ \t]*(?:#.*)?$")
 
 
 class Cost(NamedTuple):
@@ -62,44 +63,76 @@ def description(skill_md: Path) -> str:
     if not field:
         return ""
     value = field.group(1).strip()
-    if BLOCK_HEADER.match(value):
-        return _block_scalar(value, block.group(1)[field.end():].split("\n")[1:])
+    header = BLOCK_HEADER.match(value)
+    if header:
+        return _block_scalar(header, block.group(1)[field.end():].split("\n")[1:])
     return _unquote(value)
 
 
-def _block_body(lines: list[str]) -> list[str]:
-    """The indented lines of a block scalar, dedented; blank lines kept."""
+def _indent_of(line: str) -> int:
+    return len(line) - len(line.lstrip(" "))
+
+
+def _ends_block(line: str, indent: int) -> bool:
+    """A content line indented less than the block ends it."""
+    return bool(line.strip()) and (indent == 0 or _indent_of(line) < indent)
+
+
+def _block_body(lines: list[str], indent: int | None) -> list[str]:
+    """The block's lines with its indentation removed: `indent` when the header
+    gave one, else the first content line's. A whitespace-only line keeps the
+    spaces past that indentation; the block ends at a less-indented line."""
+    if indent is None:
+        indent = next((_indent_of(line) for line in lines if line.strip()), 0)
     body: list[str] = []
     for line in lines:
-        if line.strip() and not line.startswith((" ", "\t")):
+        if _ends_block(line, indent):
             break
-        body.append(line)
-    indent = min((len(line) - len(line.lstrip()) for line in body if line.strip()), default=0)
-    return [line[indent:] if line.strip() else "" for line in body]
+        body.append(line[indent:])
+    return body
+
+
+def _separator(previous: str | None, kind: str, empties: int) -> str:
+    """What joins a folded line to the one before it: a space between two
+    ordinary lines, a newline per empty line, and a kept break next to a
+    more-indented line."""
+    if previous is None:
+        return "\n" * empties
+    if previous == kind == "normal":
+        return "\n" * empties or " "
+    return "\n" * (empties + 1)
 
 
 def _fold(lines: list[str]) -> str:
-    """YAML folding: lines join with a space, each blank line is a newline."""
-    text, pending = "", ""
+    """YAML folding of a block's content lines."""
+    text, empties, previous = "", 0, None
     for line in lines:
         if not line:
-            pending += "\n"
-        else:
-            text += (pending or (" " if text else "")) + line
-            pending = ""
+            empties += 1
+            continue
+        kind = "more" if line[0] in " \t" else "normal"
+        text += _separator(previous, kind, empties) + line
+        empties, previous = 0, kind
     return text
 
 
-def _block_scalar(header: str, lines: list[str]) -> str:
-    """A `|` (literal) or `>` (folded) description, with its chomping
-    indicator: `-` strips the final newline, `+` keeps every trailing blank
-    line, none keeps one. More-indented lines are not treated specially."""
-    body = _block_body(lines)
+def _header(match: re.Match) -> tuple[str, str, int | None]:
+    """(style, chomping indicator, explicit indentation) of a block header."""
+    explicit = match.group(3) or match.group(4)
+    return match.group(1), match.group(2) or match.group(5) or "", int(explicit) if explicit else None
+
+
+def _block_scalar(match: re.Match, lines: list[str]) -> str:
+    """A `|` (literal) or `>` (folded) description as YAML reads it, with its
+    chomping indicator: `-` strips the final newline, `+` keeps every
+    trailing empty line, none keeps one."""
+    style, chomp, indent = _header(match)
+    body = _block_body(lines, indent)
     content = body[: max((i + 1 for i, line in enumerate(body) if line), default=0)]
-    text = "\n".join(content) if header[0] == "|" else _fold(content)
-    if not text or header[1:] == "-":
+    text = "\n".join(content) if style == "|" else _fold(content)
+    if not text or chomp == "-":
         return text
-    return text + "\n" * (1 + (len(body) - len(content) if header[1:] == "+" else 0))
+    return text + "\n" * (1 + (len(body) - len(content) if chomp == "+" else 0))
 
 
 def install_cost(skills_dir: Path, names: list[str], prompt: Path | None) -> Cost:

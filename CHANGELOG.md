@@ -31,7 +31,9 @@ All notable changes to AgtMLS are recorded here.
 - `doctor`'s context cost and `verify --live`'s shortened-description check
   read a block-scalar description (`description: >` or `|`, with any
   chomping indicator) as the single character `>` or `|`. They now read it
-  as YAML does: folded or literal, checked against PyYAML on ten forms.
+  as YAML does, including chomping and indentation indicators, a comment
+  after the header and more-indented lines in a folded scalar: 4,553 random
+  block scalars read exactly as PyYAML reads them.
 - `validate-release.py` accepts recorded SHA256SUMS in the current
   version's release notes. It required `pending` until the next bump, so
   recording a published release's checksums failed the gate.
