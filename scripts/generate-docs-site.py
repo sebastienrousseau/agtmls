@@ -67,6 +67,7 @@ th, td {{ text-align: left; padding: 10px 12px; border-bottom: 1px solid #e5e9ef
 th {{ background: #eef2f6; }}
 code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }}
 li {{ margin: 8px 0; }}
+footer {{ max-width: 1180px; margin: 0 auto; padding: 0 24px 32px; color: #4a5563; }}
 </style>
 </head>
 <body>
@@ -95,6 +96,8 @@ li {{ margin: 8px 0; }}
 <section><h2>Profiles</h2><ul>{profile_items}</ul></section>
 <section><h2>Export Targets</h2><ul>{provider_items}</ul></section>
 </main>
+<footer><p>© 2026 <a href="https://sebastienrousseau.com/" rel="author">Sebastien Rousseau</a>.
+Dual-licensed under Apache-2.0 OR MIT.</p></footer>
 </body>
 </html>
 """

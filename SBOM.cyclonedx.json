@@ -2173,7 +2173,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7b42080ce234ddab34318dae113ce78e57264199adcb86ea129df307caa951c9"
+          "content": "6a8ad7a384b0960af8048cd9944cd70be3a6b61e24f4ed700b6d0e52fe03fde7"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-failure-archaeology/SKILL.md",
@@ -2228,7 +2228,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ac19b24c8158a8abc69ff5df250600b61aede06029cd38177918b552eae8c541"
+          "content": "9ddf474ca67464ba628863295d1f7d5f308e915606c4d17721721ac2f519e467"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-research-frontier/reference.md",
@@ -2965,7 +2965,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1f4b1f64b4dfcd26bdf1719407763f91b9ce86f734b02b2a77d7786317d34327"
+          "content": "f8302478b076a932cb9c40cde3cd67cdd029a986b7786b4e2ef18972032b4b57"
         }
       ],
       "name": "scripts/generate-docs-site.py",
@@ -3603,7 +3603,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "69a51ec7fa6228c2d8b0d8fba73173bbe9464463255a66d5d81ddfbaa0fe7296"
+          "content": "90a57a8b6dfd288db9865195dabefc26163ab0dabc985e99a4f92bc0bb4ca850"
         }
       ],
       "name": "scripts/validate-docs-site.py",
@@ -5432,7 +5432,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:26:23Z",
+    "timestamp": "2026-11-16T13:37:59Z",
     "tools": {
       "components": [
         {

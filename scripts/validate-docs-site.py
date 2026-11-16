@@ -10,6 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site" / "index.html"
+# Every published page names its author and links the name
+# (~/Code/AGENTS.md section 7.1.2).
+AUTHOR_LINE = '© 2026 <a href="https://sebastienrousseau.com/" rel="author">Sebastien Rousseau</a>'
 
 
 def main() -> int:
@@ -18,7 +21,8 @@ def main() -> int:
         errors.append("site/index.html missing")
     else:
         text = SITE.read_text(encoding="utf-8")
-        for needle in ["AgtMLS Registry Catalog", "Quality", "Export Targets", "cross-language-port", "providers.json"]:
+        for needle in ["AgtMLS Registry Catalog", "Quality", "Export Targets", "cross-language-port", "providers.json",
+                       AUTHOR_LINE]:
             if needle not in text:
                 errors.append(f"site/index.html missing {needle!r}")
         if "<script" in text.lower():
