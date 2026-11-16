@@ -179,6 +179,11 @@ def check_steganography(path: Path, content: str, pedantic: bool = False) -> lis
     `pedantic`. A well-formed subdivision flag is AGT-STEG-002 at LOW,
     always, once per flag. Everything else stays AGT-STEG-001.
     """
+    # Every finding starts from an INVISIBLE_RE match, so a file with none
+    # (almost every file) skips the per-line emoji-context walk, which cost
+    # more than every pattern rule's search put together.
+    if INVISIBLE_RE.search(content) is None:
+        return []
     findings: list[Finding] = []
     context = EMOJI_CONTEXT
     for line_idx, line in enumerate(content.splitlines(), start=1):
