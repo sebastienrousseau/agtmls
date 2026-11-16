@@ -523,3 +523,55 @@ class InstallerTests(unittest.TestCase):
             )
         self.assertEqual(rc, 0)
         self.assertNotIn("agent(s)", out.getvalue())
+
+
+class ForeignSkillDirectoryTests(unittest.TestCase):
+    """A real directory at a skill's install path that AgtMLS did not put there.
+
+    It is someone's own skill of the same name. Copy mode deleted it
+    (`rm -rf`, `shutil.rmtree`), and link mode nested the link inside it.
+    The install now refuses before it writes anything, the prompt included.
+    """
+
+    def setUp(self) -> None:
+        self.tmp = Path(tempfile.mkdtemp(prefix="agtmls-foreign-")).resolve()
+        self.addCleanup(lambda: shutil.rmtree(self.tmp, ignore_errors=True))
+        self.root = mini_registry(self.tmp / "registry")
+        self.target = self.tmp / "workspace"
+        self.theirs = self.target / ".claude" / "skills" / "using-agtmls"
+        self.theirs.mkdir(parents=True)
+        (self.theirs / "SKILL.md").write_text("# my own using-agtmls\n", encoding="utf-8")
+
+    def install(self, copy: bool) -> tuple[int, str]:
+        err = io.StringIO()
+        with redirect_stdout(io.StringIO()), redirect_stderr(err):
+            rc = installer.install_workspace(
+                root=self.root, target=self.target, language="python", agent="claude", copy=copy,
+            )
+        return rc, err.getvalue()
+
+    def test_neither_mode_touches_a_directory_it_did_not_install(self) -> None:
+        for copy in (False, True):
+            with self.subTest(copy=copy):
+                rc, err = self.install(copy)
+                self.assertEqual(rc, 1)
+                self.assertIn(".claude/skills/using-agtmls is a directory AgtMLS did not install", err)
+                self.assertEqual((self.theirs / "SKILL.md").read_text(encoding="utf-8"), "# my own using-agtmls\n")
+                self.assertEqual(sorted(p.name for p in self.theirs.iterdir()), ["SKILL.md"])
+                self.assertFalse((self.target / "CLAUDE.md").exists())
+
+    def test_a_copy_the_lockfile_records_is_replaced(self) -> None:
+        """Re-installing over an earlier `--copy` install is the normal case."""
+        from _lib import lockfile
+
+        lockfile.write(self.target, lockfile.build(self.target, self.root, ["using-agtmls"], "copy", "0.0.0", "claude"))
+        rc, err = self.install(copy=True)
+        self.assertEqual(rc, 0, err)
+        self.assertTrue((self.theirs / "metadata.json").is_file())
+
+    def test_the_conflict_check_ignores_links_and_unselected_skills(self) -> None:
+        shutil.rmtree(self.theirs)
+        self.theirs.symlink_to(self.root / "skills" / "using-agtmls")
+        (self.target / ".claude" / "skills" / "not-ours-and-not-selected").mkdir()
+        skills_dir = self.target / ".claude" / "skills"
+        self.assertEqual(installer.foreign_skill_dirs(self.root, self.target, skills_dir, set(), None), [])

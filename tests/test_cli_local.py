@@ -904,3 +904,27 @@ class DispatchFallthroughTests(unittest.TestCase):
         with mock.patch.object(cli, "build_parser", return_value=parser):
             self.assertEqual(cli.main(), 2)
 
+
+
+class ShellForeignSkillDirectoryTests(unittest.TestCase):
+    """setup-workspace.sh refuses a real directory it did not install."""
+
+    def test_neither_mode_touches_a_directory_it_did_not_install(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shforeign-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        for flags in ((), ("--copy",)):
+            with self.subTest(flags=flags):
+                target = tmp / ("copy" if flags else "link")
+                theirs = target / ".claude" / "skills" / "using-agtmls"
+                theirs.mkdir(parents=True)
+                (theirs / "SKILL.md").write_text("# mine\n", encoding="utf-8")
+                proc = subprocess.run(
+                    ["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude", *flags],
+                    cwd=target, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+                self.assertIn(".claude/skills/using-agtmls is a directory AgtMLS did not install", proc.stderr)
+                self.assertEqual(sorted(p.name for p in theirs.iterdir()), ["SKILL.md"])
+                self.assertFalse((target / "CLAUDE.md").exists())

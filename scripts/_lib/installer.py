@@ -15,7 +15,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from _lib import aider_conf, digest, selection, skill_roots
+from _lib import aider_conf, digest, lockfile, selection, skill_roots
 
 AGENT_CONFIGS: dict[str, tuple[str, str]] = {
     "claude": (".claude", "CLAUDE.md"),
@@ -178,18 +178,67 @@ def install_skills(
     """Install the selected skills (`selection.wanted`) into skills directory:
     general ones, or only those in `skills` when given, plus bundled ones."""
     linked = 0
-    for skill_path in skill_roots.skill_dirs(root):
-        meta_file = skill_path / "metadata.json"
-        bundle = None
-        if meta_file.is_file():
-            try:
-                bundle = json.loads(meta_file.read_text(encoding="utf-8")).get("bundle")
-            except (json.JSONDecodeError, OSError):
-                pass
-        if selection.wanted(skill_path.name, bundle, skills, bundles):
-            link_or_copy(skill_path, skills_dir / skill_path.name, copy, dry_run)
-            linked += 1
+    for skill_path in selected_skills(root, bundles, skills):
+        link_or_copy(skill_path, skills_dir / skill_path.name, copy, dry_run)
+        linked += 1
     return linked
+
+
+def skill_bundle(skill_path: Path) -> str | None:
+    """The bundle a skill's metadata.json names; None for a general skill."""
+    meta_file = skill_path / "metadata.json"
+    if not meta_file.is_file():
+        return None
+    try:
+        return json.loads(meta_file.read_text(encoding="utf-8")).get("bundle")
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def selected_skills(root: Path, bundles: set[str], skills: set[str] | None) -> list[Path]:
+    """The registry's skill directories this install carries (`selection.wanted`)."""
+    return [
+        skill_path for skill_path in skill_roots.skill_dirs(root)
+        if selection.wanted(skill_path.name, skill_bundle(skill_path), skills, bundles)
+    ]
+
+
+def foreign_skill_dirs(
+    root: Path, target: Path, skills_dir: Path, bundles: set[str], skills: set[str] | None
+) -> list[str]:
+    """Selected skills whose install path is a real directory AgtMLS did not record.
+
+    That directory is someone's own skill of the same name: copying would
+    delete it and linking would nest the link inside it. A directory the
+    target's lockfile records is an earlier `--copy` install, ours to replace.
+    """
+    try:
+        lock = lockfile.read(target)
+    except lockfile.LockfileError:
+        lock = None  # unreadable: nothing is provably ours
+    recorded = {entry["name"] for entry in lockfile.entries_for(lock, None)} if lock else set()
+    return [
+        skill_path.name for skill_path in selected_skills(root, bundles, skills)
+        if (dst := skills_dir / skill_path.name).is_dir()
+        and not dst.is_symlink()
+        and skill_path.name not in recorded
+    ]
+
+
+def selection_sets(bundles: list[str] | None, skills: list[str] | None) -> tuple[set[str], set[str] | None]:
+    """The bundles named, and the general skills listed (None: all of them)."""
+    return set(bundles or []), (set(skills) if skills is not None else None)
+
+
+def refuse_foreign(names: list[str], cli_dir: str) -> int:
+    """Name each conflict and refuse; 0 when there is none."""
+    for name in names:
+        print(
+            f"❌ {cli_dir}/skills/{name} is a directory AgtMLS did not install; "
+            "move it aside, then install again",
+            file=sys.stderr,
+        )
+    return 1 if names else 0
 
 
 def install_agents(root: Path, agents_dir: Path, copy: bool, dry_run: bool) -> int:
@@ -329,6 +378,12 @@ def install_workspace(
         )
         return 1
 
+    bundle_set, listed = selection_sets(bundles, skills)
+    # Before anything is written, the prompt included: a refusal halfway
+    # through would leave a half-installed workspace.
+    if refuse_foreign(foreign_skill_dirs(root, target, target / cli_dir / "skills", bundle_set, listed), cli_dir):
+        return 1
+
     rc = _handle_prompt(
         root, target, language, agent, prompt_file, skills_only, force, dry_run
     )
@@ -341,25 +396,14 @@ def install_workspace(
     agents_dir = cli_path / "agents"
 
     if not dry_run:
-        skills_dir.mkdir(parents=True, exist_ok=True)
-        commands_dir.mkdir(parents=True, exist_ok=True)
-        agents_dir.mkdir(parents=True, exist_ok=True)
+        for directory in (skills_dir, commands_dir, agents_dir):
+            directory.mkdir(parents=True, exist_ok=True)
 
     update_git_exclude(target, cli_dir, prompt_file, agent, skills_only, dry_run)
-    bundle_set = set(bundles or [])
-
-    listed = set(skills) if skills is not None else None
     linked_skills = install_skills(root, skills_dir, copy, dry_run, bundle_set, listed)
     linked_agents = install_agents(root, agents_dir, copy, dry_run)
     install_commands(root, commands_dir, copy, dry_run)
-
-    action = "copied" if copy else "linked"
-    print(f"   {action} {linked_skills} skill(s)")
-    if linked_agents:
-        print(f"   + {linked_agents} agent(s)")
-    for b in sorted(bundle_set):
-        print(f"   + bundle: {b}")
-
+    report_install("copied" if copy else "linked", linked_skills, linked_agents, bundle_set)
     if skills_only:
         print(
             f"✅ AgtMLS setup complete (skills-only): skills → {cli_dir}/skills/. No system prompt written."
@@ -369,6 +413,15 @@ def install_workspace(
             f"✅ AgtMLS setup complete: system prompt → {prompt_file}, skills → {cli_dir}/skills/."
         )
     return 0
+
+
+def report_install(action: str, linked_skills: int, linked_agents: int, bundles: set[str]) -> None:
+    """What an install put in place: skills, agents, and the bundles named."""
+    print(f"   {action} {linked_skills} skill(s)")
+    if linked_agents:
+        print(f"   + {linked_agents} agent(s)")
+    for bundle in sorted(bundles):
+        print(f"   + bundle: {bundle}")
 
 
 def build_parser() -> argparse.ArgumentParser:
