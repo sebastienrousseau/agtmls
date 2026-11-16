@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.34 - 2026-11-16
+
 ### Added
 
 - `audit --foreign` reads the tree's agent configuration as well as its
