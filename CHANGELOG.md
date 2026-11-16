@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.32 - 2026-11-16
+
 ### Fixed
 
 - On Windows, `agtmls install` crashed with `UnicodeEncodeError` on its last
