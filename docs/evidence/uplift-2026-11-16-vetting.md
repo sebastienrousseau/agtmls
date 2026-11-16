@@ -29,6 +29,5 @@ installing. Without the skill Claude names it in 20% of runs and Codex
 in 60%; with it, 100% and 80%. The other four findings are found in
 every run either way.
 
-The results file records commit `cc13ac5`, which is `b261375` before its
-message was amended to correct a `Fixes:` trailer; the two have the same
-tree. Raw results: [uplift-2026-11-16-vetting.json](uplift-2026-11-16-vetting.json).
+The results file records commit `cc13ac5`, the branch commit the run
+measured. Raw results: [uplift-2026-11-16-vetting.json](uplift-2026-11-16-vetting.json).
