@@ -2932,7 +2932,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fc613a1f49d15d0d1a43cf568ce4dfc6330a792678bc1c9ba73f98fd8111285b"
+          "content": "4f87c2b0c7d2d1d13133ca00c48c16e64590e3449b2699735a1a56aca9b81915"
         }
       ],
       "name": "scripts/generate-benchmarks-doc.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:45:56Z",
+    "timestamp": "2026-11-16T13:53:06Z",
     "tools": {
       "components": [
         {
