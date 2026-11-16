@@ -191,6 +191,7 @@ class LockfileTests(unittest.TestCase):
         lockfile.write(self.target, payload)
         return payload
 
+    @unittest.skipIf(sys.platform == "win32", "Windows has no executable bit to record")
     def test_executable_files_are_recorded_separately(self) -> None:
         """The bit does not survive every transport, so it is not in the digest."""
         script = self.registry / "skills" / "alpha" / "run.sh"

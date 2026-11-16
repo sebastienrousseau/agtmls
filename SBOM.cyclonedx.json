@@ -2569,7 +2569,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "26e44204110b2098ebdb6043c738876a400904e4af1f42309ff82b7424403441"
+          "content": "af6b4e882ca4daa134d4102e4585f96cebd0b788e3911527aa1820bcad96f3f9"
         }
       ],
       "name": "scripts/_lib/installer.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:53:06Z",
+    "timestamp": "2026-11-16T13:59:32Z",
     "tools": {
       "components": [
         {

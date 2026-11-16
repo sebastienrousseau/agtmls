@@ -581,3 +581,26 @@ class ForeignSkillDirectoryTests(unittest.TestCase):
         (self.target / ".claude" / "skills" / "not-ours-and-not-selected").mkdir()
         skills_dir = self.target / ".claude" / "skills"
         self.assertEqual(installer.foreign_skill_dirs(self.root, self.target, skills_dir, set(), None), [])
+
+
+class LegacyConsoleTests(unittest.TestCase):
+    """Windows writes to a pipe or file in its ANSI code page (cp1252).
+
+    The installer prints emoji and arrows; on such a stream the last line
+    raised UnicodeEncodeError after the install itself was done, so the CLI
+    never reached the lockfile it writes next.
+    """
+
+    def test_an_install_finishes_on_a_cp1252_stream(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-cp1252-")).resolve()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        root = mini_registry(tmp / "registry")
+        target = tmp / "workspace"
+        target.mkdir()
+        raw = io.BytesIO()
+        stream = io.TextIOWrapper(raw, encoding="cp1252")
+        with redirect_stdout(stream), redirect_stderr(stream):
+            rc = installer.install_workspace(root=root, target=target, language="rust", agent="claude", copy=True)
+        stream.flush()
+        self.assertEqual(rc, 0)
+        self.assertIn(b"AgtMLS setup complete", raw.getvalue())
