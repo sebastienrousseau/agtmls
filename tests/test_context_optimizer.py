@@ -16,6 +16,7 @@ from _lib.context_optimizer import (
     collapse_blank_lines,
     estimate_tokens,
     findings,
+    optimize,
     pack_verdict,
     structured_line_density,
     write_text_atomic,
@@ -207,6 +208,21 @@ class TestContextOptimizer(unittest.TestCase):
         self.assertEqual([f.get("path") for f in files], ['a"b.md'])
         self.assertEqual([line.strip() for line in files[0].text.strip().splitlines()],
                          [line.strip() for line in hostile.splitlines()])
+
+
+class CheckReasonTests(unittest.TestCase):
+    """optimize --check names every reason it fails."""
+
+    def test_a_run_of_blank_lines_is_named_when_it_is_the_only_problem(self) -> None:
+        code, lines, rewrite = optimize("AGENTS.md", "# A\n\n\n\nB\n\n\nC\n", "check")
+        self.assertEqual(code, 1)
+        self.assertIsNone(rewrite)
+        self.assertIn("AGENTS.md: 2 run(s) of blank lines; --write collapses them", lines)
+        self.assertEqual(lines[-1], "FAIL: AGENTS.md")
+
+    def test_a_clean_file_reports_no_blank_line_runs(self) -> None:
+        code, lines, _ = optimize("AGENTS.md", "# A\n\nB\n", "check")
+        self.assertEqual((code, lines), (0, ["OK: AGENTS.md"]))
 
 
 class AtomicWriteTests(unittest.TestCase):
