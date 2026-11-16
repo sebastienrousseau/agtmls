@@ -50,3 +50,4 @@ deleted.
 | [0002](0002-generated-portable-frontmatter.md) | Generated portable frontmatter | accepted |
 | [0003](0003-bundled-registry-in-the-wheel.md) | Bundled registry in the wheel | accepted |
 | [0004](0004-allowed-tools-declares-full-capability.md) | `allowed-tools` declares full capability | accepted |
+| [0005](0005-one-licence-expression.md) | One licence expression, read from pyproject.toml | accepted |

@@ -469,6 +469,7 @@ Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Pull request guidelines, conventional commits and signing. |
 | [`BENCHMARKS.md`](BENCHMARKS.md) | Measured timings, the regression method and its limits. |
 | [`CHANGELOG.md`](CHANGELOG.md) | Per-release record of additions, fixes and changes. |
+| [`CREDITS.md`](CREDITS.md) | Where adopted ideas came from, and the projects studied. |
 
 ---
 
