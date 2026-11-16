@@ -7,6 +7,16 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- `audit --all` slowed by about 30% in 0.0.34 (571 ms to 746 ms on the CI
+  runner): each of the twelve new rules is another case-insensitive pass
+  over every file, and the bench on `main` failed. Targets are now audited
+  in up to four worker processes when there are eight or more, with the
+  same findings in the same order, and in one process wherever a pool
+  cannot start. Files with no invisible code point also skip the
+  steganography line walk. On this registry, 678 ms to 446 ms (macOS).
+
 ## 0.0.34 - 2026-11-16
 
 ### Added

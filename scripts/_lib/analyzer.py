@@ -10,9 +10,14 @@ the floor. The rule data it applies lives in rules.py.
 
 from __future__ import annotations
 
+import multiprocessing
+import os
 import re
 import stat
 import unicodedata
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
+from itertools import repeat
 from pathlib import Path
 from typing import NamedTuple
 
@@ -179,6 +184,11 @@ def check_steganography(path: Path, content: str, pedantic: bool = False) -> lis
     `pedantic`. A well-formed subdivision flag is AGT-STEG-002 at LOW,
     always, once per flag. Everything else stays AGT-STEG-001.
     """
+    # Every finding starts from an INVISIBLE_RE match, so a file with none
+    # (almost every file) skips the per-line emoji-context walk, which cost
+    # more than every pattern rule's search put together.
+    if INVISIBLE_RE.search(content) is None:
+        return []
     findings: list[Finding] = []
     context = EMOJI_CONTEXT
     for line_idx, line in enumerate(content.splitlines(), start=1):
@@ -571,3 +581,32 @@ def audit_skill_target(target: Path, pedantic: bool = False) -> list[Finding]:
     if target.is_dir():
         findings.extend(check_skill_honesty(target))
     return findings
+
+
+# Below this many targets a worker pool costs more to start than it saves.
+PARALLEL_FROM = 8
+MAX_WORKERS = 4
+
+
+def audit_targets(targets: list[Path], pedantic: bool = False) -> list[Finding]:
+    """Every target's findings, in target order.
+
+    Each pattern rule is one more case-insensitive pass over every file, and
+    Python's re cannot skip ahead on those; 52 rules over the registry took
+    longer than the gate allows. Targets are independent, so a large set is
+    audited in worker processes: same findings, same order. Where a pool
+    cannot start (no semaphores in a sandbox, a worker that cannot import
+    this module), the audit runs in this process instead.
+    """
+    workers = min(MAX_WORKERS, os.cpu_count() or 1, len(targets))
+    if len(targets) >= PARALLEL_FROM and workers > 1:
+        try:
+            # spawn: pipes only, the same on every platform. Python 3.14's
+            # Linux default, forkserver, connects over a Unix socket, which
+            # the offline check rightly cannot tell from a network call.
+            with ProcessPoolExecutor(workers, mp_context=multiprocessing.get_context("spawn")) as pool:
+                per_target = list(pool.map(audit_skill_target, targets, repeat(pedantic)))
+            return [finding for findings in per_target for finding in findings]
+        except (OSError, BrokenProcessPool, NotImplementedError):
+            pass
+    return [finding for target in targets for finding in audit_skill_target(target, pedantic)]
