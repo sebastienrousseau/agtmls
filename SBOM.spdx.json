@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-16T13:37:59Z",
+    "created": "2026-11-16T13:39:34Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -753,11 +753,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "d65a14145ffcd9f57d35d713b9dd262d20c3f63f"
+          "checksumValue": "9f240a324a926383778fc554ef0e87d1415e1951"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "cd83dcc5138d0fb6e43d24a64bcab655430b954f6ff990377e64dfe99e196ff4"
+          "checksumValue": "a7d5cf1570a4a8f68ea66e93107208bf64b422814e8d079cc0f828f1bde38b05"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -769,11 +769,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "0c588983526a23ee13633234ea9815c2448b73b8"
+          "checksumValue": "5d4a96a06967f8fca066326033f17e2ccdbd390a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b4f56d91d019ce32450764806e576166f9a60b1906e84561c8456ab623ef146e"
+          "checksumValue": "ab9679764fe967c57a35f1aa1399292e86199d811605ece7077b443c58161cef"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -785,11 +785,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "c143aff29a8c3b322577c0c5e0641035a8e7219d"
+          "checksumValue": "7f3adab62ad6278d09e353e0cfa071b2267bfc9e"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3aa1b79eeec822181df71b53412974e5f6c578148d9927ef88c0dbe21d20cbb6"
+          "checksumValue": "8c4b18ea8512940e09a37e89627e783654289b033c257f5c4c620357f1dac285"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -801,11 +801,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "db81fd4051f62b647ca73866f86d95f543d67914"
+          "checksumValue": "00b02e8aacffbdadd3ed71f609cab94fd7404c78"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "33375cf7572382de0724da7cffaf1e63f432cc549edb99f44d6f871ea725b8ca"
+          "checksumValue": "581e46b2d2ddcc3730513ef7bfc589f7e065d5e95a09ef15d10bf0426022aceb"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -1082,6 +1082,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./attestations/vetting-a-skill-before-install/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "983a36be6740d9896540e4ed90f87ee0e66884d4"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "4d3e878ac32d3c1b84918f0b4973652bead0c7fcaa8cc828f1b48a67d2eacd79"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -3569,11 +3585,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "cfacb2c8b55e0515d48126f03e148beeea70cc8c"
+          "checksumValue": "9a6329599217db341d3e3f5f6f74744cb34b51c6"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9f43235064047b3a45d2aa72b9789f597127e43702266591f687bc644e495552"
+          "checksumValue": "9e36f115b6f10f92beaf3fa06123e6d355cc73c7a1dcafa824670f5018c3ba27"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7967,6 +7983,7 @@
         "SPDXRef-File-attestations-verification-before-completion-capabilities.intoto.json",
         "SPDXRef-File-attestations-verification-before-completion-manifest.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-capabilities.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-manifest.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-capabilities.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-manifest.intoto.json",

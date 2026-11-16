@@ -512,7 +512,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cd83dcc5138d0fb6e43d24a64bcab655430b954f6ff990377e64dfe99e196ff4"
+          "content": "a7d5cf1570a4a8f68ea66e93107208bf64b422814e8d079cc0f828f1bde38b05"
         }
       ],
       "name": "attestations/noyalib-failure-archaeology/capabilities.intoto.json",
@@ -523,7 +523,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b4f56d91d019ce32450764806e576166f9a60b1906e84561c8456ab623ef146e"
+          "content": "ab9679764fe967c57a35f1aa1399292e86199d811605ece7077b443c58161cef"
         }
       ],
       "name": "attestations/noyalib-failure-archaeology/manifest.intoto.json",
@@ -534,7 +534,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3aa1b79eeec822181df71b53412974e5f6c578148d9927ef88c0dbe21d20cbb6"
+          "content": "8c4b18ea8512940e09a37e89627e783654289b033c257f5c4c620357f1dac285"
         }
       ],
       "name": "attestations/noyalib-research-frontier/capabilities.intoto.json",
@@ -545,7 +545,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "33375cf7572382de0724da7cffaf1e63f432cc549edb99f44d6f871ea725b8ca"
+          "content": "581e46b2d2ddcc3730513ef7bfc589f7e065d5e95a09ef15d10bf0426022aceb"
         }
       ],
       "name": "attestations/noyalib-research-frontier/manifest.intoto.json",
@@ -736,6 +736,17 @@
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/capabilities.intoto.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4d3e878ac32d3c1b84918f0b4973652bead0c7fcaa8cc828f1b48a67d2eacd79"
+        }
+      ],
+      "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "type": "file"
     },
     {
@@ -2448,7 +2459,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9f43235064047b3a45d2aa72b9789f597127e43702266591f687bc644e495552"
+          "content": "9e36f115b6f10f92beaf3fa06123e6d355cc73c7a1dcafa824670f5018c3ba27"
         }
       ],
       "name": "scripts/_lib/cli_parser.py",
@@ -5432,7 +5443,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:37:59Z",
+    "timestamp": "2026-11-16T13:39:34Z",
     "tools": {
       "components": [
         {

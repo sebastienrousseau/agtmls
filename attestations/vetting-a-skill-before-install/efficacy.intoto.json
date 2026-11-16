@@ -1,0 +1,49 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "agents": [
+      {
+        "agent": "claude",
+        "delta": 0.12,
+        "model": "claude-opus-5-5",
+        "score_with": 1.0,
+        "score_without": 0.88,
+        "token_ratio": 1.05,
+        "verdict": "helps"
+      },
+      {
+        "agent": "codex",
+        "delta": 0.04,
+        "model": "gpt-6-astra",
+        "score_with": 0.96,
+        "score_without": 0.92,
+        "token_ratio": 1.06,
+        "verdict": "helps"
+      }
+    ],
+    "bar": {
+      "agents": 2,
+      "big_gain": 0.2,
+      "token_ceiling": 1.5
+    },
+    "evidence": {
+      "commit": "64c63d029214c895f85fbe28e9be19b57d5d2d9c",
+      "date": "2026-11-16T13:39:02Z",
+      "digest": {
+        "sha256": "9d06d48b2a71693d24c4fdbe5ceb033b25150928c270f75dc39d664539c674a5"
+      },
+      "path": "docs/evidence/uplift-2026-11-16-vetting-2.json",
+      "trials": 5
+    },
+    "meets_bar": true
+  },
+  "predicateType": "https://agtmls.dev/efficacy/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e52990f5aebc25c48c4087b8344d15034c3f3516dd3b724d5d62f80d8d4ca3ae"
+      },
+      "name": "vetting-a-skill-before-install"
+    }
+  ]
+}
