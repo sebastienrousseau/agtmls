@@ -10,6 +10,7 @@ the floor. The rule data it applies lives in rules.py.
 
 from __future__ import annotations
 
+import multiprocessing
 import os
 import re
 import stat
@@ -600,7 +601,10 @@ def audit_targets(targets: list[Path], pedantic: bool = False) -> list[Finding]:
     workers = min(MAX_WORKERS, os.cpu_count() or 1, len(targets))
     if len(targets) >= PARALLEL_FROM and workers > 1:
         try:
-            with ProcessPoolExecutor(workers) as pool:
+            # spawn: pipes only, the same on every platform. Python 3.14's
+            # Linux default, forkserver, connects over a Unix socket, which
+            # the offline check rightly cannot tell from a network call.
+            with ProcessPoolExecutor(workers, mp_context=multiprocessing.get_context("spawn")) as pool:
                 per_target = list(pool.map(audit_skill_target, targets, repeat(pedantic)))
             return [finding for findings in per_target for finding in findings]
         except (OSError, BrokenProcessPool, NotImplementedError):
