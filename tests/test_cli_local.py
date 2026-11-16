@@ -477,6 +477,26 @@ class ShellProfileTests(unittest.TestCase):
         self.assertEqual(installed, ["noyalib-config-and-flags", "using-agtmls"], proc.stdout)
 
 
+class ShellPromptTests(unittest.TestCase):
+    """The real setup-workspace.sh writes a prompt optimize --check accepts."""
+
+    def test_the_shell_installer_writes_no_run_of_blank_lines(self) -> None:
+        from _lib.context_optimizer import collapse_blank_lines
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shprompt-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        for language in ("rust", "no-such-language"):
+            target = tmp / language
+            target.mkdir()
+            proc = subprocess.run(["bash", str(registry / "scripts" / "setup-workspace.sh"), language, "claude"],
+                                  cwd=target, capture_output=True, text=True, check=False)
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            content = (target / "CLAUDE.md").read_text(encoding="utf-8")
+            self.assertEqual(collapse_blank_lines(content), content, language)
+            self.assertTrue(content.endswith("\n") and not content.endswith("\n\n"), language)
+
+
 class UninstallTests(CliFixture):
     """uninstall may only remove what this registry put there."""
 
