@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+# Supply-chain checks CI runs: dependency advisories and workflow linting.
+pip-audit==2.10.1
+zizmor==1.32.0
+actionlint-py==1.7.12.25

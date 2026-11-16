@@ -49,13 +49,17 @@ jobs:
         # README states signing is required. Until this step, that was an
         # honour-system policy rather than a control.
         if: github.event_name == 'pull_request'
+        env:
+          # Through the environment, not interpolated into the script: a
+          # branch name is text someone else chose.
+          BASE_REF: ${{ github.base_ref }}
         run: |
           git config gpg.ssh.allowedSignersFile KEYS.asc
           unsigned=0
           # --no-merges: on a pull_request event HEAD is the synthetic merge
           # commit GitHub creates, which no contributor signs. Authored commits
           # on both sides of it are still checked.
-          for commit in $(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD); do
+          for commit in $(git rev-list --no-merges "origin/$BASE_REF..HEAD"); do
             author=$(git log -1 --format='%an' "$commit")
             # A bot's commits are signed by GitHub's key, not by a maintainer
             # key in KEYS.asc, so they verify as E here. That is a different
@@ -266,6 +270,8 @@ jobs:
         with:
           egress-policy: audit
       - name: Confirm every matrix leg passed
+        env:
+          RESULT: ${{ needs.checks.result }}
         run: |
-          echo "checks result: ${{ needs.checks.result }}"
-          test "${{ needs.checks.result }}" = "success"
+          echo "checks result: $RESULT"
+          test "$RESULT" = "success"
