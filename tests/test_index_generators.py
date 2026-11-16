@@ -23,6 +23,8 @@ class SkillIndexTests(SubsetCase):
     SUBSET = (
         "skills/using-agtmls", "skills/incident-response",
         "commands", ".claude-plugin", "index.json",
+        # A skill with no `license:` is indexed under the project expression.
+        "pyproject.toml",
     )
 
     def add_skill(self, name: str, text: str, metadata: dict | None = None):
@@ -56,6 +58,8 @@ class SkillIndexTests(SubsetCase):
         self.assertEqual((skill["kind"], skill["bundle"]), ("general", None))
         self.assertEqual(skill["maturity"], "hardened")
         self.assertEqual(skill["description"], "Use when testing.")
+        # No `license:` means the project's own expression, never half of it.
+        self.assertEqual(skill["license"], "Apache-2.0 OR MIT")
 
     def test_a_skill_without_frontmatter_is_named_after_its_directory(self) -> None:
         skill = self.add_skill("zz-plain", "# No frontmatter at all\n", {"bundle": "noyalib"})

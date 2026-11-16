@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import skill_roots  # noqa: E402  (scripts path first)
+from _lib import licence, skill_roots  # noqa: E402  (scripts path first)
 from _lib.digest import skill_digest  # noqa: E402  (needs ROOT on the path first)
 
 SKILLS_DIR = ROOT / "skills"
@@ -202,7 +202,7 @@ def skill_entry(skill_md: Path) -> dict[str, object]:
         "integrity": skill_digest(skill_md.parent),
         "kind": kind,
         "bundle": bundle,
-        "license": fields.get("license", "MIT"),
+        "license": fields.get("license") or licence.project_expression(ROOT),
         "allowed_tools": fields.get("allowed-tools", "").split(),
         "metadata_path": metadata_path,
         # Set below, from whether the digest moved since the last index.
