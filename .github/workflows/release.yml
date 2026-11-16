@@ -182,8 +182,13 @@ jobs:
       - name: Build release assets
         run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
       - name: Build Python distributions
+        # The commit's time as every file's timestamp: with it the wheel and
+        # sdist are byte-identical wherever they are built (supply-chain.yml
+        # checks this on every change), so anyone can rebuild and compare.
         run: |
           python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
+          SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          export SOURCE_DATE_EPOCH
           python3 -m build --outdir dist/python
       - name: The built wheel's signatures verify
         # The signatures were made in another job and reach the wheel through

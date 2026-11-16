@@ -602,9 +602,11 @@ Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
   under **Breaking**, and CI checks the public Python API against the last
   release.
 - **Output stability**: every generated artifact is deterministic and checked in
-  CI with `--check`. The wheel and sdist are not yet byte-reproducible
-  ([`RELEASE.md`](RELEASE.md)); build provenance and `SHA256SUMS` tie each
-  release asset to the commit that built it.
+  CI with `--check`. The wheel and sdist are byte-reproducible: built with the
+  commit's time as `SOURCE_DATE_EPOCH`, they come out identical on Linux and
+  macOS and from any checkout path, which CI checks on every change. Build
+  provenance and `SHA256SUMS` tie each release asset to the commit that built
+  it.
 - **Minimum toolchain**: Python 3.10 is the floor. It is raised only when 3.10
   reaches upstream end of life ([`docs/POLICIES.md`](docs/POLICIES.md)).
 

@@ -66,13 +66,15 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
        --notes docs/release-notes/v<version>.md --pending-checksums
    ```
 
-   The artifacts are built by `release.yml` after the tag is pushed, and the
-   build is not byte-reproducible, so their checksums cannot exist before the
-   push. The notes' Checksums section says `pending` and the preflight runs
-   with `--pending-checksums`. This is a standing deviation from the
+   The artifacts are built by `release.yml` after the tag is pushed. The
+   wheel and sdist are byte-reproducible (`SOURCE_DATE_EPOCH` is the commit's
+   time, and supply-chain.yml builds them on Linux and macOS and compares),
+   but the release wheel carries `index.json.sig`, which the `release`
+   environment signs only after the push, so its checksum cannot exist
+   before it. The notes' Checksums section says `pending` and the preflight
+   runs with `--pending-checksums`. This is a standing deviation from the
    "checksums before push" rule in AGENTS.md, closed in step 4 instead:
    nothing is visible or publishable until the real checksums are checked.
-   Reproducible builds would remove it.
 4. Push the tag. `release.yml` then, in order:
    - waits for your approval of the `release` environment, then signs the
      exact bytes of `index.json` with the release key (agtmls-spec chapter
