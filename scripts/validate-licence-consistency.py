@@ -56,10 +56,17 @@ def member_labels(key: str, child: object, here: str):
 
 
 def expressions(entries: list, where: str):
-    """CycloneDX writes the licence as `licenses: [{"expression": ...}]`."""
+    """CycloneDX `licenses`: each entry is `{"expression": ...}` or
+    `{"license": {"id": ...}}` (or `"name"`); both are labels."""
     for index, entry in enumerate(entries):
-        if isinstance(entry, dict) and isinstance(entry.get("expression"), str):
+        if not isinstance(entry, dict):
+            continue
+        if isinstance(entry.get("expression"), str):
             yield f"{where}[{index}].expression", entry["expression"]
+        named = entry.get("license")
+        for key in ("id", "name"):
+            if isinstance(named, dict) and isinstance(named.get(key), str):
+                yield f"{where}[{index}].license.{key}", named[key]
 
 
 def json_files() -> list[Path]:

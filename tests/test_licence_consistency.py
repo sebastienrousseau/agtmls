@@ -12,8 +12,16 @@ failure, not a warning.
 from __future__ import annotations
 
 import re
+import sys
+import tempfile
+import unittest
+from pathlib import Path
 
+from .support import ROOT
 from .validator_harness import BrokenTreeCase
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import licence
 
 EXPRESSION = "Apache-2.0 OR MIT"
 SCRIPT = "validate-licence-consistency.py"
@@ -100,3 +108,43 @@ class HeaderExpressionTests(BrokenTreeCase):
     def test_a_workflow_header_is_checked(self) -> None:
         self.overwrite(".github/workflows/mit.yml", "# SPDX-License-Identifier: MIT\nname: x\n")
         self.assert_fails(self.HEADERS, "FAIL: .github/workflows/mit.yml: declares MIT")
+
+
+class ConsistencyEdgeTests(BrokenTreeCase):
+    """What the check does with files it cannot read as labels."""
+
+    def test_an_unparseable_json_file_is_left_to_validate_json(self) -> None:
+        self.overwrite("docs/broken.json", "{not json")
+        self.assert_clean(SCRIPT)
+
+    def test_a_cyclonedx_licence_given_by_id_is_a_label_too(self) -> None:
+        self.overwrite("docs/bom.json", '{"licenses": [{"license": {"id": "MIT"}}, "text"]}')
+        self.assert_fails(SCRIPT, "FAIL: docs/bom.json: licenses[0].license.id")
+
+    def test_citation_without_a_licence_line_is_refused(self) -> None:
+        path = self.restore_later("CITATION.cff")
+        text = path.read_text(encoding="utf-8")
+        path.write_text(re.sub(r"(?m)^license:.*\n", "", text), encoding="utf-8")
+        self.assert_fails(SCRIPT, "FAIL: CITATION.cff: no `license:` line")
+
+    def test_a_tree_without_citation_is_checked_without_it(self) -> None:
+        self.remove("CITATION.cff")
+        self.assert_clean(SCRIPT)
+
+    def test_the_header_check_needs_the_expression_too(self) -> None:
+        path = self.restore_later("pyproject.toml")
+        text = path.read_text(encoding="utf-8")
+        path.write_text(re.sub(r'(?m)^license = ".*"$', "", text), encoding="utf-8")
+        self.assert_fails("validate-licence-headers.py", "FAIL: pyproject.toml: no `license = \"...\"` expression")
+
+
+class LicenceModuleTests(unittest.TestCase):
+    def test_a_missing_pyproject_has_no_expression(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertIsNone(licence.expression(Path(tmp)))
+            with self.assertRaises(SystemExit) as raised:
+                licence.project_expression(Path(tmp))
+        self.assertIn("no `license", str(raised.exception))
+
+    def test_the_repository_expression(self) -> None:
+        self.assertEqual(licence.project_expression(ROOT), EXPRESSION)
