@@ -39,7 +39,7 @@ class CliSurfaceValidatorTests(SliceFixture):
 
     def test_a_subcommand_the_parser_no_longer_declares_is_caught(self) -> None:
         """Dropping `check` from the parser would break every script calling it."""
-        self.replace(self.PARSER, 'sub.add_parser("check")', 'sub.add_parser("chekc")')
+        self.replace(self.PARSER, 'sub.add_parser("check",', 'sub.add_parser("chekc",')
         output = self.assert_catches("CLI subcommands mismatch", count=1)
         self.assertIn("'chekc'", output)
 

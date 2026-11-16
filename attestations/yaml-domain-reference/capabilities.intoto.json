@@ -25,7 +25,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "7ce35a6a628d232b26afa0e7dfdf5ef2cfcd30d83d2d4e158f8dba3e26fe8edd"
+        "sha256": "b264516c18196478f3aa5343c7ab70389f2a0e9bea967e390dc59677c3074eeb"
       },
       "name": "yaml-domain-reference"
     }

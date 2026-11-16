@@ -97,11 +97,10 @@ unknown (token exchange) is step 2, not step 4.
 For unfamiliar territory, add an explicit **spike** step with a time or scope
 box and a decision as its done-condition:
 
-> 0. **Spike: can `authlib` do PKCE without a custom client?**
->    Done when: a throwaway script completes a PKCE exchange, or we conclude
->    it cannot and record why.
->    Verify: the script runs, or the note is written. Code is discarded
->    either way.
+> 1. **Spike: can `authlib` do PKCE without a custom client?** Done when: a
+>    throwaway script completes a PKCE exchange, or we conclude it cannot and
+>    record why. Verify: the script runs, or the note is written. Code is
+>    discarded either way.
 
 ## Revising mid-execution
 

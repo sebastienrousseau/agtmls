@@ -307,7 +307,7 @@ and the docs match reality.
 - `crates/noyalib/src/de.rs` L~400–500 — streaming vs AST gate;
   `apply_includes` / `apply_properties` post-parse walk.
 - `crates/noyalib/src/parser/loader.rs` L27–130 — `ParseConfig` mirror
-  + `From<&ParserConfig>` impl (loader-parity contract).
+  - `From<&ParserConfig>` impl (loader-parity contract).
 - `crates/noyalib/src/ser.rs` L64–236 — `SerializerConfig` struct,
   defaults, builders.
 - `crates/noyalib/src/streaming.rs` — streaming path (called only when

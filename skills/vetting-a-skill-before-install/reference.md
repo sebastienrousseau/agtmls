@@ -34,10 +34,10 @@ Knowing where a skill will land tells you what else sits beside it.
 **Install.** 4 skills, 0 findings, no hooks, no scripts, MIT licence,
 commit pinned. Installed at that commit.
 
-**Mirror.** 20 skills, 2 MEDIUM findings (quoted attack examples in a
-security skill), one `SessionStart` hook that runs a package runner with
-no version pin. The skills are useful; the unpinned runner is not. Forked at the commit,
-hook removed, installed from the fork.
+**Mirror.** 20 skills, 2 MEDIUM findings (quoted attack examples in a security
+skill), one `SessionStart` hook that runs a package runner with no version pin.
+The skills are useful; the unpinned runner is not. Forked at the commit, hook
+removed, installed from the fork.
 
 **Refuse.** 1 HIGH injection in a skill description, and an install script
 that downloads a binary and checks it against a `.sha256` from the same

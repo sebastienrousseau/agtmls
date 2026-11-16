@@ -89,3 +89,15 @@ operator provides, redacts likely secrets, writes a local draft under
 `.agtmls/proposals/`, and never publishes or installs the result. Future
 loop/evolution components must keep those same defaults unless a maintainer
 adds a reviewed policy and implementation.
+
+## OpenSSF Scorecard findings we keep
+
+The [Scorecard](https://scorecard.dev/viewer/?uri=github.com/sebastienrousseau/agtmls)
+checks below are below 10 on purpose or for reasons the code cannot fix:
+
+| Check | Why it is not 10 |
+| --- | --- |
+| Pinned-Dependencies | It flags `evals/uplift/fixtures/acme-skills/hooks/setup.sh`, an unpinned `curl \| sh`. That file is a deliberately unsafe fixture (its host is `.invalid`): the `vetting-a-skill-before-install` uplift case grades whether an agent refuses it. Pinning it would remove what the case tests. |
+| Code-Review, Contributors | AgtMLS has one maintainer, so no change gets a second human approval. |
+| CII-Best-Practices | The project is not yet registered at bestpractices.dev. |
+| Branch-Protection | Required approvals and code-owner review need a second maintainer. |

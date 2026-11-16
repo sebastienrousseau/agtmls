@@ -6,7 +6,9 @@
 AgtMLS is a registry, so a release is valid only when the generated discovery
 surface, plugin metadata, and validation gates agree.
 
-1. Run `python3 scripts/bump-version.py --version $(python3 scripts/next-version.py)` to update release metadata, changelog, and generated artifacts.
+1. Run `python3 scripts/bump-version.py --version $(python3
+   scripts/next-version.py)` to update release metadata, changelog, and
+   generated artifacts.
 2. Inspect the generated diff.
 3. Regenerate the index if any manual correction was needed:
 
@@ -32,7 +34,9 @@ surface, plugin metadata, and validation gates agree.
    python3 scripts/agtmls.py status --target /path/to/repo --agent codex --skills-only
    ```
 
-7. Confirm `VERSIONING.md`: versions increment by exactly `0.0.1`; the next release after `v0.0.1` is `v0.0.2`, and `v0.1.0` is forbidden until `v0.0.999` exists.
+7. Confirm `VERSIONING.md`: versions increment by exactly `0.0.1`; the next
+   release after `v0.0.1` is `v0.0.2`, and `v0.1.0` is forbidden until
+   `v0.0.999` exists.
 8. Tag only after CI is green.
 
 ## Tagging, publishing and the audit
@@ -62,13 +66,15 @@ A pushed `v*` tag cannot be deleted or moved, so nothing is pushed until
        --notes docs/release-notes/v<version>.md --pending-checksums
    ```
 
-   The artifacts are built by `release.yml` after the tag is pushed, and the
-   build is not byte-reproducible, so their checksums cannot exist before the
-   push. The notes' Checksums section says `pending` and the preflight runs
-   with `--pending-checksums`. This is a standing deviation from the
+   The artifacts are built by `release.yml` after the tag is pushed. The
+   wheel and sdist are byte-reproducible (`SOURCE_DATE_EPOCH` is the commit's
+   time, and supply-chain.yml builds them on Linux and macOS and compares),
+   but the release wheel carries `index.json.sig`, which the `release`
+   environment signs only after the push, so its checksum cannot exist
+   before it. The notes' Checksums section says `pending` and the preflight
+   runs with `--pending-checksums`. This is a standing deviation from the
    "checksums before push" rule in AGENTS.md, closed in step 4 instead:
    nothing is visible or publishable until the real checksums are checked.
-   Reproducible builds would remove it.
 4. Push the tag. `release.yml` then, in order:
    - waits for your approval of the `release` environment, then signs the
      exact bytes of `index.json` with the release key (agtmls-spec chapter
@@ -112,4 +118,6 @@ has no assets; it never replaces a release that shipped.
 
 ## Tag protection
 
-Treat published `v*` tags as immutable. See `docs/tag-protection.md`. Repository settings should protect `v*` tags from deletion or force-push where GitHub tag protection/rulesets are available.
+Treat published `v*` tags as immutable. See `docs/tag-protection.md`. Repository
+settings should protect `v*` tags from deletion or force-push where GitHub tag
+protection/rulesets are available.

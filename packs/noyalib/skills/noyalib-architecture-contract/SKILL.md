@@ -18,7 +18,9 @@ metadata:
 
 # noyalib architecture contract
 
-**Version:** v0.0.14 · **Date-stamp:** 2026-07-08 · **Audience:** mid-level engineer or Sonnet-class model about to modify parser / loader / streaming / CST code.
+**Version:** v0.0.14 · **Date-stamp:** 2026-07-08 · **Audience:** mid-level
+engineer or Sonnet-class model about to modify parser / loader / streaming / CST
+code.
 
 > **Reference material** (verbatim routing snippet, exhaustive
 > invariant table, detailed rustdoc excerpts, full known-weak-points
@@ -56,11 +58,17 @@ downstream.
 
 The router lives in `from_str_with_config` (`de.rs:392`). Order:
 
-1. Compute `value_target_bypass = is_value_target::<T>() && config.tag_registry.is_none()` (`de.rs:415`).
-2. Compute `stream_eligible` as a conjunction over `merge_key_policy`, `ignore_binary_tag_for_string`, `policies`, `properties`, `includes`, and `!value_target_bypass` (`de.rs:416-421`). Take the streaming path if true.
-3. Unconditionally re-check `max_document_length` (`de.rs:436-441`) — streaming enforces inline; skip-streaming branches wouldn't otherwise.
-4. If `is_value_target::<T>()` → `parse_one_value` → `NoSpanLoader`, then downcast `Box<dyn Any>` back to `T` (`de.rs:454-470`).
-5. Else (`std`) → `parse_one` → span-full `Loader` → `build_span_map` → `set_span_context` → serde reads TLS `SpanContext` (`de.rs:472+`).
+1. Compute `value_target_bypass = is_value_target::<T>() &&
+   config.tag_registry.is_none()` (`de.rs:415`).
+2. Compute `stream_eligible` as a conjunction over `merge_key_policy`,
+   `ignore_binary_tag_for_string`, `policies`, `properties`, `includes`, and
+   `!value_target_bypass` (`de.rs:416-421`). Take the streaming path if true.
+3. Unconditionally re-check `max_document_length` (`de.rs:436-441`) — streaming
+   enforces inline; skip-streaming branches wouldn't otherwise.
+4. If `is_value_target::<T>()` → `parse_one_value` → `NoSpanLoader`, then
+   downcast `Box<dyn Any>` back to `T` (`de.rs:454-470`).
+5. Else (`std`) → `parse_one` → span-full `Loader` → `build_span_map` →
+   `set_span_context` → serde reads TLS `SpanContext` (`de.rs:472+`).
 6. `no_std` always takes step 4 — `Spanned<T>` is `std`-only.
 
 **Verbatim `stream_eligible` snippet and the `value_target_bypass`
@@ -69,8 +77,10 @@ two-clause reasoning: `reference.md` §R1.1-R1.3.**
 ### Why three (not one) — one-line each
 
 1. **Streaming for the 95% case** — no `Value`, no `SpanTree`, no second serde walk.
-2. **Span-full loader for `Spanned<T>` and policies** — TLS span context + walkable tree.
-3. **Span-free loader for `from_str::<Value>`** — `Value::deserialize` never consults spans.
+2. **Span-full loader for `Spanned<T>` and policies** — TLS span context +
+   walkable tree.
+3. **Span-free loader for `from_str::<Value>`** — `Value::deserialize` never
+   consults spans.
 
 Extended rationale: `reference.md` §R1.4.
 
@@ -120,7 +130,8 @@ The CST is a **parallel side-table**, not a unified AST. Two products
 from one parse:
 
 - `Value` (the data path) — allocates only what the data demands, no trivia.
-- `noyalib::cst::Document` (the tooling path) — retains every byte of source; `Document::to_string()` on an unmutated tree is byte-identical to the input.
+- `noyalib::cst::Document` (the tooling path) — retains every byte of source;
+  `Document::to_string()` on an unmutated tree is byte-identical to the input.
 
 Both consume the same scanner token stream. There is no second parser.
 
@@ -136,8 +147,10 @@ resolves a JSON-path-shaped selector to a byte span. Three subtleties
 every future edit must preserve:
 
 1. `trim_value_span` (`document.rs:1544`) trims trailing separator whitespace/newlines.
-2. `is_keep_chomped_block_scalar` (`document.rs:1558`) short-circuits `trim_value_span` for `|+` / `>+`.
-3. `extend_to_line_start` (`document.rs:1340`) — block collection values include their first line's indent.
+2. `is_keep_chomped_block_scalar` (`document.rs:1558`) short-circuits
+   `trim_value_span` for `|+` / `>+`.
+3. `extend_to_line_start` (`document.rs:1340`) — block collection values include
+   their first line's indent.
 
 Detailed rationale, typed-cache fallback behaviour, and CST
 throughput ADR-0001 trade-off (~21 MB/s vs ~36 MB/s): `reference.md` §R3.
@@ -146,9 +159,16 @@ throughput ADR-0001 trade-off (~21 MB/s vs ~36 MB/s): `reference.md` §R3.
 
 ## 4. SemVer / API contract (from `lib.rs` rustdoc, §"API stability and SemVer policy" at `lib.rs:111-157`)
 
-- **Pre-1.0 breaking axis is the patch number** during the `0.0.x` series. `0.0.14 → 0.0.15` *is* the breaking bump. Memory `project_v001_launch_posture`: runway is `0.0.x → 0.0.99 → 0.0.999 → 0.1.0`.
-- **`#[non_exhaustive]` on every public config struct and every error type.** Adding a field or variant is not breaking; do not remove the attribute "because it's convenient."
-- **Deserialise bound is `T: for<'de> Deserialize<'de> + 'static`.** The `'static` half enables `is_value_target::<T>()`; `from_str_typed_no_tag_preserve` (`de.rs:189`) is the internal escape hatch for callers like `figment::Format::from_str` that drop `'static`.
+- **Pre-1.0 breaking axis is the patch number** during the `0.0.x` series.
+  `0.0.14 → 0.0.15` *is* the breaking bump. Memory
+  `project_v001_launch_posture`: runway is `0.0.x → 0.0.99 → 0.0.999 → 0.1.0`.
+- **`#[non_exhaustive]` on every public config struct and every error type.**
+  Adding a field or variant is not breaking; do not remove the attribute
+  "because it's convenient."
+- **Deserialise bound is `T: for<'de> Deserialize<'de> + 'static`.** The
+  `'static` half enables `is_value_target::<T>()`;
+  `from_str_typed_no_tag_preserve` (`de.rs:189`) is the internal escape hatch
+  for callers like `figment::Format::from_str` that drop `'static`.
 - **CI enforces the surface** via `cargo semver-checks` on every PR.
 
 Full list of `#[non_exhaustive]` types and the detailed rustdoc excerpt:
@@ -160,11 +180,24 @@ Full list of `#[non_exhaustive]` types and the detailed rustdoc excerpt:
 
 Terse summary; per-item detailed rationale in `reference.md` §R5.
 
-1. **`max_sequence_length` / `max_mapping_keys` surface as `Error::Serialize`, not `Error::Budget`** — classifier wart from v0.0.13. Noted for v0.0.15: add `BudgetBreach::MaxMappingKeys` / `MaxSequenceLength` variants, reroute both call sites in both loaders, cross-path parity tests. §R5.1.
-2. **Streaming path has no distinct-typed key collision check for typed targets** — serde receives `String` keys, stringifying `1`/`"1"` before the check could run. `value_target_bypass` routes `Value` targets around streaming; typed targets like `HashMap<String, T>` on streaming do not get `KeyCollision`. §R5.2.
-3. **Coverage below the 98% target** — current gates 96/94/93 (functions/lines/regions) in `.github/workflows/ci.yml:160-162` and `shared-coverage.yml`. `doc/TESTING.md` cites stale `95/93/92`; trust the workflow files. Do not lower gates to make a PR pass. §R5.3.
-4. **Single-maintainer bus factor** — GOVERNANCE.md 1.0-gate: at least one non-@sebastienrousseau maintainer with commit + release-signing rights. Bus factor is 1 until then. §R5.4.
-5. **CST throughput ~21 MB/s vs `Value` ~36 MB/s** — not a bug; ADR-0001 trade-off. §R5.5.
+1. **`max_sequence_length` / `max_mapping_keys` surface as `Error::Serialize`,
+   not `Error::Budget`** — classifier wart from v0.0.13. Noted for v0.0.15: add
+   `BudgetBreach::MaxMappingKeys` / `MaxSequenceLength` variants, reroute both
+   call sites in both loaders, cross-path parity tests. §R5.1.
+2. **Streaming path has no distinct-typed key collision check for typed
+   targets** — serde receives `String` keys, stringifying `1`/`"1"` before the
+   check could run. `value_target_bypass` routes `Value` targets around
+   streaming; typed targets like `HashMap<String, T>` on streaming do not get
+   `KeyCollision`. §R5.2.
+3. **Coverage below the 98% target** — current gates 96/94/93
+   (functions/lines/regions) in `.github/workflows/ci.yml:160-162` and
+   `shared-coverage.yml`. `doc/TESTING.md` cites stale `95/93/92`; trust the
+   workflow files. Do not lower gates to make a PR pass. §R5.3.
+4. **Single-maintainer bus factor** — GOVERNANCE.md 1.0-gate: at least one
+   non-@sebastienrousseau maintainer with commit + release-signing rights. Bus
+   factor is 1 until then. §R5.4.
+5. **CST throughput ~21 MB/s vs `Value` ~36 MB/s** — not a bug; ADR-0001
+   trade-off. §R5.5.
 
 ---
 
@@ -205,11 +238,15 @@ grep -n "trim_value_span\|extend_to_line_start\|is_keep_chomped" crates/noyalib/
 
 Ground-truth documents this skill (and `reference.md`) compress:
 
-- `doc/ARCHITECTURE.md` — workspace layout, end-to-end pipelines, streaming/loader/CST phases
+- `doc/ARCHITECTURE.md` — workspace layout, end-to-end pipelines,
+  streaming/loader/CST phases
 - `doc/adr/0001-cst-rowan-shape.md` — parallel green tree, not unified AST
-- `doc/adr/0002-yaml-1.2-default.md` — YAML 1.2 default, 1.1 opt-in via `legacy_*` flags
-- `doc/adr/0003-zero-unsafe-policy.md` — `#![forbid(unsafe_code)]` workspace-wide, no exceptions
-- `doc/adr/0005-workspace-split.md` — satellite crates in their own repos, strict-lockstep versioning
+- `doc/adr/0002-yaml-1.2-default.md` — YAML 1.2 default, 1.1 opt-in via
+  `legacy_*` flags
+- `doc/adr/0003-zero-unsafe-policy.md` — `#![forbid(unsafe_code)]`
+  workspace-wide, no exceptions
+- `doc/adr/0005-workspace-split.md` — satellite crates in their own repos,
+  strict-lockstep versioning
 - `doc/design/green-tree.md` — CST design note, ~480 lines
 - `doc/POLICIES.md` §8 — panic policy (canonical panic sites)
 - `crates/noyalib/src/lib.rs` — module map, SemVer policy rustdoc section

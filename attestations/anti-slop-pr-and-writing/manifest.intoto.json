@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "bc5d709fab54b330064467f72b82cf029a355e6cd60d3047f24ec5839cb824aa"
+          "sha256": "52db99bdb7dbef41ce8a8c4e9810e4497cd5a72b5015d0540085e277df222245"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "d76c7b705e364ec9514f2d5301cbdf781e367d243f765eadfb5015992244d5cf"
+          "sha256": "a023e3a826ee1d28b501a827c4ad386c4e59df48f0bdcde2a3bf6a15c25cd39c"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a432ebd306c2186f767b79fdfba609cb030291905836698ab68cb642499098bf"
+        "sha256": "812d94b39c52a9312dc4becdef4f44dbb354217a5ff958bd17f2d7349313b856"
       },
       "name": "anti-slop-pr-and-writing"
     }

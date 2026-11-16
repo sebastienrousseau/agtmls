@@ -137,10 +137,10 @@ Source: `crates/noyalib/src/ser.rs` lines 66–116. Also
 | `indent` | **2** | Spaces per indentation level. |
 | `document_start` | `false` | Emit `---` before the first document. |
 | `document_end` | `false` | Emit `...` after each document. |
-| `block_scalars` | `true` | Allow `|` / `>` block-scalar style for multi-line strings. |
+| `block_scalars` | `true` | Allow `\|` / `>` block-scalar style for multi-line strings. |
 | `block_scalar_threshold` | **1** | Minimum newlines to trigger block-scalar style. |
 | `flow_style` | `FlowStyle::Block` | Collection style preference: `Block`, `Flow`, or `Auto` (flow for small collections). |
-| `scalar_style` | `ScalarStyle::Auto` | String quoting preference: `Auto`, `DoubleQuoted`, `SingleQuoted`, `Literal` (`|`), `Folded` (`>`), `Plain`. |
+| `scalar_style` | `ScalarStyle::Auto` | String quoting preference: `Auto`, `DoubleQuoted`, `SingleQuoted`, `Literal` (`\|`), `Folded` (`>`), `Plain`. |
 | `flow_threshold` | **4** | In `Auto` flow, use flow style for ≤ N items. |
 | `quote_all` | `false` | Force-quote every string scalar. |
 | `compact_list_indent` | `false` | Sequence items align with their mapping key (no extra indent level). |

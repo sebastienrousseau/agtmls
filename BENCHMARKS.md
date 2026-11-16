@@ -33,7 +33,8 @@ python3 scripts/bench.py --scaling --record  # ...and publish it to benchmarks/r
 ## Results
 
 <!-- generated:latency sources="benchmarks/results/latency.json:d6496a9c70f0b6b13f428503b5f593d55768f6bc940c285e2de7b85e40f7e9c2,bench-baseline.json:f4416810a822b0f91041bd0768944d44e22ed2966187054dbb5421a367bcd2a4" -->
-Recorded on the machine named in `bench-baseline.json`: macOS 26.7, arm64, Python 3.12.14.
+Recorded on the machine named in `bench-baseline.json`: macOS 26.7, arm64,
+Python 3.12.14.
 One machine, 5 suite runs. No claim is made about any other machine.
 
 | Workload | min ms | P50 ms | P95 ms | × calibration |
@@ -48,7 +49,10 @@ One machine, 5 suite runs. No claim is made about any other machine.
 | `audit-all` (`--all --strict`) | 422.89 | 430.83 | 469.24 | 29.04 |
 | `index-check` | 108.86 | 117.39 | 152.26 | 7.47 |
 
-The 4 `cli-*` commands are the interactive surface: P50 between **46ms** and **47ms**, against the 100ms budget of scorecard criterion 3.10. About 15ms of that is the interpreter itself — the calibration row — so AgtMLS's own share of the fastest command is about 30ms.
+The 4 `cli-*` commands are the interactive surface: P50 between **46ms** and
+**47ms**, against the 100ms budget of scorecard criterion 3.10. About 15ms of
+that is the interpreter itself — the calibration row — so AgtMLS's own share of
+the fastest command is about 30ms.
 <!-- /generated:latency -->
 
 ## Regression detection, and its limits
@@ -63,7 +67,9 @@ The threshold is **not** a round number picked in advance.
 spread across those runs, and `--check` allows `max(20%, 3 × spread)`.
 
 <!-- generated:thresholds sources="bench-baseline.json:f4416810a822b0f91041bd0768944d44e22ed2966187054dbb5421a367bcd2a4" -->
-On the recorded machine the spreads are 3.6% to 13.0%, so 7 of 9 workloads are gated at the full 20% of criterion 3.2 and `digest-registry` at 39% and `index-check` at 32%.
+On the recorded machine the spreads are 3.6% to 13.0%, so 7 of 9 workloads are
+gated at the full 20% of criterion 3.2 and `digest-registry` at 39% and
+`index-check` at 32%.
 <!-- /generated:thresholds -->
 
 `--check` measures **the same way the baseline was recorded**: three full
@@ -132,7 +138,9 @@ and measures against the real one. Raw numbers in
 | 310 | 208.49 ms | 209.07 ms |
 | **growth for ×10** | **×7.02** | **×110.62** |
 
-`skill_digest` measured ×7.02 for ×10 the corpus. Pairwise scoring measured ×110.62; at 31 skills it costs 1.89ms, and extrapolating quadratically from 310 skills it reaches roughly 2.2s at 1,000 skills and 19.6s at 3,000.
+`skill_digest` measured ×7.02 for ×10 the corpus. Pairwise scoring measured
+×110.62; at 31 skills it costs 1.89ms, and extrapolating quadratically from 310
+skills it reaches roughly 2.2s at 1,000 skills and 19.6s at 3,000.
 <!-- /generated:scaling -->
 
 `skill_digest` is O(bytes), so it should grow no faster than the corpus; the

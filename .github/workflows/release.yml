@@ -182,8 +182,13 @@ jobs:
       - name: Build release assets
         run: python3 scripts/release-pack.py --out-dir dist/release --profile polyglot
       - name: Build Python distributions
+        # The commit's time as every file's timestamp: with it the wheel and
+        # sdist are byte-identical wherever they are built (supply-chain.yml
+        # checks this on every change), so anyone can rebuild and compare.
         run: |
           python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
+          SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          export SOURCE_DATE_EPOCH
           python3 -m build --outdir dist/python
       - name: The built wheel's signatures verify
         # The signatures were made in another job and reach the wheel through
@@ -299,7 +304,7 @@ jobs:
               --title "AgtMLS ${TAG#v}" --notes-file dist/body.md
           fi
           # Count what GitHub actually holds before anyone can see it.
-          expected="$(ls dist/assets | wc -l | tr -d ' ')"
+          expected="$(find dist/assets -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')"
           attached="$(asset_count "$(release_id)")"
           if [ "$attached" != "$expected" ]; then
             echo "::error::$TAG has $attached of $expected assets attached; the release stays a draft"
@@ -353,7 +358,7 @@ jobs:
           done
           # SHA256SUMS must name every other asset, and every one must match.
           listed="$(wc -l < dist/assets/SHA256SUMS | tr -d ' ')"
-          attached="$(ls dist/assets | grep -vc '^SHA256SUMS$')"
+          attached="$(find dist/assets -mindepth 1 -maxdepth 1 ! -name SHA256SUMS | wc -l | tr -d ' ')"
           test "$listed" = "$attached"
           (cd dist/assets && sha256sum -c SHA256SUMS)
       - name: Audit the release before handing it on
@@ -416,7 +421,7 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/twine.txt
           python3 -m twine check dist/pypi/*
-          echo "dry run: validated $(ls dist/pypi | wc -l) file(s); nothing uploaded"
+          echo "dry run: validated $(find dist/pypi -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ') file(s); nothing uploaded"
       - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         if: ${{ !inputs.dry_run }}
         with:

@@ -16,7 +16,7 @@ cd "$(dirname "$0")"
 floor() {
   case "$1" in
     skills-ref|coverage|griffe) echo 3.11 ;;
-    fuzz) echo 3.12 ;;
+    fuzz|supply-chain) echo 3.12 ;;
     *) echo 3.10 ;;
   esac
 }

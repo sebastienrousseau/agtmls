@@ -34,6 +34,7 @@ import hashlib
 import json
 import re
 import sys
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -78,6 +79,11 @@ def environment(env: dict) -> str:
     return f"{system} {release}, {env.get('machine', '?')}, Python {env.get('python', '?')}"
 
 
+def prose(text: str) -> str:
+    """A paragraph wrapped at 80 columns, as markdownlint (MD013) wants it."""
+    return textwrap.fill(text, width=80, break_long_words=False, break_on_hyphens=False)
+
+
 def render_latency() -> str:
     latency, baseline = load(LATENCY), load(BASELINE)
     workloads = latency["workloads"]
@@ -92,14 +98,14 @@ def render_latency() -> str:
     fastest = min(interactive)
     budget = baseline["cold_start_budget_ms"]
     return "\n".join([
-        f"Recorded on the machine named in `bench-baseline.json`: {environment(latency['environment'])}.",
+        prose(f"Recorded on the machine named in `bench-baseline.json`: {environment(latency['environment'])}."),
         f"One machine, {baseline['suite_runs']} suite runs. No claim is made about any other machine.",
         "",
         "| Workload | min ms | P50 ms | P95 ms | × calibration |",
         "|---|---:|---:|---:|---:|",
         *rows,
         "",
-        (
+        prose(
             f"The {len(interactive)} `cli-*` commands are the interactive surface: P50 between "
             f"**{fastest:.0f}ms** and **{max(interactive):.0f}ms**, against the {budget:.0f}ms budget of "
             f"scorecard criterion 3.10. About {calibration:.0f}ms of that is the interpreter itself — the "
@@ -118,11 +124,11 @@ def render_thresholds() -> str:
     at_floor = [n for n, w in workloads.items() if w["allowed_regression"] <= floor + 1e-9]
     wider = sorted((n, w["allowed_regression"]) for n, w in workloads.items() if n not in at_floor)
     tail = "".join(f" and `{n}` at {allowed:.0%}" for n, allowed in wider)
-    return (
+    return prose(
         f"On the recorded machine the spreads are {min(spreads):.1%} to {max(spreads):.1%}, so "
         f"{len(at_floor)} of {len(workloads)} workloads are gated at the full {floor:.0%} of "
-        f"criterion 3.2{tail}.\n"
-    )
+        f"criterion 3.2{tail}."
+    ) + "\n"
 
 
 def render_scaling() -> str:
@@ -141,7 +147,7 @@ def render_scaling() -> str:
         *table,
         f"| **growth for ×{growth['size']:.0f}** | **×{growth['digest']:.2f}** | **×{growth['pairwise']:.2f}** |",
         "",
-        (
+        prose(
             f"`skill_digest` measured ×{growth['digest']:.2f} for ×{growth['size']:.0f} the corpus. Pairwise "
             f"scoring measured ×{growth['pairwise']:.2f}; at {rows[0]['skills']} skills it costs "
             f"{rows[0]['pairwise_ms']:.2f}ms, and extrapolating quadratically from {largest['skills']} skills "

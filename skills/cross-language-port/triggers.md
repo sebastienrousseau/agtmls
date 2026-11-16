@@ -21,12 +21,12 @@ correctly using **only** the skill's frontmatter `description` plus its
 
 | # | Prompt | Why it fires |
 |---|--------|--------------|
-| 1 | "Port this Python IBAN validator to Rust." | explicit "port … to <lang>", multi-function module |
-| 2 | "Translate this Bash deploy script to Python." | "translate to <lang>", a whole script |
-| 3 | "Rewrite this Go rate limiter in Rust." | "rewrite in <lang>", preserves behaviour |
-| 4 | "Give me the TypeScript equivalent of this JS module." | "give me the <lang> equivalent of existing code" |
-| 5 | "Convert this Ruby CSV parser to Python." | "convert this to <lang>" |
-| 6 | "Reimplement this C++ colour parser in Swift." | "reimplement <X> in <lang>" |
+| 1 | "Port this Python IBAN validator to Rust." | explicit "port … to \<lang>", multi-function module |
+| 2 | "Translate this Bash deploy script to Python." | "translate to \<lang>", a whole script |
+| 3 | "Rewrite this Go rate limiter in Rust." | "rewrite in \<lang>", preserves behaviour |
+| 4 | "Give me the TypeScript equivalent of this JS module." | "give me the \<lang> equivalent of existing code" |
+| 5 | "Convert this Ruby CSV parser to Python." | "convert this to \<lang>" |
+| 6 | "Reimplement this C++ colour parser in Swift." | "reimplement \<X> in \<lang>" |
 | 7 | "I need this Python service's core loop in Go." | cross-language port of an existing unit |
 
 ## DEFER (micro-port — inline, don't load the skill)

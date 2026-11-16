@@ -98,7 +98,7 @@ because the symptom is gone.
 Write it *during*, not after. Memory reorders under stress and the timeline
 is what makes the follow-up honest.
 
-```
+```text
 14:02  alerts: checkout 500s at 30%
 14:04  posted first update
 14:07  noticed deploy #4821 at 13:58 — correlated

@@ -71,6 +71,16 @@ def uninstall_problems(prefix: Path) -> list[str]:
     return [f"make uninstall left {len(left)} file(s), e.g. {left[0]}"] if left else []
 
 
+def installcheck_problems(prefix: Path) -> list[str]:
+    """GNUmakefile's `installcheck` exercises the installed tree, as the GNU
+    Coding Standards define it; it must pass on a fresh install."""
+    proc = subprocess.run(
+        ["make", "installcheck", f"PREFIX={prefix}"],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+    )
+    return [] if proc.returncode == 0 else [f"make installcheck failed:\n{proc.stdout}"]
+
+
 def install_problems(prefix: Path) -> list[str] | str:
     """The problems of an installed tree, or why nothing usable was installed."""
     proc = subprocess.run(
@@ -84,7 +94,7 @@ def install_problems(prefix: Path) -> list[str] | str:
         return f"no binary at {binary}"
     errors = stats_problems(binary)
     errors += [f"missing installed file: {relative}" for relative in INSTALLED if not (prefix / relative).exists()]
-    return errors + uninstall_problems(prefix)
+    return errors + installcheck_problems(prefix) + uninstall_problems(prefix)
 
 
 def main() -> int:

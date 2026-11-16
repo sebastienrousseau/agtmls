@@ -22,7 +22,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "67acecbbf9865c060e19bdaed28fbe015467f89f05df0304bc8dec54632d6713"
+        "sha256": "83c0bd778c388a60d187e50e80187a7c87aca617aece4dbfea3bda7d470d3044"
       },
       "name": "agent-loop-design"
     }

@@ -1,8 +1,8 @@
 {
   "name": "AgtMLS Development",
-  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12@sha256:8f25b295869c35965fe0ad55e495ee17bdbb59e83c9906952fa2bcb0a5d7357f",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
   },
-  "postCreateCommand": "make check"
+  "postCreateCommand": "python3 scripts/agtmls-doctor.py --skip-gate"
 }

@@ -2,4 +2,4 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """AgtMLS — the universal agent skills registry."""
 
-__version__ = "0.0.31"
+__version__ = "0.0.32"

@@ -132,7 +132,7 @@ decision record in miniature.
 
 Structure:
 
-```
+```text
 <type>(<scope>): <imperative subject, ≤72 chars>
 
 <paragraph 1 — symptom the user or CI observed>

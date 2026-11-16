@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "49d9567ce063a8d9f46db6a42c0cf0b0adfeb2e4e097da7fa5093c1e89c9aa7a"
+          "sha256": "6a8ad7a384b0960af8048cd9944cd70be3a6b61e24f4ed700b6d0e52fe03fde7"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "85b3cfe2d8fa6301a9f8a9eafc1c32ce481c8dd8dda8204dacc53d1d2dcebe53"
+          "sha256": "059e1932da824f2e0dc810920d6600e1bf6d8a2656a3985fbc0bcdfe3049897f"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "78474a332dfd2127692c95eba23ba8bbefd00c3a0439d9f2a7ccbeb1a7dec9d9"
+        "sha256": "8d9db61a695895ca0d0bfe339672d93f92e0f63cbfd13c95a109afb98f79df8c"
       },
       "name": "noyalib-failure-archaeology"
     }

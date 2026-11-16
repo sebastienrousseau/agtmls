@@ -188,8 +188,9 @@ for v in examples/*/verify.sh; do "$v"; done
 
 - Fleet languages are derived from the active repos at
   `github.com/sebastienrousseau` (Rust, Python, Go, C++, Swift, TypeScript,
-  JavaScript, Ruby, Shell). Re-derive with:
-  `gh api 'users/sebastienrousseau/repos?per_page=100&type=owner' --jq '.[]|select(.fork==false)|.language' | sort | uniq -c | sort -rn`
+  JavaScript, Ruby, Shell). Re-derive with: `gh api
+  'users/sebastienrousseau/repos?per_page=100&type=owner' --jq
+  '.[]|select(.fork==false)|.language' | sort | uniq -c | sort -rn`
 - Toolchain rows in `reference.md` §R1 name current-stable tools; re-verify
   a formatter/linter/test-runner exists before scripting it into a port.
 - Last reviewed against the fleet: 2026-07-08.

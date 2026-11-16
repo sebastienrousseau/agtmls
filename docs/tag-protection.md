@@ -3,7 +3,9 @@
 
 # Repository Protection
 
-Published AgtMLS release tags are immutable, and `main` requires a green validation check before changes land. Protect both surfaces with GitHub rulesets before making routine releases.
+Published AgtMLS release tags are immutable, and `main` requires a green
+validation check before changes land. Protect both surfaces with GitHub rulesets
+before making routine releases.
 
 ## Recommended Tag Ruleset
 
@@ -36,10 +38,13 @@ that public releases advance by exactly `0.0.1` on the `0.0.x` line.
 
 ## Ruleset Status
 
-Active repository ruleset: `Protect release tags` (`19381166`) targeting `refs/tags/v*`. It blocks deletion and non-fast-forward updates.
+Active repository ruleset: `Protect release tags` (`19381166`) targeting
+`refs/tags/v*`. It blocks deletion and non-fast-forward updates.
 
-Ruleset URL: https://github.com/sebastienrousseau/agtmls/rules/19381166
+Ruleset URL: <https://github.com/sebastienrousseau/agtmls/rules/19381166>
 
-Active repository ruleset: `Require validate on main` (`19410401`) targeting `refs/heads/main`. It blocks deletion, blocks non-fast-forward updates, and requires the `validate-skills` check with strict update policy.
+Active repository ruleset: `Require validate on main` (`19410401`) targeting
+`refs/heads/main`. It blocks deletion, blocks non-fast-forward updates, and
+requires the `validate-skills` check with strict update policy.
 
-Ruleset URL: https://github.com/sebastienrousseau/agtmls/rules/19410401
+Ruleset URL: <https://github.com/sebastienrousseau/agtmls/rules/19410401>

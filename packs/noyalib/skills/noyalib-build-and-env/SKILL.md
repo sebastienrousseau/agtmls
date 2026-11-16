@@ -29,6 +29,7 @@ machine, and know every trap that has bitten past sessions.
 > bootstrap, first-build sequence, known traps, and satellite topology.
 
 Sibling skills — do not duplicate them here:
+
 - CI internals, release plumbing, shared-workflow SHA pinning → `noyalib-ci-and-release`.
 - Running benches / fuzzers / coverage in anger → `noyalib-diagnostics-and-tooling`.
 
@@ -245,10 +246,10 @@ Since ADR-0005 (workspace split, v0.0.12–v0.0.13), the satellites
 are their own GitHub repositories and are **not** under `crates/`
 here:
 
-- `noyalib-wasm` → https://github.com/sebastienrousseau/noyalib-wasm
-- `noyalib-mcp`  → https://github.com/sebastienrousseau/noyalib-mcp
-- `noyalib-lsp`  → https://github.com/sebastienrousseau/noyalib-lsp
-- `noya-cli`     → https://github.com/sebastienrousseau/noya-cli
+- `noyalib-wasm` → <https://github.com/sebastienrousseau/noyalib-wasm>
+- `noyalib-mcp`  → <https://github.com/sebastienrousseau/noyalib-mcp>
+- `noyalib-lsp`  → <https://github.com/sebastienrousseau/noyalib-lsp>
+- `noya-cli`     → <https://github.com/sebastienrousseau/noya-cli>
 
 Do not `grep -r noyalib-mcp crates/` and conclude the satellite is
 missing — it lives elsewhere and releases in strict lockstep at

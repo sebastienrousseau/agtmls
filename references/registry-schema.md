@@ -84,8 +84,10 @@ file or bundle metadata file:
 - `writes_files`: whether normal use edits files.
 - `executes_commands`: whether normal use runs shell/tool commands.
 - `handles_secrets`: whether the skill is expected to inspect or transform secrets.
-- `requires_human_review`: whether results should be reviewed before publication or high-impact action.
-- `risk_level`: `low`, `medium`, or `high`; high-risk skills must require human review.
+- `requires_human_review`: whether results should be reviewed before publication
+  or high-impact action.
+- `risk_level`: `low`, `medium`, or `high`; high-risk skills must require human
+  review.
 
 ## Providers and Profiles
 

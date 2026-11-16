@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "fc67fc2cd69df49ee8858723597ad9b8cbc8d271bc2872907b6409846c4969ea"
+          "sha256": "27c5ece923d8592ac8ed26d2a453f19e068034699146feb975261a883b8e14f1"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "320a8f0f82087ca884d0d603d6b4918f6385d4f5a8dc9f7a83bd56a80d9d9c22"
+          "sha256": "715c90a67be6f8c4b3bfc6fcff044a107287bee7480284c364ec9a403c30b2bd"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "f7c6cb07ca8ff68e27996f999c33daa90e34b30e195a7cda64a9857d91563322"
+        "sha256": "6d86db9205b395bb3f4455989b969521465e5d2044e2e1ebf7413b3eba8f9e18"
       },
       "name": "web-research-and-source-triage"
     }

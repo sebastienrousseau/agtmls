@@ -1,0 +1,23 @@
+// SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+//
+// The house markdownlint rules for README.md and BENCHMARKS.md, minus what
+// their layout makes impossible. CI runs it with
+// `markdownlint-cli2 --config .markdownlint-template.jsonc README.md BENCHMARKS.md`.
+{
+  "config": {
+    "default": true,
+    "MD024": { "siblings_only": true },
+    "MD041": false,
+    "MD060": false,
+    // ~/Code/README-TEMPLATE.md lays out the logo, title and badges as one
+    // HTML element per line, and generated blocks open with a marker naming
+    // each source and its SHA-256: neither can be wrapped at 80.
+    "MD013": false,
+    // The template's title is an <h1 align="center">.
+    "MD033": { "allowed_elements": ["p", "a", "img", "br", "h1", "picture", "source", "div", "details", "summary", "sup", "kbd"] },
+    // The template groups Contents under bold labels, not headings, so they
+    // stay out of the heading outline validate-readme.py checks.
+    "MD036": false
+  }
+}

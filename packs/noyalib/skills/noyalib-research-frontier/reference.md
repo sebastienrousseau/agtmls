@@ -325,5 +325,5 @@ actually did.
 - [Frontier thesis (summary)](./SKILL.md#frontier-thesis)
 - [Open-problems index](./SKILL.md#open-problems-index)
 - [Research methodology summary](./SKILL.md#research-methodology-summary)
-- [Non-goals](./SKILL.md#non-goals)
+- [Non-goals](./SKILL.md#non-goals-fenced--do-not-spend-research-budget-here)
 - [Provenance](./SKILL.md#provenance--re-verify-before-quoting-numbers)

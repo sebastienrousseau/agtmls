@@ -23,9 +23,10 @@ Use this skill for current-source research and source credibility checks.
 ## Workflow
 
 1. Classify the claim as stable, current, high-stakes, or vendor-specific.
-2. Prefer primary sources: official docs, repositories, standards bodies, papers, patents, and release notes.
+2. Prefer primary sources: official docs, repositories, standards bodies,
+   papers, patents, and release notes.
 3. Cross-check volatile claims against at least two independent sources when possible.
 4. Capture dates, versions, and source URLs in the answer or evidence record.
-5. Flag uncertainty explicitly when sources disagree or only secondary sources are available.
+5. Flag uncertainty explicitly when sources disagree or only secondary sources
+   are available.
 6. Avoid copying long passages; summarize and cite.
-

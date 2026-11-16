@@ -25,7 +25,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "b55dcee8b10d1b40dd94ba5f1cfbe87ec19f066ce10c86f96dc5dc2608983d41"
+        "sha256": "f15ff7a145f09f58f89b771071f28758ac5985735bc71bf6f33d6f7b778885dd"
       },
       "name": "noyalib-build-and-env"
     }

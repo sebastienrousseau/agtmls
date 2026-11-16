@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+name: devcontainer
+
+# The dev container must build from its pinned image and come up healthy:
+# its post-create step runs the doctor, so a container that boots into a
+# broken checkout fails here rather than on a contributor's machine.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - .devcontainer/**
+      - .github/workflows/devcontainer.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: dev container boots healthy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build, start and check the container
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3.1900000450
+        with:
+          push: never
+          runCmd: python3 scripts/agtmls.py --version

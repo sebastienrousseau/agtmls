@@ -13,4 +13,5 @@ This reference captures deeper checks for `agent-loop-design`.
 
 ## Safety
 
-Respect the bundle `safety_policy` in `metadata.json`; do not escalate permissions or publish artifacts without explicit review.
+Respect the bundle `safety_policy` in `metadata.json`; do not escalate
+permissions or publish artifacts without explicit review.

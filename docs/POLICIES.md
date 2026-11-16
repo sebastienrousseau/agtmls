@@ -9,7 +9,7 @@
 | :--- | :--- | :--- |
 | **Python floor** | 3.10 (`requires-python = ">=3.10"`) | `pyproject.toml` |
 | **Tested versions** | 3.10, 3.11, 3.12, 3.13 and 3.14 on every push to `main`; 3.10 and 3.14 on pull requests | the `checks` matrix in `.github/workflows/validate.yml` |
-| **Platforms** | Ubuntu and macOS | the same matrix |
+| **Platforms** | Ubuntu and macOS: the CLI and the repository gate. Windows: the CLI (install, verify, uninstall) and the Python installer it uses; the gate drives bash scripts and needs Linux or macOS | the same matrix, and `.github/workflows/windows.yml` on Python 3.10 and 3.14 |
 | **Runtime dependencies** | None; the standard library only | `AGENTS.md` invariant 2, and a wheel with no `Requires-Dist` |
 
 The floor is raised only when the oldest supported version reaches upstream

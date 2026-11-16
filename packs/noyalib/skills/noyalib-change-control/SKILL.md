@@ -190,10 +190,10 @@ integrity fix outranks any feature, deadline, or scheduled release.
 Holding a release to land a security fix is the correct call every
 time.
 
-**(f) Community-PR takeover protocol.** External PRs (e.g. `zoosky`
-#118 / #147–152, `canardleteer` #117) get **taken over**, rebased with
-authorship preserved via `git am --3way`, credited in release notes,
-and merged. Never left to rot; never merged unreviewed.
+**(f) Community-PR takeover protocol.** External PRs (e.g. `zoosky` #118
+/ #147–152, `canardleteer` #117) get **taken over**, rebased with authorship
+preserved via `git am --3way`, credited in release notes, and merged. Never left
+to rot; never merged unreviewed.
 
 **(g) No perf claim ships without a Criterion run in the same PR.**
 README, release-note, and rustdoc perf numbers cite a Criterion run

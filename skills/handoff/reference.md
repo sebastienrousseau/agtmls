@@ -60,6 +60,7 @@ without content.
 > (`test_callback_redirect`, see below).
 >
 > **Done:**
+>
 > - `AuthProvider` protocol extracted; `PasswordAuth` implements it.
 >   Evidence: `pytest tests/auth/` was 31 passed before and after.
 > - Google token exchange works. Evidence:
@@ -72,12 +73,14 @@ without content.
 > `settings.PUBLIC_URL` instead — `auth/google.py:71`.
 >
 > **Dead ends:**
+>
 > - Registering `http://localhost:8000` in the Google console does not help;
 >   the mismatch is our side, not theirs. ~40 minutes.
 > - `authlib`'s `authorize_redirect` helper hardcodes `request.url_for`, so
 >   we cannot use it here. Do not retry.
 >
 > **Open questions:**
+>
 > - [BLOCKING] which Google Cloud project owns the production client ID?
 >   Owner: platform team. Blocks deploy, not further development.
 

@@ -17,7 +17,7 @@ commercial tier has no code.
 Phase 0 (stabilization) is largely complete in this repository. Each row was
 reproduced before the fix and verified after.
 
-**Correctness**
+### Correctness
 
 | Fix | Evidence |
 |---|---|
@@ -26,7 +26,7 @@ reproduced before the fix and verified after.
 | `CASES` tuple could silently drop a test class | `loadTestsFromModule`; same 76 tests found by discovery |
 | `uninstall` matched sibling checkouts by string prefix | `Path.is_relative_to` |
 
-**Security**
+### Security
 
 | Fix | Evidence |
 |---|---|
@@ -39,7 +39,7 @@ reproduced before the fix and verified after.
 | Findings had no machine-readable identity | Every finding carries `AGT-<CLASS>-<NNN>` |
 | Importer fabricated a benign attestation | Audits first and refuses; preserves source metadata; `attested: false`, `risk_level: high`; symlink-safe copy |
 
-**Compliance**
+### Compliance
 
 | Fix | Evidence |
 |---|---|
@@ -48,7 +48,7 @@ reproduced before the fix and verified after.
 | No CycloneDX output | `SBOM.cyclonedx.json`, CycloneDX 1.6 |
 | `provenance.json` hardcoded `1970-01-01T00:00:00Z` | Real in-toto Statement; timestamp is when the materials last changed, kept in the statement — deterministic *and* true, and unmoved by a squash merge |
 
-**Packaging and performance**
+### Packaging and performance
 
 | Fix | Evidence |
 |---|---|
@@ -164,7 +164,7 @@ languages. The ecosystem dogfoods it.
 
 ### Repository map
 
-```
+```text
 agtmls-spec          normative schemas + conformance corpus.   no code
    │                 versioned independently; everything else pins a range
    ├── agtmls        (this repo) registry data + Python CLI.  stdlib-only
@@ -208,7 +208,7 @@ couples them and makes every skill edit look like a spec change.
 
 **Build first. Nothing else is meaningful until this exists.**
 
-```
+```text
 agtmls-spec/
 ├── spec/
 │   ├── 00-overview.md
@@ -240,7 +240,7 @@ The keystone algorithm. Everything downstream — install verification,
 per-skill versioning, rug-pull detection, lockfiles — depends on it being
 stable across a clone, a `--copy` install, a wheel extraction and a tarball.
 
-```
+```text
 skill_digest(dir) =
   SHA256( for each file f in dir, sorted by POSIX relative path:
             utf8(relpath(f)) || 0x00 ||
@@ -300,7 +300,7 @@ before a single line of Rust is written.
 
 ## 3. `agtmls-core` — the Rust engine
 
-```
+```text
 agtmls-core/
 ├── crates/
 │   ├── agtmls-core/     parse · digest · audit · resolve.  no I/O policy
@@ -402,7 +402,7 @@ cornered.
 
 ### 4.1 Surface
 
-**Resources**
+#### Resources
 
 | URI | Content |
 |---|---|
@@ -411,7 +411,7 @@ cornered.
 | `agtmls://index` | full registry index |
 | `agtmls://catalog` | human-readable catalog |
 
-**Tools**
+#### Tools
 
 | Tool | Purpose |
 |---|---|
@@ -536,8 +536,8 @@ registry follows. Ship the malicious-fixture corpus publicly alongside it as
 the reference benchmark for skill-security tooling — being the group that
 defines the benchmark is worth more than being the group with the most rules.
 
-Implementation: composite action over `@sebastienrousseau/agtmls-wasm` under Node 20. No
-platform matrix, no compilation, sub-second cold start.
+Implementation: composite action over `@sebastienrousseau/agtmls-wasm` under
+Node 20. No platform matrix, no compilation, sub-second cold start.
 
 ---
 
@@ -561,7 +561,7 @@ information. Replace with:
 
 ### 8.2 Install-time verification
 
-```
+```text
 agtmls install rust claude --verify      # default once 8.1 lands
   → recompute each source skill's digest
   → compare with index.json

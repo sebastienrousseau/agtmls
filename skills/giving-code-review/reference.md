@@ -56,26 +56,26 @@ inflating.
 
 ## Comment rewrites
 
-**Vague to specific**
+### Vague to specific
 
 > ~~"I don't think this handles errors properly."~~
 > **should**: if `fetch()` raises, `conn` at line 40 is never closed. Use
 > `with`, or close in a `finally`.
 
-**Prescriptive to reasoned**
+### Prescriptive to reasoned
 
 > ~~"Use a dataclass."~~
 > **consider**: this dict is built in three places with the same five keys — a
 > dataclass makes a missing key a type error instead of a runtime `KeyError`.
 > Your call; a dict is fine while it stays local.
 
-**Rhetorical to direct**
+### Rhetorical to direct
 
 > ~~"Is there a reason you're not using the existing helper?"~~
 > **should**: `utils.parse_duration` already does this and handles the `ms`
 > suffix, which this version drops. Was reimplementing deliberate?
 
-**Pile-on to single top-level**
+### Pile-on to single top-level
 
 Twenty inline comments all saying "this should be a state machine" is one
 comment. Put it at the top level, once, with the reasoning, and let the author

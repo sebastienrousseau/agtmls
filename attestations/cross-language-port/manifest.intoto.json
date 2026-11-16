@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "35342a10214ab1a2ae8ee98df305e8023fbf5ca7e73640bdf05e3bc222f40fe7"
+          "sha256": "4c1f6b8e7d64badf7b61e4ed847f9188425fd395afa7db5af826d598cbc34b2a"
         },
         "path": "SKILL.md"
       },
@@ -371,13 +371,13 @@
       },
       {
         "digest": {
-          "sha256": "c06960d8db34f0ff6cbddd3d600aad23f346eb7a6634f78202f6a4a0f7a15ae8"
+          "sha256": "311b048572a6f22fd4b46e6733a390f7ee09aa0a35f8542444497e669c09c3ff"
         },
         "path": "reference.md"
       },
       {
         "digest": {
-          "sha256": "06c51a23a881195a28d5f585ca2899356c105e7d5284196c27b91943ea8fad66"
+          "sha256": "c8f29ea60ec5f123a205988b745fdfc65471cab21ced74ae2df5852979fd841e"
         },
         "path": "triggers.md"
       }
@@ -387,7 +387,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "568a6bba2c0327bc77d2d752cd6cb0b06aac12060f02ed34e9c13ca939906220"
+        "sha256": "3539d66d5d023efe475cdc3cab4a4bb12b07dec5e636f41f433ec8ad9cc3e9a9"
       },
       "name": "cross-language-port"
     }

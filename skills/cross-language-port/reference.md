@@ -81,6 +81,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
 ## R2. Per-language porting notes & landmines
 
 ### Rust (as target)
+
 - Adopt: `Result`+`?`, iterator combinators, `match`, newtypes, `#[derive]`.
 - Avoid: `.clone()` to escape the borrow checker without measuring;
   `unwrap()` in library paths; `unsafe` (the fleet forbids it — see the Rust
@@ -90,6 +91,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   contract and test the boundary.
 
 ### Python (as target)
+
 - Adopt: type hints + `mypy`, dataclasses/pydantic, context managers
   (`with`), comprehensions, EAFP (`try` over `look-before-you-leap`).
 - Avoid: re-creating Go's `if err != nil` with tuple returns; C++-style
@@ -98,8 +100,9 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   the typecheck; a port without it loses a guarantee the source had.
 
 ### Go (as target)
-- Adopt: `(T, error)`, small interfaces defined at the consumer, goroutines
-  + channels, zero-value-usable structs, `defer` for cleanup.
+
+- Adopt: `(T, error)`, small interfaces defined at the consumer, goroutines +
+  channels, zero-value-usable structs, `defer` for cleanup.
 - Avoid: exceptions-as-panics; deep inheritance (Go has none — use
   composition + interfaces); generics where an interface is clearer.
 - Landmine (from Rust/Swift): no sum types. A Rust `enum` with data becomes
@@ -107,6 +110,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   consistent; don't fake it with `interface{}`.
 
 ### C++ (as target)
+
 - Adopt: RAII everywhere, smart pointers (`unique_ptr`/`shared_ptr`, never
   raw `new`/`delete`), `std::expected`/`std::optional`, `const`-correctness,
   the rule of zero.
@@ -116,6 +120,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   object that "just lives" needs an owner and a defined lifetime in C++.
 
 ### Swift (as target)
+
 - Adopt: value types (`struct`/`enum`) by default, `throws`/`Result`,
   `async/await` + actors, `Codable`, optionals over sentinels, protocol-
   oriented design.
@@ -126,6 +131,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   surrounding code's convention.
 
 ### TypeScript (as target)
+
 - Adopt: `strict` tsconfig, discriminated unions for variants, `unknown`
   over `any`, `readonly`, exhaustive `switch` with `never` checks.
 - Avoid: `any`; non-null `!` assertions to silence the checker; classes
@@ -135,6 +141,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   doesn't guard I/O.
 
 ### JavaScript (as target)
+
 - Adopt: `async/await`, ES modules, `const`/immutability, `Array` methods
   over manual loops, `Error` subclasses.
 - Avoid: callback pyramids; `var`; `==` (use `===`); floating-point money.
@@ -142,6 +149,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   double duty as your only correctness net; lean on it harder.
 
 ### Ruby (as target)
+
 - Adopt: blocks + `Enumerable`, `raise`/`rescue` with typed errors, duck
   typing, keyword args, `frozen_string_literal`.
 - Avoid: Java-style class ceremony; `rescue` without a class; mutating
@@ -151,6 +159,7 @@ interleaving), C++ `std::mutex`, Ruby GVL (threads interleave; use `Mutex`).
   structure.
 
 ### Bash/Shell (as target — usually the *source*)
+
 - Adopt: `set -euo pipefail`, `trap` for cleanup, `[[ ]]` over `[ ]`,
   quoted expansions `"$var"`, functions + exit codes, `local`.
 - Avoid: unquoted expansions (word-splitting/globbing), parsing `ls`, `eval`
@@ -179,11 +188,12 @@ into/out of it can be sanity-checked against real fleet code:
 | C++ | `euxis` | Low — single repo, lower-confidence idiom notes |
 | Ruby | `homebrew-tap` | Low — single repo, lower-confidence idiom notes |
 
-Re-derive the fleet + weights with:
-`gh api 'users/sebastienrousseau/repos?per_page=100&type=owner' --jq '.[]|select(.fork==false)|.language' | sort | uniq -c | sort -rn`.
-For the thin languages (Go, Swift, TS, C++, Ruby) treat the R2 notes as
-"idiomatic best practice, lightly fleet-checked" rather than "battle-tested
-across many repos"; deepen them if the fleet grows in that language.
+Re-derive the fleet + weights with: `gh api
+'users/sebastienrousseau/repos?per_page=100&type=owner' --jq
+'.[]|select(.fork==false)|.language' | sort | uniq -c | sort -rn`. For the thin
+languages (Go, Swift, TS, C++, Ruby) treat the R2 notes as "idiomatic best
+practice, lightly fleet-checked" rather than "battle-tested across many repos";
+deepen them if the fleet grows in that language.
 
 ---
 

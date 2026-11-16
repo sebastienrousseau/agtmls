@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "364183f08b6e040b5ae836a0fd50ed793b4579446e91317afb74b85877ae1e22"
+          "sha256": "9584cf9be47ab42777f2d6376712144893b194804233c46b185c753e0bf7b213"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "dfaf8540902e56629a53c74f62601089637ad671c875d63186a5901b2d4ed5ba"
+          "sha256": "cbd9f34f693591d151d975fba0df055625ae177fa88fc5b323d7416a62b7cb54"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "0e3629b81fa6ea119eb93dbbab1aba58452a8b5ee57ce4aaf377705e5087057b"
+        "sha256": "b3047acde20acfd069dee9ca73e7694cb55fc855455bfb8b60f7c02a7e4eb835"
       },
       "name": "pr-review-and-release"
     }

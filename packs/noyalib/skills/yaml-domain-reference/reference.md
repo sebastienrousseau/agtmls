@@ -42,6 +42,7 @@ match arms, in source order:
 integer parse → sexagesimal (if enabled) → **f64 fallback** → string.
 
 **Integer forms.**
+
 - `0xDEAD` / `0XDEAD` — hex (both cases).
 - `0o755` / `0O755` — YAML 1.2 explicit octal.
 - `0644` — YAML 1.1 bare octal, gated behind `legacy_octal_numbers`.
@@ -85,7 +86,7 @@ directive would reintroduce the Norway problem.
 
 Base fragment (spaces marked `·`, newlines marked `↵`):
 
-```
+```text
 literal: |·
 ··line1↵
 ··line2↵
@@ -95,9 +96,9 @@ literal: |·
 
 | Header | Name | Result string | Trailing newlines kept |
 |--------|------|---------------|------------------------|
-| `|`    | clip | `"line1↵line2↵"` | exactly one |
-| `|-`   | strip | `"line1↵line2"` | zero |
-| `|+`   | keep | `"line1↵line2↵↵↵"` | all trailing blanks |
+| `\|`    | clip | `"line1↵line2↵"` | exactly one |
+| `\|-`   | strip | `"line1↵line2"` | zero |
+| `\|+`   | keep | `"line1↵line2↵↵↵"` | all trailing blanks |
 | `>`    | clip (folded) | `"line1 line2↵"` | folded; one final |
 | `>-`   | strip (folded) | `"line1 line2"` | folded; zero |
 | `>+`   | keep (folded) | `"line1 line2↵↵↵"` | folded; all kept |
@@ -109,6 +110,7 @@ byte — byte-faithful for the *value* but not for the *span*, which broke
 editor diagnostics that highlighted keep-chomped blocks.
 
 **Folding rules (`>`):**
+
 - Consecutive non-empty lines join with a single space.
 - Blank lines are preserved as literal newlines (paragraph breaks).
 - More-indented lines (relative to the block's indent) are NOT folded — they
@@ -139,6 +141,7 @@ decodes in `official_suite.rs::decode_test_suite_markers` and
 | `»` / `———»` chains | U+00BB | tab |
 
 **How noyalib integrates it.**
+
 - `tests/yaml-test-suite/` — vendored corpus.
 - `tests/official_suite.rs` — the regression-net. Passes are scored as
   `pass / (total − skip)`. Asserts `compliance >= 94.0`.
@@ -156,6 +159,7 @@ decodes in `official_suite.rs::decode_test_suite_markers` and
   wrapper-parse regression can't silently vacuously pass at 0/0.
 
 **The conformance claim — what the code actually says.**
+
 - `official_suite.rs::SKIP_LIST` — currently **`&[]`** (empty). Both
   categories in the file (`Stricter rejection still missing`, `Block parser
   corners`) are present as comments with zero entries.
@@ -173,7 +177,8 @@ conformance — the README numbers are aspirational / prose and may lag the
 code.
 
 **Suite value at a glance.**
-```
+
+```text
 official_suite.rs::SKIP_LIST     = &[]        # zero entries
 yaml_compliance_report.rs::SKIP  = &[]        # zero entries
 compliance floor                 = 94.0%      # assertion
@@ -201,6 +206,7 @@ bundle. The fine-grained flags remain callable individually — e.g. "1.1
 booleans but reject octal `0644`" is a valid configuration.
 
 **Ordering of precedence.**
+
 - `no_schema = true` short-circuits everything else — scalars never reach
   the resolution table.
 - `strict_booleans = true` filters the boolean-canonical output *after* the

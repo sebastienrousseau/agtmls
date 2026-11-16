@@ -1,0 +1,169 @@
+# SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+name: supply-chain
+
+# Dependency advisories and workflow linting. AgtMLS has no runtime
+# dependencies; what it does install is the CI tooling pinned by hash in
+# .github/requirements/, and the workflows that run with this repository's
+# token. Weekly as well as per change, because an advisory can appear for a
+# version that has not moved.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  advisories:
+    name: dependency advisories
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/supply-chain.txt
+      - name: Audit every pinned requirements file against PyPI and OSV
+        # Two advisory databases, because each has entries the other lacks.
+        # --disable-pip: the files are fully pinned with hashes, so the
+        # audit reads them as written instead of resolving them again.
+        run: |
+          status=0
+          for service in pypi osv; do
+            for file in .github/requirements/*.txt; do
+              echo "::group::$service $file"
+              pip-audit --disable-pip --require-hashes --vulnerability-service "$service" -r "$file" || status=1
+              echo "::endgroup::"
+            done
+          done
+          exit "$status"
+
+  workflow-lint:
+    name: workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/supply-chain.txt
+      # actionlint runs shellcheck (preinstalled on the runner) over every
+      # `run:` block.
+      - run: actionlint
+      # Offline: the same findings on every run, with no token in the tool.
+      - run: zizmor --offline --format github .github/workflows
+
+  # The wheel and sdist built from one commit are the same bytes wherever
+  # they are built: twice on Linux from two different paths, and once on
+  # macOS. SOURCE_DATE_EPOCH is the commit's time, as in release.yml.
+  build-linux:
+    name: reproducible build (linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      sums: ${{ steps.sums.outputs.sums }}
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
+      - name: Build here and from a copy at another path
+        run: |
+          SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          export SOURCE_DATE_EPOCH
+          python3 -m build --outdir "$RUNNER_TEMP/a" .
+          copy="$RUNNER_TEMP/elsewhere/deeper/agtmls"
+          mkdir -p "$copy"
+          git archive HEAD | tar -x -C "$copy"
+          (cd "$copy" && python3 -m build --outdir "$RUNNER_TEMP/b" .)
+      - id: sums
+        name: Both builds are the same bytes
+        run: |
+          (cd "$RUNNER_TEMP/a" && sha256sum -- *) > "$RUNNER_TEMP/a.sums"
+          (cd "$RUNNER_TEMP/b" && sha256sum -- *) > "$RUNNER_TEMP/b.sums"
+          cat "$RUNNER_TEMP/a.sums"
+          diff "$RUNNER_TEMP/a.sums" "$RUNNER_TEMP/b.sums"
+          echo "sums=$(tr '\n' ' ' < "$RUNNER_TEMP/a.sums")" >> "$GITHUB_OUTPUT"
+
+  build-macos:
+    name: reproducible build (macos)
+    runs-on: macos-latest
+    timeout-minutes: 10
+    outputs:
+      sums: ${{ steps.sums.outputs.sums }}
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python3 -m pip install --disable-pip-version-check --require-hashes -r .github/requirements/build.txt
+      - id: sums
+        name: Build
+        run: |
+          SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          export SOURCE_DATE_EPOCH
+          python3 -m build --outdir "$RUNNER_TEMP/m" .
+          (cd "$RUNNER_TEMP/m" && shasum -a 256 -- *) > "$RUNNER_TEMP/m.sums"
+          cat "$RUNNER_TEMP/m.sums"
+          echo "sums=$(tr '\n' ' ' < "$RUNNER_TEMP/m.sums")" >> "$GITHUB_OUTPUT"
+
+  reproducible:
+    name: reproducible build
+    needs: [build-linux, build-macos]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - name: Linux and macOS built the same bytes
+        env:
+          LINUX: ${{ needs.build-linux.outputs.sums }}
+          MACOS: ${{ needs.build-macos.outputs.sums }}
+        run: |
+          echo "linux: $LINUX"
+          echo "macos: $MACOS"
+          test -n "$LINUX" && test "$LINUX" = "$MACOS"
