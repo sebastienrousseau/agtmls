@@ -895,3 +895,25 @@ class AuditTargetTests(Workspace):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class McpServerRunnerTests(unittest.TestCase):
+    """An MCP server launched by an unpinned runner is a supply-chain finding,
+    not a hook (AGT-MCP-002, agtmls-spec 0.0.4)."""
+
+    PATH = Path(".mcp.json")
+
+    def rules(self, body: str) -> list[str]:
+        return sorted({f.rule for f in analyzer.pattern_findings(self.PATH, body)})
+
+    def test_an_unpinned_server_is_mcp_002_not_a_hook(self) -> None:
+        body = '{"mcpServers": {"b": {"command": "npx", "args": ["-y", "browser-server@latest"]}}}\n'
+        self.assertEqual(self.rules(body), ["AGT-MCP-002"])
+
+    def test_a_pinned_server_is_clean(self) -> None:
+        body = '{"mcpServers": {"b": {"command": "npx", "args": ["-y", "browser-server@2.3.1"]}}}\n'
+        self.assertEqual(self.rules(body), [])
+
+    def test_a_hook_that_fetches_is_still_a_hook(self) -> None:
+        body = '{"hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "npx -y tool@latest"}]}]}}\n'
+        self.assertIn("AGT-HOOK-002", self.rules(body))

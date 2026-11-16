@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-16T14:01:05Z",
+    "created": "2026-11-16T15:20:22Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -3521,11 +3521,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "357a5a944ad469dd3bc4afd79c225c7c3a648181"
+          "checksumValue": "fee10497703119710cc0fc3763a33f9072544bfb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "ac23ba3ae9577bfc444b639bc45db2ece4e76222e63e72781013e73abd8f2aef"
+          "checksumValue": "2c1cbe8d7f9650cadeb03ae7777cd5a7ebcb63512a518367edabe277931748a1"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3853,6 +3853,22 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
+      "SPDXID": "SPDXRef-File-scripts--lib-quoted.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "173a20bdd19846274c6efcdefa354ace24961088"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "89b1fdbfc904b1aea6027730e2755c864bea6a823a0e83c12bb90f1d0673d0ad"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/_lib/quoted.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
       "SPDXID": "SPDXRef-File-scripts--lib-release-notes.py",
       "checksums": [
         {
@@ -3873,11 +3889,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ffeb201569bffd0458de302e0d4df87fd0fea3a6"
+          "checksumValue": "78ea49a298d08d61dccb4695ef68bc3be5078ccf"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "826ff80a61344616eb825d6a2f44d52432301baacb583f3e1662505cf3363d94"
+          "checksumValue": "36d0e79820bb7f124293382fc1fcb117c656b482bb6606b8e51b0660f46bd3c7"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -8156,6 +8172,7 @@
         "SPDXRef-File-scripts--lib-policy.py",
         "SPDXRef-File-scripts--lib-portability.py",
         "SPDXRef-File-scripts--lib-posture.py",
+        "SPDXRef-File-scripts--lib-quoted.py",
         "SPDXRef-File-scripts--lib-release-notes.py",
         "SPDXRef-File-scripts--lib-rules.json",
         "SPDXRef-File-scripts--lib-rules.py",

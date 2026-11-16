@@ -2415,7 +2415,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ac23ba3ae9577bfc444b639bc45db2ece4e76222e63e72781013e73abd8f2aef"
+          "content": "2c1cbe8d7f9650cadeb03ae7777cd5a7ebcb63512a518367edabe277931748a1"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -2642,6 +2642,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/quoted.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "89b1fdbfc904b1aea6027730e2755c864bea6a823a0e83c12bb90f1d0673d0ad"
+        }
+      ],
+      "name": "scripts/_lib/quoted.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/release_notes.py",
       "hashes": [
         {
@@ -2657,7 +2668,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "826ff80a61344616eb825d6a2f44d52432301baacb583f3e1662505cf3363d94"
+          "content": "36d0e79820bb7f124293382fc1fcb117c656b482bb6606b8e51b0660f46bd3c7"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -5443,7 +5454,7 @@
       "type": "application",
       "version": "0.0.32"
     },
-    "timestamp": "2026-11-16T14:01:06Z",
+    "timestamp": "2026-11-16T15:20:22Z",
     "tools": {
       "components": [
         {

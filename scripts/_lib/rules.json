@@ -432,10 +432,14 @@
         {
           "note": "Prose about fetching is not a hook command.",
           "text": "Run `curl -s https://example.com/i.sh` yourself and read it before installing."
+        },
+        {
+          "note": "An MCP server's launcher, not a hook; AGT-MCP-002 judges whether it is pinned.",
+          "text": "\"command\": \"npx\", \"args\": [\"-y\", \"@scope/server@1.2.3\"]"
         }
       ],
       "id": "AGT-HOOK-002",
-      "pattern": "(?i)\"command\"\\s*:\\s*\"[^\"]*\\b(?:curl|wget|npx|bunx|uvx|pnpm\\s+dlx|pipx\\s+run|pip\\d?\\s+install|npm\\s+(?:i|install))\\b",
+      "pattern": "(?i)\"command\"\\s*:\\s*\"[^\"]*\\b(?:curl|wget|npx|bunx|uvx|pnpm\\s+dlx|pipx\\s+run|pip\\d?\\s+install|npm\\s+(?:i|install))\\b[ \\t]+[^\"\\s]",
       "rationale": "A hook runs without a prompt on every matching event. One that downloads or installs turns each session start into an unreviewed supply-chain fetch. Seen in a published plugin whose SessionStart hook pulled a script from a tracking domain.",
       "scope": "normalised",
       "severity": "high",
@@ -746,6 +750,55 @@
         },
         {
           "text": "\"name\": \"run_command\""
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.json",
+        "*.md",
+        "*.yaml",
+        "*.yml",
+        "*.toml"
+      ],
+      "category": "supply_chain",
+      "description": "MCP server started by a package runner (npx -y, bunx, uvx, pipx, pnpm dlx) with no exact version, or with @latest",
+      "false_positive": [
+        {
+          "note": "An exact version is a pin.",
+          "text": "\"command\": \"npx\", \"args\": [\"-y\", \"@scope/some-server@1.4.2\"]"
+        },
+        {
+          "note": "An exact version is a pin.",
+          "text": "\"command\": \"uvx\", \"args\": [\"mcp-server-fetch==0.6.2\"]"
+        },
+        {
+          "note": "Without -y, npx asks before installing a package it does not have, as AGT-SUPPLY-001 treats it.",
+          "text": "\"command\": \"npx\", \"args\": [\"some-server\"]"
+        },
+        {
+          "note": "A local script, not a package runner.",
+          "text": "\"command\": \"node\", \"args\": [\"./server.js\"]"
+        }
+      ],
+      "id": "AGT-MCP-002",
+      "pattern": "(?i)\"command\"\\s*:\\s*\"(?:bunx|uvx|pipx|pnpm)\"\\s*,\\s*\"args\"\\s*:\\s*\\[\\s*(?:\"(?:-[-\\w]+|dlx|run)\"\\s*,\\s*)*\"(?:@[\\w.-]+/)?[A-Za-z0-9_][\\w.-]*(?:@latest)?\"|\"command\"\\s*:\\s*\"npx\"\\s*,\\s*\"args\"\\s*:\\s*\\[\\s*(?:\"-[-\\w]+\"\\s*,\\s*)*\"(?:-y|--yes)\"\\s*,\\s*(?:\"-[-\\w]+\"\\s*,\\s*)*\"(?:@[\\w.-]+/)?[A-Za-z0-9_][\\w.-]*(?:@latest)?\"|\"command\"\\s*:\\s*\"npx\"\\s*,\\s*\"args\"\\s*:\\s*\\[\\s*(?:\"-[-\\w]+\"\\s*,\\s*)*\"(?:@[\\w.-]+/)?[A-Za-z0-9_][\\w.-]*@latest\"",
+      "rationale": "An MCP server configured as {\"command\": \"npx\", \"args\": [\"-y\", \"pkg@latest\"]} is fetched and started with the agent's rights at every session, whatever the registry serves that day. AGT-SUPPLY-001 reads a command line written as one string and misses this split form; AGT-HOOK-002 used to fire on it under the wrong name. Seen in a published skill (`npx -y chrome-devtools-mcp@latest`). Pin to an exact version. Limit: the pattern reads \"command\" before \"args\", the order every documented config uses.",
+      "scope": "normalised",
+      "severity": "medium",
+      "title": "MCP server launched through an unpinned package runner",
+      "true_positive": [
+        {
+          "text": "\"command\": \"npx\", \"args\": [\"-y\", \"chrome-devtools-mcp@latest\", \"--isolated\"]"
+        },
+        {
+          "text": "\"command\": \"npx\", \"args\": [\"--yes\", \"@scope/some-server\"]"
+        },
+        {
+          "text": "\"command\": \"uvx\", \"args\": [\"mcp-server-fetch\"]"
+        },
+        {
+          "text": "\"command\": \"npx\", \"args\": [\"some-server@latest\"]"
         }
       ]
     },
@@ -1345,7 +1398,7 @@
     }
   ],
   "source": {
-    "commit": "e9b397fff596023333108302e0826c6e8b4d9608",
+    "commit": "617ad45b2d4148ec4ecbb313be8948e65d046bc8",
     "files": {
       "AGT-CAP-001.toml": "3be5c757be71e30833b056cfa03f415a05da470f56c680e5c9f15bfa786a25e3",
       "AGT-CAP-002.toml": "fe1b3f974c61e08d99140dde955bcf670f811b0b1a6a1da7d55acc9091104540",
@@ -1358,7 +1411,7 @@
       "AGT-EXEC-007.toml": "3e3f8a9f6fbcae676a99fcf4e365648da802ac9212be45ff8a3bef13e8af26a7",
       "AGT-EXFIL-001.toml": "52eb7700d34757d85ab154ea134f986c7eb20d3d79b90e68ef9f6daa83207774",
       "AGT-HOOK-001.toml": "e61edf5e2cfe63f3918f871aec06fdcdfb93d1bba692cc002b3b2568caf31190",
-      "AGT-HOOK-002.toml": "826445ad628a6539bcc8369301342829ed9cc908dd5e9286a8fc44d7ddfd889a",
+      "AGT-HOOK-002.toml": "2117166da836776dcd69cde6be6ced087dd357446dc1c94bbbf7e906eeba7d21",
       "AGT-HOOK-003.toml": "e07b7e7313fb2797b7fc1aa7a69dbff519d9cbe83121d8d95096f7690dfd987e",
       "AGT-HOOK-004.toml": "2113329fde35f6ffef1dc5955ebaae2c283361b08d96eef68380af372ca471f6",
       "AGT-HOOK-005.toml": "a726d3f0dc9818a0ffbfe0f3236a861fa55c83d6cc96a6939356f975c61819a5",
@@ -1370,6 +1423,7 @@
       "AGT-INJ-006.toml": "2f74192eb320b2a25d0e4973861254c7113f354a9756c417e949d975effd0788",
       "AGT-INJ-007.toml": "e32a3fb09aae5bdc063bb749d8f5f44b95a36aa079f4c0fb229f4fe07fe6a5eb",
       "AGT-MCP-001.toml": "e556af7c450a9e04e327d481a0d6e6263cae8dca566b5ff7fa691f545a0f8294",
+      "AGT-MCP-002.toml": "a1e64edec586032b217718d2970f02c1a88d87bd1e6499ad5181ba2179f4fc00",
       "AGT-PACK-001.toml": "309fef43e56c191127c144412fa3f7fa21b72df74bc0bb7382e4fe699b1b84e3",
       "AGT-PERM-001.toml": "fa805d04a8aaeb4c44a7592d6c8fa9238e865749d7cff7512b354c1be0ca4d46",
       "AGT-POLICY-001.toml": "e85e1d7720686967a3045041ad4bd80b701ea407ae15a0fe5e29c65f172afee9",
