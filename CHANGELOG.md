@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.31 - 2026-11-16
+
 ### Fixed
 
 - Every file now says `Apache-2.0 OR MIT`, the licence AgtMLS is offered
