@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 name: supply-chain
 
-# Dependency advisories and workflow linting. AgtMLS has no runtime
+# Dependency advisories, workflow linting, reproducible builds and the
+# foreign-audit acceptance run. AgtMLS has no runtime
 # dependencies; what it does install is the CI tooling pinned by hash in
 # .github/requirements/, and the workflows that run with this repository's
 # token. Weekly as well as per change, because an advisory can appear for a
@@ -77,6 +78,28 @@ jobs:
       - run: actionlint
       # Offline: the same findings on every run, with no token in the tool.
       - run: zizmor --offline --format github .github/workflows
+
+  # The analyzer against the repositories its rules were built from, each at
+  # a pinned commit (evals/security/foreign-acceptance.json). Network-bound,
+  # so weekly and on demand rather than per change.
+  foreign-acceptance:
+    name: foreign acceptance
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Runtime egress and process monitoring; audit records, never blocks.
+      - name: Harden the runner
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/run-foreign-acceptance.py
 
   # The wheel and sdist built from one commit are the same bytes wherever
   # they are built: twice on Linux from two different paths, and once on

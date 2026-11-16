@@ -523,12 +523,29 @@ def apply_suppressions(findings: list[Finding], content: str) -> list[Finding]:
     ]
 
 
+def stale_suppressions(path: Path, findings: list[Finding], content: str) -> list[Finding]:
+    """AGT-SCAN-002: each suppression that suppressed nothing, on its own line.
+
+    A suppression outlives the finding it was written for and waits to hide
+    the next one of that rule that lands on the line below it.
+    """
+    used = {(f.line, f.rule) for f in findings if f.suppressed is not None}
+    return [
+        Finding(path, line - 1, "LOW", "scan_limit",
+                f"Suppression of {rule} matches nothing on the next line; delete it", "AGT-SCAN-002")
+        for line, rules in sorted(suppressions(content).items())
+        for rule in sorted(rules) if (line, rule) not in used
+    ]
+
+
 def audit_file_content(path: Path, content: str, pedantic: bool = False) -> list[Finding]:
-    """Every detector over one file's text, with in-source suppressions applied."""
+    """Every detector over one file's text, with in-source suppressions applied
+    and the ones that applied to nothing reported."""
     findings: list[Finding] = []
     findings.extend(check_steganography(path, content, pedantic))
     findings.extend(pattern_findings(path, content))
-    return apply_suppressions(findings, content)
+    findings = apply_suppressions(findings, content)
+    return findings + stale_suppressions(path, findings, content)
 
 
 def audit_file(path: Path, pedantic: bool = False) -> list[Finding]:

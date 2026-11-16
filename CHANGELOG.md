@@ -7,6 +7,52 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `audit --foreign` reads the tree's agent configuration as well as its
+  skills: hook wiring and settings (`.claude/`, `.codex/`, `.cursor/`,
+  `.gemini/`, `hooks/`), plugin and MCP manifests, instruction files
+  (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`), and the install snippets and
+  scripts in `README*`, `docs/` and `scripts/`. They were listed as "NOT
+  AUDITED"; a tree with configuration and no skills, such as a GitHub
+  Action, was refused as "no skills found" and is now audited.
+- A hook and MCP inventory in every foreign report: each command hook's
+  event, matcher or `UNGATED`, hosts and writes outside the repository, and
+  each MCP server's transport and command or URL. Text, JSON
+  (`agent_config.inventory`) and SARIF (`runs[0].properties.inventory`).
+- Twelve rules from agtmls-spec (52 in all): AGT-HOOK-006 (ungated hook on
+  every turn), AGT-HOOK-007 (writes user-level agent settings), AGT-MCP-003
+  (remote MCP over plain HTTP or with no URL), AGT-MCP-004 (MCP server as
+  inline code or from above the repository), AGT-PERSIST-001 (schedules
+  itself), AGT-SUPPRESS-001 (silences another scanner), AGT-RENDER-001
+  (instruction in an HTML comment or alt text), AGT-ATTR-001 (strip AI
+  attribution), AGT-INST-001 (`rm -rf` over the user's agent directories),
+  AGT-SUPPLY-004 (unpinned plugin source), AGT-PERM-002 (destructive command
+  pre-approved) and AGT-SCAN-002 (a suppression that suppressed nothing).
+  22 security corpus cases, a detection and a false-positive guard per
+  pattern rule (143 cases, precision and recall 1.000).
+- `scripts/run-foreign-acceptance.py` and
+  `evals/security/foreign-acceptance.json`: the eight repositories the 10/10
+  plan was built from, each pinned to a commit, with the rule IDs an audit
+  must report there. Weekly in `supply-chain.yml`, and `make acceptance`.
+
+### Changed
+
+- A foreign skill with no `metadata.json` was given `executes_commands:
+  false` unless its frontmatter granted Bash, though its body said "run
+  `make test`". Each capability is now `true` when `allowed-tools` grants it
+  or the skill asks for it (a shell block, a command to run, a shipped
+  script, a URL to fetch, a file to write, a key to read), and `unknown`
+  otherwise; the report gives the basis of each `true`.
+- An in-source suppression that suppressed nothing is reported as
+  AGT-SCAN-002 (LOW) on its own line.
+
+### Removed
+
+- `coverage.agent_configs_not_audited` in foreign JSON, and its
+  `NOT AUDITED agent config` lines: every agent configuration file is now
+  audited and listed under `coverage.agent_configs_audited`.
+
 ## 0.0.33 - 2026-11-16
 
 ### Fixed

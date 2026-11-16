@@ -15,6 +15,16 @@ records where an idea came from, so a reader can follow it to the original.
 | --- | --- | --- | --- |
 | Flagging skill descriptions too similar to tell apart (TF-IDF) | `scripts/check-skill-collisions.py` | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT |
 | Ranking descriptions against prompts as a routing proxy (TF-IDF) | `scripts/run-trigger-evals.py` | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT |
+| A plugin review rubric over hooks, MCP servers and pinning | `scripts/_lib/agent_config.py` (inventory), AGT-HOOK-006 | [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) | Apache-2.0 |
+| Stripping channels a reader never sees (HTML comments, alt text) before a model reads them | AGT-RENDER-001 | [anthropics/claude-code-action](https://github.com/anthropics/claude-code-action) | MIT |
+| Warning on a suppression that no longer suppresses anything | AGT-SCAN-002, `scripts/_lib/analyzer.py` | [swamp-club/swamp](https://github.com/swamp-club/swamp) | AGPL-3.0; idea only, no code or text |
+| A tool pre-approving its own destructive subcommands, as a risk to flag | AGT-PERM-002 | [swamp-club/swamp](https://github.com/swamp-club/swamp) | AGPL-3.0; idea only, no code or text |
+
+The other rules added in 0.0.34 (AGT-HOOK-007, AGT-MCP-003, AGT-MCP-004,
+AGT-PERSIST-001, AGT-SUPPRESS-001, AGT-ATTR-001, AGT-INST-001,
+AGT-SUPPLY-004) detect patterns observed in the projects below rather than
+ideas taken from them. [`evals/security/foreign-acceptance.json`](evals/security/foreign-acceptance.json)
+pins the commit of each where an audit must still report them.
 
 ## Projects studied for the roadmap
 

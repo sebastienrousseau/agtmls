@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from . import frontmatter
+from .agent_config import surfaces
 from .analyzer import (
     AUDITABLE_SUFFIXES,
     SKIP_PARTS,
@@ -27,13 +28,12 @@ from .analyzer import (
 )
 from .digest import skill_digest
 from .findings import Finding, read_capped
+from .inferred_policy import provisional_policy
 from .policy import (
     check_capability_escalation,
     check_skill_honesty,
-    frontmatter_tools,
     load_policy,
 )
-from .rules import TOOL_CAPABILITIES
 
 
 class ForeignLayoutError(ValueError):
@@ -191,23 +191,6 @@ def foreign_skills(root: Path) -> list[tuple[str, Path]]:
     return found
 
 
-def provisional_policy(skill_dir: Path) -> dict:
-    """A safety policy inferred from allowed-tools, for a skill that declares none.
-
-    Any Bash grants executes_commands; Write or Edit grants writes_files;
-    WebFetch or WebSearch makes network optional. Marked provisional, so a
-    report never presents it as the author's own claim.
-    """
-    capabilities = {TOOL_CAPABILITIES.get(tool.split("(", 1)[0]) for tool in frontmatter_tools(skill_dir / "SKILL.md")}
-    return {
-        "executes_commands": "executes_commands" in capabilities,
-        "writes_files": "writes_files" in capabilities,
-        "network_access": "optional" if "network_access" in capabilities else "none",
-        "handles_secrets": False,
-        "provisional": True,
-    }
-
-
 class ForeignReport(NamedTuple):
     plugin: str
     path: Path
@@ -253,15 +236,6 @@ def audit_foreign(root: Path, pedantic: bool = False) -> list[ForeignReport]:
                                      key if isinstance(key, str) else None,
                                      tuple(path for _, path in members[1:])))
     return reports
-
-
-# Files that change what an agent does without being a skill: hook wiring,
-# harness settings, plugin and MCP manifests. The coverage statement names
-# any it did not audit, so a clean result is never read as covering them.
-AGENT_CONFIG_NAMES = {
-    "hooks.json", "settings.json", "settings.local.json", "plugin.json", "marketplace.json",
-    ".mcp.json", "mcp.json", "config.toml", "AGENTS.md", "CLAUDE.md", "GEMINI.md",
-}
 
 
 def _skill_name(skill_dir: Path) -> str:
@@ -346,27 +320,40 @@ def source_commit(root: Path) -> str | None:
     return lines[1]
 
 
+def _skill_dirs(reports: list[ForeignReport]) -> list[Path]:
+    return [r.path for r in reports] + [c for r in reports for c in r.copies]
+
+
+def config_files(root: Path, reports: list[ForeignReport]) -> list[str]:
+    """The agent-configuration files outside every skill the reports cover."""
+    outside, _ = _outside_skills(root, {d.resolve() for d in _skill_dirs(reports)})
+    return surfaces(outside)
+
+
 def foreign_coverage(root: Path, reports: list[ForeignReport]) -> dict:
     """What a foreign audit read, what it did not, and why.
 
     An unscanned file is not a clean one: the statement counts the skills
-    found and audited, the files audited, every auditable file outside any
-    skill (with agent configs such as hooks.json named), the dependency and
-    cache directories skipped, and skills whose copies disagree.
+    found and audited, the files audited, the agent-configuration files
+    audited beside them, every other auditable file outside any skill, the
+    dependency and cache directories skipped, and skills whose copies
+    disagree.
     """
-    skill_dirs = [r.path for r in reports] + [c for r in reports for c in r.copies]
+    skill_dirs = _skill_dirs(reports)
     inside = {d.resolve() for d in skill_dirs}
     audited = {p for r in reports for p in auditable_files(r.path)}
-    outside, skipped = _outside_skills(root, inside)
+    every, skipped = _outside_skills(root, inside)
+    configs = surfaces(every)
+    outside = [rel for rel in every if rel not in set(configs)]
     return {
         "skills_found": len(skill_dirs),
         "skills_audited": len(reports),
         "duplicate_copies": sum(len(r.copies) for r in reports),
         "files_audited": len(audited),
+        "agent_configs_audited": configs,
         "files_not_audited": len(outside),
         "not_audited_files": sorted(outside),
         "not_audited_by_area": _by_area(outside),
-        "agent_configs_not_audited": sorted(rel for rel in outside if rel.rsplit("/", 1)[-1] in AGENT_CONFIG_NAMES),
         "skipped_directories": dict(sorted(skipped.items())),
         "divergent_copies": _divergent_copies(root, reports),
         "source_commit": source_commit(root),

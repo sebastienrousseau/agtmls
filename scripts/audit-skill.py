@@ -24,6 +24,7 @@ SKILLS_DIR = ROOT / "skills"
 # floor. Finding and audit_skill_target are what main() needs; the rest are
 # re-exported because the unit tests load this script and call them.
 from _lib import analyzer  # noqa: E402, F401  (the module, for tests that patch it)
+from _lib.agent_config import audit_config  # noqa: E402  (same path insertion)
 from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; re-exported)
     MAX_AUDIT_BYTES,
     Finding,
@@ -39,6 +40,7 @@ from _lib.cli_parser import registry_version  # noqa: E402  (same path insertion
 from _lib.foreign import (  # noqa: E402  (same path insertion)
     ForeignLayoutError,
     audit_foreign,
+    config_files,
 )
 from _lib.rules import RULES  # noqa: E402  (same path insertion)
 
@@ -88,14 +90,14 @@ def print_coverage(coverage: dict) -> None:
     print(f"  source: git commit {commit}" if commit else "  source: not a git checkout, so it cannot be pinned to a commit")
     print(f"  {coverage['skills_audited']} distinct skill(s) audited from {coverage['skills_found']} location(s) "
           f"({coverage['duplicate_copies']} identical copies), {coverage['files_audited']} file(s) read")
+    if coverage["agent_configs_audited"]:
+        print(f"  {len(coverage['agent_configs_audited'])} agent configuration file(s) audited")
     for name, paths in coverage["divergent_copies"].items():
         print(f"  DIVERGENT {name}: copies differ at {', '.join(paths)}")
     if coverage["files_not_audited"]:
         areas = ", ".join(f"{area} ({count})" for area, count in list(coverage["not_audited_by_area"].items())[:6])
         print(f"  NOT AUDITED: {coverage['files_not_audited']} auditable file(s) outside any skill: {areas}")
         print(f"  NOT AUDITED files: {_listed(coverage['not_audited_files'])}")
-    for rel in coverage["agent_configs_not_audited"]:
-        print(f"  NOT AUDITED agent config: {rel}")
     if coverage["skipped_directories"]:
         skipped = ", ".join(f"{name} ({count})" for name, count in coverage["skipped_directories"].items())
         print(f"  skipped directories: {skipped}")
@@ -135,9 +137,11 @@ def foreign_skill_json(report, root: Path, notes: list[str], baseline: set[str] 
 def print_foreign_skill(report, root: Path, notes: list[str], known: list[Finding]) -> None:
     from _lib import portability
 
-    policy = ", ".join(f"{k}={str(v).lower()}" for k, v in report.policy.items() if k != "provisional")
+    policy = ", ".join(f"{k}={str(v).lower()}" for k, v in report.policy.items() if k not in {"provisional", "basis"})
     kind = "provisional policy" if report.policy.get("provisional") else "declared policy"
     print(f"plugin {report.plugin}: {report.path.relative_to(root).as_posix()} ({kind}: {policy})")
+    if report.policy.get("basis"):
+        print(f"  policy basis: {', '.join(f'{k} from {v}' for k, v in report.policy['basis'].items())}")
     if report.copies:
         print(f"  identical copies: {', '.join(c.relative_to(root).as_posix() for c in report.copies)}")
     for f in report.findings:
@@ -167,39 +171,93 @@ def foreign_reports(target: str, root: Path, pedantic: bool, fmt: str, baseline:
     from _lib import portability
     from _lib.foreign import foreign_coverage, foreign_layout
 
-    try:
-        reports = [rebased(r, root) for r in audit_foreign(root, pedantic)]
-    except ForeignLayoutError as exc:
-        print(f"error: {exc}", file=sys.stderr)
+    reports = foreign_skill_reports(root, pedantic)
+    if reports is None:
         return 2
+    config = rebased(audit_config(root, config_files(root, reports), pedantic), root)
     layout = foreign_layout(root)
     coverage = foreign_coverage(root, reports)
-    found = classify([f for report in reports for f in report.findings], baseline)
+    found = classify([f for report in reports for f in report.findings] + config.findings, baseline)
     suppressed, active, _, _ = found
     counted = untrusted(suppressed, baseline)
     # Notes, not findings: a skill that works in one agent only is not a
     # security risk, so portability never changes the exit code.
     notes = {r.path: portability.problems(r.path) for r in reports}
     if fmt == "sarif":
-        print(json.dumps(sarif_log(active, suppressed, baseline), indent=2))
+        print(json.dumps(sarif_log(active, suppressed, baseline, {"inventory": config.inventory}), indent=2))
     elif fmt == "json":
         print(json.dumps({
             "target": target, "layout": layout, "coverage": coverage,
             "skills": [foreign_skill_json(r, root, notes[r.path], baseline) for r in reports],
+            "agent_config": config_json(config, baseline),
         }, indent=2))
     else:
-        print(f"Foreign audit of {target} ({layout or 'discovered skills'}): "
+        shape = layout or ("discovered skills" if reports else "agent configuration only")
+        print(f"Foreign audit of {target} ({shape}): "
               f"{coverage['skills_audited']} distinct skill(s) in {coverage['skills_found']} location(s), "
-              f"{len(active)} finding(s)\n")
-        print_foreign_text(reports, root, notes, coverage, found, counted)
+              f"{configured(coverage)}{len(active)} finding(s)\n")
+        print_foreign_text(reports, root, notes, coverage, found, counted, config)
     return (*found, counted)
 
 
-def print_foreign_text(reports: list, root: Path, notes: dict, coverage: dict, found: tuple, counted: list) -> None:
+def configured(coverage: dict) -> str:
+    count = len(coverage["agent_configs_audited"])
+    return f"{count} agent configuration file(s), " if count else ""
+
+
+def foreign_skill_reports(root: Path, pedantic: bool) -> list | None:
+    """The tree's skill reports; [] for a tree that ships only agent
+    configuration, None (and an error printed) for one with neither."""
+    try:
+        return [rebased(r, root) for r in audit_foreign(root, pedantic)]
+    except ForeignLayoutError as exc:
+        if not config_files(root, []):
+            print(f"error: {exc}", file=sys.stderr)
+            return None
+        # The header says "agent configuration only"; nothing on stderr, so
+        # --format json stays one JSON document even with 2>&1.
+        return []
+
+
+def config_json(config, baseline: set[str] | None) -> dict:
+    return {
+        "files": config.files,
+        "findings": [finding_record(f, baseline) for f in config.findings if f.suppressed is None],
+        "suppressed": [{**finding_record(f, baseline), "justification": f.suppressed}
+                       for f in config.findings if f.suppressed is not None],
+        "inventory": config.inventory,
+    }
+
+
+def print_inventory(inventory: dict) -> None:
+    """What runs: each hook (when, gated or not, hosts, writes outside the
+    repository) and each MCP server, before any finding about them."""
+    for h in inventory["hooks"]:
+        when = f"{h['event']} matcher={h['matcher']!r}" if h["gated"] else f"{h['event']} UNGATED"
+        extra = "".join([f" hosts={','.join(h['hosts'])}" if h["hosts"] else "",
+                         " WRITES OUTSIDE THE REPO" if h["writes_outside_repo"] else ""])
+        print(f"  hook {h['file']}: {when}: {h['command']}{extra}")
+    for s in inventory["mcp_servers"]:
+        hosts = f" hosts={','.join(s['hosts'])}" if s["hosts"] else ""
+        print(f"  mcp {s['file']}: {s['name']} ({s['transport']}): {s['target']}{hosts}")
+
+
+def print_config(config, known: list[Finding]) -> None:
+    if not config.files:
+        return
+    print(f"agent configuration: {len(config.files)} file(s): {_listed(config.files)}")
+    print_inventory(config.inventory)
+    for f in config.findings:
+        print(foreign_line(f, known))
+
+
+def print_foreign_text(reports: list, root: Path, notes: dict, coverage: dict, found: tuple, counted: list,
+                       config) -> None:
     suppressed, _, known, new = found
     excused = known + [f for f in suppressed if f not in counted]
     for r in reports:
         print_foreign_skill(r, root, notes[r.path], excused)
+    print_config(config, excused)
     print_coverage(coverage)
     print_tallies(known, new, suppressed)
     if counted:
@@ -245,7 +303,8 @@ def read_baseline(path: Path) -> set[str] | None:
         return None
 
 
-def sarif_log(active: list[Finding], suppressed: list[Finding], baseline: set[str] | None) -> dict:
+def sarif_log(active: list[Finding], suppressed: list[Finding], baseline: set[str] | None,
+              properties: dict | None = None) -> dict:
     """SARIF 2.1.0: one run, every rule described, one result per finding."""
     results = []
     for finding in [*active, *suppressed]:
@@ -285,6 +344,7 @@ def sarif_log(active: list[Finding], suppressed: list[Finding], baseline: set[st
                 } for rule in RULES],
             }},
             "results": results,
+            **({"properties": properties} if properties else {}),
         }],
     }
 

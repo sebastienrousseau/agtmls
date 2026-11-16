@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "about": "The eight repositories the 10/10 plan was built from, audited with --foreign at a pinned commit. Each lists only the rule IDs the audit must report there; no text from them is committed. Run with scripts/run-foreign-acceptance.py.",
+  "repos": [
+    {
+      "repo": "addyosmani/agent-skills",
+      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "rules": [
+        "AGT-EXEC-005",
+        "AGT-EXEC-006",
+        "AGT-HOOK-004",
+        "AGT-INJ-001",
+        "AGT-INJ-007",
+        "AGT-MCP-002",
+        "AGT-PERM-001",
+        "AGT-SUPPLY-004"
+      ]
+    },
+    {
+      "repo": "alirezarezvani/claude-skills",
+      "commit": "4680893d91f2aee6f77ca1519fd1b86b7a104c87",
+      "rules": [
+        "AGT-ATTR-001",
+        "AGT-CAP-002",
+        "AGT-EXEC-001",
+        "AGT-EXEC-003",
+        "AGT-EXEC-005",
+        "AGT-EXEC-006",
+        "AGT-EXEC-007",
+        "AGT-HOOK-004",
+        "AGT-HOOK-005",
+        "AGT-HOOK-006",
+        "AGT-HOOK-007",
+        "AGT-INJ-001",
+        "AGT-INJ-003",
+        "AGT-INJ-004",
+        "AGT-INJ-005",
+        "AGT-INJ-006",
+        "AGT-INST-001",
+        "AGT-PACK-001",
+        "AGT-PERM-001",
+        "AGT-PERSIST-001",
+        "AGT-POLICY-006",
+        "AGT-SEL-001",
+        "AGT-STEG-001",
+        "AGT-SUPPLY-001",
+        "AGT-SUPPLY-004",
+        "AGT-SUPPRESS-001"
+      ]
+    },
+    {
+      "repo": "anthropics/claude-code-action",
+      "commit": "9fa68854da5fadef4ed3dce240325a0dfe251880",
+      "rules": [
+        "AGT-CAP-002",
+        "AGT-EXEC-003",
+        "AGT-EXEC-006",
+        "AGT-HOOK-002",
+        "AGT-HOOK-006",
+        "AGT-MCP-002",
+        "AGT-PERM-001",
+        "AGT-POLICY-006"
+      ]
+    },
+    {
+      "repo": "anthropics/knowledge-work-plugins",
+      "commit": "e91a134584eb798bac7fb0379358006a2b63b965",
+      "rules": [
+        "AGT-EXEC-001",
+        "AGT-EXEC-005",
+        "AGT-MCP-002",
+        "AGT-MCP-003",
+        "AGT-SUPPLY-004"
+      ]
+    },
+    {
+      "repo": "cloudflare/security-audit-skill",
+      "commit": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+      "rules": [],
+      "policy": {
+        "skills/security-audit": {
+          "executes_commands": true
+        }
+      },
+      "note": "No findings. With no metadata.json its provisional policy is inferred, not defaulted: executes_commands is true because the skill ships a script."
+    },
+    {
+      "repo": "Gentleman-Programming/gentle-ai",
+      "commit": "1ab243ca426d55dee64cf0ba693d0745cb1146c2",
+      "rules": [
+        "AGT-ATTR-001",
+        "AGT-EXEC-001",
+        "AGT-EXEC-002",
+        "AGT-EXEC-003",
+        "AGT-EXEC-005",
+        "AGT-SOCIAL-001",
+        "AGT-SUPPLY-003"
+      ],
+      "note": "Its telemetry hooks are written into user settings by the Go installer; the analyzer does not read Go source, so no rule can see them."
+    },
+    {
+      "repo": "mattpocock/skills",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "rules": [
+        "AGT-HOOK-007",
+        "AGT-INST-001",
+        "AGT-SUPPLY-001",
+        "AGT-SUPPLY-004"
+      ]
+    },
+    {
+      "repo": "stablyai/orca",
+      "commit": "9230d5041a3ca97d76fa00e007350ac64d014e08",
+      "rules": [
+        "AGT-EXEC-005",
+        "AGT-MCP-004",
+        "AGT-PERM-001"
+      ]
+    }
+  ]
+}
