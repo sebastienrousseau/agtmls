@@ -7,6 +7,51 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- On Windows, `agtmls install` crashed with `UnicodeEncodeError` on its last
+  line when its output went to a pipe or file (cp1252 has no emoji), after
+  the install but before the lockfile was written. Unencodable characters are
+  now replaced.
+- `validate.yml` interpolated a PR's base branch name, text someone else
+  chooses, straight into the shell that checks commit signatures; it now
+  passes through the environment (zizmor, high).
+- Markdown that rendered wrongly on GitHub: `|` inside backticks ended table
+  cells in two noyalib references, `<time>`-style placeholders vanished as
+  HTML in the incident-response templates, wrapped `+` signs became list
+  items, and two links pointed at heading anchors that did not exist.
+- The manpage covered 11 of 36 subcommands, was dated March 2026, and
+  rendered long options as `---all`.
+- `SUPPORT.md` and the issue form sent questions to Discussions, which were
+  switched off; they are now on.
+
+### Added
+
+- `supply-chain.yml`: `pip-audit` against PyPI and OSV advisories for every
+  pinned CI requirements file, `actionlint` and `zizmor` on every workflow,
+  and a reproducible-build check (Linux twice from two paths, and macOS).
+- `docs.yml`: markdownlint on every Markdown file, lychee link checks
+  (offline per change, external weekly), and the docs site deployed to
+  GitHub Pages from `main`, with the author link on every page.
+- `windows.yml`: the installer's tests and an install, verify and uninstall
+  through the CLI on Windows, Python 3.10 and 3.14.
+- `devcontainer.yml` builds the dev container, now pinned by digest.
+- `GNUmakefile` adds the GNU targets `all`, `installcheck`, `distclean` and
+  `dist`; `generate-completions.py --check` joins the gate (75 checks).
+- Every subcommand has a line of `--help`.
+
+### Changed
+
+- The wheel and sdist are byte-reproducible: the release builds them with the
+  commit's time as `SOURCE_DATE_EPOCH`.
+- The manpage is generated from the argument parser.
+- The dev container's post-create step runs the doctor instead of the full
+  gate, so it starts in seconds.
+- `vetting-a-skill-before-install` was re-measured after one line of its
+  reference was rewrapped; it stays hardened (Claude Code +12 points at 1.05x
+  tokens, Codex +4 at 1.06x).
+- `SECURITY.md` names the OpenSSF Scorecard findings that stay, and why.
+
 ## 0.0.31 - 2026-11-16
 
 ### Fixed
