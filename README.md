@@ -536,6 +536,16 @@ tracked:
 - **Dangerous shell** (`AGT-EXEC-*`): pipe-to-shell, root wipes, credential
   access, reverse shells.
 - **Exfiltration** (`AGT-EXFIL-*`): markdown image pingbacks that leak session context.
+- **Agent configuration** (`AGT-HOOK-*`, `AGT-MCP-*`, `AGT-PERM-*`,
+  `AGT-SUPPLY-*`): hooks that fetch, inject context, run on every turn
+  ungated or write user-level settings; MCP servers that are unpinned, over
+  plain HTTP, or loaded from outside the repository; pre-approved
+  destructive commands; unpinned plugin sources.
+- **Persistence and installers** (`AGT-PERSIST-*`, `AGT-INST-*`): content
+  that schedules itself, and `rm -rf` over the user's own agent directories.
+- **Hidden channels** (`AGT-RENDER-*`, `AGT-SUPPRESS-*`, `AGT-ATTR-*`):
+  instructions in HTML comments or alt text, markers that silence other
+  scanners, and instructions to strip AI attribution.
 - **Capability escalation** (`AGT-CAP-*`): frontmatter granting `Bash`, `Write`
   or `WebFetch` while `metadata.json` denies them. Runtimes that pre-approve
   `allowed-tools`, such as Claude Code, grant what the frontmatter says;
@@ -549,6 +559,11 @@ The analyzer is gated against an adversarial corpus
 [`scripts/run-security-evals.py`](scripts/run-security-evals.py)): payloads
 split across lines, alternate invisible channels, malicious non-markdown files,
 and skills that omit their policy, with benign fixtures gating false positives.
+[`scripts/run-foreign-acceptance.py`](scripts/run-foreign-acceptance.py) runs
+weekly against the eight public repositories the rules were built from, each
+pinned to a commit, and fails if a rule stops firing where it was seen; only
+the expected rule IDs are committed
+([`evals/security/foreign-acceptance.json`](evals/security/foreign-acceptance.json)).
 `agtmls import-skill` audits before copying, refuses on any CRITICAL or HIGH
 finding, and records the import as unattested (`maturity: draft`, `risk_level:
 high`, `requires_human_review: true`).

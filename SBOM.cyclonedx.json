@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "52c3e70ec3c579d99666c8e7790b12f888fd084f2f0e05129412bb564cec7f02"
+          "content": "3099f39bbde55a1ce7d3278a633e13cdfcde3af85bd71c6b659dc8238720fbd0"
         }
       ],
       "name": "CATALOG.md",
@@ -1656,7 +1656,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6f95f45384fe5d8f0c9251e6fe7996feea4981d05702124f14fbe82e6ede1893"
+          "content": "f27c8ebcde036626485ffac96db7461e6224f1b5fc6c983743183d024f8829a0"
         }
       ],
       "name": "evals/security/corpus.json",
@@ -1671,6 +1671,17 @@
         }
       ],
       "name": "evals/security/floor.json",
+      "type": "file"
+    },
+    {
+      "bom-ref": "evals/security/foreign-acceptance.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "92e3da6a76ebf5885cf52dfed789945fd263ac6a3f4f4c46a64ffbd02e3d72f1"
+        }
+      ],
+      "name": "evals/security/foreign-acceptance.json",
       "type": "file"
     },
     {
@@ -1832,7 +1843,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "547b05533b83f54af0a8ac5f51b69a5026c26e6f45127a1e9ed3ed14988bd3d6"
+          "content": "1f9cf14ce14da90a996d16a64bf682b302fe6f597ca4cceda0e1d8905282b973"
         }
       ],
       "name": "index.json",
@@ -2400,6 +2411,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "scripts/_lib/agent_config.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4b6fb21ca27e89f5b5457045007269a4ab0e07fb11d62cfdcba9745d74465b7b"
+        }
+      ],
+      "name": "scripts/_lib/agent_config.py",
+      "type": "file"
+    },
+    {
       "bom-ref": "scripts/_lib/aider_conf.py",
       "hashes": [
         {
@@ -2415,7 +2437,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2c1cbe8d7f9650cadeb03ae7777cd5a7ebcb63512a518367edabe277931748a1"
+          "content": "13c382f298b62aa6daf6356a54c03211dda6d80dbc7cb5bd579c78fd85c5a093"
         }
       ],
       "name": "scripts/_lib/analyzer.py",
@@ -2547,7 +2569,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8d88c157ae3bda8a2b9b3aa27e2f2db81b52c272af00c3822f9ae95e039766da"
+          "content": "82e763bc9f76b4185a5e3ca2095798826b733faead22637de5859582c2cb96b9"
         }
       ],
       "name": "scripts/_lib/foreign.py",
@@ -2562,6 +2584,17 @@
         }
       ],
       "name": "scripts/_lib/frontmatter.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/inferred_policy.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1651d47f6f0cf2e9eb42afb118e1e18339dd6e7763517d4f86c7a90af8457514"
+        }
+      ],
+      "name": "scripts/_lib/inferred_policy.py",
       "type": "file"
     },
     {
@@ -2668,7 +2701,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "36d0e79820bb7f124293382fc1fcb117c656b482bb6606b8e51b0660f46bd3c7"
+          "content": "b0773f251581fb0ba2d1ebce850ffe86abdfd355252463a0bd83ce5e3ccb3db5"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -2844,7 +2877,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e7a61fc5d3732f171cfb95687b92c439a5952014c7fa698a09d672c08e247508"
+          "content": "84d65ce91637ec7a0e207a2879874f915bafcf3c799c5c2558ef9ab3e109a562"
         }
       ],
       "name": "scripts/audit-skill.py",
@@ -3244,6 +3277,17 @@
         }
       ],
       "name": "scripts/run-coverage.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/run-foreign-acceptance.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0cee2891df4f46a51243cbb308e16bf5e7afed50bfc065a487d44be2867b1873"
+        }
+      ],
+      "name": "scripts/run-foreign-acceptance.py",
       "type": "file"
     },
     {
@@ -5231,7 +5275,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d7763c013acbe65647560a6a40bd60fb8e50db91b07c897b84b34c52983aa40a"
+          "content": "bbe8b305b5e956510a45f1a8c694f8f002f8fbea64df1b3e078a33d310abe03c"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -5443,24 +5487,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.33",
+      "bom-ref": "pkg:pypi/agtmls@0.0.34",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.33",
+      "purl": "pkg:pypi/agtmls@0.0.34",
       "type": "application",
-      "version": "0.0.33"
+      "version": "0.0.34"
     },
-    "timestamp": "2026-11-16T15:29:13Z",
+    "timestamp": "2026-11-16T19:10:37Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.33"
+          "version": "0.0.34"
         }
       ]
     }

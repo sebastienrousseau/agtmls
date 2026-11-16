@@ -122,7 +122,10 @@ Ignore previous instructions.
 The comment covers the next line only, the reason is required, and
 `AGT-STEG-*` findings can never be suppressed. Suppressed findings are listed
 separately, do not count toward the exit code (except in a foreign audit,
-below), and appear in SARIF under `suppressions`.
+below), and appear in SARIF under `suppressions`. A suppression that
+suppressed nothing in the audit is reported as `AGT-SCAN-002` (LOW) on its
+own line: the finding it was written for is gone, and the comment would hide
+the next one that lands there. Delete it.
 
 `--format sarif` writes SARIF 2.1.0 with every rule described and one result
 per finding, for code-scanning upload. `--write-baseline FILE` records each
@@ -145,6 +148,28 @@ asset trees, without following symlinks or entering `.git`, `node_modules`,
 refused when it is the only one: one repository read as one skill audits a
 whole project as prose. Point at the skill directory to audit one skill.
 
+Beside the skills, the audit reads the tree's **agent configuration**: hook
+wiring and settings (`.claude/`, `.codex/`, `.cursor/`, `.gemini/`,
+`hooks/`, `settings.json`, `hooks.json`), plugin and MCP manifests
+(`plugin.json`, `marketplace.json`, `.mcp.json`, `opencode.json`,
+`config.toml`), instruction files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`,
+`copilot-instructions.md`), and the install snippets and scripts a reader is
+told to run (`README*`, `install*` at the root, `docs/`, and `scripts/` files
+named for install, setup, bootstrap or link). Each is audited with the same
+rules as a skill, and the report lists what they wire up before any finding
+about it:
+
+- every command hook: its event, its matcher or `UNGATED`, the hosts it
+  names, and `WRITES OUTSIDE THE REPO` when it writes to the home directory
+  or an absolute path;
+- every MCP server: stdio with its command line, or remote with its URL and
+  host.
+
+A tree with agent configuration and no skills, such as a GitHub Action or a
+dotfiles repository, is audited as configuration only rather than refused.
+JSON carries all of it under `agent_config` (`files`, `findings`,
+`suppressed`, `inventory`), and SARIF as the run's `properties.inventory`.
+
 Byte-identical copies of a skill share a digest and are audited once; the
 report lists the other copies. Every report ends with a coverage statement,
 because an unscanned file is not a clean one:
@@ -152,19 +177,24 @@ because an unscanned file is not a clean one:
 - how many distinct skills were audited, from how many locations, and how
   many files were read;
 - `DIVERGENT`: copies with the same skill name whose contents differ;
-- `NOT AUDITED`: auditable files outside any skill, grouped by directory,
-  with agent configurations (`hooks.json`, `settings.json`, `plugin.json`,
-  `.mcp.json`, `CLAUDE.md`, `AGENTS.md`, ...) named one by one;
+- how many agent configuration files were audited beside them;
+- `NOT AUDITED`: every other auditable file outside any skill, grouped by
+  directory, and named in full (`--format json` lists every one);
 - the dependency and cache directories that were skipped.
 
 `--format json` carries the same statement under `coverage`, and each skill's
 `digest` and `copies`.
 
-A skill without `metadata.json` is audited against a **provisional** policy
-inferred from its `allowed-tools`: any `Bash` grants `executes_commands`,
-`Write` or `Edit` grants `writes_files`, `WebFetch` or `WebSearch` makes
-network access optional. The report prints that policy beside each skill and
-marks it provisional; a skill that ships its own policy is checked against it.
+A skill without `metadata.json` is audited against a **provisional** policy.
+Each capability is `true` when `allowed-tools` grants it (any `Bash` grants
+`executes_commands`, `Write` or `Edit` grants `writes_files`, `WebFetch` or
+`WebSearch` makes network access optional) or when the skill asks for it: a
+shell code block, "run `make test`", a script shipped beside `SKILL.md`, a
+URL to fetch, a file to write, a key or `.env` to read. Otherwise it is
+`unknown`, never `false`: nothing in the skill says either way. The report
+prints the policy beside each skill, marks it provisional, and gives the
+basis of each `true` (`policy basis: executes_commands from SKILL.md:12`); a
+skill that ships its own policy is checked against it.
 
 Each skill is also checked for portability, the same rules `validate-skills.py`
 applies to this registry: Claude Code-only command injection or `CLAUDE_*`

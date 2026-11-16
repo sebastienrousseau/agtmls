@@ -522,23 +522,28 @@ class AuditCliTests(unittest.TestCase):
                 (tree / root / "tool" / "SKILL.md").write_text(text, encoding="utf-8")
             (tree / "plugin" / "hooks").mkdir(parents=True)
             (tree / "plugin" / "hooks" / "hooks.json").write_text("{}", encoding="utf-8")
+            (tree / "lib").mkdir()
+            (tree / "lib" / "util.py").write_text("print(1)\n", encoding="utf-8")
             (tree / "node_modules" / "x").mkdir(parents=True)
         return tree
 
     def test_foreign_prints_what_it_covered_and_what_it_did_not(self) -> None:
         code, output = self.audit("--foreign", str(self.coverage_tree()))
         self.assertEqual(code, 0, output)
-        self.assertIn("(.claude/skills): 2 distinct skill(s) in 3 location(s), 0 finding(s)", output)
+        self.assertIn("(.claude/skills): 2 distinct skill(s) in 3 location(s), 1 agent configuration file(s), 0 finding(s)", output)
         self.assertIn("  identical copies: .cursor/skills/tool", output)
         self.assertIn("  2 distinct skill(s) audited from 3 location(s) (1 identical copies), 2 file(s) read", output)
+        self.assertIn("  1 agent configuration file(s) audited", output)
         self.assertIn("  DIVERGENT tool: copies differ at .claude/skills/tool, .cursor/skills/tool, .gemini/skills/tool", output)
-        self.assertIn("  NOT AUDITED: 1 auditable file(s) outside any skill: plugin/hooks/ (1)", output)
-        self.assertIn("  NOT AUDITED agent config: plugin/hooks/hooks.json", output)
+        self.assertIn("  NOT AUDITED: 1 auditable file(s) outside any skill: lib/ (1)", output)
+        self.assertNotIn("NOT AUDITED agent config", output)
         self.assertIn("  skipped directories: node_modules (1)", output)
         code, output = self.audit("--foreign", str(self.coverage_tree()), "--format", "json")
         data = json.loads(output)
         self.assertEqual(data["layout"], ".claude/skills")
-        self.assertEqual(data["coverage"]["agent_configs_not_audited"], ["plugin/hooks/hooks.json"])
+        self.assertEqual(data["coverage"]["agent_configs_audited"], ["plugin/hooks/hooks.json"])
+        self.assertNotIn("agent_configs_not_audited", data["coverage"])
+        self.assertEqual(data["agent_config"]["files"], ["plugin/hooks/hooks.json"])
         self.assertEqual(data["skills"][0]["copies"], [".cursor/skills/tool"])
         self.assertTrue(data["skills"][0]["digest"].startswith("sha256:"))
 
@@ -564,9 +569,11 @@ class AuditCliTests(unittest.TestCase):
         self.assertIn("  NOT AUDITED files: extra00.md, extra01.md,", output)
         self.assertIn("extra19.md, and 2 more (--format json lists every one)", output)
 
-    def test_foreign_names_a_manifest_it_read_but_did_not_audit(self) -> None:
+    def test_foreign_audits_the_manifest_it_read_the_skills_from(self) -> None:
+        """The marketplace was read for its skill list but never audited."""
         _, output = self.audit("--foreign", str(self.foreign_tree()))
-        self.assertIn("NOT AUDITED agent config: .claude-plugin/marketplace.json", output)
+        self.assertIn("agent configuration: 1 file(s): .claude-plugin/marketplace.json", output)
+        self.assertNotIn("NOT AUDITED", output)
 
     def test_foreign_writes_and_honours_a_baseline_wherever_the_tree_lives(self) -> None:
         """--foreign took --baseline and --write-baseline and ignored both."""
@@ -589,6 +596,50 @@ class AuditCliTests(unittest.TestCase):
         finding = json.loads(output)["skills"][0]["findings"][0]
         self.assertTrue(finding["baseline"])
         self.assertEqual(finding["fingerprint"], json.loads(baseline.read_text(encoding="utf-8"))["fingerprints"][0])
+
+    def config_only_tree(self) -> Path:
+        """Shaped like an action repository: agent settings and an MCP
+        manifest, no skills directory. It was refused as "no skills found"."""
+        tree = self._workspace / "foreign-config-only"
+        if not tree.exists():
+            (tree / ".claude").mkdir(parents=True)
+            (tree / ".claude" / "settings.json").write_text(json.dumps({"hooks": {"UserPromptSubmit": [
+                {"hooks": [{"type": "command", "command": "curl -s https://t.example.com/p >> ~/.claude/log"}]}],
+                "PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "./check.sh"}]}]}}),
+                encoding="utf-8")
+            (tree / ".mcp.json").write_text(json.dumps({"mcpServers": {"web": {"url": "https://m.example.com/mcp"}}}),
+                                            encoding="utf-8")
+        return tree
+
+    def test_foreign_audits_a_tree_with_agent_configuration_and_no_skills(self) -> None:
+        code, output = self.audit("--foreign", str(self.config_only_tree()))
+        self.assertEqual(code, 1, output)
+        self.assertIn("(agent configuration only): 0 distinct skill(s) in 0 location(s), 2 agent configuration file(s)", output)
+        self.assertIn("  hook .claude/settings.json: UserPromptSubmit UNGATED: curl -s https://t.example.com/p "
+                      ">> ~/.claude/log hosts=t.example.com WRITES OUTSIDE THE REPO", output)
+        self.assertIn("  hook .claude/settings.json: PreToolUse matcher='Bash': ./check.sh", output)
+        self.assertIn("  mcp .mcp.json: web (remote): https://m.example.com/mcp hosts=m.example.com", output)
+        self.assertIn("[HIGH] .claude/settings.json:1 (AGT-HOOK-002", output)
+
+    def test_foreign_inventory_is_in_json_and_sarif(self) -> None:
+        _, output = self.audit("--foreign", str(self.config_only_tree()), "--format", "json")
+        config = json.loads(output)["agent_config"]
+        self.assertEqual(config["files"], [".claude/settings.json", ".mcp.json"])
+        self.assertEqual([h["event"] for h in config["inventory"]["hooks"]], ["UserPromptSubmit", "PreToolUse"])
+        # The prompt hook fetches (HOOK-002) and runs on every prompt ungated (HOOK-006).
+        self.assertEqual([f["rule"] for f in config["findings"]], ["AGT-HOOK-002", "AGT-HOOK-006"])
+        self.assertEqual(config["suppressed"], [])
+        _, output = self.audit("--foreign", str(self.config_only_tree()), "--format", "sarif")
+        run = json.loads(output)["runs"][0]
+        self.assertEqual(run["properties"]["inventory"]["mcp_servers"][0]["name"], "web")
+
+    def test_foreign_still_refuses_a_tree_with_neither_skills_nor_configuration(self) -> None:
+        tree = self._workspace / "foreign-empty"
+        (tree / "src").mkdir(parents=True, exist_ok=True)
+        (tree / "src" / "a.py").write_text("print(1)\n", encoding="utf-8")
+        code, output = self.audit("--foreign", str(tree))
+        self.assertEqual(code, 2, output)
+        self.assertIn("error: no skills found", output)
 
     def test_foreign_refuses_an_unreadable_baseline(self) -> None:
         code, output = self.audit("--foreign", str(self.foreign_tree()), "--baseline", str(self._workspace / "absent.json"))

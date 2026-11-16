@@ -19,7 +19,7 @@ REGISTRY_FILES := index.json profiles.json providers.json lifecycle.json checks.
 DESTDIR ?=
 PYTHON ?= python3
 
-.PHONY: help check test bench doctor clean build bump install uninstall man completions
+.PHONY: help check test bench doctor clean build bump install uninstall man completions acceptance
 
 help: ## Show this help message
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -32,6 +32,9 @@ test: ## Run the unit test suite
 
 bench: ## Measure CLI latency against the committed baseline
 	$(PYTHON) scripts/bench.py
+
+acceptance: ## Audit the eight pinned reference repositories (network)
+	$(PYTHON) scripts/run-foreign-acceptance.py
 
 doctor: ## Run the agtmls-doctor health check
 	$(PYTHON) scripts/agtmls-doctor.py
