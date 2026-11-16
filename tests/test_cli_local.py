@@ -928,3 +928,34 @@ class ShellForeignSkillDirectoryTests(unittest.TestCase):
                 self.assertIn(".claude/skills/using-agtmls is a directory AgtMLS did not install", proc.stderr)
                 self.assertEqual(sorted(p.name for p in theirs.iterdir()), ["SKILL.md"])
                 self.assertFalse((target / "CLAUDE.md").exists())
+
+
+class RecordedModeTests(CliFixture):
+    """The lockfile's `mode` says what is on disk, not what was asked for.
+
+    On Windows a link the user may not create falls back to a copy
+    (_lib/installer.link_or_copy); the lockfile still said `symlink`.
+    """
+
+    def record(self, copy: bool, as_links: bool) -> str:
+        skills = self.target / ".claude" / "skills"
+        skills.mkdir(parents=True)
+        for name in GENERAL:
+            source = self.fixture / "skills" / name
+            if as_links:
+                (skills / name).symlink_to(source)
+            else:
+                shutil.copytree(source, skills / name)
+        args = mock.Mock(agent="claude", copy=copy)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(self.cli.record_install(args, self.target), 0)
+        return json.loads((self.target / ".agtmls" / "manifest.json").read_text(encoding="utf-8"))["mode"]
+
+    def test_links_are_recorded_as_links(self) -> None:
+        self.assertEqual(self.record(copy=False, as_links=True), "symlink")
+
+    def test_a_link_install_that_fell_back_to_copies_says_copy(self) -> None:
+        self.assertEqual(self.record(copy=False, as_links=False), "copy")
+
+    def test_a_copy_install_says_copy(self) -> None:
+        self.assertEqual(self.record(copy=True, as_links=False), "copy")

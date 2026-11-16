@@ -472,7 +472,7 @@ def record_install(args, target: Path) -> int:
     installed = installed_skill_names(target, args.agent)
     payload = lockfile.record(
         target, ROOT, installed,
-        "copy" if args.copy else "symlink",
+        lockfile.installed_mode(target / agent_paths(args.agent)[0] / "skills", installed, args.copy),
         str(load_index().get("registry_version", "")),
         args.agent, skills_dirs(target),
     )
