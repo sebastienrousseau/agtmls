@@ -3438,7 +3438,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b5bb396b51cc13bdca09a7977e83eb470306953f8daeebe92cc03b08329c5768"
+          "content": "b23d391026015a73e6bbe7b24f8a9393b27f3e1e86aa4687d40dd410197c11f2"
         }
       ],
       "name": "scripts/smoke-make-install.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:43:08Z",
+    "timestamp": "2026-11-16T13:45:56Z",
     "tools": {
       "components": [
         {
