@@ -7,6 +7,53 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- Every file now says `Apache-2.0 OR MIT`, the licence AgtMLS is offered
+  under. 126 SPDX headers said `MIT` or `MIT OR Apache-2.0`, and all 33
+  skills, the commands, agents, plugin manifests, the marketplace and
+  `index.json` said `MIT`, because two generators defaulted to it and the
+  manifest check required it. The expression is now read from
+  `pyproject.toml` ([ADR 0005](docs/adr/0005-one-licence-expression.md)).
+- `install --copy` deleted a real directory already sitting where a skill
+  goes (your own skill of the same name), and a linking install put its link
+  inside that directory. Both installers now refuse it by name before writing
+  anything; a directory the target's lockfile records as an earlier copy is
+  still replaced.
+- `install` treated the home directory as a project, writing a prompt file
+  and `.agtmls/` into `~`; it now refuses a home or root target (exit `2`)
+  unless `--allow-home` is given. `doctor --target ~` says the home directory
+  is not a project instead of reporting missing links.
+- `provider-install` overwrote a hand-written `AGENTS.md` or
+  `copilot-instructions.md`; it now keeps a timestamped
+  `.agtmls-backup` copy first.
+- The installed `agtmls` command dropped the reason when a command stopped
+  with a message; it now prints it.
+- A link install that fell back to copies (Windows without the link
+  privilege) was recorded as `symlink` in the lockfile; the mode now comes
+  from what is on disk.
+- `AGENTS.md` and the generated `GEMINI.md` pointed at a path on the
+  maintainer's laptop; they link the published standards instead.
+
+### Added
+
+- `validate-licence-consistency.py` joins the gate (74 checks): every JSON
+  licence label, CycloneDX licence and `CITATION.cff` must match
+  `pyproject.toml`. `validate-licence-headers.py` now requires that exact
+  expression and also reads YAML and TOML headers.
+- `CREDITS.md` records where adopted ideas came from and the projects
+  studied for the roadmap.
+
+### Changed
+
+- `vetting-a-skill-before-install` was re-measured after its licence label
+  changed its digest. It stays hardened: Claude Code +16 points at 1.05x
+  tokens, Codex +4 points at 1.01x
+  ([evidence](docs/evidence/uplift-2026-11-16-vetting.md)).
+- Frontmatter is read through one module, `scripts/_lib/frontmatter.py`,
+  instead of nine copies; every parser's output is unchanged.
+- ruff 0.17.4 to 0.17.5 in CI (Dependabot #156).
+
 ## 0.0.30 - 2026-11-16
 
 ### Fixed
