@@ -7,6 +7,25 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Fixed
+
+- `audit` called a skill HIGH for quoting "ignore previous instructions" as
+  text to distrust and report, as two published skills do. An injection that
+  sits wholly inside quotes, on a line whose other words say to distrust or
+  report it, is now MEDIUM: still a finding, still failing `--strict`. An
+  unquoted command, or a quoted one with no such cue, stays HIGH.
+- An MCP server launched by an unpinned runner
+  (`"command": "npx", "args": ["-y", "pkg@latest"]`) was reported as a HIGH
+  hook (AGT-HOOK-002) and missed as a supply-chain risk. It is now
+  AGT-MCP-002, a medium supply-chain finding (agtmls-spec PR #28).
+
+### Added
+
+- AGT-MCP-002 in the pinned rule set (40 rules), and four security corpus
+  cases for this release's analyzer changes (121 cases, precision and recall
+  1.000).
+- A test that no `audit` output format repeats the text a rule matched.
+
 ## 0.0.32 - 2026-11-16
 
 ### Fixed
