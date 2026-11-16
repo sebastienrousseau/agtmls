@@ -18,6 +18,7 @@ from typing import NamedTuple
 
 from .findings import MAX_AUDIT_BYTES, Finding, read_capped
 from .policy import check_skill_honesty
+from .quoted import quoted_lines, soften
 from .rules import (
     INVISIBLE_RE,
     INVISIBLE_UNICODE,
@@ -326,32 +327,6 @@ def scan(
     return findings
 
 
-# A heading under which quoting an attack is teaching, not attacking.
-QUOTING_HEADING = re.compile(r"(?i)\b(?:examples?|attacks?|do\s+not|don't)\b")
-FENCE = re.compile(r"^\s{0,3}(?:```|~~~)")
-
-
-def quoted_lines(text: str) -> set[int]:
-    """Line numbers inside a fenced block or blockquote under a quoting heading.
-
-    An injection there is the skill showing what it defends against. It is
-    still reported, and still fails --strict; it is no longer HIGH.
-    """
-    quoted: set[int] = set()
-    heading_quotes = False
-    in_fence = False
-    for number, line in enumerate(text.splitlines(), start=1):
-        if FENCE.match(line):
-            in_fence = not in_fence
-            continue
-        if not in_fence and line.startswith("#"):
-            heading_quotes = bool(QUOTING_HEADING.search(line))
-            continue
-        if heading_quotes and (in_fence or line.lstrip().startswith(">")):
-            quoted.add(number)
-    return quoted
-
-
 class PatternRule(NamedTuple):
     id: str
     category: str
@@ -457,15 +432,14 @@ def scan_rules(path: Path, content: str, rules: list[PatternRule]) -> list[Findi
 
 def pattern_findings(path: Path, content: str, rules: list[PatternRule] | None = None) -> list[Finding]:
     """Every pattern rule's findings, with quoted injections softened."""
-    findings = scan_rules(path, content, PATTERN_RULES if rules is None else rules)
+    active = PATTERN_RULES if rules is None else rules
+    findings = scan_rules(path, content, active)
     if not any(f.category == "prompt_injection" for f in findings):
         return findings
-    quoted = quoted_lines(normalize(content))  # escapes do not move lines
-    return [
-        f._replace(severity="MEDIUM", message=f"{f.message} (quoted under a heading that marks it as an example)")
-        if f.category == "prompt_injection" and f.line in quoted else f
-        for f in findings
-    ]
+    text = normalize(content)  # escapes do not move lines
+    quoted, lines = quoted_lines(text), text.splitlines()
+    regexes = {rule.id: rule.regex for rule in active}
+    return [soften(f, quoted, lines, regexes) for f in findings]
 
 
 def _category(name: str) -> list[PatternRule]:
