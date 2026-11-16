@@ -32,9 +32,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import textwrap
 import re
 import sys
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
