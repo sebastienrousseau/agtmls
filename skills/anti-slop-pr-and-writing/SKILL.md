@@ -1,7 +1,7 @@
 ---
 name: anti-slop-pr-and-writing
 description: "Eliminate AI slop, clichés, sycophancy, and robotic filler from PR descriptions, commit messages, code comments, and technical documentation. Load when reviewing or authoring PRs, drafting release notes, or stripping conversational apologies and binary contrasts while preserving human voice and technical facts."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:

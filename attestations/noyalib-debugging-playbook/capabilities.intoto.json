@@ -25,7 +25,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c92cd14b9164d3c0077f4cdc4c54f52f00739d93e8986a72657db49f40362fde"
+        "sha256": "18aea35cc7e48f702c9a1507d3dc31fd509207b3aeb7615165edc114eec43e8c"
       },
       "name": "noyalib-debugging-playbook"
     }

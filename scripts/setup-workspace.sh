@@ -123,6 +123,29 @@ case "$AGENT_CLI" in
     ;;
 esac
 
+# A real directory at a skill's install path that the lockfile does not
+# record is someone's own skill of the same name: --copy deleted it with
+# `rm -rf` and linking nested the link inside it. Refuse before anything is
+# written. The rule lives in _lib/installer.py, shared with Windows installs.
+_bundles=$(IFS=,; echo "${BUNDLES[*]:-}")
+_listed=$(IFS=,; echo "${LISTED[*]:-}")
+if ! python3 - "$AGTMLS_DIR" "$TARGET_DIR" "$CLI_DIR" "$LISTED_ONLY" "$_bundles" "$_listed" <<'PY'
+import sys
+from pathlib import Path
+root, target, cli_dir, listed_only, bundles, listed = sys.argv[1:7]
+sys.path.insert(0, str(Path(root) / "scripts"))
+from _lib import installer
+names = installer.foreign_skill_dirs(
+    Path(root), Path(target), Path(target) / cli_dir / "skills",
+    {b for b in bundles.split(",") if b},
+    {s for s in listed.split(",") if s} if listed_only == "true" else None,
+)
+sys.exit(installer.refuse_foreign(names, cli_dir))
+PY
+then
+  exit 1
+fi
+
 # A prompt file AgtMLS wrote carries the marker on line 1. Anything else is
 # the user's own content: this script used to truncate it unconditionally,
 # destroying hand-authored CLAUDE.md files with no warning and no backup.

@@ -1,7 +1,7 @@
 ---
 name: noyalib-docs-and-writing
 description: "Maintain noyalib's docs of record and house writing style. Use when authoring or editing README, CHANGELOG, RELEASE-NOTES-vX.Y.Z.md, ADRs under doc/adr/, doc/POLICIES.md, doc/ARCHITECTURE.md, doc/USER-GUIDE.md, GLOSSARY.md, MIGRATION*.md, GETTING_STARTED.md, or crate-level and item-level rustdoc. Covers house rustdoc style (# Examples, # Errors, runnable doctests), commit-message archaeology (Assisted-by trailer, symptom/root-cause bodies), SPDX/REUSE headers per file type, ADR lifecycle (when required, template, post-implementation updates), release-notes template, and the version-refs release audit. Do NOT use for release mechanics (see noyalib-ci-and-release) or competitive positioning (see noyalib-external-positioning)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:
@@ -17,7 +17,7 @@ metadata:
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Noyalib -->
-<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # noyalib-docs-and-writing
 

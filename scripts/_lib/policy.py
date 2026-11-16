@@ -13,6 +13,7 @@ import json
 import re
 from pathlib import Path
 
+from . import frontmatter
 from .findings import Finding, read_capped
 from .rules import TOOL_CAPABILITIES
 
@@ -32,14 +33,8 @@ def frontmatter_tools(skill_md: Path) -> list[str]:
     granted nothing, and AGT-CAP-001 could not fire on a real skill. Commas
     and YAML list brackets are still accepted.
     """
-    text = read_capped(skill_md) or ""
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not match:
-        return []
-    field = re.search(r"^allowed-tools:[ \t]*(.*)$", match.group(1), re.MULTILINE)
-    if not field:
-        return []
-    return TOOL_TOKEN.findall(field.group(1))
+    value = frontmatter.line_value(read_capped(skill_md) or "", "allowed-tools")
+    return TOOL_TOKEN.findall(value) if value else []
 
 
 def load_policy(skill_dir: Path) -> tuple[dict, list[Finding]]:

@@ -1,7 +1,7 @@
 ---
 name: incident-response
 description: "Restore service first, find the cause afterwards. Load when something is broken in production right now: an outage, a bad deploy, data at risk, alerts firing, users affected. Prioritises mitigation over diagnosis, keeps a running timeline, and defers the root cause to a blameless follow-up. Not for unhurried debugging of a reproducible defect."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

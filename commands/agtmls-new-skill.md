@@ -1,6 +1,6 @@
 ---
 description: Scaffold a new AgtMLS skill with its metadata and both eval cases.
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 Scaffold a skill, then author it against the contract.

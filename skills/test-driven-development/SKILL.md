@@ -1,7 +1,7 @@
 ---
 name: test-driven-development
 description: "Write the failing test first, then the code that makes it pass. Load when adding behaviour, changing behaviour, or pinning a bug, and whenever a test was authored after the code it covers. Enforces red-green-refactor with an observed red phase, so a test that never failed is never mistaken for proof."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires a test runner. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

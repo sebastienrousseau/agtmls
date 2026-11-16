@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Reference (SOURCE): parse a #RRGGBB hex colour into "r g b" decimals.
 
 Idiomatic Python: validate with a regex and ``raise ValueError`` on bad

@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "68bcec96327f3582d66ff5cc1f19d73de881dd0d38793896bbdcc4c85896d657"
+          "sha256": "ef4699530452f2ee8eecfdf9fdfa230a2ed2334d57dc9292b1a7bf675e4e172f"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "1f8fced0eff741441bf228b9b02f34350bacccaada7def9ae3eabc8ead2dba27"
+          "sha256": "ac19b24c8158a8abc69ff5df250600b61aede06029cd38177918b552eae8c541"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "28cd4b69ce5f60c7b3de21b88f58e4114cd1d56c1268e31b5646f2f2bd2a6179"
+        "sha256": "7578d75dd1e4640268364cc8f9b3c4095dbb394bdd2e7baff9f32c852079a4a2"
       },
       "name": "noyalib-research-frontier"
     }

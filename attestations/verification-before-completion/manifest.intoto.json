@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "d4fa4f02ddc67c599b681af06e2b3d8d404cfe84c75fd415d68decbab6ae1765"
+          "sha256": "9294e92e7954436425a6ed01740b6593b41c18eb9a47fbeda8176c00b8ba8396"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "56083b86def253a0ce8e84e5902e4b9b33b65a17ed4a0fb1cb76fd28595d5b1a"
+          "sha256": "c34bd54cdd287071f712a959beae7ef7c4ef5a31a444ee17757948f79e01223f"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "cb5fe166fde3fb28de6688130de27692c6e06153fbafb1bdb786197ae3e7549c"
+        "sha256": "f50a11bb40a5a2f9f386ecde0af29e6de201696b94e7426517b5baac072ad496"
       },
       "name": "verification-before-completion"
     }

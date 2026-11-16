@@ -1,7 +1,7 @@
 ---
 name: noyalib-config-and-flags
 description: "Every noyalib configuration axis: Cargo features, ParserConfig DoS budgets and toggles, SerializerConfig, preset constructors. Use for 'what does feature X do', 'how do I limit Y', 'what is the default for max_document_length', 'does strict reject duplicate keys', or adding a new axis safely."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

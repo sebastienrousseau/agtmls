@@ -1,7 +1,7 @@
 ---
 name: cross-language-port
 description: "Port a module, CLI, or function between Rust, Python, Go, C++, Swift, TypeScript, JavaScript, Ruby, and Bash - preserving logic, adopting target idioms, and proving equivalence with a differential golden-I/O harness. Use for 'port/rewrite this in <lang>'. Not micro-snippets or redesigns."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires target-language toolchain, diff. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

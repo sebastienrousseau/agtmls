@@ -132,6 +132,24 @@ def _entry(registry_root: Path, name: str, agents: list[str]) -> dict[str, objec
     }
 
 
+def installed_names(skills_dir: Path) -> list[str]:
+    """The skills present in an agent's skills directory, linked or copied."""
+    if not skills_dir.is_dir():
+        return []
+    return sorted(entry.name for entry in skills_dir.iterdir() if entry.is_dir() or entry.is_symlink())
+
+
+def installed_mode(skills_dir: Path, names: list[str], copy: bool) -> str:
+    """`copy` when any installed skill is a real directory, else `symlink`.
+
+    A link install falls back to copying where links cannot be made
+    (Windows without the privilege), so what was asked for is not proof.
+    """
+    if copy:
+        return "copy"
+    return "copy" if any(not (skills_dir / name).is_symlink() for name in names) else "symlink"
+
+
 def build(target: Path, registry_root: Path, skills: list[str], mode: str,
           registry_version: str, agent: str | None = None) -> dict[str, object]:
     """Describe an install that has just happened.

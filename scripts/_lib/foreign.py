@@ -18,6 +18,7 @@ import subprocess
 from pathlib import Path
 from typing import NamedTuple
 
+from . import frontmatter
 from .analyzer import (
     AUDITABLE_SUFFIXES,
     SKIP_PARTS,
@@ -264,9 +265,8 @@ AGENT_CONFIG_NAMES = {
 
 
 def _skill_name(skill_dir: Path) -> str:
-    text = read_capped(skill_dir / "SKILL.md") or ""
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    field = re.search(r"^name:[ \t]*[\"']?([^\"'\n]+?)[\"']?[ \t]*$", match.group(1), re.MULTILINE) if match else None
+    parts = frontmatter.split(read_capped(skill_dir / "SKILL.md") or "")
+    field = re.search(r"^name:[ \t]*[\"']?([^\"'\n]+?)[\"']?[ \t]*$", parts[0], re.MULTILINE) if parts else None
     return field.group(1).strip() if field else skill_dir.name
 
 

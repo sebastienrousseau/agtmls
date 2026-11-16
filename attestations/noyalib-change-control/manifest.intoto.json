@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "8077881c0c99be854685d7327c0e9f47e4e4fa152a5d8cc479d39dd6add381a3"
+          "sha256": "98c6610df2b345907d526a34bc8f5645fc8965ae685bbf65a85f4875b4c1fc1e"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "ad26b617b9fe5903b176e2c74c250ea7fa9d7b5010bbe4ccb74f074bb7d012a8"
+          "sha256": "ae8bd53d6e8f9066879ef376d0e17ffb3a53401c6b9a9b79e24f15bf6b74476e"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "8aa3999e81c6e3d1a4962eb5b2642be87b323db35a6c154554b88b263852910b"
+        "sha256": "2c74bc02b9bbf11ff2caf7629a1cbfbaaadbd08478d23f518a48fbb3f7ecd170"
       },
       "name": "noyalib-change-control"
     }

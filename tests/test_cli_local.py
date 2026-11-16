@@ -117,6 +117,20 @@ class InstallLifecycleTests(CliFixture):
     def lock(self) -> dict:
         return json.loads((self.target / ".agtmls" / "manifest.json").read_text(encoding="utf-8"))
 
+    def test_the_home_directory_is_not_a_project(self) -> None:
+        """`install rust claude --target ~` wrote ~/CLAUDE.md and ~/.agtmls/ and
+        called the home directory a workspace. User-level skill folders are
+        their own thing, which plain `agtmls doctor` checks."""
+        with mock.patch.object(Path, "home", return_value=self.target):
+            code, output = self.install()
+            self.assertEqual(code, 2, output)
+            self.assertIn("is your home directory, not a project", output)
+            self.assertEqual(self.calls, [])
+            self.assertEqual(list(self.target.iterdir()), [])
+            code, output = self.install("--allow-home")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(len(self.calls), 1)
+
     def test_an_install_records_what_landed_with_the_published_digests(self) -> None:
         """A lockfile that disagreed with index.json would make verify meaningless."""
         code, output = self.install("--copy")
@@ -904,3 +918,58 @@ class DispatchFallthroughTests(unittest.TestCase):
         with mock.patch.object(cli, "build_parser", return_value=parser):
             self.assertEqual(cli.main(), 2)
 
+
+
+class ShellForeignSkillDirectoryTests(unittest.TestCase):
+    """setup-workspace.sh refuses a real directory it did not install."""
+
+    def test_neither_mode_touches_a_directory_it_did_not_install(self) -> None:
+        tmp = Path(tempfile.mkdtemp(prefix="agtmls-shforeign-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        registry = mini_registry(tmp / "registry")
+        shutil.copy2(ROOT / "scripts" / "setup-workspace.sh", registry / "scripts" / "setup-workspace.sh")
+        for flags in ((), ("--copy",)):
+            with self.subTest(flags=flags):
+                target = tmp / ("copy" if flags else "link")
+                theirs = target / ".claude" / "skills" / "using-agtmls"
+                theirs.mkdir(parents=True)
+                (theirs / "SKILL.md").write_text("# mine\n", encoding="utf-8")
+                proc = subprocess.run(
+                    ["bash", str(registry / "scripts" / "setup-workspace.sh"), "rust", "claude", *flags],
+                    cwd=target, capture_output=True, text=True, check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+                self.assertIn(".claude/skills/using-agtmls is a directory AgtMLS did not install", proc.stderr)
+                self.assertEqual(sorted(p.name for p in theirs.iterdir()), ["SKILL.md"])
+                self.assertFalse((target / "CLAUDE.md").exists())
+
+
+class RecordedModeTests(CliFixture):
+    """The lockfile's `mode` says what is on disk, not what was asked for.
+
+    On Windows a link the user may not create falls back to a copy
+    (_lib/installer.link_or_copy); the lockfile still said `symlink`.
+    """
+
+    def record(self, copy: bool, as_links: bool) -> str:
+        skills = self.target / ".claude" / "skills"
+        skills.mkdir(parents=True)
+        for name in GENERAL:
+            source = self.fixture / "skills" / name
+            if as_links:
+                (skills / name).symlink_to(source)
+            else:
+                shutil.copytree(source, skills / name)
+        args = mock.Mock(agent="claude", copy=copy)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(self.cli.record_install(args, self.target), 0)
+        return json.loads((self.target / ".agtmls" / "manifest.json").read_text(encoding="utf-8"))["mode"]
+
+    def test_links_are_recorded_as_links(self) -> None:
+        self.assertEqual(self.record(copy=False, as_links=True), "symlink")
+
+    def test_a_link_install_that_fell_back_to_copies_says_copy(self) -> None:
+        self.assertEqual(self.record(copy=False, as_links=False), "copy")
+
+    def test_a_copy_install_says_copy(self) -> None:
+        self.assertEqual(self.record(copy=True, as_links=False), "copy")

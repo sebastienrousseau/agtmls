@@ -1,7 +1,7 @@
 ---
 name: noyalib-change-control
 description: "The noyalib rulebook: classify a change, pick the gates it must pass, non-negotiables (unsafe, signed commits, ADR triggers, MSRV, panic policy), PR flow. Use for 'am I allowed to do X' or judging release readiness. Not the runbook (noyalib-ci-and-release)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

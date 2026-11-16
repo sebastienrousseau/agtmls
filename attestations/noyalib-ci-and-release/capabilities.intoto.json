@@ -25,7 +25,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "04b2fb128fd56fc4a3707a22c3c588154f777fa1d2adaa2c1228376f30a6615e"
+        "sha256": "39b159c58a301119d0882ff045784709cf0e2f469dc06f933989895f41aebe5c"
       },
       "name": "noyalib-ci-and-release"
     }

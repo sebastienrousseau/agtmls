@@ -1,7 +1,7 @@
 ---
 name: pretty-commits
 description: "Use when writing a git commit message. Formats the subject and body."
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 # Pretty commits

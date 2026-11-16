@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import skill_roots  # noqa: E402  (scripts path first)
+from _lib import licence, skill_roots  # noqa: E402  (scripts path first)
 
 MANIFEST = ROOT / ".claude-plugin" / "plugin.json"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
@@ -126,8 +126,9 @@ def check_plugin_fields(manifest: dict, errors: list[str]) -> None:
     version = manifest.get("version")
     if not isinstance(version, str) or not SEMVER.match(version):
         errors.append("plugin manifest version must be semver")
-    if manifest.get("license") != "MIT":
-        errors.append("plugin manifest license must be MIT")
+    wanted = licence.expression(ROOT)
+    if manifest.get("license") != wanted:
+        errors.append(f"plugin manifest license must be {wanted}, as pyproject.toml declares")
     check_plugin_owner(manifest, errors)
 
 

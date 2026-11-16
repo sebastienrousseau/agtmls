@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Noyalib -->
-<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # noyalib skill library — routing index
 

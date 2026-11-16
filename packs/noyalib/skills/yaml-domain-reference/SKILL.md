@@ -1,7 +1,7 @@
 ---
 name: yaml-domain-reference
 description: "YAML 1.2.2 semantics as noyalib implements them: scalar resolution, block vs flow, chomping, anchors, aliases, merge keys with DoS budgets, tags, 1.1-vs-1.2 flags, the Norway problem, and whether nan or octal 0o7 scalars resolve. Use for spec-conformance and plain-scalar questions."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

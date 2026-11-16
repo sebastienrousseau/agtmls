@@ -1,7 +1,7 @@
 ---
 name: receiving-code-review
 description: "Respond to review feedback on your own change without reflexively complying or reflexively defending. Load when handling a change request on your own PR, when a reviewer leaves comments, disagrees with an approach, or asks for something out of scope, and when deciding whether to argue a point or accept it. Every comment gets a decision and a reply; silent edits and silent skips are the failure modes."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

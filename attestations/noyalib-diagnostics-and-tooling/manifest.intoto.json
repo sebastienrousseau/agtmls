@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "741e46d0460e7d0fc89ba581c382e88d66a7ff2cdcd0f5cdc055b2b8366fb4f5"
+          "sha256": "77ed9df822f3ed385d83e9793624185fe5d458fa43264e21919911d128933742"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "b10ca9031d1536596ec12b1327e762b2d54d5518c623c101dc82b22f43dfb470"
+          "sha256": "4e287b4dd059dc4d17df044867f4c10052bcd0abf40afbfa65592c22a7a33d3d"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c98216382972cbb57ea56495dfdf68c1c1763a3e7d3157be17dc3eeb7f9f1305"
+        "sha256": "27836e279e5d18a2a591558da5f209ed86e1b5995587013485553b13a921bb98"
       },
       "name": "noyalib-diagnostics-and-tooling"
     }

@@ -1,6 +1,6 @@
 ---
 description: Walk the guarded AgtMLS release flow from version bump to published artifacts.
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 Releases increment by exactly `0.0.1` on the `0.0.x` line.

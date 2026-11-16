@@ -265,6 +265,19 @@ class DoctorTargetTests(ScriptCase):
     def doctor(self, *extra: str) -> tuple[int, str]:
         return self.drive("--skip-gate", "--target", str(self.target), "--agent", "claude", *extra)
 
+    def test_the_home_directory_is_explained_not_audited_as_a_project(self) -> None:
+        """`doctor --target ~` reported missing links, no CLAUDE.md and no
+        commands for a home directory that was never a project."""
+        code, output = self.drive("--skip-gate", "--target", str(self.home), "--agent", "claude")
+        self.assertEqual(code, 0, output)
+        self.assertIn(
+            f"WARN target {self.home} is your home directory, not a project; "
+            "`agtmls doctor` without --target checks the user-level skill folders",
+            output,
+        )
+        self.assertNotIn("missing expected AgtMLS skill links", output)
+        self.assertNotIn("generated CLAUDE.md is missing", output)
+
     def test_a_complete_install_is_healthy(self) -> None:
         self.install()
         code, output = self.doctor()
@@ -439,6 +452,34 @@ class ProviderInstallTests(ScriptCase):
         self.assertIn("Profile: `minimal`", text)
         self.assertIn(f"`{self.fixture}/skills`", text)
         self.assertFalse((self.target / "adapters").exists())
+
+    def test_a_file_the_user_wrote_is_backed_up_before_it_is_replaced(self) -> None:
+        """AGENTS.md is a file people write by hand; it was overwritten without a copy."""
+        theirs = "# Our team's agent rules\n\nNever push to main.\n"
+        (self.target / "AGENTS.md").write_text(theirs, encoding="utf-8")
+        code, output = self.drive("--provider", "openai", "--target", str(self.target))
+        self.assertEqual(code, 0, output)
+        backups = list(self.target.glob("AGENTS.md.agtmls-backup.*"))
+        self.assertEqual(len(backups), 1, output)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), theirs)
+        self.assertIn(f"backed up AGENTS.md to {backups[0].name}", output)
+        self.assertTrue((self.target / "AGENTS.md").read_text(encoding="utf-8").startswith("# AgtMLS openai Adapter\n"))
+
+    def test_a_file_that_is_not_text_is_kept_too(self) -> None:
+        (self.target / "AGENTS.md").write_bytes(b"\xff\xfe binary")
+        code, output = self.drive("--provider", "openai", "--target", str(self.target))
+        self.assertEqual(code, 0, output)
+        [backup] = self.target.glob("AGENTS.md.agtmls-backup.*")
+        self.assertEqual(backup.read_bytes(), b"\xff\xfe binary")
+
+    def test_our_own_adapter_is_replaced_without_a_backup(self) -> None:
+        """Re-running with another profile rewrites our file; that needs no copy."""
+        args = ("--provider", "openai", "--target", str(self.target))
+        self.drive(*args, "--profile", "minimal")
+        code, output = self.drive(*args, "--profile", "standard")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(list(self.target.glob("AGENTS.md.agtmls-backup.*")), [])
+        self.assertIn("Profile: `standard`", (self.target / "AGENTS.md").read_text(encoding="utf-8"))
 
     def test_a_nested_adapter_path_is_created(self) -> None:
         code, output = self.drive("--provider", "cursor", "--target", str(self.target))

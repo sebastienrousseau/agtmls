@@ -1,7 +1,7 @@
 ---
 name: noyalib-coverage-campaign
 description: "Raise noyalib line, branch, and function coverage toward the 98% target. Use for 'raise coverage', llvm-cov gaps, coverage-gap triage, ratcheting fail-under thresholds, or picking the next coverage target. Fences off the known wrong turns (chasing 100%, weakening thresholds)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

@@ -157,6 +157,31 @@ class PackagedCliTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "src"))
         self.addCleanup(lambda: sys.path.remove(str(ROOT / "src")))
 
+    def test_a_dispatcher_exit_message_reaches_stderr(self) -> None:
+        """`SystemExit("why")` prints its reason when Python handles it; the
+        entry point caught it, returned 1 and dropped the reason."""
+        from agtmls.cli import run_dispatcher
+
+        with tempfile.TemporaryDirectory() as tmp:
+            script = Path(tmp) / "agtmls.py"
+            script.write_text('raise SystemExit("the reason the run stopped")\n', encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                code = run_dispatcher(script, [])
+        self.assertEqual(code, 1)
+        self.assertEqual(stderr.getvalue(), "the reason the run stopped\n")
+
+    def test_a_dispatcher_exit_code_passes_through_silently(self) -> None:
+        from agtmls.cli import run_dispatcher
+
+        with tempfile.TemporaryDirectory() as tmp:
+            script = Path(tmp) / "agtmls.py"
+            script.write_text("raise SystemExit(3)\n", encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                code = run_dispatcher(script, [])
+        self.assertEqual((code, stderr.getvalue()), (3, ""))
+
     def test_checkout_is_preferred_over_a_bundled_registry(self) -> None:
         from agtmls.cli import registry_root
 

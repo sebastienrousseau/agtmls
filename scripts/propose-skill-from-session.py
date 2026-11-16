@@ -56,7 +56,7 @@ def render(name: str, transcript: str) -> str:
     )
     today = datetime.now(timezone.utc).date()
     return f"""<!-- SPDX-FileCopyrightText: {today.year} Sebastien Rousseau -->
-<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # Skill Proposal: {name}
 

@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "ebde338ff671b585cb421fae0b3222e759c05b6ffce1a1cfb5e2b5ac3b26946a"
+          "sha256": "de3804141be9d041232ded2642bad2219effb80f955e95443e643bfcdab165ff"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "a533bc7b2afc99bb9eb28d8c169e22ac2b2a100fb57b3c808b9f5b0cbed02476"
+          "sha256": "cfd68a48b8d623b17523984dbb397f7010e5356e99b4e8a84521abee52ca071e"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "564781e49054e165f61d0d87d99dc6921673da6dc0112b1de95b76eb0c07126d"
+        "sha256": "7debe92d5763c3874f07a2f24ceea7290d73aecdcdc5caa5d836afc78c7c0902"
       },
       "name": "authoring-portable-skills"
     }

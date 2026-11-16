@@ -1,7 +1,7 @@
 ---
 name: refactoring-safely
 description: "Change the shape of code without changing what it does. Load when you extract, rename, move, deduplicate, or restructure a module safely across its call sites, and whenever a diff mixes restructuring with new behaviour. Requires a characterisation net before the first edit and keeps structural and behavioural changes in separate commits."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

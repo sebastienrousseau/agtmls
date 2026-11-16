@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "939620d3bd2851dc9b88cd50d49ee4d3fd60fa9da38df2ad53b6d4e66cf9f990"
+          "sha256": "fa98628d33ae25f3d1941d9cae0174ff8429aa5fd4e0b784008dd6ba7023011e"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "65a3dde09f8da9082f86bac4f0c25fa746680d9ea416176badd19dccc626edc5"
+          "sha256": "0d479176f3ce9abe2e30200d837ad5f9032435cd72486fd3f93059840070ce9f"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "492069fd453591bb2659f7675e7d256d789b9fe6edb18363082371772badcaba"
+        "sha256": "313cd51e9a357f678fa783bd7609118684b74cb972d930e82e83cc9b425e39ad"
       },
       "name": "handoff"
     }

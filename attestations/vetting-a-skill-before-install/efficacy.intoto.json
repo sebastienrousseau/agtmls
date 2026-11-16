@@ -4,20 +4,20 @@
     "agents": [
       {
         "agent": "claude",
-        "delta": 0.2,
+        "delta": 0.16,
         "model": "claude-opus-5-5",
         "score_with": 1.0,
-        "score_without": 0.8,
-        "token_ratio": 1.31,
+        "score_without": 0.84,
+        "token_ratio": 1.05,
         "verdict": "helps"
       },
       {
         "agent": "codex",
-        "delta": 0.08,
+        "delta": 0.04,
         "model": "gpt-6-astra",
-        "score_with": 0.88,
-        "score_without": 0.8,
-        "token_ratio": 1.17,
+        "score_with": 0.96,
+        "score_without": 0.92,
+        "token_ratio": 1.01,
         "verdict": "helps"
       }
     ],
@@ -27,12 +27,12 @@
       "token_ceiling": 1.5
     },
     "evidence": {
-      "commit": "72e1aeed6089095ede24e21503b3e72ed81c552e",
-      "date": "2026-09-30T03:03:32Z",
+      "commit": "cc13ac5a6b5c5ca661a7f56ef55d2fef00e608cc",
+      "date": "2026-11-16T11:02:19Z",
       "digest": {
-        "sha256": "3088ea626a12445c51ee9ef36216947cc682151e810cc40a0b1c1551a8d06ba8"
+        "sha256": "1f2f22976c481ed3574dcdd46d76d42a5f7a9a867bf01288b16501bbbd0e771d"
       },
-      "path": "docs/evidence/uplift-2026-09-30-vetting-5.json",
+      "path": "docs/evidence/uplift-2026-11-16-vetting.json",
       "trials": 5
     },
     "meets_bar": true
@@ -41,7 +41,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "771bbbe79c47713897b90ad65f06b9a8d26dfc22bedac0688c2c6d9396bc2696"
+        "sha256": "a4f3d071780d4a14d3aec2ddc81b97d813b74eb6e36621f22a9b1dc9099d6ad9"
       },
       "name": "vetting-a-skill-before-install"
     }

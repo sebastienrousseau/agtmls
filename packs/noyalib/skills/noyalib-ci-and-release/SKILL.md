@@ -1,7 +1,7 @@
 ---
 name: noyalib-ci-and-release
 description: "Operate noyalib CI and ship releases: workflow graph, cache-poisoning doctrine, supply-chain gates, tag-driven release flow. Use for red CI, release prep, tagging, cargo-vet or cargo-deny failures. Not which-gates-apply (noyalib-change-control)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

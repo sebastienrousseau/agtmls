@@ -1,7 +1,7 @@
 ---
 name: ai-supply-chain-security
 description: Use when auditing AI-agent supply chain risk, prompt or skill provenance, dependency trust, SBOM/SLSA evidence, MCP tool-poisoning, package provenance, or agent runtime guardrails before release.
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Bash"
 metadata:

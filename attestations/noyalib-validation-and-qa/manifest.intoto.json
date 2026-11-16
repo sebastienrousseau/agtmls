@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "5646d94cb07d99f79dd7e70e209a89799a3ed7145ccb23a9ab1e9da158e0e704"
+          "sha256": "427b3d0e927eadd8aa4456d31d37d47a0c840aeb1db62f95fdebf5ed6f30f7fa"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "f5429f3ef5b5c10cb90df884a54d09cbe4a078a79299fd31331cd86bc7dc09f5"
+          "sha256": "eb924f5b8970c0dc83c6dd15e80dea8e5b9526b387b202b8f923ed1326b6bde4"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "e050ab2f4d116d848906d818552a63d0a5a7ee6ebf1d93e815d3905326f9d447"
+        "sha256": "b5be316c5fe3791fb855271536e0f254f871e5ee4ffef0b7230b4062141aedc3"
       },
       "name": "noyalib-validation-and-qa"
     }

@@ -48,6 +48,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 from _lib import (  # noqa: E402  (scripts path first)
     context_cost,
+    frontmatter,
     portability,
     skill_roots,
 )
@@ -66,7 +67,6 @@ TRIGGER = re.compile(
     r"\bwhen\b|\bbefore\b|\btrigger\b|\buse for\b|\buse this\b|\bload this\b",
     re.IGNORECASE,
 )
-BLOCK_SCALAR = {"|", ">", "|-", ">-", "|+", ">+", ""}
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str] | None, str | None]:
@@ -75,24 +75,9 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str] | None, str | None]:
     `name`/`description` contract without a YAML dependency."""
     if not text.startswith("---"):
         return None, "no frontmatter block (must start with '---')"
-    m = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not m:
+    fields = frontmatter.fields(text, "\n")
+    if fields is None:
         return None, "unterminated frontmatter block"
-    fields: dict[str, str] = {}
-    key: str | None = None
-    buf: list[str] = []
-    for line in m.group(1).split("\n"):
-        top = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
-        if top and not line.startswith((" ", "\t")):
-            if key is not None:
-                fields[key] = "\n".join(buf).strip()
-            key = top.group(1)
-            val = top.group(2).strip()
-            buf = [] if val in BLOCK_SCALAR else [val]
-        elif key is not None:
-            buf.append(line.strip())
-    if key is not None:
-        fields[key] = "\n".join(buf).strip()
     return fields, None
 
 

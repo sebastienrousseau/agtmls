@@ -11,8 +11,8 @@
   "commands": "./commands",
   "description": "The universal agent skills registry \u2014 polyglot engineering skills and system prompts, symlinked or installed into consumer repos.",
   "homepage": "https://github.com/sebastienrousseau/agtmls",
-  "license": "MIT",
+  "license": "Apache-2.0 OR MIT",
   "name": "agtmls",
   "skills": "./skills",
-  "version": "0.0.30"
+  "version": "0.0.31"
 }

@@ -1,7 +1,7 @@
 ---
 name: skill-author
 description: Draft or revise an AgtMLS skill so it passes the full contract on the first run. Use when adding a skill, rewriting a description that routes badly, or splitting an over-long SKILL.md.
-license: MIT
+license: Apache-2.0 OR MIT
 tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 

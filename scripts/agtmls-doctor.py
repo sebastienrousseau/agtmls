@@ -307,6 +307,12 @@ def check_target(r: Reporter, args: argparse.Namespace, agents: dict) -> None:
         r.fail(f"target repo does not exist: {target}")
         return
     r.ok(f"target repo exists: {target}")
+    if target == Path.home().resolve():
+        # Every project check below would report "missing" for a directory
+        # that was never meant to hold an install.
+        r.warn(f"target {target} is your home directory, not a project; "
+               "`agtmls doctor` without --target checks the user-level skill folders")
+        return
     if not args.agent:
         return
     dot, prompt = agents[args.agent]

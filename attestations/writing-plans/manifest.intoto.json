@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "d3f03a53a170b97d4eab30849348eecf55d758b194b587b22e234861c8fb9548"
+          "sha256": "604b5cc1578e5b223810d0f388c7c221ac830fa1c313049914d3cf6c34c0d4e2"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "7415c3aed2776580a8ccbed9190354e091127807240d6888b81f21984deb6d46"
+          "sha256": "0c1059235a1a1e255006e184adee3c3a3b42e8d54702edbc4de501f48f7ef271"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "e25a2fd213836da9ee8efe9c713a13f83b66bd2f1da55445ade508eb61ee92ff"
+        "sha256": "623392dbaaa5019dfe6cdafe8f5e9f694bab0304fa429ac935a664dc00bac34d"
       },
       "name": "writing-plans"
     }

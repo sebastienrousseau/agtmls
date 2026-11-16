@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 # Bash -> Python PATH dedupe. No build; run the shared golden-diff proof.
 set -euo pipefail
 cd "$(dirname "$0")"

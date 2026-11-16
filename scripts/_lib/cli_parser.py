@@ -219,6 +219,8 @@ def _install_commands(sub, agents: list[str]) -> None:
     install.add_argument("language")
     install.add_argument("agent", choices=agents)
     install.add_argument("--target", type=Path, default=Path.cwd())
+    install.add_argument("--allow-home", action="store_true",
+                         help="install even though the target is the home directory")
     install.add_argument("--skills-only", action="store_true")
     install.add_argument(
         "--copy",

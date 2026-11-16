@@ -1,7 +1,7 @@
 ---
 name: noyalib-external-positioning
 description: "How noyalib is described publicly: ecosystem map, provable differentiators, claiming rules, migration guides, and the COMPARISON matrix against other Rust YAML crates. Use when writing or reviewing README claims, release notes, launch copy, 'why noyalib vs X', or 'can we claim noyalib is faster than yaml-rust2 or saphyr'. Dated claims must be re-verified before publishing."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

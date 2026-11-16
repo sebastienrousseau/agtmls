@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "189be118105e54e33a605e6bc3b3fefcb0a6ad63fe2371a4d4f15e2d61a4d0c5"
+          "sha256": "515bf6d3be62d6267332cd9268bb2c1412cb920bb2dc0573ca8910c3022671f7"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "5126aeb0c398bccb55515b8e3a8b5e7daac2e5c6482a2a48a997eb382b5a18e6"
+          "sha256": "c1c7e872845da72f275d014dd94f262052bf2fefc258107ae0fa4034c0358e5c"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "2f58b86ed07a19afb90339abb9c270fe3e32d89dc6440a5b7d05f13c0226be96"
+        "sha256": "722cbe438faf855ecf499165907bab6c86e52bcfa96cd9e2b96a1320e8bac445"
       },
       "name": "using-agtmls"
     }

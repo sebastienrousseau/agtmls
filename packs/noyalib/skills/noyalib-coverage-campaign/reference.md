@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
-<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 > Reference material complementing `SKILL.md` in this directory
 > (`noyalib-coverage-campaign`).
@@ -128,7 +128,7 @@ coverage test file is being authored, mirror these three.
 //! trigger on the AST fallback (triggered by `Spanned<T>`, tags, complex
 //! merges, or the `document` module's `load_all*` family).
 
-// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR MIT
 // Copyright (c) 2026 Noyalib. All rights reserved.
 ```
 

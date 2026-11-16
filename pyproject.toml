@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 
 [build-system]
 requires = ["hatchling"]
@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agtmls"
-version = "0.0.30"
+version = "0.0.31"
 description = "The universal agent skills registry — polyglot engineering skills and system prompts for Claude Code, Codex, Aider, and compatible agents."
 readme = "README.md"
 license = "Apache-2.0 OR MIT"

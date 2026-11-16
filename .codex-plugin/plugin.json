@@ -30,11 +30,11 @@
     "security",
     "release"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0 OR MIT",
   "name": "agtmls",
   "repository": "https://github.com/sebastienrousseau/agtmls",
   "skills": [
     "./skills"
   ],
-  "version": "0.0.30"
+  "version": "0.0.31"
 }

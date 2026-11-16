@@ -11,16 +11,19 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import frontmatter as fm  # noqa: E402  (scripts path first)
+
 COMMANDS = ROOT / "commands"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 
 
 def frontmatter(text: str) -> dict[str, str] | None:
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not match:
+    parts = fm.split(text)
+    if parts is None:
         return None
     fields: dict[str, str] = {}
-    for line in match.group(1).splitlines():
+    for line in parts[0].splitlines():
         item = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.+)$", line)
         if item:
             fields[item.group(1)] = item.group(2).strip()

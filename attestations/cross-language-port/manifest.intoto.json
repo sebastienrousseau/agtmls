@@ -5,19 +5,19 @@
     "files": [
       {
         "digest": {
-          "sha256": "c87c73c113c2e9a4c84fbbcee6842a343a6ead3831ad7b3c3e180c553e7bb306"
+          "sha256": "35342a10214ab1a2ae8ee98df305e8023fbf5ca7e73640bdf05e3bc222f40fe7"
         },
         "path": "SKILL.md"
       },
       {
         "digest": {
-          "sha256": "c084a9ce9d36d7c7bad3c7e9948bcd071289888cc2a68fc5388f80cb8a9cf8ce"
+          "sha256": "a2593a90de4025947078a17e0c1278d40f949e0c98fd6046e4de342a87dcee2f"
         },
         "path": "examples/README.md"
       },
       {
         "digest": {
-          "sha256": "496fad78d5345faa5a186e24807557064178e532b00af606066d0e9824a41579"
+          "sha256": "cc37f4a58cc1f4364874486b38922654e3763f9c631b6182970d31540751b474"
         },
         "path": "examples/bash-to-python-pathdedupe/README.md"
       },
@@ -35,37 +35,37 @@
       },
       {
         "digest": {
-          "sha256": "ab803aa4a7c2dfc36b66b7c2d4a4e22493c7cb4f56c25dbecca680df2e358045"
+          "sha256": "2b0404e0acc7f3a14231da0a5912a81b1b9ae6ecd5c5f7efdfdc6ea9946a234a"
         },
         "path": "examples/bash-to-python-pathdedupe/port.py"
       },
       {
         "digest": {
-          "sha256": "bb5384c0c0cba6d10a0196580e177c8d04c6f18dcd3a43952eb0a16c1d7f6428"
+          "sha256": "8b8a77f634c366dd7d6204b823f8bd84a7fcfdcafe7f1a27acf5a29c5a9853bd"
         },
         "path": "examples/bash-to-python-pathdedupe/reference.sh"
       },
       {
         "digest": {
-          "sha256": "1d39f4a026264af634aafc3b9682b3db044951d409af8323d3b7b40fc95a9b5c"
+          "sha256": "eb9fe4165c4a811231da54737d9c2b5552ad25ea3dac3d0239cc0b0258d1a360"
         },
         "path": "examples/bash-to-python-pathdedupe/verify.sh"
       },
       {
         "digest": {
-          "sha256": "569820b2f8e7738f3af7a9c46a77510b4af43058a290fd8258ae849fd8c68031"
+          "sha256": "dc4db6ccc78fd2b492a735628a369124b6fa66a10a9991a310131160f7ab5779"
         },
         "path": "examples/boundary-traps/README.md"
       },
       {
         "digest": {
-          "sha256": "9a9c9e20f68bd8ef289c91fe48a775759e5c87fab43fe12f7f493289e62abd26"
+          "sha256": "628eb862baeb50a13ae6137ffe36fd4758fea34a1e350e91bcbe0ee4c39f9839"
         },
         "path": "examples/boundary-traps/integer-width/verify.sh"
       },
       {
         "digest": {
-          "sha256": "4e3225f59652d4bfc34a4b517c6433370bacc7312ffff004c63091f53cea7113"
+          "sha256": "9e189629c5ac445ce13c5acf3eb26c98bd3a7a3dabd236bc5309789ccd4e1595"
         },
         "path": "examples/go-to-rust-fraction/README.md"
       },
@@ -95,13 +95,13 @@
       },
       {
         "digest": {
-          "sha256": "e8db123feaf2b00e4c6ab7d52e9a324120096e70dfe00f142d78e5c9af4e277b"
+          "sha256": "e9313409f9db47d7561ccd564ddb6d273485a0309e393daa0960941be24cd538"
         },
         "path": "examples/go-to-rust-fraction/verify.sh"
       },
       {
         "digest": {
-          "sha256": "887a1a0e4eba73ebfd4351d874727a47dce70b7df81a5e2cc6eedc457f0f5fc3"
+          "sha256": "0841289f2b76215390780b71dd6c4f969620212cad3c4981d4103441b9554f67"
         },
         "path": "examples/js-to-ts-configvalidate/README.md"
       },
@@ -137,13 +137,13 @@
       },
       {
         "digest": {
-          "sha256": "eb388d7864473c534eb90ec7fb30ca244ad646f948e4126a9da4e65e477043b1"
+          "sha256": "926f1a19527415e30f6026c89fb06510bd62ffce492b3768c51a9974f64f3f06"
         },
         "path": "examples/js-to-ts-configvalidate/verify.sh"
       },
       {
         "digest": {
-          "sha256": "ad8c630e925117ef5661e70f334d89d185a5b359834eb1341cbd1a37b237edca"
+          "sha256": "5fbea24e9499e06523cfb95240d2955a0c0511f0b32223aed42fcd91186ecfb0"
         },
         "path": "examples/py-to-cpp-hexcolor/README.md"
       },
@@ -173,19 +173,19 @@
       },
       {
         "digest": {
-          "sha256": "e02e0df7099d9ac0711ccb4993941e4baaa1ac8a688832d0729d4c49e6a3d951"
+          "sha256": "67b4f85ea2d92b08dfbb08b41a2da69ace163a57d601177f3e517c947949c056"
         },
         "path": "examples/py-to-cpp-hexcolor/reference.py"
       },
       {
         "digest": {
-          "sha256": "e516071a269b0b6e6740264e374895558efff8c7bbdfdce816cfeffc4066a643"
+          "sha256": "19375f0b118ff373ad311307a10aeaf671b3463c3e6d0b2e5caa84377975d0b0"
         },
         "path": "examples/py-to-cpp-hexcolor/verify.sh"
       },
       {
         "digest": {
-          "sha256": "2edc93f2802a795bdc7c5a9d26d84f3a907ec9fc6f6e6e53466d009058c4b1ad"
+          "sha256": "38604d421a8c9e7f5bc434a14baa6b3e6e64fd9c8c6cead096ccb18662c8ce9d"
         },
         "path": "examples/py-to-go-duration/README.md"
       },
@@ -209,19 +209,19 @@
       },
       {
         "digest": {
-          "sha256": "caae7925ca8f98893ef9621253db23571911b943cbf471992e2e2f1146da30cf"
+          "sha256": "799122fea3bc00bb36cfb363ad496fe19950451a66433d84a8d3881a07fdb247"
         },
         "path": "examples/py-to-go-duration/reference.py"
       },
       {
         "digest": {
-          "sha256": "710e09bc99b1651ce41fd2bc2f2d3ea4b54d8cedd1be544868d0dd43193835a2"
+          "sha256": "83536c473d5e7fad05353d274e7055a3da7bb2b9247b9594a15f98e9c93ca52d"
         },
         "path": "examples/py-to-go-duration/verify.sh"
       },
       {
         "digest": {
-          "sha256": "c3fdafbc718cb279e5f97ac7d204e9d6cc8375efb3498f5f28b2372133f7c3a6"
+          "sha256": "2ea25794133277c33e1b6445ea7978a3d5ffa6fc1c63733561a3e578ee8c9d89"
         },
         "path": "examples/py-to-rust-iban/README.md"
       },
@@ -245,19 +245,19 @@
       },
       {
         "digest": {
-          "sha256": "d1edab6305e9e6967a6eccf97da7a7cca25f49cf6efc711702d41689aef88fe5"
+          "sha256": "674133c053a86080f0b634228fc44dbe51a5bd9c403756add42c22d2e30f07f4"
         },
         "path": "examples/py-to-rust-iban/reference.py"
       },
       {
         "digest": {
-          "sha256": "b8df3136b9c663eaedee535669be4a1bf65d864366e7de20115bded7fe7c84fe"
+          "sha256": "43863a6c3b982e2ceccf9e5ede98f18d237a4d6f64755e63589d8ea3c5ce1c53"
         },
         "path": "examples/py-to-rust-iban/verify.sh"
       },
       {
         "digest": {
-          "sha256": "54c705d86feea1c9883d0e5a2d7780a4923e8c124ec00d3ce1bc8d602b600b7e"
+          "sha256": "d4f5353afc931cf9278d566cc3b37ffc8e57bb81825437e3dcf1eeecc6646d04"
         },
         "path": "examples/ruby-to-python-histogram/README.md"
       },
@@ -275,7 +275,7 @@
       },
       {
         "digest": {
-          "sha256": "21db3e3d7850bc46bc4a982180734b2fa32d68e7a59acaf310f8cebec9956e80"
+          "sha256": "727126a55e17423a694c56ab72a37b60c96de6756c79e2d9511653a236a8aaba"
         },
         "path": "examples/ruby-to-python-histogram/port.py"
       },
@@ -287,13 +287,13 @@
       },
       {
         "digest": {
-          "sha256": "c85f9b940f72e7df59c96ff65bd5a78d8d5c873642a04fb5b33fa1e8a60198a2"
+          "sha256": "d97956563cfd0af7c54a9f90ede1bda8154b7afee0a3f68a2e8565c3de6dc52e"
         },
         "path": "examples/ruby-to-python-histogram/verify.sh"
       },
       {
         "digest": {
-          "sha256": "f5abca2127046f9798bc01bccf95009e5079bd2004b41db79dff784a4ce8e276"
+          "sha256": "4557eda27538f067e6ac94c9cc16a99e7bef01b6b9f25fbb559b8c82cf882bfc"
         },
         "path": "examples/rust-to-swift-op/README.md"
       },
@@ -323,25 +323,25 @@
       },
       {
         "digest": {
-          "sha256": "1947a5d18e54c298b415c8051ec56297c67cf642c04612115444b532841d8ed5"
+          "sha256": "fb76940768a522d8a00dd35d902c3b75c82e382e95a55f95a63ec541aaf7dece"
         },
         "path": "examples/rust-to-swift-op/verify.sh"
       },
       {
         "digest": {
-          "sha256": "1fe917880ed1143759f69d7186a0f8c279d5762f633ddc2a771d6bba4f4ac60b"
+          "sha256": "356df361d8b1043e0c423b6bde67ba9a8b2cc9b99b3630610df25608f187f95c"
         },
         "path": "harness/README.md"
       },
       {
         "digest": {
-          "sha256": "bb3ed18ff934c64bee4e84731029b797d9b757155bef27fb2180e1ee569fc405"
+          "sha256": "745c539d9086ccaf50eaaba84f49e3fbbe58a0b4f6e76ca8a6c46bedabb4aeac"
         },
         "path": "harness/golden-diff.sh"
       },
       {
         "digest": {
-          "sha256": "54a903b6845ac0ce259fec8596b1ef227c466e49112dd4e0a4a0cba09d514403"
+          "sha256": "277b21ae025b45d7b4b052a1975886218d189752047990e819466830e28c1391"
         },
         "path": "harness/port-check.sh"
       },
@@ -353,7 +353,7 @@
       },
       {
         "digest": {
-          "sha256": "f3c49e0711bed62977e74ff7a8b69bdf6eb314a43e52b0ec97a1704c27a64f4a"
+          "sha256": "c90de401296be0f40eecd3f33d2554873a374582c3f90acdb4dcba1e949a8bea"
         },
         "path": "harness/templates/hypothesis_diff.py"
       },
@@ -371,13 +371,13 @@
       },
       {
         "digest": {
-          "sha256": "b7606a2bdff360cc5cb30a80171c63a03a32707c867726ed42e7e916c639dab1"
+          "sha256": "c06960d8db34f0ff6cbddd3d600aad23f346eb7a6634f78202f6a4a0f7a15ae8"
         },
         "path": "reference.md"
       },
       {
         "digest": {
-          "sha256": "e4ad4a5df256e07c777edaa0677de16cb3949048d49c348bb6ed72a2b2a321bd"
+          "sha256": "06c51a23a881195a28d5f585ca2899356c105e7d5284196c27b91943ea8fad66"
         },
         "path": "triggers.md"
       }
@@ -387,7 +387,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "d621fe3bfb6557d3729f185ecded769378e6d4cf99e71c3800cac6f557c98245"
+        "sha256": "568a6bba2c0327bc77d2d752cd6cb0b06aac12060f02ed34e9c13ca939906220"
       },
       "name": "cross-language-port"
     }

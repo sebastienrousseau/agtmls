@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "8014da9b458ed65392f93b134797672ca0d3e7d31e1b2bfc1017172a119bae08"
+          "sha256": "cad80d1bc57ffd3f0545653a209c698714c7f633a3d9f43f244acfee850f2f97"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "ab9194cb8de7bbbc482b7b9048762b5d362af27f47ae0fa9f3a384a87493a589"
+          "sha256": "87fe96ac641f5338c22b02964718d2550f690d42b6bc5c8ab7670c8db4cc6ad8"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "2419d86c092da0bac84db62979cd5eae51428845a89585ff92bf977993bcd335"
+        "sha256": "04230cd5d8ae455c201afeb989908616a50205c889c2b0d40d603c4cc2bdd8ef"
       },
       "name": "noyalib-architecture-contract"
     }
