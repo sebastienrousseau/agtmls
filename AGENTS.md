@@ -7,12 +7,14 @@ Invariants for AI-assisted contributions to AgtMLS. Read this before changing an
 
 ## Master Standards & Authoritative Sources of Truth
 
-All contributions to AgtMLS MUST comply with the global standards located at `/Users/seb/Code/`:
-- `/Users/seb/Code/AGENTS.md` (Code Repositories Standard)
-- `/Users/seb/Code/GEMINI.md` (Global Standard & Conventions)
-- `/Users/seb/Code/PR-TEMPLATE.md` (Pull Request Specification)
-- `/Users/seb/Code/README-TEMPLATE.md` (Canonical README Standard)
-- `/Users/seb/Code/REPO-STANDARD.md` (Repository Gold Standard)
+All contributions to AgtMLS MUST comply with the maintainer's workspace standards, published in the
+[dotfiles repository](https://github.com/sebastienrousseau/dotfiles/tree/main/defaults/Code)
+and installed at `~/Code/` on the maintainer's machines:
+- [`AGENTS.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/AGENTS.md) (Code Repositories Standard)
+- [`GEMINI.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/GEMINI.md) (Global Standard & Conventions)
+- [`PR-TEMPLATE.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/PR-TEMPLATE.md) (Pull Request Specification)
+- [`README-TEMPLATE.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/README-TEMPLATE.md) (Canonical README Standard)
+- [`REPO-STANDARD.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/REPO-STANDARD.md) (Repository Gold Standard)
 
 ## The core invariants
 

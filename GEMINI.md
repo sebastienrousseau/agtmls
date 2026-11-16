@@ -6,12 +6,12 @@
 
 Mandatory across all repositories from `https://github.com/sebastienrousseau` and all portfolio workspaces under `~/Code` (`Public/`, `Private/`, `Work/`, `Forks/`).
 
-The authoritative sources of truth are:
-- `/Users/seb/Code/AGENTS.md` (Code Repositories Standard)
-- `/Users/seb/Code/GEMINI.md` (Global Standard & Conventions)
-- `/Users/seb/Code/PR-TEMPLATE.md` (Pull Request Specification)
-- `/Users/seb/Code/README-TEMPLATE.md` (Canonical README Standard)
-- `/Users/seb/Code/REPO-STANDARD.md` (Repository Gold Standard)
+The authoritative sources of truth are, published in the maintainer's dotfiles repository:
+- [`AGENTS.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/AGENTS.md) (Code Repositories Standard)
+- [`GEMINI.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/GEMINI.md) (Global Standard & Conventions)
+- [`PR-TEMPLATE.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/PR-TEMPLATE.md) (Pull Request Specification)
+- [`README-TEMPLATE.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/README-TEMPLATE.md) (Canonical README Standard)
+- [`REPO-STANDARD.md`](https://github.com/sebastienrousseau/dotfiles/blob/main/defaults/Code/REPO-STANDARD.md) (Repository Gold Standard)
 
 Agents MUST read the nearest repository `AGENTS.md` and consult these master files before modifying any code.
 
