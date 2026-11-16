@@ -5,8 +5,9 @@ name: windows
 # On Windows `agtmls install` takes the Python installer (_lib/installer.py)
 # instead of setup-workspace.sh, and a link it may not make falls back to a
 # copy. The gate in validate.yml is shell-heavy and runs on Linux and macOS;
-# this runs what a Windows user meets: the unit suite, and an install,
-# verify and uninstall through the CLI, at the supported floor and ceiling.
+# this runs what a Windows user meets: the installer's unit tests, and an
+# install, verify and uninstall through the CLI, at the supported floor and
+# ceiling.
 on:
   push:
     branches: [main]
@@ -39,8 +40,12 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Unit tests
-        run: python scripts/run-unit-tests.py
+      # The installer module Windows uses, and the CLI handlers around it.
+      # The full unit suite also drives the repository's own tooling (bash
+      # scripts, executable bits), which needs Linux or macOS
+      # (docs/POLICIES.md).
+      - name: Installer unit tests
+        run: python -m unittest tests.test_installer tests.test_library -v
       - name: Install, verify and uninstall through the CLI
         run: |
           target="$RUNNER_TEMP/consumer"
