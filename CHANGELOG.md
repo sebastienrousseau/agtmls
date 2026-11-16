@@ -7,6 +7,8 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.33 - 2026-11-16
+
 ### Fixed
 
 - `audit` called a skill HIGH for quoting "ignore previous instructions" as
