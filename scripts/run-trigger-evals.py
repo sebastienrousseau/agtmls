@@ -32,7 +32,7 @@ TOP_K = 5  # lenient: TF-IDF on a short prompt is noisy; #1 for negatives is the
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import skill_roots  # noqa: E402  (scripts path first)
+from _lib import frontmatter, skill_roots  # noqa: E402  (scripts path first)
 
 SKILLS_DIR = ROOT / "skills"
 CASES_DIR = ROOT / "evals" / "cases"
@@ -46,8 +46,8 @@ TOKEN = re.compile(r"[a-z0-9_]+")
 
 def description_of(skill_md: Path) -> str:
     text = skill_md.read_text(encoding="utf-8")
-    m = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    block = m.group(1) if m else ""
+    parts = frontmatter.split(text)
+    block = parts[0] if parts else ""
     dm = re.search(r"^description:[ \t]*(.*)$", block, re.MULTILINE)
     if not dm:
         return ""

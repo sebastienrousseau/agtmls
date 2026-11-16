@@ -26,7 +26,7 @@ FAIL_AT = 0.75
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import skill_roots  # noqa: E402  (scripts path first)
+from _lib import frontmatter, skill_roots  # noqa: E402  (scripts path first)
 
 SKILLS_DIR = ROOT / "skills"
 
@@ -39,22 +39,8 @@ TOKEN = re.compile(r"[a-z0-9_]+")
 
 
 def frontmatter_description(text: str) -> str:
-    m = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not m:
-        return ""
-    block = m.group(1)
-    dm = re.search(r"^description:[ \t]*(.*)$", block, re.MULTILINE)
-    if not dm:
-        return ""
-    # capture inline value + any indented continuation lines
-    start = dm.start()
-    lines = block[start:].split("\n")
-    out = [re.sub(r"^description:[ \t]*[|>+-]*[ \t]*", "", lines[0])]
-    for line in lines[1:]:
-        if re.match(r"^[A-Za-z0-9_-]+:", line):
-            break
-        out.append(line.strip())
-    return " ".join(out).strip()
+    """The description, continuation lines joined by spaces; "" when absent."""
+    return (frontmatter.fields(text, " ") or {}).get("description", "")
 
 
 def vector(desc: str) -> Counter:

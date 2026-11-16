@@ -2481,7 +2481,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eac437dc9c584324117f9c4e925ba586ba2a55bf29efe4262ebe199aa0045d91"
+          "content": "e70736996763769aadc5e9968f67274caa8bb8572ff3306576017178b548df35"
         }
       ],
       "name": "scripts/_lib/context_cost.py",
@@ -2547,10 +2547,21 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7a3c2b1556859573898bfce00fd5ae645a9958d1fe0eef33cfcdfe8ed4c0d9d5"
+          "content": "8d88c157ae3bda8a2b9b3aa27e2f2db81b52c272af00c3822f9ae95e039766da"
         }
       ],
       "name": "scripts/_lib/foreign.py",
+      "type": "file"
+    },
+    {
+      "bom-ref": "scripts/_lib/frontmatter.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "407f018e0f435dcc6884543e067dda3c3299476e07a2d3b126b200f78516484d"
+        }
+      ],
+      "name": "scripts/_lib/frontmatter.py",
       "type": "file"
     },
     {
@@ -2602,7 +2613,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2c1f3815316e4efcb7ae1fce2564cb8769ab9028eeddb9b1499e77467d6d7c40"
+          "content": "4ca6d1df5147a117df7d2e78fdfe0d149b490fdaa915257a5336b7464c153533"
         }
       ],
       "name": "scripts/_lib/policy.py",
@@ -2877,7 +2888,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ceff5a74087301026ae3b0438945336fdbd9073bd44d0dc78de8358feafa7528"
+          "content": "71173653ace1efeb30775f2a498b8947590165b50fbfdfc20942801435a9cc7b"
         }
       ],
       "name": "scripts/check-skill-collisions.py",
@@ -3031,7 +3042,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "a67a5bb5d1946130f4c32013f6ecb5ef0f70ce5c2f37ad4d8eb8cea609c6357a"
+          "content": "e1851c6b0adfb6399ea17a7c320bfdbb6f0cb70e8c110b150cc626fd1ae9284d"
         }
       ],
       "name": "scripts/generate-skill-index.py",
@@ -3240,7 +3251,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "969fa7b95a4c30772f2e8d54f4f320c4d969f196d9f16ca8d60cd4ff8f1f54d2"
+          "content": "fdad2d941d1a8038d6d7a3d9af8444e0360b4ab0dd85f89359763bceab020ca6"
         }
       ],
       "name": "scripts/run-trigger-evals.py",
@@ -3515,7 +3526,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fdc770a48bad40461aae447308f7b0f90c4efb782eeb81344a24202865f09ea4"
+          "content": "6f5c8f9fc51a3b473ef8a095a1b493d3c2480f39c1b3031cc979e6f65f11dfd8"
         }
       ],
       "name": "scripts/sync-skill-frontmatter.py",
@@ -3570,7 +3581,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4aa5176841302e98ff89f46af6e66d851b3cee693cd441e06c3ffcad4227e9bd"
+          "content": "c89861f0860915eaad25bd9d201ec9db48e2d096aba35c5872f809ec82206a6a"
         }
       ],
       "name": "scripts/validate-commands.py",
@@ -3669,7 +3680,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4c678defe4372e4dd062652bd53532ef3c269cd7feca2c949dc84da3fd7241bd"
+          "content": "f2f0eaa20ca939048aac5a1809276aece5865eb21ce961efe76d934761574f38"
         }
       ],
       "name": "scripts/validate-licence-consistency.py",
@@ -3680,7 +3691,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1c0b946e14f74590312994cb55be5a39fd11ad1a3a8a25371a22206f808d9824"
+          "content": "b8c787735b05002fafad48e3840b8097d1a6484e3563409b98df58a4904fd4b5"
         }
       ],
       "name": "scripts/validate-licence-headers.py",
@@ -3845,7 +3856,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c708a4d4a05f82fd67920f8f7a7087e78276c991b6fc3711da16fb89c81960bf"
+          "content": "1df3d3a71a3023d90e7731940a3ff1d360d14c8d1e3c6e3505286bd00fba53de"
         }
       ],
       "name": "scripts/validate-skills.py",
@@ -5432,7 +5443,7 @@
       "type": "application",
       "version": "0.0.30"
     },
-    "timestamp": "2026-11-16T11:16:39Z",
+    "timestamp": "2026-11-16T11:28:30Z",
     "tools": {
       "components": [
         {

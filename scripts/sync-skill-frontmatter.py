@@ -39,7 +39,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import licence, skill_roots  # noqa: E402  (scripts path first)
+from _lib import frontmatter, licence, skill_roots  # noqa: E402  (scripts path first)
 
 SKILLS_DIR = ROOT / "skills"
 
@@ -113,10 +113,8 @@ def quote(value: str) -> str:
 
 
 def split_frontmatter(text: str) -> tuple[list[str], str] | None:
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not match:
-        return None
-    return match.group(1).split("\n"), text[match.end() :]
+    parts = frontmatter.split(text)
+    return (parts[0].split("\n"), parts[1]) if parts else None
 
 
 def preserved_blocks(lines: list[str]) -> list[str]:

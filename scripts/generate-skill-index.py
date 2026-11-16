@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import licence, skill_roots  # noqa: E402  (scripts path first)
+from _lib import frontmatter, licence, skill_roots  # noqa: E402  (scripts path first)
 from _lib.digest import skill_digest  # noqa: E402  (needs ROOT on the path first)
 
 SKILLS_DIR = ROOT / "skills"
@@ -64,38 +64,10 @@ def unquote(value: str) -> str:
     return value
 
 
-BLOCK_MARKERS = {"|", ">", "|-", ">-", "|+", ">+", ""}
-
-
-def top_level_key(line: str) -> tuple[str, list[str]] | None:
-    """(key, its first value parts) when `line` starts a top-level field, else None."""
-    top = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
-    if not top or line.startswith((" ", "\t")):
-        return None
-    value = top.group(2).strip()
-    return top.group(1), [] if value in BLOCK_MARKERS else [value]
-
-
 def parse_frontmatter(text: str) -> dict[str, str]:
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    if not match:
-        return {}
-    fields: dict[str, str] = {}
-    key: str | None = None
-    buf: list[str] = []
-    for line in match.group(1).splitlines():
-        started = top_level_key(line)
-        if started is not None:
-            if key is not None:
-                fields[key] = unquote(" ".join(part.strip() for part in buf).strip())
-            key, buf = started
-        elif key is not None:
-            buf.append(line.strip())
-    if key is not None:
-        # The final flush needs the same unquoting as the mid-loop one: for a
-        # command file, `description` IS the last key.
-        fields[key] = unquote(" ".join(part.strip() for part in buf).strip())
-    return fields
+    """Top-level fields, continuation lines joined by spaces, YAML quotes stripped."""
+    found = frontmatter.fields(text, " ")
+    return {key: unquote(value) for key, value in (found or {}).items()}
 
 
 def collect_commands() -> list[dict[str, object]]:

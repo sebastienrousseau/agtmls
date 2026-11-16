@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import licence  # noqa: E402  (scripts path first)
+from _lib import frontmatter, licence  # noqa: E402  (scripts path first)
 
 SPDX = "SPDX-License-Identifier"
 # Directories that are not ours to header.
@@ -38,9 +38,9 @@ IDENTIFIER = re.compile(rf"{SPDX}:\s*(.+?)\s*(?:-->)?\s*$", re.MULTILINE)
 
 def frontmatter_licence(text: str) -> str | None:
     """The `license:` value a frontmatter block declares, or None."""
-    match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    found = re.search(r"^license:[ \t]*(\S.*?)[ \t]*$", match.group(1), re.MULTILINE) if match else None
-    return found.group(1).strip("'\"") if found else None
+    value = frontmatter.line_value(text, "license")
+    value = value.strip() if value is not None else ""
+    return value.strip("'\"") if value else None
 
 
 def wants_frontmatter(path: Path) -> bool:

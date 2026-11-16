@@ -21,9 +21,10 @@ import re
 from pathlib import Path
 from typing import NamedTuple
 
+from . import frontmatter
+
 # A rough English average. Every figure built on it is labelled "about".
 CHARS_PER_TOKEN = 4
-FRONTMATTER = re.compile(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", re.DOTALL)
 DESCRIPTION = re.compile(r"^description:[ \t]*(.*)$", re.MULTILINE)
 # A block scalar header: `|` or `>`, then a chomping (`+`/`-`) and an
 # indentation (1-9) indicator in either order, then an optional comment.
@@ -58,14 +59,14 @@ def description(skill_md: Path) -> str:
         text = skill_md.read_text(encoding="utf-8")
     except (OSError, ValueError):
         return ""
-    block = FRONTMATTER.match(text)
-    field = DESCRIPTION.search(block.group(1)) if block else None
+    parts = frontmatter.split(text)
+    field = DESCRIPTION.search(parts[0]) if parts else None
     if not field:
         return ""
     value = field.group(1).strip()
     header = BLOCK_HEADER.match(value)
     if header:
-        return _block_scalar(header, block.group(1)[field.end():].split("\n")[1:])
+        return _block_scalar(header, parts[0][field.end():].split("\n")[1:])
     return _unquote(value)
 
 
