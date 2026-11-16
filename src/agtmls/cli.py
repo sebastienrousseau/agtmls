@@ -94,7 +94,11 @@ def run_dispatcher(target: Path, argv: list[str]) -> int:
         runpy.run_path(str(target), run_name="__main__")
     except SystemExit as exc:
         code = exc.code
-        return code if isinstance(code, int) else (0 if code is None else 1)
+        if code is None or isinstance(code, int):
+            return code or 0
+        # What Python does for an uncaught SystemExit("reason"): say why.
+        print(code, file=sys.stderr)
+        return 1
     return 0
 
 
