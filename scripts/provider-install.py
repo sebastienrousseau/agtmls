@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +40,29 @@ def body(provider: str, profile: str | None) -> str:
     )
 
 
+def ours(dst: Path, provider: str) -> bool:
+    """A file this script wrote: its first line names the adapter."""
+    try:
+        with dst.open(encoding="utf-8") as handle:
+            return handle.readline() == f"# AgtMLS {provider} Adapter\n"
+    except (OSError, UnicodeDecodeError):
+        return False
+
+
+def keep_theirs(dst: Path, provider: str) -> None:
+    """Copy a file someone else wrote aside before it is replaced.
+
+    AGENTS.md and copilot-instructions.md are files people write by hand;
+    the same naming as setup-workspace.sh, so one glob finds every backup.
+    """
+    if not dst.is_file() or ours(dst, provider):
+        return
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    backup = dst.with_name(f"{dst.name}.agtmls-backup.{stamp}")
+    shutil.copy2(dst, backup)
+    print(f"backed up {dst.name} to {backup.name}", file=sys.stderr)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--provider", required=True)
@@ -63,6 +88,7 @@ def main() -> int:
             installed.append(dst)
             continue
         dst.parent.mkdir(parents=True, exist_ok=True)
+        keep_theirs(dst, args.provider)
         dst.write_text(expected, encoding="utf-8")
         installed.append(dst)
 

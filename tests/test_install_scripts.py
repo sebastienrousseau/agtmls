@@ -440,6 +440,27 @@ class ProviderInstallTests(ScriptCase):
         self.assertIn(f"`{self.fixture}/skills`", text)
         self.assertFalse((self.target / "adapters").exists())
 
+    def test_a_file_the_user_wrote_is_backed_up_before_it_is_replaced(self) -> None:
+        """AGENTS.md is a file people write by hand; it was overwritten without a copy."""
+        theirs = "# Our team's agent rules\n\nNever push to main.\n"
+        (self.target / "AGENTS.md").write_text(theirs, encoding="utf-8")
+        code, output = self.drive("--provider", "openai", "--target", str(self.target))
+        self.assertEqual(code, 0, output)
+        backups = list(self.target.glob("AGENTS.md.agtmls-backup.*"))
+        self.assertEqual(len(backups), 1, output)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), theirs)
+        self.assertIn(f"backed up AGENTS.md to {backups[0].name}", output)
+        self.assertTrue((self.target / "AGENTS.md").read_text(encoding="utf-8").startswith("# AgtMLS openai Adapter\n"))
+
+    def test_our_own_adapter_is_replaced_without_a_backup(self) -> None:
+        """Re-running with another profile rewrites our file; that needs no copy."""
+        args = ("--provider", "openai", "--target", str(self.target))
+        self.drive(*args, "--profile", "minimal")
+        code, output = self.drive(*args, "--profile", "standard")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(list(self.target.glob("AGENTS.md.agtmls-backup.*")), [])
+        self.assertIn("Profile: `standard`", (self.target / "AGENTS.md").read_text(encoding="utf-8"))
+
     def test_a_nested_adapter_path_is_created(self) -> None:
         code, output = self.drive("--provider", "cursor", "--target", str(self.target))
         self.assertEqual(code, 0, output)
