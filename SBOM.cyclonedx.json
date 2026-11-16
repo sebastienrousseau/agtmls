@@ -739,6 +739,17 @@
       "type": "file"
     },
     {
+      "bom-ref": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9eae418d87a418cf076da99dcdafa37cc36057f122a436f0aefc9df0ed3addda"
+        }
+      ],
+      "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
+      "type": "file"
+    },
+    {
       "bom-ref": "attestations/vetting-a-skill-before-install/manifest.intoto.json",
       "hashes": [
         {
@@ -2987,7 +2998,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "110a2f7c44b93768e0edcb7f778be59f98b62e10f848c3268ee26c37575524f9"
+          "content": "2e866cd082069749691b5deac888c86e83bf82905f63b121da1937de3e821b7f"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -5220,7 +5231,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b5fa26b73f97a9c6faf22eb83c5cbd8e9400a0d70bd044409c5a898bd85801e0"
+          "content": "4b66c60f08163d3bc3067628a57bedecd62717665c5f6fc13aa3279eaeeeb6b4"
         }
       ],
       "name": "src/agtmls/cli.py",
@@ -5421,7 +5432,7 @@
       "type": "application",
       "version": "0.0.30"
     },
-    "timestamp": "2026-11-16T10:45:16Z",
+    "timestamp": "2026-11-16T11:05:13Z",
     "tools": {
       "components": [
         {

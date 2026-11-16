@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-16T10:45:15Z",
+    "created": "2026-11-16T11:05:12Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -1082,6 +1082,22 @@
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./attestations/vetting-a-skill-before-install/capabilities.intoto.json",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "802045ddb0bbd82fb24027b81fda4c6f10aec47b"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9eae418d87a418cf076da99dcdafa37cc36057f122a436f0aefc9df0ed3addda"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -4353,11 +4369,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "fbfbfee348993f3e51c3068f27a8cbe62b13fd49"
+          "checksumValue": "f1bacb3c187f3f672055c845c1964037bd61b93c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "110a2f7c44b93768e0edcb7f778be59f98b62e10f848c3268ee26c37575524f9"
+          "checksumValue": "2e866cd082069749691b5deac888c86e83bf82905f63b121da1937de3e821b7f"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7601,11 +7617,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "14167c7b12a0cb634dbac3cb3cc41b8e8bcf1da4"
+          "checksumValue": "f2f58be2768346b9a325f20d750fa025112abb56"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b5fa26b73f97a9c6faf22eb83c5cbd8e9400a0d70bd044409c5a898bd85801e0"
+          "checksumValue": "4b66c60f08163d3bc3067628a57bedecd62717665c5f6fc13aa3279eaeeeb6b4"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7951,6 +7967,7 @@
         "SPDXRef-File-attestations-verification-before-completion-capabilities.intoto.json",
         "SPDXRef-File-attestations-verification-before-completion-manifest.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-capabilities.intoto.json",
+        "SPDXRef-File-attestations-vetting-a-skill-before-install-efficacy.intoto.json",
         "SPDXRef-File-attestations-vetting-a-skill-before-install-manifest.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-capabilities.intoto.json",
         "SPDXRef-File-attestations-web-research-and-source-triage-manifest.intoto.json",
