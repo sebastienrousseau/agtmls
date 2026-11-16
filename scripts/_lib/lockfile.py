@@ -132,6 +132,13 @@ def _entry(registry_root: Path, name: str, agents: list[str]) -> dict[str, objec
     }
 
 
+def installed_names(skills_dir: Path) -> list[str]:
+    """The skills present in an agent's skills directory, linked or copied."""
+    if not skills_dir.is_dir():
+        return []
+    return sorted(entry.name for entry in skills_dir.iterdir() if entry.is_dir() or entry.is_symlink())
+
+
 def installed_mode(skills_dir: Path, names: list[str], copy: bool) -> str:
     """`copy` when any installed skill is a real directory, else `symlink`.
 

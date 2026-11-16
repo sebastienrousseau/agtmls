@@ -117,6 +117,20 @@ class InstallLifecycleTests(CliFixture):
     def lock(self) -> dict:
         return json.loads((self.target / ".agtmls" / "manifest.json").read_text(encoding="utf-8"))
 
+    def test_the_home_directory_is_not_a_project(self) -> None:
+        """`install rust claude --target ~` wrote ~/CLAUDE.md and ~/.agtmls/ and
+        called the home directory a workspace. User-level skill folders are
+        their own thing, which plain `agtmls doctor` checks."""
+        with mock.patch.object(Path, "home", return_value=self.target):
+            code, output = self.install()
+            self.assertEqual(code, 2, output)
+            self.assertIn("is your home directory, not a project", output)
+            self.assertEqual(self.calls, [])
+            self.assertEqual(list(self.target.iterdir()), [])
+            code, output = self.install("--allow-home")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(len(self.calls), 1)
+
     def test_an_install_records_what_landed_with_the_published_digests(self) -> None:
         """A lockfile that disagreed with index.json would make verify meaningless."""
         code, output = self.install("--copy")

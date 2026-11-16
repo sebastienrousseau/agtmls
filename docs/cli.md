@@ -282,6 +282,15 @@ publisher's. With no signature (a checkout), or no `ssh-keygen` to check one,
 it warns and installs on the digest check. Use `--no-verify` to skip both,
 which is not recommended.
 
+Before writing anything, `install` refuses (exit `1`) when a skill's place in
+the target already holds a real directory that the target's lockfile does not
+record: that is your own skill of the same name, and a copy would delete it.
+Move it aside and install again. It also refuses (exit `2`) a target that is
+your home directory or a filesystem root, where it would write a prompt file
+and `.agtmls/`; pass `--allow-home` if that is what you mean. User-level skill
+folders such as `~/.claude/skills` are not an install target: plain
+`agtmls doctor` checks them.
+
 ### Does the agent actually read the skills?
 
 The lockfile proves the installed bytes; it cannot see an agent skip a skill.

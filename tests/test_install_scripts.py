@@ -265,6 +265,19 @@ class DoctorTargetTests(ScriptCase):
     def doctor(self, *extra: str) -> tuple[int, str]:
         return self.drive("--skip-gate", "--target", str(self.target), "--agent", "claude", *extra)
 
+    def test_the_home_directory_is_explained_not_audited_as_a_project(self) -> None:
+        """`doctor --target ~` reported missing links, no CLAUDE.md and no
+        commands for a home directory that was never a project."""
+        code, output = self.drive("--skip-gate", "--target", str(self.home), "--agent", "claude")
+        self.assertEqual(code, 0, output)
+        self.assertIn(
+            f"WARN target {self.home} is your home directory, not a project; "
+            "`agtmls doctor` without --target checks the user-level skill folders",
+            output,
+        )
+        self.assertNotIn("missing expected AgtMLS skill links", output)
+        self.assertNotIn("generated CLAUDE.md is missing", output)
+
     def test_a_complete_install_is_healthy(self) -> None:
         self.install()
         code, output = self.doctor()

@@ -230,6 +230,20 @@ def selection_sets(bundles: list[str] | None, skills: list[str] | None) -> tuple
     return set(bundles or []), (set(skills) if skills is not None else None)
 
 
+def refuse_home(target: Path) -> bool:
+    """Refuse a target that is the home directory or a filesystem root.
+
+    An install writes a prompt file and .agtmls/ into its target, which
+    makes sense in a repository and not in ~. User-level skill folders
+    (~/.claude/skills) are checked by plain `agtmls doctor` instead.
+    """
+    if target not in (Path.home().resolve(), Path(target.anchor)):
+        return False
+    print(f"{target} is your home directory, not a project: install writes a prompt file and "
+          ".agtmls/ there. Run it from a repository, or pass --allow-home.", file=sys.stderr)
+    return True
+
+
 def refuse_foreign(names: list[str], cli_dir: str) -> int:
     """Name each conflict and refuse; 0 when there is none."""
     for name in names:

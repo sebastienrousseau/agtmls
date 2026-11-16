@@ -241,14 +241,6 @@ def verify_registry() -> list[tuple[str, str, str]]:
     return drift
 
 
-def installed_skill_names(target: Path, agent: str) -> list[str]:
-    dot, _ = agent_paths(agent)
-    directory = target / dot / "skills"
-    if not directory.is_dir():
-        return []
-    return sorted(entry.name for entry in directory.iterdir() if entry.is_dir() or entry.is_symlink())
-
-
 def live_check(target: Path, agent: str) -> dict:
     """Ask the agent which skills it loads in `target` (verify --live).
 
@@ -469,10 +461,11 @@ def refuse_drift() -> int | None:
 @lockfile.refusing
 def record_install(args, target: Path) -> int:
     """Record what landed, so `agtmls verify` has something to check against."""
-    installed = installed_skill_names(target, args.agent)
+    skills_dir = target / agent_paths(args.agent)[0] / "skills"
+    installed = lockfile.installed_names(skills_dir)
     payload = lockfile.record(
         target, ROOT, installed,
-        lockfile.installed_mode(target / agent_paths(args.agent)[0] / "skills", installed, args.copy),
+        lockfile.installed_mode(skills_dir, installed, args.copy),
         str(load_index().get("registry_version", "")),
         args.agent, skills_dirs(target),
     )
@@ -489,6 +482,8 @@ def install_command(args) -> int:
     if not install_selection(args, cmd):
         return 1
     target = args.target.resolve()
+    if not args.allow_home and installer.refuse_home(target):
+        return 2
     refused = None if args.no_verify or args.dry_run else refuse_drift()
     if refused is not None:
         return refused
