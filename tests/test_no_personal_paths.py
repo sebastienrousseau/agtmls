@@ -3,8 +3,8 @@
 """No tracked file names a path inside someone's home directory.
 
 `GEMINI.md` ships in the Gemini CLI extension and `AGENTS.md` is read by
-every agent working in a clone; until v0.0.31 both pointed at
-`/Users/seb/Code/...`, which exists on one laptop and nowhere else. A
+every agent working in a clone; until v0.0.31 both pointed into the
+maintainer's home directory, which exists on one laptop and nowhere else. A
 reader elsewhere gets a dead reference, and the maintainer's home layout
 is published with every release.
 """

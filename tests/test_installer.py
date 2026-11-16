@@ -560,6 +560,12 @@ class ForeignSkillDirectoryTests(unittest.TestCase):
                 self.assertEqual(sorted(p.name for p in self.theirs.iterdir()), ["SKILL.md"])
                 self.assertFalse((self.target / "CLAUDE.md").exists())
 
+    def test_an_unreadable_lockfile_proves_nothing_is_ours(self) -> None:
+        (self.target / ".agtmls").mkdir()
+        (self.target / ".agtmls" / "manifest.json").write_text("{not json", encoding="utf-8")
+        skills_dir = self.target / ".claude" / "skills"
+        self.assertEqual(installer.foreign_skill_dirs(self.root, self.target, skills_dir, set(), None), ["using-agtmls"])
+
     def test_a_copy_the_lockfile_records_is_replaced(self) -> None:
         """Re-installing over an earlier `--copy` install is the normal case."""
         from _lib import lockfile

@@ -465,6 +465,13 @@ class ProviderInstallTests(ScriptCase):
         self.assertIn(f"backed up AGENTS.md to {backups[0].name}", output)
         self.assertTrue((self.target / "AGENTS.md").read_text(encoding="utf-8").startswith("# AgtMLS openai Adapter\n"))
 
+    def test_a_file_that_is_not_text_is_kept_too(self) -> None:
+        (self.target / "AGENTS.md").write_bytes(b"\xff\xfe binary")
+        code, output = self.drive("--provider", "openai", "--target", str(self.target))
+        self.assertEqual(code, 0, output)
+        [backup] = self.target.glob("AGENTS.md.agtmls-backup.*")
+        self.assertEqual(backup.read_bytes(), b"\xff\xfe binary")
+
     def test_our_own_adapter_is_replaced_without_a_backup(self) -> None:
         """Re-running with another profile rewrites our file; that needs no copy."""
         args = ("--provider", "openai", "--target", str(self.target))
