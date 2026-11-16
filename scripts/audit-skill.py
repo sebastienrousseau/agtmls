@@ -21,9 +21,9 @@ from _lib import skill_roots  # noqa: E402  (scripts path first)
 SKILLS_DIR = ROOT / "skills"
 
 # The analyzer itself lives in _lib/analyzer.py, under the core coverage
-# floor. Finding and audit_skill_target are what main() needs; the rest are
+# floor. main() audits through analyzer.audit_targets; the names below are
 # re-exported because the unit tests load this script and call them.
-from _lib import analyzer  # noqa: E402, F401  (the module, for tests that patch it)
+from _lib import analyzer  # noqa: E402  (needs the scripts path first)
 from _lib.agent_config import audit_config  # noqa: E402  (same path insertion)
 from _lib.analyzer import (  # noqa: E402, F401  (needs the scripts path first; re-exported)
     MAX_AUDIT_BYTES,
@@ -476,7 +476,7 @@ def main() -> int:
     if args.foreign:
         return foreign_audit(args.foreign, args.format, args.strict, args.pedantic, baseline, args.write_baseline)
     targets = audit_targets(args)
-    found = classify([f for target in targets for f in audit_skill_target(target, args.pedantic)], baseline)
+    found = classify(analyzer.audit_targets(targets, args.pedantic), baseline)
     if args.write_baseline:
         write_baseline(args.write_baseline, found[1])
     report(args.format, len(targets), found, baseline)

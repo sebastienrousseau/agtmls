@@ -10,9 +10,13 @@ the floor. The rule data it applies lives in rules.py.
 
 from __future__ import annotations
 
+import os
 import re
 import stat
 import unicodedata
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
+from itertools import repeat
 from pathlib import Path
 from typing import NamedTuple
 
@@ -576,3 +580,29 @@ def audit_skill_target(target: Path, pedantic: bool = False) -> list[Finding]:
     if target.is_dir():
         findings.extend(check_skill_honesty(target))
     return findings
+
+
+# Below this many targets a worker pool costs more to start than it saves.
+PARALLEL_FROM = 8
+MAX_WORKERS = 4
+
+
+def audit_targets(targets: list[Path], pedantic: bool = False) -> list[Finding]:
+    """Every target's findings, in target order.
+
+    Each pattern rule is one more case-insensitive pass over every file, and
+    Python's re cannot skip ahead on those; 52 rules over the registry took
+    longer than the gate allows. Targets are independent, so a large set is
+    audited in worker processes: same findings, same order. Where a pool
+    cannot start (no semaphores in a sandbox, a worker that cannot import
+    this module), the audit runs in this process instead.
+    """
+    workers = min(MAX_WORKERS, os.cpu_count() or 1, len(targets))
+    if len(targets) >= PARALLEL_FROM and workers > 1:
+        try:
+            with ProcessPoolExecutor(workers) as pool:
+                per_target = list(pool.map(audit_skill_target, targets, repeat(pedantic)))
+            return [finding for findings in per_target for finding in findings]
+        except (OSError, BrokenProcessPool, NotImplementedError):
+            pass
+    return [finding for target in targets for finding in audit_skill_target(target, pedantic)]
