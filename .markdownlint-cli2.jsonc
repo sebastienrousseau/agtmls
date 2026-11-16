@@ -1,0 +1,42 @@
+// SPDX-FileCopyrightText: 2026 Sebastien Rousseau
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+//
+// markdownlint, set to the house style rather than the tool's defaults.
+// Each rule turned off or changed says why; everything else is on.
+{
+  "config": {
+    "default": true,
+    // Prose is wrapped at 72-80 by hand, but table rows, link targets and
+    // command lines cannot be wrapped without breaking them.
+    "MD013": { "line_length": 80, "tables": false, "code_blocks": false, "headings": false },
+    // CHANGELOG.md repeats "### Fixed" under every release: same-named
+    // sections under different parents are the format, not a mistake.
+    "MD024": { "siblings_only": true },
+    // Every file opens with its SPDX licence comment (REUSE), so the first
+    // line cannot be the heading.
+    "MD041": false,
+    // README.md follows ~/Code/README-TEMPLATE.md, which lays out the logo,
+    // badges and demo in HTML; SPDX headers are HTML comments everywhere.
+    "MD033": { "allowed_elements": ["p", "a", "img", "br", "picture", "source", "div", "details", "summary", "sup", "kbd"] },
+    // Tables are written compact (`| a | b |`), and the generated ones are
+    // not padded to align; either way renders the same.
+    "MD060": false
+  },
+  "ignores": [
+    "node_modules/**",
+    // Recorded agent output, kept as it was produced.
+    "docs/evidence/**",
+    // Eval fixtures and fuzz seeds are inputs whose exact bytes the evals
+    // and the fuzzer read; auto-fixing one changes what is tested.
+    "evals/uplift/fixtures/**",
+    "fuzz/corpus/**",
+    // Fill-in templates whose placeholders are HTML comments; the PR body
+    // they produce is checked by its own rules (~/Code/PR-TEMPLATE.md).
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    // README.md follows ~/Code/README-TEMPLATE.md (HTML header and badges,
+    // bold labels in Contents) and BENCHMARKS.md carries generated markers
+    // with SHA-256 digests: both are linted by .markdownlint-template.jsonc.
+    "README.md",
+    "BENCHMARKS.md"
+  ]
+}

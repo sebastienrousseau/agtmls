@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "c8d5ca2591a47951f6e32e99dbba27406abaa3269acbdef221fb71c1a326e81d"
+          "sha256": "0e3371b4a6153b6e07d40fae87430e0ab2ea5ee5725cb94e6adcfbb94a2dbb52"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "72ef12d962c262a9401316aebe98fd133f1ce4ef0e6a34573389fa860ed49411"
+          "sha256": "d8afe15b10ea1d53685d25e73be6b612efd57c76e51d094613cf4cfe92b1ad11"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "67acecbbf9865c060e19bdaed28fbe015467f89f05df0304bc8dec54632d6713"
+        "sha256": "83c0bd778c388a60d187e50e80187a7c87aca617aece4dbfea3bda7d470d3044"
       },
       "name": "agent-loop-design"
     }

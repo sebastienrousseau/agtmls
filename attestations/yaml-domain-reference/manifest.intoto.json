@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "9ac09b7e72795ec055a9a39745ce78814e7fae918878a11c99e743748c005135"
+          "sha256": "ba71d01f0af6d577cc87a0c1c3e29308316972b516dcbd31925b6868092de11f"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "d9cdc1158b001e260df023b0879b0aa8ee84ccd297472a385855b7e1d71d0fab"
+          "sha256": "1de476c8aef3f435a446fa1565ad2999eb4dc5104e4999c3d52d9140b14a0ce5"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "7ce35a6a628d232b26afa0e7dfdf5ef2cfcd30d83d2d4e158f8dba3e26fe8edd"
+        "sha256": "b264516c18196478f3aa5343c7ab70389f2a0e9bea967e390dc59677c3074eeb"
       },
       "name": "yaml-domain-reference"
     }

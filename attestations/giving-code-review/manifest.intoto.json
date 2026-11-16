@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "c404f6889aa208944f910053e39c7f31a243fed8ab025e28519e012864894cc2"
+          "sha256": "1f3752e6f62a77349e8d9e1063b425bc5c7b5a7ec41248f76f385b06b272cad8"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "8440c6ef023d07bae42a97cb160976bf31b02ff76865edfd06c9643a3696a3f3"
+        "sha256": "9f3149be41b988b3f385f2801bfab638bab2b433a784d3e3534de12a1ae3cd9f"
       },
       "name": "giving-code-review"
     }

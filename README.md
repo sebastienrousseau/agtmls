@@ -8,7 +8,9 @@
 <h1 align="center">AgtMLS</h1>
 
 <p align="center">
-  A content-addressed registry of agent skills, system prompts, commands and subagents, verified at install for Claude Code, OpenAI Codex, Aider, Google Antigravity and compatible runtimes.
+  A content-addressed registry of agent skills, system prompts, commands and
+  subagents, verified at install for Claude Code, OpenAI Codex, Aider, Google
+  Antigravity and compatible runtimes.
 </p>
 
 <p align="center">
@@ -26,20 +28,24 @@
 
 **Getting started**
 
-- [Install](#install) — Python package, `uvx` / `pipx`, agent plugins, workspace symlinks, source
+- [Install](#install) — Python package, `uvx` / `pipx`, agent plugins, workspace
+  symlinks, source
 - [Requirements](#requirements) — toolchain floor, platforms
 - [Quick Start](#quick-start) — list, inspect, audit and verify in one session
 
 **The AgtMLS ecosystem**
 
-- [The AgtMLS ecosystem](#the-agtmls-ecosystem) — `agtmls-spec`, `agtmls-core`, `agtmls-wasm`, `agtmls-action`, `agtmls-mcp`, `agtmls-lsp`
+- [The AgtMLS ecosystem](#the-agtmls-ecosystem) — `agtmls-spec`, `agtmls-core`,
+  `agtmls-wasm`, `agtmls-action`, `agtmls-mcp`, `agtmls-lsp`
 
 **Library reference**
 
-- [Capabilities at a glance](#capabilities-at-a-glance) — the current surface by theme
+- [Capabilities at a glance](#capabilities-at-a-glance) — the current surface by
+  theme
 - [Ecosystem comparison](#ecosystem-comparison) — why no matrix is published yet
 - [Benchmarks](#benchmarks) — headline numbers; full tables in [`BENCHMARKS.md`](BENCHMARKS.md)
-- [Features](#features) — discipline pipeline, editorial doctrine, skill contract, CLI
+- [Features](#features) — discipline pipeline, editorial doctrine, skill
+  contract, CLI
 - [Configuration](#configuration) — bundles, providers, profiles, environment
 - [Examples](#examples) — runnable example index
 
@@ -47,9 +53,11 @@
 
 - [When not to use AgtMLS](#when-not-to-use-agtmls) — limitations
 - [Development](#development) — make targets, the check gate, CI
-- [Security](#security) — boundaries, the analyzer, install verification, release evidence
+- [Security](#security) — boundaries, the analyzer, install verification,
+  release evidence
 - [Documentation](#documentation) — all reference docs
-- [Stability guarantees](#stability-guarantees) — SemVer axis, output stability, minimum toolchain discipline
+- [Stability guarantees](#stability-guarantees) — SemVer axis, output stability,
+  minimum toolchain discipline
 - [License](#license)
 
 ---
@@ -63,7 +71,10 @@
 dependencies = ["agtmls"]
 ```
 
-Declaring the dependency pins the `agtmls` command for a project; the package has no importable Python API, only the CLI. The wheel has no dependencies: every script, validator, generator and CLI command uses the Python standard library only.
+Declaring the dependency pins the `agtmls` command for a project; the package
+has no importable Python API, only the CLI. The wheel has no dependencies: every
+script, validator, generator and CLI command uses the Python standard library
+only.
 
 ### As a CLI tool
 
@@ -91,7 +102,8 @@ pip install agtmls
 | **Kimi Code** | `/plugins install https://github.com/sebastienrousseau/agtmls` | `.kimi-plugin/plugin.json` |
 | **OpenCode** | Follow instructions in `.opencode/INSTALL.md` | `.opencode/INSTALL.md` |
 
-Every plugin manifest is derived from `.claude-plugin/plugin.json` and the skill tree by `python3 scripts/generate-plugin-manifests.py`.
+Every plugin manifest is derived from `.claude-plugin/plugin.json` and the skill
+tree by `python3 scripts/generate-plugin-manifests.py`.
 
 ### As a workspace symlink (hub-and-spoke)
 
@@ -103,7 +115,10 @@ cd ~/dev/my-service
 ~/dev/agtmls/scripts/setup-workspace.sh rust claude
 ```
 
-`setup-workspace.sh` writes the native prompt convention (`CLAUDE.md`, `AGENTS.md` or `CONVENTIONS.md`) and links active skills into `.claude/skills/`, `.codex/skills/`, `.aider/skills/` or `.agents/skills/`. Every link and generated file is added to `.git/info/exclude`, so the working tree stays clean.
+`setup-workspace.sh` writes the native prompt convention (`CLAUDE.md`,
+`AGENTS.md` or `CONVENTIONS.md`) and links active skills into `.claude/skills/`,
+`.codex/skills/`, `.aider/skills/` or `.agents/skills/`. Every link and
+generated file is added to `.git/info/exclude`, so the working tree stays clean.
 
 ### From source (Unix Makefile)
 
@@ -126,10 +141,14 @@ make DESTDIR=/tmp/stage install
 
 ## Requirements
 
-- **Python 3.10 or newer.** CI runs Python 3.10 to 3.14 on Ubuntu and macOS for every push to `main`, and the floor and ceiling (3.10, 3.14) on pull requests. The floor policy is in [`docs/POLICIES.md`](docs/POLICIES.md).
+- **Python 3.10 or newer.** CI runs Python 3.10 to 3.14 on Ubuntu and macOS for
+  every push to `main`, and the floor and ceiling (3.10, 3.14) on pull requests.
+  The floor policy is in [`docs/POLICIES.md`](docs/POLICIES.md).
 - **No runtime dependencies.** Standard library only.
-- **Platforms.** Linux and macOS, both in CI; other POSIX systems are expected to work but are not tested.
-- **Git**, for the workspace and source installs. Maintainer commits and tags are signed with the OpenSSH keys in [`KEYS.asc`](KEYS.asc).
+- **Platforms.** Linux and macOS, both in CI; other POSIX systems are expected
+  to work but are not tested.
+- **Git**, for the workspace and source installs. Maintainer commits and tags
+  are signed with the OpenSSH keys in [`KEYS.asc`](KEYS.asc).
 
 ---
 
@@ -146,13 +165,20 @@ agtmls verify claude                     # re-check the installed tree against i
 agtmls doctor                            # local health checks
 ```
 
-`install` refuses with exit `3` if the registry does not match its own `index.json`, and `verify` reports any installed skill that changed since. [Security](#security) explains what each check does and does not prove.
+`install` refuses with exit `3` if the registry does not match its own
+`index.json`, and `verify` reports any installed skill that changed since.
+[Security](#security) explains what each check does and does not prove.
 
 ---
 
 ## The AgtMLS ecosystem
 
-Agent skills are instructions a model will follow. Copied between repositories by hand, no two checkouts agree, nobody can say whether an installed skill is the one that was published, and a hidden instruction stays invisible until a model acts on it. AgtMLS is the registry, and the repositories below implement the same specification for other surfaces. [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) records each one's state.
+Agent skills are instructions a model will follow. Copied between repositories
+by hand, no two checkouts agree, nobody can say whether an installed skill is
+the one that was published, and a hidden instruction stays invisible until a
+model acts on it. AgtMLS is the registry, and the repositories below implement
+the same specification for other surfaces.
+[`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) records each one's state.
 
 | Component | Purpose | Use case |
 | :--- | :--- | :--- |
@@ -185,13 +211,20 @@ Agent skills are instructions a model will follow. Copied between repositories b
 
 ## Ecosystem comparison
 
-No comparison matrix is published yet. A matrix is only worth reading if every cell is sourced and dated for each project it names, and that evidence has not been gathered. [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) documents the AgtMLS repositories themselves.
+No comparison matrix is published yet. A matrix is only worth reading if every
+cell is sourced and dated for each project it names, and that evidence has not
+been gathered. [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) documents the AgtMLS
+repositories themselves.
 
 ---
 
 ## Benchmarks
 
-Cold-start latency of the commands a reader runs first, and of the two operations over the whole registry, measured in fresh processes. Every number below is rendered from [`benchmarks/results/`](benchmarks/results/) by `generate-benchmarks-doc.py`, and the gate fails if the table and the results diverge.
+Cold-start latency of the commands a reader runs first, and of the two
+operations over the whole registry, measured in fresh processes. Every number
+below is rendered from [`benchmarks/results/`](benchmarks/results/) by
+`generate-benchmarks-doc.py`, and the gate fails if the table and the results
+diverge.
 
 <!-- generated:headline sources="benchmarks/results/latency.json:d6496a9c70f0b6b13f428503b5f593d55768f6bc940c285e2de7b85e40f7e9c2" -->
 | Scenario | Result | Environment |
@@ -202,7 +235,8 @@ Cold-start latency of the commands a reader runs first, and of the two operation
 | `agtmls audit --all --strict` | 431 ms P50 | macOS 26.7, arm64, Python 3.12.14 |
 <!-- /generated:headline -->
 
-See [`BENCHMARKS.md`](BENCHMARKS.md) for the methodology, every workload, the regression thresholds and the scaling measurement.
+See [`BENCHMARKS.md`](BENCHMARKS.md) for the methodology, every workload, the
+regression thresholds and the scaling measurement.
 
 ---
 
@@ -210,7 +244,8 @@ See [`BENCHMARKS.md`](BENCHMARKS.md) for the methodology, every workload, the re
 
 ### The discipline skills pipeline
 
-Six general skills (`bundle: null`) govern day-to-day engineering in any language, in order:
+Six general skills (`bundle: null`) govern day-to-day engineering in any
+language, in order:
 
 ```mermaid
 flowchart LR
@@ -234,19 +269,29 @@ flowchart LR
 
 ### Editorial doctrine
 
-The [`anti-slop-pr-and-writing`](skills/anti-slop-pr-and-writing/) skill and the [`anti-slop-editor`](agents/anti-slop-editor.md) subagent keep pull requests, commits, comments and documentation dense and in a human voice. They strip five patterns:
+The [`anti-slop-pr-and-writing`](skills/anti-slop-pr-and-writing/) skill and the
+[`anti-slop-editor`](agents/anti-slop-editor.md) subagent keep pull requests,
+commits, comments and documentation dense and in a human voice. They strip five
+patterns:
 
-1. **Sycophancy and robotic apologies** (`"Certainly!"`, `"Sorry for the oversight."`), in favour of direct statements of action and findings.
-2. **Throat-clearing openers** (`"Here's the thing..."`, `"Let's dive in..."`), in favour of the problem stated in sentence one.
-3. **Binary contrasts and fake profundity** (`"It's not X. It's Y."`), in favour of concrete trade-offs and measurements.
-4. **Fluffy summaries and emoji theatre**, in favour of the root cause, the change, and the test proof.
-5. **Comments that paraphrase syntax** (`// increment counter`), in favour of comments explaining invariants and constraints.
+1. **Sycophancy and robotic apologies** (`"Certainly!"`, `"Sorry for the
+   oversight."`), in favour of direct statements of action and findings.
+2. **Throat-clearing openers** (`"Here's the thing..."`, `"Let's dive in..."`),
+   in favour of the problem stated in sentence one.
+3. **Binary contrasts and fake profundity** (`"It's not X. It's Y."`), in favour
+   of concrete trade-offs and measurements.
+4. **Fluffy summaries and emoji theatre**, in favour of the root cause, the
+   change, and the test proof.
+5. **Comments that paraphrase syntax** (`// increment counter`), in favour of
+   comments explaining invariants and constraints.
 
 The full before-and-after catalogue is in [`skills/anti-slop-pr-and-writing/reference.md`](skills/anti-slop-pr-and-writing/reference.md).
 
 ### The skill contract
 
-Every skill follows the [Agent Skills specification](https://agentskills.io/specification.md) and passes [`scripts/validate-skills.py`](scripts/validate-skills.py):
+Every skill follows the [Agent Skills
+specification](https://agentskills.io/specification.md) and passes
+[`scripts/validate-skills.py`](scripts/validate-skills.py):
 
 ```yaml
 ---
@@ -267,12 +312,20 @@ metadata:
 ---
 ```
 
-1. **Closed key set**: only `name`, `description`, `license`, `compatibility`, `allowed-tools` and `metadata`.
+1. **Closed key set**: only `name`, `description`, `license`, `compatibility`,
+   `allowed-tools` and `metadata`.
 2. **Name**: kebab-case, at most 64 characters, equal to the directory name.
-3. **Trigger cue**: a description of at most 1024 characters that says when to load the skill (`"load when"`, `"use for"`, `"trigger"`).
-4. **Progressive disclosure**: `SKILL.md` is capped at 500 lines; catalogues and references live in `reference.md`, loaded on demand.
-5. **Portability**: the body stays under about 5,000 tokens, references are one level deep from `SKILL.md`, and no Claude Code-only construct (`` !`command` `` injection, `${CLAUDE_SKILL_DIR}`) appears, since every other agent reads the same file.
-6. **Evaluations**: positive and negative trigger cases in [`evals/cases/`](evals/cases/) and behavioural assertions in [`evals/behavioral/cases/`](evals/behavioral/cases/).
+3. **Trigger cue**: a description of at most 1024 characters that says when to
+   load the skill (`"load when"`, `"use for"`, `"trigger"`).
+4. **Progressive disclosure**: `SKILL.md` is capped at 500 lines; catalogues and
+   references live in `reference.md`, loaded on demand.
+5. **Portability**: the body stays under about 5,000 tokens, references are one
+   level deep from `SKILL.md`, and no Claude Code-only construct (`` !`command`
+   `` injection, `${CLAUDE_SKILL_DIR}`) appears, since every other agent reads
+   the same file.
+6. **Evaluations**: positive and negative trigger cases in
+   [`evals/cases/`](evals/cases/) and behavioural assertions in
+   [`evals/behavioral/cases/`](evals/behavioral/cases/).
 
 ### Command line
 
@@ -298,7 +351,9 @@ agtmls provenance --write
 agtmls docs-site --write
 ```
 
-Shell completions (Bash, Zsh, Fish) and the `agtmls(1)` manpage are generated from the CLI definition (`make completions`, `make man`) and installed by `make install`. The full reference is [`docs/cli.md`](docs/cli.md).
+Shell completions (Bash, Zsh, Fish) and the `agtmls(1)` manpage are generated
+from the CLI definition (`make completions`, `make man`) and installed by `make
+install`. The full reference is [`docs/cli.md`](docs/cli.md).
 
 ---
 
@@ -306,11 +361,18 @@ Shell completions (Bash, Zsh, Fish) and the `agtmls(1)` manpage are generated fr
 
 ### General skills and project bundles
 
-The skill tree is flat, `skills/<name>/SKILL.md`, because agent runtimes scan their skills directories non-recursively and silently ignore nested skills. Scope comes from `metadata.json` instead:
+The skill tree is flat, `skills/<name>/SKILL.md`, because agent runtimes scan
+their skills directories non-recursively and silently ignore nested skills.
+Scope comes from `metadata.json` instead:
 
-- **General skills** (`"bundle": null`), such as `writing-plans` and `systematic-debugging`, are linked into every consumer repository.
-- **Project bundles** (`"bundle": "noyalib"`) are linked only when requested with `--bundle <name>`.
-- **Packs**: a bundle that is one project's knowledge lives in `packs/<bundle>/skills/`, outside the default plugin. The noyalib pack installs as its own plugin, `/plugin install agtmls-noyalib@agtmls`, so a plain plugin install carries only the general skills.
+- **General skills** (`"bundle": null`), such as `writing-plans` and
+  `systematic-debugging`, are linked into every consumer repository.
+- **Project bundles** (`"bundle": "noyalib"`) are linked only when requested
+  with `--bundle <name>`.
+- **Packs**: a bundle that is one project's knowledge lives in
+  `packs/<bundle>/skills/`, outside the default plugin. The noyalib pack
+  installs as its own plugin, `/plugin install agtmls-noyalib@agtmls`, so a
+  plain plugin install carries only the general skills.
 
 ```bash
 agtmls install python claude --skills-only                    # general skills only
@@ -353,20 +415,32 @@ There is no `examples/` directory; the runnable examples are:
 
 - [Quick Start](#quick-start) — the everyday commands, in order.
 - [`docs/cli.md`](docs/cli.md) — the command-line reference.
-- [`templates/`](templates/) — what `agtmls scaffold-skill` renders a new skill from.
-- [`evals/cases/`](evals/cases/) and [`evals/behavioral/cases/`](evals/behavioral/cases/) — trigger and behavioural cases for every skill.
-- [`evals/security/corpus.json`](evals/security/corpus.json) — malicious and benign skills the analyzer is gated against.
+- [`templates/`](templates/) — what `agtmls scaffold-skill` renders a new skill
+  from.
+- [`evals/cases/`](evals/cases/) and
+  [`evals/behavioral/cases/`](evals/behavioral/cases/) — trigger and behavioural
+  cases for every skill.
+- [`evals/security/corpus.json`](evals/security/corpus.json) — malicious and
+  benign skills the analyzer is gated against.
 
 ---
 
 ## When not to use AgtMLS
 
-AgtMLS is a deterministic, versioned registry of engineering skills. Do not use it:
+AgtMLS is a deterministic, versioned registry of engineering skills. Do not use
+it:
 
-- **As malware detection for third-party skills.** `agtmls audit` is a static, pattern-based first pass. It does not execute or detonate a skill, and packed or obfuscated payloads can evade it. Pair it with a sandboxed runtime and a human review for anything you did not write.
-- **As a runtime sandbox.** AgtMLS ships declarative skills, prompts and tool configuration; it does not isolate what an agent does with them.
-- **For uncurated prompt collections.** Every skill must pass semantic collision checks (similarity below 0.75), behavioural eval assertions and frontmatter validation.
-- **Without reproducible release versioning.** Releases follow the strict patch line in [`VERSIONING.md`](VERSIONING.md).
+- **As malware detection for third-party skills.** `agtmls audit` is a static,
+  pattern-based first pass. It does not execute or detonate a skill, and packed
+  or obfuscated payloads can evade it. Pair it with a sandboxed runtime and a
+  human review for anything you did not write.
+- **As a runtime sandbox.** AgtMLS ships declarative skills, prompts and tool
+  configuration; it does not isolate what an agent does with them.
+- **For uncurated prompt collections.** Every skill must pass semantic collision
+  checks (similarity below 0.75), behavioural eval assertions and frontmatter
+  validation.
+- **Without reproducible release versioning.** Releases follow the strict patch
+  line in [`VERSIONING.md`](VERSIONING.md).
 
 ---
 
@@ -380,7 +454,11 @@ make doctor     # registry diagnostics
 make clean      # caches and bytecode
 ```
 
-Local development needs Python 3.10+ and `make`. [`DEVELOPMENT.md`](DEVELOPMENT.md) reproduces every CI gate locally; [`docs/checks.md`](docs/checks.md) lists the checks, generated from `checks.json`. CI adds unit coverage (98% floor, library core 100%), ruff, CodeQL, SBOM schema validation, an API-breakage check and a wheel-size ceiling.
+Local development needs Python 3.10+ and `make`.
+[`DEVELOPMENT.md`](DEVELOPMENT.md) reproduces every CI gate locally;
+[`docs/checks.md`](docs/checks.md) lists the checks, generated from
+`checks.json`. CI adds unit coverage (98% floor, library core 100%), ruff,
+CodeQL, SBOM schema validation, an API-breakage check and a wheel-size ceiling.
 
 ```text
 agtmls/
@@ -413,11 +491,24 @@ agtmls/
 
 ## Security
 
-Two kinds of protection, and they are not equally strong. **Content addressing and install verification** are structural: a skill that differs from what the registry published is refused, whatever it contains. **The static analyzer** is first-stage triage: it flags known patterns of prompt injection, hidden Unicode, unsafe execution and capability escalation, and a determined author can evade it — packed or obfuscated payloads bypass static skill scanners over 90% of the time ([arXiv 2607.02357](https://arxiv.org/abs/2607.02357)). [`SECURITY.md`](SECURITY.md#boundaries-and-heuristics) lists which is which.
+Two kinds of protection, and they are not equally strong. **Content addressing
+and install verification** are structural: a skill that differs from what the
+registry published is refused, whatever it contains. **The static analyzer** is
+first-stage triage: it flags known patterns of prompt injection, hidden Unicode,
+unsafe execution and capability escalation, and a determined author can evade it
+— packed or obfuscated payloads bypass static skill scanners over 90% of the
+time ([arXiv 2607.02357](https://arxiv.org/abs/2607.02357)).
+[`SECURITY.md`](SECURITY.md#boundaries-and-heuristics) lists which is which.
 
 ### Content addressing and install verification
 
-Every skill in [`index.json`](index.json) carries an `integrity` digest, a SHA-256 over a manifest of its files, defined normatively in [`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) and stable across a git clone, a `--copy` install, an extracted wheel and a release tarball. `install` verifies the **source** registry before copying anything and refuses with exit `3` on a mismatch, then writes `.agtmls/manifest.json` recording what each skill hashed to. `verify` recomputes those digests:
+Every skill in [`index.json`](index.json) carries an `integrity` digest, a
+SHA-256 over a manifest of its files, defined normatively in
+[`agtmls-spec`](https://github.com/sebastienrousseau/agtmls-spec) and stable
+across a git clone, a `--copy` install, an extracted wheel and a release
+tarball. `install` verifies the **source** registry before copying anything and
+refuses with exit `3` on a mismatch, then writes `.agtmls/manifest.json`
+recording what each skill hashed to. `verify` recomputes those digests:
 
 | Status | Meaning | Exit |
 | :--- | :--- | ---: |
@@ -426,27 +517,56 @@ Every skill in [`index.json`](index.json) carries an `integrity` digest, a SHA-2
 | `MISSING` | Recorded in the lockfile but no longer present | `3` |
 | `UNMANAGED` | Present but not installed by AgtMLS. Reported, never deleted | `0` |
 
-Verification reports rather than repairs: silently rewriting a skill whose digest moved would destroy a local edit and hide tampering behind the same behaviour.
+Verification reports rather than repairs: silently rewriting a skill whose
+digest moved would destroy a local edit and hide tampering behind the same
+behaviour.
 
 ### The static analyzer
 
-[`scripts/audit-skill.py`](scripts/audit-skill.py) inspects every file in a skill — markdown, shell, Python, JSON and anything executable — without running it. Each finding has a stable rule ID, so it can be suppressed, exported or tracked:
+[`scripts/audit-skill.py`](scripts/audit-skill.py) inspects every file in a
+skill — markdown, shell, Python, JSON and anything executable — without running
+it. Each finding has a stable rule ID, so it can be suppressed, exported or
+tracked:
 
-- **Invisible Unicode** (`AGT-STEG-*`): zero-width characters, bidirectional overrides, variation selectors, soft hyphens, invisible operators, Hangul fillers and tag characters used to hide instructions from a reviewer.
-- **Prompt injection** (`AGT-INJ-*`): instruction overrides, developer-mode exploits, guardrail bypasses.
-- **Dangerous shell** (`AGT-EXEC-*`): pipe-to-shell, root wipes, credential access, reverse shells.
+- **Invisible Unicode** (`AGT-STEG-*`): zero-width characters, bidirectional
+  overrides, variation selectors, soft hyphens, invisible operators, Hangul
+  fillers and tag characters used to hide instructions from a reviewer.
+- **Prompt injection** (`AGT-INJ-*`): instruction overrides, developer-mode
+  exploits, guardrail bypasses.
+- **Dangerous shell** (`AGT-EXEC-*`): pipe-to-shell, root wipes, credential
+  access, reverse shells.
 - **Exfiltration** (`AGT-EXFIL-*`): markdown image pingbacks that leak session context.
-- **Capability escalation** (`AGT-CAP-*`): frontmatter granting `Bash`, `Write` or `WebFetch` while `metadata.json` denies them. Runtimes that pre-approve `allowed-tools`, such as Claude Code, grant what the frontmatter says; runtimes that treat it as informational, such as Apache Maka, do not.
-- **Policy honesty** (`AGT-POLICY-*`): skills declaring `executes_commands: false` or `network_access: none` that tell the model to run commands or fetch URLs. A missing or unparseable `metadata.json` is itself a finding.
+- **Capability escalation** (`AGT-CAP-*`): frontmatter granting `Bash`, `Write`
+  or `WebFetch` while `metadata.json` denies them. Runtimes that pre-approve
+  `allowed-tools`, such as Claude Code, grant what the frontmatter says;
+  runtimes that treat it as informational, such as Apache Maka, do not.
+- **Policy honesty** (`AGT-POLICY-*`): skills declaring `executes_commands:
+  false` or `network_access: none` that tell the model to run commands or fetch
+  URLs. A missing or unparseable `metadata.json` is itself a finding.
 
-The analyzer is gated against an adversarial corpus ([`evals/security/corpus.json`](evals/security/corpus.json), run by [`scripts/run-security-evals.py`](scripts/run-security-evals.py)): payloads split across lines, alternate invisible channels, malicious non-markdown files, and skills that omit their policy, with benign fixtures gating false positives. `agtmls import-skill` audits before copying, refuses on any CRITICAL or HIGH finding, and records the import as unattested (`maturity: draft`, `risk_level: high`, `requires_human_review: true`).
+The analyzer is gated against an adversarial corpus
+([`evals/security/corpus.json`](evals/security/corpus.json), run by
+[`scripts/run-security-evals.py`](scripts/run-security-evals.py)): payloads
+split across lines, alternate invisible channels, malicious non-markdown files,
+and skills that omit their policy, with benign fixtures gating false positives.
+`agtmls import-skill` audits before copying, refuses on any CRITICAL or HIGH
+finding, and records the import as unattested (`maturity: draft`, `risk_level:
+high`, `requires_human_review: true`).
 
 ### Release evidence
 
-- **SBOMs**: [`SBOM.spdx.json`](SBOM.spdx.json) (SPDX 2.3) and `SBOM.cyclonedx.json` (CycloneDX 1.6) hash every shipped file; CI validates both against their schemas.
-- **Provenance**: [`provenance.json`](provenance.json) is an unsigned in-toto statement of registry state, pinned to the SBOM's digest. The signed provenance of a release is the build attestation `release.yml` emits through Sigstore, and PyPI carries PEP 740 attestations for the uploaded files.
-- **Signed tags and commits**: maintainer keys are in [`KEYS.asc`](KEYS.asc). A release is built once, checksummed, and read back from the tag, the GitHub release and PyPI before it counts as published ([`RELEASE.md`](RELEASE.md)).
-- **Scanning**: CodeQL analyses the Python and the workflows; Dependabot watches the pinned actions and Python tooling.
+- **SBOMs**: [`SBOM.spdx.json`](SBOM.spdx.json) (SPDX 2.3) and
+  `SBOM.cyclonedx.json` (CycloneDX 1.6) hash every shipped file; CI validates
+  both against their schemas.
+- **Provenance**: [`provenance.json`](provenance.json) is an unsigned in-toto
+  statement of registry state, pinned to the SBOM's digest. The signed
+  provenance of a release is the build attestation `release.yml` emits through
+  Sigstore, and PyPI carries PEP 740 attestations for the uploaded files.
+- **Signed tags and commits**: maintainer keys are in [`KEYS.asc`](KEYS.asc). A
+  release is built once, checksummed, and read back from the tag, the GitHub
+  release and PyPI before it counts as published ([`RELEASE.md`](RELEASE.md)).
+- **Scanning**: CodeQL analyses the Python and the workflows; Dependabot watches
+  the pinned actions and Python tooling.
 
 Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
 
@@ -475,15 +595,25 @@ Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
 
 ## Stability guarantees
 
-- **SemVer axis**: public releases stay on the `0.0.x` line and move by exactly `0.0.1` (`v0.0.1` → `v0.0.999` → `v0.1.0`), per [`VERSIONING.md`](VERSIONING.md). Until `1.0`, any release may change the CLI or the registry format; [`CHANGELOG.md`](CHANGELOG.md) marks breaking changes under **Breaking**, and CI checks the public Python API against the last release.
-- **Output stability**: every generated artifact is deterministic and checked in CI with `--check`. The wheel and sdist are not yet byte-reproducible ([`RELEASE.md`](RELEASE.md)); build provenance and `SHA256SUMS` tie each release asset to the commit that built it.
-- **Minimum toolchain**: Python 3.10 is the floor. It is raised only when 3.10 reaches upstream end of life ([`docs/POLICIES.md`](docs/POLICIES.md)).
+- **SemVer axis**: public releases stay on the `0.0.x` line and move by exactly
+  `0.0.1` (`v0.0.1` → `v0.0.999` → `v0.1.0`), per
+  [`VERSIONING.md`](VERSIONING.md). Until `1.0`, any release may change the CLI
+  or the registry format; [`CHANGELOG.md`](CHANGELOG.md) marks breaking changes
+  under **Breaking**, and CI checks the public Python API against the last
+  release.
+- **Output stability**: every generated artifact is deterministic and checked in
+  CI with `--check`. The wheel and sdist are not yet byte-reproducible
+  ([`RELEASE.md`](RELEASE.md)); build provenance and `SHA256SUMS` tie each
+  release asset to the commit that built it.
+- **Minimum toolchain**: Python 3.10 is the floor. It is raised only when 3.10
+  reaches upstream end of life ([`docs/POLICIES.md`](docs/POLICIES.md)).
 
 ---
 
 ## License
 
-Dual-licensed under the **Apache License, Version 2.0** and the **MIT License**, at your option:
+Dual-licensed under the **Apache License, Version 2.0** and the **MIT License**,
+at your option:
 
 - [Apache License, Version 2.0](LICENSE-APACHE)
 - [MIT License](LICENSE-MIT)

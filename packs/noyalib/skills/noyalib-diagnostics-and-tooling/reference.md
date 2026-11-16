@@ -162,10 +162,16 @@ mapping_key_clone/integer_keys/1000
 ```
 
 - **`time:`** — three-point confidence interval [lower, mean, upper] over the sample.
-- **`thrpt:`** — inverse of time, expressed against `Throughput::Elements` or `Bytes`. Only shown if the bench declared `.throughput(...)`.
-- **`change:`** — vs the last saved baseline (persisted at `target/criterion/<group>/<id>/base`). Positive is slower.
-- **`(p = ... < 0.05)`** — Welch's t-test. `p < 0.05` means the change is statistically significant. But: significance ≠ importance. A `p = 0.001` change of `+0.3%` on a 2 µs bench is noise-adjacent.
-- **"Change within noise threshold"** — criterion's own heuristic. Trust it as a *floor*: if criterion says noise, it's noise; if criterion says regression, verify.
+- **`thrpt:`** — inverse of time, expressed against `Throughput::Elements` or
+  `Bytes`. Only shown if the bench declared `.throughput(...)`.
+- **`change:`** — vs the last saved baseline (persisted at
+  `target/criterion/<group>/<id>/base`). Positive is slower.
+- **`(p = ... < 0.05)`** — Welch's t-test. `p < 0.05` means the change is
+  statistically significant. But: significance ≠ importance. A `p = 0.001`
+  change of `+0.3%` on a 2 µs bench is noise-adjacent.
+- **"Change within noise threshold"** — criterion's own heuristic. Trust it as a
+  *floor*: if criterion says noise, it's noise; if criterion says regression,
+  verify.
 
 **Project rules for perf claims.**
 
@@ -216,7 +222,7 @@ Complements SKILL.md §4.
 | `fuzz_from_value` | `from_value::<Config>` type coercion; also `Vec<Value>`, `HashMap<String, Value>`. |
 | `fuzz_multi_doc` | `---` / `...` boundary detection, per-document anchor scope, `to_string_multi` round-trip. |
 | `fuzz_strict` | Tight `ParserConfig` (depth 16, doc 4KiB, aliases 8, mapping 64, seq 64) — DoS budgets under adversarial input. |
-| `fuzz_borrowed_alias` | Borrowed-path alias resolution + bomb defence. Prefixes `anchors:\n  - &x ` so libfuzzer explores anchor-heavy inputs. |
+| `fuzz_borrowed_alias` | Borrowed-path alias resolution + bomb defence. Prefixes `anchors:\n  - &x` so libfuzzer explores anchor-heavy inputs. |
 | `fuzz_double_quoted` | Double-quoted scalar escape branches, especially JSON-style `\uXXXX\uXXXX` surrogate pairing. |
 | `fuzz_yaml_v1_1` | `YamlVersion::V1_1` bundle + each legacy flag in isolation (`legacy_booleans`, `legacy_octal_numbers`, `legacy_sexagesimal`). |
 | `fuzz_diff` | **Differential** vs `serde_yaml_ng` / `saphyr`. Flags valid divergences where all parsers accept but produce different shapes. |
@@ -253,8 +259,10 @@ Verify the list against the tree: `ls fuzz/fuzz_targets/`.
 ```
 
 - **`#123456`** — total execs since campaign start.
-- **`cov:` / `ft:`** — coverage counters (edges / features). *Growing* is progress; *flat for 10 seconds* is diminishing returns.
-- **`corp:` A/B Kb** — A inputs, B KiB total. Corpus grows as libfuzzer finds novel edges.
+- **`cov:` / `ft:`** — coverage counters (edges / features). *Growing* is
+  progress; *flat for 10 seconds* is diminishing returns.
+- **`corp:` A/B Kb** — A inputs, B KiB total. Corpus grows as libfuzzer finds
+  novel edges.
 - **`exec/s:`** — throughput. If this crashes, look at the target's per-input cost.
 - **`REDUCE`** — libfuzzer trimmed an existing corpus entry.
 - **`NEW`** — genuinely new coverage.

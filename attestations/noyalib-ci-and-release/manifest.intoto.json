@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "96310696600f4626c146eddb6a8d1e5f85e3c3c04cff06d4551f1b957ef1cf5b"
+          "sha256": "0767ce1c68975fc555aada9c231ab9690adae1f19cf74a708c2b6d4c324c1455"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "d4c8d746310c9a6bdb21e842fba4a2afd188b575a0fafc0f30154d737b61f7b4"
+          "sha256": "023dc8ebf4126a2d4175e467dc8bdf9addff8416d4a23f04952dd6a8fa3c0870"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "39b159c58a301119d0882ff045784709cf0e2f469dc06f933989895f41aebe5c"
+        "sha256": "745dfe8598515f8c3a7f08da3a0c2e24d430211580f38fcbf7c86e38147b1aca"
       },
       "name": "noyalib-ci-and-release"
     }

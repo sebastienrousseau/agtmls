@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "86b2f1657f0cfb3933aabef0071305cecd0dd8c587ad6e8cc9911492e46a9db5"
+          "sha256": "c8437e5f92843dae8d4ae3610fec70e477eb27dfa58c2780a432420131f320d9"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "46a22cb22ba9bd4628b89d5362c839704d6a3b0d3faa1def530d9fcad726e2be"
+          "sha256": "c0fb6cf31cd1b7cd54bf7de254af423f44a04530ce4bb4aab07083eccf0f1458"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "8d5095cbbd62350d85995c99bc71f7e8de57897cc513b3d4c271777fee943033"
+        "sha256": "7726c354869ca71d8c72a04882007a19080da0f29e8759233567a7086e6be2ba"
       },
       "name": "ai-supply-chain-security"
     }

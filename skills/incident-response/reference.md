@@ -71,24 +71,24 @@ rushed fix are high. If you must, have someone else read the diff.
 
 **First contact — within minutes, before you know anything:**
 
-> Investigating elevated errors on <surface> since <time>. Impact: <what
-> users experience>. Cause not yet known. Next update at <time>.
+> Investigating elevated errors on \<surface> since \<time>. Impact: \<what
+> users experience>. Cause not yet known. Next update at \<time>.
 
 **Update — on the clock, even without news:**
 
-> Update <time>. Still investigating. We have ruled out <X>. Impact unchanged
-> at <scope>. Next update <time>.
+> Update \<time>. Still investigating. We have ruled out \<X>. Impact unchanged
+> at \<scope>. Next update \<time>.
 
 **Mitigated — separate this clearly from "fixed":**
 
-> <time>: mitigated by rolling back <deploy>. Error rate back to baseline,
-> confirmed by <signal>. Root cause not yet known; investigation continues in
-> <channel>. No further impact expected.
+> \<time>: mitigated by rolling back \<deploy>. Error rate back to baseline,
+> confirmed by \<signal>. Root cause not yet known; investigation continues in
+> \<channel>. No further impact expected.
 
 **Resolved:**
 
-> Resolved. <Duration> of <impact> affecting <scope>. Cause: <one line>.
-> Follow-up: <link>.
+> Resolved. \<Duration> of \<impact> affecting \<scope>. Cause: \<one line>.
+> Follow-up: \<link>.
 
 Two rules: never say "fixed" when you mean "mitigated", and never give an ETA
 you are not confident in. A missed ETA costs more trust than no ETA.

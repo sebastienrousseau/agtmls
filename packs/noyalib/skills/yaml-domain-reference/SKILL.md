@@ -44,6 +44,7 @@ is *the* scalar table); `crates/noyalib/src/parser/scanner.rs`
 arithmetic).
 
 **Provenance re-verify (one-liners):**
+
 ```bash
 grep -n '"\.nan"\|"\.inf"' crates/noyalib/src/streaming.rs
 grep -n 'yaml_version: YamlVersion::V1_2' crates/noyalib/src/de/config.rs
@@ -66,6 +67,7 @@ version, `%TAG !x! tag:example.com,2026:` binds a tag-shorthand
 prefix. Only one `%YAML` per document (§6.8.1).
 
 **noyalib's strict rules** (scanner.rs, § cited inline):
+
 - **§6.8:** directive *must* be followed by explicit `---`.
   Pending directive at stream end → error.
 - **§6.8 / §9.1.2:** directive *must not* appear after content
@@ -82,12 +84,15 @@ prefix. Only one `%YAML` per document (§6.8.1).
 ## 2. Block vs flow, indentation, column tracking
 
 **Block style** is the indentation-driven form:
+
 ```yaml
 db:
   host: localhost
   port: 5432
 ```
-**Flow style** is the JSON-shaped inline form: `db: {host: localhost, port: 5432}`. YAML mixes freely — flow can nest inside block and vice versa.
+
+**Flow style** is the JSON-shaped inline form: `db: {host: localhost, port:
+5432}`. YAML mixes freely — flow can nest inside block and vice versa.
 
 Indentation is *structure*, not decoration: a mapping value at
 column *N+2* is a child of a key at column *N*. This is why
@@ -96,6 +101,7 @@ map to the correct visual column, or nesting silently mis-parses.
 
 Two column-desync incidents shaped this code (see
 `noyalib-failure-archaeology` for the full stories):
+
 - **BOM incident** — UTF-8 BOM is three bytes, zero visual
   columns. Fix: `advance_by(3)` over the BOM *without* touching
   `col` (scanner.rs L1150–L1181).
@@ -108,6 +114,7 @@ Two column-desync incidents shaped this code (see
 ## 3. Scalars and block-scalar chomping
 
 Five scalar styles:
+
 - **Plain** — no quotes, resolved by the plain-scalar table
   (§4): `port: 8080`.
 - **Single-quoted** — `'literal ''with'' apostrophes'`. Only
@@ -225,6 +232,7 @@ rarely exceed 2–3 aliases per anchor; above 10 (5 in strict) is
 bomb-shaped. Set to `None` to disable.
 
 **MergeKeyPolicy** (`de/config.rs:973`, note real variants):
+
 - **`Auto`** *(default)* — YAML 1.2 semantics: `<<` triggers
   automatic merge of the value into the enclosing mapping.
 - **`AsOrdinary`** — treat `<<` as a plain string key. The
@@ -242,6 +250,7 @@ bomb-shaped. Set to `None` to disable.
 ## 7. Tags
 
 Explicit type annotations. Three families:
+
 - **Core-schema tags** — `!!str`, `!!int`, `!!float`, `!!bool`,
   `!!null`, `!!seq`, `!!map`, `!!binary`. noyalib **never
   strips** these — they carry semantics (`!!str 42` forces
@@ -331,7 +340,8 @@ corpus. Each case is a wrapper with `yaml:`, `json:`, `fail:`,
   floor `total >= 350` guards against vacuous 0/0.
 
 **Ground-truth reminders (assert every time you cite them):**
-```
+
+```text
 official_suite.rs::SKIP_LIST     = &[]        # zero entries
 yaml_compliance_report.rs::SKIP  = &[]        # zero entries
 compliance floor                 = 94.0%      # assertion

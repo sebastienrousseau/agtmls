@@ -36,12 +36,12 @@ The one worth spending time on. State the trade-off in terms both of you can
 check, and name what would change your mind.
 
 > **Reviewer:** Why a state machine? A couple of booleans would do.
-
-> Two booleans give four states and only three are legal — the
+>
+> **Author:** Two booleans give four states and only three are legal — the
 > `draining && !started` combination is the bug we hit in #388. The machine
 > makes that unrepresentable. It costs ~20 lines. If you'd rather have the
-> booleans plus an assertion, I'll take that; I mainly want the illegal state
-> to be impossible or loud.
+> booleans plus an assertion, I'll take that; I mainly want the illegal state to
+> be impossible or loud.
 
 ### Preference
 

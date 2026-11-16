@@ -48,11 +48,12 @@ helps you pick the right skill (or decide none applies) before loading one.
    They compose in that order and hand off to each other. A project bundle's
    own rules (evidence bar, gates, test taxonomy) override them on specifics.
 
-3. **Working inside a specific project that has its own bundle?**
-   → load that project's skills. The **`noyalib/`** family (14 skills) is the
-   worked example; the `references/noyalib-bundle.md` index is a router for change control,
-   CI/release, debugging, architecture, YAML domain, config, coverage, docs,
-   positioning, validation, and research. Start there for any noyalib task.
+3. **Working inside a specific project that has its own bundle?** → load that
+   project's skills. The **`noyalib/`** family (14 skills) is the worked
+   example; the `references/noyalib-bundle.md` index is a router for change
+   control, CI/release, debugging, architecture, YAML domain, config, coverage,
+   docs, positioning, validation, and research. Start there for any noyalib
+   task.
 
 4. **None of the above?** Don't force a skill. Do the task directly using the
    universal engineering standards in the assembled system prompt

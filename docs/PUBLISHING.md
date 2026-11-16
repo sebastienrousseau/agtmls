@@ -39,7 +39,7 @@ registry.
 **PyPI** — pypi.org → *Your projects* → `agtmls` → *Publishing* → *Add a new
 publisher* → GitHub:
 
-```
+```text
 Owner:        sebastienrousseau
 Repository:   agtmls
 Workflow:     release.yml
@@ -49,18 +49,18 @@ Environment:  pypi
 **crates.io** — crates.io → `agtmls-core` → *Settings* → *Trusted Publishing*.
 Repeat for `agtmls-cli`; each crate is registered separately.
 
-```
+```text
 Repository:   sebastienrousseau/agtmls-core
 Workflow:     release.yml
 Environment:  crates-io
 ```
 
-**npmjs** — npmjs.com → `@sebastienrousseau/agtmls-wasm` → *Settings* → *Trusted publisher*.
-npm offers this only for a package that already exists, so the first version
-is published by hand; tick *Allow npm publish*, or only a staged publish is
-permitted.
+**npmjs** — npmjs.com → `@sebastienrousseau/agtmls-wasm` → *Settings* → *Trusted
+publisher*. npm offers this only for a package that already exists, so the first
+version is published by hand; tick *Allow npm publish*, or only a staged publish
+is permitted.
 
-```
+```text
 Repository:   sebastienrousseau/agtmls-wasm
 Workflow:     release.yml
 Environment:  npm

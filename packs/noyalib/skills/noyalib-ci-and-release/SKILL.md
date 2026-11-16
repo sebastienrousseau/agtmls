@@ -28,6 +28,7 @@ metadata:
 Repo: `github.com/sebastienrousseau/noyalib` — pure-Rust YAML 1.2
 library, `#![forbid(unsafe_code)]`, single-crate workspace after ADR-0005
 splits (`noyalib-wasm` at v0.0.12, `noyalib-mcp` at v0.0.13, `noyalib-lsp`
+
 + `noya-cli` at v0.0.14+ per RELEASE-NOTES-v0.0.13.md). Current release
 branch: `feat/v0.0.14`. Ground truth: `.github/workflows/*`, `Makefile`,
 `supply-chain/config.toml`, `deny.toml`, `RELEASE-NOTES-v0.0.13.md`,
@@ -37,17 +38,17 @@ commands in "Provenance and maintenance" at the bottom.
 
 Jargon (used everywhere below):
 
-- **Orchestrator** — `.github/workflows/ci.yml` on push / PR / nightly.
-- **Shared workflow** — a `.github/workflows/shared-*.yml` file with a
++ **Orchestrator** — `.github/workflows/ci.yml` on push / PR / nightly.
++ **Shared workflow** — a `.github/workflows/shared-*.yml` file with a
   `workflow_call:` trigger; consumed by the orchestrator via `uses:
-  ./.github/workflows/shared-*.yml` and by satellite repos via
-  `uses: sebastienrousseau/noyalib/.github/workflows/shared-*.yml@<sha>`.
-- **Compile surface** — the tuple `(toolchain, features, target,
-  RUSTFLAGS/RUSTDOCFLAGS, cfg gates, sanitiser)`. Two jobs that share a
-  compile surface can share a target/; jobs that differ MUST NOT.
-- **Satellite** — a downstream repo that publishes a `noyalib-*`
-  crate at exact-match `=X.Y.Z` in lockstep with `noyalib`. Post-split:
-  `noyalib-wasm`, `noyalib-mcp`, `noyalib-lsp`, `noya-cli`.
+  ./.github/workflows/shared-*.yml` and by satellite repos via `uses:
+  sebastienrousseau/noyalib/.github/workflows/shared-*.yml@<sha>`.
++ **Compile surface** — the tuple `(toolchain, features, target,
+  RUSTFLAGS/RUSTDOCFLAGS, cfg gates, sanitiser)`. Two jobs that share a compile
+  surface can share a target/; jobs that differ MUST NOT.
++ **Satellite** — a downstream repo that publishes a `noyalib-*` crate at
+  exact-match `=X.Y.Z` in lockstep with `noyalib`. Post-split: `noyalib-wasm`,
+  `noyalib-mcp`, `noyalib-lsp`, `noya-cli`.
 
 ## 1. Workflow graph (at a glance)
 
@@ -149,13 +150,12 @@ CodeQL (`languages: actions`), OpenSSF Scorecard.
 
 **The two rules that bite most often:**
 
-- **cargo-deny ↔ osv-scanner mirror rule.** Any `[advisories.ignore]`
-  entry in `deny.toml` MUST also land in `osv-scanner.toml` — OSV runs
-  a separate code path and would otherwise flag it. Diff the two ignore
-  lists after any change.
-- **`cargo vet fmt` strips comments** from `supply-chain/config.toml`.
-  Rationale for exemptions/trust entries goes in the **commit
-  message**, not inline in the file.
++ **cargo-deny ↔ osv-scanner mirror rule.** Any `[advisories.ignore]` entry in
+  `deny.toml` MUST also land in `osv-scanner.toml` — OSV runs a separate code
+  path and would otherwise flag it. Diff the two ignore lists after any change.
++ **`cargo vet fmt` strips comments** from `supply-chain/config.toml`. Rationale
+  for exemptions/trust entries goes in the **commit message**, not inline in the
+  file.
 
 Full per-tool detail (feed list, publisher scoping, semver-check
 short-circuit, REUSE.toml aggregation, Scorecard's Code-Review
@@ -165,16 +165,15 @@ mechanism) in `reference.md` §E.
 
 **Doctrine before mechanics:**
 
-- **Security > velocity.** A red security scan (Scorecard, cargo-deny
-  advisory, CodeQL alert, cosign-verify) always trumps the release
-  schedule. CI integrity IS a security control. Do not tag with a
-  known-red gate; do not merge a workaround that dodges the gate for
-  "release-day expedience".
-- **Don't pre-emptively phase.** If the user framed this release as
-  category-defining, fix the security / correctness / MSRV /
-  version-refs stragglers in THIS release rather than deferring to
-  `v0.0.(Z+1)`. Splitting a bang launch across two tags costs
-  credibility that a slightly-later tag does not.
++ **Security > velocity.** A red security scan (Scorecard, cargo-deny advisory,
+  CodeQL alert, cosign-verify) always trumps the release schedule. CI integrity
+  IS a security control. Do not tag with a known-red gate; do not merge a
+  workaround that dodges the gate for "release-day expedience".
++ **Don't pre-emptively phase.** If the user framed this release as
+  category-defining, fix the security / correctness / MSRV / version-refs
+  stragglers in THIS release rather than deferring to `v0.0.(Z+1)`. Splitting a
+  bang launch across two tags costs credibility that a slightly-later tag does
+  not.
 
 The nine steps, in order — **do not skip**:
 
@@ -219,20 +218,19 @@ is the standalone case — needs `pull-requests: read` on top of
 
 ## 7. When NOT to use this skill
 
-- Deciding whether a change belongs in this release, what its risk
-  class is, whether it needs an ADR, whether it's `[Fixed]` vs
-  `[Changed]` in the CHANGELOG → **`noyalib-change-control`**.
-- Local toolchain / MSRV / build env setup, why `cargo +nightly` is
-  required for coverage, how to run Miri locally →
-  **`noyalib-build-and-env`**.
-- Debugging parser / loader / CST correctness at the code level →
++ Deciding whether a change belongs in this release, what its risk class is,
+  whether it needs an ADR, whether it's `[Fixed]` vs `[Changed]` in the
+  CHANGELOG → **`noyalib-change-control`**.
++ Local toolchain / MSRV / build env setup, why `cargo +nightly` is required for
+  coverage, how to run Miri locally → **`noyalib-build-and-env`**.
++ Debugging parser / loader / CST correctness at the code level →
   **`noyalib-debugging-playbook`**.
-- Editing README / MIGRATION / USER-GUIDE / RELEASE-NOTES prose →
++ Editing README / MIGRATION / USER-GUIDE / RELEASE-NOTES prose →
   **`noyalib-docs-and-writing`**.
 
-This skill is the runbook for the workflow files under
-`.github/workflows/` and the shape of a release. It does not decide
-what should be in a release or how the code inside should behave.
+This skill is the runbook for the workflow files under `.github/workflows/` and
+the shape of a release. It does not decide what should be in a release or how
+the code inside should behave.
 
 ## Provenance and maintenance
 

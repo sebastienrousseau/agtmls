@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "0c1059235a1a1e255006e184adee3c3a3b42e8d54702edbc4de501f48f7ef271"
+          "sha256": "55469fa5fc29a2df5fc92ae06df3b3ba2bfdea453a576a06cb3fbfea7359e6fe"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "623392dbaaa5019dfe6cdafe8f5e9f694bab0304fa429ac935a664dc00bac34d"
+        "sha256": "9703d5b05a5f72b52826d27385f862cdc86242e5ca800ea3ed6809ac04ec5706"
       },
       "name": "writing-plans"
     }

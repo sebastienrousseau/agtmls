@@ -352,10 +352,14 @@ Swatinem bump.
 
 ## When NOT to use this skill
 
-- Symptom triage ("parser rejects a document I think is valid") → `noyalib-debugging-playbook`. Come back here once you know what to *measure*.
-- What evidence attaches to a PR → `noyalib-validation-and-qa`. This skill tells you *how* to produce a bench / coverage number; that one tells you *which* a given change needs.
+- Symptom triage ("parser rejects a document I think is valid") →
+  `noyalib-debugging-playbook`. Come back here once you know what to *measure*.
+- What evidence attaches to a PR → `noyalib-validation-and-qa`. This skill tells
+  you *how* to produce a bench / coverage number; that one tells you *which* a
+  given change needs.
 - YAML spec / semantic questions → `yaml-domain-reference`.
-- CI-config / workflow issues → `noyalib-change-control`. Diagnostic scripts run *inside* CI; the workflow layer that invokes them belongs there.
+- CI-config / workflow issues → `noyalib-change-control`. Diagnostic scripts run
+  *inside* CI; the workflow layer that invokes them belongs there.
 
 ---
 

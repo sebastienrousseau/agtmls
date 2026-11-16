@@ -27,4 +27,6 @@ Generated artifacts must be regenerated after every version change.
 tags before running validators so the script can reject release jumps relative
 to the latest published `v0.0.x` tag.
 
-Use `python3 scripts/bump-version.py --version $(python3 scripts/next-version.py)` to prepare a patch release. Manual version edits are not the supported release path.
+Use `python3 scripts/bump-version.py --version $(python3
+scripts/next-version.py)` to prepare a patch release. Manual version edits are
+not the supported release path.

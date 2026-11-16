@@ -50,7 +50,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "49c6ba40da78cdff4f07d6535563686c387f12e96ca0fb5e129eade00049825d"
+          "content": "fd9bc4e997ae31fa26f8c35044fb00ac29781d832000143b51c02846544a5d9e"
         }
       ],
       "name": "agents/anti-slop-editor.md",
@@ -72,7 +72,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5f3d353408d63e4fc149840dcf5c6c06d44e03070a066918acba199f62242c68"
+          "content": "f596d10fc1830845406d97a70d665a9e45410d8f1778c6102635f5be49f49e7f"
         }
       ],
       "name": "agents/security-sentinel.md",
@@ -94,7 +94,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "70eb249be28f6a5139c09ebdd688bc0782db43ced0523470896c9f5469259038"
+          "content": "dff02db7f58cd33d5497e0fd3eaafa7f48afe84d266b5d9642a90f1ef740ef6e"
         }
       ],
       "name": "attestations/agent-loop-design/capabilities.intoto.json",
@@ -105,7 +105,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "03c85eb21eae604ac7ed631d5ef47e2671453df19ce2b7c87e54621b9f1b8cce"
+          "content": "3441228cf0e989f7bd2f7be924dd1fc122e7324f71bfb3f2d2b2034ba6878556"
         }
       ],
       "name": "attestations/agent-loop-design/manifest.intoto.json",
@@ -116,7 +116,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f3b3b9437e439ce8d8beac659fae9cdda96b514d392c613ab6247da36246d625"
+          "content": "3d97ffc5422325a4b693af7f0abd152adf748fe04396c3d77d533c239b82344e"
         }
       ],
       "name": "attestations/ai-supply-chain-security/capabilities.intoto.json",
@@ -127,7 +127,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "035eca83bae948a97414bbf73d804052924ff16c066ff43837852217ab76632b"
+          "content": "1fa98be8d4e21c7af21ab8c9ab26456ff644b7d8d02c3616a9f0b3af43737122"
         }
       ],
       "name": "attestations/ai-supply-chain-security/manifest.intoto.json",
@@ -138,7 +138,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "048642ce63d4ade8d21ac3948609feede211dd7c142a5f8fc4fd51de771ed586"
+          "content": "4ad58385e3eb088e0b69d602234b174e1c67919c869b9c31b423f180adffd9b7"
         }
       ],
       "name": "attestations/anti-slop-pr-and-writing/capabilities.intoto.json",
@@ -149,7 +149,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8a442c4a67530b543594580634188c86007b637d95c2646560585690cd72f733"
+          "content": "8f2b40db9de63a0f15b72918bb738b6637c712e7226d2989196fdf7699ac6887"
         }
       ],
       "name": "attestations/anti-slop-pr-and-writing/manifest.intoto.json",
@@ -204,7 +204,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "69826cb344406a70ca6cb8f52d50acd857079cc077fc81b0b3d12eba6d4e6c25"
+          "content": "58aa9cb9bde48abc9cf3321d5c832732f5498c1db25859c6fd27a2bcec6cbbdf"
         }
       ],
       "name": "attestations/cross-language-port/capabilities.intoto.json",
@@ -215,7 +215,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "da8f65fa3ea3e79b2244535d443e06b13f44699a11e10ae7e2b36a16ba291ddc"
+          "content": "2c2103313762a7138dd40ea40edbb237cda0e6d0e9ce29dda9ffe4a415298541"
         }
       ],
       "name": "attestations/cross-language-port/manifest.intoto.json",
@@ -226,7 +226,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "402c7f56592e54e0937f7bf7560a0da644ec78653a9a5b45c732c2c1fffd5235"
+          "content": "dc8f5d93a571eef035161b0c6abd4cedb56cb4ca1bcb187f8f5ad5937e3de336"
         }
       ],
       "name": "attestations/giving-code-review/capabilities.intoto.json",
@@ -237,7 +237,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "73846297925db679d8085ae4fe10c6420cbb5a82d4e0e6c1a1bb1fbdf360ef05"
+          "content": "036907b3d9182743bd946719571a7dd736fcfed62540d263b75ba3d332b1e2dc"
         }
       ],
       "name": "attestations/giving-code-review/manifest.intoto.json",
@@ -248,7 +248,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "43dee42e21037b3ec1a5517c6b0c2380a3e12d67871bfe500aca6c4b640edf8e"
+          "content": "947789b76e29e5ff9392f99a2ecb09b6e4f820673d8e3f8580e4e0332a683b3e"
         }
       ],
       "name": "attestations/handoff/capabilities.intoto.json",
@@ -259,7 +259,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d3becc89050de24a12522f124c094c72ba02e0b880f20619d778ef578674b915"
+          "content": "0a15b5cb1354f11db2ea2a8a4794c1a31fb8ff47acbd414434458a163299daef"
         }
       ],
       "name": "attestations/handoff/manifest.intoto.json",
@@ -270,7 +270,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cd9a730114c355641d0e891673e4511d7ad7020a1469bec8c53256d4b72fcf9a"
+          "content": "b27212bc909d26e0324bbce44456675113ee6eb7b85e8079067cc0c6f6612382"
         }
       ],
       "name": "attestations/incident-response/capabilities.intoto.json",
@@ -281,7 +281,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bb8c0eb011e7f365359a826873c40d2cd7b9c5e621fbe0276c629d7c7a9d985d"
+          "content": "eefcd118fa6d881ee2621c1c37711677ae2f3c0ae35636e2f04a55115f3d1e16"
         }
       ],
       "name": "attestations/incident-response/manifest.intoto.json",
@@ -292,7 +292,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c9a97ed9c284ba5934fb442b06d65e3d520af11d4999971ad8f8ba029ec7c74f"
+          "content": "d5df384fabaed786053e4949617ba3f8eccd04e4e3253ee739cc3b53c5dccf3c"
         }
       ],
       "name": "attestations/noyalib-architecture-contract/capabilities.intoto.json",
@@ -303,7 +303,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d2a8627d814c83a88ff1f1f7ea3507483f4d9276f9aa4d8327f5c1b48300c75d"
+          "content": "eeb15b6cac567f1bb2d41e122ca74d6c8647585fd6c70784e7230ac73cd5a008"
         }
       ],
       "name": "attestations/noyalib-architecture-contract/manifest.intoto.json",
@@ -314,7 +314,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "05721f7eb38a2ab2f431d36d4f9599602c96123e282247ae4930a3c63b63582b"
+          "content": "d3e0246ee007425c90d4dc4c3b5ae33217e9747cda1ca97686ab44c29f1e312c"
         }
       ],
       "name": "attestations/noyalib-build-and-env/capabilities.intoto.json",
@@ -325,7 +325,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "89ff631f4ccf2c1d6a0fcc87c7e4a116b8c25b19806d76bdb6d7a3fd974bed8f"
+          "content": "acfbd43169ac93d1b4a10c12ffc5aaa123744278d79af802701b130048a17839"
         }
       ],
       "name": "attestations/noyalib-build-and-env/manifest.intoto.json",
@@ -336,7 +336,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "90123297dd66b5cdde0bf458d6954a4335c3fdb7a51829e99c317c8a19e4c261"
+          "content": "b9523c70d94295c51a8de7b1b59c6ee67254269486d168d9299c8dfd6e329f27"
         }
       ],
       "name": "attestations/noyalib-change-control/capabilities.intoto.json",
@@ -347,7 +347,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "40aa049239ef115fd0233dba3195ce1f9cf0eea5db093ed6b07e8164198f1b34"
+          "content": "40b30811890d43de98d298a844e262295f6153ae50ca5bef97b8ae61e5bfd40b"
         }
       ],
       "name": "attestations/noyalib-change-control/manifest.intoto.json",
@@ -358,7 +358,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e8e5fb30fdad10d8c42ad25d76f22d79a47b75907bdabeedf65d6c88106dba2d"
+          "content": "db5a6b7fa62a0342e666447bb6c09a59c7f0f374b02520765bdf567ad13cc227"
         }
       ],
       "name": "attestations/noyalib-ci-and-release/capabilities.intoto.json",
@@ -369,7 +369,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1a8456a215bd4509d58bc6fdc78b0f24a32f7b1d9bc4ca3372316cbab2832563"
+          "content": "5e04086a54ca38430af246e0483ddb4d07834332c2b01f268f6ab42d601ab8d1"
         }
       ],
       "name": "attestations/noyalib-ci-and-release/manifest.intoto.json",
@@ -380,7 +380,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7baf5654330f5ac0cb5b5d92ff3bf47553094202f023bb0ca1caa9f15334ffa7"
+          "content": "ef04624c26c847136fa1414fe390f9978fd7127309528ac06da362a51486ff5b"
         }
       ],
       "name": "attestations/noyalib-config-and-flags/capabilities.intoto.json",
@@ -391,7 +391,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ce98e17da1b9ed21b3a8911d7d0685b68b1eafa74aad2ea2c59d58b2221a47a0"
+          "content": "b1fcdcd51f2982fae50e6238ff2c32b18573189dddcc74fbb671d0ace5254420"
         }
       ],
       "name": "attestations/noyalib-config-and-flags/manifest.intoto.json",
@@ -424,7 +424,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7570025c4741629ceeb6e94255681b873f3a7209ac40a305a39a494cab6b8945"
+          "content": "68a204c1352647e5138e828cfba3882f4a47165fbbb76e854fcc0cc99217606d"
         }
       ],
       "name": "attestations/noyalib-debugging-playbook/capabilities.intoto.json",
@@ -435,7 +435,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "348b9774d4e01387574080e9a2ee7c5309b4c3a0243af0f2f5054072872b9efc"
+          "content": "3a62b46b73a7b730568be0ce70692e945fc25d54fe4a0f4d47e6386b73f1148e"
         }
       ],
       "name": "attestations/noyalib-debugging-playbook/manifest.intoto.json",
@@ -446,7 +446,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4cb3c75f60743474d0673486b97d8201a4c092d2164d5eb06f80d06ba196a75f"
+          "content": "397a8dbff149d308b55e53613803c0a0492b49456b2edb44a5dfac18a3a19c5c"
         }
       ],
       "name": "attestations/noyalib-diagnostics-and-tooling/capabilities.intoto.json",
@@ -457,7 +457,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1871baf6906fc73d7bb718a0268458b27c7105778a0450e4c53953083f585aed"
+          "content": "8697c86b46858917d4d1a26d7b293bbf3a80f56fa9ccee66edc7baf6f7a799ce"
         }
       ],
       "name": "attestations/noyalib-diagnostics-and-tooling/manifest.intoto.json",
@@ -468,7 +468,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f89d3d13dfd819abfdaa4ab9d69e621bbc1fc9c6bc7bfdd7c1c80e584cb0be51"
+          "content": "87c95df3c13f2d40ae34643854ce633921ef9cfeeafc979207730b778384251e"
         }
       ],
       "name": "attestations/noyalib-docs-and-writing/capabilities.intoto.json",
@@ -479,7 +479,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0639f27a475ecc1c60eec4ea5288170fed583f0a5fbd2223b05e3c14f7eac8b9"
+          "content": "15650dab0d40ffe7273c6c80a5566b6b8e264f84e3755f8b671a7caa37749fa9"
         }
       ],
       "name": "attestations/noyalib-docs-and-writing/manifest.intoto.json",
@@ -512,7 +512,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "99a2a24e1bf56840266cf17d71b6fd2b22cd9ff1e67ab7f875d23b1ee54e07dd"
+          "content": "cd83dcc5138d0fb6e43d24a64bcab655430b954f6ff990377e64dfe99e196ff4"
         }
       ],
       "name": "attestations/noyalib-failure-archaeology/capabilities.intoto.json",
@@ -523,7 +523,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "6754aeaab02f26bce928e17cbf0338787f91eb36cfff4ce18f1a442d77d17e7e"
+          "content": "b4f56d91d019ce32450764806e576166f9a60b1906e84561c8456ab623ef146e"
         }
       ],
       "name": "attestations/noyalib-failure-archaeology/manifest.intoto.json",
@@ -578,7 +578,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c9a1963d34155fc8d2bf19e768323b6874ef6ed36bfecdc8894ec137e15ed638"
+          "content": "b09d6f8afbed46d57fb97b91a75885d2ec2edf862017e89cadcfebcd766626b2"
         }
       ],
       "name": "attestations/pr-review-and-release/capabilities.intoto.json",
@@ -589,7 +589,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "58a49b67864a5e2be4cb3f05682c9d54d7f9db1cbe9ff6d1763944fd74400873"
+          "content": "983fb585d945ce937dfbbee84142cbac32b48df176123decc4610da6ac44f303"
         }
       ],
       "name": "attestations/pr-review-and-release/manifest.intoto.json",
@@ -600,7 +600,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "80b0814ef83454cd4de79bafaf596cf2df85a35027b97367743b401d9643566e"
+          "content": "b4d8e95f1f2f6c9f0b74fb84c30a8799529d2bb746e5bd3cf1925af152e9bdbd"
         }
       ],
       "name": "attestations/receiving-code-review/capabilities.intoto.json",
@@ -611,7 +611,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bcf0bcb0b8740e96626f0b50afb2a767964dc59a579a16af34584c14ce33200e"
+          "content": "b37bba7103b3e88fade9c38a596bb63595c5e1ebf1829e289e4bca63c5891de9"
         }
       ],
       "name": "attestations/receiving-code-review/manifest.intoto.json",
@@ -688,7 +688,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bd8e5c82b4134536d353dda567d9042631481b2d362cb6d85d01359afa0c46c5"
+          "content": "8e6e4a22dd444aee0b41700134183015026f0a15ea5677aae10a04166a2f0577"
         }
       ],
       "name": "attestations/using-agtmls/capabilities.intoto.json",
@@ -699,7 +699,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "5b5df0d5669d8c7573e9e93f7aeae8c96a430172dd660285298b38530ad2ba4f"
+          "content": "81d4bb36e6793f190fc11d8a0037645bf2c77c92000d2d921869fc5490b87b46"
         }
       ],
       "name": "attestations/using-agtmls/manifest.intoto.json",
@@ -732,21 +732,10 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "019914169b4fc9198ffd0c116352e9ef185b807bf58cfc99fa45f799af45e425"
+          "content": "08246c204d69bbadc248060f462d26c1720afce6c5121ba00d902ce9094295ef"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/capabilities.intoto.json",
-      "type": "file"
-    },
-    {
-      "bom-ref": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "9eae418d87a418cf076da99dcdafa37cc36057f122a436f0aefc9df0ed3addda"
-        }
-      ],
-      "name": "attestations/vetting-a-skill-before-install/efficacy.intoto.json",
       "type": "file"
     },
     {
@@ -754,7 +743,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1295917dbeb23b7c0ed273b8ca5919b154472a618e522013b5e964e9e4814c82"
+          "content": "877e96a4fa467a8fa5685ba9e77d6f9df577f9635c5545d88200d95f8f2c3ac4"
         }
       ],
       "name": "attestations/vetting-a-skill-before-install/manifest.intoto.json",
@@ -765,7 +754,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8b142bb6980d6d5b148a07ee6ba44a447c564720d2cc549fbc31ae388ac821ba"
+          "content": "c8932adf9d4127a008f335a33a9fea29f17f6a1a5c2f951003cd314f693e8d92"
         }
       ],
       "name": "attestations/web-research-and-source-triage/capabilities.intoto.json",
@@ -776,7 +765,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fc3f0a0115e1707e0b905d5bbc993a8e3daef1f48bce8259d502177f9a7ad8c8"
+          "content": "25ce681175b2f32b2407739207ad22dc23a86be0e12ca4b7c6b12a6699b45fe3"
         }
       ],
       "name": "attestations/web-research-and-source-triage/manifest.intoto.json",
@@ -787,7 +776,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1221a0684ab941c3bfb617d19c5895257d1b5ecb6384b09e21ec7447d8267bab"
+          "content": "4d8d8fcb9419bfa546d50bdd5d52d32b7c3ba655c81410d61a61a042db54b4cc"
         }
       ],
       "name": "attestations/writing-plans/capabilities.intoto.json",
@@ -798,7 +787,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d78b3e1b21f7439f106e9bd8789c4524d031ba82931a25f4d59674890225dc40"
+          "content": "49e286cabc7dc11ed22d2d9b31a33145495e8001da8864c97af1d9609fa8bb80"
         }
       ],
       "name": "attestations/writing-plans/manifest.intoto.json",
@@ -809,7 +798,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "207cae37c3886a60d2a5f69169e2957cec355f98bf54780ae5315d3481ee580c"
+          "content": "482f01491ca1451bfd6e3d2b6f7066def7fa18360eaf986001a23f71bd988510"
         }
       ],
       "name": "attestations/yaml-domain-reference/capabilities.intoto.json",
@@ -820,7 +809,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "274091d8275911ca83466affe3f0af45defcb7c61a0f092e7a6d764ebccc3548"
+          "content": "752da54e8707982c8e682a8c153fc78883dec7793e41fad1791f6fe315af9c31"
         }
       ],
       "name": "attestations/yaml-domain-reference/manifest.intoto.json",
@@ -1832,7 +1821,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e412e43c84c343ae76b4dd5cf7850466907b65bace772e549f109df8196cb945"
+          "content": "7aa9e5451c523b3bfd57ade5fa6923a3789dacee7f36c9aaea3462424897fda9"
         }
       ],
       "name": "index.json",
@@ -1854,7 +1843,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cad80d1bc57ffd3f0545653a209c698714c7f633a3d9f43f244acfee850f2f97"
+          "content": "8d3387181d408708b61300982b4084914dbbbea872c0531750728d050fdbe2d8"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-architecture-contract/SKILL.md",
@@ -1876,7 +1865,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "87fe96ac641f5338c22b02964718d2550f690d42b6bc5c8ab7670c8db4cc6ad8"
+          "content": "7a1d981c24d036abb69150e44b07463a61dd1e715dea96134411f77449167856"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-architecture-contract/reference.md",
@@ -1887,7 +1876,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e332ff3f6fd840daad321532267e691e6862f1ff58e81a2d35ebbf966031dc1f"
+          "content": "c541296fee306315111cb126759135dd59601183eeea2c924529758dcef4dad9"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-build-and-env/SKILL.md",
@@ -1920,7 +1909,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "98c6610df2b345907d526a34bc8f5645fc8965ae685bbf65a85f4875b4c1fc1e"
+          "content": "ed7793dc8342dc1987c940fbe48f6ea79cdb2208a835a34be8c3f0d0366f5e87"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-change-control/SKILL.md",
@@ -1942,7 +1931,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ae8bd53d6e8f9066879ef376d0e17ffb3a53401c6b9a9b79e24f15bf6b74476e"
+          "content": "a6588d09c36aefd37c809cdd48522a731df1c6b1fec1f8185e053910340604ef"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-change-control/reference.md",
@@ -1953,7 +1942,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "96310696600f4626c146eddb6a8d1e5f85e3c3c04cff06d4551f1b957ef1cf5b"
+          "content": "0767ce1c68975fc555aada9c231ab9690adae1f19cf74a708c2b6d4c324c1455"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-ci-and-release/SKILL.md",
@@ -1975,7 +1964,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d4c8d746310c9a6bdb21e842fba4a2afd188b575a0fafc0f30154d737b61f7b4"
+          "content": "023dc8ebf4126a2d4175e467dc8bdf9addff8416d4a23f04952dd6a8fa3c0870"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-ci-and-release/reference.md",
@@ -1986,7 +1975,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1e3ede13b81ca0d1b5b0848889335400e9063191fa7d291ffbec88c0db17006d"
+          "content": "7e1c819d164e53f18bd99f590c83d9764f075083b7b01277c7bf57a4904d5c5c"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-config-and-flags/SKILL.md",
@@ -2008,7 +1997,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "77daa6185332b6538c00eeeaca472b554408801b1f50ed0750aeb32662f04786"
+          "content": "444b55f41a2aa13f15e1aa155021c09c7e90914308b7f907b07e6ba65d9e88f8"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-config-and-flags/reference.md",
@@ -2052,7 +2041,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "31fc9892440d3109f726bea7de106d4c8df20f38ddf66bcc1e34169abd4496ce"
+          "content": "851b6b1e54fc933e4c3c4d9ec9023359e5fbcdfdc3371a4c38f7ecc504213813"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-debugging-playbook/SKILL.md",
@@ -2085,7 +2074,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "77ed9df822f3ed385d83e9793624185fe5d458fa43264e21919911d128933742"
+          "content": "0906c4f41a1f11f72cab21ae31169e87d19cf5a1eea7ed073dd19a971668abdd"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-diagnostics-and-tooling/SKILL.md",
@@ -2107,7 +2096,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "4e287b4dd059dc4d17df044867f4c10052bcd0abf40afbfa65592c22a7a33d3d"
+          "content": "288911f3626d10f481bfd056f33fca3ce657a53e143f2d90ea554e26fe2c8300"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-diagnostics-and-tooling/reference.md",
@@ -2118,7 +2107,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "505f690555e7a1800eb60af5c7e9870bcb41aa44bdf340395542f1c378d258cf"
+          "content": "c822ebdbc8951f656b6fa0c3d4d384e94f7b34de013fcdaee515eee741efd606"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-docs-and-writing/SKILL.md",
@@ -2184,7 +2173,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "49d9567ce063a8d9f46db6a42c0cf0b0adfeb2e4e097da7fa5093c1e89c9aa7a"
+          "content": "7b42080ce234ddab34318dae113ce78e57264199adcb86ea129df307caa951c9"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-failure-archaeology/SKILL.md",
@@ -2206,7 +2195,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "85b3cfe2d8fa6301a9f8a9eafc1c32ce481c8dd8dda8204dacc53d1d2dcebe53"
+          "content": "059e1932da824f2e0dc810920d6600e1bf6d8a2656a3985fbc0bcdfe3049897f"
         }
       ],
       "name": "packs/noyalib/skills/noyalib-failure-archaeology/reference.md",
@@ -2283,7 +2272,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9ac09b7e72795ec055a9a39745ce78814e7fae918878a11c99e743748c005135"
+          "content": "ba71d01f0af6d577cc87a0c1c3e29308316972b516dcbd31925b6868092de11f"
         }
       ],
       "name": "packs/noyalib/skills/yaml-domain-reference/SKILL.md",
@@ -2305,7 +2294,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d9cdc1158b001e260df023b0879b0aa8ee84ccd297472a385855b7e1d71d0fab"
+          "content": "1de476c8aef3f435a446fa1565ad2999eb4dc5104e4999c3d52d9140b14a0ce5"
         }
       ],
       "name": "packs/noyalib/skills/yaml-domain-reference/reference.md",
@@ -2360,7 +2349,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "677f19721180e51158fdf4e3800bb7d74858faa16ad8fdbfb5b9a4193b2c711d"
+          "content": "b7d3ceffc529fc4a275d9eab7251a2b007b8f567e8d2802085eb6547e844c3e0"
         }
       ],
       "name": "references/noyalib-bundle.md",
@@ -2371,7 +2360,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2a77f107fd5f34e1f39005eeaa580c7d7dc785042a12273f568595dd23d02949"
+          "content": "407e0ba05d84b4f9cbabbbbffd1210fdd90fd00eefff6de427ce1f2362dac7d7"
         }
       ],
       "name": "references/registry-schema.md",
@@ -2932,7 +2921,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "59d89f0f2595bea62a263356bc763b56207a7481904b285a8e560669bd823a9c"
+          "content": "fc613a1f49d15d0d1a43cf568ce4dfc6330a792678bc1c9ba73f98fd8111285b"
         }
       ],
       "name": "scripts/generate-benchmarks-doc.py",
@@ -3009,7 +2998,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2e866cd082069749691b5deac888c86e83bf82905f63b121da1937de3e821b7f"
+          "content": "877c8b71a28df7a445863a8325b5d3cc48c7e0a9331a765e669c48f530002561"
         }
       ],
       "name": "scripts/generate-plugin-manifests.py",
@@ -3933,7 +3922,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c8d5ca2591a47951f6e32e99dbba27406abaa3269acbdef221fb71c1a326e81d"
+          "content": "0e3371b4a6153b6e07d40fae87430e0ab2ea5ee5725cb94e6adcfbb94a2dbb52"
         }
       ],
       "name": "skills/agent-loop-design/SKILL.md",
@@ -3955,7 +3944,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "72ef12d962c262a9401316aebe98fd133f1ce4ef0e6a34573389fa860ed49411"
+          "content": "d8afe15b10ea1d53685d25e73be6b612efd57c76e51d094613cf4cfe92b1ad11"
         }
       ],
       "name": "skills/agent-loop-design/reference.md",
@@ -3966,7 +3955,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "86b2f1657f0cfb3933aabef0071305cecd0dd8c587ad6e8cc9911492e46a9db5"
+          "content": "c8437e5f92843dae8d4ae3610fec70e477eb27dfa58c2780a432420131f320d9"
         }
       ],
       "name": "skills/ai-supply-chain-security/SKILL.md",
@@ -3988,7 +3977,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "46a22cb22ba9bd4628b89d5362c839704d6a3b0d3faa1def530d9fcad726e2be"
+          "content": "c0fb6cf31cd1b7cd54bf7de254af423f44a04530ce4bb4aab07083eccf0f1458"
         }
       ],
       "name": "skills/ai-supply-chain-security/reference.md",
@@ -3999,7 +3988,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bc5d709fab54b330064467f72b82cf029a355e6cd60d3047f24ec5839cb824aa"
+          "content": "52db99bdb7dbef41ce8a8c4e9810e4497cd5a72b5015d0540085e277df222245"
         }
       ],
       "name": "skills/anti-slop-pr-and-writing/SKILL.md",
@@ -4021,7 +4010,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d76c7b705e364ec9514f2d5301cbdf781e367d243f765eadfb5015992244d5cf"
+          "content": "a023e3a826ee1d28b501a827c4ad386c4e59df48f0bdcde2a3bf6a15c25cd39c"
         }
       ],
       "name": "skills/anti-slop-pr-and-writing/reference.md",
@@ -4098,7 +4087,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "35342a10214ab1a2ae8ee98df305e8023fbf5ca7e73640bdf05e3bc222f40fe7"
+          "content": "4c1f6b8e7d64badf7b61e4ed847f9188425fd395afa7db5af826d598cbc34b2a"
         }
       ],
       "name": "skills/cross-language-port/SKILL.md",
@@ -4769,7 +4758,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c06960d8db34f0ff6cbddd3d600aad23f346eb7a6634f78202f6a4a0f7a15ae8"
+          "content": "311b048572a6f22fd4b46e6733a390f7ee09aa0a35f8542444497e669c09c3ff"
         }
       ],
       "name": "skills/cross-language-port/reference.md",
@@ -4780,7 +4769,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "06c51a23a881195a28d5f585ca2899356c105e7d5284196c27b91943ea8fad66"
+          "content": "c8f29ea60ec5f123a205988b745fdfc65471cab21ced74ae2df5852979fd841e"
         }
       ],
       "name": "skills/cross-language-port/triggers.md",
@@ -4813,7 +4802,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c404f6889aa208944f910053e39c7f31a243fed8ab025e28519e012864894cc2"
+          "content": "1f3752e6f62a77349e8d9e1063b425bc5c7b5a7ec41248f76f385b06b272cad8"
         }
       ],
       "name": "skills/giving-code-review/reference.md",
@@ -4846,7 +4835,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0d479176f3ce9abe2e30200d837ad5f9032435cd72486fd3f93059840070ce9f"
+          "content": "bffd4aa23d3f5ed5e9610a1ea6052b5678a1ccfaed9e6a2ec11e5528d60b4302"
         }
       ],
       "name": "skills/handoff/reference.md",
@@ -4857,7 +4846,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "12586fde9364be69ca699592ae93ebdf34eb7811905eec55dc7e8cd83dec23fc"
+          "content": "35d7d2b26f6d5125ab5f639fe1103427a17e1b7c493835eab0aee57087cbd7bd"
         }
       ],
       "name": "skills/incident-response/SKILL.md",
@@ -4879,7 +4868,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "369b4dc55d61fffd877f3dff4d7f67ed2a96a230439c7bd1744068ea0c31c910"
+          "content": "d33c2465f2ef3a383b32a16eee85daf3c83c38d6fd2a3fd1a9de6623cddf85ce"
         }
       ],
       "name": "skills/incident-response/reference.md",
@@ -4890,7 +4879,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "364183f08b6e040b5ae836a0fd50ed793b4579446e91317afb74b85877ae1e22"
+          "content": "9584cf9be47ab42777f2d6376712144893b194804233c46b185c753e0bf7b213"
         }
       ],
       "name": "skills/pr-review-and-release/SKILL.md",
@@ -4912,7 +4901,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "dfaf8540902e56629a53c74f62601089637ad671c875d63186a5901b2d4ed5ba"
+          "content": "cbd9f34f693591d151d975fba0df055625ae177fa88fc5b323d7416a62b7cb54"
         }
       ],
       "name": "skills/pr-review-and-release/reference.md",
@@ -4945,7 +4934,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e68fd35bdb11f67e2ff721aa1f609b7681f5b39b4012e4308e87c3b7c303fdb1"
+          "content": "abf0c3de622f32148794dedba09d99042bbc6d6f994bd73c7bbd805ac4194dae"
         }
       ],
       "name": "skills/receiving-code-review/reference.md",
@@ -5055,7 +5044,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "515bf6d3be62d6267332cd9268bb2c1412cb920bb2dc0573ca8910c3022671f7"
+          "content": "5ab51d0a5093d57678b55ebb13dba6501450f81b50fb2af92bcfbc02d422fb5b"
         }
       ],
       "name": "skills/using-agtmls/SKILL.md",
@@ -5143,7 +5132,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "2fe2bf72010c4a8b800088c1aefbe701ce588defbadb82e27a9bdba8cdcca127"
+          "content": "d9ba54b938d01eac85d58f09b7e0a4b635b5a6ad606baa387ac6ac7089398b7b"
         }
       ],
       "name": "skills/vetting-a-skill-before-install/reference.md",
@@ -5154,7 +5143,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fc67fc2cd69df49ee8858723597ad9b8cbc8d271bc2872907b6409846c4969ea"
+          "content": "27c5ece923d8592ac8ed26d2a453f19e068034699146feb975261a883b8e14f1"
         }
       ],
       "name": "skills/web-research-and-source-triage/SKILL.md",
@@ -5176,7 +5165,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "320a8f0f82087ca884d0d603d6b4918f6385d4f5a8dc9f7a83bd56a80d9d9c22"
+          "content": "715c90a67be6f8c4b3bfc6fcff044a107287bee7480284c364ec9a403c30b2bd"
         }
       ],
       "name": "skills/web-research-and-source-triage/reference.md",
@@ -5209,7 +5198,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0c1059235a1a1e255006e184adee3c3a3b42e8d54702edbc4de501f48f7ef271"
+          "content": "55469fa5fc29a2df5fc92ae06df3b3ba2bfdea453a576a06cb3fbfea7359e6fe"
         }
       ],
       "name": "skills/writing-plans/reference.md",
@@ -5363,7 +5352,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "18f8c9daf30edfdb705600eb83b04ec6743b388b8540e28a1ad0d85bf3c1b173"
+          "content": "ecbcf185e29aee013a7b3796ef7200cafab20b9ddd0d1413977a8ae2496aecbf"
         }
       ],
       "name": "templates/README.md",
@@ -5443,7 +5432,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T11:33:51Z",
+    "timestamp": "2026-11-16T13:26:23Z",
     "tools": {
       "components": [
         {

@@ -66,7 +66,7 @@ Some questions legitimately span two skills — load both:
 
 Pairs designed to be loaded together:
 
-```
+```text
 change-control       ↔  ci-and-release          (rulebook ↔ runbook)
 change-control       ↔  validation-and-qa       (gates ↔ evidence)
 debugging-playbook   ↔  failure-archaeology     (live triage ↔ history)

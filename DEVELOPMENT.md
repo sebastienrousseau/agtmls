@@ -3,7 +3,8 @@
 
 # Development Guide
 
-The single entry point for working on `agtmls`: toolchain setup, how to run every CI gate locally, test layout, and release flow.
+The single entry point for working on `agtmls`: toolchain setup, how to run
+every CI gate locally, test layout, and release flow.
 
 If a gate is green here, it is green in CI.
 
@@ -23,7 +24,8 @@ If a gate is green here, it is green in CI.
 | Hatchling | build backend | Zero-dependency build backend defined in `pyproject.toml`. |
 | Git       | 2.30+         | Branch management, SSH-signed commits, and tagging.        |
 
-AgtMLS is deliberately dependency-free: every utility script runs using Python stdlib alone.
+AgtMLS is deliberately dependency-free: every utility script runs using Python
+stdlib alone.
 
 ## Everyday commands
 
@@ -43,6 +45,7 @@ python3 scripts/run-all-checks.py
 ```
 
 This runs:
+
 - `validate-skills.py`, `validate-spec-conformance.py`, `validate-licence-headers.py`
 - `validate-commands.py`, `validate-plugin-manifest.py`, `validate-packaging.py`
 - `validate-providers.py`, `validate-profiles.py`, `validate-templates.py`
@@ -53,13 +56,16 @@ This runs:
 
 ## Test layout
 
-- `scripts/run-unit-tests.py`: Fast unit tests covering registry loading, manifest generation, packaging, and validation helpers.
-- `evals/`: Behavioral and routing eval test cases verifying skill matching and prompt accuracy across all 30 skills.
+- `scripts/run-unit-tests.py`: Fast unit tests covering registry loading,
+  manifest generation, packaging, and validation helpers.
+- `evals/`: Behavioral and routing eval test cases verifying skill matching and
+  prompt accuracy across all 30 skills.
 - `scripts/bench.py`: Evaluates benchmark routing and behavioral assertions.
 
 ## Release model
 
-AgtMLS follows a strict `0.0.x` patch-line sequencing policy (see `VERSIONING.md`). To prepare a patch release:
+AgtMLS follows a strict `0.0.x` patch-line sequencing policy (see
+`VERSIONING.md`). To prepare a patch release:
 
 ```console
 python3 scripts/bump-version.py --version $(python3 scripts/next-version.py)

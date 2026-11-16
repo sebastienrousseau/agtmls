@@ -27,18 +27,21 @@ One-line subjects are misleading. Read the body.
 **The costliest incident.** Maintainer-confirmed 2026-07-07.
 
 ### Symptom
+
 `cargo check --no-default-features` passed green on CI for ~2 weeks
 after a v0.0.9 refactor while the same command failed on any clean
 local machine. no_std was actually broken; CI was returning a stale
 answer.
 
 ### Root cause
+
 `Swatinem/rust-cache` served **std-on** build artifacts to the
 **no_std** job because feature-flag flips did not invalidate the
 shared cache key. Sub-2s warm `cargo check` durations replayed a
 cached success instead of re-invoking the compiler.
 
 ### Evidence
+
 - `5104048` — release: v0.0.11 (CI integrity + no_std fix + cache-
   poisoning guard + ...) (#124).
 - `0b2d616` — feat(no_std): core::error::Error + wasm32 CI bare-
@@ -46,13 +49,15 @@ cached success instead of re-invoking the compiler.
 - Isolation applied to 12 specialized jobs across 4 workflows.
 
 ### Fix pattern
+
 Every specialized/feature-matrix job sets its own `CARGO_TARGET_DIR`
 so Swatinem's cache key and Cargo's fingerprint agree on separation.
 Extended to shared workflows in `f984e3b` for satellites.
 
-### Status: SETTLED. Doctrine codified.
+### Status: SETTLED. Doctrine codified
 
 ### DO NOT RETRY
+
 - Do not consolidate `CARGO_TARGET_DIR` across feature-matrix jobs
   to "reduce disk usage" — reintroduces the mask.
 - Do not delete the wasm32 bare-metal job as "redundant with
@@ -69,10 +74,12 @@ The scariest bug class in this codebase: **wrong-but-green**.
 4000+ tests passing, `from_str::<Value>` silently losing data.
 
 ### Symptom
+
 ```rust
 let v: Value = noyalib::from_str("1: a\n\"1\": b").unwrap();
 assert_eq!(v.as_mapping().unwrap().len(), 2); // FAILS: len == 1
 ```
+
 `cst::parse_document` on the same input correctly raised
 `Error::KeyCollision`. `from_str::<Value>` silently dropped an
 entry when two distinct YAML keys shared a string spelling (int
@@ -80,6 +87,7 @@ entry when two distinct YAML keys shared a string spelling (int
 str `"null"`).
 
 ### Root cause
+
 `KeyCollision` guard was added to the span-full `Loader` in v0.0.13
 (`0fff9dd` / `9bef479`) but the sibling `NoSpanLoader` and the
 serde streaming `ValueVisitor::visit_map` path — **both used by
@@ -95,6 +103,7 @@ silently ignored. `max_document_length` bypassable when streaming
 was skipped.
 
 ### Evidence
+
 - v0.0.13 span-full guard: `0fff9dd` / `9bef479`,
   `crates/noyalib/src/parser/loader.rs`.
 - v0.0.14 parity fix: `bc8f798` — "fix(loader): plug distinct-
@@ -105,6 +114,7 @@ was skipped.
   (nine cases, every one fails without the fix).
 
 ### Fix pattern
+
 Streaming is **bypassed** for `Value` target unless a `TagRegistry`
 is active — otherwise `ValueVisitor::visit_map` never sees the
 typed key and the collision guard is unreachable. Typed-key
@@ -112,9 +122,10 @@ typed key and the collision guard is unreachable. Typed-key
 `is_buffered_merge_key` so `<<`-heavy documents don't pay the
 clone cost.
 
-### Status: SETTLED v0.0.14. `fuzz_no_span_loader` diffs the paths.
+### Status: SETTLED v0.0.14. `fuzz_no_span_loader` diffs the paths
 
 ### DO NOT RETRY
+
 - Do not route `Value` through streaming when `TagRegistry` is
   off "to simplify". The bypass exists because the streaming
   visitor loses the typed key.
@@ -131,6 +142,7 @@ Sub-battle inside Entry 2. Two adjacent "obvious" designs tried,
 both wrong.
 
 ### Symptom
+
 Cycle 1 (raw-string keys): collision detection broke — int `1`
 and string `"1"` have different raw spellings.
 Cycle 2 (resolved keys, stringified via `{:?}`): `nan: 1`
@@ -138,24 +150,28 @@ produced key `"NaN"` (Rust's Debug spelling), not YAML canonical
 `nan`. Same for `inf` / `-inf`.
 
 ### Root cause
+
 Two mutually incompatible models were being conflated. Raw-key
 mode preserves source fidelity but cannot detect distinct-typed
 collisions. Resolved-key mode detects collisions but leaks Rust's
 internal Debug spelling of floats.
 
 ### Settled middle
+
 Keys are **resolved** (typed) values, and `value_to_key_string`
 uses **canonical YAML spellings**: `"nan"`, `"inf"`, `"-inf"` —
 not Rust's `{:?}` (`"NaN"`, `"inf"`, `"-inf"`). Documented in
 the `bc8f798` commit body.
 
 ### Evidence
+
 - `bc8f798` (see quoted commit body on canonical form).
 - Search: `git log -p --all -S value_to_key_string`.
 
-### Status: SETTLED v0.0.14.
+### Status: SETTLED v0.0.14
 
 ### DO NOT RETRY
+
 - **Raw-key mode is INCOMPATIBLE with typed collision detection.**
   Do not re-propose "just keep keys as source spellings" — you
   will either lose collision detection or reintroduce Entry 2's
@@ -172,11 +188,14 @@ the `bc8f798` commit body.
 ## Entry 4 — BOM column desync (v0.0.10, community PR #118 by @zoosky)
 
 ### Symptom
+
 Any multi-node document with a leading UTF-8 BOM (`U+FEFF`) failed:
-```
+
+```text
 <BOM>a: 1
 b: 2
 ```
+
 errored "stray content after document — subsequent documents must
 start with '---'". BOM-prefixed sequences, nested mappings, and
 `<BOM>#`-first-line comments failed the same way. Single-node
@@ -184,8 +203,10 @@ BOM-prefixed documents parsed **by accident** — no sibling to
 trip the dedent check.
 
 ### Root cause
+
 A leading BOM is a zero-width stream prefix, but three scanner
 sites counted its 3 bytes toward the following content's column:
+
 1. `fetch_stream_start` advanced past BOM but grew the column
    counter by 3.
 2. Simple-key indent recomputed column as `sk.index - line_start`;
@@ -194,6 +215,7 @@ sites counted its 3 bytes toward the following content's column:
    wasn't whitespace/break — after a BOM that byte is `0xBF`.
 
 ### Evidence
+
 - `71de2d9` — "fix(scanner): make a leading BOM transparent to
   indentation and comments", `crates/noyalib/src/parser/scanner.rs`.
 - Release `3304f4c` — v0.0.10; `RELEASE-NOTES-v0.0.10.md`.
@@ -201,9 +223,11 @@ sites counted its 3 bytes toward the following content's column:
   authorship preserved.
 
 ### Status: SETTLED v0.0.10. BOM survives as `Bom` trivia leaf so
+
 CST round-trip stays byte-faithful.
 
 ### DO NOT RETRY
+
 - Do not skip the BOM at the reader layer. It must reach trivia
   to preserve byte-for-byte round-trip.
 - Do not fix only the column counter — the simple-key indent path
@@ -215,25 +239,30 @@ CST round-trip stays byte-faithful.
 ## Entry 5 — Lone-CR line breaks (v0.0.14, issue #147)
 
 ### Symptom
+
 Classic-Mac CR-only endings (`\r` no `\n`) were rejected.
 `a: 1\rb: 2\r` errored "stray content after document" — same
 symptom as Entry 4, unrelated root cause.
 
 ### Root cause
+
 YAML 1.2.2 §5.4 defines a line break as LF, CR, or CRLF. The
 scanner recognized LF and CRLF but not lone CR. Three sites
 matched `\n` only: `advance()`, `advance_by()`, and the
 block-mapping simple-key line-start scan.
 
 ### Evidence
+
 - `70c77cb` / `3ad36f0` — "fix(scanner): treat lone CR as a line
   break", `crates/noyalib/src/parser/scanner.rs`.
 - Regression tests in `coverage_scanner`.
 
 ### Status: SETTLED v0.0.14. Byte offsets (`pos`/`mark`) and token
+
 spans untouched, so `source()` and round-trip are unaffected.
 
 ### DO NOT RETRY
+
 - Do not normalize line endings at the reader layer. The scanner
   must preserve byte offsets for CST round-trip.
 - If you add a new line-break-sensitive site, match all three
@@ -244,17 +273,20 @@ spans untouched, so `source()` and round-trip are unaffected.
 ## Entry 6 — Alias span misdirection (v0.0.14, issue #149)
 
 ### Symptom
+
 `span_at` on `b: *anc` returned the dangling `*anc` lexeme — a
 standalone alias that does not re-parse. Asymmetric with anchor
 definitions (`&x 1`), whose slice is self-contained.
 
 ### Root cause
+
 An alias is a single `AliasMark` token with no value node. The
 green-tree walker lumped `AliasMark` with anchor/tag property
 prefixes and returned the alias's own bytes instead of falling
 through to the anchor's resolved value span.
 
 ### Evidence
+
 - `f8fe929` / `34852b2` — "fix(cst): resolve alias references
   through to the anchor value span", `crates/noyalib/src/cst/`
   walker + `SpanTree`.
@@ -262,15 +294,17 @@ through to the anchor's resolved value span.
   to a scalar, and as a sequence item.
 
 ### Fix pattern
+
 `entry_value` / `item_value` return `None` on `AliasMark`,
 `span_at` falls through to the typed cache whose `SpanTree`
 carries the alias node's cloned anchor-definition span (the
 loader resolves aliases at load time). `AliasMark` was dropped
 from `is_value_property_kind`.
 
-### Status: SETTLED v0.0.14.
+### Status: SETTLED v0.0.14
 
 ### DO NOT RETRY
+
 - Do not add `AliasMark` back to `is_value_property_kind`.
   Anchor definitions and alias references are structurally
   asymmetric.
@@ -283,21 +317,25 @@ from `is_value_property_kind`.
 ## Entry 7 — FlowStyle config ignored (v0.0.8, issue #84)
 
 ### Symptom
+
 `SerializerConfig::flow_style` was stored on the config struct
 but had no effect on serialization output. Users setting flow
 style saw block style.
 
 ### Root cause
+
 `ser.rs` accepted the builder field but never consulted it in
 the emit path — classic "wired to the setter, not the reader".
 
 ### Evidence
+
 - `c528e0f` — release: v0.0.8 (FlowStyle fix + batched deps)
   (#97). Closes #84. `crates/noyalib/src/ser.rs`.
 
-### Status: SETTLED v0.0.8.
+### Status: SETTLED v0.0.8
 
 ### DO NOT RETRY
+
 - Every new `SerializerConfig` field needs both a builder test
   AND an emit-path assertion. Do not merge a config knob with
   builder coverage only — that is exactly how this bug shipped.
@@ -307,12 +345,14 @@ the emit path — classic "wired to the setter, not the reader".
 ## Entry 8 — Issue #46 depth-counter imbalances (v0.0.6)
 
 ### Symptom
+
 User-reported: `pnpm-lock.yaml` (10k+ lines but only ~5 levels
 deep) failed `from_str::<Value>` with
 `Error::RecursionLimitExceeded { depth: 129 }` under default
 `max_depth = 128`. Raising to 200–300 then stack-overflowed.
 
 ### Root cause (two peers, one campaign)
+
 **Peer A — streaming depth leak on empty flow mappings.**
 `StreamingMapAccess::next_key_seed` did not check the access
 object's `finished` flag. Serde visitors that call `next_entry`
@@ -331,6 +371,7 @@ but **never compared it against the limit**. Adversarial nesting
 consumed stack without ever surfacing the documented DoS guard.
 
 ### Evidence
+
 - Peer A: `6991350` — "fix(streaming): stop depth leak on empty
   flow mappings (#46)", `crates/noyalib/src/streaming.rs`.
 - Peer B: `ad28829` — "fix(loader): NoSpan path was missing the
@@ -341,10 +382,12 @@ consumed stack without ever surfacing the documented DoS guard.
 - Ships in `df17887` — v0.0.6 batch.
 
 ### Status: SETTLED v0.0.6. Family audit at fix time confirmed no
+
 other `MapAccess`/`SeqAccess`/`EnumAccess`/`VariantAccess` impl
 in the crate has this pattern.
 
 ### DO NOT RETRY
+
 - Do not add a new `MapAccess` / `SeqAccess` impl without a
   `finished` flag consulted from **both** `next_key_seed` and
   `next_value_seed`.
@@ -359,6 +402,7 @@ in the crate has this pattern.
 ## Entry 9 — RUSTSEC responses & cargo-vet trust-chain gaps
 
 ### Symptom
+
 A dependency version that closes a `RUSTSEC-*` advisory ships
 from a publisher **outside** the `[[trusted.<crate>]]` entry in
 `supply-chain/audits.toml`. CI's `cargo vet check` reports
@@ -366,11 +410,13 @@ from a publisher **outside** the `[[trusted.<crate>]]` entry in
 turns red for a reason unrelated to the loader fix on the branch.
 
 ### Root cause
+
 `cargo-vet` trust is scoped by publisher user-id, not by crate
 name. A publisher change breaks the trust chain even when the
 bump is legitimate.
 
 ### Evidence
+
 - `3e8dcb8` — "fix(ci): rustfmt + RUSTSEC-2026-0204 (crossbeam-
   epoch < 0.9.20)". `cargo update -p crossbeam-epoch` to 0.9.20.
 - `9de0321` — "fix(supply-chain): exempt crossbeam-epoch 0.9.20
@@ -381,15 +427,17 @@ bump is legitimate.
   must live in the commit message body, not inline.
 
 ### Pattern
+
 1. Advisory lands (Dependabot / manual audit).
 2. `cargo update -p <crate>` to the fixed version.
 3. `cargo vet check`. If trust chain holds, done.
 4. If not: add `[[exemptions.<crate>]]` with `suggest = false`
    and rationale in the **commit message**.
 
-### Status: SETTLED as doctrine.
+### Status: SETTLED as doctrine
 
 ### DO NOT RETRY
+
 - Do not put exemption rationale in a TOML comment — `cargo vet
   fmt` deletes it on the next run.
 - Do not "extend trust" without an actual audit — defeats the
@@ -402,11 +450,13 @@ bump is legitimate.
 ## Entry 10 — Workspace-split shared-workflow caller permissions (ADR-0005, v0.0.12–13)
 
 ### Symptom
+
 First CI run on the `noyalib-wasm` satellite pilot **startup-
 failed with 0 jobs and no annotation**. Actions UI showed nothing
 green/red/anything.
 
 ### Root cause
+
 Reusable workflows: the callee declared
 `permissions: pull-requests: read`. The caller `ci.yml` only
 granted `contents: read`. Actions rejects the whole workflow
@@ -414,8 +464,9 @@ when the callee's `permissions` block requests scopes the caller
 did not grant — **silently**, 0 jobs, no annotation.
 
 ### Evidence
-- `fccd189` — "chore(workspace-split): crates.io ownership harness
-  + ADR-0005 (#135)". Introduces shared workflow model.
+
+- `fccd189` — "chore(workspace-split): crates.io ownership harness + ADR-0005
+  (#135)". Introduces shared workflow model.
 - `5e98151` — "docs(adr): document caller-side permissions
   gotcha (v0.0.12 pilot)". Adds permissions-mapping table to
   `doc/adr/0005-workspace-split.md`.
@@ -423,12 +474,14 @@ did not grant — **silently**, 0 jobs, no annotation.
   `33491ae` (4). Satellite completion: `a472e14`.
 
 ### Fix pattern
+
 Every satellite `ci.yml` must **union** the permissions of every
 shared workflow it calls. ADR-0005 carries the mapping table.
 
-### Status: SETTLED as doctrine.
+### Status: SETTLED as doctrine
 
 ### DO NOT RETRY
+
 - Do not diagnose a 0-jobs-no-annotation startup-fail as a
   "flaky runner". It is almost always a permissions mismatch.
 - Do not narrow a shared workflow's `permissions` block after
@@ -469,6 +522,7 @@ instead.
 ```
 
 Adding checklist:
+
 1. `git log --oneline --all | grep <sha>` — verify SHA exists.
 2. `git show <sha> -s --format="%h %s%n%n%b"` — read the body.
    Subject lines here are often misleading.

@@ -111,7 +111,7 @@ when a new push lands).
 
 **Complements SKILL.md §2 (THE cache-poisoning doctrine).**
 
-### Canonical exemplar — `shared-no-std.yml`:
+### Canonical exemplar — `shared-no-std.yml`
 
 ```yaml
 jobs:

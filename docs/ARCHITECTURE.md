@@ -48,7 +48,7 @@ export targets) read the files it installs.
 
 ## Data flow
 
-```
+```text
 skills/<name>/ and packs/<bundle>/skills/<name>/{SKILL.md, metadata.json, reference.md}   authored
    │
    ├─ sync-skill-frontmatter.py   metadata.json → portable frontmatter (ADR 0002)

@@ -111,7 +111,8 @@ All notable changes to AgtMLS are recorded here.
   arm without it is now `less reliable` (an arm whose every run failed
   included), and each arm records `completed`, `cost_usd_total` (every
   attempt that reported a cost, failed ones included), `cost_usd_runs` (how
-  many did) and `cost_usd_per_completed` (only when every run did). Every committed result had no failed run, so no
+  many did) and `cost_usd_per_completed` (only when every run did). Every
+  committed result had no failed run, so no
   verdict or efficacy attestation changes.
 - Uplift runs record token usage by kind (`input`, `cache_read`,
   `cache_write`, `output`, `reasoning`, `total`), with each agent's overlaps
@@ -1099,11 +1100,14 @@ first ships in 0.0.10.
 
 ### Added
 
-- Dual licensing under Apache-2.0 and MIT: added `LICENSE-APACHE` and `LICENSE-MIT` (merging #17).
+- Dual licensing under Apache-2.0 and MIT: added `LICENSE-APACHE` and
+  `LICENSE-MIT` (merging #17).
 
 ### Changed
 
-- Updated packaging and manifest validation tooling (`pyproject.toml`, `validate-packaging.py`, `validate-plugin-manifest.py`, `agtmls-doctor.py`, `export-registry.py`) to support dual license declarations.
+- Updated packaging and manifest validation tooling (`pyproject.toml`,
+  `validate-packaging.py`, `validate-plugin-manifest.py`, `agtmls-doctor.py`,
+  `export-registry.py`) to support dual license declarations.
 - Bumped release metadata through the guarded patch-line release flow to `v0.0.6`.
 
 ## 0.0.5 - 2026-08-04
@@ -1151,9 +1155,49 @@ first ships in 0.0.10.
   pins the version twice. The catalog would have shipped advertising the
   previous release. Caught by the manifest parity check.
 
+- `generate-skill-index.py` did not unquote the **last** frontmatter key —
+  only the mid-loop flush was patched. Invisible for skills (where `metadata`
+  is last) but wrong for `commands/*.md`, where `description` is the only key.
+  Found by the new unit tests.
+- Three checks (`validate-packaging.py`, `sync-skill-frontmatter.py`,
+  `generate-plugin-manifests.py`) were in `checks.json` and the local runner
+  but **absent from CI**, which enumerates steps by hand.
+  `validate-check-manifest.py` now enforces manifest/runner/CI parity.
+- `generate-skill-index.py` unquotes YAML scalars, so quoted descriptions no
+  longer carry their quotes into `index.json` and every downstream export.
+- `agtmls-doctor.py` handles array-valued `skills`/`commands` manifest paths.
+
 ### Changed
 
 - Bumped release metadata through the guarded patch-line release flow.
+
+- CI runs a matrix of Python 3.10-3.13 across Linux and macOS. It previously
+  tested one interpreter on one OS while declaring `requires-python >=3.10`,
+  so the 3.10 code path had never executed.
+- README split: the command reference and the check list moved to
+  `docs/cli.md` and `docs/checks.md`; CONTRIBUTING rewritten around the gate,
+  the skill lifecycle, and what a good skill looks like.
+- **The skill tree is now flat**: every skill is `skills/<name>/SKILL.md`.
+  Bundle membership moved from a parent directory to a `bundle` field in each
+  skill's `metadata.json` (`null` for general skills). Agent runtimes scan
+  their skills path *non-recursively*, so nested skills were invisible to any
+  runtime without array-valued `skills` support — Codex, Cursor, Gemini CLI,
+  and Antigravity among them. Every manifest now points at a single
+  `./skills`. `--bundle` scoping in `setup-workspace.sh` is unchanged in
+  behaviour and now resolves through metadata.
+- `skills/noyalib/README.md` moved to `references/noyalib-bundle.md`.
+- `validate-version-policy.py` and `bump-version.py` derive their metadata
+  file lists from the skill tree instead of hardcoding them, so a new skill
+  cannot escape the version gate.
+- `validate-skills.py` now enforces the agentskills.io Agent Skills spec: the
+  closed six-key frontmatter set, the `name` length and hyphen rules, the
+  `compatibility` length cap, flat string `metadata`, and a 500-line
+  `SKILL.md` budget.
+- `validate-plugin-manifest.py` also validates the marketplace catalog, and
+  fails if a nested skill ever reappears — such a skill would be invisible to
+  every runtime. Before the tree was flattened, `plugin.json`'s single
+  `./skills` path exposed only the two top-level skills; the other 18 never
+  loaded for anyone installing as a plugin.
 
 ### Added
 
@@ -1202,50 +1246,6 @@ first ships in 0.0.10.
   which generates all eight manifests from `.claude-plugin/plugin.json` and
   the skill tree so no runtime drifts behind a version bump or a new bundle.
   Runs `--check` in CI.
-
-### Changed
-
-- CI runs a matrix of Python 3.10-3.13 across Linux and macOS. It previously
-  tested one interpreter on one OS while declaring `requires-python >=3.10`,
-  so the 3.10 code path had never executed.
-- README split: the command reference and the check list moved to
-  `docs/cli.md` and `docs/checks.md`; CONTRIBUTING rewritten around the gate,
-  the skill lifecycle, and what a good skill looks like.
-- **The skill tree is now flat**: every skill is `skills/<name>/SKILL.md`.
-  Bundle membership moved from a parent directory to a `bundle` field in each
-  skill's `metadata.json` (`null` for general skills). Agent runtimes scan
-  their skills path *non-recursively*, so nested skills were invisible to any
-  runtime without array-valued `skills` support — Codex, Cursor, Gemini CLI,
-  and Antigravity among them. Every manifest now points at a single
-  `./skills`. `--bundle` scoping in `setup-workspace.sh` is unchanged in
-  behaviour and now resolves through metadata.
-- `skills/noyalib/README.md` moved to `references/noyalib-bundle.md`.
-- `validate-version-policy.py` and `bump-version.py` derive their metadata
-  file lists from the skill tree instead of hardcoding them, so a new skill
-  cannot escape the version gate.
-- `validate-skills.py` now enforces the agentskills.io Agent Skills spec: the
-  closed six-key frontmatter set, the `name` length and hyphen rules, the
-  `compatibility` length cap, flat string `metadata`, and a 500-line
-  `SKILL.md` budget.
-- `validate-plugin-manifest.py` also validates the marketplace catalog, and
-  fails if a nested skill ever reappears — such a skill would be invisible to
-  every runtime. Before the tree was flattened, `plugin.json`'s single
-  `./skills` path exposed only the two top-level skills; the other 18 never
-  loaded for anyone installing as a plugin.
-
-### Fixed
-
-- `generate-skill-index.py` did not unquote the **last** frontmatter key —
-  only the mid-loop flush was patched. Invisible for skills (where `metadata`
-  is last) but wrong for `commands/*.md`, where `description` is the only key.
-  Found by the new unit tests.
-- Three checks (`validate-packaging.py`, `sync-skill-frontmatter.py`,
-  `generate-plugin-manifests.py`) were in `checks.json` and the local runner
-  but **absent from CI**, which enumerates steps by hand.
-  `validate-check-manifest.py` now enforces manifest/runner/CI parity.
-- `generate-skill-index.py` unquotes YAML scalars, so quoted descriptions no
-  longer carry their quotes into `index.json` and every downstream export.
-- `agtmls-doctor.py` handles array-valued `skills`/`commands` manifest paths.
 
 ### Removed
 

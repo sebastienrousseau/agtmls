@@ -30,7 +30,7 @@ review checklist, where its subjectivity is honest.
 - No criterion may be satisfied by asserting it in prose. "Documented" always
   means "documented *and* enforced", or it is not a criterion.
 
-```
+```sh
 agtmls-scorecard score .            # human table
 agtmls-scorecard score . --json     # machine report
 agtmls-scorecard score . --fail-under 10 --category security

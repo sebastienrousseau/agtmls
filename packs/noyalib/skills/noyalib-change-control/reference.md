@@ -141,10 +141,9 @@ regression surfaced.
 git log --all --oneline --grep='cache-poisoning' -i
 ```
 
-Points at the run of commits under PR #124 *"release: v0.0.11 (CI
-integrity + no_std fix + strict rustdoc PR gate + cache-poisoning guard
-+ …)"*. Full narrative in `RELEASE-NOTES-v0.0.11.md` §*Why this release
-exists*.
+Points at the run of commits under PR #124 *"release: v0.0.11 (CI integrity +
+no_std fix + strict rustdoc PR gate + cache-poisoning guard + …)"*. Full
+narrative in `RELEASE-NOTES-v0.0.11.md` §*Why this release exists*.
 
 ### R4.4 The rule that came out of it
 

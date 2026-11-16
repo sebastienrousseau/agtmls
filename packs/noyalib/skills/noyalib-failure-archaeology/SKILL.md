@@ -62,7 +62,7 @@ paths.
 | 7 | [FlowStyle config ignored](reference.md#entry-7--flowstyle-config-ignored-v008-issue-84) | `SerializerConfig::flow_style` wired to setter, not reader; emit path never consulted it. | SETTLED v0.0.8 |
 | 8 | [#46 depth-counter imbalances](reference.md#entry-8--issue-46-depth-counter-imbalances-v006) | Two peers: streaming depth leak on empty flow maps + `NoSpanLoader` incremented depth but never compared to limit. | SETTLED v0.0.6 |
 | 9 | [RUSTSEC / cargo-vet trust-chain gaps](reference.md#entry-9--rustsec-responses--cargo-vet-trust-chain-gaps) | Publisher change breaks trust chain even on legitimate bumps; `cargo vet fmt` strips TOML comments. | SETTLED (doctrine) |
-| 10 | [Shared-workflow caller permissions](reference.md#entry-10--workspace-split-shared-workflow-caller-permissions-adr-0005-v0012-13) | Satellite pilot startup-failed with 0 jobs, no annotation — callee `permissions` scope not unioned by caller. | SETTLED (doctrine) |
+| 10 | [Shared-workflow caller permissions](reference.md#entry-10--workspace-split-shared-workflow-caller-permissions-adr-0005-v001213) | Satellite pilot startup-failed with 0 jobs, no annotation — callee `permissions` scope not unioned by caller. | SETTLED (doctrine) |
 
 ---
 
@@ -73,6 +73,7 @@ check whether it appears here. Full context: click through to the
 matching entry in `reference.md`.
 
 ### Cache / CI integrity (Entry 1)
+
 - Do not consolidate `CARGO_TARGET_DIR` across feature-matrix jobs
   to "reduce disk usage".
 - Do not delete the wasm32 bare-metal job as "redundant with
@@ -81,6 +82,7 @@ matching entry in `reference.md`.
   proof of compilation.
 
 ### Value fast path / key collision (Entries 2 & 3)
+
 - Do not route `Value` through streaming when `TagRegistry` is
   off "to simplify" — bypass exists because streaming visitor
   loses the typed key.
@@ -97,6 +99,7 @@ matching entry in `reference.md`.
   detection off in that mode.
 
 ### Scanner / byte-faithfulness (Entries 4 & 5)
+
 - Do not skip the BOM at the reader layer — must reach trivia.
 - Do not fix only the BOM column counter — simple-key indent and
   comment-preceded-by-whitespace are independent callers.
@@ -106,6 +109,7 @@ matching entry in `reference.md`.
   LF, CR, CRLF.
 
 ### CST walker (Entry 6)
+
 - Do not add `AliasMark` back to `is_value_property_kind` —
   anchor definitions and alias references are structurally
   asymmetric.
@@ -114,10 +118,12 @@ matching entry in `reference.md`.
   preserved.
 
 ### Serializer config (Entry 7)
+
 - Every new `SerializerConfig` field needs a builder test AND an
   emit-path assertion. No builder-coverage-only merges.
 
 ### Depth / DoS guards (Entry 8)
+
 - Do not add a new `MapAccess` / `SeqAccess` impl without a
   `finished` flag consulted from **both** `next_key_seed` and
   `next_value_seed`.
@@ -127,6 +133,7 @@ matching entry in `reference.md`.
   the counter is wrong, not the limit.
 
 ### Supply chain (Entry 9)
+
 - Do not put exemption rationale in a TOML comment — `cargo vet
   fmt` deletes it. Put it in the commit message body.
 - Do not "extend trust" without an actual audit.
@@ -134,6 +141,7 @@ matching entry in `reference.md`.
   budgeting for a CI storm.
 
 ### Shared workflows / satellites (Entry 10)
+
 - Do not diagnose a 0-jobs-no-annotation startup-fail as a
   "flaky runner" — almost always a permissions mismatch.
 - Do not narrow a shared workflow's `permissions` block after

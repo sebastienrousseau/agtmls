@@ -22,7 +22,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "a432ebd306c2186f767b79fdfba609cb030291905836698ab68cb642499098bf"
+        "sha256": "812d94b39c52a9312dc4becdef4f44dbb354217a5ff958bd17f2d7349313b856"
       },
       "name": "anti-slop-pr-and-writing"
     }

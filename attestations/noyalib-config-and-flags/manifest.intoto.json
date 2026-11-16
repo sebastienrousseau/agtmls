@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "1e3ede13b81ca0d1b5b0848889335400e9063191fa7d291ffbec88c0db17006d"
+          "sha256": "7e1c819d164e53f18bd99f590c83d9764f075083b7b01277c7bf57a4904d5c5c"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "77daa6185332b6538c00eeeaca472b554408801b1f50ed0750aeb32662f04786"
+          "sha256": "444b55f41a2aa13f15e1aa155021c09c7e90914308b7f907b07e6ba65d9e88f8"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c0695da99ea03a887bc633ba8125c9e227c679300f3ad237454cfd331e929183"
+        "sha256": "13ec523ad7bf0f4e5630ec324f126dbf2be08b59ae39e7be2e289f4f2b287dc6"
       },
       "name": "noyalib-config-and-flags"
     }

@@ -142,7 +142,7 @@ error mentions `std`, not `target`, so it looks like a toolchain bug.
 **Avoid:** always pass `--target aarch64-apple-darwin` on Apple
 Silicon:
 
-```
+```sh
 cargo +nightly fuzz run fuzz_no_span_loader --target aarch64-apple-darwin -- -max_total_time=60
 ```
 
@@ -185,7 +185,7 @@ must go in the commit — are in `reference.md` §traps-extended.
 
 Always run from the workspace root:
 
-```
+```sh
 cd "$(git rev-parse --show-toplevel)"
 ```
 
@@ -207,7 +207,7 @@ fn repro() {
 
 Run one focused test with backtrace and stdout:
 
-```
+```sh
 RUST_BACKTRACE=1 cargo test -p noyalib --test dup_key_spans -- --nocapture
 RUST_BACKTRACE=1 cargo test -p noyalib --test no_span_loader_parity distinct_typed_key_collision -- --nocapture
 RUST_BACKTRACE=1 cargo test -p noyalib --test issue_46 no_span_loader_honours_max_depth -- --nocapture
@@ -215,7 +215,7 @@ RUST_BACKTRACE=1 cargo test -p noyalib --test issue_46 no_span_loader_honours_ma
 
 Run one fuzz target for 60s (Apple Silicon):
 
-```
+```sh
 cargo +nightly fuzz run fuzz_no_span_loader \
   --target aarch64-apple-darwin -- -max_total_time=60
 ```
@@ -224,13 +224,13 @@ For x86_64 hosts drop `--target`.
 
 Inspect the routing gate (re-verify after any de.rs change):
 
-```
+```sh
 grep -n "stream_eligible\|is_value_target\|value_target_bypass" crates/noyalib/src/de.rs
 ```
 
 Cross-loader smoke check on a single input, one-shot:
 
-```
+```sh
 cargo test -p noyalib --test no_span_loader_parity -- --nocapture
 ```
 
@@ -292,7 +292,7 @@ skill claims when you update it):
 
 **Re-verify the routing table before trusting it** — one command:
 
-```
+```sh
 grep -n "stream_eligible" crates/noyalib/src/de.rs
 ```
 

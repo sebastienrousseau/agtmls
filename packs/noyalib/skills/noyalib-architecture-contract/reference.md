@@ -252,6 +252,7 @@ tests for the newly-uncovered lines instead.
 GOVERNANCE.md sets a 1.0-gate criterion: at least one
 non-@sebastienrousseau maintainer with commit rights and
 release-signing capability. Until then, the project's bus factor is
+
 1. Any architectural change that adds surface (new public function,
 new config axis, new subsystem) must clear the "would a second
 maintainer understand this from the docs and code alone?" bar.

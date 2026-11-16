@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "0d479176f3ce9abe2e30200d837ad5f9032435cd72486fd3f93059840070ce9f"
+          "sha256": "bffd4aa23d3f5ed5e9610a1ea6052b5678a1ccfaed9e6a2ec11e5528d60b4302"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "313cd51e9a357f678fa783bd7609118684b74cb972d930e82e83cc9b425e39ad"
+        "sha256": "5fb2f3b5a43169e283e88551bf1a55ed7689458903b1dd7f1c6c3c16d24c9bf5"
       },
       "name": "handoff"
     }
