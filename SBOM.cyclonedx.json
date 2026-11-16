@@ -2492,7 +2492,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bc53699edbf6941af43f32209107d67f485ac36422d43e2dd6500198359dafec"
+          "content": "5f9c2ace1b5ce10867b647fde040e5b5416c5ae5c45b6b4e4f85a39597cbaa35"
         }
       ],
       "name": "scripts/_lib/context_optimizer.py",
@@ -2558,7 +2558,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ccfabacbab3dd52b095bd3c46d894124e93d5a6c60e39fa0cbc8446d637c0f81"
+          "content": "33bdd0f6e7aa16a779dc45ae21f0158ecc5f4c491ff60fafd41a563af477352a"
         }
       ],
       "name": "scripts/_lib/installer.py",
@@ -3273,7 +3273,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "38edd231e53e1a7a7e257354c925ef6e99608b7215effb589dc2e400a93401b5"
+          "content": "3474944d944923124c6c3c2b81e27621687ef336c4d739574a98c601ae6de842"
         }
       ],
       "name": "scripts/setup-workspace.sh",
@@ -5410,7 +5410,7 @@
       "type": "application",
       "version": "0.0.29"
     },
-    "timestamp": "2026-11-15T23:02:52Z",
+    "timestamp": "2026-11-16T00:34:16Z",
     "tools": {
       "components": [
         {
