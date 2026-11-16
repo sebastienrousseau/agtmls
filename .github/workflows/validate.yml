@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 name: validate
 
 on:
@@ -78,6 +78,8 @@ jobs:
         run: python3 scripts/validate-spec-conformance.py
       - name: Validate Licence Headers
         run: python3 scripts/validate-licence-headers.py
+      - name: Validate Licence Consistency
+        run: python3 scripts/validate-licence-consistency.py
       - name: Validate Commands
         run: python3 scripts/validate-commands.py
       - name: Validate Plugin Manifest

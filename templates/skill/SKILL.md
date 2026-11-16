@@ -4,7 +4,7 @@ description: >-
   Use when the user needs this reusable workflow. Replace this with trigger-rich
   wording that says when to load the skill, what task it handles, and when not
   to use it.
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 # Example Skill

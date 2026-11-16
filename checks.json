@@ -4,6 +4,7 @@
     "validate-skills.py",
     "validate-spec-conformance.py",
     "validate-licence-headers.py",
+    "validate-licence-consistency.py",
     "validate-commands.py",
     "validate-plugin-manifest.py",
     "validate-packaging.py",

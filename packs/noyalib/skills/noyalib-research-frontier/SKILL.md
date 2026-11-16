@@ -1,7 +1,7 @@
 ---
 name: noyalib-research-frontier
 description: "Open research directions for noyalib and the evidence bar an idea must clear. Use for 'is there a research angle', 'what's worth a paper, RFC, or upstream PR', or setting a falsifiable spec-conformance milestone. Ambitions stay OPEN and CANDIDATE, never roadmap commitments."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

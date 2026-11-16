@@ -1,7 +1,7 @@
 ---
 name: systematic-debugging
 description: "Find the root cause of a defect before changing anything. Load when something crashes, hangs, returns the wrong value, fails intermittently, or broke after a change, and the cause is not yet known. Drives reproduce, localize by bisection, explain the mechanism, then fix with a failing-first regression test. Replaces guess-and-check editing."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires a reproduction command. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

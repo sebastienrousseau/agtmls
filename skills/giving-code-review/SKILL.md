@@ -1,7 +1,7 @@
 ---
 name: giving-code-review
 description: "Review someone else's change so the feedback is actionable and proportionate. Load when reading a pull request, diff, or patch you did not write, and when deciding whether a concern is blocking or merely a preference. Prioritises correctness over style, labels every comment with its severity, and separates what must change from what you would have done differently."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:

@@ -1,7 +1,7 @@
 ---
 name: noyalib-validation-and-qa
 description: "What counts as evidence in noyalib. Use before opening a PR, claiming a fix is done, or adding a test: the evidence bar, test taxonomy, doctest rules, cross-loader parity regression tests, acceptance thresholds. Not running tools (noyalib-diagnostics-and-tooling)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:
@@ -113,7 +113,7 @@ table) in `reference.md` §R2.
    exact SPDX header** every existing test carries:
 
    ```rust
-   // SPDX-License-Identifier: MIT OR Apache-2.0
+   // SPDX-License-Identifier: Apache-2.0 OR MIT
    // Copyright (c) 2026 Noyalib. All rights reserved.
 
    //! One-line summary — what invariant this file locks.

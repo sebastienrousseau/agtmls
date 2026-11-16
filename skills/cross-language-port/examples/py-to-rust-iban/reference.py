@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Reference implementation (SOURCE): IBAN mod-97 validation.
 
 Idiomatic Python: rearrange, expand letters to digits, build the whole

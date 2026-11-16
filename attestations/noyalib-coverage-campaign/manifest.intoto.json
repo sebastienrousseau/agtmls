@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "d4b3e0aed7e77d8d650d8c55d06f45326fa5394c19be33e25ddd61dc575e2c04"
+          "sha256": "f17c4c71586ae1298ff726c79a513a1cec7a4d0fd26f2875082ab9c5f309fa7d"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "f3c4c58199ae3ddec24c739ad4a9e320a1a7546b416be3be36f352f78c3b2968"
+          "sha256": "7e602c4115a0fa7612a3ca7fd3e5e57b6e8dce36b630c6dfa026a7c987ec2586"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c577909c0cde086c36fcfc81dc89628606a16c17ab5de76cc40ef6edc22eda31"
+        "sha256": "ced5f53b063e9e6c60cda7a079e63125505a1c729870f83d476018fe61d6a98c"
       },
       "name": "noyalib-coverage-campaign"
     }

@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "f3efe34e331b12893f3e2ef0fe91e69fc0413e574f3dd1497a7bdd6c5fbb4923"
+          "sha256": "42dd43b20a672779cb0f813bf87822563feede0f033b64f453522983193a9ca1"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "4a54b6f05b9f71a975302a17812d22c93b6eb5960d4d5ac3a2c4e83e7d20ff62"
+          "sha256": "706f74c51f024016e1359fe83831593948022a7ed9a6f318398dcd9dfb32cde7"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "79516d2c4f5a5cd74e71fead3341b83e5fb040c89a35d3bba96e2b0d24a75e38"
+        "sha256": "2a9606d8c953cbec0d09ebeb73a4390f224a63ae9698b0d7947d47b4490d885b"
       },
       "name": "test-driven-development"
     }

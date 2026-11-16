@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "919e5ff21f2b30ca2f1e39e2a05fb233176dc5bf929f19dbe827bd190032e565"
+          "sha256": "505f690555e7a1800eb60af5c7e9870bcb41aa44bdf340395542f1c378d258cf"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "1a8ce29262abc4b6ca127f663bcc15758dd615c5ef5e753393649bf4fbac41f9"
+          "sha256": "ed79f0415f4584b152e04b6e6f2b4a9a4e2af3043a6cf5be8789be6b3a7c4eb0"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "5ebafa2d39665818557186087bf2c5c7c956e70828231b6b38b03fd9f21b9f6d"
+        "sha256": "51c3608b896f761e4ad35f48f2942c4adfd181ff77914631773ef6250156d810"
       },
       "name": "noyalib-docs-and-writing"
     }

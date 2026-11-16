@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
-<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # 0004. `allowed-tools` declares full capability
 

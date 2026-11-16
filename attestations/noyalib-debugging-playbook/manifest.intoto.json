@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "0521ad0307f39a4aad46f022847e1156bead8138070f783b898c235aaa73431d"
+          "sha256": "31fc9892440d3109f726bea7de106d4c8df20f38ddf66bcc1e34169abd4496ce"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "1b4fb6c0e78e3fb5ce433040b9c382cbf064b7256ec6ad86501933c97709dde0"
+          "sha256": "5d552a9ff561c939b2a187c932ff99009164b96b94d66e1098da6a511dafd856"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c92cd14b9164d3c0077f4cdc4c54f52f00739d93e8986a72657db49f40362fde"
+        "sha256": "18aea35cc7e48f702c9a1507d3dc31fd509207b3aeb7615165edc114eec43e8c"
       },
       "name": "noyalib-debugging-playbook"
     }

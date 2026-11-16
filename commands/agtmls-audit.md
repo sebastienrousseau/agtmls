@@ -1,6 +1,6 @@
 ---
 description: Audit the registry for routing decay, spec drift, and stale artifacts.
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 Run the full gate, then look for what it cannot see.

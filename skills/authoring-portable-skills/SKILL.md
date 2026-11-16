@@ -1,7 +1,7 @@
 ---
 name: authoring-portable-skills
 description: "Use when writing or editing a SKILL.md that more than one agent will read (Claude Code, Codex, Antigravity, Cursor, Copilot, Gemini CLI, OpenCode). Keeps the shared file to what every agent honours, sizes the body, checks it with validate-skills.py and the agents themselves, and requires evidence before calling it hardened. Not for choosing what a skill should teach."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

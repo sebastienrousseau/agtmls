@@ -1,7 +1,7 @@
 ---
 name: pr-review-and-release
 description: "Use when preparing a pull request, judging release readiness, reviewing implementation risk with release discipline, writing release notes, checking CI, packaging artifacts, or deciding whether a repository is ready to ship."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash"
 metadata:

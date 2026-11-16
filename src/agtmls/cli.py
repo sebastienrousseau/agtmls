@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Sebastien Rousseau
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Console entry point for the packaged AgtMLS registry.
 
 `uvx agtmls ...` must behave exactly like `python3 scripts/agtmls.py ...` in a

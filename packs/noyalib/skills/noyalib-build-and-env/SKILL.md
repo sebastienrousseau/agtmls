@@ -1,7 +1,7 @@
 ---
 name: noyalib-build-and-env
 description: "Recreate a working noyalib dev environment and fix toolchain, MSRV, and Apple-Silicon traps. Use when cargo build, cargo test, make, fuzz, Miri, or coverage fails before the code is in scope."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

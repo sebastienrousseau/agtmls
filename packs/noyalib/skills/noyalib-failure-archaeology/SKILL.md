@@ -1,7 +1,7 @@
 ---
 name: noyalib-failure-archaeology
 description: "The chronicle of noyalib's settled battles: symptom, root cause, evidence, and what NOT to retry. Load BEFORE proposing a fix or refactor - 'has this been tried', 'why is X shaped that way', 'is there regression history here', 'look up the cache poisoning incident behind no_std', 'was the BOM column desync ever fixed'."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

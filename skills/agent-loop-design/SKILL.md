@@ -1,7 +1,7 @@
 ---
 name: agent-loop-design
 description: Use when turning repeated agent work into a loop with trigger conditions, evidence, stopping criteria, uninstall state, validation checks, and reviewable artifacts.
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:

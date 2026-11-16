@@ -28,7 +28,8 @@ class FrontmatterSyncTests(SubsetCase):
     """SKILL.md frontmatter is the only risk signal most runtimes ever see."""
 
     SCRIPT = "sync-skill-frontmatter.py"
-    SUBSET = ("skills/using-agtmls", "skills/incident-response")
+    # pyproject.toml states the licence the frontmatter is rendered with.
+    SUBSET = ("skills/using-agtmls", "skills/incident-response", "pyproject.toml")
     SKILL = "skills/incident-response/SKILL.md"
 
     def add_skill(self, name: str, text: str, metadata: dict | None) -> Path:

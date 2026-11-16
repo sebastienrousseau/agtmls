@@ -1,7 +1,7 @@
 ---
 name: web-research-and-source-triage
 description: Use when gathering current web evidence, comparing sources, triaging credibility, reading GitHub repositories, checking docs, or deciding whether a claim needs live verification.
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep WebFetch WebSearch"
 metadata:

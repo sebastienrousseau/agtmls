@@ -1,6 +1,6 @@
 ---
 description: Run the local AgtMLS registry health check.
-license: MIT
+license: Apache-2.0 OR MIT
 ---
 
 Run from the AgtMLS checkout:

@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "c1edd156b87ec8d6ba9485714c46297433e51929a6c08eeea979085b93dfaabc"
+          "sha256": "1e452f0a578da5b2839e184b6adcad3d2c1d2265c1257ee36985dce62dc8fec0"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "e1eb07e4315970a34a91d5c35817be7efeab3acf71d4986db73d29dc5945c8c7"
+          "sha256": "e68fd35bdb11f67e2ff721aa1f609b7681f5b39b4012e4308e87c3b7c303fdb1"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "7a1b6e69f9a787dd7a9113e7036f87f2c5b2c4d65cd5e81431d5bd113f94b6ba"
+        "sha256": "f43348b88530521c8d7a432526fe9c5ca7a009ac5a37c11ee5a04ac2611d9773"
       },
       "name": "receiving-code-review"
     }

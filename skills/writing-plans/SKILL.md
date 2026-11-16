@@ -1,7 +1,7 @@
 ---
 name: writing-plans
 description: "Turn a vague or multi-step request into an ordered list of small steps, each with its own done-condition and verification. Load before starting work that touches several files, has unclear scope, or spans more than one session, and when a request needs decomposing before any code is written. Produces a plan a reviewer can check against, not a to-do list."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit"
 metadata:

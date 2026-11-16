@@ -1,7 +1,7 @@
 ---
 name: release-notes
 description: Writes release notes.
-license: MIT
+license: Apache-2.0 OR MIT
 allowed-tools: Bash Read Write
 context: fork
 ---

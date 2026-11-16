@@ -1,7 +1,7 @@
 ---
 name: verification-before-completion
 description: "The gate between doing work and claiming it is done. Load before saying finished, fixed, working, or ready, before marking a task complete, and before reporting an outcome to a human. Converts each claim into the observation that would justify it, and names the rationalizations that let unverified work ship. Not the project's own evidence bar or test taxonomy."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Bash"
 metadata:

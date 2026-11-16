@@ -1,7 +1,7 @@
 ---
 name: registry-auditor
 description: Audit the AgtMLS registry for drift, spec violations, routing decay, and stale generated artifacts without changing anything. Use before a release, after a bulk edit, or when the catalog feels inconsistent.
-license: MIT
+license: Apache-2.0 OR MIT
 tools: Read, Glob, Grep, Bash
 ---
 

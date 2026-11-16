@@ -23,7 +23,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "2298f158338ee0b18a1320872b1c24ee7823a75d8a9ffe88f74c893f60554123"
+        "sha256": "0e3629b81fa6ea119eb93dbbab1aba58452a8b5ee57ce4aaf377705e5087057b"
       },
       "name": "pr-review-and-release"
     }

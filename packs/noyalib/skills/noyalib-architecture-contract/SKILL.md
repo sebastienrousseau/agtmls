@@ -1,7 +1,7 @@
 ---
 name: noyalib-architecture-contract
 description: "Load-bearing design decisions, invariants, and weak points in noyalib's parser, loader, and CST. Use before editing scanner, loader, streaming, or CST code, or answering 'why are there three loaders' and 'explain value_target_bypass and stream_eligible'. Not incidents (noyalib-failure-archaeology)."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

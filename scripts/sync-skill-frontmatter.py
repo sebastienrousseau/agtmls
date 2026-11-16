@@ -39,7 +39,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from _lib import skill_roots  # noqa: E402  (scripts path first)
+from _lib import licence, skill_roots  # noqa: E402  (scripts path first)
 
 SKILLS_DIR = ROOT / "skills"
 
@@ -149,7 +149,7 @@ def render(skill_md: Path) -> str | None:
     out = preserved_blocks(lines)
     while out and not out[-1].strip():
         out.pop()
-    out.append(f"license: {metadata.get('license', 'MIT')}")
+    out.append(f"license: {metadata.get('license', licence.project_expression(ROOT))}")
     out.append(f"compatibility: {quote(derive_compatibility(metadata))}")
     out.append(f"allowed-tools: {quote(' '.join(derive_allowed_tools(policy)))}")
     out.append("metadata:")

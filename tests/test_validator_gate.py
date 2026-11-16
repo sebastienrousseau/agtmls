@@ -241,7 +241,7 @@ class RepositoryValidatorTests(ValidatorFailureBase):
     def test_a_licence_buried_below_the_header_is_caught(self) -> None:
         """A header is the first lines of the file, not a mention anywhere."""
         body = "\n".join(["#!/usr/bin/env python3"] + ["pass"] * 10)
-        self.overwrite("scripts/buried.py", body + "\n# SPDX-License-Identifier: MIT\n")
+        self.overwrite("scripts/buried.py", body + "\n# SPDX-License-Identifier: Apache-2.0 OR MIT\n")
         self.assertIn("buried.py", self.assert_catches("validate-licence-headers.py"))
 
     def test_a_licence_this_repository_does_not_offer_is_caught(self) -> None:
@@ -259,7 +259,7 @@ class RepositoryValidatorTests(ValidatorFailureBase):
         text = skill.read_text(encoding="utf-8")
         self.overwrite(
             str(skill.relative_to(self.fixture)),
-            "<!-- SPDX-License-Identifier: MIT -->\n" + text,
+            "<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->\n" + text,
         )
         self.assertIn("frontmatter must start at byte 0", self.assert_catches("validate-licence-headers.py"))
 
@@ -329,7 +329,7 @@ class RepositoryValidatorTests(ValidatorFailureBase):
         self.assert_clean("validate-system-prompts.py")
 
     def test_a_system_prompt_stripped_of_its_content_is_caught(self) -> None:
-        self.overwrite("system-prompts/rust.md", "<!-- SPDX-License-Identifier: MIT -->\n")
+        self.overwrite("system-prompts/rust.md", "<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->\n")
         self.assert_catches("validate-system-prompts.py")
 
     def test_templates_pass_when_intact(self) -> None:
@@ -503,7 +503,7 @@ class SecurityClaimTests(ValidatorFailureBase):
         self.assertIn("README.md", self.assert_catches("validate-security-claims.py"))
 
     def test_a_guarantee_in_the_docs_is_caught(self) -> None:
-        self.overwrite("docs/claims.md", "<!-- SPDX-License-Identifier: MIT -->\n\nThe analyzer guarantees that no malicious skill is installed.\n")
+        self.overwrite("docs/claims.md", "<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->\n\nThe analyzer guarantees that no malicious skill is installed.\n")
         self.assertIn("claims.md", self.assert_catches("validate-security-claims.py"))
 
     def test_security_md_must_separate_boundaries_from_heuristics(self) -> None:

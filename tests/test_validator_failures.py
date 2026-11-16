@@ -47,7 +47,7 @@ class PluginManifestFailureTests(unittest.TestCase):
             "version": "0.0.1",
             "description": "x",
             "author": {"name": "Someone"},
-            "license": "MIT",
+            "license": "Apache-2.0 OR MIT",
             "homepage": "https://github.com/sebastienrousseau/agtmls",
             "skills": "./skills",
             "commands": "./commands",
@@ -74,10 +74,22 @@ class PluginManifestFailureTests(unittest.TestCase):
         manifest["version"] = "v1"
         self.assertIn("plugin manifest version must be semver", self.complaints(manifest))
 
+    def test_half_of_the_dual_licence_is_refused(self) -> None:
+        """Every manifest said `MIT` until v0.0.31, and this check required it."""
+        manifest = self.valid()
+        manifest["license"] = "MIT"
+        self.assertIn(
+            "plugin manifest license must be Apache-2.0 OR MIT, as pyproject.toml declares",
+            self.complaints(manifest),
+        )
+
     def test_the_wrong_licence_is_refused(self) -> None:
         manifest = self.valid()
         manifest["license"] = "GPL-3.0"
-        self.assertIn("plugin manifest license must be MIT", self.complaints(manifest))
+        self.assertIn(
+            "plugin manifest license must be Apache-2.0 OR MIT, as pyproject.toml declares",
+            self.complaints(manifest),
+        )
 
     def test_an_author_without_a_name_is_refused(self) -> None:
         manifest = self.valid()

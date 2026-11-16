@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Sebastien Rousseau -->
-<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # The check gate
 
@@ -20,6 +20,7 @@ Or individually, in the order the gate runs them:
 python3 scripts/validate-skills.py
 python3 scripts/validate-spec-conformance.py
 python3 scripts/validate-licence-headers.py
+python3 scripts/validate-licence-consistency.py
 python3 scripts/validate-commands.py
 python3 scripts/validate-plugin-manifest.py
 python3 scripts/validate-packaging.py

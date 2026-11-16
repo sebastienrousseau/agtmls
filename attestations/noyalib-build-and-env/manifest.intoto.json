@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "e453f029831ef83743bcb2f9f24670c2a51bc5adc7ca455d7a10a168237a3f72"
+          "sha256": "e332ff3f6fd840daad321532267e691e6862f1ff58e81a2d35ebbf966031dc1f"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "242ad0761ffc6ad363723b87a1ac2af04e9f65902b29926b4728dc13b4ca0592"
+          "sha256": "73108b70e801d743afbc837fced8863764da21c7d0d380d46959e168daafd197"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "bcc5d36ac1a4fd43e1bffd902beb986fe62348b8e9bc4c871a4e1a78be18b33d"
+        "sha256": "b55dcee8b10d1b40dd94ba5f1cfbe87ec19f066ce10c86f96dc5dc2608983d41"
       },
       "name": "noyalib-build-and-env"
     }

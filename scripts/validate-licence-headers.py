@@ -18,6 +18,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from _lib import licence  # noqa: E402  (scripts path first)
+
 SPDX = "SPDX-License-Identifier"
 # Directories that are not ours to header.
 SKIP_DIRS = {".git", "dist", "__pycache__", ".ruff_cache", ".agtmls", "node_modules"}
@@ -25,14 +28,19 @@ FRONTMATTER_FIRST = {"SKILL.md"}
 FRONTMATTER_DIRS = {"commands", "agents"}
 # A header is the top of the file: a shebang, then the SPDX lines.
 HEADER_LINES = 5
-# The repository is dual-licensed; MIT-only files predate the Apache grant.
-ALLOWED = {"Apache-2.0 OR MIT", "MIT OR Apache-2.0", "MIT"}
+# Workflows, TOML and YAML carry `#` headers like the code does.
+PATTERNS = ("*.md", "*.py", "*.sh", "*.yml", "*.yaml", "*.toml")
+# Every file carries the expression pyproject.toml declares, spelled the
+# same way, so a grep for it finds them all. Read in main(), not at import,
+# so a test tree's pyproject is the one that counts.
 IDENTIFIER = re.compile(rf"{SPDX}:\s*(.+?)\s*(?:-->)?\s*$", re.MULTILINE)
 
 
-def frontmatter_licence(text: str) -> bool:
+def frontmatter_licence(text: str) -> str | None:
+    """The `license:` value a frontmatter block declares, or None."""
     match = re.match(r"^---[ \t]*\n(.*?)\n---[ \t]*\n", text, re.DOTALL)
-    return bool(match) and bool(re.search(r"^license:[ \t]*\S", match.group(1), re.MULTILINE))
+    found = re.search(r"^license:[ \t]*(\S.*?)[ \t]*$", match.group(1), re.MULTILINE) if match else None
+    return found.group(1).strip("'\"") if found else None
 
 
 def wants_frontmatter(path: Path) -> bool:
@@ -52,30 +60,37 @@ def declared(text: str, lines: int | None = None) -> str | None:
     return match.group(1) if match else None
 
 
-def check_identifier(rel: Path, expression: str | None, errors: list[str]) -> None:
+def check_identifier(rel: Path, expression: str | None, wanted: str, errors: list[str]) -> None:
     if expression is None:
         errors.append(f"{rel}: missing an {SPDX} header in its first {HEADER_LINES} lines")
-    elif expression not in ALLOWED:
-        errors.append(f"{rel}: declares {expression}, which this repository does not offer")
+    elif expression != wanted:
+        errors.append(f"{rel}: declares {expression}, not the project's {wanted}")
 
 
-def markdown_problems(path: Path, rel: Path, text: str) -> list[str]:
+def markdown_problems(path: Path, rel: Path, text: str, wanted: str) -> list[str]:
     errors: list[str] = []
     if wants_frontmatter(path):
         # Checked first: a leading comment stops the frontmatter parsing,
         # so behind frontmatter_licence() this could never be reached.
         if text.lstrip().startswith("<!--"):
             errors.append(f"{rel}: frontmatter must start at byte 0; move the licence into `license:`")
-        elif not frontmatter_licence(text):
-            errors.append(f"{rel}: must declare `license:` in frontmatter")
+        else:
+            check_frontmatter(rel, frontmatter_licence(text), wanted, errors)
     elif SPDX not in text:
         errors.append(f"{rel}: missing an {SPDX} header")
     else:
-        check_identifier(rel, declared(text, HEADER_LINES), errors)
+        check_identifier(rel, declared(text, HEADER_LINES), wanted, errors)
     return errors
 
 
-def file_problems(path: Path) -> list[str]:
+def check_frontmatter(rel: Path, value: str | None, wanted: str, errors: list[str]) -> None:
+    if value is None:
+        errors.append(f"{rel}: must declare `license:` in frontmatter")
+    elif value != wanted:
+        errors.append(f"{rel}: frontmatter declares {value}, not the project's {wanted}")
+
+
+def file_problems(path: Path, wanted: str) -> list[str]:
     """One file's licence declaration, in the form its format allows."""
     rel = path.relative_to(ROOT)
     try:
@@ -83,9 +98,9 @@ def file_problems(path: Path) -> list[str]:
     except UnicodeDecodeError:
         return [f"{rel}: not UTF-8 text"]
     if path.suffix == ".md":
-        return markdown_problems(path, rel, text)
+        return markdown_problems(path, rel, text, wanted)
     errors: list[str] = []
-    check_identifier(rel, declared(text, HEADER_LINES), errors)
+    check_identifier(rel, declared(text, HEADER_LINES), wanted, errors)
     return errors
 
 
@@ -98,12 +113,16 @@ def ours(pattern: str) -> list[Path]:
 
 
 def main() -> int:
+    wanted = licence.expression(ROOT)
+    if wanted is None:
+        print('FAIL: pyproject.toml: no `license = "..."` expression')
+        return 1
     errors: list[str] = []
     checked = 0
-    for pattern in ("*.md", "*.py", "*.sh"):
+    for pattern in PATTERNS:
         for path in ours(pattern):
             checked += 1
-            errors += file_problems(path)
+            errors += file_problems(path, wanted)
 
     if errors:
         for error in errors:

@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Noyalib -->
-<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # noyalib-docs-and-writing — reference material
 
@@ -22,7 +22,7 @@ Header shapes by file type — use verbatim:
 **Rust (`.rs`)** — before `//!` module docs:
 
 ```rust
-// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR MIT
 // Copyright (c) 2026 Noyalib. All rights reserved.
 ```
 
@@ -30,14 +30,14 @@ Header shapes by file type — use verbatim:
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 Noyalib
-# SPDX-License-Identifier: MIT OR Apache-2.0
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 ```
 
 **Release-notes Markdown** — first two lines:
 
 ```markdown
 <!-- SPDX-FileCopyrightText: 2026 Noyalib -->
-<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 ```
 
 **Top-level Markdown** (README.md, CHANGELOG.md, GETTING_STARTED.md,
@@ -133,7 +133,7 @@ One file per release, SPDX headers inline. Shape from `v0.0.14`
 
 ```markdown
 <!-- SPDX-FileCopyrightText: 2026 Noyalib -->
-<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
 
 # noyalib vX.Y.Z Release Notes
 

@@ -1,7 +1,7 @@
 ---
 name: noyalib-diagnostics-and-tooling
 description: "Measure instead of eyeball. Use when running or reading coverage, Miri, criterion benchmarks, or cargo-fuzz on noyalib, when interpreting what an llvm-cov regions percentage means, or when a claim needs evidence rather than assertion."
-license: MIT
+license: Apache-2.0 OR MIT
 compatibility: "Requires cargo, git. Tested with Claude Code, Codex, and Aider skill layouts"
 allowed-tools: "Read Glob Grep Write Edit Bash WebFetch WebSearch"
 metadata:

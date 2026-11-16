@@ -29,7 +29,7 @@
         "security",
         "release"
       ],
-      "license": "MIT",
+      "license": "Apache-2.0 OR MIT",
       "name": "agtmls",
       "repository": "https://github.com/sebastienrousseau/agtmls",
       "skills": "./skills",
@@ -49,7 +49,7 @@
         "yaml",
         "rust"
       ],
-      "license": "MIT",
+      "license": "Apache-2.0 OR MIT",
       "name": "agtmls-noyalib",
       "repository": "https://github.com/sebastienrousseau/agtmls",
       "skills": "./skills",

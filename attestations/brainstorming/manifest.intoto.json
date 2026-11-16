@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "ab75dcbeb8718c162adab26ec5f9e723e3bc489910ba9e53c3826b87088a602c"
+          "sha256": "e8e874c1f62a230d8b18322aa7ecc0e5c5bae32c722167f15f61e13878cc3e66"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "f4fb3d683e133f75c3aff0cb83ccf5d2a55f06cffb731f4497f9453c399e6b18"
+          "sha256": "6a0dba7f3b6fc07cc24ebc16085600769d0d3a020540168c06644d2ede8f4016"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "5fcd619d2bdb070157f3b2b05c523a855f49af5233ac29abe72bb2793bdfef85"
+        "sha256": "37c97a5ef0ff273134383fbeb6017b5cf8bde0a582c4f72309920d3340001a57"
       },
       "name": "brainstorming"
     }

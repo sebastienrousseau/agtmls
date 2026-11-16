@@ -5,7 +5,7 @@
     "files": [
       {
         "digest": {
-          "sha256": "2c9fad0795a9f58b1b450d1f46345931da48486439ecaa29a5aaa19fc92c57bc"
+          "sha256": "12586fde9364be69ca699592ae93ebdf34eb7811905eec55dc7e8cd83dec23fc"
         },
         "path": "SKILL.md"
       },
@@ -17,7 +17,7 @@
       },
       {
         "digest": {
-          "sha256": "2b038ca25deb9a0d970da6a415e931a33d00248e5a117d50660c5c8c79994727"
+          "sha256": "369b4dc55d61fffd877f3dff4d7f67ed2a96a230439c7bd1744068ea0c31c910"
         },
         "path": "reference.md"
       }
@@ -27,7 +27,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "0817ffd098efd771d101fd7e879237f015de2f77e7fbf5c07871d4da332f80ed"
+        "sha256": "920b3eeaf29231ad7755b883a1b0eafd95f4eb6edee3dae9732d53b4daf60d61"
       },
       "name": "incident-response"
     }
