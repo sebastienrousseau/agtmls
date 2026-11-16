@@ -53,7 +53,12 @@ def collapse_blank_lines(markdown_text: str) -> str:
     optimize makes. Fences open and close as CommonMark's do (``` or ~~~,
     three or more, up to three spaces of indent, closed by the same character
     at least as long); an unclosed fence keeps the rest as it is."""
-    out, fence, blank = [], None, False
+    return _collapse(markdown_text)[0]
+
+
+def _collapse(markdown_text: str) -> tuple[str, int]:
+    """collapse_blank_lines' text, and how many runs it collapsed."""
+    out, fence, blank, runs, dropped = [], None, False, 0, False
     for line in markdown_text.splitlines(keepends=True):
         bare = line.rstrip("\r\n")
         if fence is not None:
@@ -61,10 +66,12 @@ def collapse_blank_lines(markdown_text: str) -> str:
         elif (match := FENCE_OPEN.match(bare)) and not (match.group(1)[0] == "`" and "`" in match.group(2)):
             fence = match.group(1)
         elif not bare and blank:
+            runs += not dropped
+            dropped = True
             continue
         out.append(line)
-        blank = not bare and fence is None
-    return "".join(out)
+        blank, dropped = not bare and fence is None, False
+    return "".join(out), runs
 
 
 def findings(markdown_text: str) -> list[str]:
@@ -85,17 +92,25 @@ def optimize(name: str, text: str, mode: str) -> tuple[int, list[str], str | Non
     rewrites, and only runs of blank lines, since rewriting prose can change
     what an instruction says."""
     notes = findings(text)
-    clean = collapse_blank_lines(text)
+    clean, runs = _collapse(text)
     lines = [f"{name}:{note}" for note in notes]
     tail = f"; {len(notes)} finding(s) left for you to edit" if notes else ""
     if mode == "check":
-        ok = not notes and clean == text
-        return (0 if ok else 1), [*lines, f"{'OK' if ok else 'FAIL'}: {name}{tail}"], None
+        code, said = _check(name, lines, runs, tail)
+        return code, said, None
     if mode == "write":
         done = "collapsed blank lines" if clean != text else "nothing to rewrite"
         return 0, [*lines, f"OK: {name}: {done}{tail}"], (clean if clean != text else None)
     summary = f"{estimate_tokens(text)} tokens, {structured_line_density(text)} list/table lines per 100 tokens"
     return 0, [*lines, f"OK: {name}: {summary}{tail}"], None
+
+
+def _check(name: str, lines: list[str], runs: int, tail: str) -> tuple[int, list[str]]:
+    """`optimize --check`: fail on any finding or run of blank lines, and say
+    which, so a FAIL never stands without its reason."""
+    ok = not lines and not runs
+    reason = [f"{name}: {runs} run(s) of blank lines; --write collapses them"] if runs else []
+    return (0 if ok else 1), [*lines, *reason, f"{'OK' if ok else 'FAIL'}: {name}{tail}"]
 
 
 def estimate_tokens(text: str) -> int:

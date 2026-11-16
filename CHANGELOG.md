@@ -7,6 +7,19 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.30 - 2026-11-16
+
+### Fixed
+
+- The prompt file `install` writes (`CLAUDE.md`, `AGENTS.md`,
+  `CONVENTIONS.md`) failed `agtmls optimize --check`: both installers
+  joined `system-prompts/_base.md` and the language profile with two blank
+  lines, because the base already ends with a newline. They now join with
+  one, and end the file with a single newline.
+- `optimize --check` names a run of blank lines as the reason it fails
+  (`N run(s) of blank lines; --write collapses them`). When that was the
+  only problem it printed `FAIL: <file>` with no reason.
+
 ## 0.0.29 - 2026-11-15
 
 ### Changed
