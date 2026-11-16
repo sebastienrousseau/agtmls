@@ -15,9 +15,11 @@ import argparse
 import hashlib
 import json
 import os
+import sys
 from unittest import mock
 
 from .subset_support import SubsetCase
+from .support import ROOT
 
 
 class ProvenanceTests(SubsetCase):
@@ -162,7 +164,7 @@ class ManpageTests(SubsetCase):
     """agtmls.1 carries the version, which used to be patched in by hand."""
 
     SCRIPT = "generate-manpage.py"
-    SUBSET = (".claude-plugin", "share")
+    SUBSET = (".claude-plugin", "share", "CHANGELOG.md")
 
     def bump(self, version: str) -> None:
         self.preserve(".claude-plugin/plugin.json")
@@ -181,6 +183,28 @@ class ManpageTests(SubsetCase):
         code, output = self.drive("--check")
         self.assertEqual(code, 0, output)
         self.assertIn("OK: manpage is current", output)
+
+    def test_every_subcommand_is_documented_with_its_help(self) -> None:
+        """The page was a hand-written template that covered 11 of 37 commands
+        and spelled every long option `\\-\\-\\-`, which renders as `---`."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from _lib.cli_parser import build_parser
+
+        page = self.script().rendered()
+        sub = next(a for a in build_parser()._actions if isinstance(a, argparse._SubParsersAction))  # noqa: SLF001
+        helps = {choice.dest: choice.help for choice in sub._choices_actions}  # noqa: SLF001
+        self.assertEqual(sorted(helps), sorted(sub.choices))
+        for name, text in helps.items():
+            with self.subTest(command=name):
+                self.assertTrue(text, f"{name} has no help text")
+                self.assertIn(f"\\fB{name}\\fR", page)
+                self.assertIn(text.replace("-", "\\-"), page)
+        self.assertNotIn("\\-\\-\\-", page)
+
+    def test_a_page_without_a_changelog_has_no_date(self) -> None:
+        self.preserve("CHANGELOG.md")
+        self.path("CHANGELOG.md").unlink()
+        self.assertIn('.TH AGTMLS 1 ""', self.script().rendered())
 
     def test_a_version_bump_makes_the_committed_page_stale(self) -> None:
         self.assertEqual(self.drive("--check")[0], 0, "the committed manpage should be current")

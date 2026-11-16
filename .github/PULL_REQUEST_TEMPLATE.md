@@ -37,7 +37,7 @@ This PR <!-- announces what it does, in one plain line -->.
 
 ## Validation
 
-* `python3 scripts/run-all-checks.py`: <!-- result, e.g. 74 check(s) passed -->.
+* `python3 scripts/run-all-checks.py`: <!-- result, e.g. 75 check(s) passed -->.
 * `python3 scripts/run-coverage.py --scope unit`: <!-- unit test coverage percentage -->.
 
 ## Checksums

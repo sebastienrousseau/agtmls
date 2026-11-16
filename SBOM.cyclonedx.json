@@ -831,7 +831,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "46f9309cec27a72799ac25f6ee174ef95e4d46d557d270fc8e1eb3c3783f4f95"
+          "content": "5331a6a07231f63cee9bd909ce9c6e08fbd2e7b7e4f0d0f9072c8c05cc43f359"
         }
       ],
       "name": "checks.json",
@@ -1832,7 +1832,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7aa9e5451c523b3bfd57ade5fa6923a3789dacee7f36c9aaea3462424897fda9"
+          "content": "e06b20083318e2bc1bbaa1df5c97a1cabb00457a9401d7dae876ca12239939eb"
         }
       ],
       "name": "index.json",
@@ -2987,7 +2987,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "c3b1cafe9d97c5ae21a37ec3c459036ec15bec4d366a01546b970703b916e5e2"
+          "content": "7a190ec446802cdff55f9a37d9b3ccf0990ac88318d0f09579abb02ddfcb6c27"
         }
       ],
       "name": "scripts/generate-manpage.py",
@@ -5443,7 +5443,7 @@
       "type": "application",
       "version": "0.0.31"
     },
-    "timestamp": "2026-11-16T13:39:34Z",
+    "timestamp": "2026-11-16T13:43:08Z",
     "tools": {
       "components": [
         {

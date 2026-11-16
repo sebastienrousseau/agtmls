@@ -53,78 +53,78 @@ def native_agents() -> list[str]:
 
 def _inspection_commands(sub, agents: list[str]) -> None:
     """Inspecting the registry and a target: doctor, status, check, list, search, show, stats, profiles, providers."""
-    doctor = sub.add_parser("doctor")
+    doctor = sub.add_parser("doctor", help="health checks for a checkout, or with --installed the installed registry and a target")
     doctor.add_argument("--target", type=Path)
     doctor.add_argument("--agent", choices=agents)
     doctor.add_argument("--skills-only", action="store_true")
     doctor.add_argument("--bundle", action="append", default=[])
     doctor.add_argument("--installed", action="store_true")
 
-    status = sub.add_parser("status")
+    status = sub.add_parser("status", help="the same checks as doctor")
     status.add_argument("--target", type=Path)
     status.add_argument("--agent", choices=agents)
     status.add_argument("--skills-only", action="store_true")
     status.add_argument("--bundle", action="append", default=[])
     status.add_argument("--installed", action="store_true")
 
-    sub.add_parser("check")
+    sub.add_parser("check", help="run every check in checks.json, the gate CI runs")
 
-    list_cmd = sub.add_parser("list")
+    list_cmd = sub.add_parser("list", help="list the registry's skills, or its commands")
     list_cmd.add_argument("kind", nargs="?", choices=["skills", "commands"], default="skills")
     list_cmd.add_argument("--bundle")
     list_cmd.add_argument("--json", action="store_true")
 
-    search = sub.add_parser("search")
+    search = sub.add_parser("search", help="find skills and commands whose name, description, bundle, path or tags hold every term")
     search.add_argument("query")
     search.add_argument("--json", action="store_true")
 
-    show = sub.add_parser("show")
+    show = sub.add_parser("show", help="print one skill's or command's index entry")
     show.add_argument("name")
     show.add_argument("--json", action="store_true")
 
-    stats_cmd = sub.add_parser("stats")
+    stats_cmd = sub.add_parser("stats", help="summarise the registry: counts, bundles, coverage and quality")
     stats_cmd.add_argument("--json", action="store_true")
 
-    profiles_cmd = sub.add_parser("profiles")
+    profiles_cmd = sub.add_parser("profiles", help="list the install profiles in profiles.json")
     profiles_cmd.add_argument("--json", action="store_true")
 
-    providers_cmd = sub.add_parser("providers")
+    providers_cmd = sub.add_parser("providers", help="list the native agents and export targets in providers.json")
     providers_cmd.add_argument("--json", action="store_true")
 
 
 def _generator_commands(sub) -> None:
     """Exporting, and the release tooling: export, docs-site, release-pack, next-version, bump-version, release-dry-run, verify-release-assets."""
-    export_cmd = sub.add_parser("export")
+    export_cmd = sub.add_parser("export", help="export a provider-neutral bundle of the registry for one provider")
     export_cmd.add_argument("--provider", default="generic")
     export_cmd.add_argument("--profile")
     export_cmd.add_argument("--bundle", action="append", default=[])
     export_cmd.add_argument("--out-dir", type=Path)
 
-    docs_site = sub.add_parser("docs-site")
+    docs_site = sub.add_parser("docs-site", help="generate the static HTML catalog in site/, or check it is current")
     docs_site.add_argument("--write", action="store_true")
     docs_site.add_argument("--check", action="store_true")
 
-    release_pack = sub.add_parser("release-pack")
+    release_pack = sub.add_parser("release-pack", help="build release artifacts and their checksums")
     release_pack.add_argument("--out-dir", type=Path)
     release_pack.add_argument("--profile")
     release_pack.add_argument("--provider", action="append", default=[])
 
-    next_version = sub.add_parser("next-version")
+    next_version = sub.add_parser("next-version", help="print the next allowed release version")
     next_version.add_argument("--tag", action="store_true")
     next_version.add_argument("--json", action="store_true")
 
-    bump_version = sub.add_parser("bump-version")
+    bump_version = sub.add_parser("bump-version", help="move every version carrier to the next allowed version")
     bump_version.add_argument("--version")
     bump_version.add_argument("--date")
     bump_version.add_argument("--check", action="store_true")
 
-    release_dry_run = sub.add_parser("release-dry-run")
+    release_dry_run = sub.add_parser("release-dry-run", help="rehearse a release without tagging or publishing")
     release_dry_run.add_argument("--version")
     release_dry_run.add_argument("--skip-check", action="store_true")
     release_dry_run.add_argument("--profile")
     release_dry_run.add_argument("--provider", action="append", default=[])
 
-    verify_release_assets = sub.add_parser("verify-release-assets")
+    verify_release_assets = sub.add_parser("verify-release-assets", help="download a GitHub release and verify its checksums and tarball manifests")
     verify_release_assets.add_argument("--tag", default="v0.0.1")
     verify_release_assets.add_argument("--repo")
     verify_release_assets.add_argument("--out-dir", type=Path)
@@ -132,47 +132,47 @@ def _generator_commands(sub) -> None:
 
 def _evolution_commands(sub) -> None:
     """Skill evolution and the generated artifacts: evolve, evidence, mcp-resources, plugin-manifests, sbom, provenance, provider-install, bench, diff, release-check."""
-    evolve = sub.add_parser("evolve")
+    evolve = sub.add_parser("evolve", help="turn a session transcript into a redacted skill-evolution proposal")
     evolve.add_argument("transcript", type=Path)
     evolve.add_argument("--skill-name", required=True)
 
-    evidence = sub.add_parser("evidence")
+    evidence = sub.add_parser("evidence", help="record a local skill invocation evidence event")
     evidence.add_argument("--skill", required=True)
     evidence.add_argument("--command", dest="evidence_commands", action="append", default=[])
     evidence.add_argument("--file", action="append", default=[])
     evidence.add_argument("--outcome", default="recorded")
 
 
-    mcp_resources = sub.add_parser("mcp-resources")
+    mcp_resources = sub.add_parser("mcp-resources", help="generate the MCP resource descriptors for the skills, or check them")
     mcp_resources.add_argument("--write", action="store_true")
     mcp_resources.add_argument("--check", action="store_true")
 
-    plugin_manifests = sub.add_parser("plugin-manifests")
+    plugin_manifests = sub.add_parser("plugin-manifests", help="generate every runtime's plugin manifest, or check them")
     plugin_manifests.add_argument("--write", action="store_true")
     plugin_manifests.add_argument("--check", action="store_true")
 
-    sbom = sub.add_parser("sbom")
+    sbom = sub.add_parser("sbom", help="generate the SPDX 2.3 and CycloneDX 1.6 SBOMs, or check them")
     sbom.add_argument("--write", action="store_true")
     sbom.add_argument("--check", action="store_true")
 
-    provenance = sub.add_parser("provenance")
+    provenance = sub.add_parser("provenance", help="generate the in-toto SLSA provenance statement, or check it")
     provenance.add_argument("--write", action="store_true")
     provenance.add_argument("--check", action="store_true")
 
-    provider_install = sub.add_parser("provider-install")
+    provider_install = sub.add_parser("provider-install", help="install a provider's adapter files into a target directory")
     provider_install.add_argument("--provider", required=True)
     provider_install.add_argument("--target", type=Path, required=True)
     provider_install.add_argument("--profile")
     provider_install.add_argument("--check", action="store_true")
 
-    sub.add_parser("bench")
+    sub.add_parser("bench", help="measure how long AgtMLS takes, and fail when it gets slower")
 
-    diff_cmd = sub.add_parser("diff")
+    diff_cmd = sub.add_parser("diff", help="diff two index files")
     diff_cmd.add_argument("--from", dest="old", required=True)
     diff_cmd.add_argument("--to", dest="new", help="defaults to this registry's index.json")
     diff_cmd.add_argument("--json", action="store_true")
 
-    sub.add_parser("release-check")
+    sub.add_parser("release-check", help="run the release-focused checks")
 
 
 def _audit_commands(sub) -> None:
@@ -188,12 +188,12 @@ def _audit_commands(sub) -> None:
     audit_cmd.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail")
     audit_cmd.add_argument("--write-baseline", type=Path, help="record this audit's fingerprints")
 
-    import_cmd = sub.add_parser("import-skill")
+    import_cmd = sub.add_parser("import-skill", help="import an external Markdown skill into the draft area")
     import_cmd.add_argument("source", type=Path)
     import_cmd.add_argument("--name")
     import_cmd.add_argument("--bundle")
 
-    index = sub.add_parser("index")
+    index = sub.add_parser("index", help="generate index.json, or check it is current")
     index.add_argument("--write", action="store_true")
     index.add_argument("--check", action="store_true")
 
@@ -215,7 +215,7 @@ def _audit_commands(sub) -> None:
 
 def _install_commands(sub, agents: list[str]) -> None:
     """Installing into a target and removing from it: install, verify, uninstall, propose-skill, scaffold-skill."""
-    install = sub.add_parser("install")
+    install = sub.add_parser("install", help="install the skills, commands and prompt file for one agent into a repository")
     install.add_argument("language")
     install.add_argument("agent", choices=agents)
     install.add_argument("--target", type=Path, default=Path.cwd())
@@ -257,16 +257,16 @@ def _install_commands(sub, agents: list[str]) -> None:
                              "headless session; Codex: its rendered prompt, no model call)")
     verify.add_argument("--json", action="store_true")
 
-    remove = sub.add_parser("uninstall")
+    remove = sub.add_parser("uninstall", help="remove what install put into a repository")
     remove.add_argument("agent", choices=agents)
     remove.add_argument("--target", type=Path, default=Path.cwd())
     remove.add_argument("--remove-prompt", action="store_true")
 
-    propose = sub.add_parser("propose-skill")
+    propose = sub.add_parser("propose-skill", help="turn a session transcript into a redacted skill proposal")
     propose.add_argument("transcript", type=Path)
     propose.add_argument("--skill-name", required=True)
 
-    scaffold = sub.add_parser("scaffold-skill")
+    scaffold = sub.add_parser("scaffold-skill", help="scaffold a new skill from the templates")
     scaffold.add_argument("name")
     scaffold.add_argument("--bundle")
     scaffold.add_argument("--title")
