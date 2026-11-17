@@ -41,3 +41,15 @@ def foreign_target(target: str) -> str:
     if "@" not in target or Path(target).exists():
         return str(Path(target).resolve())
     return target
+
+
+def audit_format(args) -> str | None:
+    """`--format`, or json for the older `--json`, or None for the default."""
+    return (args.format or args.json) and (args.format or "json")
+
+
+def changed_config(cmd: list[str], args) -> list[str]:
+    """`audit --changed-agent-config BASE`, run in the caller's repository."""
+    cmd += [args.changed_agent_config, "--root", str(Path.cwd())]
+    option(cmd, "--format", audit_format(args))
+    return cmd

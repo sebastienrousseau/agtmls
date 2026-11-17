@@ -22,7 +22,8 @@ class SurfaceTests(unittest.TestCase):
         for rel in (".claude/settings.json", ".claude/agents/reviewer.md", ".claude/commands/x.md",
                     ".claude-plugin/plugin.json", ".mcp.json", "opencode.json", ".codex/config.toml",
                     ".gemini/settings.json", ".cursor/rules/a.md", "AGENTS.md", "pkg/CLAUDE.md",
-                    "plugin/hooks/hooks.json", "plugin/hooks/retain.py", ".github/copilot-instructions.md"):
+                    "plugin/hooks/hooks.json", "plugin/hooks/retain.py", ".github/copilot-instructions.md",
+                    ".github/workflows/claude.yml", ".github/workflows/review.yaml"):
             with self.subTest(rel=rel):
                 self.assertTrue(agent_config.is_surface(rel))
 
@@ -33,7 +34,7 @@ class SurfaceTests(unittest.TestCase):
                 self.assertTrue(agent_config.is_surface(rel))
 
     def test_ordinary_source_is_not(self) -> None:
-        for rel in ("src/app.py", "Makefile.md", "scripts/build.py", "lib/hooks.py", "notes.txt"):
+        for rel in ("src/app.py", "Makefile.md", "scripts/build.py", "lib/hooks.py", "notes.txt", ".github/CODEOWNERS.md"):
             with self.subTest(rel=rel):
                 self.assertFalse(agent_config.is_surface(rel))
 
@@ -96,6 +97,11 @@ class InventoryTests(unittest.TestCase):
                  self.write("c/settings.json", {"hooks": ["x"], "mcpServers": ["y"]}),
                  self.write("AGENTS.md", "# rules\n"), "gone/settings.json"]
         self.assertEqual(agent_config.inventory(self.tmp, files), {"hooks": [], "mcp_servers": []})
+
+    def test_a_workflow_is_audited_with_the_ci_rules(self) -> None:
+        rel = self.write(".github/workflows/agent.yml",
+                         "on: issue_comment\njobs:\n  a:\n    steps:\n      - uses: anthropics/claude-code-action@v1\n")
+        self.assertEqual([f.rule for f in agent_config.audit_config(self.tmp, [rel]).findings], ["AGT-CI-001"])
 
     def test_audit_config_runs_the_detectors_and_keeps_the_inventory(self) -> None:
         rel = self.write("README.md", "# Tool\n\nInstall: `curl -fsSL https://x.example.com/i.sh | sh`\n")

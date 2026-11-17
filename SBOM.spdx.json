@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-16T20:51:51Z",
+    "created": "2026-11-17T00:15:09Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -2417,11 +2417,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "344ec29836175aa1170c144334fd530570e38e74"
+          "checksumValue": "269e83086d8171e0967328a69820270b736e47fd"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "f27c8ebcde036626485ffac96db7461e6224f1b5fc6c983743183d024f8829a0"
+          "checksumValue": "6caa6524106f500041574e31f1c743ef1607457d6c0f1fc3862637468457b252"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3521,11 +3521,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "04fa2a19caf035f841e66775a3c2d1a9f90f22ef"
+          "checksumValue": "3adfc5ecf03f1139ab6c5e85f191b09db4ca3e63"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4b6fb21ca27e89f5b5457045007269a4ab0e07fb11d62cfdcba9745d74465b7b"
+          "checksumValue": "c266e4d7432ea9bdd3d532f049bd3965fed6fcd5a0f203eb89623b47e72e3ca5"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3601,11 +3601,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "add3a5e7d52842a7229a6f87955142ba76bc26c5"
+          "checksumValue": "39197fbfaa664c406fb7d8c90fc6a11955f27820"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "6c018944e446415e690bfc4eba0d4caa5f8259dd5f28c78bd17290bfd0f681ed"
+          "checksumValue": "eb3a1db4be7d09b5f9095816d76415e7807a32dc41312fc3c561a41d42d6be1b"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3617,11 +3617,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "9a6329599217db341d3e3f5f6f74744cb34b51c6"
+          "checksumValue": "2a8cad5a70c4003aac487481573c7cdcfc9c56d2"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "9e36f115b6f10f92beaf3fa06123e6d355cc73c7a1dcafa824670f5018c3ba27"
+          "checksumValue": "023983d135a951596334d16875d11982fc6dac9f4ba5653d6abd8905b6516eb9"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3937,11 +3937,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "8dd37a64476f7e0b55ab7e7c0a1e423f8ce5ad15"
+          "checksumValue": "459a8e8204221d77d9428beb9b7621d68d505cba"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "b0773f251581fb0ba2d1ebce850ffe86abdfd355252463a0bd83ce5e3ccb3db5"
+          "checksumValue": "eff7a0f8999bd8addb493545fe19455ee1c473dfc9b1d0b10f12c8693f31823c"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4177,15 +4177,31 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "5903f7b6abbcd4b4b6b4dc3ffacd53c92cf83e19"
+          "checksumValue": "bc99fcd0530e6771a76608d2ab9017fb1c49a24c"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "4220b5aef31a84992b517536f342830da38cb94f66e06e2a97b6baa68e17e78c"
+          "checksumValue": "087042f4ec24964786e2d0a77d10c360d5f063627ddeccb1991c38cff2bf3be4"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
       "fileName": "./scripts/agtmls.py",
+      "licenseConcluded": "Apache-2.0 OR MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-File-scripts-audit-changed-config.py",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "6c361f5727d5166863b7d8fb911a3d1551857754"
+        },
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "48d11572853657500ab06af2ca8992044e1391b0b6fb9152176094985aff3508"
+        }
+      ],
+      "copyrightText": "Copyright 2026 Sebastien Rousseau",
+      "fileName": "./scripts/audit-changed-config.py",
       "licenseConcluded": "Apache-2.0 OR MIT"
     },
     {
@@ -8257,6 +8273,7 @@
         "SPDXRef-File-scripts-agtmls-doctor.py",
         "SPDXRef-File-scripts-agtmls-statusline.sh",
         "SPDXRef-File-scripts-agtmls.py",
+        "SPDXRef-File-scripts-audit-changed-config.py",
         "SPDXRef-File-scripts-audit-skill.py",
         "SPDXRef-File-scripts-bench.py",
         "SPDXRef-File-scripts-bump-version.py",

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import NamedTuple
 
@@ -41,10 +42,12 @@ def is_surface(rel: str) -> bool:
 
     README files and docs/ are included for the install snippets in them:
     the command a reader pastes runs with their rights, as a hook does.
+    GitHub workflows are included because an agent action runs there with
+    the job's token and secrets (the AGT-CI rules).
     """
     parts = rel.split("/")
     name = parts[-1]
-    if name in CONFIG_NAMES or CONFIG_DIRS.intersection(parts[:-1]):
+    if name in CONFIG_NAMES or CONFIG_DIRS.intersection(parts[:-1]) or parts[:2] == [".github", "workflows"]:
         return True
     if len(parts) == 1:
         return name.lower().startswith(("readme", "install"))
@@ -225,3 +228,46 @@ def audit_config(root: Path, files: list[str], pedantic: bool = False) -> Config
     for rel in files:
         findings.extend(audit_file(root / rel, pedantic))
     return ConfigAudit(files, findings, inventory(root, files))
+
+
+# --- what a branch changes -----------------------------------------------
+
+# The paths an agent reads as configuration on its next run, after the
+# list claude-code-action restores before it runs on a pull request, plus
+# the other agents' equivalents. README and docs are not on it: a changed
+# install snippet is reviewed as prose, a changed hook runs unread.
+WATCH_DIRS = {".claude", ".codex", ".cursor", ".gemini", ".opencode", ".husky",
+              ".claude-plugin", ".codex-plugin", ".cursor-plugin"}
+WATCH_NAMES = {".mcp.json", ".claude.json", ".gitmodules", ".ripgreprc", "CLAUDE.md", "CLAUDE.local.md",
+               "AGENTS.md", "GEMINI.md", "opencode.json", "opencode.jsonc", "copilot-instructions.md",
+               "hooks.json", "plugin.json", "marketplace.json"}
+
+
+def watched(rel: str) -> bool:
+    """Whether a changed path is agent configuration an agent loads unread."""
+    parts = rel.split("/")
+    return parts[-1] in WATCH_NAMES or bool(WATCH_DIRS.intersection(parts[:-1]))
+
+
+class ConfigChangeError(RuntimeError):
+    """git could not compare the branch with its base."""
+
+
+def changed_config(root: Path, base: str) -> list[tuple[str, str]]:
+    """(status, path) for each watched path changed between `base` and HEAD.
+
+    Compared from the merge base (`base...HEAD`), so a base that moved on
+    does not show its own changes as the branch's. A rename is reported
+    under its new path.
+    """
+    argv = ["git", "-C", str(root), "diff", "--name-status", "-M", "--no-color", f"{base}...HEAD", "--"]
+    proc = subprocess.run(argv, capture_output=True, text=True, check=False)
+    if proc.returncode != 0:
+        raise ConfigChangeError(proc.stderr.strip() or f"git diff {base}...HEAD failed")
+    changes: list[tuple[str, str]] = []
+    for line in proc.stdout.splitlines():
+        fields = line.split("\t")
+        status, path = fields[0][:1], fields[-1]
+        if watched(path):
+            changes.append((status, path))
+    return changes

@@ -155,7 +155,9 @@ wiring and settings (`.claude/`, `.codex/`, `.cursor/`, `.gemini/`,
 `config.toml`), instruction files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`,
 `copilot-instructions.md`), and the install snippets and scripts a reader is
 told to run (`README*`, `install*` at the root, `docs/`, and `scripts/` files
-named for install, setup, bootstrap or link). Each is audited with the same
+named for install, setup, bootstrap or link), and the GitHub workflows in
+`.github/workflows/`, where an agent action runs with the job's token
+(`AGT-CI-*`). Each is audited with the same
 rules as a skill, and the report lists what they wire up before any finding
 about it:
 
@@ -215,6 +217,24 @@ a baseline written for one checkout or clone matches the next.
 `--foreign <git-url>@<sha>` clones and audits a commit. Network fetch is
 opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
 or tag can move between the audit and the install.
+
+## Holding a branch that changes agent configuration
+
+`audit --changed-agent-config <base>` lists the agent configuration a
+branch changes since it left `<base>` (compared from the merge base):
+`.claude/`, `.codex/`, `.cursor/`, `.gemini/`, `.husky/`, plugin
+directories, `.mcp.json`, `.claude.json`, `.gitmodules`, `.ripgreprc`,
+`CLAUDE.md`, `CLAUDE.local.md`, `AGENTS.md`, `GEMINI.md`, `opencode.json`
+and `copilot-instructions.md`, wherever they sit. Each path that still
+exists is audited, with its hooks and MCP servers listed. These files steer
+an agent on its next run before anyone has read them, so the command exits
+1 whenever one changed, for a CI job to hold the change for review; 0 when
+none did; 2 when git cannot compare. `--format json` carries `changed`,
+`findings` and `inventory`.
+
+```sh
+agtmls audit --changed-agent-config origin/main
+```
 
 ## Auditing an external skill before importing it
 

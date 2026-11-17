@@ -7,6 +7,29 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `audit --changed-agent-config <base>`: lists the agent configuration a
+  branch changes (the paths claude-code-action restores before it runs,
+  plus `AGENTS.md`, `.codex/` and `opencode.json`), audits each with its
+  hook and MCP inventory, and exits 1 when any changed (plan R35-3).
+- Five workflow rules from agtmls-spec (57 in all), and `audit --foreign`
+  now reads `.github/workflows/`: AGT-CI-001 (agent action on a tag or
+  branch), AGT-CI-002 (secret handed to an action on a mutable ref),
+  AGT-CI-003 (`pull_request_target` or `issue_comment` checking out the
+  pull request head), AGT-CI-004 (agent open to any user or bot) and
+  AGT-CI-005 (write or OIDC token on those triggers). Eight corpus cases
+  (151, precision and recall 1.000). Written as patterns rather than over
+  a new YAML parser (plan R35-1): both implementations read them from data,
+  so agtmls-core needed no change (R35-2).
+
+### Changed
+
+- AGT-ATTR-001 no longer fires on prose that describes it, and
+  AGT-SUPPLY-004 no longer reads a marketplace whose plugin is the
+  repository itself (`"url": "./"`) as unpinned; both were found by
+  auditing this repository with `--foreign`.
+
 ### Fixed
 
 - `audit --all` slowed by about 30% in 0.0.34 (571 ms to 746 ms on the CI

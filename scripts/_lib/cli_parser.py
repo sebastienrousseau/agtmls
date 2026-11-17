@@ -187,6 +187,8 @@ def _audit_commands(sub) -> None:
     audit_cmd.add_argument("--format", choices=["text", "json", "sarif"], default=None, help="output format")
     audit_cmd.add_argument("--baseline", type=Path, help="fingerprints of known findings; only new ones fail")
     audit_cmd.add_argument("--write-baseline", type=Path, help="record this audit's fingerprints")
+    audit_cmd.add_argument("--changed-agent-config", metavar="BASE",
+                           help="name and audit the agent configuration this branch changes since BASE; exit 1 if any")
 
     import_cmd = sub.add_parser("import-skill", help="import an external Markdown skill into the draft area")
     import_cmd.add_argument("source", type=Path)
