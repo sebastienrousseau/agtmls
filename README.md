@@ -541,6 +541,9 @@ tracked:
   ungated or write user-level settings; MCP servers that are unpinned, over
   plain HTTP, or loaded from outside the repository; pre-approved
   destructive commands; unpinned plugin sources.
+- **Workflows** (`AGT-CI-*`): agent actions or secrets on unpinned refs,
+  untrusted triggers that check out pull request code or hold write
+  tokens, and agent actions open to any user.
 - **Persistence and installers** (`AGT-PERSIST-*`, `AGT-INST-*`): content
   that schedules itself, and `rm -rf` over the user's own agent directories.
 - **Hidden channels** (`AGT-RENDER-*`, `AGT-SUPPRESS-*`, `AGT-ATTR-*`):

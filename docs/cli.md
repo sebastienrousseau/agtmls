@@ -155,7 +155,9 @@ wiring and settings (`.claude/`, `.codex/`, `.cursor/`, `.gemini/`,
 `config.toml`), instruction files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`,
 `copilot-instructions.md`), and the install snippets and scripts a reader is
 told to run (`README*`, `install*` at the root, `docs/`, and `scripts/` files
-named for install, setup, bootstrap or link). Each is audited with the same
+named for install, setup, bootstrap or link), and the GitHub workflows in
+`.github/workflows/`, where an agent action runs with the job's token
+(`AGT-CI-*`). Each is audited with the same
 rules as a skill, and the report lists what they wire up before any finding
 about it:
 

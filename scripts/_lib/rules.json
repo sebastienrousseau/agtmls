@@ -18,12 +18,16 @@
         {
           "note": "Adding attribution.",
           "text": "Record the agent's part in an Assisted-by trailer."
+        },
+        {
+          "note": "Prose describing the instruction, not giving it.",
+          "text": "The rules flag instructions to strip AI attribution from commits."
         }
       ],
       "id": "AGT-ATTR-001",
-      "pattern": "(?i)\\b(?:remove|strip|omit|drop|delete|never (?:add|include|write)|do not (?:add|include|write)|don't (?:add|include|write))\\b[^.]{0,60}?\\b(?:co-authored-by|assisted-by|generated with (?:claude|codex|an? ai)|ai attribution|ai co-?author)|\\b(?:never|do not|don't) (?:mention|credit|reference|disclose) (?:that )?(?:claude|codex|ai|an? ai|the (?:ai|assistant|agent))\\b[^.]{0,40}?\\b(?:commits?|pull requests?|PRs?)\\b",
-      "rationale": "Attribution trailers are how a reviewer, and the project's licence and contribution policy, know an agent wrote a change. A skill that tells the agent to strip them makes every change it touches look hand-written. Seen in a published persona skill. Moving attribution from a PR body to a commit trailer is not this rule: the attribution survives.",
-      "scope": "normalised",
+      "pattern": "(?i)(?:(?m:^)[ \\t]*(?:[-*>+][ \\t]+|\\d+[.)][ \\t]+)?|[.:;!?\\u2014-][ \\t]+)(?:remove|strip|omit|drop|delete|never (?:add|include|write)|do not (?:add|include|write)|don't (?:add|include|write))\\b[^.\\n]{0,60}?\\b(?:co-authored-by|assisted-by|generated with (?:claude|codex|an? ai)|ai attribution|ai co-?author)|(?:(?m:^)[ \\t]*(?:[-*>+][ \\t]+|\\d+[.)][ \\t]+)?|[.:;!?\\u2014-][ \\t]+)(?:never|do not|don't) (?:mention|credit|reference|disclose) (?:that )?(?:claude|codex|ai|an? ai|the (?:ai|assistant|agent))\\b[^.\\n]{0,40}?\\b(?:commits?|pull requests?|PRs?)\\b",
+      "rationale": "Attribution trailers are how a reviewer, and the project's licence and contribution policy, know an agent wrote a change. A skill that tells the agent to strip them makes every change it touches look hand-written. Seen in a published persona skill. Moving attribution from a PR body to a commit trailer is not this rule: the attribution survives. The verb must open a line (after an optional bullet or list number) or follow a full stop, colon or dash, so prose describing such an instruction is not one. Limit: matched line by line, so an instruction split across two lines is missed.",
+      "scope": "raw",
       "severity": "low",
       "title": "Instruction to remove AI attribution",
       "true_positive": [
@@ -35,6 +39,9 @@
         },
         {
           "text": "Do not mention that an AI wrote the change in commit messages."
+        },
+        {
+          "text": "6. **No trailers** \u2014 never add AI attribution to commits."
         }
       ]
     },
@@ -88,6 +95,169 @@
         },
         {
           "text": "\"allow\": [\"mcp__*__*\", \"Bash(*)\"]"
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.yml",
+        "*.yaml"
+      ],
+      "category": "supply_chain",
+      "description": "A coding-agent action (claude-code-action, codex-action, run-gemini-cli, under any owner) used at a tag, branch or short SHA rather than a full commit",
+      "false_positive": [
+        {
+          "note": "Pinned to a commit.",
+          "text": "uses: anthropics/claude-code-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b # v1"
+        },
+        {
+          "note": "Not an agent action; AGT-CI-002 covers secrets passed to it.",
+          "text": "uses: actions/checkout@v4"
+        }
+      ],
+      "id": "AGT-CI-001",
+      "pattern": "(?i)uses:\\s*[\"']?[\\w.-]+/(?:claude-code(?:-base)?-action|codex-action|run-gemini-cli)(?:/[\\w./-]+)?@(?:[^\\s\"'#]*[^0-9a-f\\s\"'#][^\\s\"'#]*|[0-9a-f]{1,39})(?:[\\s\"'#]|$)",
+      "rationale": "An agent action runs a model with the job's token and tools on whatever the action's owner points that tag or branch at next. A moved tag changes what the agent may do in every repository that uses it, at its next run. Pin to a 40-hex commit, with the version in a comment. Seen in the reviewed repositories' workflows and README examples.",
+      "scope": "normalised",
+      "severity": "high",
+      "title": "Agent action on a mutable ref",
+      "true_positive": [
+        {
+          "text": "uses: anthropics/claude-code-action@v1"
+        },
+        {
+          "text": "uses: \"openai/codex-action@main\""
+        },
+        {
+          "text": "uses: google-github-actions/run-gemini-cli@a1b2c3d"
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.yml",
+        "*.yaml"
+      ],
+      "category": "supply_chain",
+      "description": "A step that uses an action at a tag, branch or short SHA and passes it a `${{ secrets.* }}` value",
+      "false_positive": [
+        {
+          "note": "Pinned to a commit.",
+          "text": "- uses: some-org/deploy-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n  with:\n    api_key: ${{ secrets.API_KEY }}"
+        },
+        {
+          "note": "The secret belongs to the next, pinned step.",
+          "text": "- uses: actions/checkout@v4\n- uses: some-org/deploy-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n  with:\n    api_key: ${{ secrets.API_KEY }}"
+        }
+      ],
+      "id": "AGT-CI-002",
+      "pattern": "(?i)uses:\\s*[\"']?[\\w.-]+/[\\w./-]+@(?:[^\\s\"'#]*[^0-9a-f\\s\"'#][^\\s\"'#]*|[0-9a-f]{1,39})(?:[\\s\"'#]|$)(?:[^-]|-\\S){0,400}?\\$\\{\\{\\s*secrets\\.",
+      "rationale": "A secret passed in `with:` or `env:` goes to whatever code the action's tag points at when the job runs. A compromised or retagged action reads it, as tj-actions/changed-files did in 2025. Pin the action to a full commit. Limit: the secret must follow the `uses:` line within the same step (no `- ` step marker between them), in the usual key order.",
+      "scope": "normalised",
+      "severity": "high",
+      "title": "Secret handed to an action on a mutable ref",
+      "true_positive": [
+        {
+          "text": "- uses: some-org/deploy-action@v2\n  with:\n    api_key: ${{ secrets.API_KEY }}"
+        },
+        {
+          "text": "- uses: anthropics/claude-code-action@beta\n  with:\n    anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}"
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.yml",
+        "*.yaml"
+      ],
+      "category": "unsafe_execution",
+      "description": "A workflow on `pull_request_target` or `issue_comment` that checks out the pull request head (`github.event.pull_request.head.*`, or `refs/pull/<n>/head`)",
+      "false_positive": [
+        {
+          "note": "pull_request runs without the base repository's secrets.",
+          "text": "on:\n  pull_request:\njobs:\n  a:\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          ref: ${{ github.event.pull_request.head.sha }}"
+        },
+        {
+          "note": "Checks out the base branch.",
+          "text": "on:\n  pull_request_target:\njobs:\n  a:\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b"
+        }
+      ],
+      "id": "AGT-CI-003",
+      "pattern": "(?i)\\b(?:pull_request_target|issue_comment)\\b[\\s\\S]*?ref:\\s*[\"']?(?:\\$\\{\\{\\s*github\\.event\\.pull_request\\.head\\.(?:sha|ref)|refs/pull/\\$\\{\\{)",
+      "rationale": "pull_request_target and issue_comment run with the base repository's secrets and a write token. Checking out the pull request head then hands an outsider's code, and its agent instructions, to that job: build scripts, CLAUDE.md, .mcp.json and hooks all run or steer with those rights. This is the pattern claude-code-action documents defending against. Limit: the trigger must be named before the checkout, as `on:` always is.",
+      "scope": "normalised",
+      "severity": "high",
+      "title": "Untrusted trigger checks out the pull request's code",
+      "true_positive": [
+        {
+          "text": "on:\n  pull_request_target:\njobs:\n  review:\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          ref: ${{ github.event.pull_request.head.sha }}"
+        },
+        {
+          "text": "on:\n  issue_comment:\n    types: [created]\njobs:\n  a:\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          ref: refs/pull/${{ github.event.issue.number }}/head"
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.yml",
+        "*.yaml"
+      ],
+      "category": "permission_posture",
+      "description": "An agent action input `allowed_non_write_users: \"*\"` or `allowed_bots: \"*\"`",
+      "false_positive": [
+        {
+          "note": "A named bot.",
+          "text": "allowed_bots: \"dependabot[bot]\""
+        },
+        {
+          "note": "A named user.",
+          "text": "allowed_non_write_users: \"octocat\""
+        }
+      ],
+      "id": "AGT-CI-004",
+      "pattern": "(?i)\\ballowed_(?:non_write_users|bots)\\s*:\\s*[\"']\\*[\"']",
+      "rationale": "These inputs widen who may trigger the agent from repository collaborators to anyone who can open an issue or comment, and to any bot. The agent then acts with the job's token on a stranger's instructions. Name the users or bots, or gate on author_association. Seen in claude-code-action's documented inputs.",
+      "scope": "normalised",
+      "severity": "high",
+      "title": "Agent action open to any user or bot",
+      "true_positive": [
+        {
+          "text": "allowed_non_write_users: \"*\""
+        },
+        {
+          "text": "allowed_bots: '*'  # any bot"
+        }
+      ]
+    },
+    {
+      "applies_to": [
+        "*.yml",
+        "*.yaml"
+      ],
+      "category": "permission_posture",
+      "description": "A workflow on `pull_request_target` or `issue_comment` that grants `id-token: write`, `contents: write`, or `write-all`",
+      "false_positive": [
+        {
+          "note": "A push comes from someone with write access.",
+          "text": "on:\n  push:\npermissions:\n  contents: write"
+        },
+        {
+          "note": "Reads contents; commenting needs only pull-requests: write.",
+          "text": "on:\n  pull_request_target:\npermissions:\n  contents: read\n  pull-requests: write"
+        }
+      ],
+      "id": "AGT-CI-005",
+      "pattern": "(?i)\\b(?:pull_request_target|issue_comment)\\b[\\s\\S]*?(?:\\b(?:id-token|contents)\\s*:\\s*write\\b|\\bpermissions\\s*:\\s*write-all\\b)",
+      "rationale": "These triggers run for outsiders' pull requests and comments. With contents: write the job can push to the repository; with id-token: write it can mint cloud credentials through OIDC. An agent step steered by the outsider's text uses whichever it is given. Grant them in a separate job behind a trusted trigger. Limit: the trigger must be named before the permission, as `on:` usually is.",
+      "scope": "normalised",
+      "severity": "medium",
+      "title": "Write token on an untrusted trigger",
+      "true_positive": [
+        {
+          "text": "on:\n  issue_comment:\npermissions:\n  contents: write"
+        },
+        {
+          "text": "on: [pull_request_target]\npermissions:\n  id-token: write"
         }
       ]
     },
@@ -1857,10 +2027,14 @@
         {
           "note": "A path inside the repository.",
           "text": "\"source\": \"./plugins/review\""
+        },
+        {
+          "note": "The repository itself, as a relative path.",
+          "text": "\"source\": {\"source\": \"url\", \"url\": \"./\"}"
         }
       ],
       "id": "AGT-SUPPLY-004",
-      "pattern": "(?i)(?:/plugin|\\bclaude\\s+plugin)\\s+marketplace\\s+add\\s+[\\w.-]+/[\\w.-]+(?:\\s|$|[\"'`])|\"source\"\\s*:\\s*\\{\\s*\"source\"\\s*:\\s*\"(?:github|git|url)\"\\s*,\\s*\"(?:repo|url)\"\\s*:\\s*\"[^\"]+\"\\s*\\}",
+      "pattern": "(?i)(?:/plugin|\\bclaude\\s+plugin)\\s+marketplace\\s+add\\s+[\\w.-]+/[\\w.-]+(?:\\s|$|[\"'`])|\"source\"\\s*:\\s*\\{\\s*\"source\"\\s*:\\s*\"(?:github|git|url)\"\\s*,\\s*\"(?:repo|url)\"\\s*:\\s*\"[^\".][^\"]*\"\\s*\\}",
       "rationale": "A marketplace or plugin added by repository name follows that repository's default branch: whatever its owner pushes next reaches every user at the next update, unreviewed. Pinning to a commit is the first step of vetting. Seen in published READMEs and marketplace manifests. Limit: the JSON form is read in the documented key order.",
       "scope": "normalised",
       "severity": "medium",
@@ -1924,11 +2098,16 @@
     }
   ],
   "source": {
-    "commit": "48f88e382b48bf70a504335bd78ca6493c099daa",
+    "commit": "2ca9291c4df6739c8c738304bad3720c1426fe7c",
     "files": {
-      "AGT-ATTR-001.toml": "683330ca81dfb71262d1f433cacab14816f348135f4934035e303c43554d7786",
+      "AGT-ATTR-001.toml": "5de2f9ed40b4b9033344786457523894075bcd843f2896d5ac3f4813a1f3797d",
       "AGT-CAP-001.toml": "3be5c757be71e30833b056cfa03f415a05da470f56c680e5c9f15bfa786a25e3",
       "AGT-CAP-002.toml": "fe1b3f974c61e08d99140dde955bcf670f811b0b1a6a1da7d55acc9091104540",
+      "AGT-CI-001.toml": "1c4f7a576ac5dffe70fd7c13ff295d970d916964bd19ad99110b42ff0d47a36f",
+      "AGT-CI-002.toml": "228f99e6ac3ffa66108750919739c1a7b092a90e56d8c0237d2aef0b9ae5d401",
+      "AGT-CI-003.toml": "4a290e21baf0bdab0bd87e96bcb5849267e71ad2b5ac596cfe29d6ce62d31e83",
+      "AGT-CI-004.toml": "6e8e23fc49c01f9ecf0827b8fd91687fc7a8b2201a0050a42e3038fbd7df05af",
+      "AGT-CI-005.toml": "02e219630fd47cdaa04bf155ce7ca9fab51f97824636a8e52dfc263df5591411",
       "AGT-EXEC-001.toml": "a13d9277309eff8de8ee85775588e12256a16f8bd3fa506817d1957752784543",
       "AGT-EXEC-002.toml": "b031a230cdea658abbcd9d3cfb3b361b8ab26d7cfb6f3f2fb9bf314082266da2",
       "AGT-EXEC-003.toml": "5a0cd22f4c17a0c40bc17742c2607f39d0b1569ab299c24b658ddd8ae7a0becc",
@@ -1976,7 +2155,7 @@
       "AGT-SUPPLY-001.toml": "d3745352cc5b4d1651e6ab1617b218addd1d3e952e7e11611cc237714ab053c7",
       "AGT-SUPPLY-002.toml": "63f49ff34b3514bae7c80d7453430195197a4593689e55040a0a7e8752267796",
       "AGT-SUPPLY-003.toml": "c627186f0db6ad324db79f1d4f4c772ebd7646d38d41dfe393e5f8bdee870ae9",
-      "AGT-SUPPLY-004.toml": "ff3a7514719da4641eedc7655e1322a2ee187224f9e7df9801f00807c34607ac",
+      "AGT-SUPPLY-004.toml": "0a87b30a093908f68fab081f91b516ca910698dd9886a4f9e1ebe43757ab18e6",
       "AGT-SUPPRESS-001.toml": "34df85d1f9d6fd49c63aeb08bfb80ed36af11e5712caa30fdf46b3ad341f46e7"
     },
     "repository": "sebastienrousseau/agtmls-spec"

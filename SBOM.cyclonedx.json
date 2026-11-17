@@ -1656,7 +1656,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f27c8ebcde036626485ffac96db7461e6224f1b5fc6c983743183d024f8829a0"
+          "content": "6caa6524106f500041574e31f1c743ef1607457d6c0f1fc3862637468457b252"
         }
       ],
       "name": "evals/security/corpus.json",
@@ -2415,7 +2415,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "01d23a4f2fe7f5515618e76ae7516f21fa06d5849526e82d012c7645eba0861d"
+          "content": "c266e4d7432ea9bdd3d532f049bd3965fed6fcd5a0f203eb89623b47e72e3ca5"
         }
       ],
       "name": "scripts/_lib/agent_config.py",
@@ -2701,7 +2701,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b0773f251581fb0ba2d1ebce850ffe86abdfd355252463a0bd83ce5e3ccb3db5"
+          "content": "eff7a0f8999bd8addb493545fe19455ee1c473dfc9b1d0b10f12c8693f31823c"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -5509,7 +5509,7 @@
       "type": "application",
       "version": "0.0.34"
     },
-    "timestamp": "2026-11-16T23:58:57Z",
+    "timestamp": "2026-11-17T00:15:10Z",
     "tools": {
       "components": [
         {

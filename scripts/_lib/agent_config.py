@@ -42,10 +42,12 @@ def is_surface(rel: str) -> bool:
 
     README files and docs/ are included for the install snippets in them:
     the command a reader pastes runs with their rights, as a hook does.
+    GitHub workflows are included because an agent action runs there with
+    the job's token and secrets (the AGT-CI rules).
     """
     parts = rel.split("/")
     name = parts[-1]
-    if name in CONFIG_NAMES or CONFIG_DIRS.intersection(parts[:-1]):
+    if name in CONFIG_NAMES or CONFIG_DIRS.intersection(parts[:-1]) or parts[:2] == [".github", "workflows"]:
         return True
     if len(parts) == 1:
         return name.lower().startswith(("readme", "install"))

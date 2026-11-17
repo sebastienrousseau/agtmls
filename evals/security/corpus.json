@@ -2164,6 +2164,122 @@
       "must_not_detect": [
         "permission_posture"
       ]
+    },
+    {
+      "name": "agent-action-on-a-tag",
+      "description": "AGT-CI-001: an agent action used at a tag.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: issues\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: anthropics/claude-code-action@v1\n"
+      },
+      "must_detect": [
+        {
+          "category": "supply_chain",
+          "min_severity": "HIGH",
+          "in_file": ".github/workflows/agent.yml"
+        }
+      ]
+    },
+    {
+      "name": "agent-action-pinned",
+      "description": "AGT-CI-001 and AGT-CI-002 false positive guard: the agent action is pinned and given its key.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: issues\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: anthropics/claude-code-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b # v1\n        with:\n          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}\n"
+      },
+      "must_not_detect": [
+        "supply_chain"
+      ]
+    },
+    {
+      "name": "secret-to-a-mutable-action",
+      "description": "AGT-CI-002: a secret handed to an action at a tag.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: push\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: some-org/deploy-action@v2\n        with:\n          api_key: ${{ secrets.API_KEY }}\n"
+      },
+      "must_detect": [
+        {
+          "category": "supply_chain",
+          "min_severity": "HIGH",
+          "in_file": ".github/workflows/agent.yml"
+        }
+      ]
+    },
+    {
+      "name": "untrusted-trigger-checks-out-head",
+      "description": "AGT-CI-003: pull_request_target checks out the pull request head.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on:\n  pull_request_target:\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          ref: ${{ github.event.pull_request.head.sha }}\n"
+      },
+      "must_detect": [
+        {
+          "category": "unsafe_execution",
+          "min_severity": "HIGH",
+          "in_file": ".github/workflows/agent.yml"
+        }
+      ]
+    },
+    {
+      "name": "untrusted-trigger-checks-out-base",
+      "description": "AGT-CI-003 false positive guard: pull_request_target checks out the base branch only.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on:\n  pull_request_target:\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n"
+      },
+      "must_not_detect": [
+        "unsafe_execution"
+      ]
+    },
+    {
+      "name": "agent-open-to-anyone",
+      "description": "AGT-CI-004: an agent action any user may trigger.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: issue_comment\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: anthropics/claude-code-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          allowed_non_write_users: \"*\"\n"
+      },
+      "must_detect": [
+        {
+          "category": "permission_posture",
+          "min_severity": "HIGH",
+          "in_file": ".github/workflows/agent.yml"
+        }
+      ]
+    },
+    {
+      "name": "agent-open-to-named-bot",
+      "description": "AGT-CI-004 and AGT-CI-005 false positive guard: a named bot, read-only contents.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: issue_comment\npermissions:\n  contents: read\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: anthropics/claude-code-action@8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b\n        with:\n          allowed_bots: \"dependabot[bot]\"\n"
+      },
+      "must_not_detect": [
+        "permission_posture"
+      ]
+    },
+    {
+      "name": "write-token-on-comment-trigger",
+      "description": "AGT-CI-005: issue_comment with contents: write.",
+      "files": {
+        "SKILL.md": "---\nname: session-notes\ndescription: Use when keeping session notes.\n---\n\n# Session notes\n\nFollows the steps below.\n",
+        "metadata.json": "{\n  \"safety_policy\": {\n    \"network_access\": \"none\",\n    \"writes_files\": false,\n    \"executes_commands\": false,\n    \"handles_secrets\": false,\n    \"requires_human_review\": true,\n    \"risk_level\": \"low\"\n  }\n}",
+        ".github/workflows/agent.yml": "on: issue_comment\npermissions:\n  contents: write\njobs:\n  a:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo hi\n"
+      },
+      "must_detect": [
+        {
+          "category": "permission_posture",
+          "min_severity": "MEDIUM",
+          "in_file": ".github/workflows/agent.yml"
+        }
+      ]
     }
   ],
   "schema_version": 1
