@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-17T00:15:09Z",
+    "created": "2026-11-17T11:42:37Z",
     "creators": [
       "Tool: agtmls-generate-sbom",
       "Person: Sebastien Rousseau",
@@ -10,7 +10,7 @@
     "licenseListVersion": "3.24"
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://github.com/sebastienrousseau/agtmls/spdx/0.0.34/6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88",
+  "documentNamespace": "https://github.com/sebastienrousseau/agtmls/spdx/0.0.35/6f1d1f3a-2a6d-5e55-9b7a-0c3a4f2b1d88",
   "files": [
     {
       "SPDXID": "SPDXRef-File-ALLOWED-SIGNERS",
@@ -33,11 +33,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "ee2949d2d7f1482ba699b03e81437c5ff1dd0ee8"
+          "checksumValue": "38fc6645069bec1d353b3e642f25a4bdc82d75de"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "3099f39bbde55a1ce7d3278a633e13cdfcde3af85bd71c6b659dc8238720fbd0"
+          "checksumValue": "505f9fa6695edeb47cffa2b2f8590962aa00d8d9c97fd4b442bacfc011f74b17"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -2689,11 +2689,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "60ef7ac6a0b182cec3053f74d45f23ba906ab139"
+          "checksumValue": "e92e46a931add1aebdb7c7f1e0de3be6cbf830af"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "1f9cf14ce14da90a996d16a64bf682b302fe6f597ca4cceda0e1d8905282b973"
+          "checksumValue": "017f4233aecd05bdc180690317c4e83036a8ddc215cdedafcb11be9f75af075e"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -3937,11 +3937,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "459a8e8204221d77d9428beb9b7621d68d505cba"
+          "checksumValue": "9617f2d1917949c335b7f678726719d7d4a4892a"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "eff7a0f8999bd8addb493545fe19455ee1c473dfc9b1d0b10f12c8693f31823c"
+          "checksumValue": "f97d3605f7f11cbe2318711ca5606bcdfdf1e66d84a9bd54a7b078ddf047f3b2"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -4241,11 +4241,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "eb603b4a0bea8063ef789f64ed34b7fd9653545e"
+          "checksumValue": "c84cc92c1ee1ebce54c27aea235ff1a54272d3eb"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "76c7206588854876a8395cecce317f49b5cf6e07aceb5e7efc66278d3ed95c00"
+          "checksumValue": "97d1c2cceb70112db85b4451ccf2d7145eeb1bbcb4994b3b7a958eb0cc97ddaa"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7697,11 +7697,11 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "e958543574573936cb6fd3d89feefa83feef58e2"
+          "checksumValue": "228fd4d3d98eaabee7c005bbced537330f3ba4f8"
         },
         {
           "algorithm": "SHA256",
-          "checksumValue": "bbe8b305b5e956510a45f1a8c694f8f002f8fbea64df1b3e078a33d310abe03c"
+          "checksumValue": "a55ba4779c155cbd703fe996614a85d9b01f001e80b2a173cc4fc4efcdabddf0"
         }
       ],
       "copyrightText": "Copyright 2026 Sebastien Rousseau",
@@ -7997,7 +7997,7 @@
       "licenseConcluded": "Apache-2.0 OR MIT"
     }
   ],
-  "name": "agtmls-0.0.34",
+  "name": "agtmls-0.0.35",
   "packages": [
     {
       "SPDXID": "SPDXRef-Package-agtmls",
@@ -8006,7 +8006,7 @@
       "externalRefs": [
         {
           "referenceCategory": "PACKAGE-MANAGER",
-          "referenceLocator": "pkg:pypi/agtmls@0.0.34",
+          "referenceLocator": "pkg:pypi/agtmls@0.0.35",
           "referenceType": "purl"
         }
       ],
@@ -8516,7 +8516,7 @@
       "licenseDeclared": "Apache-2.0 OR MIT",
       "name": "agtmls",
       "supplier": "Person: Sebastien Rousseau",
-      "versionInfo": "0.0.34"
+      "versionInfo": "0.0.35"
     }
   ],
   "relationships": [

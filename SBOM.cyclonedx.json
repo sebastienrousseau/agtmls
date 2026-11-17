@@ -17,7 +17,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3099f39bbde55a1ce7d3278a633e13cdfcde3af85bd71c6b659dc8238720fbd0"
+          "content": "505f9fa6695edeb47cffa2b2f8590962aa00d8d9c97fd4b442bacfc011f74b17"
         }
       ],
       "name": "CATALOG.md",
@@ -1843,7 +1843,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1f9cf14ce14da90a996d16a64bf682b302fe6f597ca4cceda0e1d8905282b973"
+          "content": "017f4233aecd05bdc180690317c4e83036a8ddc215cdedafcb11be9f75af075e"
         }
       ],
       "name": "index.json",
@@ -2701,7 +2701,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "eff7a0f8999bd8addb493545fe19455ee1c473dfc9b1d0b10f12c8693f31823c"
+          "content": "f97d3605f7f11cbe2318711ca5606bcdfdf1e66d84a9bd54a7b078ddf047f3b2"
         }
       ],
       "name": "scripts/_lib/rules.json",
@@ -2910,7 +2910,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "76c7206588854876a8395cecce317f49b5cf6e07aceb5e7efc66278d3ed95c00"
+          "content": "97d1c2cceb70112db85b4451ccf2d7145eeb1bbcb4994b3b7a958eb0cc97ddaa"
         }
       ],
       "name": "scripts/bump-version.py",
@@ -5286,7 +5286,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bbe8b305b5e956510a45f1a8c694f8f002f8fbea64df1b3e078a33d310abe03c"
+          "content": "a55ba4779c155cbd703fe996614a85d9b01f001e80b2a173cc4fc4efcdabddf0"
         }
       ],
       "name": "src/agtmls/__init__.py",
@@ -5498,24 +5498,24 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:pypi/agtmls@0.0.34",
+      "bom-ref": "pkg:pypi/agtmls@0.0.35",
       "licenses": [
         {
           "expression": "Apache-2.0 OR MIT"
         }
       ],
       "name": "agtmls",
-      "purl": "pkg:pypi/agtmls@0.0.34",
+      "purl": "pkg:pypi/agtmls@0.0.35",
       "type": "application",
-      "version": "0.0.34"
+      "version": "0.0.35"
     },
-    "timestamp": "2026-11-17T00:15:10Z",
+    "timestamp": "2026-11-17T11:42:37Z",
     "tools": {
       "components": [
         {
           "name": "agtmls-generate-sbom",
           "type": "application",
-          "version": "0.0.34"
+          "version": "0.0.35"
         }
       ]
     }

@@ -80,21 +80,26 @@ only.
 
 ```bash
 # One-shot execution (ephemeral cache)
-uvx agtmls install rust claude --skills-only --bundle noyalib
+uvx agtmls==0.0.35 install rust claude --skills-only --bundle noyalib
 
 # Persistent installation
-pipx install agtmls
+pipx install agtmls==0.0.35
 agtmls install rust claude
 
 # Or into the current environment
-pip install agtmls
+pip install agtmls==0.0.35
 ```
+
+Each command names a release, so what runs is what was audited and signed;
+`agtmls audit` flags an unpinned runner (`AGT-SUPPLY-001`) in other
+repositories' instructions, and this one follows the same rule. Every
+release moves these pins.
 
 ### As an agent plugin
 
 | Runtime | Installation command / action | Manifest location |
 | :--- | :--- | :--- |
-| **Claude Code** | `/plugin marketplace add sebastienrousseau/agtmls`<br/>`/plugin install agtmls@agtmls`<br/>noyalib pack: `/plugin install agtmls-noyalib@agtmls` | `.claude-plugin/plugin.json`<br/>`.claude-plugin/marketplace.json` |
+| **Claude Code** | `/plugin marketplace add sebastienrousseau/agtmls#v0.0.35`<br/>`/plugin install agtmls@agtmls`<br/>noyalib pack: `/plugin install agtmls-noyalib@agtmls` | `.claude-plugin/plugin.json`<br/>`.claude-plugin/marketplace.json` |
 | **Google Antigravity** | `agy plugin install https://github.com/sebastienrousseau/agtmls` | `plugin.json` |
 | **OpenAI Codex** | `/plugins` → Search `agtmls` → **Install Plugin** | `.agents/plugins/marketplace.json`<br/>`.codex-plugin/plugin.json` |
 | **Gemini CLI** | `gemini extensions install https://github.com/sebastienrousseau/agtmls` | `gemini-extension.json`<br/>`GEMINI.md` |

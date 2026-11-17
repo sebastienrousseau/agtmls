@@ -521,7 +521,7 @@ const findings = audit("SKILL.md", content);   // Finding[]
 ## 7. `agtmls-action` — the adoption engine
 
 ```yaml
-- uses: sebastienrousseau/agtmls-action@v1
+- uses: sebastienrousseau/agtmls-action@v0
   with:
     path: .claude/skills
     fail-on: high        # critical | high | medium | low | never
