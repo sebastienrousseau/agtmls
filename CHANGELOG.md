@@ -7,6 +7,13 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+### Added
+
+- `audit --changed-agent-config <base>`: lists the agent configuration a
+  branch changes (the paths claude-code-action restores before it runs,
+  plus `AGENTS.md`, `.codex/` and `opencode.json`), audits each with its
+  hook and MCP inventory, and exits 1 when any changed (plan R35-3).
+
 ### Fixed
 
 - `audit --all` slowed by about 30% in 0.0.34 (571 ms to 746 ms on the CI

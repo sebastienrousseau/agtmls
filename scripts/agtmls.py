@@ -404,6 +404,8 @@ def diff_command(args) -> int:
 
 
 def audit_command(args) -> int:
+    if args.changed_agent_config:
+        return run(cli_args.changed_config(script("audit-changed-config.py"), args))
     cmd = script("audit-skill.py")
     if args.path:
         cmd.append(str(args.path))
@@ -411,7 +413,7 @@ def audit_command(args) -> int:
     cli_args.option(cmd, "--foreign", args.foreign and cli_args.foreign_target(args.foreign))
     cli_args.switch(cmd, "--strict", args.strict)
     cli_args.switch(cmd, "--pedantic", args.pedantic)
-    cli_args.option(cmd, "--format", (args.format or args.json) and (args.format or "json"))
+    cli_args.option(cmd, "--format", cli_args.audit_format(args))
     cli_args.option(cmd, "--baseline", args.baseline and args.baseline.resolve())
     cli_args.option(cmd, "--write-baseline", args.write_baseline and args.write_baseline.resolve())
     return run(cmd)

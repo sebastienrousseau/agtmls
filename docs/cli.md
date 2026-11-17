@@ -216,6 +216,24 @@ a baseline written for one checkout or clone matches the next.
 opt-in by giving a URL, and only an exact 40-hex commit is accepted: a branch
 or tag can move between the audit and the install.
 
+## Holding a branch that changes agent configuration
+
+`audit --changed-agent-config <base>` lists the agent configuration a
+branch changes since it left `<base>` (compared from the merge base):
+`.claude/`, `.codex/`, `.cursor/`, `.gemini/`, `.husky/`, plugin
+directories, `.mcp.json`, `.claude.json`, `.gitmodules`, `.ripgreprc`,
+`CLAUDE.md`, `CLAUDE.local.md`, `AGENTS.md`, `GEMINI.md`, `opencode.json`
+and `copilot-instructions.md`, wherever they sit. Each path that still
+exists is audited, with its hooks and MCP servers listed. These files steer
+an agent on its next run before anyone has read them, so the command exits
+1 whenever one changed, for a CI job to hold the change for review; 0 when
+none did; 2 when git cannot compare. `--format json` carries `changed`,
+`findings` and `inventory`.
+
+```sh
+agtmls audit --changed-agent-config origin/main
+```
+
 ## Auditing an external skill before importing it
 
 `import-skill` runs the analyzer first and refuses on any CRITICAL or HIGH

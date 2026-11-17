@@ -409,6 +409,14 @@ class CliDispatchTests(unittest.TestCase):
         self.module.main()
         self.assertEqual(self.calls[0][self.calls[0].index("--foreign") + 1], url)
 
+    def test_audit_changed_agent_config_runs_its_own_script_in_this_repository(self) -> None:
+        sys.argv = ["agtmls", "audit", "--changed-agent-config", "origin/main", "--json"]
+        self.calls.clear()
+        self.assertEqual(self.module.main(), 0)
+        forwarded = self.calls[0]
+        self.assertTrue(forwarded[1].endswith("audit-changed-config.py"))
+        self.assertEqual(forwarded[2:], ["origin/main", "--root", str(Path.cwd()), "--format", "json"])
+
     def test_audit_forwards_its_format_and_baseline_flags(self) -> None:
         sys.argv = ["agtmls", "audit", "--all", "--format", "sarif", "--baseline", "known.json",
                     "--write-baseline", "next.json"]
