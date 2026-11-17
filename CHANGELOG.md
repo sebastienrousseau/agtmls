@@ -7,6 +7,12 @@ All notable changes to AgtMLS are recorded here.
 
 ## Unreleased
 
+## 0.0.35 - 2026-11-17
+
+In lockstep with the AgtMLS family: from this release agtmls, agtmls-spec,
+agtmls-core, agtmls-wasm, agtmls-mcp, agtmls-lsp, agtmls-action and
+agtmls-scorecard all release at one version.
+
 ### Added
 
 - `audit --changed-agent-config <base>`: lists the agent configuration a
