@@ -46,6 +46,8 @@ All notable changes to AgtMLS are recorded here.
   same findings in the same order, and in one process wherever a pool
   cannot start. Files with no invisible code point also skip the
   steganography line walk. On this registry, 678 ms to 446 ms (macOS).
+- `docs/ECOSYSTEM.md` showed `agtmls-action@v1`, a tag that does not exist;
+  it now uses `@v0`, which the action moves on every release.
 
 ## 0.0.34 - 2026-11-16
 
