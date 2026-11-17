@@ -146,7 +146,7 @@ class BumpRefusalTests(FixtureCase):
 
         self.patch(module, "run", run)
         self.preserve(".claude-plugin/plugin.json", "pyproject.toml", "src/agtmls/__init__.py",
-                      ".claude-plugin/marketplace.json", "CITATION.cff", "CHANGELOG.md")
+                      ".claude-plugin/marketplace.json", "CITATION.cff", "CHANGELOG.md", "README.md")
         return module
 
     def test_next_version_comes_from_the_next_version_script(self) -> None:

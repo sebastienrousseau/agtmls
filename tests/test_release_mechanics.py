@@ -109,6 +109,22 @@ class BumpVersionTests(ReleaseFixtureBase):
             "a release nothing changed in was recorded as the release that changed everything",
         )
 
+    def test_a_bump_moves_the_readme_install_pins(self) -> None:
+        before = self.version()
+        run_main(self.bumper("9.9.9"), "--version", "9.9.9")
+        readme = (self.fixture / "README.md").read_text(encoding="utf-8")
+        for pin in ("uvx agtmls==9.9.9 ", "pipx install agtmls==9.9.9", "pip install agtmls==9.9.9",
+                    "marketplace add sebastienrousseau/agtmls#v9.9.9"):
+            self.assertIn(pin, readme)
+        self.assertNotIn(f"agtmls=={before}", readme)
+
+    def test_a_readme_without_pins_fails_the_bump(self) -> None:
+        readme = self.fixture / "README.md"
+        readme.write_text("# AgtMLS\n\npip install agtmls\n", encoding="utf-8")
+        code, output = run_main(self.bumper("9.9.9"), "--version", "9.9.9")
+        self.assertEqual(code, 1, output)
+        self.assertIn("README.md names no install pin", output)
+
     def test_a_bump_to_the_wrong_version_is_refused(self) -> None:
         module = self.bumper("9.9.9")
         code, output = run_main(module, "--version", "4.5.6")

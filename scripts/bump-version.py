@@ -39,6 +39,13 @@ TEXT_DEFAULT_FILES = [
 YAML_VERSION_FILES = [
     ROOT / "CITATION.cff",
 ]
+# The README's install commands name the release they install, so a reader
+# runs what was audited and signed rather than whatever is newest (the
+# unpinned-runner and unpinned-plugin-source rules this registry enforces).
+PIN_FILES = [
+    ROOT / "README.md",
+]
+PIN_FORMS = ("agtmls=={}", "agtmls#v{}")
 GENERATORS = [
     ["sync-skill-frontmatter.py", "--write"],
     ["generate-plugin-manifests.py", "--write"],
@@ -90,6 +97,31 @@ def replace_yaml_version(path: Path, old: str, new: str) -> bool:
     return True
 
 
+def replace_install_pins(path: Path, old: str, new: str) -> bool:
+    """Move every install pin from `old` to `new`; False when there is none,
+    so a README that lost its pins fails the bump rather than shipping one."""
+    text = path.read_text(encoding="utf-8")
+    pins = [form.format(old) for form in PIN_FORMS]
+    if not any(pin in text for pin in pins):
+        print(f"FAIL: {path.name} names no install pin for {old} ({', '.join(pins)})")
+        return False
+    for form in PIN_FORMS:
+        text = text.replace(form.format(old), form.format(new))
+    path.write_text(text, encoding="utf-8")
+    return True
+
+
+def move_versions(old: str, target: str) -> bool:
+    """Every authored version string from `old` to `target`; False on a carrier that has none."""
+    for path in VERSION_FILES:
+        replace_json_version(path, target)
+    for path in TEXT_DEFAULT_FILES:
+        replace_text_default(path, old, target)
+    if not all(replace_yaml_version(path, old, target) for path in YAML_VERSION_FILES):
+        return False
+    return all(replace_install_pins(path, old, target) for path in PIN_FILES)
+
+
 def update_changelog(version: str, today: str) -> None:
     path = ROOT / "CHANGELOG.md"
     text = path.read_text(encoding="utf-8")
@@ -133,13 +165,8 @@ def main() -> int:
         return 0
 
     old = current_version()
-    for path in VERSION_FILES:
-        replace_json_version(path, target)
-    for path in TEXT_DEFAULT_FILES:
-        replace_text_default(path, old, target)
-    for path in YAML_VERSION_FILES:
-        if not replace_yaml_version(path, old, target):
-            return 1
+    if not move_versions(old, target):
+        return 1
     update_changelog(target, args.date)
     for item in GENERATORS:
         proc = run([sys.executable, str(ROOT / "scripts" / item[0]), *item[1:]])

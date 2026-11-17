@@ -151,6 +151,15 @@ class DigestStabilityTests(unittest.TestCase):
             "a version stamped into a skill puts the release into its digest",
         )
 
+    def test_the_readme_installs_the_current_release(self) -> None:
+        """Pinned install instructions that name an old release send readers to it."""
+        current = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["version"]
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn(f"uvx agtmls=={current} ", readme)
+        self.assertIn(f"marketplace add sebastienrousseau/agtmls#v{current}", readme)
+        stale = set(re.findall(r"agtmls(?:==|#v)(\d+\.\d+\.\d+)", readme)) - {current}
+        self.assertEqual(stale, set(), "the README pins a release that is not the current one")
+
     def test_the_version_lives_in_few_enough_places_to_track(self) -> None:
         """Scorecard 7.2. Generated artifacts legitimately restate it."""
         current = json.loads(

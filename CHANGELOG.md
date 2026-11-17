@@ -25,6 +25,13 @@ All notable changes to AgtMLS are recorded here.
 
 ### Changed
 
+- The README's install commands name the release (`uvx agtmls==X`,
+  `pipx install agtmls==X`, `pip install agtmls==X`) and the Claude Code
+  marketplace its tag (`/plugin marketplace add sebastienrousseau/agtmls#vX`,
+  the documented `#ref` form). `audit` flagged both as unpinned
+  (AGT-SUPPLY-001, AGT-SUPPLY-004) when run on this repository.
+  `bump-version.py` moves the pins and fails if the README has none; a test
+  holds them at the current version.
 - AGT-ATTR-001 no longer fires on prose that describes it, and
   AGT-SUPPLY-004 no longer reads a marketplace whose plugin is the
   repository itself (`"url": "./"`) as unpinned; both were found by

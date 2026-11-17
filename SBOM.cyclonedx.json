@@ -2910,7 +2910,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "76c7206588854876a8395cecce317f49b5cf6e07aceb5e7efc66278d3ed95c00"
+          "content": "97d1c2cceb70112db85b4451ccf2d7145eeb1bbcb4994b3b7a958eb0cc97ddaa"
         }
       ],
       "name": "scripts/bump-version.py",
@@ -5509,7 +5509,7 @@
       "type": "application",
       "version": "0.0.34"
     },
-    "timestamp": "2026-11-17T00:15:10Z",
+    "timestamp": "2026-11-17T07:49:52Z",
     "tools": {
       "components": [
         {
